@@ -1,6 +1,6 @@
 # TODO — frank
 
-Updated: 2026-04-15 17:23:00 CDT (Machine: Macmini.lan)
+Updated: 2026-04-15 17:28:00 CDT (Machine: Macmini.lan)
 
 ## In Progress
 
@@ -11,12 +11,10 @@ Updated: 2026-04-15 17:23:00 CDT (Machine: Macmini.lan)
 - Finish the Mitch account archive/imapsync transfer.
   - Destination IMAP login for `tastingroom@kovaldistillery.com` now works with the secured secret reference.
   - Next step: rerun controlled `imapsync` for the incomplete Mitch archive folders and verify final destination counts.
-- Add Gmail routing/filter rules for Angele's recurring newsletters and bulk mail.
-  - Add explicit handling for old-user alias traffic currently routing into Angele, including `abby.boler@kovaldistillery.com` and `jordan.wimby@kovaldistillery.com`.
-  - Review likely missed actionable external threads from the last 3 months before broadening auto-archive rules.
-  - Closeout handoff created for Sonat: OPS/Portal task ID `366462`, due `2026-04-12`, to review the Angele cleanup and respond to Avignon with how to proceed.
-  - Avignon emailed Sonat on 2026-04-10 with Codex session `56fd7397`, current counts, preserved categories, and OPS task `366462`.
-  - Sonat responded to Avignon on 2026-04-11: keep preserving the listed categories and focus on clearing remaining hits for `abby.boler@kovaldistillery.com`, `jordan.wimby@kovaldistillery.com`, and the marketing alias. Continue only within the approved preservation/cleanup boundaries; preserve unresolved direct vendor/customer/outreach/legal/account/Robert threads and verify final ownership/routing for Abby/Jordan old-user aliases and both marketing aliases before creating broader filters.
+- Verify Angele old-user alias and marketing-alias routing before any broader filters.
+  - Source closeout: OPS/Portal task ID `366462` asked Sonat to review Angele cleanup; Avignon emailed Sonat on 2026-04-10 with the preserved categories and cleanup counts.
+  - Sonat direction from 2026-04-11: keep preserving direct vendor/customer/outreach/legal/account/Robert threads, focus on remaining hits for `abby.boler@kovaldistillery.com`, `jordan.wimby@kovaldistillery.com`, and the marketing alias, and do not create broad filters until ownership/routing is verified.
+  - Next step: verify current owner/routing for Abby/Jordan old-user aliases and both marketing aliases, then decide whether any narrow filters are appropriate.
 - Determine where `marketing@kovaldistillery.com` and `marketing@koval-distillery.com` forwarders currently deliver.
   - April 10, 2026 audit in Angele mailbox: recent direct matches for both aliases show `Delivered-To: abby.boler@kovaldistillery.com`.
   - Historical direct matches for `marketing@kovaldistillery.com` also show some delivery to `jordan.wimby@kovaldistillery.com`, so the routing changed or was split previously.
