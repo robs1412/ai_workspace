@@ -1,11 +1,9 @@
 # TODO — avignon
 
-Updated: 2026-04-15 16:58:00 CDT (Machine: Macmini.lan)
+Updated: 2026-04-15 17:44:00 CDT (Machine: Macmini.lan)
 
 ## In Progress
 
-- Email-derived decision/work items:
-  - `avignon-new-hire-training-template-reference-2026-04-12`: Sonat sent a new-hire training email template/reference. Logged for Avignon future use and acknowledgement prepared/sent.
 - Initial Avignon setup:
   - scaffold workspace files and operating rules
   - add Avignon to launcher/docs and Workspaceboard
@@ -17,6 +15,7 @@ Updated: 2026-04-15 16:58:00 CDT (Machine: Macmini.lan)
 
 ## Done
 
+- Closed `avignon-new-hire-training-template-reference-2026-04-12` on 2026-04-15: Sonat's new-hire training email template/reference was logged for future Avignon use and the acknowledgement had already been prepared/sent; no new mail, OPS task, CRM write, or external action was created in this closeout.
 - Sent Sonat an Avignon morning overview on 2026-04-15 at 16:54 CDT, matching Robert's Frank overview format at a safe summary level; sent-log task id `avignon-morning-overview-2026-04-15`.
 - Closed Sonat business-card CRM additions follow-up on 2026-04-15: Avignon worker `e9588b48` and importer worker `10b9346d` completed/reviewed import `52`, creating account IDs `366780`, `366784`, `366786`, `366789` and contact IDs `366781`, `366782`, `366783`, `366785`, `366787`, `366788`, `366790`; 7/7 account-contact links verified and private fields were not printed.
 - Installed Avignon-specific 5-minute LaunchAgent scheduler on 2026-04-14: `com.koval.avignon-auto` runs every 300 seconds from `/Users/admin/.avignon-launch`, uses a machine-local Avignon credential reference, and logs runtime state locally to avoid synced Google Drive launchd/TCC failures. Verified launchd last exit code `0` and a clean inbox cycle with `0` messages.
