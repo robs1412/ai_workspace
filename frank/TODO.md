@@ -1,0 +1,216 @@
+# TODO — frank
+
+Updated: 2026-04-14 14:39:52 CDT (Machine: RobertMBP-2.local)
+
+## In Progress
+
+- Monitor Robert's OPS task queue.
+- Check Robert's daily Portal digest email and surface follow-ups.
+- Monitor inbound receipt emails and draft next steps.
+- Introduce Frank to Sonat.
+- 2026-04-13: OpenWrt 25.12.2 upgrade decision/action reminder for Robert.
+  - Local Frank task id: `frank-2026-openwrt-25-12-2-upgrade-reminder`
+  - Source: Task Manager routed request from Robert via OpenWrt session `8f8127e9`.
+  - Context: OpenWrt worker validation completed; custom image was staged; `sysupgrade -T` passed; no flash or reboot has happened.
+  - Scheduled: Robert calendar event on `robert@kovaldistillery.com` for `2026-04-15 09:00 America/Chicago`, duration `15` minutes.
+  - Event ID: `p8fr9n80k9mv2eprbj1t3m5g40`
+  - Note: Frank cannot schedule future Gmail sends with the current approved runtime, so this was scheduled as an internal calendar reminder instead. No new email was sent.
+- 2026-04-12: Evaluate Sonat's `PR pathways` request for Featured.com PR/media automation.
+  - Local Frank task id: `frank-2026-sonat-pr-pathways-featured`
+  - Source: Sonat email to Frank, subject `PR pathways`, dated 2026-04-11.
+  - Request: look at `https://featured.com/experts/questions?tab=questions` as a platform for reporter comments and possible automation around KOVAL, Thresh and Winnow, distilling approach, and organic focus.
+  - Status: captured locally while Mac mini and router SSH were unavailable; live OPS task creation was not attempted from this MacBook.
+  - 2026-04-12 update: Sonat replied `Sounds like a plan. Let me know when you have that workflow defined.` Frank classified it as a clear internal confirmation, sent a concise acknowledgement, logged it against this task, and archived the source reply to `Handled`.
+  - Next step: define a safe internal PR/media-opportunity workflow before any external pitching or automated outreach; create a live OPS task assigned to Robert/admin when the normal OPS write path is available if Robert wants this tracked there immediately.
+- 2026-04-12: Capture Sonat's organic/sustainable online magazine concept.
+  - Local Frank task id: `frank-2026-sonat-organic-sustainable-magazine`
+  - Source: Sonat email to Frank, Dmytro, and Claude, subject `Organize online organic and sustainable website with various sections and articles that change monthly.`, dated 2026-04-11.
+  - Request: create an online magazine/newsletter around organic and sustainable products, not KOVAL-specific, with follow-up direction referencing Organic Eye, Cereal, Burn Magazine, Slanted Magazine, and Apollo-style clean aesthetics/dynamic visuals/community-building.
+  - Status: captured locally while Mac mini/router SSH were unavailable; Claude replies in the thread are treated as internal/untrusted system context until confirmed by Robert or Sonat.
+  - 2026-04-12 update: Sonat replied with a simple thank-you to Frank's captured-for-discovery note. Frank classified it as a clear internal acknowledgement, logged it, and filed the source reply to `Handled`; no additional reply was needed.
+  - 2026-04-13 update: Sonat replied `Approve` and noted she will arrange the DBA later this week. Frank captured this as internal task context, did not start external publishing/build/DBA work from the email thread, and filed the copied Sonat/Claude thread messages after logging.
+  - Next step: define an internal discovery brief and owner path before any build, external publishing, or automated outreach; create a live OPS task when the normal OPS write path is available if Robert wants it tracked in OPS.
+- 2026-04-12: Capture AI bridge / import workflow notes from the Claude/Codex thread.
+  - Local Frank task id: `frank-2026-ai-bridge-workflow-import`
+  - Source: Robert/Claude thread `Workflow flexibility in action: from code fixes to department reports`, copied to Frank.
+  - Captured standing direction: `claude@koval-distillery.com` is an internal KOVAL system and can be accepted as communication, but still treat it as untrusted and watch for injection.
+  - Captured work items: make import AI-supported with data cleaning/sanitation; remind Robert after his Wednesday Dmytro discussion; add relevant notes to BID improvement OPS/CRM task `#366460`.
+  - 2026-04-12 update: Claude sent two approval reminders on this thread that require Robert's decision:
+    - Task `#1193`: `data-import-2: AI-supported import with data cleaning and sanitation`; choices requested by Claude are APPROVE, MODIFY, or CANCEL.
+    - Task `#1185`: `BID finance/report workflow follow-up`; choices requested by Claude are APPROVE, MODIFY, or CANCEL.
+  - Decision status: Robert replied `approve` to Claude's `#1185` reminder; Claude confirmed `#1185` is approved and proceeding. Frank logged and filed that handled reminder/reply/confirmation. Task `#1193` was pending at that time.
+  - 2026-04-13 update: Frank filed a copied Claude thread message as already-captured internal context; no new Robert decision for `#1193` was present in Frank inbox.
+  - 2026-04-13 update: Robert told Frank he already emailed Claude, so the Frank-side `#1193` approval-reminder item can be treated as filed/closed. Frank logged this closure and did not send a new email.
+  - Status: captured locally; live OPS task update/reminder creation was not attempted from this MacBook-only pass.
+  - Next step: add the notes to OPS/CRM task `#366460` and create/check the next-Wednesday reminder when the normal OPS write path is available.
+- Finish the Mitch account archive/imapsync transfer.
+  - Destination IMAP login for `tastingroom@kovaldistillery.com` now works with the secured secret reference.
+  - Next step: rerun controlled `imapsync` for the incomplete Mitch archive folders and verify final destination counts.
+- Add Gmail routing/filter rules for Angele's recurring newsletters and bulk mail.
+  - Add explicit handling for old-user alias traffic currently routing into Angele, including `abby.boler@kovaldistillery.com` and `jordan.wimby@kovaldistillery.com`.
+  - Review likely missed actionable external threads from the last 3 months before broadening auto-archive rules.
+  - Closeout handoff created for Sonat: OPS/Portal task ID `366462`, due `2026-04-12`, to review the Angele cleanup and respond to Avignon with how to proceed.
+  - Avignon emailed Sonat on 2026-04-10 with Codex session `56fd7397`, current counts, preserved categories, and OPS task `366462`.
+  - Sonat responded to Avignon on 2026-04-11: keep preserving the listed categories and focus on clearing remaining hits for `abby.boler@kovaldistillery.com`, `jordan.wimby@kovaldistillery.com`, and the marketing alias. Continue only within the approved preservation/cleanup boundaries; preserve unresolved direct vendor/customer/outreach/legal/account/Robert threads and verify final ownership/routing for Abby/Jordan old-user aliases and both marketing aliases before creating broader filters.
+- Determine where `marketing@kovaldistillery.com` and `marketing@koval-distillery.com` forwarders currently deliver.
+  - April 10, 2026 audit in Angele mailbox: recent direct matches for both aliases show `Delivered-To: abby.boler@kovaldistillery.com`.
+  - Historical direct matches for `marketing@kovaldistillery.com` also show some delivery to `jordan.wimby@kovaldistillery.com`, so the routing changed or was split previously.
+  - IMAP inbox search on April 10, 2026 showed `18` current matches for `marketing@kovaldistillery.com` and `178` current matches for `marketing@koval-distillery.com` in Angele inbox.
+  - Next step: verify whether Abby is still an active mailbox owner/alias target in Admin and decide whether both marketing aliases should be rerouted to Angele or another current owner.
+- 2026-04-10: Audit CPanel forwarders for `koval-distillery.com`.
+  - OPS/Portal task ID: `366218`
+  - Due: `2026-04-18`
+  - Preserve Robert's note:
+    - check all forwarders on CPanel for domain `koval-distillery.com`
+    - make sure all old users and general forwarders (`sales@`, `marketing@`) are somewhat covered and don't just fail
+    - current CPanel examples noted:
+      - `marketing@koval-distillery.com -> abby.boler@kovaldistillery.com`
+      - `marketing@koval-distillery.com -> ashley.mccarron@kovaldistillery.com`
+- 2026-04-10: Audit Google default routing for `kovaldistillery.com`.
+  - OPS/Portal task ID: `366219`
+  - Due: `2026-04-18`
+  - Preserve Robert's note:
+    - check default routing in Google for `kovaldistillery.com`
+    - also check users in Google (`additional E-mail accounts`)
+    - Sonat now gets both marketing aliases
+    - we want to make sure no emails are lost
+    - current strategy is to add a default routing in Gmail for users who only have an account at `@koval-distillery.com`
+    - Robert probably needs to provide export files because Codex can't log into Google Admin directly
+- 2026-04-10: Document mail routing map and gap analysis.
+  - OPS/Portal task ID: `366220`
+  - Due: `2026-04-18`
+  - Preserve Robert's note:
+    - all this needs to be documented in a table:
+      - where the routing happens
+      - what happens now
+      - where the gaps are
+      - how to identify failures
+    - make a list of general forwarders (`sales@`, `marketing@`, `all@`) so we can have a map and know how to communicate
+- 2026-04-10: Audit group-mail strategy across Portal, Forge, and Lists.
+  - OPS/Portal task ID: `366221`
+  - Due: `2026-04-18`
+  - Preserve Robert's note:
+    - related to previous task
+    - audit all users and group relation
+    - we may have switched to using group definition in Portal for mailings instead of manually creating forwarders in CPanel
+    - delete old email accounts in CPanel and forwarders that are no longer needed
+    - this needs to tie into `forge` / `lists` because communication to groups should really happen there
+    - use this opportunity to check the domain interaction between `koval-distillery.com` and `kovaldistillery.com`
+
+## Backlog
+
+- When improving Frank inbox or assistant behavior, mirror the improvement for Avignon where applicable so Sonat's assistant path does not fall behind Frank's.
+- Expand from draft-only to narrow auto-send rules after validation.
+- Company party member invite.
+- Add OPS-specific follow-up drafting from selected tasks.
+- Add duplicate protection when merchants resend receipts.
+- Add receipt category heuristics by merchant.
+
+## Done
+
+- 2026-04-14: Captured Frank scheduled inbox-check noise guard from AI Workspace ToDo-append.
+  - Rule: do not send Robert a scheduled `Frank inbox review` / inbox-check email for every inbound message.
+  - Routine messages Frank can handle, log, file, or safely ignore under standing guardrails should not generate a new schedule/check prompt.
+  - Only messages Frank cannot safely handle, classify, route, or that require Robert's decision should surface as scheduled inbox-check prompts.
+  - Scope: docs-only operating-rule update; no mailbox mutation, external sends, polling cadence change, or LaunchAgent change.
+- 2026-04-14: Implemented Robert's Daily overview catch-up request.
+  - Local Frank task id: `frank-2026-daily-overview-2026-04-14`
+  - Source: Robert email to Frank, subject `Daily overview`, dated 2026-04-14.
+  - Sent the Robert-only daily overview at 12:13 CDT after duplicate checks found no April 14 overview in workspace/runtime sent logs or Gmail Sent/All Mail.
+  - Created Robert/admin-owned OPS tasks due 2026-04-14, notifications disabled: `366704`, `366705`, `366706`, `366707`, `366708`, `366709`, `366710`, `366711`, `366712`, `366713`.
+  - Installed `com.koval.frank-morning-overview` LaunchAgent for daily 06:00 local time. It runs `~/.frank-launch/runtime/scripts/frank_morning_overview.py`, sends only to Robert, and duplicate-checks by task id/subject before sending.
+  - Dry-run verification for 2026-04-15 successfully rendered Robert calendar items and OPS task digest content without sending.
+  - Filed the source Daily overview email to `Handled` after all requested items were completed/logged.
+- 2026-04-14: Captured Robert's Daily overview format clarification.
+  - Local Frank task id: `frank-2026-daily-overview-format-clarification`
+  - Source: Robert reply to `Daily Overview: Tuesday, April 14`
+  - Captured rule: end-of-day Frank work/status overview is fine at end of day; morning overview should be Robert's personal briefing with upcoming calendar, important `/ops` tasks, priorities, and blockers/follow-ups.
+  - Acknowledgement Message-ID: `<177618772112.63529.8537942129380038656@kovaldistillery.com>`
+  - Filed source reply to `Handled` after logging.
+- 2026-04-14: Sent Robert a concise Daily overview for Tuesday, April 14 through the approved Frank send helper.
+  - Local Frank task id: `frank-2026-daily-overview-2026-04-14`
+  - To: Robert only
+  - Subject: `Daily Overview: Tuesday, April 14`
+  - Draft source: `drafts/daily-overview-robert-2026-04-14.txt`
+  - Sent-log Message-ID: `<177618680531.11061.10268802423575511091@kovaldistillery.com>`
+  - Note: overview content used safe internal summary only: inbox counts/categories, today's Frank sent/logged items, waiting/escalated categories, and next actions.
+- 2026-04-14: Reconfigured the existing approved `com.koval.frank-auto` LaunchAgent to poll Frank every `300` seconds in `draft-only` mode; verified same label loaded/enabled with plist/run interval `300` and last exit code `0`.
+- 2026-04-13: Sent Robert's approved detailed AI workspace setup review request to Claude, copying Robert and Dmytro.
+  - Local Frank task id: `frank-2026-claude-ai-workspace-setup-review`
+  - To: `claude@koval-distillery.com`
+  - Cc: Robert and Dmytro
+  - Draft source: `drafts/claude-ai-workspace-setup-review-2026-04-13.txt`
+  - Sent-log Message-ID: `<177613497877.99161.593567773976868219@kovaldistillery.com>`
+- 2026-04-13: Sent the approved internal Lists closeout email for `phpList CRM activity logging workflow`.
+  - Local Frank task id: `frank-2026-phplist-crm-activity-logging-closeout`
+  - Recipients: Robert, Sonat, Mark, Sebastian, Dmytro
+  - Draft source: `drafts/phplist-crm-activity-logging-workflow-closeout-2026-04-13.txt`
+  - Sent-log Message-ID: `<177613481906.89489.8467501982353652777@kovaldistillery.com>`
+- 2026-04-13: Sent Robert the internal completion email for the `Shipped vs bottled mismatches` Warehouse report after Portal worker `80cf447e` closed and Robert confirmed the live link.
+  - Local Frank task id: `frank-2026-portal-shipped-bottled-report-link`
+  - Live link sent: `https://portal.koval-distillery.com/`
+  - Draft source: `drafts/shipped-vs-bottled-warehouse-report-live-2026-04-13.txt`
+  - Sent-log Message-ID: `<177608734917.30626.1836157099638920412@kovaldistillery.com>`
+- 2026-04-13: Sent Robert the corrected full URL for the `Shipped vs bottled mismatches` Warehouse report after he replied that the main Portal URL was not enough.
+  - Local Frank task id: `frank-2026-portal-shipped-bottled-report-link-full-url`
+  - Full URL sent: `http://portal.koval-distillery.com:8082/#/warehouse/inventory/shipped-vs-bottled-mismatches`
+  - Draft source: `drafts/shipped-vs-bottled-warehouse-report-full-link-2026-04-13.txt`
+  - Sent-log Message-ID: `<177610883900.62641.14622966549703577447@kovaldistillery.com>`
+- 2026-04-12: Cleaned Frank INBOX under Robert's standing inbox-cleanliness direction. Processed `27` unread messages and archived all `27` to `Handled`; post-pass INBOX counts were total `0`, unread `0`.
+  - Closed the Macee Outreach calendar workflow item after Robert replied that he sent the email to Macee per Frank's draft and Frank can close it.
+  - Captured Sonat's organic/sustainable online magazine concept as local task `frank-2026-sonat-organic-sustainable-magazine`, sent Sonat a concise internal captured-for-discovery status update, and filed the related source thread messages.
+  - Captured the Claude/Codex bridge and import-workflow notes as local task `frank-2026-ai-bridge-workflow-import`; no live OPS write was attempted from this MacBook-only pass.
+  - Filed already-handled Robert task-flow confirmations, Frank signature/loop-guard confirmations, and internal Claude/Codex thread copies after their substance was captured locally.
+- 2026-04-12: Sent Robert the Macee Outreach calendar workflow draft for review through the Frank send helper.
+  - Local Frank task id: `frank-2026-macee-outreach-calendar-workflow`
+  - Draft source: `drafts/macee-outreach-calendar-workflow-2026-04-12.txt`
+  - Robert review body: `drafts/macee-outreach-calendar-workflow-robert-review-2026-04-12.txt`
+  - Sent-log Message-ID: `<177600276984.98113.230012419335998640@kovaldistillery.com>`
+  - Macee was not contacted because her email address is missing locally.
+- 2026-04-12: Handled Sonat's `PR pathways` email to Frank under the medium-independent low-risk internal workflow. Created local task `frank-2026-sonat-pr-pathways-featured`, sent Sonat a concise captured-for-follow-up status update from Frank, and archived the source email to `Handled` after verification (`INBOX` count `0`, `Handled` count `1` for the source Message-ID). Live OPS task creation was deferred because the Mac mini/router path was unavailable and this MacBook session used the local fallback.
+- Recorded Robert's 2026-04-12 approval for medium-independent Frank/Avignon task flow: clearly bounded low-risk internal email tasks can be ingested, routed, executed, logged, and filed without waiting in the inbox; higher-risk/ambiguous categories still require approval.
+- Checked MacMini Frank mailbox/logs on 2026-04-11; Robert's reply to `Frank persona blurb` was received at 13:55 CDT, incorporated into `PERSONA.md`, and Frank sent Robert `Frank task-flow decision options` at 18:14 CDT with task id `frank-decision-options-task-flow-2026-04-11`.
+- Archived Robert's handled `Fwd: Vacation request from Jack Dempsey` source email from Frank INBOX to `Handled` on 2026-04-11 after verifying Portal request ID `1104` was approved; post-archive verification showed INBOX count `0`, `Handled` count `1` for the source Message-ID.
+- Added Robert's standing handled-mail archive directive to `WHAT_TO_DO.md`: Frank may auto-archive clearly handled/resolved emails, but not ambiguous, unprocessed, externally-sensitive, or still-needs-decision messages.
+- Approved Jack Dempsey's routine Portal vacation/leave request on 2026-04-11 after Robert approved proceeding: request ID `1104`, leave type `PLA`, date `2026-04-11`, requested/approved `6.00` hours, `0.00` unpaid, note `Family crisis`; Portal returned success and verified status `Approved`, updated by `Agent Codex`.
+- Added Robert's future routine vacation approval directive to `WHAT_TO_DO.md`: when Robert forwards/sends Frank a routine Portal vacation/leave request to approve, Frank may approve it automatically, but must stop for ambiguity, destructive/non-routine cases, or mismatched request details.
+- Started Frank persona/reference file at `PERSONA.md`; Robert persona-blurb outreach was sent from Mac mini on 2026-04-11 with task id `frank-2026-persona-blurb` after duplicate checks.
+- Added Frank machine-handoff guideline at `MACHINE_HANDOFF.md`: Mac mini is the single writer for mailbox send/check actions; other sessions may draft and transfer non-secret drafts only.
+- Created Frank mailbox communication profile and templates.
+- Added tracked outbound send logging and inbox reply monitoring.
+- Added OPS digest generation for Robert's open OPS tasks.
+- Added receipt autodraft workflow.
+- Added Portal receipt automation with wallet alias handling and receipt-email archiving.
+- Added scheduled draft-only inbox automation scripts and LaunchAgent installer/uninstaller.
+- Installed the Mac mini `draft-only` LaunchAgent with a local runtime under `~/.frank-launch` to avoid launchd permission issues on Google Drive paths.
+- Enforced Robert-only scope by default in Frank email send and autodraft paths.
+- Added richer inbox classification so scheduled review can log Robert test/info replies without escalating them.
+- Added an explicit scheduled-review loop guard so replies to `Frank inbox review...` / `*-auto-escalation` review messages are logged as local follow-up instead of being re-escalated, and parameterized the runner for Avignon/Sonat use.
+- Sent Dmytro the meeting update for Thursday, April 9, 2026 at 2:00 PM Central.
+- Sent Robert a standard-format tomorrow overview for Friday, April 10 using Frank calendar data plus due-tomorrow `/ops` tasks.
+- Cleaned up Angele's inbox by archiving `5,277` clear newsletter / bulk-mail messages from recurring promo senders; `abby.boler@kovaldistillery.com` was not present in inbox.
+- Follow-up Angele review found direct delivery of old-user alias mail for `abby.boler@kovaldistillery.com` and `jordan.wimby@kovaldistillery.com`, archived another `197` clear promo/newsletter messages, and identified several likely unreplied external threads that need human review.
+- Manual Angele review on April 10, 2026 confirmed no Angele Sent Mail matches for recent outreach from Sofia Newgren / Choose Chicago, Zach Sattaur / Heritage Fire, Steve Stelter / Gen X Plorations, Valerie Bomar, or Allison Berg / The Bulletin.
+- Verified Angele cleanup pass on April 10, 2026 moved another `93` obvious alias-routed newsletter / event-promo messages into `Newsletters`, reducing inbox from `15,573` to `15,479`, unread from `6,073` to `5,983`, `abby.boler@kovaldistillery.com` hits from `2,083` to `2,012`, and `jordan.wimby@kovaldistillery.com` hits from `334` to `311`.
+- Verified a second Angele cleanup pass on April 10, 2026 moved `11` alias-routed KOVAL promo emails into `Newsletters`, reducing inbox to `15,470`, unread to `5,976`, `abby.boler@kovaldistillery.com` hits to `2,007`, and `jordan.wimby@kovaldistillery.com` hits to `305`.
+- Verified a third Angele cleanup/review pass on April 10, 2026 filed handled `KOVAL Inquiry: Marketing Inquiry` conversation messages into `Contact Forms`, reducing inbox to `15,449`, marketing alias hits to `177`, and remaining `KOVAL Inquiry: Marketing Inquiry` inbox messages to `201`.
+- Verified a fourth Angele cleanup pass on April 10, 2026 moved another conservative batch of obvious alias-routed newsletter, promo, and platform-notification mail into `Newsletters`, reducing inbox to `15,347`, unread to `5,895`, `abby.boler@kovaldistillery.com` hits to `1,928`, and `jordan.wimby@kovaldistillery.com` hits to `291`.
+- Verified an additional conservative Angele cleanup pass on April 10, 2026 moved `4` remaining Abby-alias National Honey Board promo emails into `Newsletters`, reducing inbox to `15,343`, unread to `5,892`, and `abby.boler@kovaldistillery.com` hits to `1,924`.
+- Verified a follow-up conservative Angele cleanup pass on April 10, 2026 moved another `43` obvious alias-routed newsletter / event-promo messages into `Newsletters`, reducing inbox to `15,300`, unread to `5,850`, `abby.boler@kovaldistillery.com` hits to `1,883`, and `jordan.wimby@kovaldistillery.com` hits to `289`.
+- Verified an additional conservative Angele cleanup pass on April 10, 2026 moved `8` more alias-routed notification / event-promo messages into `Newsletters`, reducing inbox to `15,292`, unread to `5,843`, and `abby.boler@kovaldistillery.com` hits to `1,875`.
+- Verified an additional conservative Angele cleanup pass on April 10, 2026 moved another bulk/newsletter Abby-alias batch into `Newsletters`, reducing inbox to `15,232`, unread to `5,791`, and `abby.boler@kovaldistillery.com` hits to `1,815`.
+- Verified a handled-mail Angele cleanup pass on April 10, 2026 filed `19` remaining Sonat-sent `Re: KOVAL Inquiry: Marketing Inquiry` copies into `Contact Forms`, reducing inbox to `15,213` and remaining `KOVAL Inquiry: Marketing Inquiry` subject-family messages in inbox to `174`.
+- Verified an additional Angele cleanup pass on April 10, 2026 using a Gmail-safe label-plus-archive method for `Newsletters`, archiving another `155` clearly safe alias-routed newsletter / promo / notification messages and reducing inbox to `15,058`, unread to `5,674`, `abby.boler@kovaldistillery.com` hits to `1,708`, and `jordan.wimby@kovaldistillery.com` hits to `241`.
+- Verified a further Angele cleanup pass on April 10, 2026 using the same Gmail-safe `Newsletters` archive method, archiving another `83` clearly safe alias-routed newsletter / promo messages and reducing inbox to `14,975`, unread to `5,600`, `abby.boler@kovaldistillery.com` hits to `1,672`, and `jordan.wimby@kovaldistillery.com` hits to `194`.
+- Verified a broader newsletter-focused Angele cleanup pass on April 10, 2026 using the same Gmail-safe `Newsletters` archive method, archiving another `224` clearly safe newsletter / bulk-promo messages and reducing inbox to `14,751`, unread to `5,442`, `abby.boler@kovaldistillery.com` hits to `1,450`, and `jordan.wimby@kovaldistillery.com` hits to `192`.
+- Verified an explicit Gmail label-operation test set on April 10, 2026 using `info@email.worlddrinksawards.com`: `18` inbox messages went to `0` after adding `Newsletters`, marking `\\Deleted` while selected in `INBOX`, and expunging. Then archived another `1,094` clearly safe newsletter / bulk messages with the same method. Final verified counts: inbox `13,640`, unread `4,650`, `abby.boler@kovaldistillery.com` hits `1,365`, `jordan.wimby@kovaldistillery.com` hits `192`, marketing alias hits `177`, and `KOVAL Inquiry: Marketing Inquiry` messages `174`.
+- Verified a residual Angele newsletter cleanup pass on April 10, 2026 archived another `60` clearly safe newsletter / list / bulk messages with the same Gmail-safe method, reducing inbox to `13,580`, unread to `4,603`, `abby.boler@kovaldistillery.com` hits to `1,364`, and leaving `jordan.wimby@kovaldistillery.com`, marketing alias, and `KOVAL Inquiry: Marketing Inquiry` counts unchanged.
+- Verified a high-confidence list-header Angele newsletter cleanup pass on April 10, 2026 archived another `1,698` clearly safe newsletter / bulk / promotional messages with the same Gmail-safe method, reducing inbox to `11,882`, unread to `3,249`, `abby.boler@kovaldistillery.com` hits to `603`, `jordan.wimby@kovaldistillery.com` hits to `162`, and marketing alias hits to `169`; `KOVAL Inquiry: Marketing Inquiry` count remained `174`.
+- Verified a more aggressive Angele newsletter/promotional cleanup pass on April 10, 2026 archived another `314` newsletter / promotional messages with the same Gmail-safe method while skipping `Re:` and `KOVAL Inquiry: Marketing Inquiry` subjects, reducing inbox to `11,568`, unread to `3,005`, `abby.boler@kovaldistillery.com` hits to `502`, and `jordan.wimby@kovaldistillery.com` hits to `158`; marketing alias hits remained `169`.
+- Verified a Qwoted list-alert Angele cleanup pass on April 10, 2026 archived another `667` list-style alert messages with the same Gmail-safe method, reducing inbox to `10,901` and unread to `2,779`; `abby.boler@kovaldistillery.com` hits remained `502`, `jordan.wimby@kovaldistillery.com` hits remained `158`, and marketing alias hits remained `169`.
+- Verified an old-mail Angele newsletter cleanup pass on April 10, 2026 archived `57` clearly stale newsletter / bulk / promo messages older than one year with the same Gmail-safe method, reducing inbox to `10,844`, unread to `2,724`, `abby.boler@kovaldistillery.com` hits to `476`, and `jordan.wimby@kovaldistillery.com` hits to `152`; marketing alias hits remained `169`.
+- Verified a six-month old-mail Angele archive pass on April 10, 2026 archived `7,021` INBOX messages older than `2025-10-10`, reducing inbox to `3,823`, unread to `1,376`, `abby.boler@kovaldistillery.com` hits to `125`, `jordan.wimby@kovaldistillery.com` hits to `37`, and marketing alias hits to `95`.
+- Verified a remaining-inbox classification pass on April 10, 2026 sampled representative content and archived `419` handled/stale automated messages, reducing inbox to `3,405`, unread to `1,124`, `abby.boler@kovaldistillery.com` hits to `126`, `jordan.wimby@kovaldistillery.com` hits to `26`, and marketing alias hits remained `95`.
+- Verified approved CRM cleanup on April 10, 2026 archived `319` remaining `crm@koval-distillery.com` messages after Robert approved archiving CRM orders/check-ins/general CRM messages, reducing inbox to `3,086` and unread to `965`; `abby.boler@kovaldistillery.com` hits remained `126`, `jordan.wimby@kovaldistillery.com` hits remained `26`, and marketing alias hits remained `95`.
+- Verified approved Qwoted and KOVAL Inquiry cleanup on April 10, 2026 archived `631` unique Qwoted media opportunity alert and KOVAL inquiry/direct reply messages after Robert approved those categories, reducing inbox to `2,495`, unread to `505`, `abby.boler@kovaldistillery.com` hits to `120`, `jordan.wimby@kovaldistillery.com` hits remained `26`, and marketing alias hits to `90`.
+- Created OPS/Portal task `366462` for Sonat due `2026-04-12` to review the Angele inbox cleanup and respond to Avignon with how to proceed; Avignon emailed Sonat on April 10, 2026 with Codex session `56fd7397`, latest counts, preserved categories, and the task id.

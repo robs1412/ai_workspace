@@ -1,0 +1,40 @@
+.DS_Store
+
+# Secrets and private material
+.env
+.env.*
+!.env.example
+.private/
+**/.private/
+**/*secret*.txt
+**/*password*.txt
+**/*token*.txt
+**/*credential*.txt
+**/*oauth*.json
+**/*oauth*.txt
+**/*.key
+**/*.mobileconfig
+**/*.p12
+**/*.pem
+
+# Runtime, caches, generated output
+.venv/
+.venvs/
+.venv_*/
+__pycache__/
+*.pyc
+node_modules/
+.pytest_cache/
+.playwright-cli/
+tmp/
+tmp-*/
+tmp_*/
+output/
+recordings/
+LOG_imapsync/
+sync_backups/
+
+# Embedded implementation clones should live under /Users/werkstatt/<repo>
+screenbox/
+external/
+htdocs/

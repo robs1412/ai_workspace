@@ -1,0 +1,111 @@
+ETL Processes for BID (extract, transform, load).... get info in
+
+Advertising issues (Google Ads)
+
+Web Analytics from Dmytro (similar to Google Analytics)
+show traffic funnel to koval-distillery.com
+
+Portal inventory and distillation schedule
+https://portal.koval-distillery.com/#/production/bottling/view/14423
+and distillations
+add extended audit trails (record all modifications to record) ... exclude picklist changes?
+... then add report page to show modifications that may relate to previous month's bottlings and distillations (also mismatches of shipped and amount bottles in bottling)
+... build report to show mashes where <2000lb grain (define grains) are used (or product and grain mismatch)
+
+https://papers.koval/teams/it/task-queue.html
+remove gitlab?
+transfer?
+https://papers.koval/teams/it/roadmap.html
+
+Check Macbook power mgt
+pmset -g log | rg -i "wake from|wake reason|EC.KeyboardTouchpad|HID Activity|clamshell|TCPKeepAlive" | tail -n 80
+
+https://papers.koval.lan/teams/it/dashboard.html
+
+SSO with Portal again (not working from OPS)
+also logs me out of /ops... next day?
+
+localhost
+The Apache service management on this machine is messy (a root-owned httpd is still active), so launch-agent env changes alone are not taking effect reliably. I’m applying a defensive local fix in config.php to set
+
+Additional programming /lists/:
+Save as batch activity with related account + contact after sending
+Add users - role 'Sales Manager' ... Jamie, Macee, Darla etc. ? 
+
+Salesreport usage of sales team
+track based on login info... general user tracking
+make sure they Dereck, Benjamin Green... need access state select
+
+Video for market event usage
+how does the system work?
+sales people don't know
+
+Mark Ideas for events
+discuss
+https://docs.google.com/document/d/1EaHH97GJ_9ztMNtWaEp-abGUHdVqVcyvJWkUjko5euc/edit?tab=t.0
+
+Manage COT team out of OPS
+replace Connecteam!
+
+Market improvements in ops
+create contact - also in ops (like activity, receipt)
+create account - also in ops (like activity, receipt)
+... use the activity function from ops market event to create in salesreport? (or keep data entry and reporting separate?)
+
+User Report
+user activity tracking in systems (as we have in Portal)
+https://portal.koval-distillery.com/#/user-management/user-activity-tracking
+have an overview per user
+User tracking
+- check Gmail account (needs to be done manually)
+- shift / check in stats
+- task stats
+- portal usage (https://portal.koval-distillery.com/#/user-management/user-activity-tracking)
+- ops / salesreport / contactreport / bid / automation (other?) usage ... maybe track through /login/ ? 
+- contactreport / KPI (salesreport) ... more of how much work the salespeople have, but others should also record calls etc.
+- Gemini AI usage (google page in admin.google.com)
+- 
+
+
+Systems Usage
+- Importer usage... how do we update our rosters? (monthly task?) we have a page now
+- Distributor inventory - add repeating task to check and send out
+- Send out monthly task stats (create task in Dasboard) - add to recurring tasks
+- Market Events and Events
+- Task Stats
+- Check on Barrel Sample Page / create KOVAL Manual for it (sent out E-mail to Zach and Matt Jan 2026)
+- PHPList and list usage
+- Review Sign up stats PHPList, Shopify and Square
+- Shopify Newsletter!
+- monthly and quarterly salesreports from WH and Distribution
+- update bid information 
+
+Google Postmaster tools
+https://postmaster.google.com/u/0/dashboards#do=kovaldistillery.com&st=userReportedSpamRate&dr=7
+
+
+https://papers.koval.lan/teams/it/task-queue.html
+
+
+ 
+Hello Robert,
+We’re writing to provide you with security best practices regarding the management of service account keys and API keys within your Google Cloud environment.
+Recent security trends indicate that long-lived credentials without proper security best practices remain a top security risk for unauthorized access. To ensure your environment remains secure, and to modernize your authentication strategy, we strongly advise implementing the unified security framework outlined below.
+
+What you need to do
+
+Action advised:
+Secure the credential lifecycle: Apply standard security hygiene by following these best practices:
+	- Zero-Code Storage: Never commit keys to source code or version control. Use Secret Manager to inject credentials at runtime.
+	- Disable Dormant Keys: Audit your active keys and decommission any that show no activity over the last 30 days.
+	- Enforce API Restrictions: Never leave an API key unrestricted. Limit keys to specific APIs (e.g., Maps Java Script only) and apply environmental restrictions (IP addresses, HTTP referrers, or bundle IDs).
+	- Apply Least Privilege: Never give full permissions to a service account. Use the IAM recommender to prune unused permissions for service accounts, ensuring only the absolute minimum access required for their function.
+	- Mandatory Rotation: Implement the iam.serviceAccountKeyExpiryHours policy to enforce a maximum lifespan for all user-managed service account keys. If service account keys are not needed, implement iam.managed.disableServiceAccountKeyCreation to disable the creation of new service account keys.
+Improve operational safeguards: Ensure a rapid response to security incidents by completing the following:
+	1. Set Essential Contacts: Verify that your Essential Contacts are up to date to ensure critical security notifications reach the right people during an incident.
+	2. Set Billing Anomaly and Budget Alerts: Ensure billing anomaly and budget alerts notifications are acted on. A sudden spike in consumption is often the first indicator of a compromised credential.
+
+We’re here to help
+
+We are committed to helping you maintain a secure environment. If you have any questions or require assistance, please contact Google Cloud Support.
+Thanks for choosing Google Cloud.

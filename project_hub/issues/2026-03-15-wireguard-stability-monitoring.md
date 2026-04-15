@@ -1,0 +1,402 @@
+# Incident / Project Slice Log
+
+- Master Incident ID: `AI-INC-20260315-WIREGUARD-STABILITY-01`
+- Date Opened: `2026-03-15 11:05:40 CDT`
+- Date Completed:
+- Owner: `Codex`
+- Priority: `Medium`
+- Status: `Open`
+
+## Scope
+
+Track WireGuard tunnel stability on the MacBook across different physical networks and determine whether prior failures were caused by local client state, third-party VPN/security software, or the home network path.
+
+## Symptoms
+
+- Historical issue: WireGuard sometimes appeared connected but traffic or routing became stale.
+- Current hypothesis as of `2026-03-15`: the previous failures may have been influenced by the home network, since testing on a different network is currently stable.
+
+## Root Cause
+
+Not yet confirmed.
+
+Working hypothesis:
+- Sophos and HMA have been removed and are not currently active.
+- A host-route pin for the WireGuard endpoint is still required on this MacBook.
+- Failures occur across at least two physical networks, so a single local network is no longer the lead suspect.
+- WireGuard's own peer log shows intermittent handshake failure/retry behavior while the macOS service remains logically `Connected`.
+- Final strongest finding as of `2026-03-15 14:24 CDT`:
+  - the stale behavior did not reproduce on a fresh `wg0` peer/client identity over a 10-minute soak
+  - the old `koval-robert` client/peer state is now the lead suspect, not `wg0` as an interface in general
+
+## Repo Logs
+
+### ai_workspace
+
+- Repo Log ID: `WG-20260315-MONITOR-01`
+- Commit SHA:
+- Commit Date:
+- Change Summary:
+  - recorded March 15, 2026 WireGuard connectivity and staleness checks
+  - added ongoing monitoring item to `TODO.md`
+  - started a dedicated monitor log for continued soak testing
+
+## Verification Notes
+
+- Baseline without VPN:
+  - public IP observed as `207.229.149.206`
+  - standard Wi-Fi DNS observed as `192.168.0.1`
+- With `koval-robert` connected:
+  - tunnel interface: `utun6`
+  - VPN DNS: `192.168.55.1`
+  - public IP observed repeatedly as `205.178.117.216`
+  - endpoint `205.178.117.216` remained pinned to `en0`
+- Short soak results on alternate network:
+  - from approximately `10:59 CDT` through `11:05 CDT` on `2026-03-15`
+  - repeated staleness samples showed `route_drift=no`
+  - repeated HTTPS probes succeeded
+  - repeated external IP checks stayed on `205.178.117.216`
+- User-reported transient stale event:
+  - reported around `11:09 CDT` on `2026-03-15`
+  - immediate snapshot captured at `2026-03-15 11:09:36 CDT`
+  - snapshot already showed the tunnel healthy again:
+    - `scutil --nc status` still `Connected`
+    - endpoint `205.178.117.216` pinned to `en0`
+    - VPN DNS still `192.168.55.1`
+    - public IP still `205.178.117.216`
+    - HTTPS probe to `1.1.1.1` returned `301`
+  - implication:
+    - either the tunnel self-recovered before the snapshot completed, or the stale symptom was transient and not visible in route/DNS state by the time of capture
+- Captured transient failure from raw monitor:
+  - raw monitor sample at `2026-03-15 11:11:54 CDT` recorded:
+    - `service=Connected`
+    - `public_ip=205.178.117.216`
+    - endpoint route still pinned to `en0`
+    - `https_probe=000FAIL`
+  - next raw sample at `2026-03-15 11:12:17 CDT` had already recovered:
+    - `https_probe=301`
+  - interpretation:
+    - this is not the old endpoint-route drift failure
+    - the tunnel can remain logically connected with correct routing while data-plane reachability briefly stalls
+    - that points away from HMA/Sophos leftovers and more toward transient path, NAT, UDP keepalive/handshake, or WireGuard/macOS extension behavior
+- WireGuard internal peer-log evidence:
+  - extracted from `~/Library/Group Containers/L82V4Y2P3C.group.com.wireguard.macos/tunnel-log.bin`
+  - repeated messages include:
+    - `Sending handshake initiation`
+    - `Handshake did not complete after 5 seconds, retrying (try 2)`
+    - `Retrying handshake because we stopped hearing back after 15 seconds`
+    - later followed by `Received handshake response`
+  - implication:
+    - the peer handshake itself is intermittently failing and later recovering
+    - this is a data-plane or peer/session continuity issue, not just stale route state
+- Automatic mitigation added on MacBook:
+  - local watchdog LaunchAgent: `com.koval.watch-wireguard-recover`
+  - runnable script path: `/Users/robert/bin/watch_wireguard_recover.sh`
+  - recovery log: `/Users/robert/Library/Logs/wireguard-recovery-wg0-fresh.log`
+  - current tuning as of `2026-03-15 11:41 CDT`:
+    - check interval `10s`
+    - recovery threshold `1` failed probe cycle
+    - automatic stop/start of `koval-robert`
+    - post-start wait for actual `Connected` state before logging recovery completion
+  - additional hardening applied later on `2026-03-15 14:36 CDT`:
+    - fixed a watchdog script bug where `recover_tunnel()` could exit immediately after `recovery_start`
+    - root cause: `read` under `set -e` consumed process-substitution output without a trailing newline and returned non-zero at EOF
+    - updated the script to emit newline-delimited status output and tolerate EOF safely
+    - recovery logging was expanded to record:
+      - `recovery_start` with pre-stop state
+      - `recovery_stop` result and post-stop state
+      - `recovery_start_request` result and immediate state
+      - `recovery_done` with final state and wait time
+- Router-side corrective change applied on `2026-03-15`:
+  - OpenWrt `firewall.@zone[2]` (`wg` zone) changed from:
+    - `masq=1` to `masq=0`
+    - `mtu_fix=1` to `mtu_fix=0`
+  - rationale:
+    - `wg0` is the server-side internal VPN interface, not a WAN uplink
+    - masquerading and MTU MSS-clamping on the WireGuard zone are atypical there and can distort return traffic behavior for VPN clients
+  - firewall config was backed up on the router before change:
+    - `/etc/config/firewall.bak.wgfix.<timestamp>`
+- Isolated tunnel test (`koval-robert-2` / `wgmac`) findings on `2026-03-15`:
+  - router-side dedicated interface `wgmac` was created on port `51821` with subnet `10.56.56.0/24`
+  - macOS service `koval-robert-2` did connect and received `10.56.56.3`
+  - however, in the live failure state:
+    - the service reported `Connected`
+    - DNS switched to `192.168.55.1`
+    - traffic probes failed
+    - even direct reachability to `192.168.55.1` failed through the tunnel
+  - key isolation was not actually clean:
+    - `wgmac` reported the same server public key as the original `wg0`
+    - `wgmac` also reused the same client peer public key as the original Mac tunnel
+  - implication:
+    - the isolated tunnel path is not yet a valid root-cause comparison
+    - duplicated WireGuard identities across `wg0` and `wgmac` are a plausible reason the isolated tunnel can show `Connected` while still failing to pass payload traffic
+  - corrective action taken:
+    - `network.wgmac.private_key` on the Linksys was re-keyed to a unique value
+    - `wgmac` now advertises a different server public key than `wg0`
+    - the Mac-side watchdog was returned to the production tunnel `koval-robert` so mitigation continues on the working path
+  - remaining requirement:
+    - `koval-robert-2` must be updated to trust the new `wgmac` server public key before the isolated test can be considered valid
+  - follow-up validation after server re-key:
+    - `koval-robert-2` again reported `Connected` with address `10.56.56.3`
+    - payload traffic still failed immediately
+    - direct reachability to `192.168.55.1` still failed
+  - updated implication:
+    - unique server identity alone did not make the isolated tunnel pass traffic
+    - the remaining likely identity collision is the duplicated Mac peer key reused across `wg0` and `wgmac`
+    - the next valid isolation step is a fresh client keypair for `koval-robert-2`, not just a duplicated copy of `koval-robert`
+  - fresh isolated retest:
+    - a new tunnel `koval-robert-2-fresh` was imported with a fresh client keypair
+    - the Linksys `wgmac` peer was updated to the new client public key
+    - initial failure persisted because WAN firewall only allowed UDP `51820`
+    - `wgmac` listens on UDP `51821`, and that port was not allowed on the router
+  - root-cause fix for isolated path:
+    - added active firewall rule `Allow-WireGuard-WGMAC-In` on OpenWrt WAN for UDP `51821`
+    - after applying that rule, `wgmac` began receiving handshakes and transfer counters advanced
+    - `koval-robert-2-fresh` then successfully passed traffic with public IP `205.178.117.216`
+  - implication:
+    - the isolated test path itself was not broken by the Mac client
+    - the immediate `wgmac` failure was caused by missing server-side firewall exposure for its listen port
+- Fresh `wg0` replacement path:
+  - a new peer was added on `wg0` using the fresh client public key with `10.55.55.10/32`
+  - a new Mac tunnel `koval-robert-wg0-fresh` was imported using the same fresh client key and `wg0` server public key
+  - a 10-minute Mac-side and router-side soak stayed clean:
+    - Mac samples stayed `Connected`
+    - public IP stayed `205.178.117.216`
+    - HTTPS stayed successful
+    - router-side handshake timestamps kept refreshing
+    - router-side transfer counters kept increasing
+  - implication:
+    - `wg0` itself is not the main fault domain
+    - the old `koval-robert` profile/peer state was likely the stale source
+- Cleanup completed on `2026-03-15`:
+  - removed the temporary `wgmac` peer from the Linksys and brought `wgmac` down
+  - removed the temporary WAN firewall rule for UDP `51821`
+  - current active production tunnel is `koval-robert-wg0-fresh`
+  - watchdog now targets `koval-robert-wg0-fresh`
+  - note: `koval-robert-2-fresh` was later re-imported on the MacBook for additional validation, but it is not the active production tunnel
+- Additional March 15 follow-up incident slice around `14:24-14:40 CDT`:
+  - user reported the WireGuard tunnel had become stuck again and asked to restore `robert2`
+  - observed state on MacBook before repair:
+    - network service `koval-robert-wg0-fresh` existed but was no longer carrying default traffic
+    - route table showed plain Wi-Fi default route via `192.168.4.1`
+    - endpoint route `205.178.117.216` was still correctly pinned to `en0`
+    - watchdog log showed:
+      - `2026-03-15 14:26:19 CDT probe_fail count=1 service=Connected endpoint_if=en0 public_ip=FAIL https_probe=000`
+      - `2026-03-15 14:26:19 CDT recovery_start service=koval-robert-wg0-fresh`
+      - there was no matching `recovery_done`, confirming the watchdog had crashed mid-recovery
+  - manual restoration:
+    - `scutil --nc start 'koval-robert-wg0-fresh'`
+    - verification after restore:
+      - service returned `Connected`
+      - primary interface returned to `utun6`
+      - public IP returned to `205.178.117.216`
+      - HTTPS probe to `https://1.1.1.1` returned `301`
+  - `koval-robert-2-fresh` was then re-enabled as a second monitored profile:
+    - active service present in `scutil --nc list`
+    - remote endpoint confirmed as `205.178.117.216:51821`
+    - dedicated watchdog LaunchAgent added:
+      - label: `com.koval.watch-wireguard-recover-robert-2-fresh`
+      - log: `/Users/robert/Library/Logs/wireguard-recovery-robert-2-fresh.log`
+    - first confirmed watchdog start log:
+      - `2026-03-15 14:38:11 CDT watchdog_start service=koval-robert-2-fresh endpoint=205.178.117.216 interval=10s threshold=1`
+  - controlled switch attempt from `koval-robert-wg0-fresh` to `koval-robert-2-fresh`:
+    - starting `koval-robert-2-fresh` caused WireGuard to deactivate `koval-robert-wg0-fresh`, as expected
+    - `koval-robert-2-fresh` then failed to remain up and reported a NetworkExtension internal error
+    - `scutil --nc status 'koval-robert-2-fresh'` showed:
+      - `LastCause : 7`
+      - localized error equivalent to:
+        - the VPN session failed because an internal error occurred
+    - resulting state after failed switch:
+      - both WireGuard services were disconnected
+      - machine fell back to plain Wi-Fi egress
+      - public IP observed as `168.91.196.90`
+  - rollback:
+    - `scutil --nc start 'koval-robert-wg0-fresh'`
+    - service recovered successfully and is again the active production tunnel
+    - post-rollback verification:
+      - `Connected`
+      - primary route on `utun6`
+      - public IP `205.178.117.216`
+      - HTTPS probe `301`
+  - current interpretation as of `2026-03-15 14:42 CDT`:
+    - `koval-robert-wg0-fresh` is the current known-good production tunnel
+    - `koval-robert-2-fresh` can no longer be treated as proven-good based only on earlier testing
+    - the re-imported `koval-robert-2-fresh` profile now requires separate debugging before it is used for failover
+  - follow-up finding shortly after:
+    - the larger immediate stability regression was caused by running two watchdog LaunchAgents at once:
+      - `com.koval.watch-wireguard-recover` for `koval-robert-wg0-fresh`
+      - `com.koval.watch-wireguard-recover-robert-2-fresh` for `koval-robert-2-fresh`
+    - on macOS/WireGuard these tunnels are mutually exclusive primary sessions
+    - the `robert-2-fresh` watchdog auto-started its service in the background, which forced `wg0-fresh` down
+    - that created a tunnel tug-of-war and left the machine on plain Wi-Fi again until manual intervention
+  - corrective action applied at `2026-03-15 14:45 CDT`:
+    - booted out the `com.koval.watch-wireguard-recover-robert-2-fresh` LaunchAgent
+    - marked `com.koval.watch-wireguard-recover-robert-2-fresh` disabled in `launchctl`
+    - explicitly stopped `koval-robert-2-fresh`
+    - restarted `koval-robert-wg0-fresh`
+    - verified recovery:
+      - `koval-robert-wg0-fresh` `Connected`
+      - primary route on `utun6`
+      - public IP `205.178.117.216`
+      - HTTPS probe `301`
+  - operational rule going forward:
+    - only one WireGuard auto-recovery watchdog may be enabled at a time on this MacBook
+    - if `koval-robert-2-fresh` is tested again, disable the `wg0-fresh` watchdog first, then switch, then enable only the watchdog for the active tunnel
+  - additional `wg0`-only monitoring setup added on `2026-03-15 15:08-15:22 CDT`:
+    - local Mac sampler LaunchAgent:
+      - label: `com.koval.monitor-wireguard-wg0`
+      - script: `/Users/robert/bin/monitor_wireguard_wg0.sh`
+      - log: `/Users/robert/Library/Logs/wireguard-wg0-monitor.log`
+    - router-side sampler LaunchAgent:
+      - label: `com.koval.monitor-wireguard-router-wg0`
+      - script: `/Users/robert/bin/monitor_wireguard_router_wg0.sh`
+      - log: `/Users/robert/Library/Logs/wireguard-router-wg0-monitor.log`
+    - router root password was rotated after accidental chat exposure and the working updated credential was saved locally in `router.md`
+    - router-side sampler auth is now working, but peer-line parsing still needs cleanup before every logged counter sample can be treated as authoritative
+  - new confirmed stale event during `wg0`-only monitoring:
+    - Mac sampler captured at `2026-03-15 15:18:02 CDT`:
+      - `service=Connected`
+      - `endpoint_if=en0`
+      - `default_if=utun6`
+      - `public_ip=FAIL`
+      - `https_probe=000`
+    - watchdog log shows:
+      - `2026-03-15 15:17:58 CDT probe_fail count=1 service=Connected endpoint_if=en0 public_ip=FAIL https_probe=000`
+      - `2026-03-15 15:17:58 CDT recovery_start service=koval-robert-wg0-fresh`
+      - `2026-03-15 15:18:05 CDT recovery_done service=Connected waited=0s`
+    - Mac sampler then returned to healthy readings from `2026-03-15 15:18:17 CDT` onward:
+      - `public_ip=205.178.117.216`
+      - `https_probe=301`
+  - recovery strategy upgraded later on `2026-03-15`:
+    - `watch_wireguard_recover.sh` was changed from plain tunnel restart behavior to `client_reset` mode
+    - stale `wg0` recovery now:
+      - stops `koval-robert-wg0-fresh`
+      - kills `WireGuardNetworkExtension`
+      - kills the WireGuard app
+      - relaunches `/Applications/WireGuard.app`
+      - reconnects `koval-robert-wg0-fresh`
+    - rationale:
+      - repeated stale events were occurring while:
+        - service still reported `Connected`
+        - `utun6` remained primary
+        - endpoint route still stayed pinned to `en0`
+      - that made stuck macOS WireGuard / NetworkExtension state the lead local fault domain
+  - local automation added for longer unattended observation:
+    - five-minute summary LaunchAgent:
+      - label: `com.koval.summarize-wireguard-wg0`
+      - script: `/Users/robert/bin/summarize_wireguard_wg0.sh`
+      - log: `/Users/robert/Library/Logs/wireguard-wg0-summary.log`
+    - local notification helper:
+      - script: `/Users/robert/bin/notify_wireguard_event.sh`
+      - used by the watchdog to notify on stale detection and recovery completion
+  - full WireGuard client reset execution and follow-up:
+    - a manual full reset of the WireGuard app / extension was performed on `2026-03-15 15:48 CDT`
+    - verification immediately after manual reset:
+      - `koval-robert-wg0-fresh` returned `Connected`
+      - primary route returned to `utun6`
+      - public IP returned to `205.178.117.216`
+      - HTTPS probe returned `301`
+      - both processes were running again under fresh PIDs:
+        - `WireGuard`
+        - `WireGuardNetworkExtension`
+  - new post-`client_reset` stale event and outcome:
+    - watchdog log recorded another stale event at `2026-03-15 15:57:50 CDT`
+      - `probe_fail count=1 service=Connected endpoint_if=en0 public_ip=FAIL https_probe=000`
+      - `recovery_start service=koval-robert-wg0-fresh mode=client_reset pre_status=Connected`
+      - `client_reset_begin app=WireGuard extension=WireGuardNetworkExtension`
+      - `client_reset_done app=WireGuard`
+      - `recovery_done service=koval-robert-wg0-fresh final_status=Connected waited=0s`
+    - this is the first observed stale event handled by the stronger `client_reset` path instead of the earlier shallow tunnel bounce
+  - post-`client_reset` stability window:
+    - Mac monitor remained healthy from shortly after `15:58 CDT` through at least `16:12:54 CDT`
+    - five-minute summary log also remained healthy at:
+      - `15:42:08 CDT`
+      - `15:47:09 CDT`
+      - `15:52:10 CDT`
+      - `15:57:12 CDT`
+      - `16:02:12 CDT`
+      - `16:07:14 CDT`
+      - `16:12:14 CDT`
+    - each summary showed:
+      - `service=Connected`
+      - `default_if=utun6`
+      - `public_ip=205.178.117.216`
+      - `https_probe=301`
+  - current assessment as of `2026-03-15 16:13 CDT`:
+    - root cause is still not proven conclusively
+    - strongest remaining hypothesis is still stuck WireGuard client / NetworkExtension state on macOS
+    - `client_reset` recovery is now the active mitigation aimed at that suspected cause
+    - no new stale sample has been observed after the `15:57:50 CDT` `client_reset` recovery during the logged window through `16:12:54 CDT`
+  - additional recurring stale events after the earlier `16:13 CDT` assessment:
+    - `16:19:23 CDT`
+    - `16:38:56 CDT`
+    - `16:42:28 CDT`
+    - `16:49:29 CDT`
+    - each event matched the same signature:
+      - service still reported `Connected`
+      - `utun6` remained primary
+      - endpoint route remained pinned to `en0`
+      - public-IP and HTTPS probes failed until a `client_reset` recovery was completed
+  - decisive two-sided capture at `2026-03-15 16:49 CDT`:
+    - a live router loop was run over SSH against `wg show wg0 dump | grep '10.55.55.10/32'` while the local Mac monitor tailed:
+      - `/Users/robert/Library/Logs/wireguard-wg0-monitor.log`
+      - `/Users/robert/Library/Logs/wireguard-recovery-wg0-fresh.log`
+    - healthy baseline immediately before the fault:
+      - router peer counters were climbing continuously every second for `10.55.55.10/32`
+      - Mac monitor samples were still healthy
+    - during the actual stale window:
+      - Mac monitor recorded:
+        - `2026-03-15 16:49:29 CDT service=Connected ... public_ip=FAIL https_probe=000`
+      - watchdog recorded:
+        - `2026-03-15 16:49:29 CDT probe_fail`
+        - `2026-03-15 16:49:30 CDT recovery_start mode=client_reset`
+      - router peer state for `10.55.55.10/32` showed:
+        - endpoint stayed on old client UDP source port `168.91.196.90:63902`
+        - `latest_handshake` stayed stale at the older epoch until after recovery
+        - peer byte counters were effectively flat from roughly `16:49:11 CDT` through `16:49:39 CDT`
+        - only tiny periodic byte increases continued, consistent with keepalive/control traffic rather than real tunnel data
+    - recovery correlation:
+      - after the `client_reset`, the router view changed at `16:49:40 CDT`:
+        - endpoint source port changed from `63902` to `51880`
+      - at `16:49:41 CDT`:
+        - `latest_handshake` advanced again
+        - peer counters resumed climbing normally
+      - Mac watchdog completed recovery at `16:49:42 CDT`
+      - Mac monitor returned to healthy at `16:49:46 CDT`
+  - updated root-cause conclusion as of `2026-03-15 16:50 CDT`:
+    - the failure is not route drift and not a false-positive monitor artifact
+    - the router did not continue seeing healthy real traffic while the Mac claimed `Connected`
+    - however, the router did still see tiny keepalive-sized packet movement during the stale window
+    - that strongly indicates the WireGuard control plane remained alive while the macOS client data plane stopped carrying real tunnel traffic
+    - most likely root cause:
+      - a macOS WireGuard / `WireGuardNetworkExtension` / TUN-path stall on the client, where keepalive/control packets continue but normal routed payload traffic stops until the client is fully reset
+    - router/NAT handling is no longer the lead suspect:
+      - if router-side UDP handling were the primary fault, the decisive `16:49` capture would more likely have shown total peer silence or router-side continued healthy traffic inconsistent with the client view
+      - instead, the evidence shows the peer remained partially alive at the control-packet level but not at the real data-plane level until the Mac client was restarted
+
+## Rollback Plan
+
+No code/runtime rollback needed for monitoring itself.
+
+If troubleshooting changes are made later:
+- disconnect WireGuard
+- remove or disable any temporary route-fix or monitor helpers added during investigation
+- restore prior user-level LaunchAgent state if intentionally changed
+
+## Follow-Ups
+
+- Run a longer soak test on the current alternate network and keep raw samples.
+- Re-test on the home network and compare:
+  - connection success
+  - time to failure
+  - endpoint route behavior
+  - DNS behavior
+  - public IP reachability
+- If the issue recurs only at home, investigate:
+  - router/firewall handling of long-lived UDP/51820
+  - ISP path changes or NAT timeout behavior
+  - local DNS/router instability under VPN traffic
+- Add local automatic stale-state detection and recovery on the MacBook:
+  - detect `Connected` plus failed data-plane probes
+  - restart the tunnel automatically after repeated failures
+  - record every recovery event with timestamps for later comparison against router-side logs

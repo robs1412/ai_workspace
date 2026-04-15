@@ -1,0 +1,5 @@
+secret calendar address Market Events
+https://calendar.google.com/calendar/ical/c_3gv356r0ehbv0fgn9sead940ig%40group.calendar.google.com/private-0d56a26b7f383064af44be49566aeced/basic.ics
+
+secret calendar Outreach Events
+https://calendar.google.com/calendar/ical/c_ocjnu99l5tpghlvrovtifk1io8%40group.calendar.google.com/private-d2f1766b1a7f4373edc510ab341037cb/basic.ics
