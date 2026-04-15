@@ -21,12 +21,6 @@ Last Updated: 2026-04-15 16:36:43 CDT (Machine: Macmini.lan)
   - Repos: `salesreport`, `portal`, shared `koval_distillery` view and Portal/Salesreport auth surfaces
   - Status: planning complete; recommendation is to move report ownership to Salesreport, but implementation is blocked pending approval because it affects live routing, auth/permissions, a shared DB view, and cross-repo deploy order
 
-- **2026-04-12 Codex Portal Auth Repair**
-  - Master ID: `AI-INC-20260412-CODEX-PORTAL-AUTH-01`
-  - Detail log: `project_hub/issues/2026-04-12-codex-portal-auth-repair.md`
-  - Repos: `ops`, `ai_workspace`, Portal API auth/database state
-  - Status: open; Codex-only DB-code 2FA completion path added in OPS, but live Portal API still rejects both service and direct Codex primary login
-
 - **2026-04-12 AI Workstation And Sync Transition**
   - Master ID: `AI-INC-20260412-AI-WORKSTATION-SYNC-01`
   - Detail log: `project_hub/issues/2026-04-12-ai-workstation-sync-transition.md`
@@ -74,6 +68,12 @@ Last Updated: 2026-04-15 16:36:43 CDT (Machine: Macmini.lan)
   - Repos: `login` (shared SSO/logout layer affecting `portal` and `ops`)
 
 ## Completed
+
+- **2026-04-12 Codex Portal Auth Repair**
+  - Master ID: `AI-INC-20260412-CODEX-PORTAL-AUTH-01`
+  - Detail log: `project_hub/issues/2026-04-12-codex-portal-auth-repair.md`
+  - Repos: `ops`, `ai_workspace`, Portal API auth/database state
+  - Status: completed 2026-04-15; Codex user id `1332` credential verifier fields reconciled to the approved local automation credential, and `crm_hydrate_session_portal_token("Codex")` now returns a non-expired Portal JWT for subject `1332`. Service-user impersonation policy for user id `167` was intentionally unchanged.
 
 - **2026-04-12 OpenWrt LuCI Upgrade Assessment**
   - Master ID: `AI-INC-20260412-OPENWRT-LUCI-UPGRADE-01`

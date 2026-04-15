@@ -2,10 +2,10 @@
 
 - Master Incident ID: AI-INC-20260412-CODEX-PORTAL-AUTH-01
 - Date Opened: 2026-04-12
-- Date Completed:
+- Date Completed: 2026-04-15
 - Owner: Codex
 - Priority: High
-- Status: Open
+- Status: Completed
 
 ## Scope
 
@@ -62,6 +62,8 @@ Resolved for direct automation login:
 - 2026-04-14 task registration verification: BID refs `366460` and `366486` already had creator `1`, owner `1332`, assignee `1332`; Communications refs `363191`, `360626`, and `363052` were repaired to creator `1`, owner `1332`, assignee `1332`; Trainual `366499` was repaired to creator `1`, owner `1332`, assignees `1,144,1332`; new OpenWrt/Workspaceboard tasks `366563`, `366564`, `366565`, and `366566` were created with creator `1`, owner `1332`, assignee `1332`.
 - 2026-04-14 silent-task policy verification: no new task was created while changing the helper; code review confirms the helper now sends `sendnotification=0`, `send_notification=false`, and `sendNotification=false` unless `--notify=1` is explicitly passed.
 - 2026-04-14 `366583` verification: CRM row currently has creator `1`, owner `1332`, assignee `1332`, and `sendnotification=0`; delivered email cannot be unsent retroactively. No external test emails were sent during investigation. Existing task check against `366583` returned `created=false`, so no duplicate task was created.
+- 2026-04-15 read-only recheck from `/Users/werkstatt/ops`: local OPS env discovery resolves Portal API credentials and Codex automation env keys as present, and the CRM DB handle is available. The service API credential verifies against CRM user id `167`, but Portal auth only permits hardcoded impersonators `1`, `3`, and `165`, so service-login impersonation to `Codex` is expected to fail with HTTP `400`. The currently loaded Codex automation password values do not verify against either the selected modern hash or the legacy hash for CRM user id `1332`; simple quote-stripping does not change that result. No live `/auth/login`, `/auth/2fa/verify`, task creation, credential rotation, or DB write was performed during this recheck.
+- 2026-04-15 approved credential reconciliation: Robert approved the Codex credential fix path for CRM/OPS user id `1332` only. Updated only user id `1332` verifier fields from the approved local Codex automation credential; both modern and legacy verifier checks now pass locally. Reran `crm_hydrate_session_portal_token("Codex")`; it returned success with a non-expired Portal JWT whose subject is user id `1332` and whose identity matches `Codex`. No service-user impersonation allowlist/policy change, task creation, or task completion was performed.
 
 ## Rollback Plan
 
@@ -71,5 +73,4 @@ Resolved for direct automation login:
 
 ## Follow-Ups
 
-- Inspect the live Portal API credential/database path and refresh the service/Codex credentials without printing secrets.
-- Continue investigating why direct Codex Portal token hydration currently fails in the clean CLI probe, even though the explicit OPS helper fallback can register tasks and force correct CRM metadata.
+- Service-user impersonation remains intentionally unchanged in this slice. If service user id `167` should impersonate Codex later, approve a separate Portal auth policy change.
