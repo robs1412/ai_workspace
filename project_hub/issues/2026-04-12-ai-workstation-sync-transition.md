@@ -221,6 +221,51 @@ Recommended replacement sync model:
 
 Do not remove Google Drive from Mac mini or delete/move `.private` until the safe subset has been created, pushed, cloned on all machines, and the secure-storage decision for secret material is explicit.
 
+## 2026-04-15 Step 4 Start: Safe Git-Backed AI Workspace
+
+Created `/Users/werkstatt/ai_workspace` on Mac mini as the new git-backed coordination repo.
+
+Initial repo state:
+
+- Branch: `main`
+- Initial commit: `19c4e58` (`Create safe AI workspace coordination repo`)
+- Size: about `1.1M`
+- Tracked files: `143`
+- M4 clone: `/Users/werkstatt/ai_workspace`, cloned from `admin-macmini:/Users/werkstatt/ai_workspace`
+
+Included in the first safe subset:
+
+- core coordination docs: `AGENTS.md`, `HANDOFF.md`, `TODO.md`, `ToDo-append.md`, `README.md`, and selected top-level policy/planning docs
+- `project_hub` markdown records
+- `worker_roles` markdown records
+- non-secret Frank and Avignon planning docs
+
+Excluded from the first safe subset:
+
+- `.private`
+- `.env*`
+- `screenbox/.env`
+- virtualenvs and caches
+- `tmp`, `tmp-staging`, `tmp_il_report`
+- `output`, `recordings`, `LOG_imapsync`, `sync_backups`
+- embedded implementation clones such as `screenbox` and `external`
+- operational `scripts`
+- Frank/Avignon drafts, sent logs, task JSON, automation logs, and private work artifacts
+
+Mapping update:
+
+- Mac mini `/Users/admin/.bashrc` now prefers `/Users/werkstatt/ai_workspace` for `ws ai`, with the Google Drive path as fallback/archive.
+- M4 `/Users/kovaladmin/.bashrc` now prefers `/Users/werkstatt/ai_workspace` for `ws ai`, with the Google Drive path as fallback/archive.
+- `frank` and `avignon` aliases prefer the new repo's planning directories on both machines.
+
+Remaining before Google Drive can be retired:
+
+1. Create or attach a private GitHub remote for `/Users/werkstatt/ai_workspace`.
+2. Clone/verify the new repo on MacBook.
+3. Decide the secure storage path for `.private`, `.env`, OAuth, password, VPN/router, and mailbox credential material.
+4. Decide whether any excluded generated/audit artifacts should be archived elsewhere.
+5. Once verified on all three machines, stop using the Google Drive `ai_workspace` for active coordination and keep it read-only or archive it.
+
 ## Decision Driver Questions
 
 1. Should M4 remain a local/manual board control surface, or should it become a formal Workspaceboard failover host?

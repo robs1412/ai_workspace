@@ -111,17 +111,17 @@ Last Updated: 2026-04-14 12:10:58 CDT (Machine: Macmini.lan)
 - output path:
 - `/Applications/MAMP/htdocs/bid/intelligence/reports/`
 - Frank local workspace:
-- `frank` -> `/Users/admin/Library/CloudStorage/GoogleDrive-robert@kovaldistillery.com/My Drive/2026_workspace_sync/ai_workspace/frank`
+- `frank` -> `/Users/werkstatt/ai_workspace/frank`
 - This is a local assistant workspace inside `ai_workspace`, not a separate repo.
 - Avignon local workspace:
-- `avignon` -> `/Users/admin/Library/CloudStorage/GoogleDrive-robert@kovaldistillery.com/My Drive/2026_workspace_sync/ai_workspace/avignon`
+- `avignon` -> `/Users/werkstatt/ai_workspace/avignon`
 - This is a local assistant workspace inside `ai_workspace`, parallel to `frank/`.
 - Braincloud local workspace:
 - `braincloud` -> `/Users/werkstatt/braincloud`
 - Keep Braincloud mapped only to the `werkstatt` root; do not use the synced `ai_workspace/htdocs/braincloud` copy as a workspace fallback.
 - Work machine reminder: if `ws` is not available, copy the `ws()` function and aliases from `/Users/robert/.bashrc` into the work machine `~/.bashrc`, then run `source ~/.bashrc`.
-- Cross-machine note: this `ai_workspace` syncs via Google Drive/Git, while other workspaces may exist as direct Git clones (no shared symlinks guaranteed).
-- 2026-04-12 workstation/sync boundary: treat `ai_workspace` as the Google Drive-synced planning, policy, task-intake, role-doc, project-hub, and handoff layer. Treat `/Users/werkstatt/<repo>` as the code/implementation workspace layer. Use git by default for code sync; use SSH/rsync only for deliberate non-git artifact handoffs; keep runtime state, LaunchAgents, tmux sessions, caches, dependency folders, non-audit logs, secrets, keychain/OAuth material, `.env` files, and live mailbox automation credentials machine-local.
+- Cross-machine note: this `ai_workspace` is migrating from Google Drive to git-backed sync under `/Users/werkstatt/ai_workspace`, while other workspaces are direct git clones under `/Users/werkstatt/<repo>`.
+- 2026-04-15 workstation/sync boundary: treat `/Users/werkstatt/ai_workspace` as the git-backed planning, policy, task-intake, role-doc, project-hub, and handoff layer. Treat `/Users/werkstatt/<repo>` as the code/implementation workspace layer. Use git by default for all source/planning sync; use SSH/rsync only for deliberate non-git artifact handoffs; keep runtime state, LaunchAgents, tmux sessions, caches, dependency folders, non-audit logs, secrets, keychain/OAuth material, `.env` files, and live mailbox automation credentials machine-local. The previous Google Drive `ai_workspace` is an archive/source during migration, not the active workspace target.
 - 2026-04-13 machine role note: Robert is moving daily workstation activity to the Mac Mini M4 2025 and should use it as the foreground control surface because it feels and benchmarks snappier for interactive work. Keep the 2018 Mac mini on macOS as the near-term AI server and long-running worker host; background worker latency is acceptable there and its 64GB RAM is valuable. Defer Linux on the 2018 Mac mini to a separate reversible pilot after the current role split is stable.
 - Codex dashboard sync note: files under `ai_workspace/codex_dashboard/` and `ai_workspace/scripts/` sync through Google Drive, but the installed LaunchAgent/runtime copies do not.
 - After any dashboard launcher or port change, re-run `./scripts/install_codex_dashboard_launchagent.sh 17878` on each machine and verify `http://127.0.0.1:17878/api/status`.
@@ -175,7 +175,7 @@ Last Updated: 2026-04-14 12:10:58 CDT (Machine: Macmini.lan)
 - For cross-module task blocks (for example `ops` + `forge`), explicitly ask the user to open 2 terminals for each required workspace before execution.
 - Short aliases are available: `ai`, `braincloudw`, `sales`, `opsw`, `bidw`, `portalw`, `loginw`, `forgew`, `importerw`, `eventw`, `contactw`, `donationsw`, `listsw`, `wb`.
 - Current mapping:
-- `ai` -> `/Users/robert/Library/CloudStorage/GoogleDrive-robert@kovaldistillery.com/My Drive/2026_workspace_sync/ai_workspace`
+- `ai` -> `/Users/werkstatt/ai_workspace`
 - `braincloud` -> `/Users/werkstatt/braincloud`
 - `sales` -> `/Users/werkstatt/salesreport`
 - `ops` -> `/Users/werkstatt/ops`
@@ -212,6 +212,7 @@ ws() {
   case "$target" in
     ai)
       ws_cd_first_exists \
+        "/Users/werkstatt/ai_workspace" \
         "/Users/robert/Library/CloudStorage/GoogleDrive-robert@kovaldistillery.com/My Drive/2026_workspace_sync/ai_workspace" \
         "/Users/admin/Library/CloudStorage/GoogleDrive-robert@kovaldistillery.com/My Drive/2026_workspace_sync/ai_workspace"
       ;;
@@ -221,11 +222,13 @@ ws() {
       ;;
     frank)
       ws_cd_first_exists \
+        "/Users/werkstatt/ai_workspace/frank" \
         "/Users/robert/Library/CloudStorage/GoogleDrive-robert@kovaldistillery.com/My Drive/2026_workspace_sync/ai_workspace/frank" \
         "/Users/admin/Library/CloudStorage/GoogleDrive-robert@kovaldistillery.com/My Drive/2026_workspace_sync/ai_workspace/frank"
       ;;
     avignon)
       ws_cd_first_exists \
+        "/Users/werkstatt/ai_workspace/avignon" \
         "/Users/robert/Library/CloudStorage/GoogleDrive-robert@kovaldistillery.com/My Drive/2026_workspace_sync/ai_workspace/avignon" \
         "/Users/admin/Library/CloudStorage/GoogleDrive-robert@kovaldistillery.com/My Drive/2026_workspace_sync/ai_workspace/avignon"
       ;;

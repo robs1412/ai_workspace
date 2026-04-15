@@ -1,10 +1,17 @@
 # Codex Session Handoff
 
-Last Updated: 2026-04-15 10:58:00 CDT (Machine: Macmini.lan)
+Last Updated: 2026-04-15 11:08:00 CDT (Machine: Macmini.lan)
 
 Use this file for cross-machine/session handoffs.
 
 ## Current Workflow Handoff
+
+- Frank/Avignon follow-through correction at `2026-04-15 10:52 CDT` on `Macmini.lan`.
+  - Problem addressed: 300-second LaunchAgent polls could exit `0` and report inbox zero while open email-derived decisions stayed parked in local/mailbox state and were not re-routed to visible work.
+  - Source changes only: added `scripts/email_decision_watchdog.py`; wired `scripts/avignon_inbox_cycle.py` and `scripts/frank_auto_runner.py` to run a watchdog after inbox classification; updated `scripts/install_avignon_launchagent.sh` and `scripts/install_frank_launchagent.sh` so the next deliberate reinstall copies the watchdog into the runtime and de-duplicates Task Manager queue entries into `ToDo-append.md`.
+  - Watchdog behavior: each open non-secret decision item is classified as `route-visible-worker`, `blocked-approval-gate`, `blocked-stale-open-record`, or `escalate-to-task-manager`; results are logged to runtime watchdog JSONL and included in cycle JSON. No mailbox bodies, credentials, mailbox content mutation, production writes, LaunchAgent reinstall, or live runtime restart were performed in this correction pass.
+  - Source tracker cleanup: `avignon/EMAIL_DERIVED_DECISIONS.md` no longer lists the already-handled LJ Hospitality / Jamie Gilmore item under `Open`; `frank/EMAIL_DERIVED_DECISIONS.md` was added as the source tracker scaffold.
+  - Manual approval still needed to activate in live 300-second workers: reinstall/restart `com.koval.frank-auto` and `com.koval.avignon-auto` from the updated source on the approved Mac mini automation host, then verify launchd status, recent stdout JSON `decision_watchdog_open_count`, and no duplicate queue spam.
 
 - AI Workspace TODO reconciliation at `2026-04-14 21:57 CDT` from `Macmini.lan`.
   - Scope was AI Workspace coordination files only; no external sends, production writes, secrets, router/network changes, or Papers body reads were performed.
@@ -32,6 +39,8 @@ Use this file for cross-machine/session handoffs.
   - 2026-04-15 transition step 3 check: Google Drive is active on Mac mini and M4 for the AI Workspace planning layer. SHA-256 hashes match between Mac mini and M4 for `AGENTS.md`, `HANDOFF.md`, `TODO.md`, `ToDo-append.md`, `project_hub/INDEX.md`, and `project_hub/issues/2026-04-12-ai-workstation-sync-transition.md`.
   - 2026-04-15 transition step 3 boundary: code/runtime remains outside Drive (`/Users/werkstatt/workspaceboard`, `~/.workspaceboard-launch`, `~/.frank-launch`, `~/.avignon-launch`). The Drive folder still contains cleanup/retention candidates such as `.env`, `screenbox/.env`, `.venv_pdf`, `.venvs`, `tmp`, and `tmp-staging`; do not read or move secret-looking files without an explicit step 4 cleanup decision.
   - 2026-04-15 step 4 proposed direction: stop using Google Drive as active `ws ai` sync, create a safe git-backed `/Users/werkstatt/ai_workspace` coordination repo, keep secrets/runtime/generated material out of that repo, verify Mac mini/M4/MacBook clones, then update `ws ai` away from the Drive path. Current Drive tree is about `331M`, dominated by `.venvs` (`299M`) and other runtime/generated material; secret-looking contents were not read.
+  - 2026-04-15 step 4 start: created `/Users/werkstatt/ai_workspace` as a git repo from a conservative safe subset of the Drive AI Workspace. Initial commit `19c4e58` contains `143` files and about `1.1M` of policy/TODO/handoff/project-hub/worker-role/non-secret Frank/Avignon planning docs. Excluded `.private`, `.env*`, virtualenvs, caches, temp folders, generated output, logs, drafts, embedded clones, and operational scripts. Cloned the repo to M4 at `/Users/werkstatt/ai_workspace` from `admin-macmini:/Users/werkstatt/ai_workspace`.
+  - 2026-04-15 step 4 mapping: Mac mini `/Users/admin/.bashrc` and M4 `/Users/kovaladmin/.bashrc` now prefer `/Users/werkstatt/ai_workspace` for `ws ai`, with the Google Drive path left as fallback/archive during migration. `frank` and `avignon` mappings also prefer the new repo's planning directories.
   - Current M4 implementation/runtime state: canonical repo root is now `/Users/werkstatt`; `/Users/kovaladmin/werkstatt` is only a compatibility symlink.
   - Current M4 planning state: the synced AI workspace is present and contains `AGENTS.md`, `TODO.md`, `ToDo-append.md`, and this `HANDOFF.md`; use it as the policy/planning layer, not as the runtime source for code repos.
   - SSH verified: Mac mini -> M4 works with `/Users/admin/.ssh/id_ed25519_macmini_to_kovaladmin`, fingerprint `SHA256:F+eXrJ3kVmBB3K33Ey3Cq2S8jv98FDJIZZ2DQGP2W7E`, target `kovaladmin@192.168.55.35`.
@@ -53,7 +62,7 @@ ssh -i ~/.ssh/id_ed25519_m4_to_macmini -o IdentitiesOnly=yes admin@192.168.55.17
 ssh -i ~/.ssh/id_ed25519_m4_to_macbook -o IdentitiesOnly=yes robert@192.168.55.38 hostname
 ```
 
-  - Next transition path: approve a safe-subset migration into `/Users/werkstatt/ai_workspace` and decide where `.private`/`.env`/password-like material should live. Do not remove Google Drive from Mac mini or delete/move `.private` until the safe git repo is verified on all three machines and the secure-storage decision is explicit.
+  - Next transition path: create/attach a private GitHub remote for `/Users/werkstatt/ai_workspace`, clone it to MacBook, then decide where `.private`/`.env`/password-like material should live. Do not remove Google Drive from Mac mini or delete/move `.private` until the safe git repo is verified on all three machines and the secure-storage decision is explicit.
 
 - Workspaceboard Node 25 runtime / Codex model fallback at `2026-04-14 12:58 CDT` on `Macmini.lan`.
   - Live LaunchAgent `com.koval.workspaceboard` is serving port `17878` from `/Users/admin/.workspaceboard-launch/runtime/app/server/index.js` with `/usr/local/opt/node/bin/node`; current PID verified as `28368` at closeout.
