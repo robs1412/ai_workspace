@@ -1,6 +1,6 @@
 # TODO — frank
 
-Updated: 2026-04-15 17:10:00 CDT (Machine: Macmini.lan)
+Updated: 2026-04-15 17:14:00 CDT (Machine: Macmini.lan)
 
 ## In Progress
 
@@ -8,13 +8,6 @@ Updated: 2026-04-15 17:10:00 CDT (Machine: Macmini.lan)
 - Check Robert's daily Portal digest email and surface follow-ups.
 - Monitor inbound receipt emails and draft next steps.
 - Introduce Frank to Sonat.
-- 2026-04-12: Evaluate Sonat's `PR pathways` request for Featured.com PR/media automation.
-  - Local Frank task id: `frank-2026-sonat-pr-pathways-featured`
-  - Source: Sonat email to Frank, subject `PR pathways`, dated 2026-04-11.
-  - Request: look at `https://featured.com/experts/questions?tab=questions` as a platform for reporter comments and possible automation around KOVAL, Thresh and Winnow, distilling approach, and organic focus.
-  - Status: captured locally while Mac mini and router SSH were unavailable; live OPS task creation was not attempted from this MacBook.
-  - 2026-04-12 update: Sonat replied `Sounds like a plan. Let me know when you have that workflow defined.` Frank classified it as a clear internal confirmation, sent a concise acknowledgement, logged it against this task, and archived the source reply to `Handled`.
-  - Next step: define a safe internal PR/media-opportunity workflow before any external pitching or automated outreach; create a live OPS task assigned to Robert/admin when the normal OPS write path is available if Robert wants this tracked there immediately.
 - 2026-04-12: Capture Sonat's organic/sustainable online magazine concept.
   - Local Frank task id: `frank-2026-sonat-organic-sustainable-magazine`
   - Source: Sonat email to Frank, Dmytro, and Claude, subject `Organize online organic and sustainable website with various sections and articles that change monthly.`, dated 2026-04-11.
@@ -92,6 +85,12 @@ Updated: 2026-04-15 17:10:00 CDT (Machine: Macmini.lan)
 
 ## Backlog
 
+- Define safe PR/media-opportunity workflow for Sonat's Featured.com `PR pathways` request.
+  - Local Frank task id: `frank-2026-sonat-pr-pathways-featured`
+  - Source: Sonat email to Frank, subject `PR pathways`, dated 2026-04-11.
+  - Request: evaluate `https://featured.com/experts/questions?tab=questions` as a platform for reporter comments and possible automation around KOVAL, Thresh and Winnow, distilling approach, and organic focus.
+  - Current state: source email was captured, Sonat's acknowledgement was logged/filed, and no external pitching or automated outreach has started.
+  - Next step: define an internal workflow, approval gate, and owner path before any external response or automation.
 - When improving Frank inbox or assistant behavior, mirror the improvement for Avignon where applicable so Sonat's assistant path does not fall behind Frank's.
 - Expand from draft-only to narrow auto-send rules after validation.
 - Company party member invite.
