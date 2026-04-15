@@ -63,7 +63,7 @@ Preservation checks:
 
 Follow-up observation:
 
-- Post-upgrade logs show repeated failed root SSH password attempts from `192.168.55.11`, while successful Codex checks came from `192.168.55.17`. This should be reviewed separately as a network/security hygiene item before changing router auth policy. No secret contents were printed.
+- Post-upgrade logs showed repeated failed root SSH password attempts from `192.168.55.11`, while successful Codex checks came from `192.168.55.17`. Robert identified `.11` as his MacBook while it used a private/fixed MAC identity, removed that setting, and reported the MacBook is now at `192.168.55.180`. No secret contents were printed.
 
 ## Latest Compatible Versions
 
