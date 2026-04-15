@@ -326,6 +326,20 @@ Next decision: choose the secure storage target for private material before extr
   - Verified both archives are now about `40M`.
   - Left `.private`, `.env*`, `LOG_imapsync`, `output`, `recordings`, `screenbox`, and `external` intact.
 
+## 2026-04-15 Google Drive Removal Readiness
+
+Mac mini active AI services no longer require Google Drive.
+
+Verified active paths:
+
+- `ws ai` resolves to `/Users/werkstatt/ai_workspace`.
+- Workspaceboard `0.69` resolves AI Workspace, Frank, and Avignon to `/Users/werkstatt/ai_workspace`.
+- `com.koval.frank-auto` and `com.koval.avignon-auto` use `/Users/werkstatt/ai_workspace` plus machine-local runtime/state/private paths.
+- `com.koval.frank-morning-overview` was updated to use `/Users/werkstatt/ai_workspace` and local `~/.frank-launch/state` logs.
+- The unloaded legacy `com.koval.codex-dashboard.plist` was moved under `/Users/admin/Library/LaunchAgents/disabled/`; active board service is `com.koval.workspaceboard`.
+
+Remaining Google Drive references are historical documentation or disabled/backup plist files only.
+
 ## Decision Driver Questions
 
 1. Should M4 remain a local/manual board control surface, or should it become a formal Workspaceboard failover host?

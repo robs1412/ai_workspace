@@ -6,6 +6,12 @@ Use this file for cross-machine/session handoffs.
 
 ## Current Workflow Handoff
 
+- Google Drive removal readiness check completed at `2026-04-15` on `Macmini.lan`.
+  - Active `ws ai`, Workspaceboard, Frank auto, Avignon auto, and Frank morning overview now use `/Users/werkstatt/ai_workspace` or machine-local runtime/state paths.
+  - Updated `com.koval.frank-morning-overview` from old Drive paths to `AI_WORKSPACE_ROOT=/Users/werkstatt/ai_workspace` and local `~/.frank-launch/state` launchd logs.
+  - Archived unloaded legacy `com.koval.codex-dashboard.plist` under `/Users/admin/Library/LaunchAgents/disabled/`; active board service is `com.koval.workspaceboard`.
+  - Remaining Google Drive path strings are in historical docs or disabled/backup plist files only, not loaded active services.
+
 - AI Workspace archive generated/cache cleanup completed at `2026-04-15` after Robert approval.
   - Deleted only `.venvs`, `.venv_pdf`, `.playwright-cli`, `tmp`, `tmp-staging`, and `tmp_il_report` from the Mac mini and MacBook legacy archives.
   - Verified both archives are now about `40M`.
