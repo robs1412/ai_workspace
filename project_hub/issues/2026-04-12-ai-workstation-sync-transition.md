@@ -340,6 +340,12 @@ Verified active paths:
 
 Remaining Google Drive references are historical documentation or disabled/backup plist files only.
 
+- AI box secure storage and backup step completed at `2026-04-15` on `Macmini.lan`.
+  - Created encrypted sparsebundle `/Users/werkstatt/secure-vaults/ai-workspace-private.sparsebundle`; passphrase is stored in local macOS Keychain item `KOVAL_AI_WORKSPACE_PRIVATE_VAULT` for user `admin`.
+  - Moved Mac mini legacy private paths into the vault without reading/printing contents: `.private`, `.env`, `.env.md`, `screenbox/.env`, `avignon/.private-work`, and `output/portal-account-passwords-2026-03-27.md`. Vault was detached afterward.
+  - Added `AI_BOX_SECURITY.md` and `scripts/ai_box_backup.sh`; first backup written to `/Users/werkstatt/ai_box_backups/20260415-142900`.
+  - MacBook private vault remains pending because remote Keychain creation over SSH was blocked by macOS user-interaction rules; MacBook private paths remain in its owner-only archive.
+
 ## Decision Driver Questions
 
 1. Should M4 remain a local/manual board control surface, or should it become a formal Workspaceboard failover host?

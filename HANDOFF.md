@@ -6,6 +6,12 @@ Use this file for cross-machine/session handoffs.
 
 ## Current Workflow Handoff
 
+- AI box secure storage and backup step completed at `2026-04-15` on `Macmini.lan`.
+  - Created encrypted sparsebundle `/Users/werkstatt/secure-vaults/ai-workspace-private.sparsebundle`; passphrase is stored in local macOS Keychain item `KOVAL_AI_WORKSPACE_PRIVATE_VAULT` for user `admin`.
+  - Moved Mac mini legacy private paths into the vault without reading/printing contents: `.private`, `.env`, `.env.md`, `screenbox/.env`, `avignon/.private-work`, and `output/portal-account-passwords-2026-03-27.md`. Vault was detached afterward.
+  - Added `AI_BOX_SECURITY.md` and `scripts/ai_box_backup.sh`; first backup written to `/Users/werkstatt/ai_box_backups/20260415-142900`.
+  - MacBook private vault remains pending because remote Keychain creation over SSH was blocked by macOS user-interaction rules; MacBook private paths remain in its owner-only archive.
+
 - Google Drive removal readiness check completed at `2026-04-15` on `Macmini.lan`.
   - Active `ws ai`, Workspaceboard, Frank auto, Avignon auto, and Frank morning overview now use `/Users/werkstatt/ai_workspace` or machine-local runtime/state paths.
   - Updated `com.koval.frank-morning-overview` from old Drive paths to `AI_WORKSPACE_ROOT=/Users/werkstatt/ai_workspace` and local `~/.frank-launch/state` launchd logs.
