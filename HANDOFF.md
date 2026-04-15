@@ -1,10 +1,17 @@
 # Codex Session Handoff
 
-Last Updated: 2026-04-15 16:24:04 CDT (Machine: Macmini.lan)
+Last Updated: 2026-04-15 16:36:43 CDT (Machine: Macmini.lan)
 
 Use this file for cross-machine/session handoffs.
 
 ## Current Workflow Handoff
+
+- OpenWrt/LuCI 25.12.2 upgrade completed at `2026-04-15 16:36 CDT`.
+  - Robert gave final `ROLLBACK ACK`; custom package-preserving image was flashed with `sysupgrade -v`.
+  - Router is back online at `192.168.55.1`, reports OpenWrt `25.12.2` / kernel `6.12.74`, boot partition `2`, and package manager `apk`.
+  - Post-checks passed for LAN ping, TCP `22/53/80/443`, LuCI HTTP/HTTPS `200`, WAN `205.178.117.216`, default route, SSH, core packages (`luci`, `uhttpd`, `dropbear`, `firewall4`, `dnsmasq`, `wireguard-tools`, `strongswan`), enabled services, WireGuard interfaces, and StrongSwan config/pool visibility.
+  - Preservation counts matched UCI targets: DHCP hosts `206`, DHCP pools `2`, dnsmasq `1`, network interfaces/devices/routes `6/3/0`, firewall zones/forwardings/rules/redirects/includes `4/5/19/34/1`, wireless devices/ifaces `3/3`.
+  - Follow-up observation: post-upgrade log shows repeated failed root SSH password attempts from `192.168.55.11`; successful checks from this host were from `192.168.55.17`. Review `192.168.55.11` separately before changing router auth policy.
 
 - OpenWrt/LuCI upgrade approval state updated at `2026-04-15 16:24 CDT`.
   - Robert approved proceeding in principle but asked for rollback instructions first.

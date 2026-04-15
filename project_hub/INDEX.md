@@ -1,5 +1,5 @@
 # AI Workspace Project Hub
-Last Updated: 2026-04-15 16:14:59 CDT (Machine: Macmini.lan)
+Last Updated: 2026-04-15 16:36:43 CDT (Machine: Macmini.lan)
 
 ## Open
 
@@ -20,12 +20,6 @@ Last Updated: 2026-04-15 16:14:59 CDT (Machine: Macmini.lan)
   - Detail log: `project_hub/issues/2026-04-13-salesreport-shipped-vs-bottled-ownership.md`
   - Repos: `salesreport`, `portal`, shared `koval_distillery` view and Portal/Salesreport auth surfaces
   - Status: planning complete; recommendation is to move report ownership to Salesreport, but implementation is blocked pending approval because it affects live routing, auth/permissions, a shared DB view, and cross-repo deploy order
-
-- **2026-04-12 OpenWrt LuCI Upgrade Assessment**
-  - Master ID: `AI-INC-20260412-OPENWRT-LUCI-UPGRADE-01`
-  - Detail log: `project_hub/issues/2026-04-12-openwrt-luci-upgrade-assessment.md`
-  - Repos: `ai_workspace`, Linksys/OpenWrt router config, workstation VPN client state
-  - Status: parked pending Robert decision; official and custom validation-only checks are complete, the custom package-preserving image is the preferred candidate, and any flash/reboot remains gated on rollback-prerequisite review plus separate explicit approval
 
 - **2026-04-12 Codex Portal Auth Repair**
   - Master ID: `AI-INC-20260412-CODEX-PORTAL-AUTH-01`
@@ -80,6 +74,12 @@ Last Updated: 2026-04-15 16:14:59 CDT (Machine: Macmini.lan)
   - Repos: `login` (shared SSO/logout layer affecting `portal` and `ops`)
 
 ## Completed
+
+- **2026-04-12 OpenWrt LuCI Upgrade Assessment**
+  - Master ID: `AI-INC-20260412-OPENWRT-LUCI-UPGRADE-01`
+  - Detail log: `project_hub/issues/2026-04-12-openwrt-luci-upgrade-assessment.md`
+  - Repos: `ai_workspace`, Linksys/OpenWrt router config, workstation VPN client state
+  - Status: completed 2026-04-15; custom package-preserving `25.12.2` image flashed, router returned on boot partition `2`, and LAN/WAN/LuCI/SSH/core package/service and preservation-count checks passed
 
 - **2026-04-07 Email User Archive Transfer (Mitch Donohue)**
   - Master ID: `AI-INC-20260407-EMAIL-ARCHIVE-TRANSFER-01`

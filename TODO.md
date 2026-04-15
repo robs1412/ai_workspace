@@ -1,6 +1,6 @@
 # TODO — ai_workspace
 
-Updated: 2026-04-15 16:24:04 CDT (Machine: Macmini.lan)
+Updated: 2026-04-15 16:36:43 CDT (Machine: Macmini.lan)
 
 ## In Progress
 
@@ -8,10 +8,7 @@ _No active AI Workspace implementation items._
 
 ## Waiting for Next Step
 
-- OpenWrt/LuCI upgrade decision:
-  - Evaluation-only work is complete; official and custom `25.12.2` WRT3200ACM images passed validation-only `sysupgrade -T`, with no flash, reboot, firewall/VPN reload, or router config change performed.
-  - Robert approved proceeding in principle on 2026-04-15, but requested rollback instructions first.
-  - Next gate: present and acknowledge rollback plan before any flash/reboot action. Do not flash until Robert confirms the rollback checklist and maintenance window.
+_No active AI Workspace waiting-next-step items._
 
 ## Backlog
 - Build in-house outreach events module (parity with Events/Market Events):
@@ -82,6 +79,9 @@ _No active AI Workspace implementation items._
 
 - **2026-04-15** Mitch Donohue email archive follow-up closed by Robert.
   - Removed the waiting decision from AI Workspace queue and marked the project-hub archive transfer record completed without further mailbox, credential, or `imapsync` work.
+
+- **2026-04-15** OpenWrt/LuCI 25.12.2 upgrade completed.
+  - Flashed the validated custom package-preserving WRT3200ACM image after rollback acknowledgment. Router now reports OpenWrt `25.12.2` on boot partition `2`; LAN/WAN/LuCI/SSH/core package/service and preservation-count checks passed. Follow-up observation: repeated failed root SSH attempts from `192.168.55.11` after reboot should be reviewed separately.
 
 - **2026-04-14** Earth Day Forge/lists workflow reconciled.
   - Account-send draft `#550` remains draft-only, Vegas distributor inclusion and Johnson Brothers MN old-distributor cleanup were verified, and Forge/phpList list sync work completed without campaign send.
