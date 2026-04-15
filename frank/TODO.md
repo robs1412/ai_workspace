@@ -1,6 +1,6 @@
 # TODO — frank
 
-Updated: 2026-04-15 17:28:00 CDT (Machine: Macmini.lan)
+Updated: 2026-04-15 17:39:00 CDT (Machine: Macmini.lan)
 
 ## In Progress
 
@@ -11,15 +11,6 @@ Updated: 2026-04-15 17:28:00 CDT (Machine: Macmini.lan)
 - Finish the Mitch account archive/imapsync transfer.
   - Destination IMAP login for `tastingroom@kovaldistillery.com` now works with the secured secret reference.
   - Next step: rerun controlled `imapsync` for the incomplete Mitch archive folders and verify final destination counts.
-- Verify Angele old-user alias and marketing-alias routing before any broader filters.
-  - Source closeout: OPS/Portal task ID `366462` asked Sonat to review Angele cleanup; Avignon emailed Sonat on 2026-04-10 with the preserved categories and cleanup counts.
-  - Sonat direction from 2026-04-11: keep preserving direct vendor/customer/outreach/legal/account/Robert threads, focus on remaining hits for `abby.boler@kovaldistillery.com`, `jordan.wimby@kovaldistillery.com`, and the marketing alias, and do not create broad filters until ownership/routing is verified.
-  - Next step: verify current owner/routing for Abby/Jordan old-user aliases and both marketing aliases, then decide whether any narrow filters are appropriate.
-- Determine where `marketing@kovaldistillery.com` and `marketing@koval-distillery.com` forwarders currently deliver.
-  - April 10, 2026 audit in Angele mailbox: recent direct matches for both aliases show `Delivered-To: abby.boler@kovaldistillery.com`.
-  - Historical direct matches for `marketing@kovaldistillery.com` also show some delivery to `jordan.wimby@kovaldistillery.com`, so the routing changed or was split previously.
-  - IMAP inbox search on April 10, 2026 showed `18` current matches for `marketing@kovaldistillery.com` and `178` current matches for `marketing@koval-distillery.com` in Angele inbox.
-  - Next step: verify whether Abby is still an active mailbox owner/alias target in Admin and decide whether both marketing aliases should be rerouted to Angele or another current owner.
 - 2026-04-10: Audit CPanel forwarders for `koval-distillery.com`.
   - OPS/Portal task ID: `366218`
   - Due: `2026-04-18`
@@ -85,6 +76,10 @@ Updated: 2026-04-15 17:28:00 CDT (Machine: Macmini.lan)
   - Local Frank task id: `frank-2026-ai-bridge-workflow-import`
   - Robert confirmed the related Claude/BID/import decision path is handled outside Frank.
   - Frank had already captured/filed the copied Claude thread, logged the `#1185` approval/confirmation, and closed the `#1193` approval-reminder after Robert said he already emailed Claude; no new Frank email, OPS write, BID write, or reminder was created here.
+- 2026-04-15: Closed Angele old-user alias and marketing-alias routing follow-up.
+  - Robert confirmed he fixed the Abby/Jordan old-user alias and marketing-alias routing items externally.
+  - Frank's prior audit context was preserved, including Sonat's boundary to preserve direct vendor/customer/outreach/legal/account/Robert threads and avoid broad filters without verified routing.
+  - No Gmail filter, forwarder, mailbox, Google Admin, OPS, Portal, or CPanel change was made by Frank/Codex in this closeout.
 - 2026-04-15: Recovered Frank's missed 6:00 AM morning overview.
   - Mac mini stayed online; launchd showed `com.koval.frank-morning-overview` loaded but with `runs = 0` because the job had been installed/updated after the 06:00 trigger.
   - Sent Robert's overview manually at 16:51 CDT with task id `frank-morning-overview-2026-04-15` and Message-ID recorded in the machine-local sent log.
