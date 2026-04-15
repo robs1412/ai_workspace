@@ -13,8 +13,8 @@ Use this file for cross-machine/session handoffs.
   - Frank and Avignon LaunchAgents were updated/restarted with `AI_WORKSPACE_ROOT=/Users/werkstatt/ai_workspace`; Avignon also has `AVIGNON_WORKSPACE_ROOT=/Users/werkstatt/ai_workspace/avignon`. Both completed one launch cycle with exit code `0`.
   - Large-file policy: keep Git as the coordination index only. Store large non-secret artifacts outside this repo and commit manifests/checksums; keep secrets and credential-like material out of git, Papers, and normal manifests. See `ARTIFACTS.md`.
   - M4 active `ws ai` and Workspaceboard runtime also resolve to `/Users/werkstatt/ai_workspace`; M4 pulled the same git commits and reinstalled Workspaceboard.
-  - M4 still has an inactive Google Drive copy at its old Drive path. Two archive attempts (`mv`, then `ditto`) hung inside the Google Drive file-provider layer while transferring no visible bytes, so the attempt was stopped and no partial archive was kept. Clean this up later through Finder/Google Drive or a dedicated file-provider-safe pass.
-  - Remaining transition follow-up: clone/verify `robs1412/ai_workspace` on MacBook, decide secure storage for the legacy archive's private/secret material, and clean up the inactive M4 old Drive copy.
+  - M4 old Google Drive `ai_workspace` path is now gone as well; no M4 archive copy remains. The active M4 `ws ai` and board runtime still resolve to `/Users/werkstatt/ai_workspace`.
+  - Remaining transition follow-up: clone/verify `robs1412/ai_workspace` on MacBook and decide secure storage for the Mac mini legacy archive's private/secret material.
 
 - Frank/Avignon follow-through correction at `2026-04-15 10:52 CDT` on `Macmini.lan`.
   - Problem addressed: 300-second LaunchAgent polls could exit `0` and report inbox zero while open email-derived decisions stayed parked in local/mailbox state and were not re-routed to visible work.
