@@ -1,20 +1,15 @@
 # TODO — avignon
 
-Updated: 2026-04-15 17:44:00 CDT (Machine: Macmini.lan)
+Updated: 2026-04-15 17:47:00 CDT (Machine: Macmini.lan)
 
 ## In Progress
 
 - Initial Avignon setup:
   - scaffold workspace files and operating rules
   - add Avignon to launcher/docs and Workspaceboard
-- Follow up with Sonat on Angele inbox cleanup direction.
-  - OPS/Portal task ID: `366462`
-  - Due: `2026-04-12`
-  - Context: Avignon emailed Sonat on 2026-04-10 with Frank/Codex cleanup session `56fd7397`, latest Angele counts, preserved categories, and the request to tell Avignon how to proceed.
-  - Sonat responded on 2026-04-11: keep preserving the listed categories and focus on remaining hits for Abby, Jordan, and the marketing alias. Routed into Frank TODO as an Angele cleanup follow-up.
-
 ## Done
 
+- Closed Avignon's Angele cleanup direction follow-up on 2026-04-15: Sonat had responded on 2026-04-11 with preservation boundaries and focus areas, the remaining Abby/Jordan/marketing-alias routing work was tracked through Frank, and Robert confirmed he fixed those routing items externally. No new mail, Gmail filter, forwarder, mailbox, Admin, OPS, Portal, or CPanel change was made by Avignon/Codex in this closeout.
 - Closed `avignon-new-hire-training-template-reference-2026-04-12` on 2026-04-15: Sonat's new-hire training email template/reference was logged for future Avignon use and the acknowledgement had already been prepared/sent; no new mail, OPS task, CRM write, or external action was created in this closeout.
 - Sent Sonat an Avignon morning overview on 2026-04-15 at 16:54 CDT, matching Robert's Frank overview format at a safe summary level; sent-log task id `avignon-morning-overview-2026-04-15`.
 - Closed Sonat business-card CRM additions follow-up on 2026-04-15: Avignon worker `e9588b48` and importer worker `10b9346d` completed/reviewed import `52`, creating account IDs `366780`, `366784`, `366786`, `366789` and contact IDs `366781`, `366782`, `366783`, `366785`, `366787`, `366788`, `366790`; 7/7 account-contact links verified and private fields were not printed.
