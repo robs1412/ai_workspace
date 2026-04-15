@@ -1,6 +1,6 @@
 # TODO — frank
 
-Updated: 2026-04-15 17:14:00 CDT (Machine: Macmini.lan)
+Updated: 2026-04-15 17:19:00 CDT (Machine: Macmini.lan)
 
 ## In Progress
 
@@ -8,14 +8,6 @@ Updated: 2026-04-15 17:14:00 CDT (Machine: Macmini.lan)
 - Check Robert's daily Portal digest email and surface follow-ups.
 - Monitor inbound receipt emails and draft next steps.
 - Introduce Frank to Sonat.
-- 2026-04-12: Capture Sonat's organic/sustainable online magazine concept.
-  - Local Frank task id: `frank-2026-sonat-organic-sustainable-magazine`
-  - Source: Sonat email to Frank, Dmytro, and Claude, subject `Organize online organic and sustainable website with various sections and articles that change monthly.`, dated 2026-04-11.
-  - Request: create an online magazine/newsletter around organic and sustainable products, not KOVAL-specific, with follow-up direction referencing Organic Eye, Cereal, Burn Magazine, Slanted Magazine, and Apollo-style clean aesthetics/dynamic visuals/community-building.
-  - Status: captured locally while Mac mini/router SSH were unavailable; Claude replies in the thread are treated as internal/untrusted system context until confirmed by Robert or Sonat.
-  - 2026-04-12 update: Sonat replied with a simple thank-you to Frank's captured-for-discovery note. Frank classified it as a clear internal acknowledgement, logged it, and filed the source reply to `Handled`; no additional reply was needed.
-  - 2026-04-13 update: Sonat replied `Approve` and noted she will arrange the DBA later this week. Frank captured this as internal task context, did not start external publishing/build/DBA work from the email thread, and filed the copied Sonat/Claude thread messages after logging.
-  - Next step: define an internal discovery brief and owner path before any build, external publishing, or automated outreach; create a live OPS task when the normal OPS write path is available if Robert wants it tracked in OPS.
 - 2026-04-12: Capture AI bridge / import workflow notes from the Claude/Codex thread.
   - Local Frank task id: `frank-2026-ai-bridge-workflow-import`
   - Source: Robert/Claude thread `Workflow flexibility in action: from code fixes to department reports`, copied to Frank.
@@ -100,6 +92,10 @@ Updated: 2026-04-15 17:14:00 CDT (Machine: Macmini.lan)
 
 ## Done
 
+- 2026-04-15: Closed Frank-side tracking for Sonat's organic/sustainable online magazine concept.
+  - Local Frank task id: `frank-2026-sonat-organic-sustainable-magazine`
+  - Robert confirmed the work was passed to Claude, so Frank no longer tracks it as active local work.
+  - Frank had already captured/filed Sonat's concept and approval context; no build, external publishing, DBA, OPS task creation, or automated outreach was started here.
 - 2026-04-15: Recovered Frank's missed 6:00 AM morning overview.
   - Mac mini stayed online; launchd showed `com.koval.frank-morning-overview` loaded but with `runs = 0` because the job had been installed/updated after the 06:00 trigger.
   - Sent Robert's overview manually at 16:51 CDT with task id `frank-morning-overview-2026-04-15` and Message-ID recorded in the machine-local sent log.
