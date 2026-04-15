@@ -1,9 +1,11 @@
 # Frank Handoff
 
-Last Updated: 2026-04-14 14:39:52 CDT (Machine: RobertMBP-2.local)
+Last Updated: 2026-04-15 16:58:00 CDT (Machine: Macmini.lan)
 
 ## Current Status
 
+- 2026-04-15 morning overview recovery: Mac mini stayed online, but `com.koval.frank-morning-overview` had `runs = 0` because it was installed/updated after the 06:00 trigger. Robert's overview was sent manually at 16:51 CDT with task id `frank-morning-overview-2026-04-15`. The LaunchAgent was reloaded and now uses `AI_WORKSPACE_ROOT=/Users/admin/.frank-launch/runtime`.
+- Known gap: `scripts/frank_ops_digest.php` is missing from the active runtime/safe repo. Until restored or replaced, Frank's morning overview can send but the OPS digest section is blocked/unavailable.
 - Frank workspace created under `ai_workspace/frank`.
 - Daily Portal digest review is now part of Frank's standard inbox workflow.
 - `com.koval.frank-auto` is installed on `Macmini.lan` in `draft-only` mode.
@@ -66,7 +68,7 @@ Last Updated: 2026-04-14 14:39:52 CDT (Machine: RobertMBP-2.local)
 ## Next Steps
 
 - Continue building Frank's assistant task handling from inbox and OPS items.
-- Handle the remaining April 14 `Daily overview` source-email follow-ups: recurring 6:00 AM overview scheduling and OPS-task creation, after confirming the approved scheduling/OPS write path.
+- Restore or replace `scripts/frank_ops_digest.php` in the approved Frank runtime path and verify the 06:00 morning overview dry-run includes OPS task digest content without sending.
 - When improving Frank inbox or assistant behavior, mirror the improvement for Avignon where applicable so Sonat's assistant path stays aligned with Frank's.
 - For Angele cleanup, wait for Sonat's direction through Avignon / OPS task `366462`; continue only high-confidence newsletter/bulk/stale handled categories until routing/ownership for Abby, Jordan, and the marketing aliases is settled.
 

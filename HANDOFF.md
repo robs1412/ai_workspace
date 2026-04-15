@@ -1,10 +1,23 @@
 # Codex Session Handoff
 
-Last Updated: 2026-04-15 16:46:09 CDT (Machine: Macmini.lan)
+Last Updated: 2026-04-15 16:58:00 CDT (Machine: Macmini.lan)
 
 Use this file for cross-machine/session handoffs.
 
 ## Current Workflow Handoff
+
+- Frank/Avignon morning overview recovery at `2026-04-15 16:58 CDT`.
+  - Mac mini did not close; `Macmini.lan` remained up and running.
+  - Frank's 06:00 overview did not run because `com.koval.frank-morning-overview` had been installed/updated after the 06:00 calendar trigger and launchd still showed `runs = 0`.
+  - Sent Robert's Frank morning overview manually at `16:51 CDT` with task id `frank-morning-overview-2026-04-15`.
+  - Sent Sonat a matching Avignon morning overview at `16:54 CDT` with task id `avignon-morning-overview-2026-04-15`.
+  - Reloaded `com.koval.frank-morning-overview` so launchd now uses `AI_WORKSPACE_ROOT=/Users/admin/.frank-launch/runtime` and the machine-local Frank runtime path for tomorrow's 06:00 run.
+  - Remaining follow-up: restore or replace the missing `scripts/frank_ops_digest.php` helper. Until that is fixed, the overview can send, but the OPS task digest section is blocked/unavailable.
+
+- Avignon/importer CRM additions pair closed at `2026-04-15 16:51 CDT`.
+  - Closed board sessions `e9588b48` and `10b9346d` after review-ready summaries matched.
+  - CRM import `52` created 4 accounts and 7 contacts, with 7/7 account-contact links verified; private fields were not printed.
+  - Updated `avignon/TODO.md` and `avignon/HANDOFF.md`.
 
 - OpenWrt/LuCI 25.12.2 upgrade completed at `2026-04-15 16:36 CDT`.
   - Robert gave final `ROLLBACK ACK`; custom package-preserving image was flashed with `sysupgrade -v`.

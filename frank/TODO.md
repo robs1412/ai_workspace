@@ -1,6 +1,6 @@
 # TODO — frank
 
-Updated: 2026-04-14 14:39:52 CDT (Machine: RobertMBP-2.local)
+Updated: 2026-04-15 16:58:00 CDT (Machine: Macmini.lan)
 
 ## In Progress
 
@@ -8,13 +8,6 @@ Updated: 2026-04-14 14:39:52 CDT (Machine: RobertMBP-2.local)
 - Check Robert's daily Portal digest email and surface follow-ups.
 - Monitor inbound receipt emails and draft next steps.
 - Introduce Frank to Sonat.
-- 2026-04-13: OpenWrt 25.12.2 upgrade decision/action reminder for Robert.
-  - Local Frank task id: `frank-2026-openwrt-25-12-2-upgrade-reminder`
-  - Source: Task Manager routed request from Robert via OpenWrt session `8f8127e9`.
-  - Context: OpenWrt worker validation completed; custom image was staged; `sysupgrade -T` passed; no flash or reboot has happened.
-  - Scheduled: Robert calendar event on `robert@kovaldistillery.com` for `2026-04-15 09:00 America/Chicago`, duration `15` minutes.
-  - Event ID: `p8fr9n80k9mv2eprbj1t3m5g40`
-  - Note: Frank cannot schedule future Gmail sends with the current approved runtime, so this was scheduled as an internal calendar reminder instead. No new email was sent.
 - 2026-04-12: Evaluate Sonat's `PR pathways` request for Featured.com PR/media automation.
   - Local Frank task id: `frank-2026-sonat-pr-pathways-featured`
   - Source: Sonat email to Frank, subject `PR pathways`, dated 2026-04-11.
@@ -99,6 +92,9 @@ Updated: 2026-04-14 14:39:52 CDT (Machine: RobertMBP-2.local)
 
 ## Backlog
 
+- Repair Frank's morning overview OPS digest integration.
+  - The 2026-04-15 manual send succeeded only after pointing `AI_WORKSPACE_ROOT` at `/Users/admin/.frank-launch/runtime`.
+  - The helper `scripts/frank_ops_digest.php` is missing from the active runtime/safe repo, so OPS task digest content is currently blocked/unavailable in the generated overview.
 - When improving Frank inbox or assistant behavior, mirror the improvement for Avignon where applicable so Sonat's assistant path does not fall behind Frank's.
 - Expand from draft-only to narrow auto-send rules after validation.
 - Company party member invite.
@@ -108,6 +104,13 @@ Updated: 2026-04-14 14:39:52 CDT (Machine: RobertMBP-2.local)
 
 ## Done
 
+- 2026-04-15: Recovered Frank's missed 6:00 AM morning overview.
+  - Mac mini stayed online; launchd showed `com.koval.frank-morning-overview` loaded but with `runs = 0` because the job had been installed/updated after the 06:00 trigger.
+  - Sent Robert's overview manually at 16:51 CDT with task id `frank-morning-overview-2026-04-15` and Message-ID recorded in the machine-local sent log.
+  - Reloaded the LaunchAgent with `AI_WORKSPACE_ROOT=/Users/admin/.frank-launch/runtime` so the scheduled job uses the installed Frank runtime.
+  - Follow-up remains open: restore/replace `scripts/frank_ops_digest.php` so the OPS digest section works again.
+- 2026-04-15: OpenWrt 25.12.2 upgrade reminder closed.
+  - The 2026-04-15 09:00 calendar reminder had served its purpose, and Robert later approved/flashed the custom image through the router worker path.
 - 2026-04-14: Captured Frank scheduled inbox-check noise guard from AI Workspace ToDo-append.
   - Rule: do not send Robert a scheduled `Frank inbox review` / inbox-check email for every inbound message.
   - Routine messages Frank can handle, log, file, or safely ignore under standing guardrails should not generate a new schedule/check prompt.

@@ -1,6 +1,6 @@
 # TODO — avignon
 
-Updated: 2026-04-14 07:33:09 CDT (Machine: Macmini.lan)
+Updated: 2026-04-15 16:58:00 CDT (Machine: Macmini.lan)
 
 ## In Progress
 
@@ -17,6 +17,8 @@ Updated: 2026-04-14 07:33:09 CDT (Machine: Macmini.lan)
 
 ## Done
 
+- Sent Sonat an Avignon morning overview on 2026-04-15 at 16:54 CDT, matching Robert's Frank overview format at a safe summary level; sent-log task id `avignon-morning-overview-2026-04-15`.
+- Closed Sonat business-card CRM additions follow-up on 2026-04-15: Avignon worker `e9588b48` and importer worker `10b9346d` completed/reviewed import `52`, creating account IDs `366780`, `366784`, `366786`, `366789` and contact IDs `366781`, `366782`, `366783`, `366785`, `366787`, `366788`, `366790`; 7/7 account-contact links verified and private fields were not printed.
 - Installed Avignon-specific 5-minute LaunchAgent scheduler on 2026-04-14: `com.koval.avignon-auto` runs every 300 seconds from `/Users/admin/.avignon-launch`, uses a machine-local Avignon credential reference, and logs runtime state locally to avoid synced Google Drive launchd/TCC failures. Verified launchd last exit code `0` and a clean inbox cycle with `0` messages.
 - Marked `avignon-google-account-security-notifications-2026-04-12` handled/filed after Robert confirmed on 2026-04-13 that the 2026-04-12 Google account/security/device-management notifications were expected/OK. No Google admin/account action was taken.
 - Handled Avignon inbox-cleaning pass on 2026-04-12: sent barrel personalization guidance to Sonat, acknowledged the new-hire training-template reference, routed the LJ Hospitality/Jamie Gilmore CRM attachment request to `EMAIL_DERIVED_DECISIONS.md`, and archived handled/routed source mail to `Handled`.

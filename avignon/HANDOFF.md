@@ -1,9 +1,11 @@
 # Handoff — avignon
 
-Last Updated: 2026-04-14 07:33:09 CDT (Machine: Macmini.lan)
+Last Updated: 2026-04-15 16:58:00 CDT (Machine: Macmini.lan)
 
 ## Current Status
 
+- 2026-04-15: Sent Sonat an Avignon morning overview at 16:54 CDT with task id `avignon-morning-overview-2026-04-15`; Message-ID is recorded in the machine-local Avignon sent log. The overview used safe summary content and did not print private mail or credential material.
+- 2026-04-15: Closed Sonat business-card CRM additions follow-up. Avignon worker `e9588b48` and importer worker `10b9346d` completed/reviewed CRM import `52`; created account IDs `366780`, `366784`, `366786`, `366789`; created contact IDs `366781`, `366782`, `366783`, `366785`, `366787`, `366788`, `366790`; verified 7/7 account-contact links and private email/phone fields without printing values. Both board sessions were closed after review.
 - Workspace scaffolding is now created.
 - 2026-04-14 07:33 CDT: Installed and verified the Avignon-specific LaunchAgent scheduler on this machine. Label: `com.koval.avignon-auto`; interval: `300` seconds; plist: `/Users/admin/Library/LaunchAgents/com.koval.avignon-auto.plist`; runtime: `/Users/admin/.avignon-launch/runtime`; credential reference: `/Users/admin/.avignon-launch/private/avignon-secret.txt` (`0600`, admin/staff, metadata only); runtime logs/state: `/Users/admin/.avignon-launch/state/`. The job runs `run_avignon_auto.sh` and `avignon_inbox_cycle.py`, polls the Avignon inbox, routes/logs decision items, and archives handled mail. Verification showed `launchctl list` with status `0`, `launchctl print` with `run interval = 300 seconds`, last exit code `0`, `plutil -lint` OK, stdout cycle JSON with `inbox_count_start: 0` / `inbox_count_end: 0`, and empty stderr. Initial attempt using synced Google Drive state paths failed under launchd with macOS file-provider/TCC permission errors, so mutable runtime state was moved to the machine-local support directory; no secrets were printed.
 - 2026-04-13: Robert confirmed the 2026-04-12 Avignon Google account/security/device-management notifications were expected/OK. Avignon marked `avignon-google-account-security-notifications-2026-04-12` handled/filed in local tracking. No Google admin/account action was taken.
