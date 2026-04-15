@@ -283,6 +283,8 @@ Completed:
 - Frank and Avignon LaunchAgents now use `AI_WORKSPACE_ROOT=/Users/werkstatt/ai_workspace`; Avignon uses `AVIGNON_WORKSPACE_ROOT=/Users/werkstatt/ai_workspace/avignon`.
 - The old Google Drive `ai_workspace` folder was moved to `/Users/werkstatt/ai_workspace_google_drive_archive_20260415`.
 - The original Google Drive path no longer exists on Mac mini.
+- M4 pulled the new `ai_workspace` and `workspaceboard` commits and its local Workspaceboard now resolves AI Workspace, Frank, and Avignon to `/Users/werkstatt/ai_workspace`.
+- M4 still has an inactive old Google Drive copy. Attempts to move it with `mv` and `ditto` hung in the Google Drive file-provider layer while transferring no visible bytes, so the attempt was stopped and no partial archive was kept.
 
 Archive handling:
 

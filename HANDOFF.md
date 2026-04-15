@@ -12,7 +12,9 @@ Use this file for cross-machine/session handoffs.
   - Workspaceboard source and runtime now prefer `/Users/werkstatt/ai_workspace` for `ai`, `/Users/werkstatt/ai_workspace/frank` for Frank, `/Users/werkstatt/ai_workspace/avignon` for Avignon, and `/Users/werkstatt/ai_workspace/worker_roles` for the role map. Live `/api/status` returns those paths.
   - Frank and Avignon LaunchAgents were updated/restarted with `AI_WORKSPACE_ROOT=/Users/werkstatt/ai_workspace`; Avignon also has `AVIGNON_WORKSPACE_ROOT=/Users/werkstatt/ai_workspace/avignon`. Both completed one launch cycle with exit code `0`.
   - Large-file policy: keep Git as the coordination index only. Store large non-secret artifacts outside this repo and commit manifests/checksums; keep secrets and credential-like material out of git, Papers, and normal manifests. See `ARTIFACTS.md`.
-  - Remaining transition follow-up: clone/verify `robs1412/ai_workspace` on MacBook, decide secure storage for the legacy archive's private/secret material, and decide whether M4 should also move or archive its old Drive copy.
+  - M4 active `ws ai` and Workspaceboard runtime also resolve to `/Users/werkstatt/ai_workspace`; M4 pulled the same git commits and reinstalled Workspaceboard.
+  - M4 still has an inactive Google Drive copy at its old Drive path. Two archive attempts (`mv`, then `ditto`) hung inside the Google Drive file-provider layer while transferring no visible bytes, so the attempt was stopped and no partial archive was kept. Clean this up later through Finder/Google Drive or a dedicated file-provider-safe pass.
+  - Remaining transition follow-up: clone/verify `robs1412/ai_workspace` on MacBook, decide secure storage for the legacy archive's private/secret material, and clean up the inactive M4 old Drive copy.
 
 - Frank/Avignon follow-through correction at `2026-04-15 10:52 CDT` on `Macmini.lan`.
   - Problem addressed: 300-second LaunchAgent polls could exit `0` and report inbox zero while open email-derived decisions stayed parked in local/mailbox state and were not re-routed to visible work.
