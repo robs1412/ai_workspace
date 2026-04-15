@@ -260,11 +260,19 @@ Mapping update:
 
 Remaining before Google Drive can be retired:
 
-1. Create or attach a private GitHub remote for `/Users/werkstatt/ai_workspace`.
-2. Clone/verify the new repo on MacBook.
-3. Decide the secure storage path for `.private`, `.env`, OAuth, password, VPN/router, and mailbox credential material.
-4. Decide whether any excluded generated/audit artifacts should be archived elsewhere.
-5. Once verified on all three machines, stop using the Google Drive `ai_workspace` for active coordination and keep it read-only or archive it.
+1. Robert creates a private empty GitHub repo `robs1412/ai_workspace`; the future remote `git@github.com:robs1412/ai_workspace.git` is already configured as `github` on Mac mini and M4.
+2. Push from Mac mini with `git push -u github main`.
+3. Clone/verify the new repo on MacBook. Current Mac mini -> MacBook SSH check to `robert@192.168.55.38` timed out, so this is pending either GitHub remote availability or restored MacBook SSH/LAN reachability.
+4. Decide the secure storage path for `.private`, `.env`, OAuth, password, VPN/router, and mailbox credential material.
+5. Decide whether any excluded generated/audit artifacts should be archived elsewhere.
+6. Once verified on all three machines, stop using the Google Drive `ai_workspace` for active coordination and keep it read-only or archive it.
+
+GitHub remote blocker:
+
+- `git ls-remote git@github.com:robs1412/ai_workspace.git` returns `Repository not found`.
+- `gh` is not installed/authenticated on Mac mini.
+- The available GitHub connector can inspect and write existing repositories but does not expose repository creation.
+- No secret material was read to work around this.
 
 ## Decision Driver Questions
 
