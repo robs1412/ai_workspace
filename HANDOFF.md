@@ -1,10 +1,16 @@
 # Codex Session Handoff
 
-Last Updated: 2026-04-15 17:10:00 CDT (Machine: Macmini.lan)
+Last Updated: 2026-04-15 18:35:52 CDT (Machine: Macmini.lan)
 
 Use this file for cross-machine/session handoffs.
 
 ## Current Workflow Handoff
+
+- MacBook/M4/Mac mini role clarification recorded at `2026-04-15 18:35 CDT` on `Macmini.lan`.
+  - Keep `ws ai` local on Mac mini, M4, and MacBook as `/Users/werkstatt/ai_workspace`; the normal sync path is git/GitHub, not Google Drive.
+  - 2018 Mac mini (`Macmini.lan`, `.17`) is the main AI worker/station: keep Workspaceboard/Frank/Avignon/long-running Codex worker and automation hosting there unless Robert explicitly changes the role split.
+  - Mac Mini M4 2025 (`Mac.lan`, `.35`, user `kovaladmin`) and MacBook (`MacBookPro.lan`, `.44` when last verified) are both Robert's front-facing workstations. Either may run local/supplemental tasks from its own checkout, but both are backup/supplemental worker surfaces relative to `.17`.
+  - Use direct SSH/rsync between machines only for deliberate non-git handoffs, fallback, or service verification.
 
 - Frank OPS digest helper restored at `2026-04-15 17:10 CDT`.
   - Found `frank_ops_digest.php` inside the encrypted legacy vault at `macmini-legacy-archive/remaining-archive/scripts/frank_ops_digest.php`.

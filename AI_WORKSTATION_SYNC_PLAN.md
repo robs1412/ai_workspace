@@ -1,12 +1,12 @@
 # AI Workstation And Sync Plan
 
 Status: approved planning direction
-Updated: 2026-04-13 17:29:23 CDT (Machine: Macmini.lan)
+Updated: 2026-04-15 18:35:52 CDT (Machine: Macmini.lan)
 Owner: Robert / Decision Driver
 
 ## Recommendation
 
-Move Robert's daily workstation role to the Mac Mini M4 2025. Keep the Mac mini 2018 as the near-term AI server and worker host on macOS. Defer any Linux migration for the 2018 Mac mini until it is tested as a separate pilot with a rollback path.
+Robert's front-facing workstation role is shared by the Mac Mini M4 2025 and MacBook, with the M4 as the stronger desk workstation. Keep the Mac mini 2018 (`.17`) as the near-term main AI station/server and worker host on macOS. Defer any Linux migration for the 2018 Mac mini until it is tested as a separate pilot with a rollback path.
 
 This keeps the snappiest current macOS machine in front of Robert for foreground work while preserving the 2018 Mac mini's 64GB RAM for long-running Codex workers, Workspaceboard, Frank, Avignon, Polier, Summarizer, and Decision Driver sessions. Slight worker startup or execution delay on the Intel host is acceptable because worker sessions are asynchronous; foreground responsiveness for Robert is more valuable on the M4. The 2018 Mac mini cannot remain on the latest macOS track indefinitely, but switching it to Linux now would add T2 and service-migration risk before the current hosting/sync boundaries are fully settled.
 
@@ -14,23 +14,23 @@ This keeps the snappiest current macOS machine in front of Robert for foreground
 
 | Machine | Recommended role | Notes |
 | --- | --- | --- |
-| Mac Mini M4 2025, 16GB observed on `.35` | Robert's daily workstation | Use for current macOS, foreground work, reviews, browser/admin work, approvals, and interactive control surfaces. Treat its snappier UI and CLI responsiveness as the main reason to move Robert's work there. Do not make it the main multi-worker AI host unless memory pressure proves acceptable. |
-| Mac mini 2018, 64GB, macOS | Primary AI server and worker host for now | Host Workspaceboard, Frank/Avignon, Polier, Summarizer, Decision Driver, and long-running Codex workers. Treat it as always-on and service-oriented; background worker delay is acceptable if it keeps Robert's foreground M4 session responsive. |
+| Mac Mini M4 2025, 16GB observed on `.35` | Front-facing desk workstation / supplemental worker | Use for current macOS, foreground work, reviews, browser/admin work, approvals, and interactive control surfaces. It can run local tasks from its own git-backed checkouts, but do not make it the main multi-worker AI host unless memory pressure proves acceptable. |
+| Mac mini 2018, 64GB, macOS, `.17` | Main AI station and primary worker/server host for now | Host Workspaceboard, Frank/Avignon, Polier, Summarizer, Decision Driver, and long-running Codex workers. Treat it as always-on and service-oriented; background worker delay is acceptable if it keeps Robert's front-facing workstation sessions responsive. |
 | Mac mini 2018, 64GB, Linux pilot | Future option only | Evaluate later if macOS security/support limits become the dominant risk. Pilot should verify Codex, Workspaceboard, Node/PHP/Apache, tmux, SSH, git, task intake, and mailbox worker constraints before any cutover. |
-| MacBook Pro 2019, 32GB | Portable fallback/client | Use for home/mobile work and emergency fallback. Avoid making it the second live writer for the same workspace. |
+| MacBook Pro 2019, 32GB | Front-facing portable workstation / supplemental worker | Use for home/mobile work, emergency fallback, and occasional local tasks from its own git-backed checkouts. Avoid making it the second live writer for the same workspace unless file ownership is explicit. |
 | Raetan / Claude server | Server-side analysis layer | Keep Claude as separate reasoning/planning support. Bridge through durable notes, OPS/email, TODOs, handoffs, and later a reviewed MCP/workspace bridge. |
 
-## Sync Boundary
+## Current Sync Boundary
 
-### Stays In Google Drive `ai_workspace`
+### Git-Backed AI Workspace
 
-- AI coordination policy and planning docs: `AGENTS.md`, `HANDOFF.md`, `TODO.md`, `ToDo-append.md`, `PROJECT_TODOS.md`, `ai-memory-policy.md`, and approved planning notes.
+- AI coordination policy and planning docs now live locally on Mac mini, M4, and MacBook in the private git-backed `/Users/werkstatt/ai_workspace` repo: `AGENTS.md`, `HANDOFF.md`, `TODO.md`, `ToDo-append.md`, `PROJECT_TODOS.md`, `ai-memory-policy.md`, and approved planning notes.
 - Worker role docs under `worker_roles/`, including Frank/Avignon/persona/role guidance that needs to follow Robert between machines.
 - Project hub records under `project_hub/`, because they are durable cross-machine status and decision logs rather than runtime state.
 - Frank/Avignon planning notes, TODOs, approved drafts, and non-secret handoff records.
-- Append-only intake queues and lightweight handoff files where Google Drive's human-visible sync is useful.
+- Append-only intake queues and lightweight handoff files should move by normal git pull/commit/push flow.
 
-Google Drive should be treated as the shared notebook and intake layer, not the live execution substrate for active repo work.
+Google Drive is now archive/fallback for the old AI Workspace, not the active sync mechanism.
 
 ### Belongs In `/Users/werkstatt` Repos
 
@@ -43,7 +43,7 @@ The default `ws <name>` target should continue to resolve code work to `/Users/w
 ### Git-Only By Default
 
 - Source code, migrations, docs that live with code, tests, scripts, Workspaceboard source, and module-specific implementation changes.
-- Cross-machine code movement between M4, 2018 Mac mini, and MacBook should use `git pull --ff-only` / commit / push workflows when the repo has a remote.
+- Cross-machine code and planning movement between M4, 2018 Mac mini, and MacBook should use `git pull --ff-only` / commit / push workflows when the repo has a remote. Mac mini `.17` remains the main AI station and service host; M4 and MacBook remain local front-facing workstations and backup/supplemental worker surfaces.
 - If a repo is dirty, inspect before pulling or pushing. Do not overwrite another worker or user's local edits.
 
 ### SSH / Rsync / Handoff
