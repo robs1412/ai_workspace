@@ -1,10 +1,14 @@
 # Codex Session Handoff
 
-Last Updated: 2026-04-15 16:14:59 CDT (Machine: Macmini.lan)
+Last Updated: 2026-04-15 16:24:04 CDT (Machine: Macmini.lan)
 
 Use this file for cross-machine/session handoffs.
 
 ## Current Workflow Handoff
+
+- OpenWrt/LuCI upgrade approval state updated at `2026-04-15 16:24 CDT`.
+  - Robert approved proceeding in principle but asked for rollback instructions first.
+  - Do not flash yet. Present rollback plan, confirm local/physical recovery readiness and maintenance window, then require final explicit confirmation before running any `sysupgrade` command.
 
 - Mitch Donohue email archive follow-up closed by Robert at `2026-04-15 16:14 CDT`.
   - Removed the AI Workspace waiting decision from `TODO.md`.

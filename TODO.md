@@ -1,6 +1,6 @@
 # TODO — ai_workspace
 
-Updated: 2026-04-15 16:14:59 CDT (Machine: Macmini.lan)
+Updated: 2026-04-15 16:24:04 CDT (Machine: Macmini.lan)
 
 ## In Progress
 
@@ -10,7 +10,8 @@ _No active AI Workspace implementation items._
 
 - OpenWrt/LuCI upgrade decision:
   - Evaluation-only work is complete; official and custom `25.12.2` WRT3200ACM images passed validation-only `sysupgrade -T`, with no flash, reboot, firewall/VPN reload, or router config change performed.
-  - Decision: Robert must explicitly approve or reject flashing the staged custom package-preserving image and accept the reboot/connectivity-risk window after rollback prerequisites are reviewed.
+  - Robert approved proceeding in principle on 2026-04-15, but requested rollback instructions first.
+  - Next gate: present and acknowledge rollback plan before any flash/reboot action. Do not flash until Robert confirms the rollback checklist and maintenance window.
 
 ## Backlog
 - Build in-house outreach events module (parity with Events/Market Events):

@@ -5,7 +5,7 @@
 - Date Opened: 2026-04-12
 - Owner: Codex / Robert approval gate
 - Priority: High, network infrastructure
-- Status: Validation-only staging complete; live preservation refresh captured; no upgrade/reload/reboot approved
+- Status: Validation-only staging complete; Robert approved proceeding in principle on 2026-04-15 pending rollback checklist acknowledgment; no upgrade/reload/reboot executed
 
 ## Scope
 
