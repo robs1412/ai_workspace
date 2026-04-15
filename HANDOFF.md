@@ -6,6 +6,14 @@ Use this file for cross-machine/session handoffs.
 
 ## Current Workflow Handoff
 
+- AI Workspace moved out of Google Drive at `2026-04-15 10:56 CDT` on `Macmini.lan`.
+  - Active `ws ai` is `/Users/werkstatt/ai_workspace`; `/bin/bash -lc 'source /Users/admin/.bashrc; ws ai; pwd'` resolves there.
+  - The old Google Drive folder was moved, not deleted, to `/Users/werkstatt/ai_workspace_google_drive_archive_20260415`; the original Drive path no longer exists on Mac mini.
+  - Workspaceboard source and runtime now prefer `/Users/werkstatt/ai_workspace` for `ai`, `/Users/werkstatt/ai_workspace/frank` for Frank, `/Users/werkstatt/ai_workspace/avignon` for Avignon, and `/Users/werkstatt/ai_workspace/worker_roles` for the role map. Live `/api/status` returns those paths.
+  - Frank and Avignon LaunchAgents were updated/restarted with `AI_WORKSPACE_ROOT=/Users/werkstatt/ai_workspace`; Avignon also has `AVIGNON_WORKSPACE_ROOT=/Users/werkstatt/ai_workspace/avignon`. Both completed one launch cycle with exit code `0`.
+  - Large-file policy: keep Git as the coordination index only. Store large non-secret artifacts outside this repo and commit manifests/checksums; keep secrets and credential-like material out of git, Papers, and normal manifests. See `ARTIFACTS.md`.
+  - Remaining transition follow-up: clone/verify `robs1412/ai_workspace` on MacBook, decide secure storage for the legacy archive's private/secret material, and decide whether M4 should also move or archive its old Drive copy.
+
 - Frank/Avignon follow-through correction at `2026-04-15 10:52 CDT` on `Macmini.lan`.
   - Problem addressed: 300-second LaunchAgent polls could exit `0` and report inbox zero while open email-derived decisions stayed parked in local/mailbox state and were not re-routed to visible work.
   - Source changes only: added `scripts/email_decision_watchdog.py`; wired `scripts/avignon_inbox_cycle.py` and `scripts/frank_auto_runner.py` to run a watchdog after inbox classification; updated `scripts/install_avignon_launchagent.sh` and `scripts/install_frank_launchagent.sh` so the next deliberate reinstall copies the watchdog into the runtime and de-duplicates Task Manager queue entries into `ToDo-append.md`.

@@ -272,6 +272,31 @@ GitHub remote status:
 - Mac mini and M4 now use GitHub as `origin`.
 - M4 also keeps `macmini=admin-macmini:/Users/werkstatt/ai_workspace` as a fallback remote.
 
+## 2026-04-15 Step 4 Move Out Of Google Drive
+
+Mac mini active AI coordination has moved out of Google Drive.
+
+Completed:
+
+- Active `ws ai` resolves to `/Users/werkstatt/ai_workspace`.
+- Workspaceboard source and live runtime resolve AI Workspace, Frank, Avignon, and worker-role paths through `/Users/werkstatt/ai_workspace` first.
+- Frank and Avignon LaunchAgents now use `AI_WORKSPACE_ROOT=/Users/werkstatt/ai_workspace`; Avignon uses `AVIGNON_WORKSPACE_ROOT=/Users/werkstatt/ai_workspace/avignon`.
+- The old Google Drive `ai_workspace` folder was moved to `/Users/werkstatt/ai_workspace_google_drive_archive_20260415`.
+- The original Google Drive path no longer exists on Mac mini.
+
+Archive handling:
+
+- The archive is a legacy source/retention bundle, not an active workspace.
+- Secret-looking and credential-bearing paths inside the archive must not be read, printed, synced, or copied into git during normal work.
+- Future extraction from the archive should be task-specific: copy only approved non-secret records into `/Users/werkstatt/ai_workspace`, then commit through git.
+
+Large-file rule:
+
+- Git is the index and audit trail, not bulk storage.
+- Large non-secret artifacts should live in an explicit local/NAS/artifact location with a committed manifest containing location, owner, size, SHA-256 checksum, retention, and share scope.
+- Papers can be used for curated human-readable shared work records, but Claude/Codex should not both write the same Papers document until single-writer or locking rules are approved.
+- Secrets, OAuth material, private keys, password-like files, and mailbox credentials stay out of git, Papers, and normal artifact manifests.
+
 ## Decision Driver Questions
 
 1. Should M4 remain a local/manual board control surface, or should it become a formal Workspaceboard failover host?
