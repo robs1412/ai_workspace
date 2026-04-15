@@ -14,7 +14,8 @@ Use this file for cross-machine/session handoffs.
   - Large-file policy: keep Git as the coordination index only. Store large non-secret artifacts outside this repo and commit manifests/checksums; keep secrets and credential-like material out of git, Papers, and normal manifests. See `ARTIFACTS.md`.
   - M4 active `ws ai` and Workspaceboard runtime also resolve to `/Users/werkstatt/ai_workspace`; M4 pulled the same git commits and reinstalled Workspaceboard.
   - M4 old Google Drive `ai_workspace` path is now gone as well; no M4 archive copy remains. The active M4 `ws ai` and board runtime still resolve to `/Users/werkstatt/ai_workspace`.
-  - Remaining transition follow-up: clone/verify `robs1412/ai_workspace` on MacBook and decide secure storage for the Mac mini legacy archive's private/secret material.
+  - MacBook is now verified at `192.168.55.44` / `MacBookPro.lan`: cloned `/Users/werkstatt/ai_workspace`, updated `ws ai`, pulled/reinstalled Workspaceboard, and moved the old Drive AI folder to `/Users/werkstatt/ai_workspace_google_drive_archive_20260415_macbook`.
+  - Remaining transition follow-up: decide secure storage and retention handling for the Mac mini and MacBook legacy archives' private/secret material.
 
 - Frank/Avignon follow-through correction at `2026-04-15 10:52 CDT` on `Macmini.lan`.
   - Problem addressed: 300-second LaunchAgent polls could exit `0` and report inbox zero while open email-derived decisions stayed parked in local/mailbox state and were not re-routed to visible work.

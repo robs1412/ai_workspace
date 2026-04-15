@@ -285,6 +285,7 @@ Completed:
 - The original Google Drive path no longer exists on Mac mini.
 - M4 pulled the new `ai_workspace` and `workspaceboard` commits and its local Workspaceboard now resolves AI Workspace, Frank, and Avignon to `/Users/werkstatt/ai_workspace`.
 - M4 old Google Drive `ai_workspace` path is now gone; no M4 archive copy remains. Active M4 `ws ai` and Workspaceboard continue to resolve to `/Users/werkstatt/ai_workspace`.
+- MacBook is now verified at `192.168.55.44` / `MacBookPro.lan`: `/Users/werkstatt/ai_workspace` is cloned at the current GitHub commit, `ws ai` resolves there, Workspaceboard `0.69` resolves AI/Frank/Avignon to `/Users/werkstatt/ai_workspace`, and the old Drive AI folder was moved to `/Users/werkstatt/ai_workspace_google_drive_archive_20260415_macbook`.
 
 Archive handling:
 
