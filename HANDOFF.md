@@ -1,10 +1,17 @@
 # Codex Session Handoff
 
-Last Updated: 2026-04-15 16:58:00 CDT (Machine: Macmini.lan)
+Last Updated: 2026-04-15 17:10:00 CDT (Machine: Macmini.lan)
 
 Use this file for cross-machine/session handoffs.
 
 ## Current Workflow Handoff
+
+- Frank OPS digest helper restored at `2026-04-15 17:10 CDT`.
+  - Found `frank_ops_digest.php` inside the encrypted legacy vault at `macmini-legacy-archive/remaining-archive/scripts/frank_ops_digest.php`.
+  - Restored it to `/Users/admin/.frank-launch/runtime/scripts/frank_ops_digest.php`, added the current OPS bootstrap path `/Users/werkstatt/ops/bootstrap.php`, and verified PHP syntax.
+  - Verified the helper returns JSON for Robert's OPS queue without printing task contents in chat.
+  - Verified a no-send Frank morning overview dry-run for `2026-04-16` completed with `ops_error = null` and generated an `Important OPS Tasks` section.
+  - Detached `/Volumes/AIWorkspacePrivate` after the search/restore.
 
 - Frank/Avignon morning overview recovery at `2026-04-15 16:58 CDT`.
   - Mac mini did not close; `Macmini.lan` remained up and running.
@@ -12,7 +19,7 @@ Use this file for cross-machine/session handoffs.
   - Sent Robert's Frank morning overview manually at `16:51 CDT` with task id `frank-morning-overview-2026-04-15`.
   - Sent Sonat a matching Avignon morning overview at `16:54 CDT` with task id `avignon-morning-overview-2026-04-15`.
   - Reloaded `com.koval.frank-morning-overview` so launchd now uses `AI_WORKSPACE_ROOT=/Users/admin/.frank-launch/runtime` and the machine-local Frank runtime path for tomorrow's 06:00 run.
-  - Remaining follow-up: restore or replace the missing `scripts/frank_ops_digest.php` helper. Until that is fixed, the overview can send, but the OPS task digest section is blocked/unavailable.
+  - Follow-up resolved at `17:10 CDT`: `scripts/frank_ops_digest.php` was restored into the live Frank runtime and dry-run verification now shows no OPS error.
 
 - Avignon/importer CRM additions pair closed at `2026-04-15 16:51 CDT`.
   - Closed board sessions `e9588b48` and `10b9346d` after review-ready summaries matched.

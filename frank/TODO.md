@@ -1,6 +1,6 @@
 # TODO — frank
 
-Updated: 2026-04-15 16:58:00 CDT (Machine: Macmini.lan)
+Updated: 2026-04-15 17:10:00 CDT (Machine: Macmini.lan)
 
 ## In Progress
 
@@ -92,9 +92,6 @@ Updated: 2026-04-15 16:58:00 CDT (Machine: Macmini.lan)
 
 ## Backlog
 
-- Repair Frank's morning overview OPS digest integration.
-  - The 2026-04-15 manual send succeeded only after pointing `AI_WORKSPACE_ROOT` at `/Users/admin/.frank-launch/runtime`.
-  - The helper `scripts/frank_ops_digest.php` is missing from the active runtime/safe repo, so OPS task digest content is currently blocked/unavailable in the generated overview.
 - When improving Frank inbox or assistant behavior, mirror the improvement for Avignon where applicable so Sonat's assistant path does not fall behind Frank's.
 - Expand from draft-only to narrow auto-send rules after validation.
 - Company party member invite.
@@ -108,7 +105,7 @@ Updated: 2026-04-15 16:58:00 CDT (Machine: Macmini.lan)
   - Mac mini stayed online; launchd showed `com.koval.frank-morning-overview` loaded but with `runs = 0` because the job had been installed/updated after the 06:00 trigger.
   - Sent Robert's overview manually at 16:51 CDT with task id `frank-morning-overview-2026-04-15` and Message-ID recorded in the machine-local sent log.
   - Reloaded the LaunchAgent with `AI_WORKSPACE_ROOT=/Users/admin/.frank-launch/runtime` so the scheduled job uses the installed Frank runtime.
-  - Follow-up remains open: restore/replace `scripts/frank_ops_digest.php` so the OPS digest section works again.
+  - Restored `scripts/frank_ops_digest.php` from the encrypted legacy vault into the live Frank runtime at 17:10 CDT, added `/Users/werkstatt/ops/bootstrap.php` as the preferred bootstrap path, and verified a no-send 2026-04-16 dry-run generated the OPS section with `ops_error = null`.
 - 2026-04-15: OpenWrt 25.12.2 upgrade reminder closed.
   - The 2026-04-15 09:00 calendar reminder had served its purpose, and Robert later approved/flashed the custom image through the router worker path.
 - 2026-04-14: Captured Frank scheduled inbox-check noise guard from AI Workspace ToDo-append.
