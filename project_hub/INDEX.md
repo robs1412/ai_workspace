@@ -1,7 +1,13 @@
 # AI Workspace Project Hub
-Last Updated: 2026-04-15 16:36:43 CDT (Machine: Macmini.lan)
+Last Updated: 2026-04-15 18:25:58 CDT (Machine: Macmini.lan)
 
 ## Open
+
+- **2026-04-15 Login Portal Security Rollout Activation**
+  - Master ID: `AI-INC-20260415-LOGIN-PORTAL-SECURITY-ROLLOUT-01`
+  - Detail log: `project_hub/issues/2026-04-15-login-portal-security-rollout-activation.md`
+  - Repos: `login`, `ai_workspace`, live Login/Portal auth database state
+  - Status: activated and notification emails sent on 2026-04-15; 47 Portal users tracked, 47 reset confirmations outstanding, 47 emailed, 0 send failures
 
 - **2026-04-14 Macmini, M4, And MacBook SSH Key Exchange**
   - Master ID: `AI-INC-20260414-MACMINI-M4-SSH-KEY-EXCHANGE-01`
