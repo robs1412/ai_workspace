@@ -221,6 +221,18 @@ Recommended replacement sync model:
 
 Do not remove Google Drive from Mac mini or delete/move `.private` until the safe subset has been created, pushed, cloned on all machines, and the secure-storage decision for secret material is explicit.
 
+## 2026-04-15 Role Clarification For Local Workstation Sync
+
+Robert clarified that `ws ai` should remain local on Mac mini, M4, and MacBook, with git as the sync mechanism. The M4 and MacBook are both front-facing workstations, while the 2018 Mac mini `.17` is the main AI worker/station.
+
+Current operating interpretation:
+
+- M4 `Mac.lan` / `192.168.55.35` is Robert's front-facing desk workstation and a supplemental/local task runner.
+- MacBook `MacBookPro.lan` / `192.168.55.44` when last verified is Robert's front-facing portable workstation and a supplemental/local task runner.
+- 2018 Mac mini `Macmini.lan` / `.17` remains the main AI station for Workspaceboard, Frank, Avignon, long-running Codex workers, automation, and deliberate service verification.
+- Mac mini, M4, and MacBook should each keep local GitHub-backed `/Users/werkstatt/ai_workspace` and `/Users/werkstatt/<repo>` checkouts. Use direct SSH/rsync only for deliberate non-git handoffs, fallback, or service checks.
+- Older references to Google Drive as the active AI Workspace sync layer or Mac mini as the foreground source should be treated as historical unless they are explicitly marked as archive/retention work.
+
 ## 2026-04-15 Step 4 Start: Safe Git-Backed AI Workspace
 
 Created `/Users/werkstatt/ai_workspace` on Mac mini as the new git-backed coordination repo.
