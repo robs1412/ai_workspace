@@ -19,18 +19,18 @@ Git remains the coordination index only. These archives are legacy source/retent
 
 ## Mac Mini Inventory
 
-Total size: about `443M`.
+Original size: about `443M`. Current size after approved generated/cache cleanup: about `40M`.
 
 Largest retained items:
 
-- `.venvs` - about `299M`; regenerated Python environment, deletion candidate after confirmation.
-- `.venv_pdf` - about `100M`; regenerated Python environment, deletion candidate after confirmation.
+- `.venvs` - about `299M`; deleted 2026-04-15 after Robert approval.
+- `.venv_pdf` - about `100M`; deleted 2026-04-15 after Robert approval.
 - `.private` - about `23M`; private/secret-bearing material, secure-storage decision required.
 - `project_hub` - about `7.1M`; mostly safe text already migrated, keep archive for traceability until spot-checked.
 - `screenbox` - about `4.0M`; embedded implementation clone, decide separately.
-- `.playwright-cli` - about `2.4M`; generated/runtime cache, deletion candidate after confirmation.
+- `.playwright-cli` - about `2.4M`; deleted 2026-04-15 after Robert approval.
 - `external` - about `2.3M`; embedded implementation clone, decide separately.
-- `tmp` - about `1.8M`; generated/runtime temp, deletion candidate after confirmation.
+- `tmp` - about `1.8M`; deleted 2026-04-15 after Robert approval.
 - `LOG_imapsync` - about `1.1M`; email archive logs, retain until email archive projects are closed.
 
 Secret-looking paths by name include:
@@ -51,16 +51,16 @@ Those paths were identified by filename only. Contents were not read.
 
 ## MacBook Inventory
 
-Total size is materially the same as Mac mini; top-level sizes show the same large retention categories:
+Original size was materially the same as Mac mini. Current size after approved generated/cache cleanup: about `40M`. Top-level sizes showed the same large retention categories:
 
-- `.venvs` - about `299M`; regenerated Python environment, deletion candidate after confirmation.
-- `.venv_pdf` - about `100M`; regenerated Python environment, deletion candidate after confirmation.
+- `.venvs` - about `299M`; deleted 2026-04-15 after Robert approval.
+- `.venv_pdf` - about `100M`; deleted 2026-04-15 after Robert approval.
 - `.private` - about `23M`; private/secret-bearing material, secure-storage decision required.
 - `project_hub` - about `7.1M`; mostly safe text already migrated, keep archive for traceability until spot-checked.
 - `screenbox` - about `4.0M`; embedded implementation clone, decide separately.
-- `.playwright-cli` - about `2.4M`; generated/runtime cache, deletion candidate after confirmation.
+- `.playwright-cli` - about `2.4M`; deleted 2026-04-15 after Robert approval.
 - `external` - about `2.3M`; embedded implementation clone, decide separately.
-- `tmp` - about `1.8M`; generated/runtime temp, deletion candidate after confirmation.
+- `tmp` - about `1.8M`; deleted 2026-04-15 after Robert approval.
 - `LOG_imapsync` - about `1.1M`; email archive logs, retain until email archive projects are closed.
 
 Secret-looking paths by name match the Mac mini categories, including `.env`, `.env.md`, `.private/`, OAuth/password/IKEv2/router private paths, `output/portal-account-passwords-2026-03-27.md`, `screenbox/.env`, and `avignon/.private-work`.
@@ -80,8 +80,7 @@ On Mac mini and MacBook:
 Recommended next actions:
 
 1. Keep both archives intact until Robert approves cleanup categories.
-2. Delete regenerated environments and caches after approval:
-   `.venvs`, `.venv_pdf`, `.playwright-cli`, `tmp`, `tmp-staging`, `tmp_il_report`.
+2. Completed 2026-04-15 after Robert approval: deleted regenerated environments and caches from Mac mini and MacBook archives: `.venvs`, `.venv_pdf`, `.playwright-cli`, `tmp`, `tmp-staging`, `tmp_il_report`.
 3. Retain `LOG_imapsync`, `output`, and `recordings` until related email/archive and reporting projects are confirmed closed.
 4. Move `.private`, `.env*`, password-like outputs, OAuth/mailbox material, and router/VPN credential material into the approved secure-storage path once chosen.
 5. Review `screenbox` and `external/mempalace` as code projects, not as AI Workspace coordination content.
@@ -96,3 +95,7 @@ Choose the secure storage target for private material:
 - or another approved secure location.
 
 Until that decision is made, leave private material inside the owner-only legacy archives and do not copy it into the Git-backed workspace.
+
+## Cleanup Record
+
+2026-04-15: Robert approved deleting generated/cache folders. Removed `.venvs`, `.venv_pdf`, `.playwright-cli`, `tmp`, `tmp-staging`, and `tmp_il_report` from both Mac mini and MacBook archives. Verified both archives are about `40M` afterward. Secret/private, log, output, recordings, `screenbox`, and `external` folders were left intact.

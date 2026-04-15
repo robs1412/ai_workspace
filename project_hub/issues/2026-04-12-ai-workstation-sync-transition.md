@@ -321,6 +321,11 @@ MacBook archive inventory and permission hardening completed. Keep the MacBook a
 
 Next decision: choose the secure storage target for private material before extracting or deleting secret-bearing paths.
 
+- AI Workspace archive generated/cache cleanup completed at `2026-04-15` after Robert approval.
+  - Deleted only `.venvs`, `.venv_pdf`, `.playwright-cli`, `tmp`, `tmp-staging`, and `tmp_il_report` from the Mac mini and MacBook legacy archives.
+  - Verified both archives are now about `40M`.
+  - Left `.private`, `.env*`, `LOG_imapsync`, `output`, `recordings`, `screenbox`, and `external` intact.
+
 ## Decision Driver Questions
 
 1. Should M4 remain a local/manual board control surface, or should it become a formal Workspaceboard failover host?

@@ -6,6 +6,11 @@ Use this file for cross-machine/session handoffs.
 
 ## Current Workflow Handoff
 
+- AI Workspace archive generated/cache cleanup completed at `2026-04-15` after Robert approval.
+  - Deleted only `.venvs`, `.venv_pdf`, `.playwright-cli`, `tmp`, `tmp-staging`, and `tmp_il_report` from the Mac mini and MacBook legacy archives.
+  - Verified both archives are now about `40M`.
+  - Left `.private`, `.env*`, `LOG_imapsync`, `output`, `recordings`, `screenbox`, and `external` intact.
+
 - AI Workspace archive retention step 5 started at `2026-04-15 14:17 CDT` on `Macmini.lan`.
   - Inventory was by names/sizes only; no `.private`, `.env`, password-like, mailbox, OAuth, router/VPN secret, or key material contents were read.
   - Mac mini legacy archive `/Users/werkstatt/ai_workspace_google_drive_archive_20260415` is about `443M`; archive root and `.private` are owner-only `700`, `.env` and `.env.md` are owner-only `600`.
