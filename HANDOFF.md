@@ -6,6 +6,13 @@ Use this file for cross-machine/session handoffs.
 
 ## Current Workflow Handoff
 
+- AI Workspace archive retention step 5 started at `2026-04-15 14:17 CDT` on `Macmini.lan`.
+  - Inventory was by names/sizes only; no `.private`, `.env`, password-like, mailbox, OAuth, router/VPN secret, or key material contents were read.
+  - Mac mini legacy archive `/Users/werkstatt/ai_workspace_google_drive_archive_20260415` is about `443M`; archive root and `.private` are owner-only `700`, `.env` and `.env.md` are owner-only `600`.
+  - Retention manifest: `project_hub/artifacts/2026-04-15-ai-workspace-legacy-archives.md`.
+  - MacBook archive inventory and permission hardening completed; keep `/Users/werkstatt/ai_workspace_google_drive_archive_20260415_macbook` intact until cleanup categories are approved.
+  - Next decision: choose secure storage for private material before extracting or deleting secret-bearing archive paths.
+
 - AI Workspace moved out of Google Drive at `2026-04-15 10:56 CDT` on `Macmini.lan`.
   - Active `ws ai` is `/Users/werkstatt/ai_workspace`; `/bin/bash -lc 'source /Users/admin/.bashrc; ws ai; pwd'` resolves there.
   - The old Google Drive folder was moved, not deleted, to `/Users/werkstatt/ai_workspace_google_drive_archive_20260415`; the original Drive path no longer exists on Mac mini.

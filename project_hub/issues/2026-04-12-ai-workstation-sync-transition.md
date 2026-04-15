@@ -300,6 +300,27 @@ Large-file rule:
 - Papers can be used for curated human-readable shared work records, but Claude/Codex should not both write the same Papers document until single-writer or locking rules are approved.
 - Secrets, OAuth material, private keys, password-like files, and mailbox credentials stay out of git, Papers, and normal artifact manifests.
 
+## 2026-04-15 Step 5 Archive Retention Start
+
+Started the legacy archive retention pass after all reachable machines moved active `ws ai` out of Google Drive.
+
+Actions completed:
+
+- Created archive manifest `project_hub/artifacts/2026-04-15-ai-workspace-legacy-archives.md`.
+- Inventoried the Mac mini archive by names and sizes only. Secret-bearing contents were not read.
+- Hardened Mac mini archive permissions: archive root and `.private` are owner-only `700`; `.env` and `.env.md` are owner-only `600`.
+
+Mac mini archive summary:
+
+- Total size: about `443M`.
+- Regenerated environment/cache deletion candidates: `.venvs` about `299M`, `.venv_pdf` about `100M`, `.playwright-cli` about `2.4M`, plus temp folders.
+- Secure-storage decision required: `.private`, `.env*`, password-like outputs, OAuth/mailbox material, router/VPN credential material, and `screenbox/.env`.
+- Retain until project closeout: `LOG_imapsync`, `output`, and `recordings`.
+
+MacBook archive inventory and permission hardening completed. Keep the MacBook archive intact until cleanup categories are approved.
+
+Next decision: choose the secure storage target for private material before extracting or deleting secret-bearing paths.
+
 ## Decision Driver Questions
 
 1. Should M4 remain a local/manual board control surface, or should it become a formal Workspaceboard failover host?
