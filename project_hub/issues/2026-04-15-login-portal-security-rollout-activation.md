@@ -31,8 +31,8 @@ Implementation and operational rollout were intentionally split. The remaining w
 ### ai_workspace
 
 - Repo Log ID: `AI-PORTAL-SECURITY-ROLLOUT-20260415`
-- Commit SHA:
-- Commit Date:
+- Commit SHA: `8a24178`
+- Commit Date: 2026-04-15
 - Change Summary: Added this project-hub record and index entry.
 
 ### ops
