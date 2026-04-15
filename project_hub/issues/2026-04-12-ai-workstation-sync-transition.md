@@ -258,6 +258,18 @@ Mapping update:
 - M4 `/Users/kovaladmin/.bashrc` now prefers `/Users/werkstatt/ai_workspace` for `ws ai`, with the Google Drive path as fallback/archive.
 - `frank` and `avignon` aliases prefer the new repo's planning directories on both machines.
 
+## 2026-04-15 Legacy Archive Cleanup Recovery
+
+Recovered from a failed/background cleanup attempt without reading or printing secret contents.
+
+- Verified encrypted vault `/Users/werkstatt/secure-vaults/ai-workspace-private.sparsebundle` mounted at `/Volumes/AIWorkspacePrivate`.
+- Verified no live `rsync`, `ditto`, or `hdiutil` archive copy process remained.
+- Verified loose archive folders `/Users/werkstatt/ai_workspace_google_drive_archive_20260415` and `/Users/werkstatt/ai_workspace_google_drive_archive_20260415_macbook` are absent.
+- Verified vault payload `macmini-legacy-archive/` has `944` files and about `40M` payload; sparsebundle is about `60M` on disk.
+- No separate `macbook-legacy-archive/` payload was found in the vault during recovery.
+- Classified embedded `screenbox` and `external/mempalace` copies as vaulted legacy/audit material only, not active workspaces. `mempalace` still carries historical local modifications in `mempalace/entity_detector.py` and `mempalace/miner.py`.
+- Updated retention manifest: `../artifacts/2026-04-15-ai-workspace-legacy-archives.md`.
+
 Remaining before Google Drive can be retired:
 
 1. Clone/verify the new repo on MacBook. Current Mac mini -> MacBook SSH check to `robert@192.168.55.38` still times out, so this is pending restored MacBook SSH/LAN reachability or manual GitHub clone on the MacBook.

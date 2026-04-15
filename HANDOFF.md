@@ -1,10 +1,17 @@
 # Codex Session Handoff
 
-Last Updated: 2026-04-15 11:22:00 CDT (Machine: Macmini.lan)
+Last Updated: 2026-04-15 15:25:10 CDT (Machine: Macmini.lan)
 
 Use this file for cross-machine/session handoffs.
 
 ## Current Workflow Handoff
+
+- AI Workspace legacy archive cleanup recovery completed at `2026-04-15 15:25 CDT` on `Macmini.lan`.
+  - Verified no live archive copy process remained and the encrypted sparsebundle was mounted at `/Volumes/AIWorkspacePrivate`.
+  - The loose archive folders `/Users/werkstatt/ai_workspace_google_drive_archive_20260415` and `/Users/werkstatt/ai_workspace_google_drive_archive_20260415_macbook` were already absent.
+  - The vault contains `macmini-legacy-archive/` with `944` files, about `40M` payload; no separate `macbook-legacy-archive/` payload was found.
+  - Embedded code copies `screenbox` and `external/mempalace` are classified as vaulted legacy/audit material only; `mempalace` still has historical local modifications in `mempalace/entity_detector.py` and `mempalace/miner.py`.
+  - No secret contents were read or printed. Updated `project_hub/artifacts/2026-04-15-ai-workspace-legacy-archives.md` with the final state.
 
 - AI box secure storage and backup step completed at `2026-04-15` on `Macmini.lan`.
   - Created encrypted sparsebundle `/Users/werkstatt/secure-vaults/ai-workspace-private.sparsebundle`; passphrase is stored in local macOS Keychain item `KOVAL_AI_WORKSPACE_PRIVATE_VAULT` for user `admin`.

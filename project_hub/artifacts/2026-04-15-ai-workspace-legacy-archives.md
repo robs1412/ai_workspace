@@ -13,8 +13,9 @@ Git remains the coordination index only. These archives are legacy source/retent
 
 | Machine | Archive path | Status |
 | --- | --- | --- |
-| Mac mini | `/Users/werkstatt/ai_workspace_google_drive_archive_20260415` | Present, permission-hardened |
-| MacBook | `/Users/werkstatt/ai_workspace_google_drive_archive_20260415_macbook` | Present, permission-hardened |
+| Mac mini | `/Users/werkstatt/secure-vaults/ai-workspace-private.sparsebundle` -> `macmini-legacy-archive/` | Retained in encrypted Mac mini vault |
+| Mac mini loose archive | `/Users/werkstatt/ai_workspace_google_drive_archive_20260415` | Removed after vault copy verification |
+| MacBook loose archive | `/Users/werkstatt/ai_workspace_google_drive_archive_20260415_macbook` | Removed as duplicate loose legacy material; no separate `macbook-legacy-archive/` payload was found in the vault during recovery check |
 | M4 | none retained | Old Drive path removed; no archive retained |
 
 ## Mac Mini Inventory
@@ -90,7 +91,7 @@ Recommended next actions:
 
 Mac mini secure-storage target is selected and active: a machine-local encrypted sparsebundle with its passphrase in the admin login Keychain.
 
-Remaining decision: complete the equivalent MacBook vault locally or decide to delete the MacBook legacy private archive after confirming Mac mini vault coverage is sufficient.
+No current cleanup decision is pending for the loose legacy archive folders on Mac mini; both known loose legacy archive paths are gone. If MacBook-specific archive material is later found elsewhere, handle it through the same vault/manifest workflow before deletion.
 
 ## Cleanup Record
 
@@ -99,3 +100,5 @@ Remaining decision: complete the equivalent MacBook vault locally or decide to d
 2026-04-15: Created Mac mini encrypted private archive vault `/Users/werkstatt/secure-vaults/ai-workspace-private.sparsebundle`, with the passphrase stored in the admin user's macOS Keychain item `KOVAL_AI_WORKSPACE_PRIVATE_VAULT`. Moved Mac mini archive private paths into the mounted vault under `macmini-legacy-archive/`, then detached the vault. Moved paths: `.private`, `.env`, `.env.md`, `screenbox/.env`, `avignon/.private-work`, and `output/portal-account-passwords-2026-03-27.md`. Verified those paths are gone from the Mac mini legacy archive. Mac mini legacy archive is now about `17M`; vault payload is about `23M`.
 
 MacBook private paths remain in its owner-only archive because macOS refused non-interactive Keychain item creation over SSH (`User interaction is not allowed`). Complete the MacBook vault step locally or during a GUI-approved session.
+
+2026-04-15 recovery/cleanup pass at 15:25 CDT: after a failed/background cleanup attempt, verified the encrypted vault was mounted at `/Volumes/AIWorkspacePrivate` and no live `rsync`, `ditto`, or `hdiutil` copy process remained. The loose Mac mini and MacBook archive folders were already absent. The vault contains `macmini-legacy-archive/` with `944` files and about `40M` of payload; the sparsebundle is about `60M` on disk. A separate `macbook-legacy-archive/` payload was not present. Embedded code copies are retained only inside the encrypted legacy archive payload: `screenbox` points at `https://github.com/dklymentiev/screenbox`, and `external/mempalace` points at `https://github.com/milla-jovovich/mempalace.git` with local modifications in `mempalace/entity_detector.py` and `mempalace/miner.py`. These are classified as vaulted legacy/audit material, not active AI Workspace source. No secret contents were read or printed.

@@ -82,6 +82,9 @@ _No active AI Workspace implementation items._
 
 ## Done
 
+- **2026-04-15** AI Workspace legacy archive cleanup recovery completed.
+  - Verified the encrypted vault retained the Mac mini legacy archive payload, loose Mac mini/MacBook archive folders are gone, embedded `screenbox`/`external/mempalace` copies are vaulted legacy/audit material only, and no secret contents were read or printed.
+
 - **2026-04-14** Earth Day Forge/lists workflow reconciled.
   - Account-send draft `#550` remains draft-only, Vegas distributor inclusion and Johnson Brothers MN old-distributor cleanup were verified, and Forge/phpList list sync work completed without campaign send.
 
