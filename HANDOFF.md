@@ -1,10 +1,15 @@
 # Codex Session Handoff
 
-Last Updated: 2026-04-15 15:25:10 CDT (Machine: Macmini.lan)
+Last Updated: 2026-04-15 16:14:59 CDT (Machine: Macmini.lan)
 
 Use this file for cross-machine/session handoffs.
 
 ## Current Workflow Handoff
+
+- Mitch Donohue email archive follow-up closed by Robert at `2026-04-15 16:14 CDT`.
+  - Removed the AI Workspace waiting decision from `TODO.md`.
+  - Marked `project_hub/issues/2026-04-07-email-user-archive-transfer-mitch-donohue.md` completed by decision, without additional mailbox access, credential handling, or `imapsync` execution.
+  - `project_hub/INDEX.md` now lists the email archive transfer under Completed.
 
 - AI Workspace legacy archive cleanup recovery completed at `2026-04-15 15:25 CDT` on `Macmini.lan`.
   - Verified no live archive copy process remained and the encrypted sparsebundle was mounted at `/Volumes/AIWorkspacePrivate`.
@@ -60,7 +65,7 @@ Use this file for cross-machine/session handoffs.
   - Board status before reconciliation: AI Workspace TODO `open_count=14`, append queue `6`; whole-board total `open_items=87` across all workspaces.
   - Reconciled completed/review-ready AI items: Communications Manager task routing, Earth Day Forge/lists workflow, OpenWrt/LuCI evaluation closeout, Heritage un-blacklist, Trainual first-module narrowing, and `/lists/` phpList CRM activity logging.
   - Cleared duplicate workstation append entries into the existing workstation/sync transition record instead of creating new architecture tasks. Remaining workstation questions stay in `project_hub/issues/2026-04-12-ai-workstation-sync-transition.md`.
-  - Remaining AI Workspace decisions after this pass: OpenWrt flash/reboot approval or deferral, and Mitch Donohue archive verification/rerun approval or park decision.
+  - Remaining AI Workspace decision after this pass: OpenWrt flash/reboot approval or deferral.
 
 - M4 workstation handoff at `2026-04-14 13:08 CDT` from `Macmini.lan`.
   - M4 identity: `Mac.lan`, LAN IP `192.168.55.35`, user `kovaladmin`, home `/Users/kovaladmin`.
@@ -382,7 +387,7 @@ ssh -i ~/.ssh/id_ed25519_m4_to_macbook -o IdentitiesOnly=yes robert@192.168.55.3
   - `curl -fsS http://127.0.0.1:17878/api/status | head`
 - Re-open `TODO.md`, `HANDOFF.md`, and `project_hub/INDEX.md` after sync completes.
 - If resuming dashboard work, fix the TODO parser to count only top-level `In Progress` bullets.
-- If resuming ops work, prioritize Mitch archive verification first.
+- Mitch archive verification is closed by Robert as of 2026-04-15; do not prioritize it as an open worker item.
 
 ## Previous Handoff Archive
 

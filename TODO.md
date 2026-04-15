@@ -1,6 +1,6 @@
 # TODO — ai_workspace
 
-Updated: 2026-04-14 21:57:30 CDT (Machine: Macmini.lan)
+Updated: 2026-04-15 16:14:59 CDT (Machine: Macmini.lan)
 
 ## In Progress
 
@@ -11,12 +11,6 @@ _No active AI Workspace implementation items._
 - OpenWrt/LuCI upgrade decision:
   - Evaluation-only work is complete; official and custom `25.12.2` WRT3200ACM images passed validation-only `sysupgrade -T`, with no flash, reboot, firewall/VPN reload, or router config change performed.
   - Decision: Robert must explicitly approve or reject flashing the staged custom package-preserving image and accept the reboot/connectivity-risk window after rollback prerequisites are reviewed.
-
-- Email archive transfer follow-up:
-  - Decision prompt prepared 2026-04-14 after reviewing only AI Workspace TODO/HANDOFF/project note; no mailbox, credential, or `imapsync` access was used.
-  - Needed: Robert needs to decide whether to continue the Mitch Donohue archive transfer now that the 2026-04-10 project-note reassessment says both source and destination IMAP logins worked, while destination counts remain incomplete (`Mitch-Inbox`, `Mitch-Sent`, `Drafts`, `Spam`, `Trash`, and `All Mail` short by `1`).
-  - Next: if approved, run a separate security-gated email/archive worker on `Macmini.lan` to rerun or locate final `imapsync` completion logs, rerun only the intended `UserArchive/Mitch_Donohue/...` mappings if needed, verify counts, and close the project log only after completion evidence exists.
-  - Decision: Robert, do you approve continuing the Mitch archive verification/rerun worker on Mac mini, or should this remain parked with the source account retained and not deleted?
 
 ## Backlog
 - Build in-house outreach events module (parity with Events/Market Events):
@@ -84,6 +78,9 @@ _No active AI Workspace implementation items._
 
 - **2026-04-15** AI Workspace legacy archive cleanup recovery completed.
   - Verified the encrypted vault retained the Mac mini legacy archive payload, loose Mac mini/MacBook archive folders are gone, embedded `screenbox`/`external/mempalace` copies are vaulted legacy/audit material only, and no secret contents were read or printed.
+
+- **2026-04-15** Mitch Donohue email archive follow-up closed by Robert.
+  - Removed the waiting decision from AI Workspace queue and marked the project-hub archive transfer record completed without further mailbox, credential, or `imapsync` work.
 
 - **2026-04-14** Earth Day Forge/lists workflow reconciled.
   - Account-send draft `#550` remains draft-only, Vegas distributor inclusion and Johnson Brothers MN old-distributor cleanup were verified, and Forge/phpList list sync work completed without campaign send.

@@ -1,5 +1,5 @@
 # AI Workspace Project Hub
-Last Updated: 2026-04-14 12:40:10 CDT (Machine: Macmini.lan)
+Last Updated: 2026-04-15 16:14:59 CDT (Machine: Macmini.lan)
 
 ## Open
 
@@ -44,11 +44,6 @@ Last Updated: 2026-04-14 12:40:10 CDT (Machine: Macmini.lan)
   - Detail log: `project_hub/issues/2026-04-09-werkstatt-path-unification.md`
   - Repos: `ai_workspace`, `workspaceboard`, local workspace roots on Mac mini and MacBook
 
-- **2026-04-07 Email User Archive Transfer (Mitch Donohue)**
-  - Master ID: `AI-INC-20260407-EMAIL-ARCHIVE-TRANSFER-01`
-  - Detail log: `project_hub/issues/2026-04-07-email-user-archive-transfer-mitch-donohue.md`
-  - Repos: `ai_workspace`, Gmail IMAP archive path in `tastingroom`
-
 - **2026-04-07 MemPalace Salesreport Pilot**
   - Master ID: `AI-INC-20260407-MEMPALACE-SALESREPORT-01`
   - Detail log: `project_hub/issues/2026-04-07-mempalace-salesreport-pilot.md`
@@ -85,6 +80,12 @@ Last Updated: 2026-04-14 12:40:10 CDT (Machine: Macmini.lan)
   - Repos: `login` (shared SSO/logout layer affecting `portal` and `ops`)
 
 ## Completed
+
+- **2026-04-07 Email User Archive Transfer (Mitch Donohue)**
+  - Master ID: `AI-INC-20260407-EMAIL-ARCHIVE-TRANSFER-01`
+  - Detail log: `project_hub/issues/2026-04-07-email-user-archive-transfer-mitch-donohue.md`
+  - Repos: `ai_workspace`, Gmail IMAP archive path in `tastingroom`
+  - Status: closed by Robert on 2026-04-15; no further mailbox, credential, or `imapsync` work is active
 
 - **2026-04-14 Codex Daily Check-In Notifications**
   - Master ID: `AI-INC-20260414-CODEX-DAILY-CHECKIN-NOTIFICATIONS-01`
