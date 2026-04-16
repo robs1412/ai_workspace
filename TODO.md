@@ -1,6 +1,6 @@
 # TODO — ai_workspace
 
-Updated: 2026-04-16 17:56 CDT (Machine: Macmini.lan)
+Updated: 2026-04-16 17:57 CDT (Machine: Macmini.lan)
 
 ## In Progress
 
@@ -10,8 +10,33 @@ _No active AI Workspace implementation items._
 
 - Blocker: event strategy Google Doc for COT/Connecteam replacement needs read-only access or a supplied text export before full external-source review.
   - Source: `https://docs.google.com/document/d/1EaHH97GJ_9ztMNtWaEp-abGUHdVqVcyvJWkUjko5euc/edit?tab=t.0`.
-  - Local coordination review completed 2026-04-16 from existing AI Workspace notes; exact blocker is anonymous Google Docs export returned `HTTP/2 401`.
+  - Local coordination review completed in AI Workspace commit `128c5f1` from existing AI Workspace notes; exact blocker is anonymous Google Docs export returned `HTTP/2 401`.
   - Decision note: `project_hub/issues/2026-04-16-event-strategy-cot-connecteam-review.md`.
+
+- Decision needed: approve the next OPS outreach Connecteam replacement stage before any final sync, live schedule, notifications, auth/access work, or canonical rule changes.
+  - Completed source: ops commit `18d32a04ddaf5257214d62340eda7e044a1ef3d8`, including docs and `scripts/connecteam_staging_parity.php`.
+  - Allowed next slice without this decision: keep work to docs or read-only dry-run analysis in `ws ops`.
+  - Approval gates: no `--apply`, final sync, live schedule, notification send, auth/access change, or canonical data-rule change without explicit approval.
+
+- Decision needed: choose owner/product rules for OPS market improvements.
+  - Completed source: ops commit `478593f3329c49aec9a30ce0464f2f507394a60e`, `docs/2026-04-16-ops-market-improvements-plan.md`.
+  - Decisions needed before implementation: account/contact request ownership, duplicate rules, account category mapping, Salesreport consumption shape, and audit/retention expectations.
+
+- Blocker: Shopify/Square signup recurring checks need source owner and approved read-only export/API path.
+  - Completed source: lists commit `e2ce6afd8706372d2375b7dd50c4c4a0c63091e4`, `docs/signup-recurring-checks-review-2026-04-16.md`.
+  - Approval gate: no Shopify/Square/API credential access, production read, automation, or mutation until the read-only path is approved.
+
+- Decision needed: define exact next-day logout policy and obtain Security Guard approval before SSO/session changes.
+  - Completed source: login commit `ad6a19760d626e3e709122d311e247187e3df72b`, `docs/2026-04-16-ops-portal-sso-persistence-preflight.md`.
+  - Approval gate: no auth/session code change, production session mutation, deploy, or live login test requiring credentials before Security Guard approval.
+
+- Decision needed: define Portal production audit report rules and Salesreport handoff.
+  - Completed source: portal commit `2e076c6c8e47ce54140ddc95704f574adb9f8333`, `docs/production-audit-enhancements.md`.
+  - Decisions needed before implementation: edit-trail definitions, prior-month edit handling, `<2000 lb` rule semantics, and which shipped-vs-bottled work belongs in Salesreport.
+
+- Decision needed: assign recurring sales/data cleanup owners and mutation boundaries.
+  - Completed source: salesreport commit `8004fd93f97ccc0f65db8f4755523facb1370271`, `doc/recurring-sales-data-ops-review-2026-04-16.md`.
+  - Decisions/handoffs needed before implementation: importer roster owner, BID refresh cadence, CRM mutation approval, and cleanup owner for distributor/account changes.
 
 - Decision needed: choose Google Drive OAuth/token storage policy before any future Drive-backed Digital Office projection automation.
   - Policy review completed 2026-04-16: recommendation is a machine-local OS keychain/private path by default, or an approved secret manager/keychain/service-account path for shared automation.
@@ -23,10 +48,14 @@ _No active AI Workspace implementation items._
 
 ### OPS / Outreach / Trainual
 - Build the in-house outreach events module in `ws ops`.
-  - Goal: Events + Market Events parity, one-or-more linked shifts, existing shift-notification behavior, Connecteam replacement, account/login/activity linkage, and no second user system.
+  - Goal: Events + Market Events parity, one-or-more linked shifts, account/login/activity linkage, and no second user system.
+  - Completed planning/dry-run source: ops commit `18d32a04ddaf5257214d62340eda7e044a1ef3d8`, docs plus `scripts/connecteam_staging_parity.php`.
+  - Next scoped work: implementation design or read-only dry-run follow-up only until final sync/live schedule/notifications/auth/canonical-rule approvals are explicit.
   - Route before implementation: `ws ops` worker with Code and Git Manager preflight; Security Guard only if auth/access or production data mutation enters scope.
-- Define OPS market improvements.
-  - Scope: account/contact creation from OPS and OPS -> salesreport data-flow boundaries.
+- Implement OPS market improvements after owner/product decisions.
+  - Completed planning source: ops commit `478593f3329c49aec9a30ce0464f2f507394a60e`, `docs/2026-04-16-ops-market-improvements-plan.md`.
+  - Next scoped work: convert approved account/contact request, duplicate, category, Salesreport handoff, and audit/retention rules into an implementation plan.
+  - Route: `ws ops`, with `ws sales` involved for Salesreport consumption shape.
 
 ### Lists / Forge / Communications
 - PHPList legacy send-history cleanup next slice.
@@ -34,8 +63,10 @@ _No active AI Workspace implementation items._
   - Next scoped work: run a read-only inventory of candidate legacy send-history soft-delete rows and affected newsletter/list workflows.
   - Approval gate: no DB mutation, deletion, restore, or production cleanup without explicit mutation approval after inventory review.
   - Route: `ws lists`; coordinate with Forge only if newsletter/list workflow crosses modules.
-- Review PHPList, Shopify, and Square signup recurring checks.
-  - Route: `ws lists` / `ws forge` after a concrete checklist is approved.
+- Implement signup recurring checks after Shopify/Square source access is approved.
+  - Completed review source: lists commit `e2ce6afd8706372d2375b7dd50c4c4a0c63091e4`, `docs/signup-recurring-checks-review-2026-04-16.md`.
+  - Next scoped work: build a read-only recurring-check design from approved source exports/API surfaces.
+  - Route: `ws lists` / `ws forge`; no source-system access or credential handling until approved.
 
 ### BID / Importer / Salesreport / Analytics
 - Build web analytics funnel reporting for `koval-distillery.com`.
@@ -49,16 +80,21 @@ _No active AI Workspace implementation items._
   - Completed planning source: salesreport commit `85971d9004d1d73c49751d52080a5ec7587f9780`, `doc/salesreport-adoption-access-planning-2026-04-16.md`.
   - Next scoped work: turn the planning result into specific usage-by-login and state/access-control changes after owner review.
   - Approval gate: no access-control mutation, user-state change, deploy, or production data change without explicit approval and Code and Git Manager preflight.
-- Review recurring sales/data operations.
-  - Scope: importer roster update cadence, distributor inventory checks, monthly/quarterly warehouse + distribution salesreport checks, and BID data refresh cadence.
+- Implement recurring sales/data operations after owner handoffs.
+  - Completed review source: salesreport commit `8004fd93f97ccc0f65db8f4755523facb1370271`, `doc/recurring-sales-data-ops-review-2026-04-16.md`.
+  - Next scoped work: turn approved importer roster ownership, distributor inventory cadence, warehouse/distribution checks, and BID refresh cadence into concrete tasks.
+  - Route: `ws sales`, with `ws importer` and `ws bid` involved for their owned cadences.
 - Clean distributor accounts.
   - Route after scope split: `ws sales` for reporting/account analysis, `ws portal` or `ws ops` only if the cleanup mutates CRM records.
 
 ### Portal / Login / Activity Reporting
 - Fix OPS <-> Portal SSO/login persistence, including next-day logout behavior.
-  - Existing related project-hub records remain open; route through `ws login` and `ws ops` with Code and Git Manager plus Security Guard preflight.
-- Define Portal production audit enhancements.
-  - Scope: extended modification trails, prior-month edit report, shipped-vs-bottled mismatch report, and `<2000 lb` grain/product mismatch logic.
+  - Completed preflight source: login commit `ad6a19760d626e3e709122d311e247187e3df72b`, `docs/2026-04-16-ops-portal-sso-persistence-preflight.md`.
+  - Next scoped work: implement only after exact next-day logout policy and Security Guard approval are recorded.
+  - Route through `ws login` and `ws ops` with Code and Git Manager plus Security Guard preflight.
+- Implement Portal production audit enhancements after definitions are approved.
+  - Completed definition source: portal commit `2e076c6c8e47ce54140ddc95704f574adb9f8333`, `docs/production-audit-enhancements.md`.
+  - Next scoped work: build extended modification trails, prior-month edit report, shipped-vs-bottled mismatch report, and `<2000 lb` grain/product mismatch logic after rule definitions and Salesreport handoff are clear.
   - Route: `ws portal` for Portal-owned reports, with Salesreport ownership checked for shipped-vs-bottled work.
 
 ### IT / Security / Workstations
@@ -74,13 +110,16 @@ _No active AI Workspace implementation items._
 ## Done
 
 - **2026-04-16** Event strategy / COT Connecteam replacement coordination review completed locally.
-  - Added `project_hub/issues/2026-04-16-event-strategy-cot-connecteam-review.md` with local actionable strategy points and OPS-safe next steps. Google Doc source was reachable but returned `HTTP/2 401`, so full external-source review remains blocked pending read-only access or supplied text export. Scope stayed docs-only: no Google Docs mutation, credentials, OPS/Papers/Connecteam/notification/production-data access, code change, commit, push, deploy, or runtime change.
+  - Source commit `128c5f1`; added `project_hub/issues/2026-04-16-event-strategy-cot-connecteam-review.md` with local actionable strategy points and OPS-safe next steps. Google Doc source was reachable but returned `HTTP/2 401`, so full external-source review remains blocked pending read-only access or supplied text export. Scope stayed docs-only: no Google Docs mutation, credentials, OPS/Papers/Connecteam/notification/production-data access, code change, commit, push, deploy, or runtime change.
+
+- **2026-04-16** Source workspace planning/review closeouts reconciled into AI TODO.
+  - Moved completed source items out of raw open backlog and preserved only scoped next slices or real waiting decisions. Sources: ops commits `18d32a04ddaf5257214d62340eda7e044a1ef3d8` and `478593f3329c49aec9a30ce0464f2f507394a60e`; lists commit `e2ce6afd8706372d2375b7dd50c4c4a0c63091e4`; login commit `ad6a19760d626e3e709122d311e247187e3df72b`; portal commit `2e076c6c8e47ce54140ddc95704f574adb9f8333`; salesreport commit `8004fd93f97ccc0f65db8f4755523facb1370271`. Current real manual blocker count: 8 active Waiting items. Docs-only: no external systems, credentials, OPS intake, email, runtime services, live data, deploys, or source workspace mutation was accessed.
 
 - **2026-04-16** Google Cloud security hardening plan completed.
   - Added `project_hub/issues/2026-04-16-google-cloud-security-hardening-plan.md` with a no-credential checklist, first read-only audit plan, and explicit approval gates for IAM, keys, APIs, billing, Essential Contacts, credentials, live admin surfaces, notifications, deploys, and automation. Scope stayed local docs-only: no Google Cloud console, credentials, keychain, OAuth files, secrets, billing accounts, IAM, live admin surfaces, email, deploy, or runtime service was accessed.
 
 - **2026-04-16** Completed planning/review backlog reconciled from source workspaces.
-  - Moved raw open planning items for Salesreport adoption/access, web analytics funnel/source review, and PHPList legacy send-history soft-delete review into this concise Done record. Sources: salesreport commit `85971d9004d1d73c49751d52080a5ec7587f9780` with `doc/salesreport-adoption-access-planning-2026-04-16.md` and `doc/web-analytics-funnel-source-review-2026-04-16.md`; lists commit `a246095d14f07c4e82ebc23fe47e0836a7dded26` with `docs/phplist-legacy-send-history-soft-delete-review-2026-04-16.md`; lists TODO closeout commit `eae015bef06eed50fbbcbacd6324033fa62fb427`. Preserved only scoped future implementation/inventory work and approval gates in Backlog. Current real manual blocker count: 1 active Waiting item. Docs-only: no OPS intake, credentials, live external systems, email, runtime service, deploy, production data, or source-workspace mutation was accessed.
+  - Moved raw open planning items for Salesreport adoption/access, web analytics funnel/source review, and PHPList legacy send-history soft-delete review into this concise Done record. Sources: salesreport commit `85971d9004d1d73c49751d52080a5ec7587f9780` with `doc/salesreport-adoption-access-planning-2026-04-16.md` and `doc/web-analytics-funnel-source-review-2026-04-16.md`; lists commit `a246095d14f07c4e82ebc23fe47e0836a7dded26` with `docs/phplist-legacy-send-history-soft-delete-review-2026-04-16.md`; lists TODO closeout commit `eae015bef06eed50fbbcbacd6324033fa62fb427`. Preserved only scoped future implementation/inventory work and approval gates in Backlog. Docs-only: no OPS intake, credentials, live external systems, email, runtime service, deploy, production data, or source-workspace mutation was accessed.
 
 - **2026-04-16** Recurring operations reporting planning slice completed.
   - Added `project_hub/issues/2026-04-16-recurring-operations-reporting-plan.md` with owner modules, read-only source surfaces, cadence, approval gates, first no-write slice, and notification/email boundaries for monthly task stats, events/task stats review, and barrel sample page manual/follow-up. Scope stayed docs-only: no code, production data, email, notifications, credentials, scheduled jobs, commit, push, deploy, runtime change, OPS intake, or live-source access.

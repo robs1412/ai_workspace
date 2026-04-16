@@ -1,10 +1,17 @@
 # Codex Session Handoff
 
-Last Updated: 2026-04-16 17:56 CDT (Machine: Macmini.lan)
+Last Updated: 2026-04-16 17:57 CDT (Machine: Macmini.lan)
 
 Use this file for cross-machine/session handoffs.
 
 ## Current Workflow Handoff
+
+- AI Workspace TODO/HANDOFF source-closeout reconciliation completed at `2026-04-16 17:57 CDT`.
+  - Reconciled completed planning/review/source-control items from AI Workspace and source workspaces so they no longer remain as raw open backlog.
+  - Source closeouts recorded in `TODO.md`: AI Workspace event strategy commit `128c5f1`; ops commits `18d32a04ddaf5257214d62340eda7e044a1ef3d8` and `478593f3329c49aec9a30ce0464f2f507394a60e`; lists commit `e2ce6afd8706372d2375b7dd50c4c4a0c63091e4`; login commit `ad6a19760d626e3e709122d311e247187e3df72b`; portal commit `2e076c6c8e47ce54140ddc95704f574adb9f8333`; salesreport commit `8004fd93f97ccc0f65db8f4755523facb1370271`.
+  - Preserved true next slices in Backlog: OPS outreach events module read-only/design continuation, OPS market improvements after product decisions, signup recurring checks after source access approval, SSO persistence after logout policy/Security Guard approval, Portal production audit implementation after definitions, and recurring sales/data operations after owner handoffs.
+  - Current real manual blocker count: `8` active Waiting items: event strategy Google Doc access/export; OPS outreach final sync/live schedule/notifications/auth/canonical-rule approval; OPS market owner/product rules; Shopify/Square source owner and read-only path; Login next-day logout policy plus Security Guard approval; Portal audit definitions plus Salesreport handoff; recurring sales/data cleanup owners and mutation boundaries; Google Drive OAuth/token storage policy.
+  - Scope stayed AI Workspace docs-only. No external systems, credentials, OPS intake, email, runtime services, live data, deploys, or source workspace mutation were accessed.
 
 - Google Cloud security hardening planning slice completed at `2026-04-16 17:56 CDT`.
   - Detail log: `project_hub/issues/2026-04-16-google-cloud-security-hardening-plan.md`.
@@ -15,7 +22,7 @@ Use this file for cross-machine/session handoffs.
   - Reconciled completed source-workspace planning/review items so they no longer remain as raw open AI Workspace backlog: Salesreport adoption/access planning, web analytics funnel/source review, and PHPList legacy send-history soft-delete review.
   - Source references recorded in `TODO.md`: salesreport commit `85971d9004d1d73c49751d52080a5ec7587f9780` with `doc/salesreport-adoption-access-planning-2026-04-16.md` and `doc/web-analytics-funnel-source-review-2026-04-16.md`; lists commit `a246095d14f07c4e82ebc23fe47e0836a7dded26` with `docs/phplist-legacy-send-history-soft-delete-review-2026-04-16.md`; lists TODO closeout commit `eae015bef06eed50fbbcbacd6324033fa62fb427`.
   - Preserved true remaining work only as scoped future tasks: Salesreport adoption/access implementation after owner review and Code/Git Manager preflight; web analytics funnel implementation after analytics source ownership/build scope confirmation; PHPList read-only inventory before any separately approved mutation cleanup.
-  - Operational-autonomy note remains durable: Decision Driver may approve obvious safe continuations within approved scope, and Task Manager should keep routing safe work until 15 real manual blockers. Current real manual blocker count after this reconciliation is `1` active Waiting item, the Google Drive OAuth/token storage policy decision.
+  - Operational-autonomy note remains durable: Decision Driver may approve obvious safe continuations within approved scope, and Task Manager should keep routing safe work until 15 real manual blockers. The then-active waiting item was the Google Drive OAuth/token storage policy decision; see the latest handoff entry for current blocker count.
   - Scope stayed AI Workspace docs-only. No OPS intake, credentials, live external systems, email, runtime services, deploys, production data, or source-workspace mutation was accessed.
 
 - Recurring operations reporting planning slice completed at `2026-04-16 17:32 CDT`.
