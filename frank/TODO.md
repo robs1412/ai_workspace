@@ -68,6 +68,11 @@ Updated: 2026-04-15 17:39:00 CDT (Machine: Macmini.lan)
 
 ## Done
 
+- 2026-04-16: Added dry-run Frank completion-confirmation helper.
+  - Added `frank/scripts/frank_completion_confirmation.py` to model a task-specific completion confirmation from a stable task id plus source `Message-ID` and/or tracked outbound `task_id`.
+  - Helper writes local draft previews and `completion-confirmation-log.jsonl`, checks duplicate confirmation identifiers across local dry-run log and sent-log paths, and refuses duplicate confirmations.
+  - Verified help, syntax compile, first dry-run draft/log creation, duplicate-skip behavior, and preview-only mode. No email, mailbox filing, polling cadence, LaunchAgent, Papers, runtime send hook, or credential path was touched.
+  - Remaining approval before actual sends: exact SMTP/send hook, recipient policy, mailbox filing behavior, credential path, and real sent-log fields.
 - 2026-04-15: Closed Frank-side tracking for Sonat's organic/sustainable online magazine concept.
   - Local Frank task id: `frank-2026-sonat-organic-sustainable-magazine`
   - Robert confirmed the work was passed to Claude, so Frank no longer tracks it as active local work.

@@ -12,6 +12,7 @@ Current design:
 - sent messages are logged for reply tracking
 - inbox checks can surface replies tied to tracked outbound messages
 - task records live locally and can be expanded as the workflow matures
+- task-specific completion confirmations are policy-approved only when tied to a stable task/email id, logged, duplicate-checked, and allowed by recipient/approval gates
 
 This is manual by default. An optional scheduled `launchd` runner now exists for controlled inbox triage, but the default deployment mode remains `draft-only`.
 
@@ -23,6 +24,7 @@ This is manual by default. An optional scheduled `launchd` runner now exists for
 - `scripts/frank_autodraft.py`: generates drafts from recent inbox messages using Frank's rules
 - `scripts/frank_portal_receipt.py`: creates Portal receipt records from receipt emails and attaches receipt URLs
 - `scripts/frank_auto_runner.py`: one scheduled inbox-review cycle with dedupe logging and escalation
+- `frank/scripts/frank_completion_confirmation.py`: dry-run-only completion confirmation helper; creates a local preview and duplicate-check log, never sends mail
 - `scripts/install_frank_launchagent.sh`: installs a 15-minute local LaunchAgent
 - `scripts/uninstall_frank_launchagent.sh`: removes the LaunchAgent
 - mailbox credentials remain outside this folder in `../frank-pw.html`
@@ -56,6 +58,40 @@ Scheduled loop:
 3. Treat receipt emails as clear operational items and generate drafts.
 4. Escalate suspicious mail and unclear messages to the configured primary recipient.
 5. Record one decision per source email in `frank/automation-log.jsonl`.
+
+
+Completion confirmation rule:
+
+1. Use an OPS/Portal task id when available; otherwise create/use a local Frank task id.
+2. Link the source email `Message-ID` or tracked outbound `task_id` in the local log.
+3. Check `sent-log.jsonl`, source `Message-ID`, task id, subject, recipient, and draft filename before any send.
+4. Send or draft only one concise task-specific completion confirmation when approval gates allow it.
+5. Mark the task/email handled after the confirmation is logged so the same task is not resurfaced.
+
+Dry-run completion helper usage:
+
+```bash
+python3 frank/scripts/frank_completion_confirmation.py \
+  --task-id frank-2026-example \
+  --source-message-id '<source-message-id@example>' \
+  --tracked-task-id frank-2026-example-worker \
+  --done 'The worker completed the requested internal routing and no approval blocker remains.' \
+  --worker 'workspace/session-id' \
+  --json
+```
+
+The helper:
+
+- requires either `--source-message-id` or `--tracked-task-id`
+- creates a stable `confirmation_key`
+- checks the live Frank sent log plus local dry-run completion log for duplicate confirmation identifiers
+- writes a preview draft under `frank/drafts/` and a dry-run JSONL row to `frank/completion-confirmation-log.jsonl`
+- exits with `3` and writes nothing when a duplicate confirmation key/source is found
+- never sends mail, reads credentials, connects to IMAP/SMTP, files messages, changes polling cadence, or edits LaunchAgents
+
+Future workflow fit: when Robert emails Frank and Frank routes a worker, use this helper only after the worker reports completion with no remaining approval blocker. If the worker reports that approval is needed, use the separate decision-email path instead of a completion confirmation.
+
+Remaining approval boundary: turning this into send-enabled runtime requires separate approval for the exact send hook, recipient policy, mailbox filing behavior, credential path, and duplicate-confirmation fields to add to the real sent log.
 
 Loop guard:
 

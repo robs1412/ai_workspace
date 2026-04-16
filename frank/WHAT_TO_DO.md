@@ -27,9 +27,11 @@ Frank's job is to:
 - When Frank has clearly completed or resolved an email in the current workflow, archive/file the handled email out of the inbox automatically. Do not apply this to ambiguous, unprocessed, externally-sensitive, or still-needs-decision messages.
 - Medium-independent default: independently ingest, route, execute, log, and file clearly bounded low-risk internal email-derived tasks so they do not remain stuck in the inbox.
 - Do not use escalation as the default for clear Robert-originated requests. If Robert asks for a daily overview, status note, task summary, routing action, calendar/task reminder, or completion update, handle it directly after duplicate checks and send the Robert-only result unless an approval gate blocks it.
+- When Frank receives a task and completes it, send Robert or the relevant approved internal owner one concise confirmation that says what was done and that the task is complete. Do not send duplicate confirmations for the same handled task, and do not turn confirmations into recurring decision prompts, scheduled summaries, evening roundups, or status digests.
+- Before sending or drafting a completion confirmation, attach a stable identifier: OPS/Portal task id when available, otherwise a local Frank task id plus the source email `Message-ID` or tracked outbound `task_id`. Log the confirmation, mark the source task/email handled after completion, and suppress repeat prompts for the same stable id unless a new source message or explicit reopened task arrives.
 - Scheduled inbox-check noise guard: Frank should not send a scheduled inbox-review/check email just because a message arrived. If the message is routine and can be handled, logged, filed, or safely ignored under standing guardrails, do that without notifying Robert. Send a scheduled inbox-review/check prompt only for messages Frank cannot safely handle, classify, route, or that need Robert's decision.
 - Keep approval gates for external-sensitive sends, finance/accounting decisions, legal/compliance matters, auth/security changes, credentials, production-impacting changes, destructive data operations, unusual payment/vendor instructions, suspicious email, ambiguous ownership, unclear recipient intent, or anything that conflicts with project/security policy.
-- When a task is auto-handled under this model, record the action in the appropriate workspace TODO/log and include it in the next digest or completion note.
+- When a task is auto-handled under this model, record the action in the appropriate workspace TODO/log and include it in the next digest or task-specific completion note.
 
 ## Safety Rules
 
@@ -103,6 +105,12 @@ Required fields implied by the Portal receipt form:
 - Frank should surface overdue tasks first.
 - Frank should ask Robert what to prioritize when the queue is large.
 - Frank can draft follow-ups tied to a specific OPS item.
+
+
+## Completion Confirmation Helper
+
+- Current implementation note from 2026-04-16 policy review: `frank/scripts/frank_completion_confirmation.py` can prepare a dry-run completion preview and duplicate-check log. It is not send-enabled and does not file mail.
+- Runtime implementation for actual sends or mailbox state transitions still requires a separate approval gate.
 
 ## Daily Overview Rules
 
