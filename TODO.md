@@ -1,6 +1,6 @@
 # TODO — ai_workspace
 
-Updated: 2026-04-16 17:22:17 CDT (Machine: Macmini.lan)
+Updated: 2026-04-16 17:32 CDT (Machine: Macmini.lan)
 
 ## In Progress
 
@@ -33,12 +33,6 @@ _No active AI Workspace implementation items._
   - Route: `ws lists` / `ws forge` after a concrete checklist is approved.
 
 ### BID / Importer / Salesreport / Analytics
-- Plan BID ETL and import workflow.
-  - Scope: extract/transform/load flow, schedule, validation, and BID data refresh cadence.
-  - Route: `ws bid`; use `ws importer` only if the work becomes Portal/account import implementation.
-- Evaluate AI-assisted data-import workflow.
-  - Context: Julia currently imports salesreports manually from XLS and other data sources.
-  - Goal: determine whether AI-assisted import can improve speed and data accuracy.
 - Build web analytics funnel reporting for `koval-distillery.com`.
   - Scope: Dmytro analytics source review and GA-style funnel view.
   - Route: likely `ws sales` or a dedicated analytics worker after source ownership is clarified.
@@ -57,9 +51,6 @@ _No active AI Workspace implementation items._
 - Define Portal production audit enhancements.
   - Scope: extended modification trails, prior-month edit report, shipped-vs-bottled mismatch report, and `<2000 lb` grain/product mismatch logic.
   - Route: `ws portal` for Portal-owned reports, with Salesreport ownership checked for shipped-vs-bottled work.
-- Define recurring operations reporting.
-  - Scope: monthly task stats send-out, events/task stats review cadence, and barrel sample page manual/follow-up.
-  - Route: `ws ai` planning first; implementation split by owning module.
 
 ### IT / Security / Workstations
 - Review IT planning docs and decide transfer/deprecation plan for GitLab.
@@ -75,6 +66,15 @@ _No active AI Workspace implementation items._
   - Route: Security Guard-led planning; no credential, IAM, billing, or production changes without explicit approval.
 
 ## Done
+
+- **2026-04-16** Recurring operations reporting planning slice completed.
+  - Added `project_hub/issues/2026-04-16-recurring-operations-reporting-plan.md` with owner modules, read-only source surfaces, cadence, approval gates, first no-write slice, and notification/email boundaries for monthly task stats, events/task stats review, and barrel sample page manual/follow-up. Scope stayed docs-only: no code, production data, email, notifications, credentials, scheduled jobs, commit, push, deploy, runtime change, OPS intake, or live-source access.
+
+- **2026-04-16** AI-assisted Salesreport data-import planning slice completed.
+  - Added `project_hub/issues/2026-04-16-ai-assisted-salesreport-data-import-plan.md` with deterministic preflight, safe AI assist points, approval gates, first no-write prototype, owner workspace, and future routing. Scope stayed docs-only: no code, credentials, production data, email, commit, import, deploy, or runtime change.
+
+- **2026-04-16** BID ETL/import workflow planning moved to Done.
+  - Closed the planning item based on BID commit `54c8e544d967e7b5f645f8e872827fdcfebe207d` and `data-management/etl-import-workflow-plan.md`. Docs closeout only in AI Workspace; no BID code, commit, push, deploy, import run, data mutation, credential access, or external-system change was performed.
 
 - **2026-04-16** Unified user activity reporting planning slice completed.
   - Added `project_hub/issues/2026-04-16-unified-user-activity-reporting-plan.md` with source systems, read-only data surfaces, privacy/security gates, cadence, first slice, and workspace ownership. Scope stayed docs-only: no code, credentials, production data, email, deploy, or runtime change.

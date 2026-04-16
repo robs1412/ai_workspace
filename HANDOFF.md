@@ -1,10 +1,28 @@
 # Codex Session Handoff
 
-Last Updated: 2026-04-16 17:30 CDT (Machine: Macmini.lan)
+Last Updated: 2026-04-16 17:32 CDT (Machine: Macmini.lan)
 
 Use this file for cross-machine/session handoffs.
 
 ## Current Workflow Handoff
+
+- Recurring operations reporting planning slice completed at `2026-04-16 17:32 CDT`.
+  - Detail log: `project_hub/issues/2026-04-16-recurring-operations-reporting-plan.md`.
+  - Recorded owner modules, read-only source surfaces, cadence, approval gates, first no-write slice, and notification/email boundaries for monthly task stats, events/task stats review, and barrel sample page manual/follow-up.
+  - Barrel sample ownership remains an explicit first-slice discovery item; do not assume whether it belongs to Portal, OPS, Salesreport, Contactreport, or another module.
+  - Scope stayed local and docs-only. No code, production data, email, notifications, credentials, scheduled jobs, commit, push, deploy, runtime change, OPS intake, or live-source access was performed.
+
+- AI-assisted Salesreport data-import planning slice completed at `2026-04-16 17:31 CDT`.
+  - Detail log: `project_hub/issues/2026-04-16-ai-assisted-salesreport-data-import-plan.md`.
+  - Recorded owner workspace `ws sales`, AI Workspace planning role, and source-side collaborator boundaries for `ws importer` and `ws bid`.
+  - Defined deterministic preflight, safe AI assist points, approval gates, and a first no-write prototype based on sanitized/synthetic sample imports and generated dry-run artifacts.
+  - Future prototype requires explicit approval, a sanitized/synthetic sample or approved raw-source access, and Code and Git Manager preflight before any code in `salesreport`, `importer`, or `bid`.
+  - Scope stayed docs-only. No code, credentials, production data, mailbox data, email, commit, import, deploy, runtime change, or external-system write was performed.
+
+- BID ETL/import workflow planning moved to Done at `2026-04-16 17:30 CDT`.
+  - Closed the AI Workspace TODO item `Plan BID ETL and import workflow`.
+  - Reference implementation/planning source: BID commit `54c8e544d967e7b5f645f8e872827fdcfebe207d` and `data-management/etl-import-workflow-plan.md`.
+  - Scope was docs closeout only in AI Workspace. No BID code, commit, push, deploy, import run, data mutation, credential access, or external-system change was performed.
 
 - Unified user activity reporting planning slice completed at `2026-04-16 17:22 CDT`.
   - Detail log: `project_hub/issues/2026-04-16-unified-user-activity-reporting-plan.md`.

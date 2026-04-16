@@ -1,5 +1,5 @@
 # AI Workspace Project Hub
-Last Updated: 2026-04-16 17:22:17 CDT (Machine: Macmini.lan)
+Last Updated: 2026-04-16 17:32 CDT (Machine: Macmini.lan)
 
 ## Open
 
@@ -64,6 +64,18 @@ Last Updated: 2026-04-16 17:22:17 CDT (Machine: Macmini.lan)
   - Repos: `login` (shared SSO/logout layer affecting `portal` and `ops`)
 
 ## Completed
+
+- **2026-04-16 Recurring Operations Reporting Plan**
+  - Master ID: `AI-INC-20260416-RECURRING-OPERATIONS-REPORTING-01`
+  - Detail log: `project_hub/issues/2026-04-16-recurring-operations-reporting-plan.md`
+  - Repos: `ai_workspace`; future source ownership split across `ops`, `portal`, `login`, `salesreport`, `contactreport`, and possibly other owner modules after barrel sample ownership is confirmed
+  - Status: planning slice completed docs-only; no code, production data, email, notifications, credentials, scheduled jobs, commits, pushes, deploys, or runtime changes were performed
+
+- **2026-04-16 AI-Assisted Salesreport Data Import Plan**
+  - Master ID: `AI-INC-20260416-SALESREPORT-AI-DATA-IMPORT-PLAN-01`
+  - Detail log: `project_hub/issues/2026-04-16-ai-assisted-salesreport-data-import-plan.md`
+  - Repos: `ai_workspace`; future prototype owner `salesreport`, with `importer` and `bid` only as source-side collaborators if approved
+  - Status: planning slice completed docs-only; first approved next step would be a no-write prototype with deterministic preflight, AI-generated summaries/mapping suggestions only, and explicit gates for raw data, credentials, production reads, code, email, commits, imports, deploys, and automation
 
 - **2026-04-16 Unified User Activity Reporting Plan**
   - Master ID: `AI-INC-20260416-UNIFIED-USER-ACTIVITY-REPORTING-01`
