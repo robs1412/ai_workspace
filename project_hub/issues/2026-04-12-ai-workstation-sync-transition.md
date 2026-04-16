@@ -228,7 +228,7 @@ Robert clarified that `ws ai` should remain local on Mac mini, M4, and MacBook, 
 Current operating interpretation:
 
 - M4 `Mac.lan` / `192.168.55.35` is Robert's front-facing desk workstation and a supplemental/local task runner.
-- MacBook `MacBookPro.lan` / `192.168.55.44` when last verified is Robert's front-facing portable workstation and a supplemental/local task runner.
+- MacBook `MacBookPro.lan` / `192.168.55.180` is Robert's front-facing portable workstation and a supplemental/local task runner.
 - 2018 Mac mini `Macmini.lan` / `.17` remains the main AI station for Workspaceboard, Frank, Avignon, long-running Codex workers, automation, and deliberate service verification.
 - Mac mini, M4, and MacBook should each keep local GitHub-backed `/Users/werkstatt/ai_workspace` and `/Users/werkstatt/<repo>` checkouts. Use direct SSH/rsync only for deliberate non-git handoffs, fallback, or service checks.
 - Older references to Google Drive as the active AI Workspace sync layer or Mac mini as the foreground source should be treated as historical unless they are explicitly marked as archive/retention work.
@@ -309,7 +309,7 @@ Completed:
 - The original Google Drive path no longer exists on Mac mini.
 - M4 pulled the new `ai_workspace` and `workspaceboard` commits and its local Workspaceboard now resolves AI Workspace, Frank, and Avignon to `/Users/werkstatt/ai_workspace`.
 - M4 old Google Drive `ai_workspace` path is now gone; no M4 archive copy remains. Active M4 `ws ai` and Workspaceboard continue to resolve to `/Users/werkstatt/ai_workspace`.
-- MacBook is now verified at `192.168.55.44` / `MacBookPro.lan`: `/Users/werkstatt/ai_workspace` is cloned at the current GitHub commit, `ws ai` resolves there, Workspaceboard `0.69` resolves AI/Frank/Avignon to `/Users/werkstatt/ai_workspace`, and the old Drive AI folder was moved to `/Users/werkstatt/ai_workspace_google_drive_archive_20260415_macbook`.
+- MacBook current LAN IP corrected by Robert to `192.168.55.180` / `MacBookPro.lan`; earlier `192.168.55.44` notes are stale. `/Users/werkstatt/ai_workspace` is cloned there, `ws ai` resolves there, Workspaceboard `0.69` resolves AI/Frank/Avignon to `/Users/werkstatt/ai_workspace`, and the old Drive AI folder was moved to `/Users/werkstatt/ai_workspace_google_drive_archive_20260415_macbook`.
 
 Archive handling:
 

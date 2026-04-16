@@ -9,7 +9,7 @@ Use this file for cross-machine/session handoffs.
 - MacBook/M4/Mac mini role clarification recorded at `2026-04-15 18:35 CDT` on `Macmini.lan`.
   - Keep `ws ai` local on Mac mini, M4, and MacBook as `/Users/werkstatt/ai_workspace`; the normal sync path is git/GitHub, not Google Drive.
   - 2018 Mac mini (`Macmini.lan`, `.17`) is the main AI worker/station: keep Workspaceboard/Frank/Avignon/long-running Codex worker and automation hosting there unless Robert explicitly changes the role split.
-  - Mac Mini M4 2025 (`Mac.lan`, `.35`, user `kovaladmin`) and MacBook (`MacBookPro.lan`, `.44` when last verified) are both Robert's front-facing workstations. Either may run local/supplemental tasks from its own checkout, but both are backup/supplemental worker surfaces relative to `.17`.
+  - Mac Mini M4 2025 (`Mac.lan`, `.35`, user `kovaladmin`) and MacBook (`MacBookPro.lan`, `.180`) are both Robert's front-facing workstations. Either may run local/supplemental tasks from its own checkout, but both are backup/supplemental worker surfaces relative to `.17`.
   - Use direct SSH/rsync between machines only for deliberate non-git handoffs, fallback, or service verification.
 
 - Frank OPS digest helper restored at `2026-04-15 17:10 CDT`.
@@ -87,7 +87,7 @@ Use this file for cross-machine/session handoffs.
   - Large-file policy: keep Git as the coordination index only. Store large non-secret artifacts outside this repo and commit manifests/checksums; keep secrets and credential-like material out of git, Papers, and normal manifests. See `ARTIFACTS.md`.
   - M4 active `ws ai` and Workspaceboard runtime also resolve to `/Users/werkstatt/ai_workspace`; M4 pulled the same git commits and reinstalled Workspaceboard.
   - M4 old Google Drive `ai_workspace` path is now gone as well; no M4 archive copy remains. The active M4 `ws ai` and board runtime still resolve to `/Users/werkstatt/ai_workspace`.
-  - MacBook is now verified at `192.168.55.44` / `MacBookPro.lan`: cloned `/Users/werkstatt/ai_workspace`, updated `ws ai`, pulled/reinstalled Workspaceboard, and moved the old Drive AI folder to `/Users/werkstatt/ai_workspace_google_drive_archive_20260415_macbook`.
+  - MacBook current LAN IP corrected by Robert to `192.168.55.180` / `MacBookPro.lan`; earlier `192.168.55.44` notes are stale. MacBook had cloned `/Users/werkstatt/ai_workspace`, updated `ws ai`, pulled/reinstalled Workspaceboard, and moved the old Drive AI folder to `/Users/werkstatt/ai_workspace_google_drive_archive_20260415_macbook`.
   - Remaining transition follow-up: decide secure storage and retention handling for the Mac mini and MacBook legacy archives' private/secret material.
 
 - Frank/Avignon follow-through correction at `2026-04-15 10:52 CDT` on `Macmini.lan`.
