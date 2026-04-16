@@ -78,6 +78,7 @@ Implementation and operational rollout were intentionally split. The remaining w
 - Live Portal deploy completed on 2026-04-15: deployed backend/frontend images `v20260415b` from Portal commit `5612c7b4`. Built on the deploy host after staging the existing server-side production env file into the temporary build tree without printing it. Deploy script health checks passed for backend and frontend.
 - Post-deploy container status: `koval-crm-backend:v20260415b`, `koval-crm-frontend:v20260415b`, and `koval-crm-backend-nginx` running. Internal host checks returned 200 for `http://127.0.0.1:8082/` and `http://127.0.0.1:8083/`.
 - Public smoke checks against `https://portal.koval-distillery.com/` and `https://www.koval-distillery.com/login/reset_password.php` returned 404 from the edge route, while the deployed containers and live login files were present on the host. Treat public edge routing as separate from this code deploy unless Robert reports browser-visible failure.
+- Robert reported Portal did not load after the `v20260415b` deployment. Emergency rollback completed on 2026-04-15: `./deploy/scripts/rollback.sh all v20260415`. Verified containers running `koval-crm-backend:v20260415`, `koval-crm-frontend:v20260415`, and backend nginx; internal host checks returned 200 for frontend port `8082` and backend nginx port `8083`. Keep Portal reset-gate image `v20260415b` out of production until root cause is isolated.
 
 ## Rollback Plan
 
