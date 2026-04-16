@@ -1,5 +1,5 @@
 # AI Workspace Project Hub
-Last Updated: 2026-04-16 17:32 CDT (Machine: Macmini.lan)
+Last Updated: 2026-04-16 17:56 CDT (Machine: Macmini.lan)
 
 ## Open
 
@@ -64,6 +64,12 @@ Last Updated: 2026-04-16 17:32 CDT (Machine: Macmini.lan)
   - Repos: `login` (shared SSO/logout layer affecting `portal` and `ops`)
 
 ## Completed
+
+- **2026-04-16 Google Cloud Security Hardening Plan**
+  - Master ID: `AI-INC-20260416-GOOGLE-CLOUD-SECURITY-HARDENING-01`
+  - Detail log: `project_hub/issues/2026-04-16-google-cloud-security-hardening-plan.md`
+  - Repos: `ai_workspace`; future approved audit may touch Google Cloud admin/billing/IAM surfaces only after explicit human approval
+  - Status: planning slice completed docs-only; no Google Cloud console, credentials, keychain, OAuth files, secrets, billing accounts, IAM, live admin surfaces, email, deploys, runtime services, or external-system changes were accessed or performed
 
 - **2026-04-16 Recurring Operations Reporting Plan**
   - Master ID: `AI-INC-20260416-RECURRING-OPERATIONS-REPORTING-01`

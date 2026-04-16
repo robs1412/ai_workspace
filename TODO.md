@@ -1,6 +1,6 @@
 # TODO — ai_workspace
 
-Updated: 2026-04-16 17:55 CDT (Machine: Macmini.lan)
+Updated: 2026-04-16 17:56 CDT (Machine: Macmini.lan)
 
 ## In Progress
 
@@ -68,11 +68,11 @@ _No active AI Workspace implementation items._
 - Monitor Google Postmaster.
   - Source: `https://postmaster.google.com/u/0/dashboards#do=kovaldistillery.com&st=userReportedSpamRate&dr=7`.
   - Route: read-only review first; no admin/account changes without approval.
-- Plan Google Cloud security hardening.
-  - Scope: key inventory, dormant-key cleanup, API restrictions, least privilege, key rotation/expiry policy, Essential Contacts, and billing anomaly/budget alerts.
-  - Route: Security Guard-led planning; no credential, IAM, billing, or production changes without explicit approval.
 
 ## Done
+
+- **2026-04-16** Google Cloud security hardening plan completed.
+  - Added `project_hub/issues/2026-04-16-google-cloud-security-hardening-plan.md` with a no-credential checklist, first read-only audit plan, and explicit approval gates for IAM, keys, APIs, billing, Essential Contacts, credentials, live admin surfaces, notifications, deploys, and automation. Scope stayed local docs-only: no Google Cloud console, credentials, keychain, OAuth files, secrets, billing accounts, IAM, live admin surfaces, email, deploy, or runtime service was accessed.
 
 - **2026-04-16** Completed planning/review backlog reconciled from source workspaces.
   - Moved raw open planning items for Salesreport adoption/access, web analytics funnel/source review, and PHPList legacy send-history soft-delete review into this concise Done record. Sources: salesreport commit `85971d9004d1d73c49751d52080a5ec7587f9780` with `doc/salesreport-adoption-access-planning-2026-04-16.md` and `doc/web-analytics-funnel-source-review-2026-04-16.md`; lists commit `a246095d14f07c4e82ebc23fe47e0836a7dded26` with `docs/phplist-legacy-send-history-soft-delete-review-2026-04-16.md`; lists TODO closeout commit `eae015bef06eed50fbbcbacd6324033fa62fb427`. Preserved only scoped future implementation/inventory work and approval gates in Backlog. Current real manual blocker count: 1 active Waiting item. Docs-only: no OPS intake, credentials, live external systems, email, runtime service, deploy, production data, or source-workspace mutation was accessed.
