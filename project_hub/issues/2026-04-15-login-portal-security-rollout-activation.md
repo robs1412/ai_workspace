@@ -74,6 +74,10 @@ Implementation and operational rollout were intentionally split. The remaining w
 - No `complete <username>` reset-clear actions were run.
 - Created silent OPS reminder task `366807`, due 2026-08-15, creator `1`, owner/assignee `1332`, to recommend another Portal password-change rollout email after four months.
 - Created silent OPS follow-up task `366809`, due 2026-04-29, creator `1`, owner/assignee `1332`, to re-check reset flags after 14 days and task only users still open.
+- Live Login deploy completed on 2026-04-15: `/home/koval/public_html/login` fast-forwarded to `73ebb45`; live PHP lint passed for `auth_helpers.php`, `checklogin.php`, `index.php`, and `reset_password.php`. Runtime log files were preserved without printing contents.
+- Live Portal deploy completed on 2026-04-15: deployed backend/frontend images `v20260415b` from Portal commit `5612c7b4`. Built on the deploy host after staging the existing server-side production env file into the temporary build tree without printing it. Deploy script health checks passed for backend and frontend.
+- Post-deploy container status: `koval-crm-backend:v20260415b`, `koval-crm-frontend:v20260415b`, and `koval-crm-backend-nginx` running. Internal host checks returned 200 for `http://127.0.0.1:8082/` and `http://127.0.0.1:8083/`.
+- Public smoke checks against `https://portal.koval-distillery.com/` and `https://www.koval-distillery.com/login/reset_password.php` returned 404 from the edge route, while the deployed containers and live login files were present on the host. Treat public edge routing as separate from this code deploy unless Robert reports browser-visible failure.
 
 ## Rollback Plan
 
