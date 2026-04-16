@@ -1,10 +1,17 @@
 # Codex Session Handoff
 
-Last Updated: 2026-04-16 18:07 CDT (Machine: Macmini.lan)
+Last Updated: 2026-04-16 18:13 CDT (Machine: Macmini.lan)
 
 Use this file for cross-machine/session handoffs.
 
 ## Current Workflow Handoff
+
+- Final access/source blocker reconciliation completed at `2026-04-16 18:13 CDT`.
+  - Recorded four final-output-only checks in `TODO.md` without expanding audit logs: Google Postmaster session `6ee02528`, IT Papers GitLab planning session `e6071659`, Google Ads session `258b4242`, and web analytics funnel readiness session `d73ed365`.
+  - New blockers: Postmaster Tools access/export for `kovaldistillery.com`; Papers/Portal auth or supplied IT planning exports; Google Ads login/admin access or approved export/screenshot/report; analytics source of truth, scoped surfaces, funnel-stage definition, export owner, and import contract.
+  - Backlog entries now point to those blockers and keep mutation boundaries explicit, including that `saved_reports` would write DB tables/runs and is outside the no-mutation boundary.
+  - Current real manual blocker count: `15` active Waiting items. This reaches the configured threshold for asking Robert.
+  - Scope stayed AI Workspace docs-only. No external access, credentials, source workspace reads, OPS intake, email, live data, deploys, or runtime services were accessed.
 
 - AI Workspace TODO/HANDOFF second source-closeout reconciliation completed at `2026-04-16 18:07 CDT`.
   - Reconciled the latest completed source plans into `TODO.md`: MacBook wake blocker commit `02d5dc7`, lists PHPList inventory plan commit `075cd358b784e47c246ef4f5fbd02cfab66facdd`, and salesreport distributor cleanup report workflow commit `dd58319202d308f86c8e20f2cf31b12413b0ddae`.

@@ -1,6 +1,6 @@
 # TODO — ai_workspace
 
-Updated: 2026-04-16 18:07 CDT (Machine: Macmini.lan)
+Updated: 2026-04-16 18:13 CDT (Machine: Macmini.lan)
 
 ## In Progress
 
@@ -59,6 +59,22 @@ _No active AI Workspace implementation items._
   - Completed source: salesreport commit `dd58319202d308f86c8e20f2cf31b12413b0ddae`, `doc/distributor-account-cleanup-report-workflow-2026-04-16.md`.
   - Decisions needed before implementation: approved production read/export path for the report workflow, and owner/source-of-truth definition for any distributor cleanup mutation.
 
+- Blocker: Google Postmaster monitoring needs authenticated Google account access or a supplied read-only export/screenshot/report.
+  - Final-output-only check: session `6ee02528`.
+  - Exact need: Google account with Postmaster Tools access for `kovaldistillery.com`, or a supplied read-only export/screenshot/report. No files changed.
+
+- Blocker: IT Papers GitLab planning review needs Papers/Portal authentication or supplied exports.
+  - Final-output-only check: session `e6071659`.
+  - Finding: `papers.koval` has a TLS hostname mismatch; `papers.koval.lan` URLs redirect to `mi.koval.lan` login. No files changed.
+
+- Blocker: Google Ads audit needs Google Ads login/admin access or an approved export/screenshot/report.
+  - Final-output-only check: session `258b4242`.
+  - Finding: public site has GA4 `G-4D8S5SQHQ5` and Google Ads `AW-628725001` tags, but real account audit is blocked without Ads access or supplied read-only evidence. No files changed.
+
+- Blocker: web analytics funnel work needs approved analytics source of truth, scoped surfaces, funnel definitions, export owner, and import contract.
+  - Final-output-only check: session `d73ed365`.
+  - Finding: `saved_reports` would write DB tables/runs and is outside the no-mutation boundary. No files changed.
+
 ## Backlog
 
 ### OPS / Outreach / Trainual
@@ -86,11 +102,14 @@ _No active AI Workspace implementation items._
 ### BID / Importer / Salesreport / Analytics
 - Build web analytics funnel reporting for `koval-distillery.com`.
   - Completed planning/review source: salesreport commit `85971d9004d1d73c49751d52080a5ec7587f9780`, `doc/web-analytics-funnel-source-review-2026-04-16.md`.
-  - Next scoped work: implement the approved GA-style funnel view only after analytics source ownership and build scope are confirmed.
-  - Approval gate: no account changes, tracking changes, production data mutation, deploy, or external analytics-system write without explicit approval.
+  - Final readiness check: session `d73ed365`, blocked pending analytics source of truth, scoped domains/surfaces, funnel-stage definition, aggregate export owner, and import contract.
+  - Next scoped work: implement the approved GA-style funnel view only after those definitions and an approved no-mutation import path are confirmed.
+  - Approval gate: no `saved_reports` DB writes/runs, account changes, tracking changes, production data mutation, deploy, or external analytics-system write without explicit approval.
   - Route: likely `ws sales` or a dedicated analytics worker after source ownership is clarified.
 - Audit Google Ads issues.
-  - Route: read-only account/campaign audit first; no account changes without explicit approval.
+  - Final access check: session `258b4242`; public tags found: GA4 `G-4D8S5SQHQ5` and Google Ads `AW-628725001`.
+  - Next scoped work: read-only account/campaign audit only after Google Ads login/admin access or approved export/screenshot/report is supplied.
+  - Approval gate: no account changes without explicit approval.
 - Implement approved Salesreport adoption/access follow-ups.
   - Completed planning source: salesreport commit `85971d9004d1d73c49751d52080a5ec7587f9780`, `doc/salesreport-adoption-access-planning-2026-04-16.md`.
   - Next scoped work: turn the planning result into specific usage-by-login and state/access-control changes after owner review.
@@ -117,15 +136,21 @@ _No active AI Workspace implementation items._
 ### IT / Security / Workstations
 - Review IT planning docs and decide transfer/deprecation plan for GitLab.
   - Sources: `https://papers.koval/teams/it/task-queue.html`, `https://papers.koval/teams/it/roadmap.html`, `https://papers.koval.lan/teams/it/dashboard.html`, and `https://papers.koval.lan/teams/it/research.html`.
+  - Final access check: session `e6071659`; blocked by Papers/Portal authentication, `papers.koval` TLS hostname mismatch, and `papers.koval.lan` redirect to `mi.koval.lan` login.
+  - Next scoped work: review only after authenticated access or supplied read-only exports are available.
   - Approval gate: no live Papers writes or `.205` work without explicit approval.
 - Monitor Google Postmaster.
   - Source: `https://postmaster.google.com/u/0/dashboards#do=kovaldistillery.com&st=userReportedSpamRate&dr=7`.
-  - Route: read-only review first; no admin/account changes without approval.
+  - Final access check: session `6ee02528`; blocked by Google login/admin access.
+  - Route: read-only review only after Postmaster Tools access for `kovaldistillery.com` or supplied export/screenshot/report; no admin/account changes without approval.
 
 ## Done
 
 - **2026-04-16** Event strategy / COT Connecteam replacement coordination review completed locally.
   - Source commit `128c5f1`; added `project_hub/issues/2026-04-16-event-strategy-cot-connecteam-review.md` with local actionable strategy points and OPS-safe next steps. Google Doc source was reachable but returned `HTTP/2 401`, so full external-source review remains blocked pending read-only access or supplied text export. Scope stayed docs-only: no Google Docs mutation, credentials, OPS/Papers/Connecteam/notification/production-data access, code change, commit, push, deploy, or runtime change.
+
+- **2026-04-16** Final access/source blockers reconciled before Robert decision batch.
+  - Recorded final-output-only findings for Google Postmaster `6ee02528`, IT Papers GitLab planning `e6071659`, Google Ads `258b4242`, and web analytics funnel readiness `d73ed365`. Current real manual blocker count: 15 active Waiting items. Docs-only: no external access, credentials, source workspace reads, OPS intake, email, live data, deploys, or runtime services were accessed.
 
 - **2026-04-16** PHPList inventory and distributor cleanup workflow closeouts reconciled.
   - Moved completed source plans into scoped backlog entries and preserved the true remaining blockers. Sources: lists commit `075cd358b784e47c246ef4f5fbd02cfab66facdd`, `docs/phplist-legacy-send-history-read-only-inventory-plan-2026-04-16.md`; salesreport commit `dd58319202d308f86c8e20f2cf31b12413b0ddae`, `doc/distributor-account-cleanup-report-workflow-2026-04-16.md`. Current real manual blocker count: 11 active Waiting items. Docs-only: no external systems, credentials, source workspaces, OPS intake, email, live data, deploys, or runtime services were accessed.
