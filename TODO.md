@@ -1,6 +1,6 @@
 # TODO — ai_workspace
 
-Updated: 2026-04-16 18:02 CDT (Machine: Macmini.lan)
+Updated: 2026-04-16 18:07 CDT (Machine: Macmini.lan)
 
 ## In Progress
 
@@ -45,10 +45,19 @@ _No active AI Workspace implementation items._
   - Decision note: `project_hub/digital-office/storage-decision-needed.md`.
 
 - Blocker: MacBook power-management wake-cause review needs the MacBook to be reachable or local user access to its logs.
+  - Completed source: AI Workspace commit `02d5dc7`.
   - Target checked: `MacBookPro.lan` / `192.168.55.180`.
   - Read-only diagnostics attempted 2026-04-16: hostname resolution, ICMP ping, and batch-mode SSH only.
   - Result: `MacBookPro.lan` did not resolve, `192.168.55.180` had 100% ping loss, and SSH to `192.168.55.180:22` timed out. No `pmset` logs were available remotely.
   - Approval gates preserved: no credentials requested, no settings changed, no daemon/LaunchAgent/SSH config/system state touched.
+
+- Blocker: PHPList legacy send-history inventory needs an approved sanitized export or approved read-only DB/export path before real counts.
+  - Completed source: lists commit `075cd358b784e47c246ef4f5fbd02cfab66facdd`, `docs/phplist-legacy-send-history-read-only-inventory-plan-2026-04-16.md`.
+  - Approval gate: no production DB read/export, credential access, mutation, deletion, restore, or cleanup until the inventory input path is approved and the resulting inventory is reviewed.
+
+- Decision needed: approve Salesreport distributor cleanup production read/export and define mutation ownership/source of truth.
+  - Completed source: salesreport commit `dd58319202d308f86c8e20f2cf31b12413b0ddae`, `doc/distributor-account-cleanup-report-workflow-2026-04-16.md`.
+  - Decisions needed before implementation: approved production read/export path for the report workflow, and owner/source-of-truth definition for any distributor cleanup mutation.
 
 ## Backlog
 
@@ -65,9 +74,9 @@ _No active AI Workspace implementation items._
 
 ### Lists / Forge / Communications
 - PHPList legacy send-history cleanup next slice.
-  - Completed planning/review source: lists commit `a246095d14f07c4e82ebc23fe47e0836a7dded26`, `docs/phplist-legacy-send-history-soft-delete-review-2026-04-16.md`; TODO closeout commit `eae015bef06eed50fbbcbacd6324033fa62fb427`.
-  - Next scoped work: run a read-only inventory of candidate legacy send-history soft-delete rows and affected newsletter/list workflows.
-  - Approval gate: no DB mutation, deletion, restore, or production cleanup without explicit mutation approval after inventory review.
+  - Completed planning/review source: lists commit `a246095d14f07c4e82ebc23fe47e0836a7dded26`, `docs/phplist-legacy-send-history-soft-delete-review-2026-04-16.md`; inventory plan source: lists commit `075cd358b784e47c246ef4f5fbd02cfab66facdd`, `docs/phplist-legacy-send-history-read-only-inventory-plan-2026-04-16.md`; TODO closeout commit `eae015bef06eed50fbbcbacd6324033fa62fb427`.
+  - Next scoped work: run the planned read-only inventory only after a sanitized export or approved read-only DB/export path is provided.
+  - Approval gate: no production DB read/export, credential access, DB mutation, deletion, restore, or production cleanup until the input path is approved and inventory results are reviewed.
   - Route: `ws lists`; coordinate with Forge only if newsletter/list workflow crosses modules.
 - Implement signup recurring checks after Shopify/Square source access is approved.
   - Completed review source: lists commit `e2ce6afd8706372d2375b7dd50c4c4a0c63091e4`, `docs/signup-recurring-checks-review-2026-04-16.md`.
@@ -90,8 +99,10 @@ _No active AI Workspace implementation items._
   - Completed review source: salesreport commit `8004fd93f97ccc0f65db8f4755523facb1370271`, `doc/recurring-sales-data-ops-review-2026-04-16.md`.
   - Next scoped work: turn approved importer roster ownership, distributor inventory cadence, warehouse/distribution checks, and BID refresh cadence into concrete tasks.
   - Route: `ws sales`, with `ws importer` and `ws bid` involved for their owned cadences.
-- Clean distributor accounts.
-  - Route after scope split: `ws sales` for reporting/account analysis, `ws portal` or `ws ops` only if the cleanup mutates CRM records.
+- Clean distributor accounts after report input and mutation ownership are approved.
+  - Completed workflow source: salesreport commit `dd58319202d308f86c8e20f2cf31b12413b0ddae`, `doc/distributor-account-cleanup-report-workflow-2026-04-16.md`.
+  - Next scoped work: run/prepare the report workflow after approved production read/export access; mutation cleanup remains separate until owner and source of truth are defined.
+  - Route after scope split: `ws sales` for reporting/account analysis, `ws portal` or `ws ops` only if a later approved cleanup mutates CRM records.
 
 ### Portal / Login / Activity Reporting
 - Fix OPS <-> Portal SSO/login persistence, including next-day logout behavior.
@@ -115,6 +126,9 @@ _No active AI Workspace implementation items._
 
 - **2026-04-16** Event strategy / COT Connecteam replacement coordination review completed locally.
   - Source commit `128c5f1`; added `project_hub/issues/2026-04-16-event-strategy-cot-connecteam-review.md` with local actionable strategy points and OPS-safe next steps. Google Doc source was reachable but returned `HTTP/2 401`, so full external-source review remains blocked pending read-only access or supplied text export. Scope stayed docs-only: no Google Docs mutation, credentials, OPS/Papers/Connecteam/notification/production-data access, code change, commit, push, deploy, or runtime change.
+
+- **2026-04-16** PHPList inventory and distributor cleanup workflow closeouts reconciled.
+  - Moved completed source plans into scoped backlog entries and preserved the true remaining blockers. Sources: lists commit `075cd358b784e47c246ef4f5fbd02cfab66facdd`, `docs/phplist-legacy-send-history-read-only-inventory-plan-2026-04-16.md`; salesreport commit `dd58319202d308f86c8e20f2cf31b12413b0ddae`, `doc/distributor-account-cleanup-report-workflow-2026-04-16.md`. Current real manual blocker count: 11 active Waiting items. Docs-only: no external systems, credentials, source workspaces, OPS intake, email, live data, deploys, or runtime services were accessed.
 
 - **2026-04-16** Source workspace planning/review closeouts reconciled into AI TODO.
   - Moved completed source items out of raw open backlog and preserved only scoped next slices or real waiting decisions. Sources: ops commits `18d32a04ddaf5257214d62340eda7e044a1ef3d8` and `478593f3329c49aec9a30ce0464f2f507394a60e`; lists commit `e2ce6afd8706372d2375b7dd50c4c4a0c63091e4`; login commit `ad6a19760d626e3e709122d311e247187e3df72b`; portal commit `2e076c6c8e47ce54140ddc95704f574adb9f8333`; salesreport commit `8004fd93f97ccc0f65db8f4755523facb1370271`. Current real manual blocker count: 8 active Waiting items. Docs-only: no external systems, credentials, OPS intake, email, runtime services, live data, deploys, or source workspace mutation was accessed.

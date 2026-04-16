@@ -1,12 +1,20 @@
 # Codex Session Handoff
 
-Last Updated: 2026-04-16 18:02 CDT (Machine: Macmini.lan)
+Last Updated: 2026-04-16 18:07 CDT (Machine: Macmini.lan)
 
 Use this file for cross-machine/session handoffs.
 
 ## Current Workflow Handoff
 
+- AI Workspace TODO/HANDOFF second source-closeout reconciliation completed at `2026-04-16 18:07 CDT`.
+  - Reconciled the latest completed source plans into `TODO.md`: MacBook wake blocker commit `02d5dc7`, lists PHPList inventory plan commit `075cd358b784e47c246ef4f5fbd02cfab66facdd`, and salesreport distributor cleanup report workflow commit `dd58319202d308f86c8e20f2cf31b12413b0ddae`.
+  - Updated the PHPList legacy send-history backlog item so the completed inventory plan is recorded and the next slice is only an approved sanitized export or approved read-only DB/export inventory; no mutation is allowed until inventory review.
+  - Updated the distributor cleanup backlog item so the completed report workflow is recorded and the next slice is gated on production read/export approval plus mutation owner/source-of-truth definition.
+  - Current real manual blocker count: `11` active Waiting items. New blockers added in this pass: PHPList approved sanitized export/read-only path before real counts, and Salesreport distributor cleanup production read/export plus mutation ownership/source-of-truth.
+  - Scope stayed AI Workspace docs-only. No external systems, credentials, source workspaces, OPS intake, email, live data, deploys, or runtime services were accessed.
+
 - MacBook power-management wake-cause review blocked at `2026-04-16 18:02 CDT`.
+  - Completed source commit: AI Workspace `02d5dc7`.
   - Scope stayed read-only coordination from AI Workspace. Target was `MacBookPro.lan` / `192.168.55.180`.
   - Commands attempted: DNS/hostname reachability, ICMP ping, and batch-mode SSH with publickey/hostbased auth only.
   - Result: `MacBookPro.lan` did not resolve, `192.168.55.180` returned 100% ping loss, and SSH to `192.168.55.180:22` timed out. No remote `pmset` / power-management logs were accessible.
