@@ -1,10 +1,17 @@
 # Codex Session Handoff
 
-Last Updated: 2026-04-15 18:35:52 CDT (Machine: Macmini.lan)
+Last Updated: 2026-04-16 10:45:58 CDT (Machine: Macmini.lan)
 
 Use this file for cross-machine/session handoffs.
 
 ## Current Workflow Handoff
+
+- Workspaceboard remote classic board enabled at `2026-04-16 10:45 CDT` on `Macmini.lan`.
+  - Robert requested remote access to the full classic Workspaceboard at `http://192.168.55.17/workspaceboard/` and remote tmux/Terminal launch.
+  - Workspaceboard serve mode is now `external`; LaunchAgent `com.koval.workspaceboard` was reinstalled with `CODEX_DASHBOARD_HOST=0.0.0.0` on port `17878`.
+  - Guardrail verified: unauthenticated direct LAN request to `http://192.168.55.17:17878/api/status` returns `401` with a Portal login redirect; local runtime health reports `ok: true` and `tmux_available: true`.
+  - Remote use still requires a Portal-authenticated allowlisted Workspaceboard user (`uid:1` or `uid:165`) and the same PHP session cookie. If runtime auth validation fails, revert by reinstalling with `CODEX_DASHBOARD_HOST=127.0.0.1 ./scripts/install_codex_dashboard_launchagent.sh 17878` and/or setting serve mode back to `localhost_only`.
+  - Detail log: `project_hub/issues/2026-04-16-workspaceboard-remote-classic-board.md`.
 
 - Portal reset-gate hotfix handoff at `2026-04-15 19:24 CDT`.
   - Production Portal was rolled back after Robert reported that Portal did not load from image `v20260415b`.

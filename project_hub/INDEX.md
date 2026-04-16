@@ -1,5 +1,5 @@
 # AI Workspace Project Hub
-Last Updated: 2026-04-15 18:25:58 CDT (Machine: Macmini.lan)
+Last Updated: 2026-04-16 10:45:58 CDT (Machine: Macmini.lan)
 
 ## Open
 
@@ -74,6 +74,12 @@ Last Updated: 2026-04-15 18:25:58 CDT (Machine: Macmini.lan)
   - Repos: `login` (shared SSO/logout layer affecting `portal` and `ops`)
 
 ## Completed
+
+- **2026-04-16 Workspaceboard Remote Classic Board**
+  - Master ID: `AI-INC-20260416-WORKSPACEBOARD-REMOTE-CLASSIC-BOARD-01`
+  - Detail log: `project_hub/issues/2026-04-16-workspaceboard-remote-classic-board.md`
+  - Repos: `workspaceboard`, `ai_workspace`, Mac mini LaunchAgent/runtime auth state
+  - Status: completed; `com.koval.workspaceboard` is bound to `0.0.0.0:17878` for authenticated classic-board access at `http://192.168.55.17/workspaceboard/`, with unauthenticated direct LAN runtime requests verified as `401`
 
 - **2026-04-12 Codex Portal Auth Repair**
   - Master ID: `AI-INC-20260412-CODEX-PORTAL-AUTH-01`
