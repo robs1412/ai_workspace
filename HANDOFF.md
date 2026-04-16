@@ -6,6 +6,36 @@ Use this file for cross-machine/session handoffs.
 
 ## Current Workflow Handoff
 
+- Portal reset-gate hotfix handoff at `2026-04-15 19:24 CDT`.
+  - Production Portal was rolled back after Robert reported that Portal did not load from image `v20260415b`.
+  - Current stable production state is `/home/koval/dockerportal/portal` running `koval-crm-backend:v20260415`, `koval-crm-frontend:v20260415`, and `koval-crm-backend-nginx`; internal checks returned `200` for `http://127.0.0.1:8082/` and `http://127.0.0.1:8083/`.
+  - Do not deploy `v20260415b` again. Login live deploy remains on commit `73ebb45`; do not roll Login back unless there is direct evidence it is involved.
+  - Likely root cause: `v20260415b` did not contain previous hashed frontend assets. Cached Portal HTML requested `/js/app.e98ec78f.js` and `/js/chunk-vendors.195a95d8.js`, and `v20260415b` returned `404` for both.
+  - Fix committed in `/Users/werkstatt/portal` on `dev`: `1595a1af Preserve previous frontend assets during deploy builds`. It lets frontend builds preserve `/usr/share/nginx/html` from `PREVIOUS_FRONTEND_IMAGE` before overlaying the new dist.
+  - Hotfix build is running in Codex terminal session `22926` on deploy host path `/home/koval/dockerportal/portal-builds/portal-3fc35b6f/deploy` with:
+```bash
+PREVIOUS_FRONTEND_IMAGE=koval-crm-frontend:v20260415 ./scripts/build.sh all v20260415c
+```
+  - Backend `v20260415c` already built from cache; frontend `v20260415c` was still building when this handoff was written.
+  - Task Manager continuation from another terminal:
+```bash
+ssh koval@ftp.koval-distillery.com 'docker images koval-crm-frontend:v20260415c koval-crm-backend:v20260415c'
+ssh koval@ftp.koval-distillery.com 'docker rm -f portal-v20260415c-test >/dev/null 2>&1 || true; docker run -d --name portal-v20260415c-test -p 127.0.0.1:8094:80 koval-crm-frontend:v20260415c && for p in / /js/app.e98ec78f.js /js/chunk-vendors.195a95d8.js; do printf "%s " "$p"; curl -sS -o /dev/null -w "%{http_code}\n" "http://127.0.0.1:8094$p"; done'
+ssh koval@ftp.koval-distillery.com 'cd /home/koval/dockerportal/portal && ./deploy/scripts/deploy-prod.sh all v20260415c'
+ssh koval@ftp.koval-distillery.com 'docker ps --format "{{.Names}} {{.Image}} {{.Status}}" | grep -E "koval-crm-(backend|frontend)" && for u in http://127.0.0.1:8082/ http://127.0.0.1:8083/; do printf "%s " "$u"; curl -sS -o /dev/null -w "%{http_code}\n" "$u"; done'
+```
+  - Emergency rollback command if Portal fails again:
+```bash
+ssh koval@ftp.koval-distillery.com 'cd /home/koval/dockerportal/portal && ./deploy/scripts/rollback.sh all v20260415'
+```
+
+- Frank tracked-reply correction at `2026-04-15 19:06 CDT`.
+  - Robert clarified that Frank should answer directly and copy Robert/Dmytro where instructed instead of sending tracked-reply review emails unless Frank cannot answer.
+  - The live Frank runtime now extracts HTML-only assistant email bodies, logs Robert's Claude-thread instruction locally, and answers Claude's Papers-access follow-up directly.
+  - Frank sent Claude `Re: Thoughts on our AI workspace setup`, copied Robert and Dmytro, and the LaunchAgent-environment runner check returned no new unseen messages requiring action.
+  - Frank docs/TODO/HANDOFF were updated. Avignon was then aligned with the same tracked-reply rule: answer safe already-approved internal tracked-thread replies directly, copy Sonat/Robert/other stakeholders where instructed, and only escalate when blocked, ambiguous, or gated. The live Avignon runtime now extracts HTML-only bodies and classifies safe primary tracked-thread replies as local follow-up instead of primary-review material.
+  - Follow-up decision-routing clarification: Avignon decision items now send concise decision emails to Sonat by default through a shared profile-based helper; the same helper is available in Frank's runtime for Frank -> Robert decision emails. Personas remain separate; decision mechanics and routing are centralized where practical.
+
 - MacBook/M4/Mac mini role clarification recorded at `2026-04-15 18:35 CDT` on `Macmini.lan`.
   - Keep `ws ai` local on Mac mini, M4, and MacBook as `/Users/werkstatt/ai_workspace`; the normal sync path is git/GitHub, not Google Drive.
   - 2018 Mac mini (`Macmini.lan`, `.17`) is the main AI worker/station: keep Workspaceboard/Frank/Avignon/long-running Codex worker and automation hosting there unless Robert explicitly changes the role split.
