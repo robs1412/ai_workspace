@@ -8,6 +8,11 @@ _No active AI Workspace implementation items._
 
 ## Waiting for Next Step
 
+- Blocker: event strategy Google Doc for COT/Connecteam replacement needs read-only access or a supplied text export before full external-source review.
+  - Source: `https://docs.google.com/document/d/1EaHH97GJ_9ztMNtWaEp-abGUHdVqVcyvJWkUjko5euc/edit?tab=t.0`.
+  - Local coordination review completed 2026-04-16 from existing AI Workspace notes; exact blocker is anonymous Google Docs export returned `HTTP/2 401`.
+  - Decision note: `project_hub/issues/2026-04-16-event-strategy-cot-connecteam-review.md`.
+
 - Decision needed: choose Google Drive OAuth/token storage policy before any future Drive-backed Digital Office projection automation.
   - Policy review completed 2026-04-16: recommendation is a machine-local OS keychain/private path by default, or an approved secret manager/keychain/service-account path for shared automation.
   - Rejected storage targets: Google Drive-synced files, Google Drive-synced runtime folders, Papers records, normal manifests, and git.
@@ -20,9 +25,6 @@ _No active AI Workspace implementation items._
 - Build the in-house outreach events module in `ws ops`.
   - Goal: Events + Market Events parity, one-or-more linked shifts, existing shift-notification behavior, Connecteam replacement, account/login/activity linkage, and no second user system.
   - Route before implementation: `ws ops` worker with Code and Git Manager preflight; Security Guard only if auth/access or production data mutation enters scope.
-- Review event strategy notes and COT/Connecteam replacement plan.
-  - Sources: `https://docs.google.com/document/d/1EaHH97GJ_9ztMNtWaEp-abGUHdVqVcyvJWkUjko5euc/edit?tab=t.0`.
-  - Route: coordination in `ws ai`; implementation in `ws ops`.
 - Define OPS market improvements.
   - Scope: account/contact creation from OPS and OPS -> salesreport data-flow boundaries.
 
@@ -70,6 +72,9 @@ _No active AI Workspace implementation items._
   - Route: read-only review first; no admin/account changes without approval.
 
 ## Done
+
+- **2026-04-16** Event strategy / COT Connecteam replacement coordination review completed locally.
+  - Added `project_hub/issues/2026-04-16-event-strategy-cot-connecteam-review.md` with local actionable strategy points and OPS-safe next steps. Google Doc source was reachable but returned `HTTP/2 401`, so full external-source review remains blocked pending read-only access or supplied text export. Scope stayed docs-only: no Google Docs mutation, credentials, OPS/Papers/Connecteam/notification/production-data access, code change, commit, push, deploy, or runtime change.
 
 - **2026-04-16** Google Cloud security hardening plan completed.
   - Added `project_hub/issues/2026-04-16-google-cloud-security-hardening-plan.md` with a no-credential checklist, first read-only audit plan, and explicit approval gates for IAM, keys, APIs, billing, Essential Contacts, credentials, live admin surfaces, notifications, deploys, and automation. Scope stayed local docs-only: no Google Cloud console, credentials, keychain, OAuth files, secrets, billing accounts, IAM, live admin surfaces, email, deploy, or runtime service was accessed.
