@@ -1,10 +1,16 @@
 # Codex Session Handoff
 
-Last Updated: 2026-04-16 17:57 CDT (Machine: Macmini.lan)
+Last Updated: 2026-04-16 18:02 CDT (Machine: Macmini.lan)
 
 Use this file for cross-machine/session handoffs.
 
 ## Current Workflow Handoff
+
+- MacBook power-management wake-cause review blocked at `2026-04-16 18:02 CDT`.
+  - Scope stayed read-only coordination from AI Workspace. Target was `MacBookPro.lan` / `192.168.55.180`.
+  - Commands attempted: DNS/hostname reachability, ICMP ping, and batch-mode SSH with publickey/hostbased auth only.
+  - Result: `MacBookPro.lan` did not resolve, `192.168.55.180` returned 100% ping loss, and SSH to `192.168.55.180:22` timed out. No remote `pmset` / power-management logs were accessible.
+  - No credentials were requested or printed, and no daemon, system setting, power setting, LaunchAgent, SSH config, file deletion, or machine state change was performed. TODO now records this as a Waiting blocker.
 
 - AI Workspace TODO/HANDOFF source-closeout reconciliation completed at `2026-04-16 17:57 CDT`.
   - Reconciled completed planning/review/source-control items from AI Workspace and source workspaces so they no longer remain as raw open backlog.

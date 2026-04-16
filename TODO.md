@@ -1,6 +1,6 @@
 # TODO — ai_workspace
 
-Updated: 2026-04-16 17:57 CDT (Machine: Macmini.lan)
+Updated: 2026-04-16 18:02 CDT (Machine: Macmini.lan)
 
 ## In Progress
 
@@ -43,6 +43,12 @@ _No active AI Workspace implementation items._
   - Rejected storage targets: Google Drive-synced files, Google Drive-synced runtime folders, Papers records, normal manifests, and git.
   - Exact human decision if Drive-backed automation is requested: approve Option A as the default storage path for this project, or name the approved Option B secret manager/keychain/service-account path.
   - Decision note: `project_hub/digital-office/storage-decision-needed.md`.
+
+- Blocker: MacBook power-management wake-cause review needs the MacBook to be reachable or local user access to its logs.
+  - Target checked: `MacBookPro.lan` / `192.168.55.180`.
+  - Read-only diagnostics attempted 2026-04-16: hostname resolution, ICMP ping, and batch-mode SSH only.
+  - Result: `MacBookPro.lan` did not resolve, `192.168.55.180` had 100% ping loss, and SSH to `192.168.55.180:22` timed out. No `pmset` logs were available remotely.
+  - Approval gates preserved: no credentials requested, no settings changed, no daemon/LaunchAgent/SSH config/system state touched.
 
 ## Backlog
 
@@ -101,8 +107,6 @@ _No active AI Workspace implementation items._
 - Review IT planning docs and decide transfer/deprecation plan for GitLab.
   - Sources: `https://papers.koval/teams/it/task-queue.html`, `https://papers.koval/teams/it/roadmap.html`, `https://papers.koval.lan/teams/it/dashboard.html`, and `https://papers.koval.lan/teams/it/research.html`.
   - Approval gate: no live Papers writes or `.205` work without explicit approval.
-- Check MacBook power-management logs and wake causes.
-  - Route: `ws ai` coordination; no daemon or system-setting change without explicit approval.
 - Monitor Google Postmaster.
   - Source: `https://postmaster.google.com/u/0/dashboards#do=kovaldistillery.com&st=userReportedSpamRate&dr=7`.
   - Route: read-only review first; no admin/account changes without approval.
