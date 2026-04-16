@@ -1,0 +1,45 @@
+Claude,
+
+Robert wants Claude, not Codex, to implement this fix.
+
+Target repo/codebase:
+/Users/werkstatt/data-import
+
+Target file:
+/Users/werkstatt/data-import/public/js/main.js
+
+Problem:
+The client-side manual XLS/salesreport workflow checks whether account/location fields are mapped before rebuilding the import profile from the current selectors. On a first import, that validation can inspect stale or empty profile data.
+
+Requested smallest fix:
+Build or rebuild the current profile from the selectors before account/location validation, then validate against the freshly built profile.
+
+Scope boundaries:
+- No live imports.
+- No DB writes.
+- No external calls.
+- No production data mutation.
+- No uploaded XLS mutation.
+
+Before work:
+- Read the local guidance.
+- Run `git status`.
+- If the working tree is clean, run `git pull --ff-only`.
+- If the working tree is dirty, preserve existing edits.
+
+Verification:
+- Run a safe JS syntax/static check if available.
+- If there is no test harness, describe the code-path verification you performed.
+
+Deliverable back to Robert/Frank:
+- Changed files.
+- Behavior fixed.
+- Checks run.
+- Whether commit/push is recommended.
+
+Do not commit or push unless Robert approves.
+
+Context from the completed read-only assessment:
+- The newer `/Users/werkstatt/importer` repo is contact/account focused and is not the right implementation target for Julia/manual XLS salesreports.
+- The older `/Users/werkstatt/data-import` app is the salesreport XLS workflow: XLS/XLSX upload, sheet normalization, manual field mapping, account/product matching, and invoice creation consumed by salesreport.
+- The smallest next task is the validation-order fix in `public/js/main.js` described above.

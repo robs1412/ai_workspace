@@ -34,6 +34,10 @@ recordings/
 LOG_imapsync/
 sync_backups/
 
+# Frank dry-run completion-confirmation artifacts
+frank/completion-confirmation-log.jsonl
+frank/drafts/completion-confirmation-*.txt
+
 # Embedded implementation clones should live under /Users/werkstatt/<repo>
 screenbox/
 external/
