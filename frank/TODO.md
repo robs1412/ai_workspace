@@ -7,6 +7,11 @@ Updated: 2026-04-15 17:39:00 CDT (Machine: Macmini.lan)
 - Monitor Robert's OPS task queue.
 - Check Robert's daily Portal digest email and surface follow-ups.
 - Monitor inbound receipt emails and draft next steps.
+- Await Claude's reply on Screenbox vs Playwright workflow recommendations.
+  - Local Frank task id: `frank-2026-claude-screenbox-workflow`
+  - Source session: `158f2faf`
+  - Sent to Claude on 2026-04-16 with subject `Screenbox workflow recommendations`.
+  - Need: capture Claude's recommended setup, command pattern, artifacts/screenshots, handoff format, and cautions on when Playwright should still be used.
 - Introduce Frank to Sonat.
 - Finish the Mitch account archive/imapsync transfer.
   - Destination IMAP login for `tastingroom@kovaldistillery.com` now works with the secured secret reference.

@@ -1,0 +1,17 @@
+Claude,
+
+Robert wants to start evaluating Screenbox instead of Playwright for some of our UI/browser testing. Could you send back how you manage that workflow and what you recommend for our Workspaceboard/worker testing flow?
+
+The main things we need:
+
+- How you think about Screenbox-style UI/browser testing compared with Playwright.
+- The setup you recommend before a worker starts using it.
+- The command pattern you would use from a worker session.
+- What artifacts to capture, especially screenshots or other visual evidence.
+- The handoff format you would want back from a worker so Robert or another agent can review the result quickly.
+- Any cautions about when Playwright should still be used instead.
+
+This is just a workflow recommendation request for now. We are not asking you to install Screenbox, replace Playwright, change repo code, or alter any runtime configuration yet.
+
+Thanks,
+Frank
