@@ -1,6 +1,6 @@
 # TODO — ai_workspace
 
-Updated: 2026-04-16 17:05:51 CDT (Machine: Macmini.lan)
+Updated: 2026-04-16 17:22:17 CDT (Machine: Macmini.lan)
 
 ## In Progress
 
@@ -9,7 +9,9 @@ _No active AI Workspace implementation items._
 ## Waiting for Next Step
 
 - Decision needed: choose Google Drive OAuth/token storage policy before any future Drive-backed Digital Office projection automation.
-  - Recommendation: keep OAuth credentials and token caches machine-local or in an approved secret manager/keychain path; do not store them in Google Drive-synced planning files or git.
+  - Policy review completed 2026-04-16: recommendation is a machine-local OS keychain/private path by default, or an approved secret manager/keychain/service-account path for shared automation.
+  - Rejected storage targets: Google Drive-synced files, Google Drive-synced runtime folders, Papers records, normal manifests, and git.
+  - Exact human decision if Drive-backed automation is requested: approve Option A as the default storage path for this project, or name the approved Option B secret manager/keychain/service-account path.
   - Decision note: `project_hub/digital-office/storage-decision-needed.md`.
 
 ## Backlog
@@ -18,10 +20,6 @@ _No active AI Workspace implementation items._
 - Build the in-house outreach events module in `ws ops`.
   - Goal: Events + Market Events parity, one-or-more linked shifts, existing shift-notification behavior, Connecteam replacement, account/login/activity linkage, and no second user system.
   - Route before implementation: `ws ops` worker with Code and Git Manager preflight; Security Guard only if auth/access or production data mutation enters scope.
-- Produce the first Trainual planning slice for OPS Market Events.
-  - Scope: module outline, user-facing walkthrough script, recording checklist, safe demo-data notes, output-location convention under `ai_workspace/recordings/`, and acceptance checklist.
-  - Out of scope until Robert approves separately: recording, external publishing, code changes, live data mutation, and broad cross-module rollout.
-  - After acceptance, decide whether a reusable Trainual skill is warranted.
 - Review event strategy notes and COT/Connecteam replacement plan.
   - Sources: `https://docs.google.com/document/d/1EaHH97GJ_9ztMNtWaEp-abGUHdVqVcyvJWkUjko5euc/edit?tab=t.0`.
   - Route: coordination in `ws ai`; implementation in `ws ops`.
@@ -59,9 +57,6 @@ _No active AI Workspace implementation items._
 - Define Portal production audit enhancements.
   - Scope: extended modification trails, prior-month edit report, shipped-vs-bottled mismatch report, and `<2000 lb` grain/product mismatch logic.
   - Route: `ws portal` for Portal-owned reports, with Salesreport ownership checked for shipped-vs-bottled work.
-- Design unified user activity reporting.
-  - Scope: Portal activity, task stats, shift/check-in stats, OPS/salesreport/contactreport/BID/automation usage, and optional Gmail/Gemini admin usage overlays.
-  - Route: `ws ai` planning first; implementation split by source system.
 - Define recurring operations reporting.
   - Scope: monthly task stats send-out, events/task stats review cadence, and barrel sample page manual/follow-up.
   - Route: `ws ai` planning first; implementation split by owning module.
@@ -80,6 +75,15 @@ _No active AI Workspace implementation items._
   - Route: Security Guard-led planning; no credential, IAM, billing, or production changes without explicit approval.
 
 ## Done
+
+- **2026-04-16** Unified user activity reporting planning slice completed.
+  - Added `project_hub/issues/2026-04-16-unified-user-activity-reporting-plan.md` with source systems, read-only data surfaces, privacy/security gates, cadence, first slice, and workspace ownership. Scope stayed docs-only: no code, credentials, production data, email, deploy, or runtime change.
+
+- **2026-04-16** OPS Market Events Trainual planning slice prepared.
+  - Added local planning docs under `trainual/ops-market-events/` for module outline, walkthrough script, recording checklist, safe demo-data notes, recordings output convention, and acceptance checklist. Ignored `recordings/` artifacts are excluded. Planning only; no recording, publishing, code, live data, email, secrets, deploy, or external-system mutation.
+
+- **2026-04-16** Digital Office OAuth/token storage policy review completed.
+  - Updated the local storage decision note after a docs-only review. Recommendation is a machine-local OS keychain/private path by default, or an approved secret manager/keychain/service-account path for shared automation; not Google Drive-synced files, Papers, manifests, or git. No credentials, OAuth, Drive, Papers, runtime, or email surfaces were accessed.
 
 - **2026-04-16** Operational autonomy directive recorded.
   - Updated AI Workspace role/policy docs so Decision Driver may approve obvious verified Code/Git continuation within approved scope, Task Manager keeps routing until 15 real manual blockers, and Task Manager/Decision Driver/Code and Git Manager/Security Guard resolve safe routing, review, and cleanup without Robert where guardrails allow. Docs/notes only; no code, commit, push, restart, email, secret access, external-system mutation, deploy, or live-data action.

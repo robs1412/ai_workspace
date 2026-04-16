@@ -1,5 +1,5 @@
 # AI Workspace Project Hub
-Last Updated: 2026-04-16 17:05:00 CDT (Machine: Macmini.lan)
+Last Updated: 2026-04-16 17:22:17 CDT (Machine: Macmini.lan)
 
 ## Open
 
@@ -64,6 +64,12 @@ Last Updated: 2026-04-16 17:05:00 CDT (Machine: Macmini.lan)
   - Repos: `login` (shared SSO/logout layer affecting `portal` and `ops`)
 
 ## Completed
+
+- **2026-04-16 Unified User Activity Reporting Plan**
+  - Master ID: `AI-INC-20260416-UNIFIED-USER-ACTIVITY-REPORTING-01`
+  - Detail log: `project_hub/issues/2026-04-16-unified-user-activity-reporting-plan.md`
+  - Repos: `ai_workspace`; future source ownership split across `login`, `portal`, `ops`, `salesreport`, `contactreport`, `bid`, `importer`, `workspaceboard`, `frank`, and `avignon`
+  - Status: planning slice completed docs-only; implementation, production data access, Gmail/Admin overlays, email sends, deploys, and scheduled reports remain unstarted and approval-gated
 
 - **2026-04-09 Werkstatt Path Unification**
   - Master ID: `AI-INC-20260409-WERKSTATT-PATHS-01`

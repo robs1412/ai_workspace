@@ -1,10 +1,28 @@
 # Codex Session Handoff
 
-Last Updated: 2026-04-16 17:05:51 CDT (Machine: Macmini.lan)
+Last Updated: 2026-04-16 17:30 CDT (Machine: Macmini.lan)
 
 Use this file for cross-machine/session handoffs.
 
 ## Current Workflow Handoff
+
+- Unified user activity reporting planning slice completed at `2026-04-16 17:22 CDT`.
+  - Detail log: `project_hub/issues/2026-04-16-unified-user-activity-reporting-plan.md`.
+  - Recorded source systems, read-only data surfaces, privacy/security gates, cadence, first slice, and workspace ownership for a future unified user activity report.
+  - Recommended first future slice is a no-production-data source inventory and metric contract across `login`, `ops`, `portal`, and `salesreport`, with Google Workspace/Gmail/Gemini overlays deferred.
+  - Scope stayed local and docs-only. No code, credentials, production data, mailbox/Admin data, email, deploy, scheduled report, or runtime change was performed.
+
+- OPS Market Events Trainual planning slice prepared at `2026-04-16 17:30 CDT`.
+  - Added local planning pack under `trainual/ops-market-events/` with module outline, walkthrough script, recording checklist, safe demo-data notes, recordings output convention, and acceptance checklist.
+  - Kept future media output guidance in the tracked `trainual/ops-market-events/recordings-output-convention.md`; ignored `recordings/` artifacts are not part of the docs batch.
+  - Updated `TODO.md` by moving the Trainual planning slice from Backlog to Done.
+  - Scope stayed planning-only: no recording, publishing, code changes, live data mutation, email, secrets, deploy, external-system write, or media artifact was created.
+
+- Digital Office OAuth/token storage policy review completed at `2026-04-16 17:18 CDT`.
+  - Updated `project_hub/digital-office/storage-decision-needed.md` after a local-docs-only review.
+  - Recommendation: OAuth credentials and token caches must live in machine-local OS keychain/private storage by default, or in an approved secret manager/keychain/service-account path for shared automation. Do not store OAuth credentials, refresh/access tokens, client secrets, private keys, or app passwords in Google Drive-synced files, Google Drive-synced runtime folders, Papers records, normal manifests, or git.
+  - Exact remaining human decision if Drive-backed automation is requested: approve Option A as the default storage path for this project, or name the approved Option B secret manager/keychain/service-account path.
+  - No credentials, OAuth/token material, Google Drive files, Papers data, runtime state, mailbox/email content, keychain contents, MCP config, `.205`, `.17`, OPS/Portal data, external service, code implementation, deploy, service restart, or live mutation was accessed or changed.
 
 - Operational autonomy directive recorded at `2026-04-16 17:05 CDT`.
   - Decision Driver may approve obvious, verified Code/Git continuation within already-approved scope when the action is non-destructive, does not touch secrets/auth/external sends, creates no deploy/live-data risk, and has no unresolved worker ownership conflict.
