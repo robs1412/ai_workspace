@@ -1,10 +1,17 @@
 # Codex Session Handoff
 
-Last Updated: 2026-04-16 17:32 CDT (Machine: Macmini.lan)
+Last Updated: 2026-04-16 17:55 CDT (Machine: Macmini.lan)
 
 Use this file for cross-machine/session handoffs.
 
 ## Current Workflow Handoff
+
+- AI Workspace TODO planning/review reconciliation completed at `2026-04-16 17:55 CDT`.
+  - Reconciled completed source-workspace planning/review items so they no longer remain as raw open AI Workspace backlog: Salesreport adoption/access planning, web analytics funnel/source review, and PHPList legacy send-history soft-delete review.
+  - Source references recorded in `TODO.md`: salesreport commit `85971d9004d1d73c49751d52080a5ec7587f9780` with `doc/salesreport-adoption-access-planning-2026-04-16.md` and `doc/web-analytics-funnel-source-review-2026-04-16.md`; lists commit `a246095d14f07c4e82ebc23fe47e0836a7dded26` with `docs/phplist-legacy-send-history-soft-delete-review-2026-04-16.md`; lists TODO closeout commit `eae015bef06eed50fbbcbacd6324033fa62fb427`.
+  - Preserved true remaining work only as scoped future tasks: Salesreport adoption/access implementation after owner review and Code/Git Manager preflight; web analytics funnel implementation after analytics source ownership/build scope confirmation; PHPList read-only inventory before any separately approved mutation cleanup.
+  - Operational-autonomy note remains durable: Decision Driver may approve obvious safe continuations within approved scope, and Task Manager should keep routing safe work until 15 real manual blockers. Current real manual blocker count after this reconciliation is `1` active Waiting item, the Google Drive OAuth/token storage policy decision.
+  - Scope stayed AI Workspace docs-only. No OPS intake, credentials, live external systems, email, runtime services, deploys, production data, or source-workspace mutation was accessed.
 
 - Recurring operations reporting planning slice completed at `2026-04-16 17:32 CDT`.
   - Detail log: `project_hub/issues/2026-04-16-recurring-operations-reporting-plan.md`.

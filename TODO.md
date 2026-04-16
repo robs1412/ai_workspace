@@ -1,6 +1,6 @@
 # TODO — ai_workspace
 
-Updated: 2026-04-16 17:32 CDT (Machine: Macmini.lan)
+Updated: 2026-04-16 17:55 CDT (Machine: Macmini.lan)
 
 ## In Progress
 
@@ -27,19 +27,26 @@ _No active AI Workspace implementation items._
   - Scope: account/contact creation from OPS and OPS -> salesreport data-flow boundaries.
 
 ### Lists / Forge / Communications
-- Clean PHPList legacy send-history soft deletes.
+- PHPList legacy send-history cleanup next slice.
+  - Completed planning/review source: lists commit `a246095d14f07c4e82ebc23fe47e0836a7dded26`, `docs/phplist-legacy-send-history-soft-delete-review-2026-04-16.md`; TODO closeout commit `eae015bef06eed50fbbcbacd6324033fa62fb427`.
+  - Next scoped work: run a read-only inventory of candidate legacy send-history soft-delete rows and affected newsletter/list workflows.
+  - Approval gate: no DB mutation, deletion, restore, or production cleanup without explicit mutation approval after inventory review.
   - Route: `ws lists`; coordinate with Forge only if newsletter/list workflow crosses modules.
 - Review PHPList, Shopify, and Square signup recurring checks.
   - Route: `ws lists` / `ws forge` after a concrete checklist is approved.
 
 ### BID / Importer / Salesreport / Analytics
 - Build web analytics funnel reporting for `koval-distillery.com`.
-  - Scope: Dmytro analytics source review and GA-style funnel view.
+  - Completed planning/review source: salesreport commit `85971d9004d1d73c49751d52080a5ec7587f9780`, `doc/web-analytics-funnel-source-review-2026-04-16.md`.
+  - Next scoped work: implement the approved GA-style funnel view only after analytics source ownership and build scope are confirmed.
+  - Approval gate: no account changes, tracking changes, production data mutation, deploy, or external analytics-system write without explicit approval.
   - Route: likely `ws sales` or a dedicated analytics worker after source ownership is clarified.
 - Audit Google Ads issues.
   - Route: read-only account/campaign audit first; no account changes without explicit approval.
-- Track Salesreport user adoption/access.
-  - Scope: usage by login and required state/access controls for named sales users.
+- Implement approved Salesreport adoption/access follow-ups.
+  - Completed planning source: salesreport commit `85971d9004d1d73c49751d52080a5ec7587f9780`, `doc/salesreport-adoption-access-planning-2026-04-16.md`.
+  - Next scoped work: turn the planning result into specific usage-by-login and state/access-control changes after owner review.
+  - Approval gate: no access-control mutation, user-state change, deploy, or production data change without explicit approval and Code and Git Manager preflight.
 - Review recurring sales/data operations.
   - Scope: importer roster update cadence, distributor inventory checks, monthly/quarterly warehouse + distribution salesreport checks, and BID data refresh cadence.
 - Clean distributor accounts.
@@ -66,6 +73,9 @@ _No active AI Workspace implementation items._
   - Route: Security Guard-led planning; no credential, IAM, billing, or production changes without explicit approval.
 
 ## Done
+
+- **2026-04-16** Completed planning/review backlog reconciled from source workspaces.
+  - Moved raw open planning items for Salesreport adoption/access, web analytics funnel/source review, and PHPList legacy send-history soft-delete review into this concise Done record. Sources: salesreport commit `85971d9004d1d73c49751d52080a5ec7587f9780` with `doc/salesreport-adoption-access-planning-2026-04-16.md` and `doc/web-analytics-funnel-source-review-2026-04-16.md`; lists commit `a246095d14f07c4e82ebc23fe47e0836a7dded26` with `docs/phplist-legacy-send-history-soft-delete-review-2026-04-16.md`; lists TODO closeout commit `eae015bef06eed50fbbcbacd6324033fa62fb427`. Preserved only scoped future implementation/inventory work and approval gates in Backlog. Current real manual blocker count: 1 active Waiting item. Docs-only: no OPS intake, credentials, live external systems, email, runtime service, deploy, production data, or source-workspace mutation was accessed.
 
 - **2026-04-16** Recurring operations reporting planning slice completed.
   - Added `project_hub/issues/2026-04-16-recurring-operations-reporting-plan.md` with owner modules, read-only source surfaces, cadence, approval gates, first no-write slice, and notification/email boundaries for monthly task stats, events/task stats review, and barrel sample page manual/follow-up. Scope stayed docs-only: no code, production data, email, notifications, credentials, scheduled jobs, commit, push, deploy, runtime change, OPS intake, or live-source access.
