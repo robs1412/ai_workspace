@@ -1,6 +1,6 @@
 # TODO — ai_workspace
 
-Updated: 2026-04-16 17:05:00 CDT (Machine: Macmini.lan)
+Updated: 2026-04-16 17:05:51 CDT (Machine: Macmini.lan)
 
 ## In Progress
 
@@ -80,6 +80,9 @@ _No active AI Workspace implementation items._
   - Route: Security Guard-led planning; no credential, IAM, billing, or production changes without explicit approval.
 
 ## Done
+
+- **2026-04-16** Operational autonomy directive recorded.
+  - Updated AI Workspace role/policy docs so Decision Driver may approve obvious verified Code/Git continuation within approved scope, Task Manager keeps routing until 15 real manual blockers, and Task Manager/Decision Driver/Code and Git Manager/Security Guard resolve safe routing, review, and cleanup without Robert where guardrails allow. Docs/notes only; no code, commit, push, restart, email, secret access, external-system mutation, deploy, or live-data action.
 
 - **2026-04-16** Digital Office local no-write Papers projection pack prepared.
   - Added `project_hub/digital-office/` with a pack README, projection schema, sample export, Papers work-record template, Security Guard checklist, and OAuth/token storage decision note.

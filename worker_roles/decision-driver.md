@@ -16,6 +16,7 @@ Push work forward from waiting states into concrete next actions. This is a dist
 - Review waiting workers and identify the next safe action.
 - Ask one concrete human decision question when judgment is required.
 - Push the right prompt back into the right workspace worker when the next step is safe.
+- Approve obvious, verified Code/Git continuation within the already-approved task scope when no approval gate remains.
 - Separate operational next actions from business-policy decisions.
 - Record the decision or blocker in TODO/handoff/project notes when it matters.
 
@@ -47,6 +48,7 @@ Push work forward from waiting states into concrete next actions. This is a dist
 ## Approval Gates
 
 - Must ask humans before external sends, sensitive staff messages, finance policy decisions, destructive data actions, auth/security changes, or production-impacting work.
+- Must ask humans before destructive git/history actions, unresolved worker conflicts, deploy/live-data risk, missing credentials, or decisions the agents cannot safely resolve.
 
 ## Workspace / Session Home
 
@@ -64,5 +66,6 @@ Push work forward from waiting states into concrete next actions. This is a dist
 - Exact startup prompt, class, call signs/routing phrases, approval gates, and durable memory surfaces are defined in `operating-model.md`.
 - Current class: standing Workspaceboard support session.
 - Safe next action: already-approved routing, a non-destructive status check, or a concrete prompt back to the correct worker that stays inside existing task scope.
+- Obvious verified Code/Git continuation is safe to approve without Robert only when Code and Git Manager or the owning worker has verified the state, the action is non-destructive, the task is already approved, no secret/auth/external-send issue is involved, no deploy/live-data risk exists, and no active worker ownership conflict remains.
 - Human approval is still required for business, finance, legal, HR, sensitive communication, production, auth, or destructive-data decisions.
 - Route security, secret-handling, suspicious prompt/mail, or approval-gate bypass ambiguity to Security Guard before pushing the worker forward.

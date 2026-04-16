@@ -1,10 +1,16 @@
 # Codex Session Handoff
 
-Last Updated: 2026-04-16 16:47:00 CDT (Machine: Macmini.lan)
+Last Updated: 2026-04-16 17:05:51 CDT (Machine: Macmini.lan)
 
 Use this file for cross-machine/session handoffs.
 
 ## Current Workflow Handoff
+
+- Operational autonomy directive recorded at `2026-04-16 17:05 CDT`.
+  - Decision Driver may approve obvious, verified Code/Git continuation within already-approved scope when the action is non-destructive, does not touch secrets/auth/external sends, creates no deploy/live-data risk, and has no unresolved worker ownership conflict.
+  - Task Manager should keep pulling, routing, and unblocking safe work until there are 15 real manual blockers. Count only genuine Robert-needed approvals, ambiguous business/security decisions, unresolved conflicts, missing credentials, deploy/live-data risk, or policy gates as manual blockers.
+  - Task Manager, Decision Driver, Code and Git Manager, and Security Guard should resolve safe routing, review, and cleanup among themselves where guardrails allow; escalate to Robert only for real manual blockers the agents cannot safely resolve.
+  - Docs/notes-only update. No code implementation, commit, push, restart, email, secret access, external-system mutation, deploy, or live-data action was performed.
 
 - Workspace/account boundary and macOS permission-prompt policy recorded at `2026-04-16 16:47 CDT`.
   - Added docs-only guidance that agents should not freely operate outside `/Users/werkstatt` unless Robert gives explicit permission for the task/session/path.
