@@ -1,5 +1,5 @@
 # AI Workspace Project Hub
-Last Updated: 2026-04-16 10:45:58 CDT (Machine: Macmini.lan)
+Last Updated: 2026-04-16 17:05:00 CDT (Machine: Macmini.lan)
 
 ## Open
 
@@ -19,7 +19,7 @@ Last Updated: 2026-04-16 10:45:58 CDT (Machine: Macmini.lan)
   - Master ID: `AI-INC-20260414-DIGITAL-OFFICE-WORK-RECORDS-01`
   - Detail log: `project_hub/issues/2026-04-14-digital-office-project-task-work-records-proposal.md`
   - Repos: `ai_workspace`, `workspaceboard`
-  - Status: read-only Workspaceboard prototype implemented and pushed as commit `68df99c`; live dashboard `http://localhost/workspaceboard/digital-office.html` indexes project-hub, TODO, and board/session metadata before any Papers, `.205`, OPS/Portal schema, production DB, notification, or MCP write work
+  - Status: local no-write projection pack prepared under `project_hub/digital-office/`; remaining human decision is Google Drive OAuth/token storage policy before any future Drive-backed automation, and all live Papers, `.205`, `.17`, OPS/Portal DB, credential, MCP, notification/email, Frank/Avignon runtime, commit/push/deploy gates remain closed
 
 - **2026-04-13 Salesreport Shipped-vs-Bottled Ownership**
   - Master ID: `AI-INC-20260413-SALESREPORT-SHIPPED-BOTTLED-OWNERSHIP-01`
@@ -32,16 +32,6 @@ Last Updated: 2026-04-16 10:45:58 CDT (Machine: Macmini.lan)
   - Detail log: `project_hub/issues/2026-04-12-ai-workstation-sync-transition.md`
   - Repos: `ai_workspace`, `ai-bridge`, `/Users/werkstatt` workspace roots, Workspaceboard host state
   - Status: planning approved; 2026-04-14 audit completed and legacy synced `ai_workspace/codex_dashboard` deleted after dependency checks; `/Users/werkstatt/workspaceboard` remains the source of truth and active Workspaceboard v0.69 stayed healthy
-
-- **2026-04-09 Werkstatt Path Unification**
-  - Master ID: `AI-INC-20260409-WERKSTATT-PATHS-01`
-  - Detail log: `project_hub/issues/2026-04-09-werkstatt-path-unification.md`
-  - Repos: `ai_workspace`, `workspaceboard`, local workspace roots on Mac mini and MacBook
-
-- **2026-04-07 MemPalace Salesreport Pilot**
-  - Master ID: `AI-INC-20260407-MEMPALACE-SALESREPORT-01`
-  - Detail log: `project_hub/issues/2026-04-07-mempalace-salesreport-pilot.md`
-  - Repos: `ai_workspace`, `salesreport`
 
 - **2026-03-15 WireGuard Stability Monitoring**
   - Master ID: `AI-INC-20260315-WIREGUARD-STABILITY-01`
@@ -74,6 +64,18 @@ Last Updated: 2026-04-16 10:45:58 CDT (Machine: Macmini.lan)
   - Repos: `login` (shared SSO/logout layer affecting `portal` and `ops`)
 
 ## Completed
+
+- **2026-04-09 Werkstatt Path Unification**
+  - Master ID: `AI-INC-20260409-WERKSTATT-PATHS-01`
+  - Detail log: `project_hub/issues/2026-04-09-werkstatt-path-unification.md`
+  - Repos: `ai_workspace`, `workspaceboard`, local workspace roots on Mac mini and MacBook
+  - Status: completed; canonical local module roots now use `/Users/werkstatt/<repo>`, with remaining cross-machine sync/runtime follow-up tracked under the AI workstation/sync transition record
+
+- **2026-04-07 MemPalace Salesreport Pilot**
+  - Master ID: `AI-INC-20260407-MEMPALACE-SALESREPORT-01`
+  - Detail log: `project_hub/issues/2026-04-07-mempalace-salesreport-pilot.md`
+  - Repos: `ai_workspace`, `salesreport`
+  - Status: completed by Robert decision on 2026-04-12; local Salesreport MemPalace pilot should not be expanded
 
 - **2026-04-16 Workspaceboard Remote Classic Board**
   - Master ID: `AI-INC-20260416-WORKSPACEBOARD-REMOTE-CLASSIC-BOARD-01`

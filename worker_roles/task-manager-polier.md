@@ -13,6 +13,7 @@ Own the board-level operating system. The Task Manager keeps sessions visible, r
 
 ## Responsibilities
 
+- Use the KOVAL 2026 Management Planner as guide material for management framing: clarify the management goal, owner, visible worker route, decision gate, and closure condition.
 - Start or focus the correct board-managed worker.
 - Keep Task Manager, Summary Worker, Decision Driver, and Session Worker boundaries clear.
 - Track which worker owns which task.
@@ -59,6 +60,7 @@ Own the board-level operating system. The Task Manager keeps sessions visible, r
 ## Operating Reference
 
 - Exact startup prompt, class, call signs/routing phrases, approval gates, and durable memory surfaces are defined in `operating-model.md`.
+- KOVAL 2026 Management Planner guidance lives in `operating-model.md` and should inform task-management and organigram docs without authorizing runtime actions by itself.
 - Current class: standing Workspaceboard session.
 - Routing rule: if the task needs more than a quick status check or one safe command, route it to a visible workspace worker and keep this role as coordination only.
 - Decision Driver is called when a waiting worker needs one safe next action or one concrete human decision question.

@@ -2,10 +2,10 @@
 
 - Master Incident ID: AI-INC-20260407-MEMPALACE-SALESREPORT-01
 - Date Opened: 2026-04-07 08:31:40 CDT
-- Date Completed:
+- Date Completed: 2026-04-12
 - Owner: Codex
 - Priority: Medium
-- Status: In Progress
+- Status: Completed
 
 ## Scope
 
@@ -110,6 +110,5 @@
 
 ## Follow-Ups
 
-- Decide whether `salesreport` retrieval is useful enough to keep.
-- If useful, expand to one more active initiative before considering chat-export ingestion.
-- If not useful, document the failure mode instead of broadening scope.
+- Closed by Robert decision on 2026-04-12: do not expand the local Salesreport MemPalace pilot.
+- Future memory/retrieval experiments should stay in AI Workspace or a deliberate cross-repo tool, not as ad hoc Salesreport repo-local scripts.

@@ -1,6 +1,6 @@
 # AI Digital Office
 
-Last Updated: 2026-04-14 11:58:40 CDT (Machine: Macmini.lan)
+Last Updated: 2026-04-16 17:05:00 CDT (Machine: Macmini.lan)
 
 ## Purpose
 
@@ -11,7 +11,9 @@ Track the KOVAL AI digital office model after Claude replied to Frank about the 
 - Local Claude/Codex follow-up plan: `/Users/werkstatt/ai-bridge/CLAUDE-CODEX-NEXT-STEPS.md`
 - Local papers investigation plan: `/Users/werkstatt/ai-bridge/bridge/traces/2026-04-14-claude-papers-durable-tracking-plan.md`
 - AI-Bridge closeout/routing trace: `/Users/werkstatt/ai-bridge/bridge/traces/2026-04-14-digital-office-routing-closeout.md`
+- MCP Codex/Claude Dmytro-surface routing note: `/Users/werkstatt/ai-bridge/bridge/traces/2026-04-16-mcp-codex-claude-dmytro-surfaces-routing.md`
 - Project/task/work-record source-of-truth proposal: `project_hub/issues/2026-04-14-digital-office-project-task-work-records-proposal.md`
+- Local no-write Papers projection pack: `project_hub/digital-office/no-write-papers-projection-pack-2026-04-16.md`
 - Related board session: `AI Workspace | monitoring | live | codex-board-5909d11e`
 - Related board session: `AI Workspace | review-ready | live | codex-board-5a3ad43a`
 - Related board session: `AI-Bridge | needs-input | live | codex-board-e860fb15`
@@ -22,6 +24,12 @@ This note should stay non-secret. Do not paste credentials, private mailbox cont
 2026-04-14 routing update: Task Manager routed Robert's instruction to treat the current Claude at work / Codex integration follow-up as part of this larger Digital Office initiative rather than a standalone AI-Bridge open item. AI-Bridge now keeps supporting plans and traces, but this note is the umbrella index for remaining decisions and follow-up.
 
 2026-04-14 project/task/work-record proposal: use `project_hub` as the canonical cross-workspace project/decision/approval surface, keep workspace `TODO.md` files as short action queues, keep OPS/Portal as staff/business task source of truth, keep Workspaceboard as live execution/session source of truth, and treat Papers as a document/work-record projection until its storage/API model is approved for inspection. First implementation candidate is a read-only Workspaceboard index/dashboard prototype, not a write path to Papers, `.205`, OPS/Portal schema, production DBs, notifications, or MCP.
+
+2026-04-16 Papers projection design update: the project/task/work-record proposal now defines how Markdown, Workspaceboard, OPS/Portal, and Papers should interoperate; which completed events may eventually create Papers records; the projected record schema/template; stable IDs and duplicate protection; auth/approval gates; write path options; rollback/export; Task Manager and Decision Driver autonomy; and how existing `project_hub`, `TODO`, `HANDOFF`, Workspaceboard, OPS/Portal, and Frank/Avignon content should project into Papers. Live Papers writes remain disabled. The local no-write projection pack has been produced under `project_hub/digital-office/`.
+
+2026-04-16 local no-write projection pack: Task Manager approved the safe local-only/no-write next slice. The projection pack now lives under `project_hub/digital-office/` and includes a schema, sample export, Papers work-record template, Security Guard checklist, and explicit storage decision note. Remaining human decision: choose Google Drive OAuth/token storage policy before any future Drive-backed automation. Recommendation is machine-local or approved secret manager/keychain storage, not Google Drive-synced planning files or git. No live Papers writes, `.205`/`.17` writes, OPS/Portal DB changes, credential access, MCP exposure changes, notifications/email, Frank/Avignon runtime changes, service restarts, deploys, or live runtime mutation were performed.
+
+2026-04-16 MCP Codex/Claude Dmytro-surface routing update: Robert's TODO `MCP Codex >< Claude - mi, papers etc. things Dmytro published` is interpreted as a design/evaluation item under this Digital Office initiative, not a live bridge change. The intended scope is a future read-only bridge design for `mi.koval.lan`, Papers, and Dmytro-published assets/docs, using only local non-secret documentation until explicit approvals are granted. No `.205` access, protected Papers/MI login, private MCP config access, Papers writes, MCP exposure changes, emails, deploys, or service changes are approved by this note. See the AI-Bridge trace linked above for the safe first slice, approval gates, and owner/worker routing.
 
 ## Current KOVAL Framing
 
@@ -177,19 +185,25 @@ Deployment/security notes from local docs:
    - Extract only architectural facts: runtime, storage, API surface, MCP support, deployment model, auth model, and maintenance status.
    - Compare against KOVAL equivalents: Workspaceboard, Braincloud, AI-Bridge, project_hub, papers, Frank/Avignon, and Portal/OPS.
 
-3. Investigate local code safely.
+3. Design a no-write MCP Codex/Claude bridge inventory for Dmytro-published and KOVAL-hosted surfaces.
+   - Source trace: `/Users/werkstatt/ai-bridge/bridge/traces/2026-04-16-mcp-codex-claude-dmytro-surfaces-routing.md`.
+   - Include `mi.koval.lan/nav-map`, `papers.koval.lan`, public Digital Office docs/repos, Mesh, Agent Memory, local Screenbox docs, AI-Bridge records, and project-hub records only as locally documented or already approved.
+   - First safe slice: `ws ai-bridge` docs-only worker creates a bridge inventory/design matrix, then Security Guard reviews data exposure before any optional `ws workspaceboard` no-write projection prototype.
+   - Approval gates remain closed for `.205`, protected service login, private MCP config, Papers read/write, MCP exposure, email/notifications, deploys, and service changes.
+
+4. Investigate local code safely.
    - Inspect local `screenbox/` as a source checkout.
    - Use the workstation/sync transition audit before deciding where `screenbox` belongs; if it stays active, prefer `/Users/werkstatt` or a git-managed workspace over a Google Drive-embedded clone.
    - Search local docs for Mesh/Doci/papers/Braincloud references.
    - Do not read `.env` or credential files.
    - Do not start services or mutate runtime state unless routed as a separate implementation task.
 
-4. Investigate papers / `.205` only after explicit approval.
+5. Investigate papers / `.205` only after explicit approval.
    - Approval-gated targets: `192.168.55.205`, `/srv/CLAUDE.md`, `/home/claude/.claude/.mcp.json`, `papers.koval.lan`, and any service/database configs.
    - First approved pass should be read-only and should capture structure before content: service root, storage backend type, schema/migration files, API route names, counts/sizes, and status semantics.
    - Do not print or store secrets.
 
-5. Decide the KOVAL source-of-truth model.
+6. Decide the KOVAL source-of-truth model.
    - Keep Markdown as canonical for bridge decisions, handoffs, and human-readable traces for now.
    - Add YAML front matter or generated JSON/SQLite indexes before moving active work state into a writable database.
    - Consider a writable DB only if papers or Workspaceboard needs concurrency, low-latency dashboarding, relational queries, audit events, or field-level permissions that Markdown cannot handle.
@@ -209,7 +223,9 @@ Deployment/security notes from local docs:
 
 ## Immediate Next Step
 
-Next approved implementation decision is whether to route `ws workspaceboard` through Code and Git Manager preflight, then a Workspaceboard worker, to build a read-only Digital Office project/task/work-record index and dashboard prototype from project-hub, TODO, and board/session metadata.
+Current open decision: choose Google Drive OAuth/token storage policy before any future Drive-backed projection automation. Recommendation remains machine-local or approved secret manager/keychain storage, not Google Drive-synced planning files or git.
+
+The exact later decision needed before live Papers writes are enabled: approve the writer identity, target Papers space, first record types, redaction level, duplicate/update behavior, and rollback/export procedure for an API-only live Papers write test. Until then: no live Papers writes, no `.205`, no production DB writes, no credential printing, no MCP exposure changes, no notifications/emails, and no commit/push/deploy under this design task.
 
 The separate safe investigation backlog remains: create an AI-Bridge trace for Claude's new reply to Frank, then use this note as the umbrella index for deciding which Digital Office components should be adopted, mirrored, ignored, or replaced by existing KOVAL infrastructure.
 

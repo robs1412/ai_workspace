@@ -1,10 +1,57 @@
 # Codex Session Handoff
 
-Last Updated: 2026-04-16 10:45:58 CDT (Machine: Macmini.lan)
+Last Updated: 2026-04-16 16:47:00 CDT (Machine: Macmini.lan)
 
 Use this file for cross-machine/session handoffs.
 
 ## Current Workflow Handoff
+
+- Workspace/account boundary and macOS permission-prompt policy recorded at `2026-04-16 16:47 CDT`.
+  - Added docs-only guidance that agents should not freely operate outside `/Users/werkstatt` unless Robert gives explicit permission for the task/session/path.
+  - Added Security Guard ownership for cross-machine permission boundaries and macOS permission prompts such as "Control other apps", Automation, Accessibility, Files and Folders, Full Disk Access, Keychain, Screen Recording, and related system/account grants.
+  - Required workers to explain the requesting app/helper, why the permission is needed, whether it is optional, and the effect of declining before asking Robert to grant a macOS permission.
+  - Concrete implementation surfaces identified for a later approved slice: Codex startup prompts, `ws` launcher, Workspaceboard terminal/session helper prompts, MacBook/M4 install docs, shell aliases/wrappers, and board session creation prompts.
+  - Reconciliation note for `674d65dd`: this commit object is not present in `/Users/werkstatt/ai_workspace`, `/Users/werkstatt/workspaceboard`, or any git repository directly under `/Users/werkstatt` after local checks and fetches for the AI Workspace and Workspaceboard repos. This policy slice therefore records the requested boundary as new docs-only guidance rather than modifying or reverting that commit.
+  - No runtime code, launcher, LaunchAgent, SSH config, Keychain, secret, deploy, system permission, or direct worker-injection change was performed.
+
+- AI Workspace TODO hygiene pass completed at `2026-04-16 15:05 CDT`.
+  - Reviewed the active AI Workspace TODO, empty `ToDo-append.md`, handoff notes, and project-hub open index.
+  - Regrouped the open AI Workspace backlog by route and approval boundary so `TODO.md` stays an action queue instead of a transcript.
+  - Moved older verbose Done history into `TODO-done-archive-2026-04-16.md`; `TODO.md` now keeps only concise current closures plus an archive pointer.
+  - Closed stale project-hub records for the Robert-killed Salesreport MemPalace pilot and completed Werkstatt path-unification migration; remaining related work stays under broader AI workstation/sync, auth/session, and module-specific implementation records.
+  - No OPS intake, code implementation, external-system mutation, email send, credential access, live daemon/background polling, commit, push, deploy, or production change was performed.
+
+- Management Planner role-map guidance recorded at `2026-04-16`.
+  - Added docs-only guidance that Task Manager, role-map, organigram, task-management, and project-management docs should use the KOVAL 2026 Management Planner as guide material for management goal framing, accountable owner clarity, visible worker routing, cadence, decision gates, and closure criteria.
+  - Scope was AI Workspace documentation only. No emails, external-system mutations, credential exposure, runtime changes, Workspaceboard code edits, commit, push, deploy, or service restart were performed.
+  - Source-file search note: no local file named or containing `KOVAL 2026 Management Planner` / `2026 Management Planner` / `Management Planner` was found under `/Users/werkstatt` outside private/secret paths during this pass, so the durable note records the planner as requested guide material rather than citing a discovered local source file.
+
+- Completed-code-worker routing policy updated at `2026-04-16 14:35 CDT`.
+  - New directive: completed code-producing workers in git-backed workspaces route to Code and Git Manager for closeout review before commit, push, deploy, cleanup, or closure.
+  - Task Manager and Decision Driver should surface only real human decisions, approval gates, blockers, or ambiguous next steps; routine completion, code-review handoff, git hygiene, and verification status route to Code and Git Manager, Summary Worker, or the owning workspace worker.
+  - Approval/security guardrails remain unchanged: dirty worktree, active-session overlap, overlapping worker edits, destructive git actions, force-push/reset/rebase, live deploy/pull, production impact, and Security Guard triggers still require the existing checks or approvals.
+  - Docs-only policy update. No runtime code, email, secret, monitor, commit, push, deploy, or service change was performed.
+
+- Digital Office Papers projection design expanded at `2026-04-16 14:05 CDT`.
+  - Detail log updated: `project_hub/issues/2026-04-14-digital-office-project-task-work-records-proposal.md`.
+  - The design now defines Markdown/Workspaceboard/OPS-Portal/Papers responsibilities, automatic Papers record candidates, schema/template, stable IDs and duplicate protection, auth/approval gates, write path options, rollback/export, Task Manager vs Decision Driver behavior, existing-content projection, and Security Guard boundaries.
+  - Current approved scope remains docs/no-write only. No live Papers writes, `.205` access, production DB writes, credential printing, MCP exposure changes, notifications/emails, commits, pushes, deploys, or service restarts were performed.
+  - Follow-up completed: the local no-write projection pack was produced under `project_hub/digital-office/`.
+  - Current open decision: choose Google Drive OAuth/token storage policy before any future Drive-backed projection automation. Live Papers writes still need a later explicit decision on writer identity, target Papers space, first record types, redaction level, duplicate/update behavior, and rollback/export procedure.
+
+- Avignon morning summary runtime installed at `2026-04-16 13:28 CDT`.
+  - Robert approved the remaining runtime change after the policy-only pass.
+  - Added runtime script `/Users/admin/.avignon-launch/runtime/scripts/avignon_morning_overview.py` and LaunchAgent `/Users/admin/Library/LaunchAgents/com.koval.avignon-morning-overview.plist`.
+  - The job mirrors Frank's morning-overview pattern where appropriate: Avignon profile, Sonat-only recipient guard, task id/subject duplicate protection against Avignon sent logs, machine-local draft/log paths, and a 06:00 local `StartCalendarInterval`.
+  - It does not create any evening/end-of-day job and does not alter `com.koval.avignon-auto`; the inbox monitor remains on its existing 300-second cadence.
+  - Verification: Python compile passed, plist lint passed, script help loaded, existing `com.koval.avignon-auto` still reports run interval `300 seconds` and last exit `0`, and `launchctl bootstrap/enable` loaded `com.koval.avignon-morning-overview` with `runs = 0`, `last exit code = (never exited)`, `Hour = 6`, `Minute = 0`.
+  - No test email was sent and no secret/credential material was printed.
+
+- Frank/Avignon completion and summary policy aligned at `2026-04-16 12:55 CDT`.
+  - Robert clarified that when Frank or Avignon receives and completes a task, the worker should send one concise completion confirmation stating what was done and that the task is complete.
+  - Default scheduled summary cadence is now morning emails only for both Frank and Avignon; evening roundups/end-of-day summaries are off by default unless Robert explicitly re-approves a specific one-off or recurring evening cadence.
+  - Superseded runtime finding: at 12:55, no `com.koval.avignon-morning-overview` LaunchAgent was installed. Robert approved the follow-up, and it was installed at 13:28 without sending a test email.
+  - No mailbox, send, polling cadence, or credential change was made in the policy pass.
 
 - Workspaceboard remote classic board enabled at `2026-04-16 10:45 CDT` on `Macmini.lan`.
   - Robert requested remote access to the full classic Workspaceboard at `http://192.168.55.17/workspaceboard/` and remote tmux/Terminal launch.

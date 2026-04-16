@@ -1,6 +1,6 @@
 # TODO — avignon
 
-Updated: 2026-04-15 17:47:00 CDT (Machine: Macmini.lan)
+Updated: 2026-04-16 14:54:00 CDT (Machine: Macmini.lan)
 
 ## In Progress
 
@@ -9,6 +9,12 @@ Updated: 2026-04-15 17:47:00 CDT (Machine: Macmini.lan)
   - add Avignon to launcher/docs and Workspaceboard
 ## Done
 
+- Sent Sonat one distributor account review decision email on 2026-04-16 with task id `avignon-distributor-account-review-needed-2026-04-16`; no CRM/contact/list/send changes were made.
+- Installed Avignon morning summary runtime on 2026-04-16 after Robert approval: `com.koval.avignon-morning-overview` is loaded for 06:00 local time, sends Sonat-only via the Avignon profile, preserves duplicate protection, creates no evening roundup, and leaves `com.koval.avignon-auto` at its existing 300-second cadence. Verification used compile/lint/help/launchctl only; no test email was sent.
+- Aligned Avignon completion and summary policy on 2026-04-16: Avignon should send one concise task-specific completion confirmation when a received task is complete; default scheduled summaries should be morning-only; evening/end-of-day roundups are off by default unless Robert explicitly re-approves them. The initial finding that no `com.koval.avignon-morning-overview` LaunchAgent existed was superseded by Robert's approval and the completed runtime install above.
+- Stopped Avignon decision-email loop on 2026-04-16: live runtime `/Users/admin/.avignon-launch/runtime/scripts/avignon_inbox_cycle.py` now records local decision items without emailing Sonat by default, suppresses replies to Avignon decision-needed emails, dedupes ambiguous review items by stable subject key, and treats tracked replies as no-action unless a real approval boundary is found. Consolidated the active decision ledger to one Lander Journal review item and one Google Ads ownership/spend-review item; manual verification found inbox count `0` and sent no email.
+- Added Avignon decision-email routing on 2026-04-15: new Avignon decision items now send concise decision emails to Sonat by default through a shared profile-based helper while still recording the item in `EMAIL_DERIVED_DECISIONS.md`. The helper is central in structure (`Needed`, `Next`, `Decision`, `Reference`) and keeps Frank -> Robert / Avignon -> Sonat routing separate from persona content.
+- Mirrored Frank's tracked-reply correction for Avignon on 2026-04-15: Avignon should answer safe already-approved internal tracked-thread replies directly, copy Sonat/Robert/other internal stakeholders where instructed, and avoid tracked-reply review prompts unless blocked, ambiguous, or gated. The live runtime now extracts HTML-only bodies and classifies safe primary tracked-thread replies as local follow-up instead of primary-review material.
 - Closed Avignon's Angele cleanup direction follow-up on 2026-04-15: Sonat had responded on 2026-04-11 with preservation boundaries and focus areas, the remaining Abby/Jordan/marketing-alias routing work was tracked through Frank, and Robert confirmed he fixed those routing items externally. No new mail, Gmail filter, forwarder, mailbox, Admin, OPS, Portal, or CPanel change was made by Avignon/Codex in this closeout.
 - Closed `avignon-new-hire-training-template-reference-2026-04-12` on 2026-04-15: Sonat's new-hire training email template/reference was logged for future Avignon use and the acknowledgement had already been prepared/sent; no new mail, OPS task, CRM write, or external action was created in this closeout.
 - Sent Sonat an Avignon morning overview on 2026-04-15 at 16:54 CDT, matching Robert's Frank overview format at a safe summary level; sent-log task id `avignon-morning-overview-2026-04-15`.

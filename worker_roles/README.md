@@ -1,13 +1,17 @@
 # Worker Roles Directory
 
 Status: source-of-truth role reference
-Updated: 2026-04-14
+Updated: 2026-04-16
 
 This folder describes the operating roles in the Codex / Claude worker system. Workspaceboard can present these notes, but the role definitions should be maintained here so each worker has a durable job description, call pattern, and boundary.
 
 Primary operating reference:
 
 - `operating-model.md`: role class, exact startup prompts, call signs/routing phrases, approval gates, durable memory surfaces, and BID finance task `#1185` answer-recording rule.
+
+Planning guide material:
+
+- KOVAL 2026 Management Planner: use as guide material when shaping Task Manager, role-map, organigram, task-management, and project-management docs. Treat it as a planning and prioritization reference, not as an automatic approval to change runtime behavior, send messages, mutate external systems, or bypass approval gates.
 
 ## Hierarchical Role Map
 
@@ -65,6 +69,7 @@ Human owners and decision makers sit above the Workspaceboard Task Manager / Sys
 
 ## Shared Rules
 
+- Use the KOVAL 2026 Management Planner as guide material for management workflows: start with the management goal, identify the accountable owner, route work to the right visible worker, keep the decision path explicit, and record only durable next actions or closure notes.
 - Task Manager coordinates; it should not secretly implement module work.
 - Summary Worker summarizes only.
 - Decision Driver pushes next actions and asks concrete decision questions.

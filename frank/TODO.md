@@ -1,6 +1,6 @@
 # TODO — frank
 
-Updated: 2026-04-15 17:39:00 CDT (Machine: Macmini.lan)
+Updated: 2026-04-16 16:52:00 CDT (Machine: Macmini.lan)
 
 ## In Progress
 
@@ -70,6 +70,9 @@ Updated: 2026-04-15 17:39:00 CDT (Machine: Macmini.lan)
 - Add OPS-specific follow-up drafting from selected tasks.
 - Add duplicate protection when merchants resend receipts.
 - Add receipt category heuristics by merchant.
+- Define and approve live Papers lookup/projection for Frank email links.
+  - Current state: local/runtime insertion hook can format supplied Papers URLs, but existing Workspaceboard Papers snapshot is metadata-only and does not provide safe URLs.
+  - Needed before automation: approved Papers source/API/read path, canonical URL field, redaction rules, duplicate behavior, and whether Claude or Workspaceboard owns the projection.
 
 ## Done
 
@@ -78,6 +81,40 @@ Updated: 2026-04-15 17:39:00 CDT (Machine: Macmini.lan)
   - Helper writes local draft previews and `completion-confirmation-log.jsonl`, checks duplicate confirmation identifiers across local dry-run log and sent-log paths, and refuses duplicate confirmations.
   - Verified help, syntax compile, first dry-run draft/log creation, duplicate-skip behavior, and preview-only mode. No email, mailbox filing, polling cadence, LaunchAgent, Papers, runtime send hook, or credential path was touched.
   - Remaining approval before actual sends: exact SMTP/send hook, recipient policy, mailbox filing behavior, credential path, and real sent-log fields.
+- 2026-04-16: Created safe Papers-link insertion hook for Frank emails.
+  - Added runtime helper `/Users/admin/.frank-launch/runtime/scripts/frank_papers_links.py`.
+  - Extended the installed `send_frank_email.py` with opt-in `--papers-link`, `--papers-metadata-file`, and `--papers-context-id` options so approved completion/report bodies can include real Papers URLs when supplied.
+  - Morning overview behavior is unchanged because it has no completed-work section; live Papers lookup/projection remains pending approval.
+  - No email, Papers write/read, LaunchAgent cadence change, inbox mutation, or credential printing was performed.
+- 2026-04-16: Documented Frank completion-confirmation traceability policy.
+  - Current behavior found: inbox automation dedupes by source `Message-ID`, primary instructions/forwards are logged without review spam, and morning overview duplicate-checks by task id or subject/recipient; generalized runtime completion sends are not implemented.
+  - Updated Frank docs so task-specific completion confirmations require a stable OPS/Portal/local task id plus source email or tracked-send id, logging, handled marking, and duplicate suppression.
+  - Docs-only change; no email, mailbox, LaunchAgent, polling cadence, Papers, runtime code, or credential state was changed.
+- 2026-04-16: Documented Frank report path and runtime boundary.
+  - Current scheduled report path is the Mac mini `com.koval.frank-morning-overview` LaunchAgent at 06:00, writing generated morning overview bodies to `/Users/admin/.frank-launch/state/drafts` and logs to `/Users/admin/.frank-launch/state/`.
+  - Policy remains morning overview only by default; task-specific completion confirmations are allowed but are not recurring reports.
+  - No Papers read/write hook, LaunchAgent edit, inbox polling cadence change, mailbox mutation, or credential access was performed.
+- 2026-04-16: Aligned Frank completion and summary policy.
+  - Frank should send one concise task-specific completion confirmation when a received task is complete.
+  - Frank's default scheduled summary cadence is morning overview only; evening/end-of-day roundups are off by default unless Robert explicitly re-approves them.
+  - Verified `com.koval.frank-morning-overview` is loaded at 06:00 and last exited `0`; no runtime or mailbox change was made.
+- 2026-04-16: Sent Claude the data-import/manual XLS validation-order fix handoff.
+  - To: `claude@koval-distillery.com`
+  - Subject: `Claude task: data-import XLS mapping validation order fix`
+  - Sent-log task id: `frank-2026-claude-data-import-xls-validation-order-fix`
+  - Message-ID: `<177636014994.96251.687129627683676686@kovaldistillery.com>`
+  - No data-import code, live imports, DB writes, production data, uploaded XLS files, commit, or push were touched by Frank/Codex.
+- 2026-04-16: Corrected Frank auto-review noise that emailed Robert about Robert's own instructions.
+  - Patched the live Frank runtime to log Robert's instructions, forwards, and tracked corrections for local routing without sending a `Frank inbox review` email back to Robert.
+  - Added sensitive-summary redaction in the live runner, sanitized local runtime automation/stdout logs for credential-style body fragments, verified a manual installed-environment run, and filed 14 already-handled/duplicate INBOX messages to `Handled`.
+  - No outgoing email was sent, no polling cadence/LaunchAgent schedule was changed, and the standing Frank monitor was not closed.
+- 2026-04-15: Added shared decision-email helper to Frank runtime.
+  - The helper uses central profile routing so Frank decisions route to Robert and Avignon decisions route to Sonat while persona content stays separate.
+  - No Frank decision email was sent during this helper install.
+- 2026-04-15: Corrected Frank tracked-reply handling for the Claude AI workspace thread.
+  - Robert clarified that Frank should answer directly and copy Robert/Dmytro where instructed instead of sending tracked-reply review emails unless Frank cannot answer.
+  - Patched the live Frank runtime to read HTML-only assistant replies, log Robert instructions on the Claude thread without re-reviewing them, and answer Claude's Papers-access follow-up directly with Robert and Dmytro copied.
+  - Sent Claude `Re: Thoughts on our AI workspace setup` at 19:06 CDT with Robert and Dmytro copied; verified the runner under the LaunchAgent environment returned no new unseen messages requiring action.
 - 2026-04-15: Closed Frank-side tracking for Sonat's organic/sustainable online magazine concept.
   - Local Frank task id: `frank-2026-sonat-organic-sustainable-magazine`
   - Robert confirmed the work was passed to Claude, so Frank no longer tracks it as active local work.
@@ -110,10 +147,10 @@ Updated: 2026-04-15 17:39:00 CDT (Machine: Macmini.lan)
   - Installed `com.koval.frank-morning-overview` LaunchAgent for daily 06:00 local time. It runs `~/.frank-launch/runtime/scripts/frank_morning_overview.py`, sends only to Robert, and duplicate-checks by task id/subject before sending.
   - Dry-run verification for 2026-04-15 successfully rendered Robert calendar items and OPS task digest content without sending.
   - Filed the source Daily overview email to `Handled` after all requested items were completed/logged.
-- 2026-04-14: Captured Robert's Daily overview format clarification.
+- 2026-04-14: Captured Robert's Daily overview format clarification, superseded for defaults on 2026-04-16.
   - Local Frank task id: `frank-2026-daily-overview-format-clarification`
   - Source: Robert reply to `Daily Overview: Tuesday, April 14`
-  - Captured rule: end-of-day Frank work/status overview is fine at end of day; morning overview should be Robert's personal briefing with upcoming calendar, important `/ops` tasks, priorities, and blockers/follow-ups.
+  - Original captured rule: end-of-day Frank work/status overview was fine at end of day; morning overview should be Robert's personal briefing with upcoming calendar, important `/ops` tasks, priorities, and blockers/follow-ups. Superseding 2026-04-16 default: morning summaries only for both Frank and Avignon; evening/end-of-day roundups require explicit re-approval.
   - Acknowledgement Message-ID: `<177618772112.63529.8537942129380038656@kovaldistillery.com>`
   - Filed source reply to `Handled` after logging.
 - 2026-04-14: Sent Robert a concise Daily overview for Tuesday, April 14 through the approved Frank send helper.

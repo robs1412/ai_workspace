@@ -2,10 +2,10 @@
 
 - Master Incident ID: `AI-INC-20260409-WERKSTATT-PATHS-01`
 - Date Opened: `2026-04-09 09:09:28 CDT`
-- Date Completed:
+- Date Completed: 2026-04-15
 - Owner: `Codex`
 - Priority: `High`
-- Status: `Open`
+- Status: `Completed`
 
 ## Scope
 
@@ -73,6 +73,5 @@
 
 ## Follow-Ups
 
-- Update `~/.bashrc` `ws()` mapping on both machines.
-- Update `workspaceboard` path maps and reinstall its LaunchAgent/runtime on both machines.
-- Update the AI Workspace policy notes to describe `Documents/werkstatt` as the canonical repo root.
+- Closed in favor of the completed `/Users/werkstatt/<repo>` canonical-root migration and the broader AI workstation/sync transition record.
+- Any remaining cross-machine sync or runtime-launcher follow-up belongs under `project_hub/issues/2026-04-12-ai-workstation-sync-transition.md`.

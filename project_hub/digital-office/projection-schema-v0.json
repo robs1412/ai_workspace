@@ -1,0 +1,351 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://koval.local/schemas/digital-office/no-write-papers-projection-v0.json",
+  "title": "Digital Office No-Write Papers Projection Export",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "generated_at",
+    "mode",
+    "approval_gates",
+    "source_policy",
+    "projects",
+    "work_items",
+    "events",
+    "artifacts",
+    "relationships",
+    "duplicate_checks",
+    "storage_decisions"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "digital-office-projection-v0"
+    },
+    "generated_at": {
+      "type": "string"
+    },
+    "mode": {
+      "const": "local_no_write"
+    },
+    "approval_gates": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "enum": [
+          "closed",
+          "open",
+          "not_applicable"
+        ]
+      }
+    },
+    "source_policy": {
+      "type": "object",
+      "required": [
+        "allowed_sources",
+        "excluded_sources",
+        "redaction_rule"
+      ],
+      "properties": {
+        "allowed_sources": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "excluded_sources": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "redaction_rule": {
+          "type": "string"
+        }
+      }
+    },
+    "projects": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/project"
+      }
+    },
+    "work_items": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/work_item"
+      }
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/event"
+      }
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/artifact"
+      }
+    },
+    "relationships": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/relationship"
+      }
+    },
+    "duplicate_checks": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/duplicate_check"
+      }
+    },
+    "storage_decisions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/storage_decision"
+      }
+    }
+  },
+  "$defs": {
+    "source_ref": {
+      "type": "object",
+      "required": [
+        "kind",
+        "uri",
+        "redaction_level"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string"
+        },
+        "uri": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "redaction_level": {
+          "type": "string",
+          "enum": [
+            "public_internal",
+            "private_internal",
+            "secret_redacted"
+          ]
+        }
+      }
+    },
+    "project": {
+      "type": "object",
+      "required": [
+        "id",
+        "title",
+        "status",
+        "source_refs",
+        "approval_state",
+        "security_scope"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "summary": {
+          "type": "string"
+        },
+        "source_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/source_ref"
+          }
+        },
+        "approval_state": {
+          "type": "string"
+        },
+        "security_scope": {
+          "type": "string"
+        }
+      }
+    },
+    "work_item": {
+      "type": "object",
+      "required": [
+        "id",
+        "project_id",
+        "title",
+        "status",
+        "source_system",
+        "stable_aliases",
+        "source_refs"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "project_id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "source_system": {
+          "type": "string"
+        },
+        "stable_aliases": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "source_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/source_ref"
+          }
+        },
+        "current_next_action": {
+          "type": "string"
+        }
+      }
+    },
+    "event": {
+      "type": "object",
+      "required": [
+        "id",
+        "project_id",
+        "event_type",
+        "body",
+        "redaction_level"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "project_id": {
+          "type": "string"
+        },
+        "work_item_id": {
+          "type": "string"
+        },
+        "event_type": {
+          "type": "string"
+        },
+        "body": {
+          "type": "string"
+        },
+        "redaction_level": {
+          "type": "string"
+        }
+      }
+    },
+    "artifact": {
+      "type": "object",
+      "required": [
+        "id",
+        "kind",
+        "uri",
+        "redaction_level"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "project_id": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "uri": {
+          "type": "string"
+        },
+        "content_hash": {
+          "type": "string"
+        },
+        "redaction_level": {
+          "type": "string"
+        }
+      }
+    },
+    "relationship": {
+      "type": "object",
+      "required": [
+        "from",
+        "to",
+        "type"
+      ],
+      "properties": {
+        "from": {
+          "type": "string"
+        },
+        "to": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        }
+      }
+    },
+    "duplicate_check": {
+      "type": "object",
+      "required": [
+        "record_id",
+        "decision",
+        "matched_on"
+      ],
+      "properties": {
+        "record_id": {
+          "type": "string"
+        },
+        "decision": {
+          "type": "string",
+          "enum": [
+            "create",
+            "update_candidate",
+            "skip_duplicate",
+            "blocked_gate"
+          ]
+        },
+        "matched_on": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "storage_decision": {
+      "type": "object",
+      "required": [
+        "id",
+        "status",
+        "question",
+        "recommendation"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "question": {
+          "type": "string"
+        },
+        "recommendation": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

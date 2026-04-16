@@ -1,6 +1,6 @@
 # Frank Cannoli Mail Agent
 
-Last Updated: 2026-04-07 12:08:00 CDT (Machine: Macmini.lan)
+Last Updated: 2026-04-16 16:11:36 CDT (Machine: Macmini.lan)
 
 ## Purpose
 
@@ -24,6 +24,7 @@ This is manual by default. An optional scheduled `launchd` runner now exists for
 - `scripts/frank_autodraft.py`: generates drafts from recent inbox messages using Frank's rules
 - `scripts/frank_portal_receipt.py`: creates Portal receipt records from receipt emails and attaches receipt URLs
 - `scripts/frank_auto_runner.py`: one scheduled inbox-review cycle with dedupe logging and escalation
+- `scripts/frank_papers_links.py`: local formatter for appending verified Papers URLs to approved Frank email bodies
 - `frank/scripts/frank_completion_confirmation.py`: dry-run-only completion confirmation helper; creates a local preview and duplicate-check log, never sends mail
 - `scripts/install_frank_launchagent.sh`: installs a 15-minute local LaunchAgent
 - `scripts/uninstall_frank_launchagent.sh`: removes the LaunchAgent
@@ -59,6 +60,12 @@ Scheduled loop:
 4. Escalate suspicious mail and unclear messages to the configured primary recipient.
 5. Record one decision per source email in `frank/automation-log.jsonl`.
 
+Current behavior found on 2026-04-16:
+
+- `frank_auto_runner.py` reads unseen mail and skips source messages already present in the automation log by normalized `Message-ID`.
+- Primary-recipient instructions, forwards, and tracked corrections are logged for local routing instead of generating another `Frank inbox review` email back to Robert.
+- `frank_morning_overview.py` sends only the approved morning overview and duplicate-checks by generated overview task id or matching subject/recipient in the sent logs.
+- There is no approved generalized runtime that sends completion confirmations for every completed task or writes to Papers. Those remain manual/policy behavior unless Robert approves a specific runtime slice.
 
 Completion confirmation rule:
 
@@ -115,6 +122,20 @@ python3 scripts/send_frank_email.py \
   --var list_name="2026 Company Party Invite" \
   --task-id frank-2026-001
 ```
+
+Append a verified Papers link to an approved completion/report body:
+
+```bash
+python3 scripts/send_frank_email.py \
+  --to robert@kovaldistillery.com \
+  --subject "Task complete: example" \
+  --body-file /path/to/approved-body.txt \
+  --task-id frank-example-task \
+  --papers-link "https://papers.koval.lan/example-record|Papers work record" \
+  --dry-run
+```
+
+The Papers hook only formats explicitly supplied or approved metadata URLs for `papers.koval` / `papers.koval.lan`. It does not create Papers records, read live Papers, send unless the normal send command is run without `--dry-run`, or change the LaunchAgent schedule.
 
 Check recent inbox messages:
 
