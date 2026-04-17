@@ -6,6 +6,13 @@ Use this file for cross-machine/session handoffs.
 
 ## Current Workflow Handoff
 
+- Mac mini Workspaceboard runtime mitigation at `2026-04-17 16:25 CDT` from `Mac.lan`.
+  - Incident: `Macmini.lan` / `.17` was temporarily unreachable from M4, then returned after Robert opened Codex locally.
+  - Confirmed Workspaceboard risk: launch logs showed a prior `node-pty` terminal attach crash while the runtime used Node `v25.9.0`; `node-pty` loads cleanly under `/usr/local/opt/node@24/bin/node`.
+  - Mitigation applied on `Macmini.lan`: `/Users/werkstatt/workspaceboard/.nvmrc` pinned back to `24`, installer now honors Homebrew `node@<major>` from `.nvmrc`, and `com.koval.workspaceboard` was reinstalled on port `17878`.
+  - Verification: live process uses `/usr/local/opt/node@24/bin/node`, runtime `.node-version` is `v24.14.1`, `/api/status` is healthy, WebSocket terminal attach returned `ready`, manual decision sweep succeeded, and `server/test/session-status.test.js` passed with `23` tests.
+  - Durable source fix: Workspaceboard commit `c1c47d1` (`Pin Workspaceboard runtime to Node 24`) was pushed to `origin/main`; unrelated dirty Workspaceboard worktree edits were left untouched.
+
 - MacBook/M4/Mac mini role clarification recorded at `2026-04-15 18:35 CDT` on `Macmini.lan`.
   - Keep `ws ai` local on Mac mini, M4, and MacBook as `/Users/werkstatt/ai_workspace`; the normal sync path is git/GitHub, not Google Drive.
   - 2018 Mac mini (`Macmini.lan`, `.17`) is the main AI worker/station: keep Workspaceboard/Frank/Avignon/long-running Codex worker and automation hosting there unless Robert explicitly changes the role split.

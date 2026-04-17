@@ -1,7 +1,13 @@
 # AI Workspace Project Hub
-Last Updated: 2026-04-14 12:40:10 CDT (Machine: Macmini.lan)
+Last Updated: 2026-04-17 16:09:51 CDT (Machine: Mac.lan)
 
 ## Open
+
+- **2026-04-15 Gmail Readonly Export CLI**
+  - Master ID: `AI-INC-20260415-GMAIL-READONLY-EXPORT-CLI-01`
+  - Detail log: `project_hub/issues/2026-04-15-gmail-readonly-export-cli.md`
+  - Repos: `ai_workspace`, local Google OAuth/Gmail read-only token state
+  - Status: CLI implemented; ERTC discovery export completed from local Gmail archive; Oleg Gmail exported 420 messages plus 139 non-signature attachments, Sebastian Gmail exported 153 messages plus 56 non-signature attachments, and Mark Gmail exported 499 messages plus 111 non-signature attachments with CSV manifests for review
 
 - **2026-04-14 Macmini, M4, And MacBook SSH Key Exchange**
   - Master ID: `AI-INC-20260414-MACMINI-M4-SSH-KEY-EXCHANGE-01`
@@ -85,6 +91,12 @@ Last Updated: 2026-04-14 12:40:10 CDT (Machine: Macmini.lan)
   - Repos: `login` (shared SSO/logout layer affecting `portal` and `ops`)
 
 ## Completed
+
+- **2026-04-17 Macmini Workspaceboard Unreachable**
+  - Master ID: `AI-INC-20260417-MACMINI-WORKSPACEBOARD-UNREACHABLE-01`
+  - Detail log: `project_hub/issues/2026-04-17-macmini-workspaceboard-unreachable.md`
+  - Repos: `ai_workspace`, `workspaceboard`, Workspaceboard host state on `Macmini.lan`
+  - Status: completed / mitigated; `.17` is reachable again, Workspaceboard was reinstalled to run on Node `v24.14.1`, `/api/status` is healthy, terminal WebSocket attach returned `ready`, focused status tests passed, and Workspaceboard commit `c1c47d1` was pushed.
 
 - **2026-04-14 Codex Daily Check-In Notifications**
   - Master ID: `AI-INC-20260414-CODEX-DAILY-CHECKIN-NOTIFICATIONS-01`
