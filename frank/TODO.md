@@ -1,6 +1,6 @@
 # TODO — frank
 
-Updated: 2026-04-17 10:34 CDT (Machine: Macmini.lan)
+Updated: 2026-04-17 10:46 CDT (Machine: Macmini.lan)
 
 ## In Progress
 
@@ -48,21 +48,18 @@ Updated: 2026-04-17 10:34 CDT (Machine: Macmini.lan)
 
 ## Backlog
 
-- Define safe PR/media-opportunity workflow for Sonat's Featured.com `PR pathways` request.
-  - Local Frank task id: `frank-2026-sonat-pr-pathways-featured`
-  - Source: Sonat email to Frank, subject `PR pathways`, dated 2026-04-11.
-  - Request: evaluate `https://featured.com/experts/questions?tab=questions` as a platform for reporter comments and possible automation around KOVAL, Thresh and Winnow, distilling approach, and organic focus.
-  - Current state: source email was captured, Sonat's acknowledgement was logged/filed, and no external pitching or automated outreach has started.
-  - Next step: define an internal workflow, approval gate, and owner path before any external response or automation.
 - Expand from draft-only to narrow auto-send rules after validation.
   - Keep the Avignon mirror rule as part of any future assistant-behavior implementation so Sonat's assistant path does not fall behind Frank's.
 - Company party member invite.
+  - Blocked in this pass: local `README_AGENT.md` contains only a sample command/template path for a tracked task email, but no current source message, recipient list, approval, exact send path, or permission to send. Keep open until Robert provides/approves the concrete invite action.
 - Define and approve live Papers lookup/projection for Frank email links.
   - Current state: local/runtime insertion hook can format supplied Papers URLs, but existing Workspaceboard Papers snapshot is metadata-only and does not provide safe URLs.
   - Needed before automation: approved Papers source/API/read path, canonical URL field, redaction rules, duplicate behavior, and whether Claude or Workspaceboard owns the projection.
 
 ## Done
 
+- 2026-04-17: Defined safe PR/media-opportunity workflow for Sonat's Featured.com `PR pathways` request.
+  - Created `featured-pr-pathways-workflow.md` with approval gates, owner path, intake checklist, risk triage, draft format, duplicate protection, and completion criteria. This completes the local workflow-definition task only; no external pitching, platform account work, automation, email send, mailbox mutation, credential access, or outreach was performed.
 - 2026-04-17: Reduced stale Frank communication TODO queue.
   - Grouped the standing OPS/Portal/receipt monitor work, grouped receipt duplicate/category follow-ups under that parent, grouped four related mail-routing audit tasks under one parent, and folded the Avignon mirror reminder into the future assistant-behavior implementation note. Closed the stale `Introduce Frank to Sonat` reminder because local TODO/HANDOFF evidence shows Frank has already sent Sonat task-capture/status communications and preserved Sonat-facing context.
 - 2026-04-17: Corrected Frank EOD schedule and signature.
