@@ -1,6 +1,6 @@
 # TODO — frank
 
-Updated: 2026-04-17 10:46 CDT (Machine: Macmini.lan)
+Updated: 2026-04-17 10:59 CDT (Machine: Macmini.lan)
 
 ## In Progress
 
@@ -20,31 +20,6 @@ Updated: 2026-04-17 10:46 CDT (Machine: Macmini.lan)
 - Finish the Mitch account archive/imapsync transfer.
   - Destination IMAP login for `tastingroom@kovaldistillery.com` now works with the secured secret reference.
   - Next step: rerun controlled `imapsync` for the incomplete Mitch archive folders and verify final destination counts.
-- 2026-04-10: Complete mail-routing audit and gap map.
-  - OPS/Portal task IDs: `366218`, `366219`, `366220`, `366221`
-  - Due: `2026-04-18`
-  - CPanel forwarders for `koval-distillery.com`:
-    - check all forwarders on CPanel for domain `koval-distillery.com`
-    - make sure all old users and general forwarders (`sales@`, `marketing@`) are somewhat covered and don't just fail
-    - current CPanel examples noted:
-      - `marketing@koval-distillery.com -> abby.boler@kovaldistillery.com`
-      - `marketing@koval-distillery.com -> ashley.mccarron@kovaldistillery.com`
-  - Google default routing for `kovaldistillery.com`:
-    - check default routing in Google for `kovaldistillery.com`
-    - also check users in Google (`additional E-mail accounts`)
-    - Sonat now gets both marketing aliases
-    - make sure no emails are lost
-    - current strategy is to add a default routing in Gmail for users who only have an account at `@koval-distillery.com`
-    - Robert probably needs to provide export files because Codex can't log into Google Admin directly
-  - Mail-routing table and gap analysis:
-    - document where routing happens, what happens now, where the gaps are, and how to identify failures
-    - make a list of general forwarders (`sales@`, `marketing@`, `all@`) so we can have a map and know how to communicate
-  - Group-mail strategy across Portal, Forge, and Lists:
-    - audit all users and group relation
-    - we may have switched to using group definition in Portal for mailings instead of manually creating forwarders in CPanel
-    - delete old email accounts in CPanel and forwarders that are no longer needed only after review/approval
-    - tie this into `forge` / `lists` because communication to groups should really happen there
-    - check the domain interaction between `koval-distillery.com` and `kovaldistillery.com`
 
 ## Backlog
 
@@ -58,6 +33,10 @@ Updated: 2026-04-17 10:46 CDT (Machine: Macmini.lan)
 
 ## Done
 
+- 2026-04-17: Produced local mail-routing audit and gap map.
+  - Created `mail-routing-audit-gap-map.md` for OPS/Portal tasks `366218`, `366219`, `366220`, and `366221`.
+  - Documented known routing layers, address families, local evidence, gaps, failure signals, export needs, and a conservative target model for CPanel, Google routing, Portal, Forge, and Lists.
+  - Docs/TODO only: no email, mailbox/admin login, credential access, routing change, forwarder deletion, LaunchAgent edit, or external system mutation was performed.
 - 2026-04-17: Defined safe PR/media-opportunity workflow for Sonat's Featured.com `PR pathways` request.
   - Created `featured-pr-pathways-workflow.md` with approval gates, owner path, intake checklist, risk triage, draft format, duplicate protection, and completion criteria. This completes the local workflow-definition task only; no external pitching, platform account work, automation, email send, mailbox mutation, credential access, or outreach was performed.
 - 2026-04-17: Reduced stale Frank communication TODO queue.

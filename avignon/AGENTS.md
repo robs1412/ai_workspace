@@ -1,6 +1,6 @@
 # AGENTS.md — avignon Workspace
 
-Last Updated: 2026-04-16 12:55:00 CDT (Machine: Macmini.lan)
+Last Updated: 2026-04-17 10:59 CDT (Machine: Macmini.lan)
 
 Scope: Applies to everything under `avignon/`.
 
@@ -36,6 +36,16 @@ This workspace is dedicated to Avignon Rose acting as Sonat's assistant / chief 
 - Unclear, suspicious, or policy-conflicting messages must escalate to `sonat@kovaldistillery.com`, except Robert/security/admin approval issues route to Robert or Security Guard as appropriate.
 - Start Avignon work from the `avignon/` workspace root when practical so the Codex sidebar/board maps this session to the Avignon workspace.
 - Keep the session in `avignon/` unless Robert or Sonat explicitly redirects the work to another workspace.
+
+## Local Setup And TODO Conventions
+
+- Canonical local workspace root: `/Users/werkstatt/ai_workspace/avignon`.
+- Use this workspace for Avignon role docs, local TODO/HANDOFF records, persona references, decision ledgers, and Avignon-specific communication conventions.
+- Do not use this workspace for hidden multi-step implementation when another module owns the work. Route CRM/import work to `importer`, sales-list or market-analysis work to `salesreport`, Portal work to `portal`, and general cross-workspace coordination to `ai`.
+- Keep the standing Avignon inbox monitor distinct from visible worker sessions. The monitor may classify, route, log, and file; substantive work should have a visible worker/session or explicit local docs task.
+- Keep `TODO.md` as an action queue, not an audit log. Remove finished items from open sections and add one concise Done entry for real closure.
+- Record durable setup, policy, or routing changes in `HANDOFF.md`; record deduped email-derived decisions in `EMAIL_DERIVED_DECISIONS.md`.
+- This workspace's setup/conventions baseline is docs-local. Launcher, Workspaceboard runtime, LaunchAgent, mailbox, credential, send-path, and monitor-cadence changes require separate explicit approval.
 
 ## Report Path And Policy
 

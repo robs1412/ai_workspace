@@ -1,14 +1,14 @@
 # TODO — avignon
 
-Updated: 2026-04-17 10:11 CDT (Machine: Macmini.lan)
+Updated: 2026-04-17 10:59 CDT (Machine: Macmini.lan)
 
 ## In Progress
 
-- Initial Avignon setup:
-  - scaffold workspace files and operating rules
-  - add Avignon to launcher/docs and Workspaceboard
+No open items.
+
 ## Done
 
+- Closed the remaining Avignon setup/conventions docs task on 2026-04-17: `README.md`, `AGENTS.md`, and `HANDOFF.md` now record the canonical Avignon workspace root, visible-worker versus standing-monitor boundary, task/follow-up conventions, stable source traceability, routing rules, TODO hygiene, and explicit docs-only/runtime boundary. No email, mailbox, runtime, LaunchAgent, credential, Workspaceboard, or launcher changes were made; `ws` was not available in the non-interactive shell, so launcher behavior was not runtime-verified.
 - Mirrored the relevant safe Frank workflow documentation into Avignon on 2026-04-17: added Avignon-specific completion traceability, visible-worker communication intake, exception-only inbox-review prompts, Sonat-specific approval gates, and the boundary that Frank's Robert-approved 18:00/EOD reporting and Papers/runtime hooks are not Avignon-approved. This folds the standalone mirror backlog into ongoing Avignon setup/conventions; docs/TODO only, with no email, mailbox, runtime, credential, LaunchAgent, or monitor-cadence changes.
 - Sent Sonat one distributor account review decision email on 2026-04-16 with task id `avignon-distributor-account-review-needed-2026-04-16`; no CRM/contact/list/send changes were made.
 - Installed Avignon morning summary runtime on 2026-04-16 after Robert approval: `com.koval.avignon-morning-overview` is loaded for 06:00 local time, sends Sonat-only via the Avignon profile, preserves duplicate protection, creates no evening roundup, and leaves `com.koval.avignon-auto` at its existing 300-second cadence. Verification used compile/lint/help/launchctl only; no test email was sent.
@@ -36,4 +36,4 @@ Updated: 2026-04-17 10:11 CDT (Machine: Macmini.lan)
 
 ## Backlog
 
-- Establish Avignon mailbox triage, task, and follow-up conventions for Sonat.
+No open items.
