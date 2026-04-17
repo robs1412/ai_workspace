@@ -1,6 +1,6 @@
 # TODO — ai_workspace
 
-Updated: 2026-04-17 09:22 CDT (Machine: Macmini.lan)
+Updated: 2026-04-17 10:24 CDT (Machine: Macmini.lan)
 
 ## In Progress
 
@@ -38,30 +38,15 @@ _No active AI Workspace implementation items._
 
 ## Backlog
 
-- OPS/outreach implementation after the current decisions are approved.
-  - Scope: in-house outreach events module, Events + Market Events parity, linked shifts, account/login/activity linkage, Connecteam replacement continuation, and OPS market improvements.
-  - Route: `ws ops` worker with Code and Git Manager preflight; involve `ws sales` for Salesreport consumption shape; involve Security Guard only if auth/access or production data mutation enters scope.
-
-- Lists/Forge/communications follow-up after source access is approved.
-  - Scope: PHPList legacy send-history read-only inventory/cleanup planning and signup recurring checks from approved Shopify/Square exports/API surfaces.
-  - Route: `ws lists` / `ws forge`; no source-system access, credential handling, production DB read/export, or mutation until approved.
-
-- Salesreport/BID/importer/analytics implementation after owner and data contracts are approved.
-  - Scope: web analytics funnel reporting, Google Ads account audit, Salesreport adoption/access follow-ups, recurring sales/data operations, and distributor account report/cleanup workflow.
-  - Route: `ws sales`, with `ws importer`, `ws bid`, `ws portal`, or `ws ops` involved only for their owned cadences or approved mutation surfaces.
-
-- Portal/login/activity reporting implementation after definitions and Security Guard approval.
-  - Scope: OPS <-> Portal SSO/login persistence, next-day logout behavior, Portal production audit enhancements, extended modification trails, prior-month edit report, shipped-vs-bottled mismatch report, and `<2000 lb` grain/product mismatch logic.
-  - Route: `ws login` / `ws portal` with Code and Git Manager; Security Guard required for auth/session work.
-
-- IT/security/workstation reviews after access or exports are available.
-  - Scope: IT planning docs and GitLab transfer/deprecation plan, Google Postmaster monitoring, MacBook wake-cause review, and related read-only diagnostics.
-  - Route: read-only review only until authenticated access, reachable machine state, or supplied exports are available; no live Papers writes, `.205` work, admin/account changes, or system-setting changes without explicit approval.
+- Source-owned implementation and review continuations resume only after the matching Waiting-family blocker is cleared.
+  - Route implementation from the relevant blocker above into the owning workspace (`ws ops`, `ws lists`, `ws forge`, `ws sales`, `ws importer`, `ws bid`, `ws portal`, `ws login`, or read-only IT/security review) with Code and Git Manager preflight where code or git-backed closeout is involved.
+  - Keep source-workspace-specific backlog in the owning workspace once its commit/docs reference is recorded above; do not expand AI Workspace TODO with separate implementation bullets for OPS/outreach, Lists/Forge communications, Salesreport/BID/importer/analytics, Portal/login/activity reporting, or IT/security/workstation reviews.
+  - Preserve the approval gates from the matching Waiting family: no credentials, external sends, production DB/export access, source-system API access, auth/session changes, live data mutation, deploy, cleanup, or system-setting changes until explicitly approved.
 
 ## Done
 
 - **2026-04-17** AI Workspace TODO count-reduction audit completed.
-  - Compressed duplicate waiting/backlog entries into grouped blocker families, reduced verbose Done/audit detail in the active queue, and recorded the count policy in `HANDOFF.md`. Scope stayed docs-only.
+  - Compressed duplicate waiting/backlog entries into grouped blocker families, reduced verbose Done/audit detail in the active queue, and recorded the count policy in `HANDOFF.md`. Follow-up hygiene collapsed source-workspace implementation backlog into one source-owned continuation family. Scope stayed docs-only.
 
 - **2026-04-16** Current planning/source/access closeouts compressed into active blockers and grouped future slices.
   - Source refs remain in the Waiting and Backlog sub-bullets above, `HANDOFF.md`, source-workspace docs, and project-hub notes. This includes OPS, Lists, Login, Portal, Salesreport, Google Postmaster, IT Papers, Google Ads, MacBook wake-cause, and web analytics readiness work from 2026-04-16.

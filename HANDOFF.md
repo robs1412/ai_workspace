@@ -1,10 +1,17 @@
 # Codex Session Handoff
 
-Last Updated: 2026-04-17 09:22 CDT (Machine: Macmini.lan)
+Last Updated: 2026-04-17 10:24 CDT (Machine: Macmini.lan)
 
 Use this file for cross-machine/session handoffs.
 
 ## Current Workflow Handoff
+
+- AI Workspace TODO source-owned backlog reduction completed at `2026-04-17 10:24 CDT`.
+  - Starting state for this pass: clean git status, `git pull --ff-only` already up to date, empty append queue, and `TODO.md` at `13` top-level bullets (`4` Waiting, `5` Backlog, `4` Done; open/actionable `9` Waiting+Backlog).
+  - Reduced only AI-level TODO structure. The five source-workspace-specific Backlog bullets were collapsed into one source-owned continuation family because the specific source commits/docs/sessions and approval blockers are already preserved under the four Waiting families.
+  - Result after this pass: `TODO.md` has `9` top-level bullets (`4` Waiting, `1` Backlog, `4` Done; open/actionable `5` Waiting+Backlog). The remaining open AI items are grouped blocker families plus one routing/backlog family; detailed implementation backlog should stay in the owning source workspace once the matching blocker clears.
+  - Route this docs-only closeout to Code and Git Manager for final diff/check review. Do not commit directly from the implementation worker.
+  - Scope stayed `/Users/werkstatt/ai_workspace` docs-only. No emails, OPS intake, source workspace edits, runtime changes, deploys, external systems, credentials, mailbox state, monitor closure, commit, or push was performed.
 
 - AI Workspace TODO count-reduction audit completed at `2026-04-17 09:22 CDT`.
   - Robert asked why a full day of work appeared to increase ToDos from `74` to `93`. The local `TODO.md` history showed the same pattern at the file level: `a704550` had `33` top-level bullets (`waiting 1`, `backlog 16`, `done 16`), `adefd16` had `49` (`waiting 15`, `backlog 13`, `done 21`), and pre-audit `HEAD 5baa8bb` had `48` (`waiting 14`, `backlog 13`, `done 21`).
