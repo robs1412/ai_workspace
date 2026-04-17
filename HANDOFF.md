@@ -1,35 +1,246 @@
 # Codex Session Handoff
 
-Last Updated: 2026-04-15 18:35:52 CDT (Machine: Macmini.lan)
+Last Updated: 2026-04-17 10:24 CDT (Machine: Macmini.lan)
 
 Use this file for cross-machine/session handoffs.
 
 ## Current Workflow Handoff
 
-- AI transfer gate installed on M4 at `2026-04-17 16:38 CDT` from `Mac.lan`.
-  - Purpose: `.17` can fetch a file from the M4 only after Robert creates a short-lived one-time grant and code locally on the M4.
-  - Receiver script: `/Users/werkstatt/ai_workspace/scripts/ai_transfer_gate.py`; Mac mini helper: `/Users/werkstatt/ai_workspace/scripts/ai_transfer_fetch.py`.
-  - User-facing M4 approval launcher: double-click `/Users/werkstatt/ai_workspace/scripts/approve_ai_fetch.command`; it opens a file picker and copies the grant id/code to the clipboard.
-  - User-facing Mac mini fetch wrapper: `/Users/werkstatt/ai_workspace/scripts/fetch_from_m4.sh <grant_id> <output_path>`.
-  - Always-allowed M4 shared folder: `/Users/kovaladmin/Downloads - shared`. Files there can be fetched from `.17` with `/Users/werkstatt/ai_workspace/scripts/fetch_from_m4.sh --shared <relative_file_path> <output_path>`; files or folders can be fetched as `.tar.gz` with `--shared-archive <relative_path> <output_tar_gz>`.
-  - M4 `authorized_keys` backup before restriction: `/Users/kovaladmin/.ssh/authorized_keys.bak.20260417163618`.
-  - Replaced only the matching `macmini-to-kovaladmin` public-key line with a forced command restricted by `from="192.168.55.17"`, `restrict`, no forwarding, no PTY, and `/Users/werkstatt/ai_workspace/scripts/ai_transfer_gate.py serve`.
-  - Verification: direct shell from `.17` to M4 now fails at the gate; a temporary one-time approved fetch succeeded and matched source hash; consumed grants cannot be reused; shared-folder list/file/archive fetches succeeded; a `../.ssh/authorized_keys` escape attempt was rejected.
-  - MacBook is still pending because SSH timed out at `192.168.55.38`, `192.168.55.44`, and current mDNS `192.168.55.11`. Mac mini `/Users/werkstatt/workspaceboard/TODO.md` has a backlog note to install the same gate and `Downloads - shared` behavior on MacBook once reachable.
-  - Project log: `project_hub/issues/2026-04-17-ai-transfer-gate.md`.
+- AI Workspace TODO source-owned backlog reduction completed at `2026-04-17 10:24 CDT`.
+  - Starting state for this pass: clean git status, `git pull --ff-only` already up to date, empty append queue, and `TODO.md` at `13` top-level bullets (`4` Waiting, `5` Backlog, `4` Done; open/actionable `9` Waiting+Backlog).
+  - Reduced only AI-level TODO structure. The five source-workspace-specific Backlog bullets were collapsed into one source-owned continuation family because the specific source commits/docs/sessions and approval blockers are already preserved under the four Waiting families.
+  - Result after this pass: `TODO.md` has `9` top-level bullets (`4` Waiting, `1` Backlog, `4` Done; open/actionable `5` Waiting+Backlog). The remaining open AI items are grouped blocker families plus one routing/backlog family; detailed implementation backlog should stay in the owning source workspace once the matching blocker clears.
+  - Route this docs-only closeout to Code and Git Manager for final diff/check review. Do not commit directly from the implementation worker.
+  - Scope stayed `/Users/werkstatt/ai_workspace` docs-only. No emails, OPS intake, source workspace edits, runtime changes, deploys, external systems, credentials, mailbox state, monitor closure, commit, or push was performed.
 
-- Mac mini Workspaceboard runtime mitigation at `2026-04-17 16:25 CDT` from `Mac.lan`.
-  - Incident: `Macmini.lan` / `.17` was temporarily unreachable from M4, then returned after Robert opened Codex locally.
-  - Confirmed Workspaceboard risk: launch logs showed a prior `node-pty` terminal attach crash while the runtime used Node `v25.9.0`; `node-pty` loads cleanly under `/usr/local/opt/node@24/bin/node`.
-  - Mitigation applied on `Macmini.lan`: `/Users/werkstatt/workspaceboard/.nvmrc` pinned back to `24`, installer now honors Homebrew `node@<major>` from `.nvmrc`, and `com.koval.workspaceboard` was reinstalled on port `17878`.
-  - Verification: live process uses `/usr/local/opt/node@24/bin/node`, runtime `.node-version` is `v24.14.1`, `/api/status` is healthy, WebSocket terminal attach returned `ready`, manual decision sweep succeeded, and `server/test/session-status.test.js` passed with `23` tests.
-  - Durable source fix: Workspaceboard commit `c1c47d1` (`Pin Workspaceboard runtime to Node 24`) was pushed to `origin/main`; unrelated dirty Workspaceboard worktree edits were left untouched.
+- AI Workspace TODO count-reduction audit completed at `2026-04-17 09:22 CDT`.
+  - Robert asked why a full day of work appeared to increase ToDos from `74` to `93`. The local `TODO.md` history showed the same pattern at the file level: `a704550` had `33` top-level bullets (`waiting 1`, `backlog 16`, `done 16`), `adefd16` had `49` (`waiting 15`, `backlog 13`, `done 21`), and pre-audit `HEAD 5baa8bb` had `48` (`waiting 14`, `backlog 13`, `done 21`).
+  - Cause: workers split vague backlog into explicit approval blockers and final access checks, then kept related future implementation slices in Backlog. That created duplicate top-level entries for the same source item: one Waiting blocker and one Backlog next slice. Done also carried detailed audit paragraphs that belong in `HANDOFF.md`, `project_hub/`, source-workspace docs, or git history, not in the active queue. Robert's board count may also include review-ready sessions parked for review, so it can grow even when `TODO.md` is being closed correctly.
+  - New count policy: `TODO.md` counts actionable work packets and real human decisions, not every derived blocker, session, verification note, or audit detail. Use one clear `Waiting for Next Step` list for grouped blocker families, one grouped `Backlog` for future implementation families, and concise `Done` entries. Keep source commits, session ids, docs, and links as sub-bullets or in `HANDOFF.md` / project-hub logs. Do not re-add verbose completed-work transcripts to active TODO.
+  - Result: `TODO.md` was reduced from `48` top-level bullets (`14` Waiting, `13` Backlog, `21` Done) to `13` top-level bullets (`4` Waiting, `5` Backlog, `4` Done). Open/actionable count is now `9` top-level Waiting+Backlog families instead of `27`; the underlying manual blockers are preserved as sub-bullets with gates.
+  - Scope stayed AI Workspace docs-only. No emails, OPS intake, source workspace edits, runtime changes, deploys, external systems, credentials, mailbox state, board session closure, commit, or push was performed. Existing dirty Frank worker files were left untouched.
+
+- Event strategy / COT / Connecteam replacement source unblock reconciled at `2026-04-16 19:53 CDT`.
+  - Robert supplied the source Markdown path: `/Users/robert/Library/CloudStorage/GoogleDrive-robert@kovaldistillery.com/My Drive/Downloads - shared/Implentation of Scheduling  .md`.
+  - Direct retrieval was attempted read-only: the exact `/Users/robert/...` path was absent locally, `MacBookPro.lan` did not resolve, and SSH to `robert@192.168.55.180` timed out.
+  - Read the already-incorporated OPS source context instead: `ops/docs/2026-04-16-outreach-readiness-report.md` records the supplemental scheduling source was retrieved read-only from the M4 on 2026-04-16 and that one credential line was excluded; `ops/docs/2026-04-12-outreach-events-workflow-manual.md` contains the relevant non-sensitive workflow context.
+  - Updated `project_hub/issues/2026-04-16-event-strategy-cot-connecteam-review.md`, `project_hub/INDEX.md`, and `TODO.md` so the original Google Doc/source blocker is closed for AI Workspace planning. Remaining OPS decisions are still active: final sync/live schedule/notifications/auth/canonical-rule approval, zero-shift rule, notification groups, claim/unclaim behavior, reminders, final Connecteam re-sync/export timing, reviewed user crosswalk, and canonical account/activity rules.
+  - Scope stayed AI Workspace docs-only. No source files, mailbox state, Google Docs, OPS/Papers/Connecteam data, notifications, credentials, code, commits, deploys, or runtime services were mutated.
+
+- Final access/source blocker reconciliation completed at `2026-04-16 18:13 CDT`.
+  - Recorded four final-output-only checks in `TODO.md` without expanding audit logs: Google Postmaster session `6ee02528`, IT Papers GitLab planning session `e6071659`, Google Ads session `258b4242`, and web analytics funnel readiness session `d73ed365`.
+  - New blockers: Postmaster Tools access/export for `kovaldistillery.com`; Papers/Portal auth or supplied IT planning exports; Google Ads login/admin access or approved export/screenshot/report; analytics source of truth, scoped surfaces, funnel-stage definition, export owner, and import contract.
+  - Backlog entries now point to those blockers and keep mutation boundaries explicit, including that `saved_reports` would write DB tables/runs and is outside the no-mutation boundary.
+  - Current real manual blocker count: `15` active Waiting items. This reaches the configured threshold for asking Robert.
+  - Scope stayed AI Workspace docs-only. No external access, credentials, source workspace reads, OPS intake, email, live data, deploys, or runtime services were accessed.
+
+- AI Workspace TODO/HANDOFF second source-closeout reconciliation completed at `2026-04-16 18:07 CDT`.
+  - Reconciled the latest completed source plans into `TODO.md`: MacBook wake blocker commit `02d5dc7`, lists PHPList inventory plan commit `075cd358b784e47c246ef4f5fbd02cfab66facdd`, and salesreport distributor cleanup report workflow commit `dd58319202d308f86c8e20f2cf31b12413b0ddae`.
+  - Updated the PHPList legacy send-history backlog item so the completed inventory plan is recorded and the next slice is only an approved sanitized export or approved read-only DB/export inventory; no mutation is allowed until inventory review.
+  - Updated the distributor cleanup backlog item so the completed report workflow is recorded and the next slice is gated on production read/export approval plus mutation owner/source-of-truth definition.
+  - Current real manual blocker count: `11` active Waiting items. New blockers added in this pass: PHPList approved sanitized export/read-only path before real counts, and Salesreport distributor cleanup production read/export plus mutation ownership/source-of-truth.
+  - Scope stayed AI Workspace docs-only. No external systems, credentials, source workspaces, OPS intake, email, live data, deploys, or runtime services were accessed.
+
+- MacBook power-management wake-cause review blocked at `2026-04-16 18:02 CDT`.
+  - Completed source commit: AI Workspace `02d5dc7`.
+  - Scope stayed read-only coordination from AI Workspace. Target was `MacBookPro.lan` / `192.168.55.180`.
+  - Commands attempted: DNS/hostname reachability, ICMP ping, and batch-mode SSH with publickey/hostbased auth only.
+  - Result: `MacBookPro.lan` did not resolve, `192.168.55.180` returned 100% ping loss, and SSH to `192.168.55.180:22` timed out. No remote `pmset` / power-management logs were accessible.
+  - No credentials were requested or printed, and no daemon, system setting, power setting, LaunchAgent, SSH config, file deletion, or machine state change was performed. TODO now records this as a Waiting blocker.
+
+- AI Workspace TODO/HANDOFF source-closeout reconciliation completed at `2026-04-16 17:57 CDT`.
+  - Reconciled completed planning/review/source-control items from AI Workspace and source workspaces so they no longer remain as raw open backlog.
+  - Source closeouts recorded in `TODO.md`: AI Workspace event strategy commit `128c5f1`; ops commits `18d32a04ddaf5257214d62340eda7e044a1ef3d8` and `478593f3329c49aec9a30ce0464f2f507394a60e`; lists commit `e2ce6afd8706372d2375b7dd50c4c4a0c63091e4`; login commit `ad6a19760d626e3e709122d311e247187e3df72b`; portal commit `2e076c6c8e47ce54140ddc95704f574adb9f8333`; salesreport commit `8004fd93f97ccc0f65db8f4755523facb1370271`.
+  - Preserved true next slices in Backlog: OPS outreach events module read-only/design continuation, OPS market improvements after product decisions, signup recurring checks after source access approval, SSO persistence after logout policy/Security Guard approval, Portal production audit implementation after definitions, and recurring sales/data operations after owner handoffs.
+  - Current real manual blocker count: `8` active Waiting items: event strategy Google Doc access/export; OPS outreach final sync/live schedule/notifications/auth/canonical-rule approval; OPS market owner/product rules; Shopify/Square source owner and read-only path; Login next-day logout policy plus Security Guard approval; Portal audit definitions plus Salesreport handoff; recurring sales/data cleanup owners and mutation boundaries; Google Drive OAuth/token storage policy.
+  - Scope stayed AI Workspace docs-only. No external systems, credentials, OPS intake, email, runtime services, live data, deploys, or source workspace mutation were accessed.
+
+- Google Cloud security hardening planning slice completed at `2026-04-16 17:56 CDT`.
+  - Detail log: `project_hub/issues/2026-04-16-google-cloud-security-hardening-plan.md`.
+  - Recorded no-credential checklist, first read-only audit plan, and approval gates for IAM, keys, API restrictions, least privilege, rotation/expiry, Essential Contacts, billing anomaly/budget alerts, credentials, live admin surfaces, notifications, deploys, and automation.
+  - Scope stayed local docs-only. No Google Cloud console, credentials, keychain, OAuth files, secrets, billing accounts, IAM, live admin surfaces, email, deploy, runtime service, or external-system mutation was accessed.
+
+- AI Workspace TODO planning/review reconciliation completed at `2026-04-16 17:55 CDT`.
+  - Reconciled completed source-workspace planning/review items so they no longer remain as raw open AI Workspace backlog: Salesreport adoption/access planning, web analytics funnel/source review, and PHPList legacy send-history soft-delete review.
+  - Source references recorded in `TODO.md`: salesreport commit `85971d9004d1d73c49751d52080a5ec7587f9780` with `doc/salesreport-adoption-access-planning-2026-04-16.md` and `doc/web-analytics-funnel-source-review-2026-04-16.md`; lists commit `a246095d14f07c4e82ebc23fe47e0836a7dded26` with `docs/phplist-legacy-send-history-soft-delete-review-2026-04-16.md`; lists TODO closeout commit `eae015bef06eed50fbbcbacd6324033fa62fb427`.
+  - Preserved true remaining work only as scoped future tasks: Salesreport adoption/access implementation after owner review and Code/Git Manager preflight; web analytics funnel implementation after analytics source ownership/build scope confirmation; PHPList read-only inventory before any separately approved mutation cleanup.
+  - Operational-autonomy note remains durable: Decision Driver may approve obvious safe continuations within approved scope, and Task Manager should keep routing safe work until 15 real manual blockers. The then-active waiting item was the Google Drive OAuth/token storage policy decision; see the latest handoff entry for current blocker count.
+  - Scope stayed AI Workspace docs-only. No OPS intake, credentials, live external systems, email, runtime services, deploys, production data, or source-workspace mutation was accessed.
+
+- Recurring operations reporting planning slice completed at `2026-04-16 17:32 CDT`.
+  - Detail log: `project_hub/issues/2026-04-16-recurring-operations-reporting-plan.md`.
+  - Recorded owner modules, read-only source surfaces, cadence, approval gates, first no-write slice, and notification/email boundaries for monthly task stats, events/task stats review, and barrel sample page manual/follow-up.
+  - Barrel sample ownership remains an explicit first-slice discovery item; do not assume whether it belongs to Portal, OPS, Salesreport, Contactreport, or another module.
+  - Scope stayed local and docs-only. No code, production data, email, notifications, credentials, scheduled jobs, commit, push, deploy, runtime change, OPS intake, or live-source access was performed.
+
+- AI-assisted Salesreport data-import planning slice completed at `2026-04-16 17:31 CDT`.
+  - Detail log: `project_hub/issues/2026-04-16-ai-assisted-salesreport-data-import-plan.md`.
+  - Recorded owner workspace `ws sales`, AI Workspace planning role, and source-side collaborator boundaries for `ws importer` and `ws bid`.
+  - Defined deterministic preflight, safe AI assist points, approval gates, and a first no-write prototype based on sanitized/synthetic sample imports and generated dry-run artifacts.
+  - Future prototype requires explicit approval, a sanitized/synthetic sample or approved raw-source access, and Code and Git Manager preflight before any code in `salesreport`, `importer`, or `bid`.
+  - Scope stayed docs-only. No code, credentials, production data, mailbox data, email, commit, import, deploy, runtime change, or external-system write was performed.
+
+- BID ETL/import workflow planning moved to Done at `2026-04-16 17:30 CDT`.
+  - Closed the AI Workspace TODO item `Plan BID ETL and import workflow`.
+  - Reference implementation/planning source: BID commit `54c8e544d967e7b5f645f8e872827fdcfebe207d` and `data-management/etl-import-workflow-plan.md`.
+  - Scope was docs closeout only in AI Workspace. No BID code, commit, push, deploy, import run, data mutation, credential access, or external-system change was performed.
+
+- Unified user activity reporting planning slice completed at `2026-04-16 17:22 CDT`.
+  - Detail log: `project_hub/issues/2026-04-16-unified-user-activity-reporting-plan.md`.
+  - Recorded source systems, read-only data surfaces, privacy/security gates, cadence, first slice, and workspace ownership for a future unified user activity report.
+  - Recommended first future slice is a no-production-data source inventory and metric contract across `login`, `ops`, `portal`, and `salesreport`, with Google Workspace/Gmail/Gemini overlays deferred.
+  - Scope stayed local and docs-only. No code, credentials, production data, mailbox/Admin data, email, deploy, scheduled report, or runtime change was performed.
+
+- OPS Market Events Trainual planning slice prepared at `2026-04-16 17:30 CDT`.
+  - Added local planning pack under `trainual/ops-market-events/` with module outline, walkthrough script, recording checklist, safe demo-data notes, recordings output convention, and acceptance checklist.
+  - Kept future media output guidance in the tracked `trainual/ops-market-events/recordings-output-convention.md`; ignored `recordings/` artifacts are not part of the docs batch.
+  - Updated `TODO.md` by moving the Trainual planning slice from Backlog to Done.
+  - Scope stayed planning-only: no recording, publishing, code changes, live data mutation, email, secrets, deploy, external-system write, or media artifact was created.
+
+- Digital Office OAuth/token storage policy review completed at `2026-04-16 17:18 CDT`.
+  - Updated `project_hub/digital-office/storage-decision-needed.md` after a local-docs-only review.
+  - Recommendation: OAuth credentials and token caches must live in machine-local OS keychain/private storage by default, or in an approved secret manager/keychain/service-account path for shared automation. Do not store OAuth credentials, refresh/access tokens, client secrets, private keys, or app passwords in Google Drive-synced files, Google Drive-synced runtime folders, Papers records, normal manifests, or git.
+  - Exact remaining human decision if Drive-backed automation is requested: approve Option A as the default storage path for this project, or name the approved Option B secret manager/keychain/service-account path.
+  - No credentials, OAuth/token material, Google Drive files, Papers data, runtime state, mailbox/email content, keychain contents, MCP config, `.205`, `.17`, OPS/Portal data, external service, code implementation, deploy, service restart, or live mutation was accessed or changed.
+
+- Operational autonomy directive recorded at `2026-04-16 17:05 CDT`.
+  - Decision Driver may approve obvious, verified Code/Git continuation within already-approved scope when the action is non-destructive, does not touch secrets/auth/external sends, creates no deploy/live-data risk, and has no unresolved worker ownership conflict.
+  - Task Manager should keep pulling, routing, and unblocking safe work until there are 15 real manual blockers. Count only genuine Robert-needed approvals, ambiguous business/security decisions, unresolved conflicts, missing credentials, deploy/live-data risk, or policy gates as manual blockers.
+  - Task Manager, Decision Driver, Code and Git Manager, and Security Guard should resolve safe routing, review, and cleanup among themselves where guardrails allow; escalate to Robert only for real manual blockers the agents cannot safely resolve.
+  - Docs/notes-only update. No code implementation, commit, push, restart, email, secret access, external-system mutation, deploy, or live-data action was performed.
+
+- Workspace/account boundary and macOS permission-prompt policy recorded at `2026-04-16 16:47 CDT`.
+  - Added docs-only guidance that agents should not freely operate outside `/Users/werkstatt` unless Robert gives explicit permission for the task/session/path.
+  - Added Security Guard ownership for cross-machine permission boundaries and macOS permission prompts such as "Control other apps", Automation, Accessibility, Files and Folders, Full Disk Access, Keychain, Screen Recording, and related system/account grants.
+  - Required workers to explain the requesting app/helper, why the permission is needed, whether it is optional, and the effect of declining before asking Robert to grant a macOS permission.
+  - Concrete implementation surfaces identified for a later approved slice: Codex startup prompts, `ws` launcher, Workspaceboard terminal/session helper prompts, MacBook/M4 install docs, shell aliases/wrappers, and board session creation prompts.
+  - Reconciliation note for `674d65dd`: this commit object is not present in `/Users/werkstatt/ai_workspace`, `/Users/werkstatt/workspaceboard`, or any git repository directly under `/Users/werkstatt` after local checks and fetches for the AI Workspace and Workspaceboard repos. This policy slice therefore records the requested boundary as new docs-only guidance rather than modifying or reverting that commit.
+  - No runtime code, launcher, LaunchAgent, SSH config, Keychain, secret, deploy, system permission, or direct worker-injection change was performed.
+
+- AI Workspace TODO hygiene pass completed at `2026-04-16 15:05 CDT`.
+  - Reviewed the active AI Workspace TODO, empty `ToDo-append.md`, handoff notes, and project-hub open index.
+  - Regrouped the open AI Workspace backlog by route and approval boundary so `TODO.md` stays an action queue instead of a transcript.
+  - Moved older verbose Done history into `TODO-done-archive-2026-04-16.md`; `TODO.md` now keeps only concise current closures plus an archive pointer.
+  - Closed stale project-hub records for the Robert-killed Salesreport MemPalace pilot and completed Werkstatt path-unification migration; remaining related work stays under broader AI workstation/sync, auth/session, and module-specific implementation records.
+  - No OPS intake, code implementation, external-system mutation, email send, credential access, live daemon/background polling, commit, push, deploy, or production change was performed.
+
+- Management Planner role-map guidance recorded at `2026-04-16`.
+  - Added docs-only guidance that Task Manager, role-map, organigram, task-management, and project-management docs should use the KOVAL 2026 Management Planner as guide material for management goal framing, accountable owner clarity, visible worker routing, cadence, decision gates, and closure criteria.
+  - Scope was AI Workspace documentation only. No emails, external-system mutations, credential exposure, runtime changes, Workspaceboard code edits, commit, push, deploy, or service restart were performed.
+  - Source-file search note: no local file named or containing `KOVAL 2026 Management Planner` / `2026 Management Planner` / `Management Planner` was found under `/Users/werkstatt` outside private/secret paths during this pass, so the durable note records the planner as requested guide material rather than citing a discovered local source file.
+
+- Completed-code-worker routing policy updated at `2026-04-16 14:35 CDT`.
+  - New directive: completed code-producing workers in git-backed workspaces route to Code and Git Manager for closeout review before commit, push, deploy, cleanup, or closure.
+  - Task Manager and Decision Driver should surface only real human decisions, approval gates, blockers, or ambiguous next steps; routine completion, code-review handoff, git hygiene, and verification status route to Code and Git Manager, Summary Worker, or the owning workspace worker.
+  - Approval/security guardrails remain unchanged: dirty worktree, active-session overlap, overlapping worker edits, destructive git actions, force-push/reset/rebase, live deploy/pull, production impact, and Security Guard triggers still require the existing checks or approvals.
+  - Docs-only policy update. No runtime code, email, secret, monitor, commit, push, deploy, or service change was performed.
+
+- Digital Office Papers projection design expanded at `2026-04-16 14:05 CDT`.
+  - Detail log updated: `project_hub/issues/2026-04-14-digital-office-project-task-work-records-proposal.md`.
+  - The design now defines Markdown/Workspaceboard/OPS-Portal/Papers responsibilities, automatic Papers record candidates, schema/template, stable IDs and duplicate protection, auth/approval gates, write path options, rollback/export, Task Manager vs Decision Driver behavior, existing-content projection, and Security Guard boundaries.
+  - Current approved scope remains docs/no-write only. No live Papers writes, `.205` access, production DB writes, credential printing, MCP exposure changes, notifications/emails, commits, pushes, deploys, or service restarts were performed.
+  - Follow-up completed: the local no-write projection pack was produced under `project_hub/digital-office/`.
+  - Current open decision: choose Google Drive OAuth/token storage policy before any future Drive-backed projection automation. Live Papers writes still need a later explicit decision on writer identity, target Papers space, first record types, redaction level, duplicate/update behavior, and rollback/export procedure.
+
+- Avignon morning summary runtime installed at `2026-04-16 13:28 CDT`.
+  - Robert approved the remaining runtime change after the policy-only pass.
+  - Added runtime script `/Users/admin/.avignon-launch/runtime/scripts/avignon_morning_overview.py` and LaunchAgent `/Users/admin/Library/LaunchAgents/com.koval.avignon-morning-overview.plist`.
+  - The job mirrors Frank's morning-overview pattern where appropriate: Avignon profile, Sonat-only recipient guard, task id/subject duplicate protection against Avignon sent logs, machine-local draft/log paths, and a 06:00 local `StartCalendarInterval`.
+  - It does not create any evening/end-of-day job and does not alter `com.koval.avignon-auto`; the inbox monitor remains on its existing 300-second cadence.
+  - Verification: Python compile passed, plist lint passed, script help loaded, existing `com.koval.avignon-auto` still reports run interval `300 seconds` and last exit `0`, and `launchctl bootstrap/enable` loaded `com.koval.avignon-morning-overview` with `runs = 0`, `last exit code = (never exited)`, `Hour = 6`, `Minute = 0`.
+  - No test email was sent and no secret/credential material was printed.
+
+- Frank/Avignon completion and summary policy aligned at `2026-04-16 12:55 CDT`.
+  - Robert clarified that when Frank or Avignon receives and completes a task, the worker should send one concise completion confirmation stating what was done and that the task is complete.
+  - Default scheduled summary cadence is now morning emails only for both Frank and Avignon; evening roundups/end-of-day summaries are off by default unless Robert explicitly re-approves a specific one-off or recurring evening cadence.
+  - Superseded runtime finding: at 12:55, no `com.koval.avignon-morning-overview` LaunchAgent was installed. Robert approved the follow-up, and it was installed at 13:28 without sending a test email.
+  - No mailbox, send, polling cadence, or credential change was made in the policy pass.
+
+- Workspaceboard remote classic board enabled at `2026-04-16 10:45 CDT` on `Macmini.lan`.
+  - Robert requested remote access to the full classic Workspaceboard at `http://192.168.55.17/workspaceboard/` and remote tmux/Terminal launch.
+  - Workspaceboard serve mode is now `external`; LaunchAgent `com.koval.workspaceboard` was reinstalled with `CODEX_DASHBOARD_HOST=0.0.0.0` on port `17878`.
+  - Guardrail verified: unauthenticated direct LAN request to `http://192.168.55.17:17878/api/status` returns `401` with a Portal login redirect; local runtime health reports `ok: true` and `tmux_available: true`.
+  - Remote use still requires a Portal-authenticated allowlisted Workspaceboard user (`uid:1` or `uid:165`) and the same PHP session cookie. If runtime auth validation fails, revert by reinstalling with `CODEX_DASHBOARD_HOST=127.0.0.1 ./scripts/install_codex_dashboard_launchagent.sh 17878` and/or setting serve mode back to `localhost_only`.
+  - Detail log: `project_hub/issues/2026-04-16-workspaceboard-remote-classic-board.md`.
+
+- Portal reset-gate hotfix handoff at `2026-04-15 19:24 CDT`.
+  - Production Portal was rolled back after Robert reported that Portal did not load from image `v20260415b`.
+  - Current stable production state is `/home/koval/dockerportal/portal` running `koval-crm-backend:v20260415`, `koval-crm-frontend:v20260415`, and `koval-crm-backend-nginx`; internal checks returned `200` for `http://127.0.0.1:8082/` and `http://127.0.0.1:8083/`.
+  - Do not deploy `v20260415b` again. Login live deploy remains on commit `73ebb45`; do not roll Login back unless there is direct evidence it is involved.
+  - Likely root cause: `v20260415b` did not contain previous hashed frontend assets. Cached Portal HTML requested `/js/app.e98ec78f.js` and `/js/chunk-vendors.195a95d8.js`, and `v20260415b` returned `404` for both.
+  - Fix committed in `/Users/werkstatt/portal` on `dev`: `1595a1af Preserve previous frontend assets during deploy builds`. It lets frontend builds preserve `/usr/share/nginx/html` from `PREVIOUS_FRONTEND_IMAGE` before overlaying the new dist.
+  - Hotfix build is running in Codex terminal session `22926` on deploy host path `/home/koval/dockerportal/portal-builds/portal-3fc35b6f/deploy` with:
+```bash
+PREVIOUS_FRONTEND_IMAGE=koval-crm-frontend:v20260415 ./scripts/build.sh all v20260415c
+```
+  - Backend `v20260415c` already built from cache; frontend `v20260415c` was still building when this handoff was written.
+  - Task Manager continuation from another terminal:
+```bash
+ssh koval@ftp.koval-distillery.com 'docker images koval-crm-frontend:v20260415c koval-crm-backend:v20260415c'
+ssh koval@ftp.koval-distillery.com 'docker rm -f portal-v20260415c-test >/dev/null 2>&1 || true; docker run -d --name portal-v20260415c-test -p 127.0.0.1:8094:80 koval-crm-frontend:v20260415c && for p in / /js/app.e98ec78f.js /js/chunk-vendors.195a95d8.js; do printf "%s " "$p"; curl -sS -o /dev/null -w "%{http_code}\n" "http://127.0.0.1:8094$p"; done'
+ssh koval@ftp.koval-distillery.com 'cd /home/koval/dockerportal/portal && ./deploy/scripts/deploy-prod.sh all v20260415c'
+ssh koval@ftp.koval-distillery.com 'docker ps --format "{{.Names}} {{.Image}} {{.Status}}" | grep -E "koval-crm-(backend|frontend)" && for u in http://127.0.0.1:8082/ http://127.0.0.1:8083/; do printf "%s " "$u"; curl -sS -o /dev/null -w "%{http_code}\n" "$u"; done'
+```
+  - Emergency rollback command if Portal fails again:
+```bash
+ssh koval@ftp.koval-distillery.com 'cd /home/koval/dockerportal/portal && ./deploy/scripts/rollback.sh all v20260415'
+```
+
+- Frank tracked-reply correction at `2026-04-15 19:06 CDT`.
+  - Robert clarified that Frank should answer directly and copy Robert/Dmytro where instructed instead of sending tracked-reply review emails unless Frank cannot answer.
+  - The live Frank runtime now extracts HTML-only assistant email bodies, logs Robert's Claude-thread instruction locally, and answers Claude's Papers-access follow-up directly.
+  - Frank sent Claude `Re: Thoughts on our AI workspace setup`, copied Robert and Dmytro, and the LaunchAgent-environment runner check returned no new unseen messages requiring action.
+  - Frank docs/TODO/HANDOFF were updated. Avignon was then aligned with the same tracked-reply rule: answer safe already-approved internal tracked-thread replies directly, copy Sonat/Robert/other stakeholders where instructed, and only escalate when blocked, ambiguous, or gated. The live Avignon runtime now extracts HTML-only bodies and classifies safe primary tracked-thread replies as local follow-up instead of primary-review material.
+  - Follow-up decision-routing clarification: Avignon decision items now send concise decision emails to Sonat by default through a shared profile-based helper; the same helper is available in Frank's runtime for Frank -> Robert decision emails. Personas remain separate; decision mechanics and routing are centralized where practical.
 
 - MacBook/M4/Mac mini role clarification recorded at `2026-04-15 18:35 CDT` on `Macmini.lan`.
   - Keep `ws ai` local on Mac mini, M4, and MacBook as `/Users/werkstatt/ai_workspace`; the normal sync path is git/GitHub, not Google Drive.
   - 2018 Mac mini (`Macmini.lan`, `.17`) is the main AI worker/station: keep Workspaceboard/Frank/Avignon/long-running Codex worker and automation hosting there unless Robert explicitly changes the role split.
-  - Mac Mini M4 2025 (`Mac.lan`, `.35`, user `kovaladmin`) and MacBook (`MacBookPro.lan`, `.44` when last verified) are both Robert's front-facing workstations. Either may run local/supplemental tasks from its own checkout, but both are backup/supplemental worker surfaces relative to `.17`.
+  - Mac Mini M4 2025 (`Mac.lan`, `.35`, user `kovaladmin`) and MacBook (`MacBookPro.lan`, `.180`) are both Robert's front-facing workstations. Either may run local/supplemental tasks from its own checkout, but both are backup/supplemental worker surfaces relative to `.17`.
   - Use direct SSH/rsync between machines only for deliberate non-git handoffs, fallback, or service verification.
+
+- Frank OPS digest helper restored at `2026-04-15 17:10 CDT`.
+  - Found `frank_ops_digest.php` inside the encrypted legacy vault at `macmini-legacy-archive/remaining-archive/scripts/frank_ops_digest.php`.
+  - Restored it to `/Users/admin/.frank-launch/runtime/scripts/frank_ops_digest.php`, added the current OPS bootstrap path `/Users/werkstatt/ops/bootstrap.php`, and verified PHP syntax.
+  - Verified the helper returns JSON for Robert's OPS queue without printing task contents in chat.
+  - Verified a no-send Frank morning overview dry-run for `2026-04-16` completed with `ops_error = null` and generated an `Important OPS Tasks` section.
+  - Detached `/Volumes/AIWorkspacePrivate` after the search/restore.
+
+- Frank/Avignon morning overview recovery at `2026-04-15 16:58 CDT`.
+  - Mac mini did not close; `Macmini.lan` remained up and running.
+  - Frank's 06:00 overview did not run because `com.koval.frank-morning-overview` had been installed/updated after the 06:00 calendar trigger and launchd still showed `runs = 0`.
+  - Sent Robert's Frank morning overview manually at `16:51 CDT` with task id `frank-morning-overview-2026-04-15`.
+  - Sent Sonat a matching Avignon morning overview at `16:54 CDT` with task id `avignon-morning-overview-2026-04-15`.
+  - Reloaded `com.koval.frank-morning-overview` so launchd now uses `AI_WORKSPACE_ROOT=/Users/admin/.frank-launch/runtime` and the machine-local Frank runtime path for tomorrow's 06:00 run.
+  - Follow-up resolved at `17:10 CDT`: `scripts/frank_ops_digest.php` was restored into the live Frank runtime and dry-run verification now shows no OPS error.
+
+- Avignon/importer CRM additions pair closed at `2026-04-15 16:51 CDT`.
+  - Closed board sessions `e9588b48` and `10b9346d` after review-ready summaries matched.
+  - CRM import `52` created 4 accounts and 7 contacts, with 7/7 account-contact links verified; private fields were not printed.
+  - Updated `avignon/TODO.md` and `avignon/HANDOFF.md`.
+
+- OpenWrt/LuCI 25.12.2 upgrade completed at `2026-04-15 16:36 CDT`.
+  - Robert gave final `ROLLBACK ACK`; custom package-preserving image was flashed with `sysupgrade -v`.
+  - Router is back online at `192.168.55.1`, reports OpenWrt `25.12.2` / kernel `6.12.74`, boot partition `2`, and package manager `apk`.
+  - Post-checks passed for LAN ping, TCP `22/53/80/443`, LuCI HTTP/HTTPS `200`, WAN `205.178.117.216`, default route, SSH, core packages (`luci`, `uhttpd`, `dropbear`, `firewall4`, `dnsmasq`, `wireguard-tools`, `strongswan`), enabled services, WireGuard interfaces, and StrongSwan config/pool visibility.
+  - Preservation counts matched UCI targets: DHCP hosts `206`, DHCP pools `2`, dnsmasq `1`, network interfaces/devices/routes `6/3/0`, firewall zones/forwardings/rules/redirects/includes `4/5/19/34/1`, wireless devices/ifaces `3/3`.
+  - Follow-up observation resolved by Robert: post-upgrade failed root SSH attempts from `192.168.55.11` were his MacBook while it used a private/fixed MAC identity. Robert removed that private/fixed MAC setting; the MacBook is now at `192.168.55.180`. Successful Codex checks from this host were from `192.168.55.17`.
+
+- OpenWrt/LuCI upgrade approval state updated at `2026-04-15 16:24 CDT`.
+  - Robert approved proceeding in principle but asked for rollback instructions first.
+  - Do not flash yet. Present rollback plan, confirm local/physical recovery readiness and maintenance window, then require final explicit confirmation before running any `sysupgrade` command.
+
+- Mitch Donohue email archive follow-up closed by Robert at `2026-04-15 16:14 CDT`.
+  - Removed the AI Workspace waiting decision from `TODO.md`.
+  - Marked `project_hub/issues/2026-04-07-email-user-archive-transfer-mitch-donohue.md` completed by decision, without additional mailbox access, credential handling, or `imapsync` execution.
+  - `project_hub/INDEX.md` now lists the email archive transfer under Completed.
+
+- AI Workspace legacy archive cleanup recovery completed at `2026-04-15 15:25 CDT` on `Macmini.lan`.
+  - Verified no live archive copy process remained and the encrypted sparsebundle was mounted at `/Volumes/AIWorkspacePrivate`.
+  - The loose archive folders `/Users/werkstatt/ai_workspace_google_drive_archive_20260415` and `/Users/werkstatt/ai_workspace_google_drive_archive_20260415_macbook` were already absent.
+  - The vault contains `macmini-legacy-archive/` with `944` files, about `40M` payload; no separate `macbook-legacy-archive/` payload was found.
+  - Embedded code copies `screenbox` and `external/mempalace` are classified as vaulted legacy/audit material only; `mempalace` still has historical local modifications in `mempalace/entity_detector.py` and `mempalace/miner.py`.
+  - No secret contents were read or printed. Updated `project_hub/artifacts/2026-04-15-ai-workspace-legacy-archives.md` with the final state.
 
 - AI box secure storage and backup step completed at `2026-04-15` on `Macmini.lan`.
   - Created encrypted sparsebundle `/Users/werkstatt/secure-vaults/ai-workspace-private.sparsebundle`; passphrase is stored in local macOS Keychain item `KOVAL_AI_WORKSPACE_PRIVATE_VAULT` for user `admin`.
@@ -63,7 +274,7 @@ Use this file for cross-machine/session handoffs.
   - Large-file policy: keep Git as the coordination index only. Store large non-secret artifacts outside this repo and commit manifests/checksums; keep secrets and credential-like material out of git, Papers, and normal manifests. See `ARTIFACTS.md`.
   - M4 active `ws ai` and Workspaceboard runtime also resolve to `/Users/werkstatt/ai_workspace`; M4 pulled the same git commits and reinstalled Workspaceboard.
   - M4 old Google Drive `ai_workspace` path is now gone as well; no M4 archive copy remains. The active M4 `ws ai` and board runtime still resolve to `/Users/werkstatt/ai_workspace`.
-  - MacBook is now verified at `192.168.55.44` / `MacBookPro.lan`: cloned `/Users/werkstatt/ai_workspace`, updated `ws ai`, pulled/reinstalled Workspaceboard, and moved the old Drive AI folder to `/Users/werkstatt/ai_workspace_google_drive_archive_20260415_macbook`.
+  - MacBook current LAN IP corrected by Robert to `192.168.55.180` / `MacBookPro.lan`; earlier `192.168.55.44` notes are stale. MacBook had cloned `/Users/werkstatt/ai_workspace`, updated `ws ai`, pulled/reinstalled Workspaceboard, and moved the old Drive AI folder to `/Users/werkstatt/ai_workspace_google_drive_archive_20260415_macbook`.
   - Remaining transition follow-up: decide secure storage and retention handling for the Mac mini and MacBook legacy archives' private/secret material.
 
 - Frank/Avignon follow-through correction at `2026-04-15 10:52 CDT` on `Macmini.lan`.
@@ -78,7 +289,7 @@ Use this file for cross-machine/session handoffs.
   - Board status before reconciliation: AI Workspace TODO `open_count=14`, append queue `6`; whole-board total `open_items=87` across all workspaces.
   - Reconciled completed/review-ready AI items: Communications Manager task routing, Earth Day Forge/lists workflow, OpenWrt/LuCI evaluation closeout, Heritage un-blacklist, Trainual first-module narrowing, and `/lists/` phpList CRM activity logging.
   - Cleared duplicate workstation append entries into the existing workstation/sync transition record instead of creating new architecture tasks. Remaining workstation questions stay in `project_hub/issues/2026-04-12-ai-workstation-sync-transition.md`.
-  - Remaining AI Workspace decisions after this pass: OpenWrt flash/reboot approval or deferral, and Mitch Donohue archive verification/rerun approval or park decision.
+  - Remaining AI Workspace decision after this pass: OpenWrt flash/reboot approval or deferral.
 
 - M4 workstation handoff at `2026-04-14 13:08 CDT` from `Macmini.lan`.
   - M4 identity: `Mac.lan`, LAN IP `192.168.55.35`, user `kovaladmin`, home `/Users/kovaladmin`.
@@ -400,7 +611,7 @@ ssh -i ~/.ssh/id_ed25519_m4_to_macbook -o IdentitiesOnly=yes robert@192.168.55.3
   - `curl -fsS http://127.0.0.1:17878/api/status | head`
 - Re-open `TODO.md`, `HANDOFF.md`, and `project_hub/INDEX.md` after sync completes.
 - If resuming dashboard work, fix the TODO parser to count only top-level `In Progress` bullets.
-- If resuming ops work, prioritize Mitch archive verification first.
+- Mitch archive verification is closed by Robert as of 2026-04-15; do not prioritize it as an open worker item.
 
 ## Previous Handoff Archive
 

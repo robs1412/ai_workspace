@@ -2,10 +2,10 @@
 
 - Master Incident ID: AI-INC-20260407-EMAIL-ARCHIVE-TRANSFER-01
 - Date Opened: 2026-04-07
-- Date Completed:
+- Date Completed: 2026-04-15
 - Owner: Codex
 - Priority: Medium
-- Status: In Progress
+- Status: Completed by Robert decision
 
 ## Scope
 
@@ -115,8 +115,5 @@ No existing local runbook in `ai_workspace` for this transfer pattern, and the i
 
 ## Follow-Ups
 
-- Re-run or locate the missing final `imapsync` completion logs for `Mitch-Inbox`, `Mitch-Sent`, and `[Gmail]/All Mail`.
-- Refresh the secure `tastingroom@kovaldistillery.com` app-password reference and rerun the Mac mini `imapsync` job.
-- Re-check destination folder counts after a successful non-interrupted sync.
-- Record final destination counts in this log only after the completion evidence exists.
-- Mark the incident completed in `project_hub/INDEX.md` only after the archive is verified complete.
+- Closed by Robert on 2026-04-15. Do not run additional mailbox, credential, or `imapsync` work for this project unless Robert reopens it explicitly.
+- Historical count gaps above remain as recorded audit context, not an active task queue.

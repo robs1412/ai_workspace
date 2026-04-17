@@ -1,19 +1,13 @@
 # AI Workspace Project Hub
-Last Updated: 2026-04-17 16:09:51 CDT (Machine: Mac.lan)
+Last Updated: 2026-04-16 19:53 CDT (Machine: Macmini.lan)
 
 ## Open
 
-- **2026-04-17 AI Transfer Gate**
-  - Master ID: `AI-INC-20260417-AI-TRANSFER-GATE-01`
-  - Detail log: `project_hub/issues/2026-04-17-ai-transfer-gate.md`
-  - Repos: `ai_workspace`, workstation SSH state on M4 and MacBook, Mac mini client helper
-  - Status: partially complete; M4 now forces Mac mini file pulls through a one-time code gate, while MacBook install is pending because SSH is currently unreachable.
-
-- **2026-04-15 Gmail Readonly Export CLI**
-  - Master ID: `AI-INC-20260415-GMAIL-READONLY-EXPORT-CLI-01`
-  - Detail log: `project_hub/issues/2026-04-15-gmail-readonly-export-cli.md`
-  - Repos: `ai_workspace`, local Google OAuth/Gmail read-only token state
-  - Status: CLI implemented; ERTC discovery export completed from local Gmail archive; Oleg Gmail exported 420 messages plus 139 non-signature attachments, Sebastian Gmail exported 153 messages plus 56 non-signature attachments, and Mark Gmail exported 499 messages plus 111 non-signature attachments with CSV manifests for review
+- **2026-04-15 Login Portal Security Rollout Activation**
+  - Master ID: `AI-INC-20260415-LOGIN-PORTAL-SECURITY-ROLLOUT-01`
+  - Detail log: `project_hub/issues/2026-04-15-login-portal-security-rollout-activation.md`
+  - Repos: `login`, `ai_workspace`, live Login/Portal auth database state
+  - Status: activated and notification emails sent on 2026-04-15; 47 Portal users tracked, 47 reset confirmations outstanding, 47 emailed, 0 send failures
 
 - **2026-04-14 Macmini, M4, And MacBook SSH Key Exchange**
   - Master ID: `AI-INC-20260414-MACMINI-M4-SSH-KEY-EXCHANGE-01`
@@ -25,7 +19,7 @@ Last Updated: 2026-04-17 16:09:51 CDT (Machine: Mac.lan)
   - Master ID: `AI-INC-20260414-DIGITAL-OFFICE-WORK-RECORDS-01`
   - Detail log: `project_hub/issues/2026-04-14-digital-office-project-task-work-records-proposal.md`
   - Repos: `ai_workspace`, `workspaceboard`
-  - Status: read-only Workspaceboard prototype implemented and pushed as commit `68df99c`; live dashboard `http://localhost/workspaceboard/digital-office.html` indexes project-hub, TODO, and board/session metadata before any Papers, `.205`, OPS/Portal schema, production DB, notification, or MCP write work
+  - Status: local no-write projection pack prepared under `project_hub/digital-office/`; remaining human decision is Google Drive OAuth/token storage policy before any future Drive-backed automation, and all live Papers, `.205`, `.17`, OPS/Portal DB, credential, MCP, notification/email, Frank/Avignon runtime, commit/push/deploy gates remain closed
 
 - **2026-04-13 Salesreport Shipped-vs-Bottled Ownership**
   - Master ID: `AI-INC-20260413-SALESREPORT-SHIPPED-BOTTLED-OWNERSHIP-01`
@@ -33,38 +27,11 @@ Last Updated: 2026-04-17 16:09:51 CDT (Machine: Mac.lan)
   - Repos: `salesreport`, `portal`, shared `koval_distillery` view and Portal/Salesreport auth surfaces
   - Status: planning complete; recommendation is to move report ownership to Salesreport, but implementation is blocked pending approval because it affects live routing, auth/permissions, a shared DB view, and cross-repo deploy order
 
-- **2026-04-12 OpenWrt LuCI Upgrade Assessment**
-  - Master ID: `AI-INC-20260412-OPENWRT-LUCI-UPGRADE-01`
-  - Detail log: `project_hub/issues/2026-04-12-openwrt-luci-upgrade-assessment.md`
-  - Repos: `ai_workspace`, Linksys/OpenWrt router config, workstation VPN client state
-  - Status: parked pending Robert decision; official and custom validation-only checks are complete, the custom package-preserving image is the preferred candidate, and any flash/reboot remains gated on rollback-prerequisite review plus separate explicit approval
-
-- **2026-04-12 Codex Portal Auth Repair**
-  - Master ID: `AI-INC-20260412-CODEX-PORTAL-AUTH-01`
-  - Detail log: `project_hub/issues/2026-04-12-codex-portal-auth-repair.md`
-  - Repos: `ops`, `ai_workspace`, Portal API auth/database state
-  - Status: open; Codex-only DB-code 2FA completion path added in OPS, but live Portal API still rejects both service and direct Codex primary login
-
 - **2026-04-12 AI Workstation And Sync Transition**
   - Master ID: `AI-INC-20260412-AI-WORKSTATION-SYNC-01`
   - Detail log: `project_hub/issues/2026-04-12-ai-workstation-sync-transition.md`
   - Repos: `ai_workspace`, `ai-bridge`, `/Users/werkstatt` workspace roots, Workspaceboard host state
   - Status: planning approved; 2026-04-14 audit completed and legacy synced `ai_workspace/codex_dashboard` deleted after dependency checks; `/Users/werkstatt/workspaceboard` remains the source of truth and active Workspaceboard v0.69 stayed healthy
-
-- **2026-04-09 Werkstatt Path Unification**
-  - Master ID: `AI-INC-20260409-WERKSTATT-PATHS-01`
-  - Detail log: `project_hub/issues/2026-04-09-werkstatt-path-unification.md`
-  - Repos: `ai_workspace`, `workspaceboard`, local workspace roots on Mac mini and MacBook
-
-- **2026-04-07 Email User Archive Transfer (Mitch Donohue)**
-  - Master ID: `AI-INC-20260407-EMAIL-ARCHIVE-TRANSFER-01`
-  - Detail log: `project_hub/issues/2026-04-07-email-user-archive-transfer-mitch-donohue.md`
-  - Repos: `ai_workspace`, Gmail IMAP archive path in `tastingroom`
-
-- **2026-04-07 MemPalace Salesreport Pilot**
-  - Master ID: `AI-INC-20260407-MEMPALACE-SALESREPORT-01`
-  - Detail log: `project_hub/issues/2026-04-07-mempalace-salesreport-pilot.md`
-  - Repos: `ai_workspace`, `salesreport`
 
 - **2026-03-15 WireGuard Stability Monitoring**
   - Master ID: `AI-INC-20260315-WIREGUARD-STABILITY-01`
@@ -98,11 +65,71 @@ Last Updated: 2026-04-17 16:09:51 CDT (Machine: Mac.lan)
 
 ## Completed
 
-- **2026-04-17 Macmini Workspaceboard Unreachable**
-  - Master ID: `AI-INC-20260417-MACMINI-WORKSPACEBOARD-UNREACHABLE-01`
-  - Detail log: `project_hub/issues/2026-04-17-macmini-workspaceboard-unreachable.md`
-  - Repos: `ai_workspace`, `workspaceboard`, Workspaceboard host state on `Macmini.lan`
-  - Status: completed / mitigated; `.17` is reachable again, Workspaceboard was reinstalled to run on Node `v24.14.1`, `/api/status` is healthy, terminal WebSocket attach returned `ready`, focused status tests passed, and Workspaceboard commit `c1c47d1` was pushed.
+- **2026-04-16 Event Strategy COT Connecteam Review**
+  - Master ID: `AI-INC-20260416-EVENT-STRATEGY-COT-CONNECTEAM-01`
+  - Detail log: `project_hub/issues/2026-04-16-event-strategy-cot-connecteam-review.md`
+  - Repos: `ai_workspace`; future implementation belongs in `ops` after read-only OPS discovery and Code and Git Manager preflight
+  - Status: source-context review completed docs-only. Google Doc returned `HTTP/2 401`, and direct MacBook retrieval of Robert's Markdown path was unavailable in this session, but OPS already records read-only incorporation of the non-sensitive Markdown scheduling context with credential material excluded. No source mutation, mailbox state change, Google Docs mutation, credentials, OPS/Papers/Connecteam/notification/production-data mutation, code change, commit, push, deploy, or runtime change was performed
+
+- **2026-04-16 Google Cloud Security Hardening Plan**
+  - Master ID: `AI-INC-20260416-GOOGLE-CLOUD-SECURITY-HARDENING-01`
+  - Detail log: `project_hub/issues/2026-04-16-google-cloud-security-hardening-plan.md`
+  - Repos: `ai_workspace`; future approved audit may touch Google Cloud admin/billing/IAM surfaces only after explicit human approval
+  - Status: planning slice completed docs-only; no Google Cloud console, credentials, keychain, OAuth files, secrets, billing accounts, IAM, live admin surfaces, email, deploys, runtime services, or external-system changes were accessed or performed
+
+- **2026-04-16 Recurring Operations Reporting Plan**
+  - Master ID: `AI-INC-20260416-RECURRING-OPERATIONS-REPORTING-01`
+  - Detail log: `project_hub/issues/2026-04-16-recurring-operations-reporting-plan.md`
+  - Repos: `ai_workspace`; future source ownership split across `ops`, `portal`, `login`, `salesreport`, `contactreport`, and possibly other owner modules after barrel sample ownership is confirmed
+  - Status: planning slice completed docs-only; no code, production data, email, notifications, credentials, scheduled jobs, commits, pushes, deploys, or runtime changes were performed
+
+- **2026-04-16 AI-Assisted Salesreport Data Import Plan**
+  - Master ID: `AI-INC-20260416-SALESREPORT-AI-DATA-IMPORT-PLAN-01`
+  - Detail log: `project_hub/issues/2026-04-16-ai-assisted-salesreport-data-import-plan.md`
+  - Repos: `ai_workspace`; future prototype owner `salesreport`, with `importer` and `bid` only as source-side collaborators if approved
+  - Status: planning slice completed docs-only; first approved next step would be a no-write prototype with deterministic preflight, AI-generated summaries/mapping suggestions only, and explicit gates for raw data, credentials, production reads, code, email, commits, imports, deploys, and automation
+
+- **2026-04-16 Unified User Activity Reporting Plan**
+  - Master ID: `AI-INC-20260416-UNIFIED-USER-ACTIVITY-REPORTING-01`
+  - Detail log: `project_hub/issues/2026-04-16-unified-user-activity-reporting-plan.md`
+  - Repos: `ai_workspace`; future source ownership split across `login`, `portal`, `ops`, `salesreport`, `contactreport`, `bid`, `importer`, `workspaceboard`, `frank`, and `avignon`
+  - Status: planning slice completed docs-only; implementation, production data access, Gmail/Admin overlays, email sends, deploys, and scheduled reports remain unstarted and approval-gated
+
+- **2026-04-09 Werkstatt Path Unification**
+  - Master ID: `AI-INC-20260409-WERKSTATT-PATHS-01`
+  - Detail log: `project_hub/issues/2026-04-09-werkstatt-path-unification.md`
+  - Repos: `ai_workspace`, `workspaceboard`, local workspace roots on Mac mini and MacBook
+  - Status: completed; canonical local module roots now use `/Users/werkstatt/<repo>`, with remaining cross-machine sync/runtime follow-up tracked under the AI workstation/sync transition record
+
+- **2026-04-07 MemPalace Salesreport Pilot**
+  - Master ID: `AI-INC-20260407-MEMPALACE-SALESREPORT-01`
+  - Detail log: `project_hub/issues/2026-04-07-mempalace-salesreport-pilot.md`
+  - Repos: `ai_workspace`, `salesreport`
+  - Status: completed by Robert decision on 2026-04-12; local Salesreport MemPalace pilot should not be expanded
+
+- **2026-04-16 Workspaceboard Remote Classic Board**
+  - Master ID: `AI-INC-20260416-WORKSPACEBOARD-REMOTE-CLASSIC-BOARD-01`
+  - Detail log: `project_hub/issues/2026-04-16-workspaceboard-remote-classic-board.md`
+  - Repos: `workspaceboard`, `ai_workspace`, Mac mini LaunchAgent/runtime auth state
+  - Status: completed; `com.koval.workspaceboard` is bound to `0.0.0.0:17878` for authenticated classic-board access at `http://192.168.55.17/workspaceboard/`, with unauthenticated direct LAN runtime requests verified as `401`
+
+- **2026-04-12 Codex Portal Auth Repair**
+  - Master ID: `AI-INC-20260412-CODEX-PORTAL-AUTH-01`
+  - Detail log: `project_hub/issues/2026-04-12-codex-portal-auth-repair.md`
+  - Repos: `ops`, `ai_workspace`, Portal API auth/database state
+  - Status: completed 2026-04-15; Codex user id `1332` credential verifier fields reconciled to the approved local automation credential, and `crm_hydrate_session_portal_token("Codex")` now returns a non-expired Portal JWT for subject `1332`. Service-user impersonation policy for user id `167` was intentionally unchanged.
+
+- **2026-04-12 OpenWrt LuCI Upgrade Assessment**
+  - Master ID: `AI-INC-20260412-OPENWRT-LUCI-UPGRADE-01`
+  - Detail log: `project_hub/issues/2026-04-12-openwrt-luci-upgrade-assessment.md`
+  - Repos: `ai_workspace`, Linksys/OpenWrt router config, workstation VPN client state
+  - Status: completed 2026-04-15; custom package-preserving `25.12.2` image flashed, router returned on boot partition `2`, and LAN/WAN/LuCI/SSH/core package/service and preservation-count checks passed
+
+- **2026-04-07 Email User Archive Transfer (Mitch Donohue)**
+  - Master ID: `AI-INC-20260407-EMAIL-ARCHIVE-TRANSFER-01`
+  - Detail log: `project_hub/issues/2026-04-07-email-user-archive-transfer-mitch-donohue.md`
+  - Repos: `ai_workspace`, Gmail IMAP archive path in `tastingroom`
+  - Status: closed by Robert on 2026-04-15; no further mailbox, credential, or `imapsync` work is active
 
 - **2026-04-14 Codex Daily Check-In Notifications**
   - Master ID: `AI-INC-20260414-CODEX-DAILY-CHECKIN-NOTIFICATIONS-01`

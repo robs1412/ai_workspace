@@ -1,0 +1,176 @@
+{
+  "schema_version": "digital-office-projection-v0",
+  "generated_at": "2026-04-16T00:00:00-05:00",
+  "mode": "local_no_write",
+  "approval_gates": {
+    "papers_writes": "closed",
+    "remote_205_writes": "closed",
+    "remote_17_writes": "closed",
+    "ops_portal_db_changes": "closed",
+    "credential_access": "closed",
+    "mcp_exposure_changes": "closed",
+    "notifications_email": "closed",
+    "frank_avignon_runtime_changes": "closed"
+  },
+  "source_policy": {
+    "allowed_sources": [
+      "ai_workspace/ai-digital-office.md",
+      "ai_workspace/TODO.md",
+      "ai_workspace/HANDOFF.md",
+      "ai_workspace/project_hub/INDEX.md",
+      "ai_workspace/project_hub/issues/2026-04-14-digital-office-project-task-work-records-proposal.md",
+      "workspaceboard local metadata when supplied by the approved local runtime"
+    ],
+    "excluded_sources": [
+      "Papers live writes or authenticated mutation paths",
+      ".205 or .17 remote writes",
+      "OPS/Portal production database writes",
+      "credentials, tokens, OAuth material, private keys, .env values",
+      "private email body content",
+      "MCP exposure changes",
+      "Frank/Avignon runtime files or LaunchAgents"
+    ],
+    "redaction_rule": "Store only non-secret summaries, stable aliases, local source references, and dry-run decisions."
+  },
+  "projects": [
+    {
+      "id": "project:AI-INC-20260414-DIGITAL-OFFICE-WORK-RECORDS-01",
+      "title": "Digital Office Project/Task/Work Records",
+      "status": "approved_local_no_write_slice",
+      "summary": "Define a rebuildable local projection from project-hub, TODO, and Workspaceboard metadata toward future Papers work records while all live write gates remain closed.",
+      "source_refs": [
+        {
+          "kind": "file",
+          "uri": "ai_workspace/project_hub/issues/2026-04-14-digital-office-project-task-work-records-proposal.md",
+          "title": "Digital Office Project/Task/Work Record Source-of-Truth Proposal",
+          "redaction_level": "private_internal"
+        },
+        {
+          "kind": "file",
+          "uri": "ai_workspace/ai-digital-office.md",
+          "title": "AI Digital Office",
+          "redaction_level": "private_internal"
+        }
+      ],
+      "approval_state": "local_no_write_approved",
+      "security_scope": "secret_adjacent"
+    }
+  ],
+  "work_items": [
+    {
+      "id": "work:item:no-write-papers-projection-pack",
+      "project_id": "project:AI-INC-20260414-DIGITAL-OFFICE-WORK-RECORDS-01",
+      "title": "Local no-write Papers projection pack",
+      "status": "completed",
+      "source_system": "project_hub",
+      "stable_aliases": [
+        "project:AI-INC-20260414-DIGITAL-OFFICE-WORK-RECORDS-01",
+        "todo:ai_workspace:digital-office-no-write-papers-projection-slice"
+      ],
+      "source_refs": [
+        {
+          "kind": "file",
+          "uri": "ai_workspace/TODO.md",
+          "title": "AI Workspace TODO waiting item",
+          "redaction_level": "private_internal"
+        }
+      ],
+      "current_next_action": "Robert must decide Google Drive OAuth/token storage policy before any future OAuth-backed ingestion/export automation."
+    },
+    {
+      "id": "work:item:future-workspaceboard-implementation",
+      "project_id": "project:AI-INC-20260414-DIGITAL-OFFICE-WORK-RECORDS-01",
+      "title": "Future Workspaceboard local projection implementation",
+      "status": "blocked",
+      "source_system": "workspaceboard",
+      "stable_aliases": [
+        "workspace:workspaceboard",
+        "future:local-projection-indexer"
+      ],
+      "source_refs": [
+        {
+          "kind": "file",
+          "uri": "workspaceboard/server/digital-office-index.js",
+          "title": "Existing read-only Digital Office indexer candidate",
+          "redaction_level": "private_internal"
+        }
+      ],
+      "current_next_action": "Separate implementation approval and Code/Git Manager preflight are required before code changes."
+    }
+  ],
+  "events": [
+    {
+      "id": "event:2026-04-16:task-manager-approved-local-no-write",
+      "project_id": "project:AI-INC-20260414-DIGITAL-OFFICE-WORK-RECORDS-01",
+      "work_item_id": "work:item:no-write-papers-projection-pack",
+      "event_type": "approval_granted",
+      "body": "Task Manager approved the safe local-only/no-write next slice with all live/runtime gates closed.",
+      "redaction_level": "private_internal"
+    },
+    {
+      "id": "event:2026-04-16:oauth-storage-decision-open",
+      "project_id": "project:AI-INC-20260414-DIGITAL-OFFICE-WORK-RECORDS-01",
+      "work_item_id": "work:item:no-write-papers-projection-pack",
+      "event_type": "approval_requested",
+      "body": "Human decision remains open: whether Google Drive OAuth material must stay machine-local, use approved service-account secret storage, or be allowed in Drive-synced storage.",
+      "redaction_level": "private_internal"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "artifact:no-write-pack-readme",
+      "project_id": "project:AI-INC-20260414-DIGITAL-OFFICE-WORK-RECORDS-01",
+      "kind": "markdown",
+      "uri": "ai_workspace/project_hub/digital-office/no-write-papers-projection-pack-2026-04-16.md",
+      "content_hash": "",
+      "redaction_level": "private_internal"
+    },
+    {
+      "id": "artifact:projection-schema-v0",
+      "project_id": "project:AI-INC-20260414-DIGITAL-OFFICE-WORK-RECORDS-01",
+      "kind": "json_schema",
+      "uri": "ai_workspace/project_hub/digital-office/projection-schema-v0.json",
+      "content_hash": "",
+      "redaction_level": "private_internal"
+    },
+    {
+      "id": "artifact:sample-projection-export-v0",
+      "project_id": "project:AI-INC-20260414-DIGITAL-OFFICE-WORK-RECORDS-01",
+      "kind": "json",
+      "uri": "ai_workspace/project_hub/digital-office/sample-projection-export-v0.json",
+      "content_hash": "",
+      "redaction_level": "private_internal"
+    }
+  ],
+  "relationships": [
+    {
+      "from": "work:item:no-write-papers-projection-pack",
+      "to": "project:AI-INC-20260414-DIGITAL-OFFICE-WORK-RECORDS-01",
+      "type": "implements"
+    },
+    {
+      "from": "work:item:future-workspaceboard-implementation",
+      "to": "work:item:no-write-papers-projection-pack",
+      "type": "depends_on"
+    }
+  ],
+  "duplicate_checks": [
+    {
+      "record_id": "papers-projection:AI-INC-20260414-DIGITAL-OFFICE-WORK-RECORDS-01",
+      "decision": "blocked_gate",
+      "matched_on": [
+        "project_master_id",
+        "stable_aliases"
+      ],
+      "notes": "No Papers record should be created until live write authority, target space, record types, redaction level, duplicate/update behavior, and rollback/export procedure are explicitly approved."
+    }
+  ],
+  "storage_decisions": [
+    {
+      "id": "decision:google-drive-oauth-storage",
+      "status": "human_decision_needed",
+      "question": "Should Google Drive OAuth credentials/token cache for any future projection automation be machine-local only, approved service-account secret storage only, or allowed in Google Drive-synced storage?",
+      "recommendation": "Keep OAuth credentials and token caches machine-local or in an approved secret manager/keychain path; do not store them in Google Drive-synced planning files or git."
+    }
+  ]
+}

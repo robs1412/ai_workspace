@@ -5,13 +5,13 @@
 - Date Opened: 2026-04-12
 - Owner: Codex / Robert approval gate
 - Priority: High, network infrastructure
-- Status: Validation-only staging complete; live preservation refresh captured; no upgrade/reload/reboot approved
+- Status: Completed; custom package-preserving `25.12.2` image flashed 2026-04-15 and post-upgrade checks passed
 
-## Scope
+## Original Assessment Scope
 
 Assess the ToDo-append task to update the router to the latest OpenWrt and LuCI. This assessment is intentionally read-only: no firmware/package upgrades, backup creation, firewall reloads, VPN reloads, or router reboots were performed.
 
-## Current Router State
+## Pre-Upgrade Router State
 
 - SSH alias used: `koval-openwrt`
 - Device: Linksys WRT3200ACM
@@ -22,6 +22,48 @@ Assess the ToDo-append task to update the router to the latest OpenWrt and LuCI.
 - Rootfs: `squashfs`
 - LuCI packages are installed, including `luci`, `luci-ssl`, `luci-base`, `luci-app-firewall`, and `luci-app-package-manager`.
 - Attended upgrade helpers `auc`, `owut`, and `luci-app-attendedsysupgrade` were not installed in the read-only package check.
+
+## 2026-04-15 Upgrade Execution And Post-Check
+
+Robert approved the rollback plan and gave final `ROLLBACK ACK: flash the custom OpenWrt image now` on 2026-04-15. Used the validated custom package-preserving WRT3200ACM sysupgrade image:
+
+- Router staged path: `/tmp/codex-openwrt-20260414-custom-validation/openwrt-25.12.2-285891de87a2-mvebu-cortexa9-linksys_wrt3200acm-squashfs-sysupgrade.bin`
+- SHA256: `c2dd7796370a4cdec34aabccfb85721ef38401b2ee5f6ffd29ea2fcce62d1029`
+- Pre-flash validation: `sysupgrade -T` exit `0`
+- Flash command shape: `sysupgrade -v <staged-custom-image>`
+
+Result:
+
+- Router came back online at `192.168.55.1`.
+- OpenWrt reports `25.12.2` / `r32802-f505120278`.
+- Kernel reports `6.12.74`.
+- Board remains `linksys,wrt3200acm`, target `mvebu/cortexa9`, rootfs `squashfs`.
+- Boot env now reports `boot_part=2`.
+- Package manager is now `apk`.
+- WAN is up at `205.178.117.216/21` with default gateway `205.178.112.1`.
+- LuCI HTTP and HTTPS both returned `200`.
+- Router TCP ports `22`, `53`, `80`, and `443` were reachable from LAN.
+
+Package/service checks:
+
+- Installed critical packages confirmed: `luci`, `uhttpd`, `dropbear`, `firewall4`, `dnsmasq`, `wireguard-tools`, `strongswan`.
+- Enabled services confirmed: `network`, `firewall`, `dnsmasq`, `dropbear`, `uhttpd`, `swanctl`.
+- Running processes confirmed: `dnsmasq`, `dropbear`, `uhttpd`, `charon`.
+- StrongSwan connection and pool are visible through `swanctl --list-conns` / `swanctl --list-pools`; no active IKEv2 SA was required for this LAN-based post-check.
+- WireGuard interfaces `wgmac` and `wg0` are present.
+
+Preservation checks:
+
+- DHCP hosts: `206`.
+- DHCP pools: `2`.
+- dnsmasq sections: `1`.
+- Network interfaces/devices/routes/route6: `6` / `3` / `0` / `0`.
+- Firewall zones/forwardings/rules/redirects/includes: `4` / `5` / `19` / `34` / `1`.
+- Wireless devices/interfaces: `3` / `3`.
+
+Follow-up observation:
+
+- Post-upgrade logs showed repeated failed root SSH password attempts from `192.168.55.11`, while successful Codex checks came from `192.168.55.17`. Robert identified `.11` as his MacBook while it used a private/fixed MAC identity, removed that setting, and reported the MacBook is now at `192.168.55.180`. No secret contents were printed.
 
 ## Latest Compatible Versions
 

@@ -12,6 +12,7 @@ Turn multi-step work into scoped plans, owners, statuses, and closeout records.
 
 ## Responsibilities
 
+- Use the KOVAL 2026 Management Planner as guide material for project structure, owner clarity, cadence, decision gates, and closure criteria.
 - Break work into clear phases.
 - Assign work to Task Manager, Decision Driver, workspace workers, and specialist roles.
 - Maintain project notes and TODO state.
@@ -55,6 +56,7 @@ Turn multi-step work into scoped plans, owners, statuses, and closeout records.
 ## Operating Reference
 
 - Exact startup prompt, class, call signs/routing phrases, approval gates, and durable memory surfaces are defined in `operating-model.md`.
+- KOVAL 2026 Management Planner guidance lives in `operating-model.md` and should inform management planning docs without replacing human approvals.
 - Current class: on-demand planning role.
 - Project-hub is required for multi-repo changes, auth/session fixes, production incidents, or large initiatives that need a durable issue log.
 - Decision Driver is called when a project plan needs one concrete decision or a waiting worker must be unblocked.

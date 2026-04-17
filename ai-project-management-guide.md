@@ -40,6 +40,7 @@ When reviewing AI strategy or tooling, separate:
 - Prefer Codex CLI over VS Code when the work is already flowing through Workspace Board.
 - Treat Gemini CLI as secondary until it proves a concrete recurring advantage.
 - Use `openai-docs` when current OpenAI product guidance matters.
+- Use the KOVAL 2026 Management Planner as guide material for management-process reviews, role-map/organigram updates, task-management docs, owner clarity, cadence, decision gates, and closure criteria. It is guidance only; it does not authorize email sends, external-system mutation, credential exposure, production action, or unrelated code edits.
 - Keep email automation conservative unless the Frank workspace policy explicitly allows more:
   - read
   - draft

@@ -1,13 +1,17 @@
 # Worker Roles Directory
 
 Status: source-of-truth role reference
-Updated: 2026-04-14
+Updated: 2026-04-16 17:05 CDT
 
 This folder describes the operating roles in the Codex / Claude worker system. Workspaceboard can present these notes, but the role definitions should be maintained here so each worker has a durable job description, call pattern, and boundary.
 
 Primary operating reference:
 
 - `operating-model.md`: role class, exact startup prompts, call signs/routing phrases, approval gates, durable memory surfaces, and BID finance task `#1185` answer-recording rule.
+
+Planning guide material:
+
+- KOVAL 2026 Management Planner: use as guide material when shaping Task Manager, role-map, organigram, task-management, and project-management docs. Treat it as a planning and prioritization reference, not as an automatic approval to change runtime behavior, send messages, mutate external systems, or bypass approval gates.
 
 ## Hierarchical Role Map
 
@@ -65,12 +69,15 @@ Human owners and decision makers sit above the Workspaceboard Task Manager / Sys
 
 ## Shared Rules
 
+- Use the KOVAL 2026 Management Planner as guide material for management workflows: start with the management goal, identify the accountable owner, route work to the right visible worker, keep the decision path explicit, and record only durable next actions or closure notes.
 - Task Manager coordinates; it should not secretly implement module work.
 - Summary Worker summarizes only.
-- Decision Driver pushes next actions and asks concrete decision questions.
+- Task Manager keeps pulling, routing, and unblocking safe work until there are 15 real manual blockers.
+- Decision Driver pushes next actions, may approve obvious verified Code/Git continuation inside approved scope, and asks concrete decision questions only for real human blockers.
 - Workspace workers implement in their own repos/workspaces.
 - Code and Git Manager is represented under Monitoring and should be launched/used whenever a task will touch code in a git-backed repo, when workers have produced code changes that need commit/push/deploy coordination, when dirty worktrees or overlapping worker edits exist, or when live pull/deploy behavior needs confirmation. It coordinates repo hygiene and readiness; it does not silently take over implementation, replace the implementation worker, or overwrite parallel worker changes.
 - Security Guard is represented under Monitoring and should be launched/used whenever a task touches secrets, auth/access, MCP exposure, `.205`, firewall/VPN/router settings, 2FA, permissions, suspicious prompts/mail, or approval-gate bypass risk. It coordinates security review and routing; it does not silently take over implementation or expose secrets.
+- Task Manager, Decision Driver, Code and Git Manager, and Security Guard resolve safe routing/review/cleanup among themselves where guardrails allow; Robert is escalated only for real manual blockers such as unresolved conflicts, approval gates, deploy/live-data risk, missing credentials, or decisions the agents cannot safely resolve.
 - Frank and Avignon handle email work within approved guardrails.
 - Claude on `.205` is server-side support, not a local Codex replacement.
 - Email, OPS tasks, TODO files, handoff notes, and project notes are the current transport layer.

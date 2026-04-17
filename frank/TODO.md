@@ -1,113 +1,110 @@
 # TODO — frank
 
-Updated: 2026-04-14 14:39:52 CDT (Machine: RobertMBP-2.local)
+Updated: 2026-04-17 10:59 CDT (Machine: Macmini.lan)
 
 ## In Progress
 
-- Monitor Robert's OPS task queue.
-- Check Robert's daily Portal digest email and surface follow-ups.
-- Monitor inbound receipt emails and draft next steps.
-- Introduce Frank to Sonat.
-- 2026-04-13: OpenWrt 25.12.2 upgrade decision/action reminder for Robert.
-  - Local Frank task id: `frank-2026-openwrt-25-12-2-upgrade-reminder`
-  - Source: Task Manager routed request from Robert via OpenWrt session `8f8127e9`.
-  - Context: OpenWrt worker validation completed; custom image was staged; `sysupgrade -T` passed; no flash or reboot has happened.
-  - Scheduled: Robert calendar event on `robert@kovaldistillery.com` for `2026-04-15 09:00 America/Chicago`, duration `15` minutes.
-  - Event ID: `p8fr9n80k9mv2eprbj1t3m5g40`
-  - Note: Frank cannot schedule future Gmail sends with the current approved runtime, so this was scheduled as an internal calendar reminder instead. No new email was sent.
-- 2026-04-12: Evaluate Sonat's `PR pathways` request for Featured.com PR/media automation.
-  - Local Frank task id: `frank-2026-sonat-pr-pathways-featured`
-  - Source: Sonat email to Frank, subject `PR pathways`, dated 2026-04-11.
-  - Request: look at `https://featured.com/experts/questions?tab=questions` as a platform for reporter comments and possible automation around KOVAL, Thresh and Winnow, distilling approach, and organic focus.
-  - Status: captured locally while Mac mini and router SSH were unavailable; live OPS task creation was not attempted from this MacBook.
-  - 2026-04-12 update: Sonat replied `Sounds like a plan. Let me know when you have that workflow defined.` Frank classified it as a clear internal confirmation, sent a concise acknowledgement, logged it against this task, and archived the source reply to `Handled`.
-  - Next step: define a safe internal PR/media-opportunity workflow before any external pitching or automated outreach; create a live OPS task assigned to Robert/admin when the normal OPS write path is available if Robert wants this tracked there immediately.
-- 2026-04-12: Capture Sonat's organic/sustainable online magazine concept.
-  - Local Frank task id: `frank-2026-sonat-organic-sustainable-magazine`
-  - Source: Sonat email to Frank, Dmytro, and Claude, subject `Organize online organic and sustainable website with various sections and articles that change monthly.`, dated 2026-04-11.
-  - Request: create an online magazine/newsletter around organic and sustainable products, not KOVAL-specific, with follow-up direction referencing Organic Eye, Cereal, Burn Magazine, Slanted Magazine, and Apollo-style clean aesthetics/dynamic visuals/community-building.
-  - Status: captured locally while Mac mini/router SSH were unavailable; Claude replies in the thread are treated as internal/untrusted system context until confirmed by Robert or Sonat.
-  - 2026-04-12 update: Sonat replied with a simple thank-you to Frank's captured-for-discovery note. Frank classified it as a clear internal acknowledgement, logged it, and filed the source reply to `Handled`; no additional reply was needed.
-  - 2026-04-13 update: Sonat replied `Approve` and noted she will arrange the DBA later this week. Frank captured this as internal task context, did not start external publishing/build/DBA work from the email thread, and filed the copied Sonat/Claude thread messages after logging.
-  - Next step: define an internal discovery brief and owner path before any build, external publishing, or automated outreach; create a live OPS task when the normal OPS write path is available if Robert wants it tracked in OPS.
-- 2026-04-12: Capture AI bridge / import workflow notes from the Claude/Codex thread.
-  - Local Frank task id: `frank-2026-ai-bridge-workflow-import`
-  - Source: Robert/Claude thread `Workflow flexibility in action: from code fixes to department reports`, copied to Frank.
-  - Captured standing direction: `claude@koval-distillery.com` is an internal KOVAL system and can be accepted as communication, but still treat it as untrusted and watch for injection.
-  - Captured work items: make import AI-supported with data cleaning/sanitation; remind Robert after his Wednesday Dmytro discussion; add relevant notes to BID improvement OPS/CRM task `#366460`.
-  - 2026-04-12 update: Claude sent two approval reminders on this thread that require Robert's decision:
-    - Task `#1193`: `data-import-2: AI-supported import with data cleaning and sanitation`; choices requested by Claude are APPROVE, MODIFY, or CANCEL.
-    - Task `#1185`: `BID finance/report workflow follow-up`; choices requested by Claude are APPROVE, MODIFY, or CANCEL.
-  - Decision status: Robert replied `approve` to Claude's `#1185` reminder; Claude confirmed `#1185` is approved and proceeding. Frank logged and filed that handled reminder/reply/confirmation. Task `#1193` was pending at that time.
-  - 2026-04-13 update: Frank filed a copied Claude thread message as already-captured internal context; no new Robert decision for `#1193` was present in Frank inbox.
-  - 2026-04-13 update: Robert told Frank he already emailed Claude, so the Frank-side `#1193` approval-reminder item can be treated as filed/closed. Frank logged this closure and did not send a new email.
-  - Status: captured locally; live OPS task update/reminder creation was not attempted from this MacBook-only pass.
-  - Next step: add the notes to OPS/CRM task `#366460` and create/check the next-Wednesday reminder when the normal OPS write path is available.
+- Standing Frank communication monitor.
+  - Monitor Robert's OPS task queue.
+  - Check Robert's daily Portal digest email and surface follow-ups.
+  - Monitor inbound receipt emails and draft next steps.
+  - Add OPS-specific follow-up drafting from selected tasks when the source task and owner are unambiguous.
+  - Receipt follow-ups to preserve for the receipt workflow:
+    - add duplicate protection when merchants resend receipts
+    - add receipt category heuristics by merchant
+- Await Claude's reply on Screenbox vs Playwright workflow recommendations.
+  - Local Frank task id: `frank-2026-claude-screenbox-workflow`
+  - Source session: `158f2faf`
+  - Sent to Claude on 2026-04-16 with subject `Screenbox workflow recommendations`.
+  - Need: capture Claude's recommended setup, command pattern, artifacts/screenshots, handoff format, and cautions on when Playwright should still be used.
 - Finish the Mitch account archive/imapsync transfer.
   - Destination IMAP login for `tastingroom@kovaldistillery.com` now works with the secured secret reference.
   - Next step: rerun controlled `imapsync` for the incomplete Mitch archive folders and verify final destination counts.
-- Add Gmail routing/filter rules for Angele's recurring newsletters and bulk mail.
-  - Add explicit handling for old-user alias traffic currently routing into Angele, including `abby.boler@kovaldistillery.com` and `jordan.wimby@kovaldistillery.com`.
-  - Review likely missed actionable external threads from the last 3 months before broadening auto-archive rules.
-  - Closeout handoff created for Sonat: OPS/Portal task ID `366462`, due `2026-04-12`, to review the Angele cleanup and respond to Avignon with how to proceed.
-  - Avignon emailed Sonat on 2026-04-10 with Codex session `56fd7397`, current counts, preserved categories, and OPS task `366462`.
-  - Sonat responded to Avignon on 2026-04-11: keep preserving the listed categories and focus on clearing remaining hits for `abby.boler@kovaldistillery.com`, `jordan.wimby@kovaldistillery.com`, and the marketing alias. Continue only within the approved preservation/cleanup boundaries; preserve unresolved direct vendor/customer/outreach/legal/account/Robert threads and verify final ownership/routing for Abby/Jordan old-user aliases and both marketing aliases before creating broader filters.
-- Determine where `marketing@kovaldistillery.com` and `marketing@koval-distillery.com` forwarders currently deliver.
-  - April 10, 2026 audit in Angele mailbox: recent direct matches for both aliases show `Delivered-To: abby.boler@kovaldistillery.com`.
-  - Historical direct matches for `marketing@kovaldistillery.com` also show some delivery to `jordan.wimby@kovaldistillery.com`, so the routing changed or was split previously.
-  - IMAP inbox search on April 10, 2026 showed `18` current matches for `marketing@kovaldistillery.com` and `178` current matches for `marketing@koval-distillery.com` in Angele inbox.
-  - Next step: verify whether Abby is still an active mailbox owner/alias target in Admin and decide whether both marketing aliases should be rerouted to Angele or another current owner.
-- 2026-04-10: Audit CPanel forwarders for `koval-distillery.com`.
-  - OPS/Portal task ID: `366218`
-  - Due: `2026-04-18`
-  - Preserve Robert's note:
-    - check all forwarders on CPanel for domain `koval-distillery.com`
-    - make sure all old users and general forwarders (`sales@`, `marketing@`) are somewhat covered and don't just fail
-    - current CPanel examples noted:
-      - `marketing@koval-distillery.com -> abby.boler@kovaldistillery.com`
-      - `marketing@koval-distillery.com -> ashley.mccarron@kovaldistillery.com`
-- 2026-04-10: Audit Google default routing for `kovaldistillery.com`.
-  - OPS/Portal task ID: `366219`
-  - Due: `2026-04-18`
-  - Preserve Robert's note:
-    - check default routing in Google for `kovaldistillery.com`
-    - also check users in Google (`additional E-mail accounts`)
-    - Sonat now gets both marketing aliases
-    - we want to make sure no emails are lost
-    - current strategy is to add a default routing in Gmail for users who only have an account at `@koval-distillery.com`
-    - Robert probably needs to provide export files because Codex can't log into Google Admin directly
-- 2026-04-10: Document mail routing map and gap analysis.
-  - OPS/Portal task ID: `366220`
-  - Due: `2026-04-18`
-  - Preserve Robert's note:
-    - all this needs to be documented in a table:
-      - where the routing happens
-      - what happens now
-      - where the gaps are
-      - how to identify failures
-    - make a list of general forwarders (`sales@`, `marketing@`, `all@`) so we can have a map and know how to communicate
-- 2026-04-10: Audit group-mail strategy across Portal, Forge, and Lists.
-  - OPS/Portal task ID: `366221`
-  - Due: `2026-04-18`
-  - Preserve Robert's note:
-    - related to previous task
-    - audit all users and group relation
-    - we may have switched to using group definition in Portal for mailings instead of manually creating forwarders in CPanel
-    - delete old email accounts in CPanel and forwarders that are no longer needed
-    - this needs to tie into `forge` / `lists` because communication to groups should really happen there
-    - use this opportunity to check the domain interaction between `koval-distillery.com` and `kovaldistillery.com`
 
 ## Backlog
 
-- When improving Frank inbox or assistant behavior, mirror the improvement for Avignon where applicable so Sonat's assistant path does not fall behind Frank's.
 - Expand from draft-only to narrow auto-send rules after validation.
+  - Keep the Avignon mirror rule as part of any future assistant-behavior implementation so Sonat's assistant path does not fall behind Frank's.
 - Company party member invite.
-- Add OPS-specific follow-up drafting from selected tasks.
-- Add duplicate protection when merchants resend receipts.
-- Add receipt category heuristics by merchant.
+  - Blocked in this pass: local `README_AGENT.md` contains only a sample command/template path for a tracked task email, but no current source message, recipient list, approval, exact send path, or permission to send. Keep open until Robert provides/approves the concrete invite action.
+- Define and approve live Papers lookup/projection for Frank email links.
+  - Current state: local/runtime insertion hook can format supplied Papers URLs, but existing Workspaceboard Papers snapshot is metadata-only and does not provide safe URLs.
+  - Needed before automation: approved Papers source/API/read path, canonical URL field, redaction rules, duplicate behavior, and whether Claude or Workspaceboard owns the projection.
 
 ## Done
 
+- 2026-04-17: Produced local mail-routing audit and gap map.
+  - Created `mail-routing-audit-gap-map.md` for OPS/Portal tasks `366218`, `366219`, `366220`, and `366221`.
+  - Documented known routing layers, address families, local evidence, gaps, failure signals, export needs, and a conservative target model for CPanel, Google routing, Portal, Forge, and Lists.
+  - Docs/TODO only: no email, mailbox/admin login, credential access, routing change, forwarder deletion, LaunchAgent edit, or external system mutation was performed.
+- 2026-04-17: Defined safe PR/media-opportunity workflow for Sonat's Featured.com `PR pathways` request.
+  - Created `featured-pr-pathways-workflow.md` with approval gates, owner path, intake checklist, risk triage, draft format, duplicate protection, and completion criteria. This completes the local workflow-definition task only; no external pitching, platform account work, automation, email send, mailbox mutation, credential access, or outreach was performed.
+- 2026-04-17: Reduced stale Frank communication TODO queue.
+  - Grouped the standing OPS/Portal/receipt monitor work, grouped receipt duplicate/category follow-ups under that parent, grouped four related mail-routing audit tasks under one parent, and folded the Avignon mirror reminder into the future assistant-behavior implementation note. Closed the stale `Introduce Frank to Sonat` reminder because local TODO/HANDOFF evidence shows Frank has already sent Sonat task-capture/status communications and preserved Sonat-facing context.
+- 2026-04-17: Corrected Frank EOD schedule and signature.
+  - Robert corrected that EOD should arrive at 18:00 Central and that Frank's social links should not render as angle-bracket URLs. Updated the existing LaunchAgent to 06:00/18:00, fixed runtime plain-text signature links, reloaded the LaunchAgent, verified syntax/plist/dry-run previews, and confirmed today's already-sent `frank-eod-summary-2026-04-17` sent-log entry plus duplicate-skip protection. No live EOD email was sent during this correction.
+- 2026-04-17: Enabled Frank live morning/EOD daily reporting runtime.
+  - Robert approved the Frank daily reporting runtime slice only. Installed runtime now uses existing Frank credentials/sent-log/send helper, corrected morning OPS selection to today's tasks plus most recent overdue fill-in tasks up to 10, includes active Frank follow-ups, and sends EOD accomplished-project/task summaries at 18:00 through the existing `com.koval.frank-morning-overview` LaunchAgent. Dry-runs passed; one EOD email was sent during enablement for 2026-04-17 and duplicate protection is active.
+- 2026-04-17: Fixed Frank local daily report/task-selection slice.
+  - Added dry-run `scripts/frank_daily_report.py` for morning active-task selection and one-off end-of-day completed-work summaries from approved local notes, with optional approved Papers metadata links and no send/mailbox/LaunchAgent behavior. Updated Frank docs so emailed tasks route through visible workers and the standing inbox monitor stays separate. Verified syntax plus morning/EOD dry-runs; no duplicate open Frank task was created.
+- 2026-04-16: Added dry-run Frank completion-confirmation helper.
+  - Added `frank/scripts/frank_completion_confirmation.py` to model a task-specific completion confirmation from a stable task id plus source `Message-ID` and/or tracked outbound `task_id`.
+  - Helper writes local draft previews and `completion-confirmation-log.jsonl`, checks duplicate confirmation identifiers across local dry-run log and sent-log paths, and refuses duplicate confirmations.
+  - Verified help, syntax compile, first dry-run draft/log creation, duplicate-skip behavior, and preview-only mode. No email, mailbox filing, polling cadence, LaunchAgent, Papers, runtime send hook, or credential path was touched.
+  - Remaining approval before actual sends: exact SMTP/send hook, recipient policy, mailbox filing behavior, credential path, and real sent-log fields.
+- 2026-04-16: Created safe Papers-link insertion hook for Frank emails.
+  - Added runtime helper `/Users/admin/.frank-launch/runtime/scripts/frank_papers_links.py`.
+  - Extended the installed `send_frank_email.py` with opt-in `--papers-link`, `--papers-metadata-file`, and `--papers-context-id` options so approved completion/report bodies can include real Papers URLs when supplied.
+  - Morning overview behavior is unchanged because it has no completed-work section; live Papers lookup/projection remains pending approval.
+  - No email, Papers write/read, LaunchAgent cadence change, inbox mutation, or credential printing was performed.
+- 2026-04-16: Documented Frank completion-confirmation traceability policy.
+  - Current behavior found: inbox automation dedupes by source `Message-ID`, primary instructions/forwards are logged without review spam, and morning overview duplicate-checks by task id or subject/recipient; generalized runtime completion sends are not implemented.
+  - Updated Frank docs so task-specific completion confirmations require a stable OPS/Portal/local task id plus source email or tracked-send id, logging, handled marking, and duplicate suppression.
+  - Docs-only change; no email, mailbox, LaunchAgent, polling cadence, Papers, runtime code, or credential state was changed.
+- 2026-04-16: Documented Frank report path and runtime boundary.
+  - Current scheduled report path is the Mac mini `com.koval.frank-morning-overview` LaunchAgent at 06:00, writing generated morning overview bodies to `/Users/admin/.frank-launch/state/drafts` and logs to `/Users/admin/.frank-launch/state/`.
+  - Policy remains morning overview only by default; task-specific completion confirmations are allowed but are not recurring reports.
+  - No Papers read/write hook, LaunchAgent edit, inbox polling cadence change, mailbox mutation, or credential access was performed.
+- 2026-04-16: Aligned Frank completion and summary policy.
+  - Frank should send one concise task-specific completion confirmation when a received task is complete.
+  - Frank's default scheduled summary cadence is morning overview only; evening/end-of-day roundups are off by default unless Robert explicitly re-approves them.
+  - Verified `com.koval.frank-morning-overview` is loaded at 06:00 and last exited `0`; no runtime or mailbox change was made.
+- 2026-04-16: Sent Claude the data-import/manual XLS validation-order fix handoff.
+  - To: `claude@koval-distillery.com`
+  - Subject: `Claude task: data-import XLS mapping validation order fix`
+  - Sent-log task id: `frank-2026-claude-data-import-xls-validation-order-fix`
+  - Message-ID: `<177636014994.96251.687129627683676686@kovaldistillery.com>`
+  - No data-import code, live imports, DB writes, production data, uploaded XLS files, commit, or push were touched by Frank/Codex.
+- 2026-04-16: Corrected Frank auto-review noise that emailed Robert about Robert's own instructions.
+  - Patched the live Frank runtime to log Robert's instructions, forwards, and tracked corrections for local routing without sending a `Frank inbox review` email back to Robert.
+  - Added sensitive-summary redaction in the live runner, sanitized local runtime automation/stdout logs for credential-style body fragments, verified a manual installed-environment run, and filed 14 already-handled/duplicate INBOX messages to `Handled`.
+  - No outgoing email was sent, no polling cadence/LaunchAgent schedule was changed, and the standing Frank monitor was not closed.
+- 2026-04-15: Added shared decision-email helper to Frank runtime.
+  - The helper uses central profile routing so Frank decisions route to Robert and Avignon decisions route to Sonat while persona content stays separate.
+  - No Frank decision email was sent during this helper install.
+- 2026-04-15: Corrected Frank tracked-reply handling for the Claude AI workspace thread.
+  - Robert clarified that Frank should answer directly and copy Robert/Dmytro where instructed instead of sending tracked-reply review emails unless Frank cannot answer.
+  - Patched the live Frank runtime to read HTML-only assistant replies, log Robert instructions on the Claude thread without re-reviewing them, and answer Claude's Papers-access follow-up directly with Robert and Dmytro copied.
+  - Sent Claude `Re: Thoughts on our AI workspace setup` at 19:06 CDT with Robert and Dmytro copied; verified the runner under the LaunchAgent environment returned no new unseen messages requiring action.
+- 2026-04-15: Closed Frank-side tracking for Sonat's organic/sustainable online magazine concept.
+  - Local Frank task id: `frank-2026-sonat-organic-sustainable-magazine`
+  - Robert confirmed the work was passed to Claude, so Frank no longer tracks it as active local work.
+  - Frank had already captured/filed Sonat's concept and approval context; no build, external publishing, DBA, OPS task creation, or automated outreach was started here.
+- 2026-04-15: Closed Frank-side tracking for AI bridge/import workflow notes.
+  - Local Frank task id: `frank-2026-ai-bridge-workflow-import`
+  - Robert confirmed the related Claude/BID/import decision path is handled outside Frank.
+  - Frank had already captured/filed the copied Claude thread, logged the `#1185` approval/confirmation, and closed the `#1193` approval-reminder after Robert said he already emailed Claude; no new Frank email, OPS write, BID write, or reminder was created here.
+- 2026-04-15: Closed Angele old-user alias and marketing-alias routing follow-up.
+  - Robert confirmed he fixed the Abby/Jordan old-user alias and marketing-alias routing items externally.
+  - Frank's prior audit context was preserved, including Sonat's boundary to preserve direct vendor/customer/outreach/legal/account/Robert threads and avoid broad filters without verified routing.
+  - No Gmail filter, forwarder, mailbox, Google Admin, OPS, Portal, or CPanel change was made by Frank/Codex in this closeout.
+- 2026-04-15: Recovered Frank's missed 6:00 AM morning overview.
+  - Mac mini stayed online; launchd showed `com.koval.frank-morning-overview` loaded but with `runs = 0` because the job had been installed/updated after the 06:00 trigger.
+  - Sent Robert's overview manually at 16:51 CDT with task id `frank-morning-overview-2026-04-15` and Message-ID recorded in the machine-local sent log.
+  - Reloaded the LaunchAgent with `AI_WORKSPACE_ROOT=/Users/admin/.frank-launch/runtime` so the scheduled job uses the installed Frank runtime.
+  - Restored `scripts/frank_ops_digest.php` from the encrypted legacy vault into the live Frank runtime at 17:10 CDT, added `/Users/werkstatt/ops/bootstrap.php` as the preferred bootstrap path, and verified a no-send 2026-04-16 dry-run generated the OPS section with `ops_error = null`.
+- 2026-04-15: OpenWrt 25.12.2 upgrade reminder closed.
+  - The 2026-04-15 09:00 calendar reminder had served its purpose, and Robert later approved/flashed the custom image through the router worker path.
 - 2026-04-14: Captured Frank scheduled inbox-check noise guard from AI Workspace ToDo-append.
   - Rule: do not send Robert a scheduled `Frank inbox review` / inbox-check email for every inbound message.
   - Routine messages Frank can handle, log, file, or safely ignore under standing guardrails should not generate a new schedule/check prompt.
@@ -121,10 +118,10 @@ Updated: 2026-04-14 14:39:52 CDT (Machine: RobertMBP-2.local)
   - Installed `com.koval.frank-morning-overview` LaunchAgent for daily 06:00 local time. It runs `~/.frank-launch/runtime/scripts/frank_morning_overview.py`, sends only to Robert, and duplicate-checks by task id/subject before sending.
   - Dry-run verification for 2026-04-15 successfully rendered Robert calendar items and OPS task digest content without sending.
   - Filed the source Daily overview email to `Handled` after all requested items were completed/logged.
-- 2026-04-14: Captured Robert's Daily overview format clarification.
+- 2026-04-14: Captured Robert's Daily overview format clarification, superseded for defaults on 2026-04-16.
   - Local Frank task id: `frank-2026-daily-overview-format-clarification`
   - Source: Robert reply to `Daily Overview: Tuesday, April 14`
-  - Captured rule: end-of-day Frank work/status overview is fine at end of day; morning overview should be Robert's personal briefing with upcoming calendar, important `/ops` tasks, priorities, and blockers/follow-ups.
+  - Original captured rule: end-of-day Frank work/status overview was fine at end of day; morning overview should be Robert's personal briefing with upcoming calendar, important `/ops` tasks, priorities, and blockers/follow-ups. Superseding 2026-04-16 default: morning summaries only for both Frank and Avignon; evening/end-of-day roundups require explicit re-approval.
   - Acknowledgement Message-ID: `<177618772112.63529.8537942129380038656@kovaldistillery.com>`
   - Filed source reply to `Handled` after logging.
 - 2026-04-14: Sent Robert a concise Daily overview for Tuesday, April 14 through the approved Frank send helper.
