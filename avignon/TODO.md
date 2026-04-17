@@ -1,6 +1,6 @@
 # TODO — avignon
 
-Updated: 2026-04-16 14:54:00 CDT (Machine: Macmini.lan)
+Updated: 2026-04-17 10:11 CDT (Machine: Macmini.lan)
 
 ## In Progress
 
@@ -9,6 +9,7 @@ Updated: 2026-04-16 14:54:00 CDT (Machine: Macmini.lan)
   - add Avignon to launcher/docs and Workspaceboard
 ## Done
 
+- Mirrored the relevant safe Frank workflow documentation into Avignon on 2026-04-17: added Avignon-specific completion traceability, visible-worker communication intake, exception-only inbox-review prompts, Sonat-specific approval gates, and the boundary that Frank's Robert-approved 18:00/EOD reporting and Papers/runtime hooks are not Avignon-approved. This folds the standalone mirror backlog into ongoing Avignon setup/conventions; docs/TODO only, with no email, mailbox, runtime, credential, LaunchAgent, or monitor-cadence changes.
 - Sent Sonat one distributor account review decision email on 2026-04-16 with task id `avignon-distributor-account-review-needed-2026-04-16`; no CRM/contact/list/send changes were made.
 - Installed Avignon morning summary runtime on 2026-04-16 after Robert approval: `com.koval.avignon-morning-overview` is loaded for 06:00 local time, sends Sonat-only via the Avignon profile, preserves duplicate protection, creates no evening roundup, and leaves `com.koval.avignon-auto` at its existing 300-second cadence. Verification used compile/lint/help/launchctl only; no test email was sent.
 - Aligned Avignon completion and summary policy on 2026-04-16: Avignon should send one concise task-specific completion confirmation when a received task is complete; default scheduled summaries should be morning-only; evening/end-of-day roundups are off by default unless Robert explicitly re-approves them. The initial finding that no `com.koval.avignon-morning-overview` LaunchAgent existed was superseded by Robert's approval and the completed runtime install above.
@@ -35,5 +36,4 @@ Updated: 2026-04-16 14:54:00 CDT (Machine: Macmini.lan)
 
 ## Backlog
 
-- Mirror relevant Frank workflow improvements into Avignon when operationally useful.
 - Establish Avignon mailbox triage, task, and follow-up conventions for Sonat.
