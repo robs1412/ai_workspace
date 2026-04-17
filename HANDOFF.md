@@ -1,10 +1,17 @@
 # Codex Session Handoff
 
-Last Updated: 2026-04-16 19:53 CDT (Machine: Macmini.lan)
+Last Updated: 2026-04-17 09:22 CDT (Machine: Macmini.lan)
 
 Use this file for cross-machine/session handoffs.
 
 ## Current Workflow Handoff
+
+- AI Workspace TODO count-reduction audit completed at `2026-04-17 09:22 CDT`.
+  - Robert asked why a full day of work appeared to increase ToDos from `74` to `93`. The local `TODO.md` history showed the same pattern at the file level: `a704550` had `33` top-level bullets (`waiting 1`, `backlog 16`, `done 16`), `adefd16` had `49` (`waiting 15`, `backlog 13`, `done 21`), and pre-audit `HEAD 5baa8bb` had `48` (`waiting 14`, `backlog 13`, `done 21`).
+  - Cause: workers split vague backlog into explicit approval blockers and final access checks, then kept related future implementation slices in Backlog. That created duplicate top-level entries for the same source item: one Waiting blocker and one Backlog next slice. Done also carried detailed audit paragraphs that belong in `HANDOFF.md`, `project_hub/`, source-workspace docs, or git history, not in the active queue. Robert's board count may also include review-ready sessions parked for review, so it can grow even when `TODO.md` is being closed correctly.
+  - New count policy: `TODO.md` counts actionable work packets and real human decisions, not every derived blocker, session, verification note, or audit detail. Use one clear `Waiting for Next Step` list for grouped blocker families, one grouped `Backlog` for future implementation families, and concise `Done` entries. Keep source commits, session ids, docs, and links as sub-bullets or in `HANDOFF.md` / project-hub logs. Do not re-add verbose completed-work transcripts to active TODO.
+  - Result: `TODO.md` was reduced from `48` top-level bullets (`14` Waiting, `13` Backlog, `21` Done) to `13` top-level bullets (`4` Waiting, `5` Backlog, `4` Done). Open/actionable count is now `9` top-level Waiting+Backlog families instead of `27`; the underlying manual blockers are preserved as sub-bullets with gates.
+  - Scope stayed AI Workspace docs-only. No emails, OPS intake, source workspace edits, runtime changes, deploys, external systems, credentials, mailbox state, board session closure, commit, or push was performed. Existing dirty Frank worker files were left untouched.
 
 - Event strategy / COT / Connecteam replacement source unblock reconciled at `2026-04-16 19:53 CDT`.
   - Robert supplied the source Markdown path: `/Users/robert/Library/CloudStorage/GoogleDrive-robert@kovaldistillery.com/My Drive/Downloads - shared/Implentation of Scheduling  .md`.
