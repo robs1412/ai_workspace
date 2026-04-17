@@ -1,6 +1,6 @@
 # TODO — frank
 
-Updated: 2026-04-16 16:52:00 CDT (Machine: Macmini.lan)
+Updated: 2026-04-17 09:24 CDT (Machine: Macmini.lan)
 
 ## In Progress
 
@@ -76,6 +76,8 @@ Updated: 2026-04-16 16:52:00 CDT (Machine: Macmini.lan)
 
 ## Done
 
+- 2026-04-17: Fixed Frank local daily report/task-selection slice.
+  - Added dry-run `scripts/frank_daily_report.py` for morning active-task selection and one-off end-of-day completed-work summaries from approved local notes, with optional approved Papers metadata links and no send/mailbox/LaunchAgent behavior. Updated Frank docs so emailed tasks route through visible workers and the standing inbox monitor stays separate. Verified syntax plus morning/EOD dry-runs; no duplicate open Frank task was created.
 - 2026-04-16: Added dry-run Frank completion-confirmation helper.
   - Added `frank/scripts/frank_completion_confirmation.py` to model a task-specific completion confirmation from a stable task id plus source `Message-ID` and/or tracked outbound `task_id`.
   - Helper writes local draft previews and `completion-confirmation-log.jsonl`, checks duplicate confirmation identifiers across local dry-run log and sent-log paths, and refuses duplicate confirmations.

@@ -26,6 +26,7 @@ This is manual by default. An optional scheduled `launchd` runner now exists for
 - `scripts/frank_auto_runner.py`: one scheduled inbox-review cycle with dedupe logging and escalation
 - `scripts/frank_papers_links.py`: local formatter for appending verified Papers URLs to approved Frank email bodies
 - `frank/scripts/frank_completion_confirmation.py`: dry-run-only completion confirmation helper; creates a local preview and duplicate-check log, never sends mail
+- `frank/scripts/frank_daily_report.py`: dry-run-only morning-priority and end-of-day completed-work report helper; reads approved local Frank notes, never sends mail
 - `scripts/install_frank_launchagent.sh`: installs a 15-minute local LaunchAgent
 - `scripts/uninstall_frank_launchagent.sh`: removes the LaunchAgent
 - mailbox credentials remain outside this folder in `../frank-pw.html`
@@ -66,6 +67,8 @@ Current behavior found on 2026-04-16:
 - Primary-recipient instructions, forwards, and tracked corrections are logged for local routing instead of generating another `Frank inbox review` email back to Robert.
 - `frank_morning_overview.py` sends only the approved morning overview and duplicate-checks by generated overview task id or matching subject/recipient in the sent logs.
 - There is no approved generalized runtime that sends completion confirmations for every completed task or writes to Papers. Those remain manual/policy behavior unless Robert approves a specific runtime slice.
+- Morning task selection should use active local work only: `In Progress`, `Waiting for Next Step`, and useful `Backlog` items. It should not pull from `Done` or from completed/closed/filed/superseded task history.
+- End-of-day completed-work reporting is currently available as a local dry-run draft via `scripts/frank_daily_report.py --type eod`. Wiring that report to a real scheduled send still requires explicit approval for the send hook, schedule, duplicate protection fields, credential path, and mailbox/log behavior.
 
 Completion confirmation rule:
 
@@ -99,6 +102,24 @@ The helper:
 Future workflow fit: when Robert emails Frank and Frank routes a worker, use this helper only after the worker reports completion with no remaining approval blocker. If the worker reports that approval is needed, use the separate decision-email path instead of a completion confirmation.
 
 Remaining approval boundary: turning this into send-enabled runtime requires separate approval for the exact send hook, recipient policy, mailbox filing behavior, credential path, and duplicate-confirmation fields to add to the real sent log.
+
+Communication intake fit: tasks emailed to Frank should be routed into a visible worker/session when they need implementation or investigation beyond a small mailbox action. The standing Frank inbox monitor remains the control surface, while the worker reports back to Frank with either completion or a real approval blocker.
+
+Daily report helper usage:
+
+```bash
+python3 scripts/frank_daily_report.py --type morning --date 2026-04-17 --json
+python3 scripts/frank_daily_report.py --type eod --date 2026-04-17 --json
+```
+
+The helper:
+
+- reads `TODO.md` by default
+- selects morning work only from active TODO sections
+- selects end-of-day accomplishments only from same-date `Done` entries
+- accepts optional approved Papers metadata through `--papers-metadata-file`
+- writes a local draft unless `--preview-only` is used
+- never sends mail, reads credentials, connects to IMAP/SMTP, changes LaunchAgents, or reads live Papers
 
 Loop guard:
 
