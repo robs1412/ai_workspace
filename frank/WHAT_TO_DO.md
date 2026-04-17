@@ -110,17 +110,16 @@ Required fields implied by the Portal receipt form:
 
 ## Daily Overview Rules
 
-- Robert clarified on 2026-04-16 that Frank and Avignon should default to morning summary emails only.
-- Evening roundups/end-of-day summaries are off by default unless Robert explicitly re-approves a specific one-off or recurring evening cadence.
+- Robert approved Frank live/runtime daily reporting on 2026-04-17 for this task only: Frank sends a morning overview and an 18:00 Central end-of-day accomplished-project/task summary using the approved local selector/reporting rules. This approval does not change Avignon, inbox polling cadence, unrelated mailbox behavior, or approval gates for sensitive/ambiguous work.
 - Robert's morning overview should be his personal briefing, not Frank's work-status report.
 - Morning overview content should prioritize Robert's upcoming calendar, important `/ops` tasks, immediate priorities, and blockers/follow-ups.
 - Morning task selection must use active work only: `In Progress`, `Waiting for Next Step`, and useful `Backlog` items. It must exclude `Done`, completed, closed, filed, superseded, and stale local-context entries, then prefer active tasks, blockers/decisions, dated/due items, OPS/Portal ids, local Frank task ids, and clear action verbs.
 - Keep the briefing concise and scannable; do not include private email bodies.
-- The approved runtime report hook is the Mac mini `com.koval.frank-morning-overview` LaunchAgent at 06:00 local time. It writes generated morning overview bodies to `/Users/admin/.frank-launch/state/drafts` and records sent/automation metadata under `/Users/admin/.frank-launch/state/`.
+- The approved runtime report hook is the Mac mini `com.koval.frank-morning-overview` LaunchAgent at 06:00 and 18:00 local time. It writes generated morning/EOD bodies to `/Users/admin/.frank-launch/state/drafts` and records sent/automation metadata under `/Users/admin/.frank-launch/state/`.
 - Do not treat Papers as an approved Frank report sink. Papers read/write reporting, additional scheduled summaries, evening reports, LaunchAgent edits, and polling-cadence changes require explicit approval before implementation.
 - If Frank completes a clear task between morning summaries, use a one-off task-specific completion confirmation when allowed by the completion rule instead of creating a new recurring report.
 - Current implementation note from 2026-04-16 policy review: `frank/scripts/frank_completion_confirmation.py` can prepare a dry-run completion preview and duplicate-check log. It is not send-enabled and does not file mail. Runtime implementation for actual sends or mailbox state transitions still requires a separate approval gate.
-- Current implementation note from 2026-04-17: `frank/scripts/frank_daily_report.py` can prepare dry-run morning-priority and end-of-day completed-work previews from approved local notes. End-of-day output remains a one-off/local draft path until Robert separately approves the exact runtime send hook, schedule, duplicate fields, and credential path.
+- Current implementation note from 2026-04-17: the installed runtime uses the reviewed morning/EOD selector rules with existing Frank credentials, existing sent-log duplicate protection, and the existing morning overview LaunchAgent. `frank/scripts/frank_daily_report.py` remains the local dry-run preview helper for the same selection rules.
 
 ## Papers Link Rules
 

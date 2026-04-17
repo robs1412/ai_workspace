@@ -68,7 +68,7 @@ Current behavior found on 2026-04-16:
 - `frank_morning_overview.py` sends only the approved morning overview and duplicate-checks by generated overview task id or matching subject/recipient in the sent logs.
 - There is no approved generalized runtime that sends completion confirmations for every completed task or writes to Papers. Those remain manual/policy behavior unless Robert approves a specific runtime slice.
 - Morning task selection should use active local work only: `In Progress`, `Waiting for Next Step`, and useful `Backlog` items. It should not pull from `Done` or from completed/closed/filed/superseded task history.
-- End-of-day completed-work reporting is currently available as a local dry-run draft via `scripts/frank_daily_report.py --type eod`. Wiring that report to a real scheduled send still requires explicit approval for the send hook, schedule, duplicate protection fields, credential path, and mailbox/log behavior.
+- End-of-day completed-work reporting is wired into the installed Mac mini runtime as of 2026-04-17. It uses the existing Frank send helper, existing credential path, existing sent log, and the existing `com.koval.frank-morning-overview` LaunchAgent with a second 18:00 calendar trigger.
 
 Completion confirmation rule:
 
@@ -90,7 +90,7 @@ python3 frank/scripts/frank_completion_confirmation.py \
   --json
 ```
 
-The helper:
+The local helper:
 
 - requires either `--source-message-id` or `--tracked-task-id`
 - creates a stable `confirmation_key`
@@ -120,6 +120,14 @@ The helper:
 - accepts optional approved Papers metadata through `--papers-metadata-file`
 - writes a local draft unless `--preview-only` is used
 - never sends mail, reads credentials, connects to IMAP/SMTP, changes LaunchAgents, or reads live Papers
+
+Installed runtime status:
+
+- 06:00: `frank_morning_overview.py` sends the morning overview.
+- 18:00: the same script auto-selects the EOD report and sends `Frank End-of-Day Update: ...`.
+- Duplicate protection checks the sent log by report `task_id` and subject/recipient before sending.
+- Morning OPS task selection is today's tasks first, then the most recent overdue tasks, up to 10.
+- Frank's runtime signature is plain text with clean social-link labels, not angle-bracket URL formatting.
 
 Loop guard:
 

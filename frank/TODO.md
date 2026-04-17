@@ -1,6 +1,6 @@
 # TODO — frank
 
-Updated: 2026-04-17 09:24 CDT (Machine: Macmini.lan)
+Updated: 2026-04-17 10:00 CDT (Machine: Macmini.lan)
 
 ## In Progress
 
@@ -76,6 +76,10 @@ Updated: 2026-04-17 09:24 CDT (Machine: Macmini.lan)
 
 ## Done
 
+- 2026-04-17: Corrected Frank EOD schedule and signature.
+  - Robert corrected that EOD should arrive at 18:00 Central and that Frank's social links should not render as angle-bracket URLs. Updated the existing LaunchAgent to 06:00/18:00, fixed runtime plain-text signature links, reloaded the LaunchAgent, verified syntax/plist/dry-run previews, and confirmed today's already-sent `frank-eod-summary-2026-04-17` sent-log entry plus duplicate-skip protection. No live EOD email was sent during this correction.
+- 2026-04-17: Enabled Frank live morning/EOD daily reporting runtime.
+  - Robert approved the Frank daily reporting runtime slice only. Installed runtime now uses existing Frank credentials/sent-log/send helper, corrected morning OPS selection to today's tasks plus most recent overdue fill-in tasks up to 10, includes active Frank follow-ups, and sends EOD accomplished-project/task summaries at 18:00 through the existing `com.koval.frank-morning-overview` LaunchAgent. Dry-runs passed; one EOD email was sent during enablement for 2026-04-17 and duplicate protection is active.
 - 2026-04-17: Fixed Frank local daily report/task-selection slice.
   - Added dry-run `scripts/frank_daily_report.py` for morning active-task selection and one-off end-of-day completed-work summaries from approved local notes, with optional approved Papers metadata links and no send/mailbox/LaunchAgent behavior. Updated Frank docs so emailed tasks route through visible workers and the standing inbox monitor stays separate. Verified syntax plus morning/EOD dry-runs; no duplicate open Frank task was created.
 - 2026-04-16: Added dry-run Frank completion-confirmation helper.
