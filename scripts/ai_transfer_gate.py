@@ -13,14 +13,17 @@ import shlex
 import shutil
 import stat
 import sys
+import tarfile
 import time
 from pathlib import Path
 
 
 DEFAULT_STATE_DIR = Path.home() / ".ai-transfer-gate"
+DEFAULT_SHARED_DIR = Path.home() / "Downloads - shared"
 DEFAULT_TTL_SECONDS = 5 * 60
 MAX_TTL_SECONDS = 30 * 60
 MAX_FILE_BYTES = 2 * 1024 * 1024 * 1024
+MAX_SHARED_ARCHIVE_BYTES = 2 * 1024 * 1024 * 1024
 
 
 class GateError(Exception):
@@ -91,6 +94,59 @@ def real_file(path_text: str) -> Path:
     if size > MAX_FILE_BYTES:
         raise GateError(f"File is too large for this gate: {size} bytes")
     return path
+
+
+def ensure_shared_root(path_text: str) -> Path:
+    root = Path(path_text).expanduser().resolve()
+    root.mkdir(mode=0o755, parents=True, exist_ok=True)
+    if not root.is_dir():
+        raise GateError(f"Shared path is not a directory: {root}")
+    return root
+
+
+def resolve_shared_path(shared_root: Path, relative_text: str) -> Path:
+    relative_text = relative_text.strip() or "."
+    relative = Path(relative_text)
+    if relative.is_absolute():
+        raise GateError("Shared paths must be relative.")
+    target = (shared_root / relative).resolve()
+    try:
+        target.relative_to(shared_root)
+    except ValueError as error:
+        raise GateError("Shared path escapes the allowed folder.") from error
+    if not target.exists():
+        raise GateError(f"Shared path does not exist: {relative_text}")
+    return target
+
+
+def shared_arcname(shared_root: Path, target: Path) -> str:
+    if target == shared_root:
+        return shared_root.name
+    return str(target.relative_to(shared_root))
+
+
+def shared_tree_size(target: Path, shared_root: Path) -> int:
+    if target.is_symlink():
+        raise GateError("Symlinks are not allowed in shared transfers.")
+    if target.is_file():
+        return target.stat().st_size
+    total = 0
+    for root, dirs, files in os.walk(target, followlinks=False):
+        root_path = Path(root).resolve()
+        try:
+            root_path.relative_to(shared_root)
+        except ValueError as error:
+            raise GateError("Shared directory traversal escaped the allowed folder.") from error
+        dirs[:] = [name for name in dirs if not (root_path / name).is_symlink()]
+        for name in files:
+            file_path = root_path / name
+            if file_path.is_symlink():
+                continue
+            if file_path.is_file():
+                total += file_path.stat().st_size
+                if total > MAX_SHARED_ARCHIVE_BYTES:
+                    raise GateError("Shared archive is too large.")
+    return total
 
 
 def assert_local_tty(args: argparse.Namespace) -> None:
@@ -170,8 +226,14 @@ def serve(args: argparse.Namespace) -> int:
     state_dir = Path(args.state_dir).expanduser()
     grants_dir, _ = state_paths(state_dir)
     parts = parse_original_command()
+    if parts and parts[0] == "shared-list":
+        return serve_shared_list(args, parts)
+    if parts and parts[0] == "shared-get":
+        return serve_shared_get(args, parts)
+    if parts and parts[0] == "shared-archive":
+        return serve_shared_archive(args, parts)
     if len(parts) != 3 or parts[0] != "fetch":
-        raise GateError("Unsupported command. Expected: fetch <grant_id> <code>")
+        raise GateError("Unsupported command. Expected: fetch <grant_id> <code>, shared-list, shared-get, or shared-archive.")
     grant_id, code = parts[1], parts[2]
     if not grant_id or not code.isdigit() or len(code) != 6:
         raise GateError("Invalid grant id or code format.")
@@ -209,6 +271,104 @@ def serve(args: argparse.Namespace) -> int:
 
     with file_path.open("rb") as handle:
         shutil.copyfileobj(handle, sys.stdout.buffer)
+    return 0
+
+
+def serve_shared_list(args: argparse.Namespace, parts: list[str]) -> int:
+    if len(parts) > 2:
+        raise GateError("Usage: shared-list [relative_path]")
+    shared_root = ensure_shared_root(args.shared_dir)
+    target = resolve_shared_path(shared_root, parts[1] if len(parts) == 2 else ".")
+    if target.is_file():
+        print(json.dumps({
+            "type": "file",
+            "path": shared_arcname(shared_root, target),
+            "size": target.stat().st_size,
+        }, sort_keys=True))
+        return 0
+    entries = []
+    for child in sorted(target.iterdir(), key=lambda item: item.name.lower()):
+        if child.is_symlink():
+            kind = "symlink-skipped"
+            size = 0
+        elif child.is_dir():
+            kind = "directory"
+            size = 0
+        elif child.is_file():
+            kind = "file"
+            size = child.stat().st_size
+        else:
+            kind = "other"
+            size = 0
+        entries.append({
+            "name": child.name,
+            "path": shared_arcname(shared_root, child.resolve() if not child.is_symlink() else child),
+            "type": kind,
+            "size": size,
+        })
+    append_audit(Path(args.state_dir).expanduser(), {
+        "event": "shared_list",
+        "path": shared_arcname(shared_root, target),
+        "count": len(entries),
+        "used_by": os.environ.get("SSH_CONNECTION", "ssh"),
+    })
+    print(json.dumps({"type": "directory", "path": shared_arcname(shared_root, target), "entries": entries}, indent=2, sort_keys=True))
+    return 0
+
+
+def serve_shared_get(args: argparse.Namespace, parts: list[str]) -> int:
+    if len(parts) != 2:
+        raise GateError("Usage: shared-get <relative_file_path>")
+    shared_root = ensure_shared_root(args.shared_dir)
+    target = resolve_shared_path(shared_root, parts[1])
+    if target.is_symlink() or not target.is_file():
+        raise GateError("shared-get only serves regular files. Use shared-archive for folders.")
+    if target.stat().st_size > MAX_FILE_BYTES:
+        raise GateError("Shared file is too large.")
+    append_audit(Path(args.state_dir).expanduser(), {
+        "event": "shared_get",
+        "path": shared_arcname(shared_root, target),
+        "size": target.stat().st_size,
+        "used_by": os.environ.get("SSH_CONNECTION", "ssh"),
+    })
+    with target.open("rb") as handle:
+        shutil.copyfileobj(handle, sys.stdout.buffer)
+    return 0
+
+
+def add_to_tar(tar: tarfile.TarFile, target: Path, shared_root: Path, arc_root: str) -> None:
+    if target.is_symlink():
+        return
+    if target.is_file():
+        tar.add(target, arcname=arc_root, recursive=False)
+        return
+    info = tar.gettarinfo(str(target), arcname=arc_root)
+    tar.addfile(info)
+    for child in sorted(target.iterdir(), key=lambda item: item.name.lower()):
+        if child.is_symlink():
+            continue
+        child_resolved = child.resolve()
+        child_resolved.relative_to(shared_root)
+        add_to_tar(tar, child_resolved, shared_root, f"{arc_root}/{child.name}")
+
+
+def serve_shared_archive(args: argparse.Namespace, parts: list[str]) -> int:
+    if len(parts) != 2:
+        raise GateError("Usage: shared-archive <relative_path>")
+    shared_root = ensure_shared_root(args.shared_dir)
+    target = resolve_shared_path(shared_root, parts[1])
+    if target.is_symlink():
+        raise GateError("Symlinks are not allowed in shared transfers.")
+    total_size = shared_tree_size(target, shared_root)
+    arc_root = target.name if target != shared_root else shared_root.name
+    append_audit(Path(args.state_dir).expanduser(), {
+        "event": "shared_archive",
+        "path": shared_arcname(shared_root, target),
+        "size": total_size,
+        "used_by": os.environ.get("SSH_CONNECTION", "ssh"),
+    })
+    with tarfile.open(fileobj=sys.stdout.buffer, mode="w|gz") as tar:
+        add_to_tar(tar, target, shared_root, arc_root)
     return 0
 
 
@@ -297,6 +457,7 @@ def install_authorized_key(args: argparse.Namespace) -> int:
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--state-dir", default=str(DEFAULT_STATE_DIR))
+    parser.add_argument("--shared-dir", default=str(DEFAULT_SHARED_DIR))
     sub = parser.add_subparsers(dest="command", required=True)
 
     approve_parser = sub.add_parser("approve", help="Create a local, short-lived transfer grant.")

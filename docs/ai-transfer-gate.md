@@ -10,6 +10,8 @@ Short-lived file transfer gate for cases where the primary AI worker (`Macmini.l
 - The approval code is shown once and is not stored in plaintext.
 - Grants expire by default after five minutes and are consumed after one successful fetch.
 - The grant approves one exact resolved file path, not a directory browse.
+- `~/Downloads - shared` is the one always-allowed folder. Files and folders placed there can be fetched from `.17` without a one-time code.
+- Shared-folder access is constrained by resolved paths; `..`, absolute paths, and symlink escapes are rejected or skipped.
 - Audit logs record metadata only: timestamps, grant id, file path, basename, size, outcome, and SSH source. They do not record file contents or approval codes.
 
 This does not replace normal SSH hardening. It narrows the Mac mini-to-workstation path for file pulls.
@@ -78,6 +80,36 @@ Lower-level form:
 ```
 
 The helper prompts for the six-digit approval code without echo.
+
+## Always-Allow Shared Folder
+
+On the M4, put files or folders here when `.17` should be able to fetch them without a code:
+
+```text
+~/Downloads - shared
+```
+
+From `Macmini.lan`, list the shared folder:
+
+```bash
+/Users/werkstatt/ai_workspace/scripts/fetch_from_m4.sh --shared-list shared-list.json
+```
+
+Fetch one regular file:
+
+```bash
+/Users/werkstatt/ai_workspace/scripts/fetch_from_m4.sh \
+  --shared "example.pdf" \
+  ~/Downloads/example.pdf
+```
+
+Fetch a folder or file as a gzip tar archive:
+
+```bash
+/Users/werkstatt/ai_workspace/scripts/fetch_from_m4.sh \
+  --shared-archive "folder-name" \
+  ~/Downloads/folder-name.tar.gz
+```
 
 ## Cleanup
 

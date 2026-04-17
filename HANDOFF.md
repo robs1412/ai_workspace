@@ -11,10 +11,11 @@ Use this file for cross-machine/session handoffs.
   - Receiver script: `/Users/werkstatt/ai_workspace/scripts/ai_transfer_gate.py`; Mac mini helper: `/Users/werkstatt/ai_workspace/scripts/ai_transfer_fetch.py`.
   - User-facing M4 approval launcher: double-click `/Users/werkstatt/ai_workspace/scripts/approve_ai_fetch.command`; it opens a file picker and copies the grant id/code to the clipboard.
   - User-facing Mac mini fetch wrapper: `/Users/werkstatt/ai_workspace/scripts/fetch_from_m4.sh <grant_id> <output_path>`.
+  - Always-allowed M4 shared folder: `/Users/kovaladmin/Downloads - shared`. Files there can be fetched from `.17` with `/Users/werkstatt/ai_workspace/scripts/fetch_from_m4.sh --shared <relative_file_path> <output_path>`; files or folders can be fetched as `.tar.gz` with `--shared-archive <relative_path> <output_tar_gz>`.
   - M4 `authorized_keys` backup before restriction: `/Users/kovaladmin/.ssh/authorized_keys.bak.20260417163618`.
   - Replaced only the matching `macmini-to-kovaladmin` public-key line with a forced command restricted by `from="192.168.55.17"`, `restrict`, no forwarding, no PTY, and `/Users/werkstatt/ai_workspace/scripts/ai_transfer_gate.py serve`.
-  - Verification: direct shell from `.17` to M4 now fails at the gate; a temporary one-time approved fetch succeeded and matched source hash; consumed grants cannot be reused.
-  - MacBook is still pending because SSH timed out at `192.168.55.38`, `192.168.55.44`, and current mDNS `192.168.55.11`.
+  - Verification: direct shell from `.17` to M4 now fails at the gate; a temporary one-time approved fetch succeeded and matched source hash; consumed grants cannot be reused; shared-folder list/file/archive fetches succeeded; a `../.ssh/authorized_keys` escape attempt was rejected.
+  - MacBook is still pending because SSH timed out at `192.168.55.38`, `192.168.55.44`, and current mDNS `192.168.55.11`. Mac mini `/Users/werkstatt/workspaceboard/TODO.md` has a backlog note to install the same gate and `Downloads - shared` behavior on MacBook once reachable.
   - Project log: `project_hub/issues/2026-04-17-ai-transfer-gate.md`.
 
 - Mac mini Workspaceboard runtime mitigation at `2026-04-17 16:25 CDT` from `Mac.lan`.
