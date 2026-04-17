@@ -1,17 +1,12 @@
 # TODO — ai_workspace
 
-Updated: 2026-04-16 18:13 CDT (Machine: Macmini.lan)
+Updated: 2026-04-16 19:53 CDT (Machine: Macmini.lan)
 
 ## In Progress
 
 _No active AI Workspace implementation items._
 
 ## Waiting for Next Step
-
-- Blocker: event strategy Google Doc for COT/Connecteam replacement needs read-only access or a supplied text export before full external-source review.
-  - Source: `https://docs.google.com/document/d/1EaHH97GJ_9ztMNtWaEp-abGUHdVqVcyvJWkUjko5euc/edit?tab=t.0`.
-  - Local coordination review completed in AI Workspace commit `128c5f1` from existing AI Workspace notes; exact blocker is anonymous Google Docs export returned `HTTP/2 401`.
-  - Decision note: `project_hub/issues/2026-04-16-event-strategy-cot-connecteam-review.md`.
 
 - Decision needed: approve the next OPS outreach Connecteam replacement stage before any final sync, live schedule, notifications, auth/access work, or canonical rule changes.
   - Completed source: ops commit `18d32a04ddaf5257214d62340eda7e044a1ef3d8`, including docs and `scripts/connecteam_staging_parity.php`.
@@ -147,7 +142,7 @@ _No active AI Workspace implementation items._
 ## Done
 
 - **2026-04-16** Event strategy / COT Connecteam replacement coordination review completed locally.
-  - Source commit `128c5f1`; added `project_hub/issues/2026-04-16-event-strategy-cot-connecteam-review.md` with local actionable strategy points and OPS-safe next steps. Google Doc source was reachable but returned `HTTP/2 401`, so full external-source review remains blocked pending read-only access or supplied text export. Scope stayed docs-only: no Google Docs mutation, credentials, OPS/Papers/Connecteam/notification/production-data access, code change, commit, push, deploy, or runtime change.
+  - Source commit `128c5f1`; updated `project_hub/issues/2026-04-16-event-strategy-cot-connecteam-review.md` after Robert supplied the Markdown source path. Direct MacBook retrieval was unavailable in this session, but OPS already records read-only incorporation of the non-sensitive Markdown scheduling context with one credential line excluded. The review now includes that source-attributed context and no longer counts the Google Doc access issue as an active blocker. Scope stayed docs-only: no source mutation, mailbox state change, Google Docs mutation, credentials, OPS/Papers/Connecteam/notification/production-data mutation, code change, commit, push, deploy, or runtime change.
 
 - **2026-04-16** Final access/source blockers reconciled before Robert decision batch.
   - Recorded final-output-only findings for Google Postmaster `6ee02528`, IT Papers GitLab planning `e6071659`, Google Ads `258b4242`, and web analytics funnel readiness `d73ed365`. Current real manual blocker count: 15 active Waiting items. Docs-only: no external access, credentials, source workspace reads, OPS intake, email, live data, deploys, or runtime services were accessed.

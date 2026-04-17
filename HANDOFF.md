@@ -1,10 +1,17 @@
 # Codex Session Handoff
 
-Last Updated: 2026-04-16 18:13 CDT (Machine: Macmini.lan)
+Last Updated: 2026-04-16 19:53 CDT (Machine: Macmini.lan)
 
 Use this file for cross-machine/session handoffs.
 
 ## Current Workflow Handoff
+
+- Event strategy / COT / Connecteam replacement source unblock reconciled at `2026-04-16 19:53 CDT`.
+  - Robert supplied the source Markdown path: `/Users/robert/Library/CloudStorage/GoogleDrive-robert@kovaldistillery.com/My Drive/Downloads - shared/Implentation of Scheduling  .md`.
+  - Direct retrieval was attempted read-only: the exact `/Users/robert/...` path was absent locally, `MacBookPro.lan` did not resolve, and SSH to `robert@192.168.55.180` timed out.
+  - Read the already-incorporated OPS source context instead: `ops/docs/2026-04-16-outreach-readiness-report.md` records the supplemental scheduling source was retrieved read-only from the M4 on 2026-04-16 and that one credential line was excluded; `ops/docs/2026-04-12-outreach-events-workflow-manual.md` contains the relevant non-sensitive workflow context.
+  - Updated `project_hub/issues/2026-04-16-event-strategy-cot-connecteam-review.md`, `project_hub/INDEX.md`, and `TODO.md` so the original Google Doc/source blocker is closed for AI Workspace planning. Remaining OPS decisions are still active: final sync/live schedule/notifications/auth/canonical-rule approval, zero-shift rule, notification groups, claim/unclaim behavior, reminders, final Connecteam re-sync/export timing, reviewed user crosswalk, and canonical account/activity rules.
+  - Scope stayed AI Workspace docs-only. No source files, mailbox state, Google Docs, OPS/Papers/Connecteam data, notifications, credentials, code, commits, deploys, or runtime services were mutated.
 
 - Final access/source blocker reconciliation completed at `2026-04-16 18:13 CDT`.
   - Recorded four final-output-only checks in `TODO.md` without expanding audit logs: Google Postmaster session `6ee02528`, IT Papers GitLab planning session `e6071659`, Google Ads session `258b4242`, and web analytics funnel readiness session `d73ed365`.
