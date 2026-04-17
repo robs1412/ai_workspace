@@ -1,60 +1,50 @@
 # TODO — frank
 
-Updated: 2026-04-17 10:00 CDT (Machine: Macmini.lan)
+Updated: 2026-04-17 10:34 CDT (Machine: Macmini.lan)
 
 ## In Progress
 
-- Monitor Robert's OPS task queue.
-- Check Robert's daily Portal digest email and surface follow-ups.
-- Monitor inbound receipt emails and draft next steps.
+- Standing Frank communication monitor.
+  - Monitor Robert's OPS task queue.
+  - Check Robert's daily Portal digest email and surface follow-ups.
+  - Monitor inbound receipt emails and draft next steps.
+  - Add OPS-specific follow-up drafting from selected tasks when the source task and owner are unambiguous.
+  - Receipt follow-ups to preserve for the receipt workflow:
+    - add duplicate protection when merchants resend receipts
+    - add receipt category heuristics by merchant
 - Await Claude's reply on Screenbox vs Playwright workflow recommendations.
   - Local Frank task id: `frank-2026-claude-screenbox-workflow`
   - Source session: `158f2faf`
   - Sent to Claude on 2026-04-16 with subject `Screenbox workflow recommendations`.
   - Need: capture Claude's recommended setup, command pattern, artifacts/screenshots, handoff format, and cautions on when Playwright should still be used.
-- Introduce Frank to Sonat.
 - Finish the Mitch account archive/imapsync transfer.
   - Destination IMAP login for `tastingroom@kovaldistillery.com` now works with the secured secret reference.
   - Next step: rerun controlled `imapsync` for the incomplete Mitch archive folders and verify final destination counts.
-- 2026-04-10: Audit CPanel forwarders for `koval-distillery.com`.
-  - OPS/Portal task ID: `366218`
+- 2026-04-10: Complete mail-routing audit and gap map.
+  - OPS/Portal task IDs: `366218`, `366219`, `366220`, `366221`
   - Due: `2026-04-18`
-  - Preserve Robert's note:
+  - CPanel forwarders for `koval-distillery.com`:
     - check all forwarders on CPanel for domain `koval-distillery.com`
     - make sure all old users and general forwarders (`sales@`, `marketing@`) are somewhat covered and don't just fail
     - current CPanel examples noted:
       - `marketing@koval-distillery.com -> abby.boler@kovaldistillery.com`
       - `marketing@koval-distillery.com -> ashley.mccarron@kovaldistillery.com`
-- 2026-04-10: Audit Google default routing for `kovaldistillery.com`.
-  - OPS/Portal task ID: `366219`
-  - Due: `2026-04-18`
-  - Preserve Robert's note:
+  - Google default routing for `kovaldistillery.com`:
     - check default routing in Google for `kovaldistillery.com`
     - also check users in Google (`additional E-mail accounts`)
     - Sonat now gets both marketing aliases
-    - we want to make sure no emails are lost
+    - make sure no emails are lost
     - current strategy is to add a default routing in Gmail for users who only have an account at `@koval-distillery.com`
     - Robert probably needs to provide export files because Codex can't log into Google Admin directly
-- 2026-04-10: Document mail routing map and gap analysis.
-  - OPS/Portal task ID: `366220`
-  - Due: `2026-04-18`
-  - Preserve Robert's note:
-    - all this needs to be documented in a table:
-      - where the routing happens
-      - what happens now
-      - where the gaps are
-      - how to identify failures
+  - Mail-routing table and gap analysis:
+    - document where routing happens, what happens now, where the gaps are, and how to identify failures
     - make a list of general forwarders (`sales@`, `marketing@`, `all@`) so we can have a map and know how to communicate
-- 2026-04-10: Audit group-mail strategy across Portal, Forge, and Lists.
-  - OPS/Portal task ID: `366221`
-  - Due: `2026-04-18`
-  - Preserve Robert's note:
-    - related to previous task
+  - Group-mail strategy across Portal, Forge, and Lists:
     - audit all users and group relation
     - we may have switched to using group definition in Portal for mailings instead of manually creating forwarders in CPanel
-    - delete old email accounts in CPanel and forwarders that are no longer needed
-    - this needs to tie into `forge` / `lists` because communication to groups should really happen there
-    - use this opportunity to check the domain interaction between `koval-distillery.com` and `kovaldistillery.com`
+    - delete old email accounts in CPanel and forwarders that are no longer needed only after review/approval
+    - tie this into `forge` / `lists` because communication to groups should really happen there
+    - check the domain interaction between `koval-distillery.com` and `kovaldistillery.com`
 
 ## Backlog
 
@@ -64,18 +54,17 @@ Updated: 2026-04-17 10:00 CDT (Machine: Macmini.lan)
   - Request: evaluate `https://featured.com/experts/questions?tab=questions` as a platform for reporter comments and possible automation around KOVAL, Thresh and Winnow, distilling approach, and organic focus.
   - Current state: source email was captured, Sonat's acknowledgement was logged/filed, and no external pitching or automated outreach has started.
   - Next step: define an internal workflow, approval gate, and owner path before any external response or automation.
-- When improving Frank inbox or assistant behavior, mirror the improvement for Avignon where applicable so Sonat's assistant path does not fall behind Frank's.
 - Expand from draft-only to narrow auto-send rules after validation.
+  - Keep the Avignon mirror rule as part of any future assistant-behavior implementation so Sonat's assistant path does not fall behind Frank's.
 - Company party member invite.
-- Add OPS-specific follow-up drafting from selected tasks.
-- Add duplicate protection when merchants resend receipts.
-- Add receipt category heuristics by merchant.
 - Define and approve live Papers lookup/projection for Frank email links.
   - Current state: local/runtime insertion hook can format supplied Papers URLs, but existing Workspaceboard Papers snapshot is metadata-only and does not provide safe URLs.
   - Needed before automation: approved Papers source/API/read path, canonical URL field, redaction rules, duplicate behavior, and whether Claude or Workspaceboard owns the projection.
 
 ## Done
 
+- 2026-04-17: Reduced stale Frank communication TODO queue.
+  - Grouped the standing OPS/Portal/receipt monitor work, grouped receipt duplicate/category follow-ups under that parent, grouped four related mail-routing audit tasks under one parent, and folded the Avignon mirror reminder into the future assistant-behavior implementation note. Closed the stale `Introduce Frank to Sonat` reminder because local TODO/HANDOFF evidence shows Frank has already sent Sonat task-capture/status communications and preserved Sonat-facing context.
 - 2026-04-17: Corrected Frank EOD schedule and signature.
   - Robert corrected that EOD should arrive at 18:00 Central and that Frank's social links should not render as angle-bracket URLs. Updated the existing LaunchAgent to 06:00/18:00, fixed runtime plain-text signature links, reloaded the LaunchAgent, verified syntax/plist/dry-run previews, and confirmed today's already-sent `frank-eod-summary-2026-04-17` sent-log entry plus duplicate-skip protection. No live EOD email was sent during this correction.
 - 2026-04-17: Enabled Frank live morning/EOD daily reporting runtime.
