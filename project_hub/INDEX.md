@@ -3,6 +3,12 @@ Last Updated: 2026-04-17 16:09:51 CDT (Machine: Mac.lan)
 
 ## Open
 
+- **2026-04-17 AI Transfer Gate**
+  - Master ID: `AI-INC-20260417-AI-TRANSFER-GATE-01`
+  - Detail log: `project_hub/issues/2026-04-17-ai-transfer-gate.md`
+  - Repos: `ai_workspace`, workstation SSH state on M4 and MacBook, Mac mini client helper
+  - Status: partially complete; M4 now forces Mac mini file pulls through a one-time code gate, while MacBook install is pending because SSH is currently unreachable.
+
 - **2026-04-15 Gmail Readonly Export CLI**
   - Master ID: `AI-INC-20260415-GMAIL-READONLY-EXPORT-CLI-01`
   - Detail log: `project_hub/issues/2026-04-15-gmail-readonly-export-cli.md`

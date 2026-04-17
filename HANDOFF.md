@@ -6,6 +6,15 @@ Use this file for cross-machine/session handoffs.
 
 ## Current Workflow Handoff
 
+- AI transfer gate installed on M4 at `2026-04-17 16:38 CDT` from `Mac.lan`.
+  - Purpose: `.17` can fetch a file from the M4 only after Robert creates a short-lived one-time grant and code locally on the M4.
+  - Receiver script: `/Users/werkstatt/ai_workspace/scripts/ai_transfer_gate.py`; Mac mini helper: `/Users/werkstatt/ai_workspace/scripts/ai_transfer_fetch.py`.
+  - M4 `authorized_keys` backup before restriction: `/Users/kovaladmin/.ssh/authorized_keys.bak.20260417163618`.
+  - Replaced only the matching `macmini-to-kovaladmin` public-key line with a forced command restricted by `from="192.168.55.17"`, `restrict`, no forwarding, no PTY, and `/Users/werkstatt/ai_workspace/scripts/ai_transfer_gate.py serve`.
+  - Verification: direct shell from `.17` to M4 now fails at the gate; a temporary one-time approved fetch succeeded and matched source hash; consumed grants cannot be reused.
+  - MacBook is still pending because SSH timed out at `192.168.55.38`, `192.168.55.44`, and current mDNS `192.168.55.11`.
+  - Project log: `project_hub/issues/2026-04-17-ai-transfer-gate.md`.
+
 - Mac mini Workspaceboard runtime mitigation at `2026-04-17 16:25 CDT` from `Mac.lan`.
   - Incident: `Macmini.lan` / `.17` was temporarily unreachable from M4, then returned after Robert opened Codex locally.
   - Confirmed Workspaceboard risk: launch logs showed a prior `node-pty` terminal attach crash while the runtime used Node `v25.9.0`; `node-pty` loads cleanly under `/usr/local/opt/node@24/bin/node`.
