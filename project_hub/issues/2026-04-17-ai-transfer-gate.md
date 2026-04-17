@@ -24,7 +24,7 @@ The M4 `authorized_keys` file contained the Mac mini public key as a normal unre
 ### ai_workspace
 
 - Repo Log ID: `AI-INC-20260417-AI-TRANSFER-GATE-01-ai-workspace`
-- Commit SHA:
+- Commit SHA: local `5887df7`, follow-up local commit pending for wrapper UX
 - Commit Date:
 - Change Summary: Added `scripts/ai_transfer_gate.py`, `scripts/ai_transfer_fetch.py`, and `docs/ai-transfer-gate.md`.
 
@@ -32,6 +32,8 @@ The M4 `authorized_keys` file contained the Mac mini public key as a normal unre
 
 - M4 receiver gate installed at `/Users/werkstatt/ai_workspace/scripts/ai_transfer_gate.py`.
 - Mac mini fetch helper installed at `/Users/werkstatt/ai_workspace/scripts/ai_transfer_fetch.py`.
+- M4 double-click approval launcher added at `/Users/werkstatt/ai_workspace/scripts/approve_ai_fetch.command`; it opens a file picker, creates a one-time grant, prints the grant id/code, and copies the grant id/code to clipboard.
+- Mac mini wrapper added at `/Users/werkstatt/ai_workspace/scripts/fetch_from_m4.sh` for the common M4 fetch path.
 - Replaced only the matching M4 `authorized_keys` line for public key comment `macmini-to-kovaladmin`.
 - M4 `authorized_keys` backup created: `/Users/kovaladmin/.ssh/authorized_keys.bak.20260417163618`.
 - Restricted line includes `from="192.168.55.17"`, `restrict`, `no-agent-forwarding`, `no-X11-forwarding`, `no-port-forwarding`, `no-pty`, and forced command `/Users/werkstatt/ai_workspace/scripts/ai_transfer_gate.py serve`.
@@ -39,6 +41,7 @@ The M4 `authorized_keys` file contained the Mac mini public key as a normal unre
 - Temporary approved-transfer test succeeded from `.17` to M4: fetched file SHA-1 matched source SHA-1.
 - Reusing or consuming grants is blocked; local test confirmed a second use returns `Grant has already been used`.
 - MacBook was not changed because SSH timed out at remembered/current addresses: `192.168.55.38`, `192.168.55.44`, and `192.168.55.11`.
+- Wrapper verification: `zsh -n` passed for `approve_ai_fetch.command` and `fetch_from_m4.sh`; Mac mini copy of `fetch_from_m4.sh` passed syntax/help smoke.
 
 ## Rollback Plan
 

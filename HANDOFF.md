@@ -9,6 +9,8 @@ Use this file for cross-machine/session handoffs.
 - AI transfer gate installed on M4 at `2026-04-17 16:38 CDT` from `Mac.lan`.
   - Purpose: `.17` can fetch a file from the M4 only after Robert creates a short-lived one-time grant and code locally on the M4.
   - Receiver script: `/Users/werkstatt/ai_workspace/scripts/ai_transfer_gate.py`; Mac mini helper: `/Users/werkstatt/ai_workspace/scripts/ai_transfer_fetch.py`.
+  - User-facing M4 approval launcher: double-click `/Users/werkstatt/ai_workspace/scripts/approve_ai_fetch.command`; it opens a file picker and copies the grant id/code to the clipboard.
+  - User-facing Mac mini fetch wrapper: `/Users/werkstatt/ai_workspace/scripts/fetch_from_m4.sh <grant_id> <output_path>`.
   - M4 `authorized_keys` backup before restriction: `/Users/kovaladmin/.ssh/authorized_keys.bak.20260417163618`.
   - Replaced only the matching `macmini-to-kovaladmin` public-key line with a forced command restricted by `from="192.168.55.17"`, `restrict`, no forwarding, no PTY, and `/Users/werkstatt/ai_workspace/scripts/ai_transfer_gate.py serve`.
   - Verification: direct shell from `.17` to M4 now fails at the gate; a temporary one-time approved fetch succeeded and matched source hash; consumed grants cannot be reused.

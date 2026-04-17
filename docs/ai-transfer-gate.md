@@ -40,7 +40,16 @@ The installer creates a timestamped `authorized_keys` backup before replacing an
 
 ## Approve A File
 
-Run locally on the M4 or MacBook:
+Preferred M4 flow: double-click:
+
+```text
+/Users/werkstatt/ai_workspace/scripts/approve_ai_fetch.command
+```
+
+It opens a file picker, creates a one-time grant, prints the grant id and code, and copies the grant id/code to the clipboard.
+No Python command is required for the normal approval flow.
+
+Terminal flow:
 
 ```bash
 /Users/werkstatt/ai_workspace/scripts/ai_transfer_gate.py approve ~/Desktop/example.pdf
@@ -51,6 +60,14 @@ It prints a grant id and six-digit code. Share those only for the specific trans
 ## Fetch From Mac Mini
 
 Run on `Macmini.lan`:
+
+```bash
+/Users/werkstatt/ai_workspace/scripts/fetch_from_m4.sh \
+  1713370000-abcd1234 \
+  ~/Downloads/example.pdf
+```
+
+Lower-level form:
 
 ```bash
 /Users/werkstatt/ai_workspace/scripts/ai_transfer_fetch.py \
