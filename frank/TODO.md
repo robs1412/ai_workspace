@@ -1,9 +1,14 @@
 # TODO — frank
 
-Updated: 2026-04-17 10:59 CDT (Machine: Macmini.lan)
+Updated: 2026-04-19 08:55 CDT (Machine: RobertMBP-2.local)
 
 ## In Progress
 
+- Send the Codex/Claude organigram and task-record bridge note to Claude through Frank once the approved Frank runtime is reachable.
+  - Local task id: `frank-2026-claude-codex-organigram-work-record-bridge`.
+  - Draft: `drafts/claude-codex-organigram-work-record-bridge-2026-04-19.txt`.
+  - Source refs: `AI-INC-20260419-CODEX-CLAUDE-PAPERS-01`, Claude `ref:2379`, and prior bridge `ref:1773`.
+  - Blocked on MacBook fallback: approved Frank send helper/runtime path is not present locally and both local Workspaceboard Frank worker sessions are `launch-failed`. Send from Mac mini Frank runtime when `.17`/Frank is available.
 - Standing Frank communication monitor.
   - Monitor Robert's OPS task queue.
   - Check Robert's daily Portal digest email and surface follow-ups.

@@ -3,6 +3,18 @@ Last Updated: 2026-04-16 19:53 CDT (Machine: Macmini.lan)
 
 ## Open
 
+- **2026-04-19 AI Bridge Mac Mini Handoff**
+  - Master ID: `AI-INC-20260419-CODEX-CLAUDE-PAPERS-01`
+  - Detail log: `project_hub/issues/2026-04-19-ai-bridge-macmini-handoff.md`
+  - Repos: `ai_workspace`, `workspaceboard`, Mac mini Frank runtime after pull
+  - Status: Local role docs, task-record model, organigram source, and Frank draft are prepared; Mac mini needs pull/restart/Frank send from approved runtime
+
+- **2026-04-19 Codex / Claude / Papers Integration Plan**
+  - Master ID: `AI-INC-20260419-CODEX-CLAUDE-PAPERS-01`
+  - Detail log: `project_hub/issues/2026-04-19-codex-claude-papers-integration-plan.md`
+  - Repos: `ai_workspace`, `workspaceboard`; future `ai-bridge`, MI/Papers/.205 surfaces only after approval
+  - Status: role-map/organigram planning started; next recommended slice is a no-write work-record projection from TODO/project-hub/Workspaceboard into a structured MI/Papers-ready shape
+
 - **2026-04-15 Login Portal Security Rollout Activation**
   - Master ID: `AI-INC-20260415-LOGIN-PORTAL-SECURITY-ROLLOUT-01`
   - Detail log: `project_hub/issues/2026-04-15-login-portal-security-rollout-activation.md`

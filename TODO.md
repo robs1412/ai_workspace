@@ -1,12 +1,17 @@
 # TODO — ai_workspace
 
-Updated: 2026-04-17 10:24 CDT (Machine: Macmini.lan)
+Updated: 2026-04-19 08:45 CDT (Machine: RobertMBP-2.local)
 
 ## In Progress
 
 _No active AI Workspace implementation items._
 
 ## Waiting for Next Step
+
+- Codex/Claude integration approvals: approve the next no-write work-record projection slice and decide whether Monday OAuth planning should be routed through Security Guard before any Frank/Avignon/Macee token work.
+  - Source: `project_hub/issues/2026-04-19-codex-claude-papers-integration-plan.md`.
+  - Immediate safe implementation candidate: sanitized read-only JSON projection from TODO/project-hub/Workspaceboard session metadata into a Workspaceboard view, shaped around the Claude-style task-record spine from `ref:2379` (`task #1361`, requester, assigned agent, priority, deliverable bullets, update promise, source ref) and preferring OPS/Portal task IDs where available; no `.205`, Papers write, OAuth, Portal/CRM mutation, mailbox runtime, MCP, or production action.
+  - Follow-up tasks to route after approval: Portal existing-account/contact summary workflow; Monday Frank/Avignon OAuth planning; Macee inbox OAuth/template derivation; April 27 Frank national-outreach/Macee handoff email; MI/Papers read-only agent registration.
 
 - OPS/outreach decisions: approve or define the next Connecteam replacement stage and OPS market-improvement product rules before live implementation.
   - Connecteam source: ops commit `18d32a04ddaf5257214d62340eda7e044a1ef3d8`, including docs and `scripts/connecteam_staging_parity.php`.
@@ -44,6 +49,9 @@ _No active AI Workspace implementation items._
   - Preserve the approval gates from the matching Waiting family: no credentials, external sends, production DB/export access, source-system API access, auth/session changes, live data mutation, deploy, cleanup, or system-setting changes until explicitly approved.
 
 ## Done
+
+- **2026-04-19** AI Manager Robert/Dmytro chain-of-command roles added.
+  - Added role docs, operating-model routing, AGENTS/HANDOFF/project-hub notes, and Workspaceboard organigram entries so AI Manager Robert/Dmytro query Task Manager before routing to Codex workers or Claude agents. Live `.205`, OAuth, MI/Papers writes, Portal/CRM mutation, mailbox runtime, MCP exposure, and production actions remain gated.
 
 - **2026-04-17** AI Workspace TODO count-reduction audit completed.
   - Compressed duplicate waiting/backlog entries into grouped blocker families, reduced verbose Done/audit detail in the active queue, and recorded the count policy in `HANDOFF.md`. Follow-up hygiene collapsed source-workspace implementation backlog into one source-owned continuation family. Scope stayed docs-only.

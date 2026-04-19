@@ -1,10 +1,38 @@
 # Codex Session Handoff
 
-Last Updated: 2026-04-17 10:24 CDT (Machine: Macmini.lan)
+Last Updated: 2026-04-19 08:15 CDT (Machine: RobertMBP-2.local)
 
 Use this file for cross-machine/session handoffs.
 
 ## Current Workflow Handoff
+
+- AI Manager chain-of-command role update at `2026-04-19 08:45 CDT`.
+  - Added `worker_roles/ai-manager-robert.md` and `worker_roles/ai-manager-dmytro.md`.
+  - Updated role docs and operating model so Robert's active Codex login is represented as `AI Manager Robert`, Dmytro is represented as `AI Manager Dmytro`, and both query the fixed Workspaceboard Task Manager before routing down to Codex workers or Claude agents.
+  - Updated Workspaceboard organigram source to show both AI Manager roles above the Task Manager chain.
+  - Guardrail: AI Manager Dmytro may recommend technical sequencing and bridge contracts, but Robert remains final approval owner for external sends, finance/legal/HR, auth/security, production, destructive data, OAuth, `.205`, MCP exposure, MI/Papers writes, and shared-write behavior.
+  - Follow-up from Robert's Claude example `ref:2379`: Codex should adopt Claude's cleaner task-record spine with task id, source ref, requester, assigned agent/role, priority, status, deliverable bullets, next update promise, approval gates, and single-writer owner. OPS/Portal task IDs are preferred when available; local stable ids are fallback only.
+  - Frank draft prepared for Claude: `frank/drafts/claude-codex-organigram-work-record-bridge-2026-04-19.txt`. Send is blocked on this MacBook fallback because the approved Frank runtime/send helper is not available locally and local Frank board sessions are launch-failed; send from the Mac mini Frank runtime when `.17`/Frank is reachable.
+  - Mac mini handoff prepared: `project_hub/issues/2026-04-19-ai-bridge-macmini-handoff.md`. `.17` is reachable again by ping/API auth gate/ports, but direct SSH from this MacBook as `admin@192.168.55.17` failed with `Permission denied (publickey)`, so no Mac mini runtime/service/mailbox state was changed from this pass.
+
+- Codex/Claude integration role-map and planning pass at `2026-04-19 08:15 CDT`.
+  - Added Codex/Claude integration role docs: `worker_roles/codex-integration-manager.md`, `worker_roles/codex-local-agent.md`, `worker_roles/claude-server-agent.md`, `worker_roles/claude-205-structure.md`, and `worker_roles/outreach-communicator.md`.
+  - Updated `worker_roles/README.md` and `worker_roles/operating-model.md` so Codex Integration Manager owns cross-agent directive/automation planning, Codex Local Agent represents local Codex work, Claude Server Agent and Claude `.205` Structure represent server-side Claude visibility, and Outreach Communicator owns reusable booking/outreach drafts through approved sender routes.
+  - Updated Workspaceboard organigram source (`worker-organigram.php`, `worker-organigram.html`) to include Codex Integration Manager, Codex Local Agent, Claude Server Agent, Claude `.205` Structure, and Outreach Communicator as visible cards/roles.
+  - Recorded the plan in `project_hub/issues/2026-04-19-codex-claude-papers-integration-plan.md` and linked it from `project_hub/INDEX.md`.
+  - Codex recommendation: implement a no-write work-record projection from TODO/project-hub/Workspaceboard session metadata before any Papers/MI write path. This addresses the "Codex is still using Markdown instead of Papers" gap without giving Codex and Claude simultaneous write access to the same shared records.
+  - Follow-up tasks captured in `TODO.md`: Portal existing-account/contact summary workflow, Monday Frank/Avignon OAuth planning, Macee inbox OAuth/template derivation, April 27 Frank national-outreach/Macee handoff email, and MI/Papers read-only agent registration.
+  - Guardrails: no `.205`, MI/Papers write, OAuth, Portal/CRM mutation, mailbox runtime, MCP exposure, service restart, production data, or external send was performed in this pass.
+
+- Workspaceboard `.17` outage and local-client drift handoff at `2026-04-19 08:04 CDT` from the MacBook VPN path.
+  - User report: `wb.koval.lan` / Workspaceboard seemed down. Robert clarified that `wb.koval.lan` is the supported client URL for iPhone and MacBook, and that M4/MacBook should remain clients/local fallbacks rather than being silently promoted to Workspaceboard backends.
+  - Read-only reachability findings: MacBook, router, `.205` Reatan, and M4 could not reach `192.168.55.17` on SSH or Workspaceboard runtime. Router DHCP still listed `Macmini` at `192.168.55.17`, but router ARP/neigh moved to `INCOMPLETE`; `.205` reported `No route to host` for `.17:22`, `.17:80`, and `.17:17878`. This is lower-level than a Workspaceboard bind-only failure and needs Mac mini physical restart/network recovery before service inspection can continue.
+  - Wake attempts were non-destructive only: router had no wake tool; Wake-on-LAN magic packets from MacBook and M4 did not restore `.17` reachability.
+  - Git sync correction: MacBook `/Users/werkstatt/ai_workspace` was `55` commits behind and has now been fast-forwarded to `origin/main` `825e795`; MacBook `/Users/werkstatt/workspaceboard` was `33` commits behind and has now been fast-forwarded to `origin/main` `c689804`. This explains why localhost Workspaceboard/TODO state differed from the Mac mini/current source. Local LaunchAgent runtime copies are separate build artifacts; pulling source alone does not prove the running localhost board has been reinstalled from that source.
+  - MacBook localhost correction: reinstalled local `com.koval.workspaceboard` from the pulled `/Users/werkstatt/workspaceboard` source with `CODEX_DASHBOARD_HOST=127.0.0.1`; live listener is `127.0.0.1:17878`. Post-reinstall API check reports AI Workspace open TODO count `5` and Workspaceboard open TODO count `1`, matching the pulled TODO files rather than the stale local `60`-item view.
+  - Conflict handling: AI Workspace local handoff notes were stashed, pull was fast-forwarded, then this current handoff and `AGENTS.md` directive were re-added on top of upstream. Workspaceboard local remote-access edits were stashed, pull was fast-forwarded, and upstream `index.php` / `workspaceboard_auth.php` canonical-host guarded versions were kept because they already include the relevant remote/iPhone-safe route work.
+  - Temporary failover correction: M4 Workspaceboard was briefly rebound to `192.168.55.35:17878` during feasibility checking, then reverted to client/local default `CODEX_DASHBOARD_HOST=127.0.0.1` with listener `127.0.0.1:17878`. No `.205` Traefik edit, router DNS edit, Mac mini edit, source-code mutation, or secret print was performed.
+  - New directive recorded in `AGENTS.md`: do not repoint `wb.koval.lan`, promote M4/MacBook to backend, edit router DNS/hosts, edit `.205` Traefik, change Mac mini LaunchAgents/bind addresses/tmux socket ownership, or perform cleanup that could affect `.17` reachability unless Robert explicitly approves and an independent recovery path is verified first. If `.17` is already unreachable, stop at read-only diagnosis and ask Robert for physical restart/recovery.
 
 - AI Workspace TODO source-owned backlog reduction completed at `2026-04-17 10:24 CDT`.
   - Starting state for this pass: clean git status, `git pull --ff-only` already up to date, empty append queue, and `TODO.md` at `13` top-level bullets (`4` Waiting, `5` Backlog, `4` Done; open/actionable `9` Waiting+Backlog).
