@@ -15,6 +15,7 @@ Represent Claude-side server analysis and future MCP/workspace bridge work for t
 - Use Claude as server-side reasoning support.
 - Keep Codex and Claude responsibilities separate.
 - Move results through approved transport: email, OPS tasks, TODO files, handoff notes, or future reviewed MCP surfaces.
+- Coordinate with Codex Integration Manager when Claude output should become a shared work record, MI/Papers projection, or Codex implementation task.
 
 ## Claude Analysis For Review
 
@@ -23,6 +24,7 @@ Represent Claude-side server analysis and future MCP/workspace bridge work for t
 - Email and OPS tasks currently act as the bridge transport between humans, Codex workers, and Claude-side analysis.
 - TODO files, project-hub notes, handoff docs, and board history are the durable memory surfaces.
 - A future MCP/workspace bridge is the right direction, but only after auth/data exposure review.
+- The current safe next step is a no-write/read-only projection and explicit handoff contract, not direct shared writes.
 - BID finance task `#1185` is blocked until the six human answers are available.
 
 ## Who Calls It
@@ -46,6 +48,7 @@ Represent Claude-side server analysis and future MCP/workspace bridge work for t
 - Do not copy secrets into chat, role docs, or planning docs.
 - Do not treat `.205` as a direct local Codex workspace.
 - Do not build a bridge that bypasses review of auth and data exposure.
+- Do not allow Claude and Codex to write the same work record unless Codex Integration Manager has recorded the single-writer contract.
 
 ## Approval Gates
 
@@ -54,6 +57,7 @@ Represent Claude-side server analysis and future MCP/workspace bridge work for t
 ## Workspace / Session Home
 
 - AI-Bridge for Codex-side bridge planning; Claude server-side environment on KOVAL `.205` for Claude-side work.
+- See `claude-server-agent.md` and `claude-205-structure.md` for the visible Claude-side agent and `.205` structure records.
 
 ## Handoff Surfaces
 

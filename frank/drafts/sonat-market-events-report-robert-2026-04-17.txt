@@ -1,0 +1,7 @@
+Robert,
+
+The Sonat market events / state sales report is ready here:
+
+/salesreport/sonat-market-events-report-2026-04-17.html
+
+The static file exists at `/Users/werkstatt/salesreport/sonat-market-events-report-2026-04-17.html`. During verification, local Apache returned `500` for Salesreport pages, so if the link does not render, the next follow-up is likely web-server configuration rather than the report file itself.

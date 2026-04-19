@@ -1,10 +1,10 @@
 # Digital Office Project/Task/Work Record Source-of-Truth Proposal
 
-- Last Updated: 2026-04-16 17:05:00 CDT (Machine: Macmini.lan)
+- Last Updated: 2026-04-18 09:17 CDT (Machine: Macmini.lan)
 - Date: 2026-04-14
 - Workspace: `ai_workspace`
 - Master ID: `AI-INC-20260414-DIGITAL-OFFICE-WORK-RECORDS-01`
-- Status: local no-write projection pack prepared; live writer and OAuth/token storage decisions still gated
+- Status: local no-write projection pack prepared; OAuth/token storage policy closed; Papers MCP scoping and read-only wrapper design routed through Workspaceboard workers `c6421ac1` and `778ef252`; live writer and implementation gates remain closed pending Robert read-only access/scope approval
 - Scope: docs-only planning and object-model/projection design
 
 ## Task
@@ -24,7 +24,26 @@ Task Manager approved the safe local-only/no-write next slice. The local project
 
 This pack is planning/projection material only. It does not write to Papers, `.205`, `.17`, OPS/Portal databases, credentials, MCP exposure, notifications/email, Frank/Avignon runtime, services, deploy targets, or live runtime state.
 
-Remaining human decision: choose Google Drive OAuth/token storage policy before any future Drive-backed projection automation. Current recommendation is machine-local or approved secret manager/keychain storage, not Google Drive-synced planning files or git.
+OAuth/token storage policy is closed: rejected storage targets include Google Drive-synced planning/runtime folders, Papers records, normal manifests, logs, chat, and git. Future per-machine automation should use machine-local keychain/private storage by default; shared automation requires an approved secret manager, service-account/delegated app flow, or keychain-backed provisioning path.
+
+## 2026-04-18 Papers MCP Routing
+
+Frank sent Claude task `frank-2026-claude-papers-completion-reporting` on 2026-04-17. Claude replied that Papers MCP is live at `https://papers.koval.lan/mcp`, and Robert replied that Frank should route this to Task Manager / Workspaceboard so it can start being used or integrated.
+
+Visible Workspaceboard worker `c6421ac1` (`Papers MCP integration read-only scoping`) now owns the next safe action: determine whether Workspaceboard can perform a no-secret, read-only MCP reachability/schema/tool-list check from this machine, or produce exactly one missing approval/input if it cannot.
+
+Gates remain closed for live Papers writes, credentials/auth handling, `.205`, MCP config changes, LaunchAgent/runtime mutation, production mutation, code edits without Code/Git Manager, deploy, push, live pull, and private mailbox-body exposure.
+
+Follow-through completed:
+
+- `c6421ac1` verified no-secret MCP reachability and tool schema. It did not read document bodies or call write tools.
+- Security Guard `c2e66c43` required a deny-by-default read-only wrapper with hard-denied mutation tools, fixed endpoint, server-side scopes, redaction, audit logging, and rate/volume limits.
+- Code/Git Manager `9a4787cd` cleared design-only planning and noted actual implementation is blocked until dirty Workspaceboard worktree ownership is resolved.
+- Workspaceboard worker `778ef252` produced the design-only wrapper plan and test outline without editing files or calling Papers MCP.
+
+Current decision:
+
+Robert must approve or reject live read-only Workspaceboard access to Papers through the deny-by-default wrapper, and name the initial allowed Papers scopes/collections plus any initial document IDs approved for body-level reads.
 
 ## Inputs Reviewed
 
@@ -450,9 +469,9 @@ Recommended route:
 
 ## Decision Needed
 
-Resolve the current storage decision before any Drive-backed automation:
+Storage policy is closed; resolve only the implementation path before any Drive-backed automation:
 
-Choose Google Drive OAuth/token storage policy for future projection tooling. Current recommendation: machine-local storage or an approved secret manager/keychain path, not Google Drive-synced planning files or git.
+Use machine-local keychain/private storage for per-machine automation, or name the approved secret manager/keychain/service-account path for shared automation. Do not use Google Drive-synced planning/runtime folders, Papers records, normal manifests, logs, chat, or git for OAuth/token material.
 
 The completed local pack remains docs-only and no-write; do not touch Papers or `.205`.
 

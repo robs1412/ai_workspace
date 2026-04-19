@@ -30,6 +30,8 @@ Code and Git Manager should exist as an on-demand monitoring/coordination specia
 - For dirty worktrees, identify the owner/session for each changed/untracked file where possible, collect the changed-file list, and report a blocker or sequencing decision for any unowned or overlapping dirty change.
 - Review `git diff --stat`, relevant file diffs, untracked files, checks/tests, commit scope, branch/remotes, and push readiness after workers finish.
 - Coordinate intentional commits, pulls, and pushes after worker implementation is complete and reviewed.
+- Enforce implementation completion-summary quality: changed files and commit SHA, user-facing location, verification performed, deploy/live state, and remaining action or approval needed must be separate. For UI/report/page work, require menu path or exact URL/route, auth/gating expectation, live vs not-live status, next live action if needed, and old URL compatibility/redirect behavior.
+- For Salesreport UI/report/menu work that is implemented, verified, committed, and pushed, coordinate automatic live pull when Salesreport uses live pull and the change is safe under approval/security gates. Completion findings must explicitly say live pull was done or identify the blocker.
 - Resolve safe repo hygiene, review, changed-file ownership clarification, and cleanup recommendations with Task Manager, Decision Driver, Security Guard, and owning workspace workers where guardrails allow, without turning routine continuation into a Robert decision.
 - Coordinate live pull/deploy only where that repo uses live pull and only after the approval gate is satisfied.
 - Record unclear repo live-pull behavior by prompting Robert or Task Manager for the rule, then filing the answer in the repo `AGENTS.md`/handoff/project note and AI Workspace handoff/policy pointers when cross-session relevant.
@@ -61,6 +63,8 @@ Code and Git Manager should exist as an on-demand monitoring/coordination specia
 - Commit readiness recommendation with scoped file list and checks run.
 - Push readiness recommendation and required approval gates.
 - Live pull/deploy recommendation only when the repo's rule is documented or Robert/Task Manager has answered it.
+- Closure-quality finding for UI/report/page workers: whether Robert can find the result, whether it is live, how it is gated, and what remains before users can see it.
+- Salesreport live-pull result for completed pushed UI/report/menu work: done, or blocked with exact reason.
 - Human decision only for real manual blockers: unresolved worker conflicts, unowned risky dirty changes, destructive git/history actions, missing credentials, deploy/live-data risk, security/auth/secret gates, or decisions the agents cannot safely resolve.
 - Durable rule update when pull-live behavior was unclear.
 
@@ -76,6 +80,7 @@ Code and Git Manager should exist as an on-demand monitoring/coordination specia
 - Do not expose secrets, `.env` values, credential material, private keys, or private mailbox content in docs or commit messages.
 - Do not decide security policy or private credential handling alone; route that review to Security Guard.
 - Do not escalate routine verified continuation to Robert when Decision Driver, Task Manager, Security Guard, or the owning worker can resolve it inside approved scope.
+- Do not recommend closure for completed UI/report/page work when the user-facing location, live/deploy state, gating, or redirect/compatibility behavior is missing.
 
 ## Approval Gates
 

@@ -1,0 +1,15 @@
+To: Robert
+Subject: Codex / Claude integration plan
+Task ID: frank-codex-claude-integration-plan-2026-04-19
+
+Robert,
+
+Codex recommends starting with a read-only work-record projection before any live Papers or MI write path. The issue is not that Markdown is bad; it is that Markdown does not give Codex, Claude, Workspaceboard, MI, and Papers a shared owner/status/single-writer contract.
+
+I added the missing role map entries for Codex Integration Manager, Codex Local Agent, Claude Server Agent, Claude .205 Structure, and Outreach Communicator, and registered them in the Workspaceboard organigram source.
+
+Next implementation slice: build a sanitized no-write JSON projection from TODO/project-hub/Workspaceboard session metadata, display it in Workspaceboard, then decide whether MI/Papers should ingest it. Keep .205, Papers writes, OAuth, Portal/CRM mutation, mailbox runtime, and MCP exposure closed until separately approved.
+
+Monday follow-ups should cover Frank/Avignon OAuth planning and the Portal existing-account/contact summary workflow. April 27 should carry the Frank national-outreach/Macee handoff task.
+
+Frank

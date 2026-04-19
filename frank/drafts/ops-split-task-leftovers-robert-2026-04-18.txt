@@ -1,0 +1,23 @@
+To: Robert <robert@kovaldistillery.com>
+Subject: Decision needed: OPS split-task leftovers 366206-366209
+Task ID: frank-2026-ops-split-task-leftovers-366206-366209
+
+Robert,
+
+I need four specific decisions so we can stop carrying the April 10 OPS split-task leftovers as vague blockers.
+
+1. OPS 366206 - hitlist optimization
+Does the shipped Salesreport hitlist work satisfy this task? If not, what exact remaining acceptance criterion should the worker complete?
+
+2. OPS 366207 - forge emails
+What did "forge emails" mean in this task: Forge campaign drafts, sent emails, audience/list linkage, or another Forge workflow?
+
+3. OPS 366208 - ai data analytics
+What monthly AI report output should Sonat/Frank review first? Please name the first report or sample output you want reviewed.
+
+4. OPS 366209 - duplicates in portal
+For Portal duplicates, should the next step be report-only, review markup, or approved cleanup? If cleanup is approved, what canonical-record rules should the worker use?
+
+Once I have those answers, I can route each item to the correct workspace instead of leaving the OPS TODO surface as generic blocked tracking.
+
+Frank

@@ -1,0 +1,25 @@
+Robert,
+
+I cleaned up the Frank/Avignon Gmail push approval packet. Please reply with concrete decisions on these points so the next worker can either proceed or keep the gates closed:
+
+1. Google Cloud project
+Which Google Cloud project should host Gmail Pub/Sub for Frank/Avignon, or should a new dedicated project be created?
+
+2. Pub/Sub owner
+Who should own and approve the Pub/Sub topic, pull subscription, and IAM setup for this slice?
+
+3. Gmail API watch
+Approve or reject implementing Gmail API `users.watch` for both Frank and Avignon with the minimum mailbox scope needed for the workflow.
+
+4. Mac mini machine-local storage
+Approve or reject machine-local token and `historyId` storage on the Mac mini runtime host. This would keep OAuth/token/history state out of git, Google Drive-synced planning files, project-hub records, normal logs, and chat.
+
+5. Pull subscriber runtime slice
+Approve or reject a pull-subscriber/runtime LaunchAgent slice with fallback periodic sync. This would not change Frank/Avignon polling cadence until a separate install/change is approved.
+
+6. MacBook role
+Should local Codex on the MacBook receive setup instructions only, or should it also run supplemental workers for this Gmail push work?
+
+Current boundary if approved: build only after Security Guard, Google Cloud owner, OAuth app owner, Runtime owner, and Code/Git Manager gates are cleared. No Gmail push/OAuth implementation credential reads, mailbox-body reads, Google Cloud mutation, Pub/Sub/IAM change, OAuth-client change, LaunchAgent/runtime install, code commit, deploy, or live pull has been done.
+
+Reference: AI Workspace project log `AI-INC-20260418-FRANK-AVIGNON-GMAIL-PUSH-01`.

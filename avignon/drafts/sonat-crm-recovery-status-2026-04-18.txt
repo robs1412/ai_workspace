@@ -1,0 +1,21 @@
+Hi Sonat,
+
+Quick status on the CRM additions recovery from the missed Avignon intake.
+
+Completed so far:
+- Avignon routed the recovery into visible worker sessions instead of leaving it inside the inbox monitor.
+- Importer session 86dc0b04 restored local preview access using the approved Codex 2FA workflow.
+- The importer-safe CSV was loaded to preview and verified as 5 rows.
+- The default actions stayed off: no phpList sync, no account filter, and no contact filter.
+- The worker stopped before Confirm Import.
+- A read-only check found 0 recent importer history rows, so no import was created.
+- No CRM records, Portal records, phpList records, filters, mailbox labels, or external sends were changed.
+
+Still in progress:
+- Portal worker session 44b8a370 is reviewing the account-only/activity-note rows and the status-update row as a separate safe-prep slice. It is blocked from making any CRM or Portal mutation unless the existing source approval is explicit and the action is safe.
+
+Decision still needed:
+- Two duplicate/link records need a human decision before any mutation. For each, please decide whether Avignon should link/update the existing contact record or keep it separate, and which account should own the relationship/update.
+
+Next action:
+- I will wait for the Portal worker's non-secret blocker or completion output, then report the final recovery state. I will not import or update the two duplicate/link records until you approve the target/link handling.

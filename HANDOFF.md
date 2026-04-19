@@ -1,10 +1,209 @@
 # Codex Session Handoff
 
-Last Updated: 2026-04-17 10:24 CDT (Machine: Macmini.lan)
+Last Updated: 2026-04-19 10:12 CDT (Machine: Macmini.lan)
 
 Use this file for cross-machine/session handoffs.
 
 ## Current Workflow Handoff
+
+- AI Manager / Codex Integration synthesis recorded at `2026-04-19 10:14 CDT`.
+  - Source: MacBook `origin/main` commit `32d5ded` and Workspaceboard organigram commit `88cd7a3`, reconciled into the Mac mini dirty tree under Code/Git Manager merge review.
+  - Added the missing AI Manager Robert / AI Manager Dmytro chain-of-command guidance and shared task-record spine to the Mac mini canonical docs while preserving local Mac mini operational records.
+  - Role map now includes AI Manager Robert, AI Manager Dmytro, Codex Integration Manager, Codex Local Agent, Claude Server Agent, Claude `.205` Structure, and Outreach Communicator as docs/metadata roles. Workspaceboard organigram source was already fast-forwarded to `88cd7a3`.
+  - Shared task-record spine: prefer Portal/OPS task id when available, plus source ref, requester, assigned role, priority, status, deliverable, next update, source links, approval gates, and single-writer owner.
+  - Preserved Mac mini state: Frank/Avignon CC/BCC helper records, Gmail pause, completion-report rules, chief-of-staff routing, TODO-count cleanup, source-access cleanup, UI/report completion-location rules, and Salesreport live-pull rule.
+  - No `.205`, OAuth, Papers/MI write, Portal/CRM mutation, mailbox credential exposure, MCP exposure, deploy, live pull, service restart, reset/rebase/force-push, commit, push, or dirty-file discard was performed.
+
+- Monday morning Mac mini hard-server-mode follow-up added at `2026-04-19 10:12 CDT`.
+  - Robert directed that the Monday 2026-04-20 update/follow-up should include this item alongside the Frank/Avignon Gmail polling/OAuth health follow-up.
+  - Include: wire the Mac mini; plan turning the Mac mini into hard server mode; migrate/verify critical Workspaceboard, Frank, and Avignon services so logout of the Aqua/GUI session is safe; only then consider logging out the old workstation GUI session.
+  - Scope from this note is recording/planning only. Do not perform service migration, logout, LaunchDaemon changes, service restarts, LaunchAgent/runtime changes, deploy, push, live pull, OAuth work, mailbox reads, credential access, or Workspaceboard mutation from this note.
+
+- Security Guard OAuth follow-up review recorded at `2026-04-19`.
+  - Source: Robert input in active Codex Integration Manager chat on 2026-04-19; coordinating session `b66fdade`; Security Guard review session `71ab6f94`.
+  - Canonical non-secret checklist: `project_hub/issues/2026-04-18-frank-avignon-gmail-push-plan.md`, section `2026-04-19 Security Guard OAuth Follow-Up Review`.
+  - Decision: planning-only is allowed for Frank, Avignon, and future Macee inbox/template work. No OAuth, Google auth, mailbox content read, credential/token inspection, Google Cloud/PubSub/IAM mutation, runtime cadence change, deploy/live pull/service restart, or external send is approved by this review.
+  - Monday 2026-04-20 first action for Frank/Avignon remains polling-health verification from non-secret metadata. The Monday update must also include the Mac mini hard-server-mode planning item above. Only after polling health is verified may Robert decide whether true Gmail API push is still needed.
+  - Macee is future approval-gated work with no due date from this review. Prefer supplied sanitized examples/export over OAuth; any Macee inbox OAuth requires Robert plus mailbox-owner approval and Security Guard scope/storage review before access.
+
+- Frank/Avignon Gmail push pause recorded at `2026-04-18 13:42 CDT`.
+  - Robert paused the Gmail API push/OAuth/PubSub slice until Monday, 2026-04-20.
+  - Keep Frank/Avignon email handling on the current 15-second polling path. Do not change cadence before Monday unless Robert explicitly reopens it.
+  - Monday first action: verify polling health for `com.koval.frank-auto` and `com.koval.avignon-auto`, including loaded interval, last exit, recent run timestamps, error logs, duplicate-protection behavior, and captured/routed acknowledgement behavior.
+  - Only after the Monday polling-health check should Task Manager decide whether Gmail API push is still needed. If still needed, resume only from the M4 ERTC Google auth context under credential/token guardrails.
+  - Hard boundaries before Monday approval: no Google Cloud/Pub/Sub/IAM mutation, no OAuth token work, no mailbox content read, no runtime cadence change, no deploy/push/live pull for the Gmail push slice, no subscriber/daemon work, no Workspaceboard change for this slice, and no further Google auth changes unless Robert explicitly reopens it.
+
+- Workspaceboard phone/VPN follow-up at `2026-04-18 13:20 CDT`.
+  - The Mac mini Workspaceboard runtime recovery remains valid, but the phone path still failed after that recovery.
+  - Additional checks narrowed the remaining issue to the MI/auth gateway flow: `wb.koval.lan` sends unauthenticated users to `mi.koval.lan/login?redirect=https://wb.koval.lan/...`; Login source previously consumed `referrer=` but not `redirect=`, and current MI login headers showed host-only `PHPSESSID` with no `.koval.lan` cookie domain.
+  - Local Login source now accepts `redirect=` and only permits absolute redirects to `https://wb.koval.lan/workspaceboard...` or `https://workspaceboard.koval.lan/workspaceboard...`; unsafe absolute targets collapse to `/ops/start.php`.
+  - Not done: no deploy, push, live pull, production session mutation, auth bypass, credential output, or live Google OAuth/Gmail mutation. Live phone recovery still needs an approved Login rollout and cookie-domain confirmation.
+  - Project log: `project_hub/issues/2026-04-18-frank-workspaceboard-response-incident.md`.
+
+- Frank direct-email recovery route recorded at `2026-04-18 11:30 CDT`.
+  - Recovery source: Robert reported that he emailed Frank twice and got no response because direct Robert messages had been logged as local-routing/no-email instead of creating visible worker routes or acknowledgements.
+  - Directive correction: direct primary-owner email is actionable intake, not silent local routing. Frank must treat direct Robert emails, and Avignon must treat direct Sonat emails, as work intake unless clearly FYI/no-action or already handled. For direct breakage reports, approvals, requests, status questions, or instructions, the mailbox worker must route/create a visible Task Manager/board-managed worker, record source id/dedupe key plus routed session/task, and send a concise captured/routed acknowledgement unless the message explicitly suppresses email. Duplicate messages in the same thread attach to the existing route/log instead of generating repeated acknowledgements.
+  - Recovered item 1: Robert phone access issue for `wb.koval.lan/workspaceboard` while on VPN. Workspaceboard LaunchAgent was restored to external bind with the remote auth guard; verify Robert phone access after MI login.
+  - Recovered item 2: Gmail push/OAuth instruction. Robert approved using the existing Google project path and said to sign in using approved private credentials, asking for 2FA/app approval when needed.
+  - Runtime note from recovery: Frank runtime is patched so future primary-input messages route to Task Manager and send Robert a captured/routed acknowledgement. Preserve duplicate protection and do not repeatedly acknowledge already-routed source threads.
+  - Updated durable directives: `AGENTS.md`, `frank/AGENTS.md`, `avignon/AGENTS.md`, and `worker_roles/operating-model.md`. No secrets or private email content were recorded here.
+
+- Frank/Avignon Gmail fast-poll runtime improvement installed at `2026-04-18 11:12 CDT`.
+  - Master ID: `AI-INC-20260418-FRANK-AVIGNON-GMAIL-PUSH-01`; detail log `project_hub/issues/2026-04-18-frank-avignon-gmail-push-plan.md`.
+  - Robert explicitly approved the Gmail push/OAuth/PubSub/subscriber/runtime/LaunchAgent/token/historyId slice. Local inspection still found no usable Gmail API OAuth token for `frank.cannoli@kovaldistillery.com` or `avignon.rose@kovaldistillery.com`, no local Pub/Sub/watch/history state, and no local `gcloud` CLI.
+  - Immediate safe improvement: changed `/Users/admin/Library/LaunchAgents/com.koval.frank-auto.plist` and `/Users/admin/Library/LaunchAgents/com.koval.avignon-auto.plist` from `StartInterval` `60` to `15`, created `.bak-20260418-gmail-fastpoll` backups, reloaded/enabled/kickstarted both labels, and verified `launchctl print` reports `run interval = 15 seconds` and `last exit code = 0` for both.
+  - Behavior remains the existing duplicate-protected IMAP inbox cycle: automation logs, handled-mail filing rules, completion-report/decision-email behavior, and persona routing are unchanged. The kickstarted live cycles may process current inbox items under those established rules. This is fast polling, not Gmail API push.
+  - 2026-04-18 13:20 CDT retry: existing local Gmailconnector OAuth path was tried for Frank using approved private credential input, but Google returned `401 deleted_client` before password or 2FA/app approval. No OAuth token, Gmail content read, Google Cloud/PubSub/IAM/API change, or credential output occurred.
+  - Robert clarified the useful Google auth state is on the M4 from the ERTC work, not this Mac mini Gmailconnector client. Future Gmail push/OAuth work should use the M4-approved context under normal credential/token guardrails.
+  - 2026-04-18 13:30 CDT pause: Robert directed no more Google auth changes before Monday, 2026-04-20, unless explicitly reopened. Keep 15-second polling active and verify polling health first on Monday before deciding whether true push is still needed.
+  - Verification: `plutil -lint` passed for both changed plists; Frank dry-run with `--limit 0` returned `0` actions; synthetic non-private routing checks hit the existing Frank classifier path and Avignon self-mail no-action path without creating a decision item.
+  - Exact one-step blocker for true push: Google/OAuth owner must provide or authorize the complete Frank/Avignon Gmail push setup bundle: Google Cloud project, Pub/Sub topic/subscription, `gmail-api-push@system.gserviceaccount.com` publisher IAM, and Gmail API OAuth authorization for both Frank and Avignon with the minimum approved Gmail scope.
+  - No OAuth token/app password contents, private mailbox bodies, Gmail API message content, Pub/Sub resources, Google Cloud IAM, public endpoint, webhook, subscriber daemon, code commit, push, deploy, or live pull was changed.
+
+- AI sales analytics decision-matrix continuation completed at `2026-04-18 11:20 CDT`.
+  - Scope stayed local docs-only in `/Users/werkstatt/salesreport` and `/Users/werkstatt/ai_workspace`.
+  - Added Salesreport doc `doc/sales-analytics-decision-matrix-2026-04-18.md` for OPS `366208` / AI data analytics.
+  - Updated Salesreport `TODO.md` and `HANDOFF.md`, and mirrored the source reference in AI Workspace `TODO.md`.
+  - Local result: wired CRM-backed candidates for a first approved monthly packet are Illinois all/warehouse/distribution sales summaries and National Sales Assistant CRM-backed re-engagement/lost-account sections; `illinois-last-month-top-5-products` and `illinois-last-month-channel-compare` are stubbed; new prospects/open-status/web analytics remain outside-source/manual.
+  - Remaining decisions: approve/revise first monthly packet scope, confirm warehouse/distribution account-category semantics, decide whether the visit planner's four 10-account segments are acceptable or need rename/fix before inclusion, decide whether top-product/channel-comparison execution should be implemented next, and name the outside-research owner/path before Frank runs new-prospect/open-status work.
+  - No OPS task body/status read, production data query, saved-report run, `saved_reports` write, CRM mutation, outside research, Frank/Sonat send, deploy, live pull, push, commit, credentials, mailbox state, or external system access was performed.
+
+- AI source/access blocker sweep rechecked at `2026-04-18 11:04 CDT`.
+  - Scope stayed local TODO/HANDOFF/project docs only. No credentials, mailbox bodies, external systems, source APIs, production DBs, runtime state, email sends, deploys, commits, pushes, or live account changes were accessed.
+  - No new safe source inputs were found for Shopify/Square signup recurring checks, PHPList legacy send-history inventory, Google Postmaster, Papers live read access, or MacBook wake-cause.
+  - Current source/access state remains: Shopify/Square needs Claude/source-owner reply plus approved read-only export/report/API path; PHPList needs sanitized export or approved read-only DB/export path; Google Postmaster needs account access or supplied read-only export/screenshot/report; Papers needs Robert approval for live read-only Workspaceboard access through the deny-by-default wrapper and initial allowed scopes/document IDs; MacBook wake-cause needs the MacBook reachable or a supplied local wake-cause excerpt/report.
+  - Google Ads remains closed/routed out of Codex access tracking unless Robert reopens it.
+  - Related durable-state cleanup: project-hub status for `AI-INC-20260417-FRANK-AVIGNON-RUNTIME-CRM-INTAKE-01` was aligned to the local Avignon/project log state: most deterministic CRM recovery execution is complete, with source `1` and source `10` still requiring concrete Sonat target/link/account decisions and source `7` held until those decisions close.
+
+- Frank/Avignon Gmail push feasibility/design recorded at `2026-04-18 09:16 CDT`.
+  - Master ID: `AI-INC-20260418-FRANK-AVIGNON-GMAIL-PUSH-01`; detail log `project_hub/issues/2026-04-18-frank-avignon-gmail-push-plan.md`.
+  - Current local non-secret evidence indicates Frank/Avignon use machine-local IMAP/SMTP-style polling/sending via LaunchAgents and private credential references, not Gmail API push. `Gmailconnector` is a separate Gmail API read-only search/export tool and is not wired into Frank/Avignon push processing.
+  - No local non-secret evidence was found for existing Gmail `users.watch`, Pub/Sub topic/subscription, persisted Gmail `historyId`, or daily watch renewal state.
+  - Recommended safe path is a pull subscriber on an approved Mac mini/runtime path, not a new public unauthenticated webhook. Use Gmail `users.watch` with `INBOX` include filter per mailbox, persist history/watch state machine-locally, process `users.history.list`, keep fallback periodic sync, renew watches daily, and feed existing Task Manager/Frank/Avignon routing/completion-report workflow.
+  - Robert directed that this should not be left as local `needs input`; Frank sent Robert-only subject `Frank/Avignon Gmail push: concrete approvals needed` at 2026-04-18 11:06 CDT with task id `frank-2026-gmail-push-approval-packet-2026-04-18`, Message-ID `<177652840568.70175.10644898545170796700@kovaldistillery.com>`, and draft source `frank/drafts/gmail-push-approval-packet-robert-2026-04-18.txt`.
+  - The email asks six concrete decisions: Google Cloud project/create-new choice; Pub/Sub topic/subscription/IAM owner; approve/reject Gmail API `users.watch` for Frank and Avignon with minimum mailbox scope; approve/reject Mac mini machine-local token/historyId storage; approve/reject pull-subscriber/runtime LaunchAgent slice with fallback periodic sync and no cadence change until separately installed; and MacBook setup-only vs supplemental-worker role.
+  - Scope of this send: approved Frank-to-Robert decision email only. No Gmail push/OAuth implementation credentials, mailbox bodies, Google Cloud state, Pub/Sub/IAM, OAuth clients, LaunchAgents, runtime installs, code commits, deploys, live pulls, or mailbox filing were changed.
+  - Blocked until Security Guard approves Gmail OAuth scope/token storage/runtime placement, and a Google Cloud owner confirms or creates the project/topic/subscription/IAM. No credential files, OAuth tokens, mailbox bodies, Google Cloud admin state, live runtime files, LaunchAgents, webhooks, Pub/Sub resources, or mailbox state were read or changed.
+
+- Papers MCP integration routed at `2026-04-18 09:10 CDT`.
+  - Verified Frank sent Claude task `frank-2026-claude-papers-completion-reporting` on 2026-04-17 15:03 CDT and that Claude replied; no >24h follow-up was needed.
+  - Non-secret reply metadata says Papers MCP is live at `https://papers.koval.lan/mcp`; Robert replied that Frank should route this to Task Manager / Workspaceboard and start using or integrating it.
+  - Created visible Workspaceboard worker `c6421ac1` titled `Papers MCP integration read-only scoping`, injected a full task brief, and verified the prompt landed with session status `working`.
+  - Worker `c6421ac1` verified no-secret MCP reachability: `https://papers.koval.lan/mcp` initializes as Papers `1.27.0` and advertises read tools plus mutation tools. No document bodies, credentials, writes, runtime changes, or code edits were used.
+  - Routed Security Guard review to `c2e66c43`; it classified the endpoint as sensitive and required a deny-by-default read-only wrapper, server-side scopes, audit logging, rate/volume limits, secret redaction, fixed endpoint, and hard-denial of `create_document`, `update_document`, `delete_document`, and `set_key_document`.
+  - Routed Code/Git Manager review to `9a4787cd`; it cleared design-only planning but blocked actual implementation until the dirty Workspaceboard worktree and untracked backup artifacts are owned/reconciled. It ran read-only checks including `npm test` in `server`, which passed `25` tests.
+  - Created visible Workspaceboard design worker `778ef252`; it produced the read-only wrapper design. Likely future files: `server/index.js`, `server/papers-readonly-policy.js`, `server/papers-readonly-client.js`, `server/papers-readonly-audit.js`, `server/test/papers-readonly-policy.test.js`, `server/test/papers-readonly-client.test.js`, optional `api/papers-readonly`, optional `server/digital-office-index.js`, and docs.
+  - Concrete decision now needed: Robert must approve or reject live read-only Workspaceboard access to Papers through the deny-by-default wrapper, and name initial allowed Papers scopes/collections plus any initial document IDs approved for body-level reads.
+  - Gates still closed: no Papers writes, credentials/auth handling, `.205`, MCP config changes, LaunchAgents/runtime mutation, production mutation, code edits without Code/Git Manager, private mailbox-body exposure, deploy, push, or live pull.
+  - Durable source refs: AI Workspace source/access blocker, Digital Office master ID `AI-INC-20260414-DIGITAL-OFFICE-WORK-RECORDS-01`, source session `e6071659`, Frank task `frank-2026-claude-papers-completion-reporting`, Workspaceboard workers `c6421ac1` and `778ef252`, Security Guard `c2e66c43`, Code/Git Manager `9a4787cd`.
+
+- Frank/Avignon mandatory completion-report correction recorded at `2026-04-18 09:05 CDT`.
+  - Robert corrected the chief-of-staff directive: when Frank or Avignon accomplishes a task, the completion report email is required by default, not optional, unless the specific task says to suppress email.
+  - Required report contents: what was done, what changed, relevant links/session IDs/task IDs, what was not done, and any remaining decisions or approval gates.
+  - Recipient routing: Frank reports to Robert by default. Avignon reports to Sonat by default; copy/include Robert only where task context, approval path, or ownership boundary requires it.
+  - Scope stayed docs/policy only. No email was sent, no mailbox was filed, and no LaunchAgent, polling cadence, runtime code, credential path, daemon, OPS intake, production system, commit, push, deploy, or live data was changed.
+
+- Frank/Avignon chief-of-staff email-worker authority recorded at `2026-04-18 08:52 CDT`.
+  - Robert authorized Frank and Avignon as full-time chief-of-staff roles, not passive inbox summarizers. Clear low-risk internal email work should be identified, routed to a visible board-managed worker in the correct workspace, briefed with source id/owner/outcome/constraints/approval gates/deliverable/completion target, verified as started, monitored to completion, logged in TODO/project/handoff surfaces, filed from handled mail, and closed with the required completion report to the relevant human owner.
+  - Persona routing remains separate: Frank defaults to Robert-facing routing; Avignon defaults to Sonat-facing routing unless the task context names another approved owner. Shared mechanics may be reused, but persona, recipient, and approval boundaries stay separate.
+  - Duplicate protection is required for every email-derived item: stable source id/dedupe key plus current state must be recorded, and already routed/handled/completed/blocked/FYI items must not be surfaced repeatedly unless a new source message, explicit reopen, or newly actionable approval gate appears.
+  - Decision requests waiting more than 24 hours should receive one follow-up email through the same persona route with detailed instructions, concrete questions, original reference, and approval boundary.
+  - Approval gates are preserved for external-sensitive sends, finance/legal/auth/security/credentials, destructive operations, production-impacting work, suspicious mail, ambiguous ownership/recipient intent, unusual vendor/payment instructions, and policy conflicts.
+  - Scope stayed docs/policy only. No LaunchAgent, polling cadence, mailbox state, send action, credential path, background daemon, runtime code, OPS intake, production system, commit, push, deploy, or live data was changed.
+
+- UI/report/page completion-output directive recorded at `2026-04-18 08:48 CDT`.
+  - Task Manager must not close UI/report/page workers as done unless the output includes enough location and deploy-state detail for Robert to find the result: page/menu location or exact URL/route, whether pushed code is live or still needs deploy/live pull, exact next live action if not live, auth/gating expectation, and old URL compatibility/redirect behavior.
+  - Completion summaries must separate changed files/commit SHA, user-facing location, verification performed, deploy/live state, and remaining action or approval needed.
+  - Decision Driver and Code and Git Manager must enforce the same output quality when routing or closing completed implementation sessions.
+  - Robert added the Salesreport live-pull rule at `2026-04-18 08:49 CDT`: for Salesreport UI/report/menu changes that are implemented, verified, committed, and pushed, workers and Task Manager should pull live automatically when Salesreport uses live pull and the change is safe under approval/security gates. Completion reports must explicitly say live pull was done, or explain why it was blocked.
+  - Salesreport market-events correction: page/menu location is `Salesreport -> Advanced Sales Reports -> Market Events Report`; file is `market_events_report.php`; snapshot compatibility means `sonat-market-events-report-2026-04-18.html` rewrites to gated `sonat-market-events-report-2026-04-18.php`; commit is `fe268bc Add gated market events report`; push was done, but no live pull/deploy was run by the worker.
+  - Scope stayed policy/docs-only. No app code, runtime, deploy, live pull, credential access, or external-system state was changed.
+
+- OPS Outreach staged Connecteam parity accepted at `2026-04-18 08:01 CDT`.
+  - Robert approved the decision: accept OPS Outreach as parity-ready for the staged `2026-03-31` to `2026-05-30` Connecteam window.
+  - Approval scope is intentionally narrow: next step is limited to one final read-only Connecteam re-sync/export before decommission, followed by refreshed parity/bridge-plan/user-crosswalk review and a new approval packet. There is still no `--apply` approval.
+  - Worker-ready OPS task brief: in `ws ops`, perform the final read-only Connecteam re-sync/export for Outreach decommission readiness; regenerate/review Connecteam parity, bridge-plan, and user-crosswalk artifacts; compare deltas against the approved staged packet; produce a docs-only approval packet with any new/missing/review-needed rows and unresolved user mappings. Do not run `--apply`, decommission Connecteam, mutate OPS/Portal/CRM, mutate Google sync, send notifications, change auth/canonical rules, deploy, push, live-pull, or close source tasks.
+  - Updated AI Workspace `TODO.md` and this handoff only. No OPS/Portal/CRM mutation, Connecteam sync/export run, `--apply`, notification, auth/canonical-rule change, deploy, push, live pull, OPS file edit, or source-task closure was performed.
+
+- Source/access blocker cleanup completed at `2026-04-17 18:03 CDT`.
+  - Scope stayed local/read-only. Reviewed AI Workspace TODO/HANDOFF, Lists source docs for Shopify/Square and PHPList, Frank/Avignon TODO/HANDOFF evidence, and local project notes. No credentials, account access, external APIs, production DBs, exports, private account data, mailbox bodies, system settings, live services, OPS/Portal mutations, deploys, commits, pushes, or cleanup actions were accessed or changed.
+  - Google Ads is no longer a Codex access blocker: Robert confirmed on 2026-04-17 that Claude/Sonat own the Google Ads credit/current-state item; Frank and Avignon recorded/filed/routed the related email evidence. Codex should not request Ads login/admin access for this item unless Robert reopens it.
+  - Shopify/Square is sharper but still blocked: Lists review found no Square signup implementation and only Shopify as a Forge planner reference. Frank sent Claude `frank-2026-claude-square-shopify-list-links` asking for OPS task IDs/status, exact source links, and source-of-truth records. Remaining input is Claude/source-owner reply plus approved read-only export/report/API path.
+  - PHPList legacy send-history still needs a sanitized SQL/CSV/report export or approved read-only DB/export path before counts can be produced in `ws lists`; current Lists doc is only a query/inventory plan.
+  - Google Postmaster still needs a Google account with Postmaster Tools access for `kovaldistillery.com` or a supplied read-only export/screenshot/report.
+  - IT Papers/GitLab planning advanced from waiting on Claude to Workspaceboard scoping: Claude replied that Papers MCP is live, Robert routed the item to Task Manager / Workspaceboard, and visible worker `c6421ac1` now owns no-secret read-only scoping. Live Papers writes, credentials/auth handling, `.205`, MCP config changes, runtime mutation, and code edits remain gated.
+  - MacBook wake-cause remains unreachable after a safe network-only recheck: `MacBookPro.lan` did not resolve, `192.168.55.180` had 100% ping loss, and TCP/22 timed out. Wake-cause review needs the MacBook reachable on LAN/VPN or a local wake-cause log excerpt/report supplied from the MacBook.
+
+- OPS/outreach decision blocker narrowed at `2026-04-17 18:02 CDT`.
+  - Scope stayed read-only/docs-only. Reviewed AI Workspace TODO/HANDOFF plus OPS TODO/HANDOFF and the referenced OPS commits `18d32a04ddaf5257214d62340eda7e044a1ef3d8` and `478593f3329c49aec9a30ce0464f2f507394a60e`.
+  - Connecteam result: this is no longer a broad implementation decision. OPS has a concrete review packet at `ops/docs/2026-04-17-connecteam-parity-readiness-approval-packet.md`: staged window `2026-03-31` to `2026-05-30`, `151/151` staged rows matched to OPS Outreach events with linked shifts, `0` safe-to-apply rows, `0` review-needed rows, and `17` unique Connecteam users with `0` unmapped or ambiguous. Remaining Robert decision is whether to accept staged-window parity and authorize scheduling one final read-only Connecteam re-sync/export before decommission; any future `--apply` remains separately gated.
+  - Market result: the safe next slice is read-only market readiness/export preview using `ops.market_events.v1`; account/contact creation from OPS should remain blocked until Robert/source owners decide request ownership, approver, direct CRM creation vs pending Portal/CRM review, duplicate rules, category mapping, Salesreport consumption shape, and audit/retention fields.
+  - Updated AI Workspace `TODO.md` to preserve one blocker family but replace the broad wording with concrete safe slices and exact remaining approvals. No OPS/Portal/CRM mutation, live data read/write, Connecteam sync, `--apply`, notification, auth/canonical-rule change, deploy, push, source-task closure, or OPS file edit was performed.
+
+- Auth/security/storage policy blocker closed at `2026-04-17 16:33 CDT`.
+  - Robert approved the default OPS/Portal persistence policy for the next Security Guard-reviewed implementation slice: explicit logout revokes Login/OPS/Portal artifacts globally, and next-day Portal/OPS access requires a fresh Login handoff/user action unless longer app persistence is explicitly approved.
+  - This closes the AI Workspace auth/security/storage policy decision. Remaining work is implementation-gated, not policy-gated: no auth/session code change, production session mutation, deploy, live pull, live credentialed login test, OAuth credential access, token handling, Drive automation, shared credential storage, rejected storage override, or production data/session write without the appropriate explicit approval and Security Guard review.
+  - Scope stayed docs-only. No credentials, tokens, keychains, production sessions, Drive OAuth material, auth/session code, deploy, live pull, OPS/Portal task mutation, or live credentialed test was accessed or changed.
+
+- Security/storage final blocker review completed at `2026-04-17 16:20 CDT`.
+  - Scope stayed policy/docs-only. No credentials, tokens, keychains, production sessions, Drive OAuth material, auth/session code, deploy, live pull, OPS/Portal task mutation, or live credentialed test was accessed or changed.
+  - Closed as policy: OAuth credentials, refresh/access tokens, client secrets, private keys, app passwords, token caches, and session secrets must not be stored in Google Drive-synced files/folders, Google Drive-synced runtime folders, Papers records, normal manifests, logs, chat, or git.
+  - Approved-default recommendation for implementation workers: use local OS keychain or owner-only machine-local private path for per-machine automation; use an approved secret manager, Google-managed service account/delegated app flow, or keychain-backed provisioning path for shared automation, with named owner, least privilege, rotation, revocation, and only non-secret references in project-hub.
+  - OPS/Portal SSO recommendation: explicit logout should revoke Login/OPS/Portal artifacts globally; next-day Portal/OPS access should require a fresh Login handoff/user action unless Robert explicitly approves longer app persistence. Remaining human decision is the exact OPS/Portal persistence policy before Security Guard-reviewed implementation.
+
+- Final missed TODO audit after implementation routing completed at `2026-04-17 15:53 CDT`.
+  - `/api/status` reported `10` open TODO rows: AI Workspace `4`, OPS `2`, BID `4`; all other workspaces reported `0` open rows and append queues were empty where checked.
+  - Coverage result: every open row has either a visible worker/session or a durable blocker. OPS rows are covered by workers `7dc06bdb` and `b497bc25`; BID rows are covered by workers `feabef7c`, `7a60faf8`, `59fb84c1`, `9c222048`, and Code/Git coordinator `52d23860`; AI Workspace rows are durable grouped decision/source-access blockers.
+  - Risks to preserve: OPS has overlapping live workers in one dirty repo; BID has four live implementation workers plus Code/Git in one dirty repo. Do not commit, push, deploy, live-pull, clean, reset, or close sessions until Code and Git Manager reviews changed files and worker ownership. Session `0011e210` is finished/review-ready and should be parked for review, not auto-closed.
+  - No missed open TODO rows or duplicate implementation sessions were found in the active board state. Scope stayed audit-only: no code implementation, source mutation, credential access, OPS/Portal task mutation, external send, deploy, commit, push, or session close was performed.
+
+- Cross-workspace TODO reduction continuation completed at `2026-04-17`.
+  - Starting board count from `/api/status`: `15` open TODO rows across workspaces.
+  - Ending board count after `/api/status` verification: `10` open TODO rows.
+  - Targeted closures/routing decisions:
+    1. Braincloud search/build tooling row closed from open TODO counting because it is deferred until enough non-sensitive Markdown-first records exist; future condition is now in Braincloud `HANDOFF.md`.
+    2. Frank live Papers lookup/projection row closed from local Frank TODO counting because the approval gates are represented by AI Workspace/project-hub records and Claude guidance request `frank-2026-claude-papers-completion-reporting`; Frank may only format supplied approved Papers URLs.
+    3. Importer Avignon Sonat CRM intake row closed from local TODO counting because visible worker `dd70d427` owns execution; importer `HANDOFF.md` keeps the guarded next steps.
+    4. OPS Robert `ai to do` split-task reconciliation row closed from local TODO counting because OPS/Portal task IDs `366206`-`366209` and source-workspace blockers are the durable records.
+    5. OPS Connecteam parity/replacement row closed from local TODO counting because OPS/Portal task `366583`, AI Workspace `OPS/outreach decisions`, and the 2026-04-17 readiness packet are the durable records.
+  - Preserved real blockers: AI Workspace decision families, OPS dashboard task-creation SSO/session issue `367115`, OPS platform planning backlog, BID blocked/finance/payroll rows, and the active Frank Google Ads worker `e8735579` because Robert confirmed Claude is handling Google Ads and that closure belongs separately in Frank.
+  - Scope stayed TODO/HANDOFF hygiene only. No code implementation, credential access, OPS/Portal mutation, CRM write, mailbox mutation, external email, deploy, live pull, broad git cleanup, commit, push, session close, or production mutation was performed.
+
+- Cross-workspace TODO reduction pass completed at `2026-04-17 15:40 CDT`.
+  - Starting board count from `/api/status`: `30` open TODO rows across workspaces. Ending board count after this pass: `15` open TODO rows. Note: a separate OPS blocker, `Robert OPS dashboard task creation SSO/session credential error`, appeared during the pass; it was not closed because it is a real auth/session blocker.
+  - Current remaining open rows by workspace: AI Workspace `4`, Braincloud `1`, Frank `1`, OPS `4`, Importer `1`, BID `4`; all other board workspaces report `0`.
+  - Selected/closed/routed items:
+    1. Braincloud placeholder `None.` In Progress row removed from open count; no worker task existed.
+    2. BID placeholder `None.` In Progress row removed from open count; no worker task existed.
+    3. Frank standing monitor moved out of open TODO counting; standing session `1794c370` remains live and must not be closed.
+    4. Frank Google Ads credit decision row closed into AI Workspace Google Ads blocker `session 258b4242` and active Frank worker `e8735579`; no Ads/login/email/mailbox action.
+    5. Avignon CRM-addition audit row closed locally because execution is routed to importer worker `dd70d427` and OPS task `367097`; no CRM/Portal/Sonat send.
+    6. Importer four CRM recovery backlog rows consolidated into active worker `dd70d427`; private artifacts stay under ignored `uploads/`, no private fields printed.
+    7. Login Portal-wide security rollout implementation row closed locally; remaining reset-status proof is OPS follow-up `366809` / AI auth-security blocker, not active Login implementation.
+    8. Workspaceboard weekly `node-pty` release check moved out of open TODO counting as a dependency watch; reopen only when a stable candidate exists for smoke testing.
+    9. OPS Avignon CRM remediation row routed out of duplicate OPS TODO tracking to importer worker `dd70d427`; OPS task `367097` remains the external audit record.
+    10. OPS Sonat market events/state sales report row closed locally after Salesreport report completion and Frank link send; OPS task `367098` remains the external audit record.
+    11. OPS Papers integration row closed as non-OPS coordination, represented by AI Workspace/Frank Papers blockers and Claude guidance request.
+    12. OPS manual-pull cleanup row for Oleg-owned tasks `362789`, `362788`, and `362786` closed from Codex TODO ownership; no OPS mutation.
+    13. OPS production batch row for remaining open production tasks `366228`, `366233`, `366235`, `366236`, `366237`, `366238`, `366239`, `366240`, `366241`, `366242`, `366243`, `366244`, `366246`, `366247`, `366249`, `366250`, and `366251` closed from Codex TODO ownership; production owners still own the actual work.
+    14. OPS scheduled-reminder backlog row closed from local open TODO count because dated OPS tasks `367057`, `366809`, `366499`, `366807`, and `366563` are the durable tracking records.
+    15. Workspaceboard current backlog cleared to `No current Workspaceboard backlog items`; the dependency watch remains documented in Done/HANDOFF instead of counted as implementation work.
+    16. AI Workspace parent TODO recorded this reduction pass as a concise Done entry so future count audits can see why the board count changed.
+  - Scope stayed TODO/HANDOFF hygiene only. Existing dirty repo states were preserved; no commit, push, pull, reset, clean, deploy, LaunchAgent/runtime change, live DB/API write, mailbox action, credential read/print, session close, or external-system mutation was performed.
+  - Active routed sessions after this pass: current coordinator session `58225678`; importer CRM recovery worker `dd70d427`; Frank Google Ads routing worker `e8735579`; standing Frank monitor `1794c370`; standing Avignon monitor `09af6d70`.
+  - One real next decision to surface if Robert wants to reduce the remaining open count further: approve the next OPS/outreach direction for Connecteam replacement and market-improvement rules, or keep that blocker parked until source owners are ready.
+
+- Summary directive policy correction completed at `2026-04-17 11:56 CDT`.
+  - Robert clarified that morning summary means upcoming summary/upcoming tasks, while evening summary means accomplished task summaries from Task Manager/board-completed work.
+  - This supersedes the earlier 2026-04-16/2026-04-17 morning-only interpretation for Frank and Avignon. Anti-spam and decision-email rules remain unchanged: no repeated decision prompts, no inbox-review spam, and only concise capture/routing/blocker/completion notes when useful.
+  - Updated AI Workspace policy, Task Manager/Summary Worker role docs, Frank docs, Avignon docs, TODOs, and handoff notes. Scope stayed docs/TODO/HANDOFF only; no runtime, LaunchAgent, mailbox state, mailbox send/file action, credential path, OPS intake, commit, push, deploy, or external-system change was performed.
+  - Runtime blocker: Avignon currently has only the 06:00 morning overview runtime installed. Frank has an 18:00 report path, but its source-selection may still need a separate implementation worker if Robert wants the evening report to consume Task Manager/board accomplishments directly rather than local Frank `Done` notes.
+
+- Frank/Avignon communication directive audit completed at `2026-04-17 11:35 CDT`.
+  - Confirmed the central AI Workspace directive already covers medium-independent request handling, direct tracked replies when approved, concise task-specific completion confirmations, exception-only decision emails, standing-worker preservation, and the then-current morning-only scheduled summary interpretation.
+  - Tightened durable policy and role prompts so both workers must record request source id, owner, routed workspace/session, and current state; status updates should be concise capture/routing/blocker/completion notes, not repeated decision emails or inbox-review prompts.
+  - Superseded by the 11:56 clarification above: morning summaries now mean upcoming work/tasks, and evening summaries mean accomplished Task Manager/board work. No runtime, LaunchAgent, mailbox, credential, send path, or mailbox state was changed during either docs pass.
+  - Scope stayed docs-only under `/Users/werkstatt/ai_workspace`. Existing dirty Frank worker files were preserved and no external emails, mailbox reads/filing, daemons, OPS intake, commits, pushes, or deploys were performed.
 
 - AI Workspace TODO source-owned backlog reduction completed at `2026-04-17 10:24 CDT`.
   - Starting state for this pass: clean git status, `git pull --ff-only` already up to date, empty append queue, and `TODO.md` at `13` top-level bullets (`4` Waiting, `5` Backlog, `4` Done; open/actionable `9` Waiting+Backlog).
@@ -100,7 +299,7 @@ Use this file for cross-machine/session handoffs.
 - Digital Office OAuth/token storage policy review completed at `2026-04-16 17:18 CDT`.
   - Updated `project_hub/digital-office/storage-decision-needed.md` after a local-docs-only review.
   - Recommendation: OAuth credentials and token caches must live in machine-local OS keychain/private storage by default, or in an approved secret manager/keychain/service-account path for shared automation. Do not store OAuth credentials, refresh/access tokens, client secrets, private keys, or app passwords in Google Drive-synced files, Google Drive-synced runtime folders, Papers records, normal manifests, or git.
-  - Exact remaining human decision if Drive-backed automation is requested: approve Option A as the default storage path for this project, or name the approved Option B secret manager/keychain/service-account path.
+  - Superseded by the 2026-04-17 closeout above: rejected storage targets are closed as policy; future Drive-backed automation still needs an approved implementation slice and concrete per-machine or shared storage path.
   - No credentials, OAuth/token material, Google Drive files, Papers data, runtime state, mailbox/email content, keychain contents, MCP config, `.205`, `.17`, OPS/Portal data, external service, code implementation, deploy, service restart, or live mutation was accessed or changed.
 
 - Operational autonomy directive recorded at `2026-04-16 17:05 CDT`.
@@ -140,7 +339,7 @@ Use this file for cross-machine/session handoffs.
   - The design now defines Markdown/Workspaceboard/OPS-Portal/Papers responsibilities, automatic Papers record candidates, schema/template, stable IDs and duplicate protection, auth/approval gates, write path options, rollback/export, Task Manager vs Decision Driver behavior, existing-content projection, and Security Guard boundaries.
   - Current approved scope remains docs/no-write only. No live Papers writes, `.205` access, production DB writes, credential printing, MCP exposure changes, notifications/emails, commits, pushes, deploys, or service restarts were performed.
   - Follow-up completed: the local no-write projection pack was produced under `project_hub/digital-office/`.
-  - Current open decision: choose Google Drive OAuth/token storage policy before any future Drive-backed projection automation. Live Papers writes still need a later explicit decision on writer identity, target Papers space, first record types, redaction level, duplicate/update behavior, and rollback/export procedure.
+  - Superseded by the 2026-04-17 closeout above: OAuth/token storage policy is closed, with rejected storage targets recorded. Live Papers writes still need a later explicit decision on writer identity, target Papers space, first record types, redaction level, duplicate/update behavior, and rollback/export procedure.
 
 - Avignon morning summary runtime installed at `2026-04-16 13:28 CDT`.
   - Robert approved the remaining runtime change after the policy-only pass.
@@ -150,9 +349,9 @@ Use this file for cross-machine/session handoffs.
   - Verification: Python compile passed, plist lint passed, script help loaded, existing `com.koval.avignon-auto` still reports run interval `300 seconds` and last exit `0`, and `launchctl bootstrap/enable` loaded `com.koval.avignon-morning-overview` with `runs = 0`, `last exit code = (never exited)`, `Hour = 6`, `Minute = 0`.
   - No test email was sent and no secret/credential material was printed.
 
-- Frank/Avignon completion and summary policy aligned at `2026-04-16 12:55 CDT`.
+- Frank/Avignon completion and summary policy aligned at `2026-04-16 12:55 CDT` (summary cadence superseded on 2026-04-17 11:56 CDT).
   - Robert clarified that when Frank or Avignon receives and completes a task, the worker should send one concise completion confirmation stating what was done and that the task is complete.
-  - Default scheduled summary cadence is now morning emails only for both Frank and Avignon; evening roundups/end-of-day summaries are off by default unless Robert explicitly re-approves a specific one-off or recurring evening cadence.
+  - Superseded cadence note: this entry recorded morning emails only for both Frank and Avignon. The current directive is morning = upcoming work/tasks, evening = accomplished Task Manager/board work.
   - Superseded runtime finding: at 12:55, no `com.koval.avignon-morning-overview` LaunchAgent was installed. Robert approved the follow-up, and it was installed at 13:28 without sending a test email.
   - No mailbox, send, polling cadence, or credential change was made in the policy pass.
 

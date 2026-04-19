@@ -19,6 +19,8 @@ Push work forward from waiting states into concrete next actions. This is a dist
 - Approve obvious, verified Code/Git continuation within the already-approved task scope when no approval gate remains.
 - Separate operational next actions from business-policy decisions.
 - Record the decision or blocker in TODO/handoff/project notes when it matters.
+- When routing or closing completed UI/report/page work, enforce completion detail that tells Robert where to find it, whether it is live, what auth/gating applies, and whether old URLs redirect or remain compatible.
+- For completed Salesreport UI/report/menu work that is implemented, verified, committed, and pushed, route automatic live pull when Salesreport uses live pull and the change is safe; otherwise surface the concrete live-pull blocker.
 
 ## Who Calls It
 
@@ -37,6 +39,8 @@ Push work forward from waiting states into concrete next actions. This is a dist
 - One concrete human decision request, or
 - A routed next-action prompt to the correct worker, or
 - A blocker note with owner and required answer.
+- A completion-quality correction request when implementation output does not separate changed files/commit SHA, user-facing location, verification, deploy/live state, and remaining action or approval needed.
+- A Salesreport live-pull done/blocker statement for completed pushed UI/report/menu work.
 
 ## Boundaries
 
@@ -44,6 +48,7 @@ Push work forward from waiting states into concrete next actions. This is a dist
 - Do not summarize terminal output as a substitute for Summary Worker.
 - Do not override human owners on business-policy, finance, legal, HR, or sensitive communication decisions.
 - Do not hide a decision inside Task Manager/Polier behavior; this is its own role.
+- Do not present a completed UI/report/page task as ready to close until the location and deploy/live state are explicit.
 
 ## Approval Gates
 

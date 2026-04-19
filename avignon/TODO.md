@@ -1,38 +1,56 @@
 # TODO — avignon
 
-Updated: 2026-04-17 10:59 CDT (Machine: Macmini.lan)
+Updated: 2026-04-19 10:16 CDT (Machine: Macmini.lan)
 
 ## In Progress
 
-No open items.
+- `avignon-sonat-crm-intake-recovery-2026-04-17`
+  - Status: active recovery/email-quality correction for 10 missed Sonat CRM/status items. Robert corrected on 2026-04-19 that this is not simply waiting on Sonat; current owner/path is Robert -> Frank/Claude-context coordination -> Avignon worker `b583edb6` with Task Manager visibility.
+  - Importer execution: Importer session `86dc0b04` completed Import ID `56` for the 5 importer-safe rows; contacts `367141`, `367143`, `367144`, `367146`, `367148`; accounts `367142`, `367145`, `367147`; 0 skipped rows; phpList/account-filter/contact-filter all `none`.
+  - Portal execution: source `9` completed as bounded account-only CRM work with account `367149`; source `5` completed with account `367150`, 2 existing contact links, and activity/note `367151`.
+  - Remaining recovery questions must be handled as a concrete action plan, not a vague wait: privately re-check source `1`, source `10`, source `7`, Robert's forwarded Frank message, and Claude/Frank bridge context; decide what can be resolved from existing context; route safe bounded Portal/Importer work if a unique target is verified; otherwise send one corrected concise Sonat-facing answer sheet with exact answer format.
+  - Reports sent to Sonat: `avignon-sonat-crm-intake-recovery-2026-04-17-status-2026-04-18`, `avignon-sonat-crm-intake-recovery-2026-04-17-follow-up-2026-04-18`, `avignon-sonat-crm-intake-recovery-2026-04-17-current-state-2026-04-18`, and `avignon-sonat-crm-intake-recovery-2026-04-17-target-link-decisions-2026-04-18`; Robert was not copied.
+  - Latest decision email: subject `CRM additions: target/link decisions needed`, Message-ID `<177652842151.70937.3224022845392947786@kovaldistillery.com>`.
+  - Frank corrective reports sent to Robert: task id `frank-avignon-crm-recovery-corrected-path-2026-04-19`, Message-ID `<177661098259.95485.12446032407156880410@kovaldistillery.com>`; Task Manager/worker route acknowledgement `frank-2026-avignon-crm-claude-context-route-2026-04-19`, Message-ID `<177661099509.95877.3244850234872230469@kovaldistillery.com>`.
+  - Boundary: no phpList action, broad import, unrelated mailbox filing, credential/security/auth work, external-sensitive send, or destructive/bulk action was performed.
+
+## Waiting Next Step
+
+- Gmail push parked follow-up:
+  - Monday, 2026-04-20: verify Frank/Avignon 15-second polling health before any Gmail API push/OAuth/PubSub work resumes.
+  - Robert pause directive from 2026-04-18: keep Frank/Avignon email handling on the current 15-second polling path until Monday, 2026-04-20.
+  - First Monday action: verify polling health from non-secret LaunchAgent/runtime metadata.
+  - Resume Gmail API push/OAuth/PubSub only if still needed and only from the M4 ERTC Google auth context.
+  - Before Monday approval: no Google Cloud/PubSub/IAM mutation, no OAuth token work, no mailbox content read, no runtime cadence change, and no deploy/push/live pull for the Gmail push slice.
+  - Do not attempt more Google auth changes before Monday unless Robert explicitly reopens it.
+
+- CRM recovery next action:
+  - Avignon worker `b583edb6` should use the private Frank context capture at `/Users/werkstatt/ai_workspace/frank/drafts/claude-avignon-context-frank-mail-2026-04-19.private.txt` and metadata at `/Users/werkstatt/ai_workspace/frank/drafts/claude-avignon-context-frank-mail-2026-04-19.meta.json`, plus private Avignon source artifacts, without printing private bodies/contact fields.
+  - If a unique safe target can be determined, route only that bounded action to Portal/Importer. If ambiguity remains, send a corrected concise Avignon email to Sonat with Robert copied for visibility; copy Claude only if Robert explicitly wants Claude in the CRM decision thread.
+  - Source `7` should be handled in the final closeout only after the source `1` / source `10` recovery path is resolved or explicitly held by Robert/Task Manager.
+  - Do not run phpList actions, broad imports, unrelated mailbox filing, credential work, destructive changes, or external-sensitive sends under this routine CRM authority.
 
 ## Done
 
-- Closed the remaining Avignon setup/conventions docs task on 2026-04-17: `README.md`, `AGENTS.md`, and `HANDOFF.md` now record the canonical Avignon workspace root, visible-worker versus standing-monitor boundary, task/follow-up conventions, stable source traceability, routing rules, TODO hygiene, and explicit docs-only/runtime boundary. No email, mailbox, runtime, LaunchAgent, credential, Workspaceboard, or launcher changes were made; `ws` was not available in the non-interactive shell, so launcher behavior was not runtime-verified.
-- Mirrored the relevant safe Frank workflow documentation into Avignon on 2026-04-17: added Avignon-specific completion traceability, visible-worker communication intake, exception-only inbox-review prompts, Sonat-specific approval gates, and the boundary that Frank's Robert-approved 18:00/EOD reporting and Papers/runtime hooks are not Avignon-approved. This folds the standalone mirror backlog into ongoing Avignon setup/conventions; docs/TODO only, with no email, mailbox, runtime, credential, LaunchAgent, or monitor-cadence changes.
-- Sent Sonat one distributor account review decision email on 2026-04-16 with task id `avignon-distributor-account-review-needed-2026-04-16`; no CRM/contact/list/send changes were made.
-- Installed Avignon morning summary runtime on 2026-04-16 after Robert approval: `com.koval.avignon-morning-overview` is loaded for 06:00 local time, sends Sonat-only via the Avignon profile, preserves duplicate protection, creates no evening roundup, and leaves `com.koval.avignon-auto` at its existing 300-second cadence. Verification used compile/lint/help/launchctl only; no test email was sent.
-- Aligned Avignon completion and summary policy on 2026-04-16: Avignon should send one concise task-specific completion confirmation when a received task is complete; default scheduled summaries should be morning-only; evening/end-of-day roundups are off by default unless Robert explicitly re-approves them. The initial finding that no `com.koval.avignon-morning-overview` LaunchAgent existed was superseded by Robert's approval and the completed runtime install above.
-- Stopped Avignon decision-email loop on 2026-04-16: live runtime `/Users/admin/.avignon-launch/runtime/scripts/avignon_inbox_cycle.py` now records local decision items without emailing Sonat by default, suppresses replies to Avignon decision-needed emails, dedupes ambiguous review items by stable subject key, and treats tracked replies as no-action unless a real approval boundary is found. Consolidated the active decision ledger to one Lander Journal review item and one Google Ads ownership/spend-review item; manual verification found inbox count `0` and sent no email.
-- Added Avignon decision-email routing on 2026-04-15: new Avignon decision items now send concise decision emails to Sonat by default through a shared profile-based helper while still recording the item in `EMAIL_DERIVED_DECISIONS.md`. The helper is central in structure (`Needed`, `Next`, `Decision`, `Reference`) and keeps Frank -> Robert / Avignon -> Sonat routing separate from persona content.
-- Mirrored Frank's tracked-reply correction for Avignon on 2026-04-15: Avignon should answer safe already-approved internal tracked-thread replies directly, copy Sonat/Robert/other internal stakeholders where instructed, and avoid tracked-reply review prompts unless blocked, ambiguous, or gated. The live runtime now extracts HTML-only bodies and classifies safe primary tracked-thread replies as local follow-up instead of primary-review material.
-- Closed Avignon's Angele cleanup direction follow-up on 2026-04-15: Sonat had responded on 2026-04-11 with preservation boundaries and focus areas, the remaining Abby/Jordan/marketing-alias routing work was tracked through Frank, and Robert confirmed he fixed those routing items externally. No new mail, Gmail filter, forwarder, mailbox, Admin, OPS, Portal, or CPanel change was made by Avignon/Codex in this closeout.
-- Closed `avignon-new-hire-training-template-reference-2026-04-12` on 2026-04-15: Sonat's new-hire training email template/reference was logged for future Avignon use and the acknowledgement had already been prepared/sent; no new mail, OPS task, CRM write, or external action was created in this closeout.
-- Sent Sonat an Avignon morning overview on 2026-04-15 at 16:54 CDT, matching Robert's Frank overview format at a safe summary level; sent-log task id `avignon-morning-overview-2026-04-15`.
-- Closed Sonat business-card CRM additions follow-up on 2026-04-15: Avignon worker `e9588b48` and importer worker `10b9346d` completed/reviewed import `52`, creating account IDs `366780`, `366784`, `366786`, `366789` and contact IDs `366781`, `366782`, `366783`, `366785`, `366787`, `366788`, `366790`; 7/7 account-contact links verified and private fields were not printed.
-- Installed Avignon-specific 5-minute LaunchAgent scheduler on 2026-04-14: `com.koval.avignon-auto` runs every 300 seconds from `/Users/admin/.avignon-launch`, uses a machine-local Avignon credential reference, and logs runtime state locally to avoid synced Google Drive launchd/TCC failures. Verified launchd last exit code `0` and a clean inbox cycle with `0` messages.
-- Marked `avignon-google-account-security-notifications-2026-04-12` handled/filed after Robert confirmed on 2026-04-13 that the 2026-04-12 Google account/security/device-management notifications were expected/OK. No Google admin/account action was taken.
-- Handled Avignon inbox-cleaning pass on 2026-04-12: sent barrel personalization guidance to Sonat, acknowledged the new-hire training-template reference, routed the LJ Hospitality/Jamie Gilmore CRM attachment request to `EMAIL_DERIVED_DECISIONS.md`, and archived handled/routed source mail to `Handled`.
-- Completed `avignon-crm-lj-hospitality-jamie-gilmore-2026-04-12` after Sonat approved by email: created the CRM account/contact link and prepared/sent a completion note to Sonat. No attachment contents were logged.
-- Added Avignon profile support to the shared local sender plus explicit helper `scripts/send_avignon_email.py`: default Sonat audience guard, Avignon credential path, Avignon sent log, Avignon From/signature defaults, and README dry-run/send usage. Verification was dry-run/help/syntax only; no mail was sent.
-- Logged Sonat's 2026-04-12 reply approving Avignon task-flow Option A, with digest/audit trail. Sent acknowledgement to Sonat with task id `avignon-task-flow-option-a-ack-2026-04-12` and archived the source reply to `Handled`.
-- Recorded Robert's 2026-04-12 approval for medium-independent Frank/Avignon task flow: clearly bounded low-risk internal email tasks can be ingested, routed, executed, logged, and filed without waiting in the inbox; higher-risk/ambiguous categories still require approval.
-- Checked MacMini Avignon mailbox/logs on 2026-04-11; Sonat's reply to `Avignon persona blurb` was received at 15:19 CDT, incorporated into `PERSONA.md`, and Avignon sent Sonat `Avignon task-flow decision options` at 18:14 CDT with task id `avignon-decision-options-task-flow-2026-04-11`.
-- Routed Sonat's 2026-04-11 reply on the barrel buyer re-engagement list to Salesreport worker `a7a6d9f5`; Salesreport completed the cleaned review list and Avignon sent the completion notice to Sonat.
-- Started Avignon persona/reference file at `PERSONA.md`; Sonat persona-blurb outreach was sent from Mac mini on 2026-04-11 with task id `avignon-2026-persona-blurb` after duplicate checks.
-- Intro email sent from `Avignon.rose@kovaldistillery.com` to `sonat@kovaldistillery.com` with `robert@kovaldistillery.com` copied on 2026-04-10 after app-password refresh.
-- Angele cleanup progress email sent from `avignon.rose@kovaldistillery.com` to `sonat@kovaldistillery.com` on 2026-04-10, referencing OPS/Portal task `366462` and Codex session `56fd7397`.
-- Mirrored Frank's scheduled inbox loop guard into the shared runner configuration path for Avignon: Sonat replies to `Avignon inbox review...` and tracked `*-auto-escalation` review replies should be logged as local follow-up instead of being re-escalated, while Avignon self-mail should be logged with no action.
+- 2026-04-19: Sent Sonat the pricing unification / Portal pricing scope note.
+  - Task id `ops-pricing-unification-portal-2026-04-19`; subject `Pricing unification and Portal pricing scope`; Message-ID `<177661177342.12519.5475020165538054926@kovaldistillery.com>`. No production pricing data or Portal behavior changed.
+
+- 2026-04-18: Parked Gmail API push/OAuth/PubSub slice until Monday health check.
+  - Recorded Robert's pause directive: stay on current 15-second polling until Monday, 2026-04-20; verify polling health first; resume Gmail API push/OAuth/PubSub only from the M4 ERTC Google auth context if still needed. Docs-only; no Google auth, mailbox read, runtime cadence change, Cloud/PubSub/IAM mutation, deploy, push, live pull, credential, OPS, or external-system state changed.
+
+- 2026-04-18: Installed Avignon Gmail fast-poll runtime improvement.
+  - `com.koval.avignon-auto` now polls every 15 seconds instead of 60 seconds, using the existing duplicate-protected inbox cycle. True Gmail push is still blocked on Google Cloud/PubSub/IAM plus Avignon Gmail API OAuth setup.
+
+- 2026-04-18: Cleaned active Avignon TODO.
+  - Collapsed verbose history into the current CRM recovery item plus exact waiting gates. Older Done history remains in `HANDOFF.md` and `TODO-done-archive-2026-04-18.md`. No mailbox/runtime/CRM/Portal/phpList mutation was performed.
+- 2026-04-18: Mandatory Avignon completion-report correction recorded.
+  - Avignon task-completion report email is required by default unless explicitly suppressed. Reports go to Sonat by default and include Robert only when task context or approval path requires it.
+- 2026-04-18: Authorized Avignon chief-of-staff inbox cleanup sweep completed.
+  - Final verified Avignon INBOX/unread was `0` / `0`. No follow-up email, worker routing, credential output, runtime change, CRM/Portal write, or external-system action was performed.
+- 2026-04-18: Chief-of-staff email-worker directive recorded.
+  - Avignon routes clear low-risk internal email tasks to visible workers, verifies start/completion, updates durable state, sends required completion reports, suppresses duplicate surfacing, files FYI/CC/no-action items, and follows 24-hour decision follow-up rules.
+- 2026-04-17 and earlier: Older Avignon setup, runtime, inbox, decision-loop, CRM recovery, Google Ads routing, and historical completion entries archived out of the active TODO.
+  - See `TODO-done-archive-2026-04-18.md` and `HANDOFF.md`.
 
 ## Backlog
 

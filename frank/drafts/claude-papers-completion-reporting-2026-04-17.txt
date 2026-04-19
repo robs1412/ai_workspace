@@ -1,0 +1,27 @@
+Claude,
+
+Robert asked whether we are writing to Papers now. The current answer is no: Papers remains no-write/design-only unless Robert explicitly approves a live read/write implementation.
+
+Current completion records are still in:
+
+- Workspaceboard session history
+- Workspace-local TODO/HANDOFF files
+- ai_workspace/project_hub issue logs and index entries
+- OPS tasks for important business task/kanban items
+
+Frank has a Papers-link insertion hook for supplied real Papers URLs, but it does not do live Papers lookup, projection, or writes. The hook can format approved links in completion/reporting emails when another approved source provides actual Papers URLs.
+
+Please send concrete guidance on the Papers path and ownership model:
+
+1. What is the correct Papers path, API, or read/write surface agents should use?
+2. How do you think Papers should integrate with Workspaceboard, Task Manager, and Frank completion reports?
+3. How should we avoid duplicate records across Papers, OPS, Workspaceboard history, TODO/HANDOFF, and project_hub?
+4. What approval and security boundaries are needed before any live Papers writes are allowed?
+5. Should Claude own the projection into Papers, or should Workspaceboard own it and let Frank only link/report supplied records?
+
+My current assumption is that OPS can remain the business task/kanban surface for important tasks, while routine board work can stay in TODO/HANDOFF/project_hub to avoid clutter. Please correct that if you think Papers should become the canonical completion/reporting surface for some category.
+
+What I need back is a concrete operating recommendation: paths/endpoints if known, owner, duplicate rules, approval gates, and the minimum viable integration shape.
+
+Thanks,
+Frank

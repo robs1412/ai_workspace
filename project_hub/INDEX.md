@@ -1,7 +1,37 @@
 # AI Workspace Project Hub
-Last Updated: 2026-04-16 19:53 CDT (Machine: Macmini.lan)
+Last Updated: 2026-04-19 10:16 CDT (Machine: Macmini.lan)
 
 ## Open
+
+- **2026-04-19 Pricing Unification / Portal Pricing Scope**
+  - Master ID: `AI-INC-20260419-PRICING-UNIFICATION-PORTAL-01`
+  - Detail log: `project_hub/issues/2026-04-19-pricing-unification-portal-scope.md`
+  - Repos: `ops`, `ai_workspace`, `avignon`; future approved implementation may involve `portal`, `salesreport`, and pricing source systems
+  - Status: local OPS/Codex scope artifact created and Sonat-facing Avignon email sent. Real OPS/Portal task ID is pending because current task-create auth/session path failed before creation. No production pricing data, Portal pricing behavior, customer terms, credentials, deploy, push, live pull, or pricing/CRM records were changed.
+
+- **2026-04-19 Codex / Claude / Papers Integration Plan**
+  - Master ID: `AI-INC-20260419-CODEX-CLAUDE-PAPERS-01`
+  - Detail log: `project_hub/issues/2026-04-19-codex-claude-papers-integration-plan.md`
+  - Repos: `ai_workspace`, `workspaceboard`, `ai-bridge`, future MI/Papers/.205 surfaces
+  - Status: active routing recorded. Codex/Claude/Integration roles are present in local role docs and Workspaceboard organigram source; Frank/Macee/national outreach dated task records and the Security Guard OAuth checklist are created; Portal existing-account summary and read-only MI/Papers registration designs are produced and waiting for approval/input. Live `.205`, MI/Papers writes, OAuth, Portal/CRM mutation, mailbox credential/content access, MCP exposure, deploy/live pull, and service restart remain closed.
+
+- **2026-04-18 Frank / Workspaceboard Response Recovery**
+  - Master ID: `AI-INC-20260418-FRANK-WB-RESPONSE-01`
+  - Detail log: `project_hub/issues/2026-04-18-frank-workspaceboard-response-incident.md`
+  - Repos: `ai_workspace`, `workspaceboard`, `login`, machine-local Frank runtime, Mac mini Workspaceboard LaunchAgent
+  - Status: Frank direct-email routing/ack recovery is complete and Workspaceboard runtime is rebound to `0.0.0.0:17878`; Robert's phone still failed through the MI auth gateway. Local Login source now accepts the gateway `redirect=` handoff for approved Workspaceboard URLs, but live recovery remains blocked on approved Login rollout plus confirmation that live Login issues `.koval.lan` domain session cookies for the `mi.koval.lan` to `wb.koval.lan` transition. Monday update should also include the Mac mini hard-server-mode path: wire Mac mini, migrate/verify Workspaceboard/Frank/Avignon critical services before Aqua/GUI logout, then only consider old workstation GUI logout; no service migration/restart/logout/LaunchDaemon change is approved by this note.
+
+- **2026-04-18 Frank/Avignon Gmail Push Planning**
+  - Master ID: `AI-INC-20260418-FRANK-AVIGNON-GMAIL-PUSH-01`
+  - Detail log: `project_hub/issues/2026-04-18-frank-avignon-gmail-push-plan.md`
+  - Repos: `ai_workspace`, future approved work may touch Frank/Avignon machine-local runtime state and Google Cloud Pub/Sub/Gmail API
+  - Status: parked until Monday, 2026-04-20. Keep `com.koval.frank-auto` and `com.koval.avignon-auto` on the current 15-second duplicate-protected polling path, verify polling health first on Monday, and resume true Gmail push/OAuth/PubSub only from the M4 ERTC Google auth context if still needed. 2026-04-19 Security Guard review added a non-secret checklist for Frank/Avignon and future Macee inbox/template OAuth planning. Before approval/reopen: no Google auth changes, OAuth token work, Google Cloud/Pub/Sub/IAM mutation, mailbox content reads, cadence changes, deploy/push/live pull, external sends, or subscriber work.
+
+- **2026-04-17 Frank/Avignon Runtime CRM Intake Audit**
+  - Master ID: `AI-INC-20260417-FRANK-AVIGNON-RUNTIME-CRM-INTAKE-01`
+  - Detail log: `project_hub/issues/2026-04-17-frank-avignon-runtime-crm-intake-audit.md`
+  - Repos: `ai_workspace`, `frank`, `avignon`, machine-local Frank/Avignon LaunchAgent/runtime state, pending `importer` recovery queue
+  - Status: auto polling restored to 60 seconds and Frank runtime bugs patched. Avignon CRM recovery has completed the importer-safe rows plus bounded Portal work recorded in the detail log; remaining blockers are source `1` target/contact ambiguity and source `10` target distributor-account ambiguity, with source `7` held until those decisions close. Future runtime prevention still needs a separate safe CRM-intake routing patch.
 
 - **2026-04-15 Login Portal Security Rollout Activation**
   - Master ID: `AI-INC-20260415-LOGIN-PORTAL-SECURITY-ROLLOUT-01`
@@ -19,7 +49,7 @@ Last Updated: 2026-04-16 19:53 CDT (Machine: Macmini.lan)
   - Master ID: `AI-INC-20260414-DIGITAL-OFFICE-WORK-RECORDS-01`
   - Detail log: `project_hub/issues/2026-04-14-digital-office-project-task-work-records-proposal.md`
   - Repos: `ai_workspace`, `workspaceboard`
-  - Status: local no-write projection pack prepared under `project_hub/digital-office/`; remaining human decision is Google Drive OAuth/token storage policy before any future Drive-backed automation, and all live Papers, `.205`, `.17`, OPS/Portal DB, credential, MCP, notification/email, Frank/Avignon runtime, commit/push/deploy gates remain closed
+  - Status: local no-write projection pack prepared under `project_hub/digital-office/`; OAuth/token rejected storage targets are closed as policy, default storage class is machine-local keychain/private path for per-machine automation or approved secret manager/service-account/keychain-backed path for shared automation, and all live Papers, `.205`, `.17`, OPS/Portal DB, credential, MCP, notification/email, Frank/Avignon runtime, commit/push/deploy gates remain closed
 
 - **2026-04-13 Salesreport Shipped-vs-Bottled Ownership**
   - Master ID: `AI-INC-20260413-SALESREPORT-SHIPPED-BOTTLED-OWNERSHIP-01`
@@ -62,8 +92,27 @@ Last Updated: 2026-04-16 19:53 CDT (Machine: Macmini.lan)
   - Master ID: `AI-INC-20260226-LOGOUT-02`
   - Detail log: `project_hub/issues/2026-02-26-logout-reliability-regression.md`
   - Repos: `login` (shared SSO/logout layer affecting `portal` and `ops`)
+  - Status: default OPS/Portal persistence policy approved 2026-04-17; explicit logout revokes Login/OPS/Portal artifacts globally, and next-day Portal/OPS access requires a fresh Login handoff/user action unless longer app persistence is explicitly approved. Implementation remains gated on Security Guard review and no live/session/credential/deploy action is approved by this policy record.
 
 ## Completed
+
+- **2026-04-18 Salesreport Market Events Static HTML Cleanup**
+  - Master ID: `AI-INC-20260418-SALESREPORT-MARKET-EVENTS-STATIC-HTML-CLEANUP-01`
+  - Detail log: `project_hub/issues/2026-04-18-salesreport-market-events-static-html-cleanup.md`
+  - Repos: `salesreport`, live Salesreport worktree
+  - Status: completed; moved the untracked live static Sonat market-events HTML snapshot out of `/home/koval/public_html/salesreport` to a private backup path, preserved the gated PHP report files, and verified the public `.html` URL no longer serves report content
+
+- **2026-04-18 Salesreport Market Events Live Deploy**
+  - Master ID: `AI-INC-20260418-SALESREPORT-MARKET-EVENTS-LIVE-DEPLOY-01`
+  - Detail log: `project_hub/issues/2026-04-18-salesreport-market-events-live-deploy.md`
+  - Repos: `salesreport`, live Salesreport worktree
+  - Status: completed; live `/home/koval/public_html/salesreport` fast-forwarded to `fe268bc4126537432302452e2a41541d077d93b1`, Market Events Report menu/source checks passed, unauthenticated direct report and old `.html` Sonat URL redirect to Login, and full non-interactive Codex credential login remained blocked before 2FA
+
+- **2026-04-17 OPS Dashboard Task Creation Session Credential Error**
+  - Master ID: `AI-INC-20260417-OPS-DASHBOARD-TASK-CREATE-SESSION-CREDS-01`
+  - Detail log: `project_hub/issues/2026-04-17-ops-dashboard-task-creation-session-credential-error.md`
+  - Repos: `ops`, `login`, Portal/CRM task API session state
+  - Status: investigation complete; local config booleans show Portal API config present, dashboard task-create path traced, and simulated Robert/admin OPS session hydrates a matching non-expired SSO JWT. No credential/auth config/session handling code change, production session mutation, task-create write test, deploy, live pull, push, or commit performed
 
 - **2026-04-16 Event Strategy COT Connecteam Review**
   - Master ID: `AI-INC-20260416-EVENT-STRATEGY-COT-CONNECTEAM-01`
@@ -111,7 +160,7 @@ Last Updated: 2026-04-16 19:53 CDT (Machine: Macmini.lan)
   - Master ID: `AI-INC-20260416-WORKSPACEBOARD-REMOTE-CLASSIC-BOARD-01`
   - Detail log: `project_hub/issues/2026-04-16-workspaceboard-remote-classic-board.md`
   - Repos: `workspaceboard`, `ai_workspace`, Mac mini LaunchAgent/runtime auth state
-  - Status: completed; `com.koval.workspaceboard` is bound to `0.0.0.0:17878` for authenticated classic-board access at `http://192.168.55.17/workspaceboard/`, with unauthenticated direct LAN runtime requests verified as `401`
+  - Status: completed; 2026-04-17 relapse after relaunch traced to LaunchAgent host reverting to `127.0.0.1` and fixed by reloading `com.koval.workspaceboard` with `CODEX_DASHBOARD_HOST=0.0.0.0`; authenticated classic-board access remains at `http://192.168.55.17/workspaceboard/`, with unauthenticated direct LAN runtime requests verified as `401` / login redirect
 
 - **2026-04-12 Codex Portal Auth Repair**
   - Master ID: `AI-INC-20260412-CODEX-PORTAL-AUTH-01`

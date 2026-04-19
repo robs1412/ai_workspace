@@ -1,0 +1,21 @@
+Hi Sonat,
+
+Follow-up on the CRM additions recovery: the separate Portal review slice is now complete.
+
+Completed since my last note:
+- Portal worker session 44b8a370 reviewed the account-only/activity-note rows and the status-update row using non-secret classification metadata only.
+- It did not create, import, update, or delete CRM records, Portal records, phpList lists, filters, mailbox labels, or email state.
+- Avignon TODO/HANDOFF were updated with the non-secret blocker summary.
+
+Current recovery state:
+- The 5 importer-safe rows were previewed by Importer session 86dc0b04, with phpList/account-filter/contact-filter actions all left off and no import created.
+- One account-only CRM item can be prepared, but the actual CRM write still needs active-session approval before mutation.
+- One CRM item is gated because it includes account/activity-note work plus distributor-contact and duplicate-review handling.
+- The status/update item should wait until the recovery/import results are final.
+
+Decision still needed before mutation:
+- For the duplicate/link records, please decide whether Avignon should link/update the existing contact record or keep separate handling, and which account should own each relationship/update.
+- For the gated distributor-contact/duplicate-review item, please confirm the target account and duplicate handling before Avignon mutates CRM data.
+
+Next action:
+- I will hold CRM/Portal/phpList writes until those approval gates are resolved. Once approved, Avignon can route the safe write slice, verify it, and send you the final completion report.

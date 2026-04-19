@@ -1,0 +1,36 @@
+To: Robert
+Subject: BID payroll/Portal reimbursement validation owner and approval
+Status: Draft only; not sent.
+
+Robert,
+
+BID has the payroll/Portal reimbursement report contract and sample checklist ready for owner approval, but the local BID docs do not identify the payroll/reimbursement owner. Please name the owner or answer these directly so BID can run the first validation only after approval.
+
+Please provide:
+
+1. Payroll/reimbursement owner:
+2. First live validation payroll period start:
+3. First live validation payroll period end:
+4. Pay date for that payroll cycle:
+5. Exact OnPay/payroll register export or payroll stub source to use:
+6. Square payroll tips source for the same period, or confirmation that tips are already represented in the payroll register/stub source:
+7. Portal/TrackTime gross source for the same period:
+8. Portal/TrackTime reimbursement total source for the same period:
+9. Portal/TrackTime reimbursement pay-addition source for the same period:
+10. Portal/TrackTime lunch stipend source for the same period:
+11. Employee matching basis: approve Portal user id when available, with name matching only as a review fallback, or specify another basis:
+12. Gross discrepancy threshold: approve the draft absolute difference greater than $1.00, or specify another threshold:
+13. Evidence storage target: CSV artifact, BID report/export, or both:
+14. After the fields above are named, is live current-cycle validation approved against OnPay/payroll source, Square tips, and Portal/TrackTime period totals?
+
+Draft contract for approval:
+
+Use pay_date for payroll stub grouping; use payroll period start/end for Portal gross, reimbursements, reimbursement pay additions, and lunch stipend; list reimbursement pay additions as reimbursement support only; show lunch stipend both separately and in portal_gross_plus_stipend; flag gross discrepancies above $1.00; aggregate month-end reporting by pay_date month unless the owner chooses a different basis.
+
+Until those answers are provided, BID will stay local-only: no payroll credentials, no live Portal/TrackTime query, no payroll-system access, no imports, no production writes, no emails to owners, and no current-cycle validation.
+
+Reference files:
+
+- /Users/werkstatt/bid/data-management/PAYROLL-PORTAL-REIMBURSEMENT-PLAN.md
+- /Users/werkstatt/bid/data-management/sample-reports/payroll_portal_reimbursement_owner_approval_checklist.md
+- /Users/werkstatt/bid/data-management/sample-reports/payroll_portal_reimbursement_sample.csv

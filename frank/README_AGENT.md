@@ -1,6 +1,6 @@
 # Frank Cannoli Mail Agent
 
-Last Updated: 2026-04-16 16:11:36 CDT (Machine: Macmini.lan)
+Last Updated: 2026-04-19 09:25 CDT (Machine: Macmini.lan)
 
 ## Purpose
 
@@ -10,9 +10,12 @@ Current design:
 
 - outbound messages are sent through Gmail SMTP using Frank's mailbox
 - sent messages are logged for reply tracking
+- the send helper supports To/Cc/Bcc recipient lists while preserving the primary-audience guard
 - inbox checks can surface replies tied to tracked outbound messages
 - task records live locally and can be expanded as the workflow matures
 - task-specific completion confirmations are policy-approved only when tied to a stable task/email id, logged, duplicate-checked, and allowed by recipient/approval gates
+- clear low-risk internal email tasks should be routed to visible board-managed workers in the correct workspace, with Frank tracking source id, worker/session id, completion state, handled-mail filing, and the mandatory owner-facing completion report unless the task explicitly suppresses email
+- direct Robert emails that report breakage, give approval, ask for status, or give an instruction are actionable intake and must create/reuse a visible route plus a captured/routed acknowledgement, not silent `local-routing/no-email`
 
 This is manual by default. An optional scheduled `launchd` runner now exists for controlled inbox triage, but the default deployment mode remains `draft-only`.
 
@@ -65,6 +68,7 @@ Current behavior found on 2026-04-16:
 
 - `frank_auto_runner.py` reads unseen mail and skips source messages already present in the automation log by normalized `Message-ID`.
 - Primary-recipient instructions, forwards, and tracked corrections are logged for local routing instead of generating another `Frank inbox review` email back to Robert.
+- Copied/FYI messages where Frank is only CC'd and no explicit Frank action request is detected are logged as `cc-fyi-no-action`, filed to `Handled`, and do not generate a Robert decision email.
 - `frank_morning_overview.py` sends only the approved morning overview and duplicate-checks by generated overview task id or matching subject/recipient in the sent logs.
 - There is no approved generalized runtime that sends completion confirmations for every completed task or writes to Papers. Those remain manual/policy behavior unless Robert approves a specific runtime slice.
 - Morning task selection should use active local work only: `In Progress`, `Waiting for Next Step`, and useful `Backlog` items. It should not pull from `Done` or from completed/closed/filed/superseded task history.
@@ -77,6 +81,13 @@ Completion confirmation rule:
 3. Check `sent-log.jsonl`, source `Message-ID`, task id, subject, recipient, and draft filename before any send.
 4. Send or draft only one concise task-specific completion confirmation when approval gates allow it.
 5. Mark the task/email handled after the confirmation is logged so the same task is not resurfaced.
+
+Recipient guardrails:
+
+- `send_frank_email.py` accepts repeated or comma-separated `--to`, `--cc`, and `--bcc` values.
+- Frank still defaults to Robert-only audience. Any To/Cc/Bcc recipient outside `robert@kovaldistillery.com` requires an explicit approval basis and `--allow-non-primary`.
+- Sent logs record non-secret delivery metadata: To addresses, Cc addresses, `has_cc`, `has_bcc`, and `bcc_count`. Bcc addresses are intentionally not logged.
+- Dry-runs print Bcc count only, not Bcc addresses.
 
 Dry-run completion helper usage:
 
@@ -101,9 +112,28 @@ The local helper:
 
 Future workflow fit: when Robert emails Frank and Frank routes a worker, use this helper only after the worker reports completion with no remaining approval blocker. If the worker reports that approval is needed, use the separate decision-email path instead of a completion confirmation.
 
-Remaining approval boundary: turning this into send-enabled runtime requires separate approval for the exact send hook, recipient policy, mailbox filing behavior, credential path, and duplicate-confirmation fields to add to the real sent log.
+Validated narrow auto-send policy as of 2026-04-17:
+
+- Robert-only scheduled morning/EOD reports may send through the already approved runtime when duplicate checks pass and the content matches the current summary policy.
+- Task-specific completion confirmations may be sent to Robert or a relevant approved internal owner only after a stable task/source id is recorded, the worker reports completion with no approval blocker, duplicate checks pass, and recipient/approval gates are clear.
+- Tracked replies on already-approved internal threads may be answered directly only when Frank can answer safely and recipient intent is unambiguous.
+- Clear internal routing/status notes may be sent when they report a captured, routed, blocked, or completed request; routine progress stays local or in the next approved summary.
+- Avignon should mirror these behavior rules for Sonat where equivalent validation evidence and owner routing exist.
+
+Validation evidence already present in this workspace: Robert's medium-independent approval, documented completion traceability rules, `frank_auto_runner.py` source `Message-ID` dedupe behavior, `frank_morning_overview.py` task/subject/recipient duplicate checks, dry-run completion-confirmation stable-key duplicate checks, tracked-reply correction logs, and successful internal sends logged with task ids and Message-IDs.
+
+Remaining approval boundary: turning the dry-run completion helper into a generalized send-enabled runtime still requires separate approval for the exact send hook, recipient policy, mailbox filing behavior, credential path, and duplicate-confirmation fields to add to the real sent log.
 
 Communication intake fit: tasks emailed to Frank should be routed into a visible worker/session when they need implementation or investigation beyond a small mailbox action. The standing Frank inbox monitor remains the control surface, while the worker reports back to Frank with either completion or a real approval blocker.
+
+Board-managed task flow:
+
+1. Classify the email as no-action/FYI, small mailbox action, clear low-risk internal task, or approval-gated/ambiguous/suspicious.
+2. For a clear task, create or reuse the correct visible workspace worker and send a full brief with source id, task id, owner, workspace, outcome, constraints, approval gates, deliverable, verification expectation, and completion-report recipient.
+3. Verify from board status/history or tmux/session history that the prompt started.
+4. Monitor the worker until it reports completion or a real approval blocker.
+5. Update Frank TODO/HANDOFF/project notes and source handled-mail state, then send or draft the completion report. The report is required by default unless the task explicitly suppresses email; it should state what was done, what changed, relevant links/session IDs/task IDs, what was not done, and any remaining decisions or approval gates.
+6. Record the dedupe key so the same email/thread is not surfaced repeatedly; if a real decision blocks work for more than 24 hours, send one follow-up with concrete questions and the approval boundary.
 
 Daily report helper usage:
 
@@ -116,7 +146,7 @@ The helper:
 
 - reads `TODO.md` by default
 - selects morning work only from active TODO sections
-- selects end-of-day accomplishments only from same-date `Done` entries
+- currently selects end-of-day accomplishments from same-date `Done` entries; Robert's 2026-04-17 directive says evening summaries should ultimately be sourced from Task Manager/board-completed work
 - accepts optional approved Papers metadata through `--papers-metadata-file`
 - writes a local draft unless `--preview-only` is used
 - never sends mail, reads credentials, connects to IMAP/SMTP, changes LaunchAgents, or reads live Papers
@@ -128,6 +158,7 @@ Installed runtime status:
 - Duplicate protection checks the sent log by report `task_id` and subject/recipient before sending.
 - Morning OPS task selection is today's tasks first, then the most recent overdue tasks, up to 10.
 - Frank's runtime signature is plain text with clean social-link labels, not angle-bracket URL formatting.
+- Runtime source-selection changes that wire the 18:00 report directly to Task Manager/board accomplishments require a separate implementation worker and approval.
 
 Loop guard:
 

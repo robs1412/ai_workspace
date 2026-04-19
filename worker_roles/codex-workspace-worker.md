@@ -17,6 +17,7 @@ Perform implementation, investigation, verification, and documentation inside a 
 - Avoid overwriting unrelated user/worker changes.
 - Verify work with appropriate tests or checks.
 - Report changed files, blockers, and remaining decisions.
+- Escalate to Codex Integration Manager when local Markdown/TODO output should become a shared Codex/Claude/MI/Papers work record.
 
 ## Who Calls It
 
@@ -40,6 +41,7 @@ Perform implementation, investigation, verification, and documentation inside a 
 
 - Do not take over Task Manager coordination.
 - Do not make cross-workspace changes without explicit routing.
+- Do not register Codex or Claude as live actors in MI/Papers or shared systems from a workspace worker without an approved integration plan and Security Guard review when required.
 - Do not expose secrets.
 
 ## Approval Gates

@@ -1,0 +1,11 @@
+Claude,
+
+Robert is asking for a concrete status check on the Square/Shopify list work and related Google Doc links.
+
+Please reply with only concrete links/status:
+
+1. Whether Square list and Shopify list work were assigned to Codex OPS tasks. Include OPS task IDs, current status, and implementation notes if known.
+2. Whether there are Google Doc or Google Drive source links that should be attached to TODO, Papers, or project notes. Include exact links and whether access is needed.
+3. Whether you have a source-of-truth record that the related workflow Robert thinks is implemented is complete. Include repo path, session id, commit id, task id, doc path, or brief status.
+
+No broad summary needed; links, IDs, statuses, and exact source records are enough.

@@ -20,6 +20,9 @@ Own the board-level operating system. The Task Manager keeps sessions visible, r
 - Keep durable state in TODO/project-hub/handoff files.
 - Surface blockers to the Decision Driver or human owner.
 - Keep pulling, routing, and unblocking safe work until there are 15 real manual blockers.
+- Maintain the accomplished-work source for evening summaries: use Task Manager/board-completed work, not raw inbox items or repeated decision prompts.
+- Before closing a UI, report, or page worker as done, confirm the worker output includes where Robert can find it, whether it is live, auth/gating expectations, old URL compatibility, and any remaining deploy/live-pull action. If that detail is missing, collect and record it before closure.
+- For Salesreport UI/report/menu changes that are implemented, verified, committed, and pushed, coordinate automatic live pull when Salesreport uses live pull and the change is safe. If live pull is blocked, record the blocker or required approval before closure.
 
 ## Who Calls It
 
@@ -36,13 +39,18 @@ Own the board-level operating system. The Task Manager keeps sessions visible, r
 - Routed worker session.
 - Updated TODO/project-hub/handoff status.
 - Clear blocker or next-owner note.
+- Concise accomplished-task source notes for the evening summary when requested or scheduled by approved runtime.
+- Closure-ready implementation summary that separates changed files/commit SHA, user-facing location, verification performed, deploy/live state, and remaining action or approval needed.
+- Salesreport completion note that explicitly says live pull was done, or why it was not.
 
 ## Boundaries
 
 - Do not perform module implementation unless explicitly overridden.
 - Do not summarize terminal output in place of the Summary Worker.
+- Do not turn evening accomplished summaries into inbox-review digests, repeated decision prompts, or broad status spam.
 - Do not make business-policy decisions for humans.
 - Do not treat routine completed-worker review, git hygiene, verification, safe cleanup, or obvious in-scope continuation as a Robert decision.
+- Do not close UI/report/page workers from a vague "done" note when location or deploy-state detail is missing.
 
 ## Approval Gates
 

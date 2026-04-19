@@ -1,0 +1,27 @@
+Hi Sonat,
+
+Robert asked Codex to scope a larger pricing-unification project: one approved KOVAL pricing source, with that pricing available in the Portal where sales users need it.
+
+Why it matters:
+Sales, Portal, reporting, and support workflows should not depend on duplicated spreadsheets, stale exports, or page-specific pricing rules. The first phase is planning and validation only; no production pricing data or Portal behavior changes are approved yet.
+
+Proposed phases:
+1. Inventory current pricing sources and every Portal/reporting surface that uses pricing.
+2. Define the canonical pricing model, including effective dates, customer/distributor overrides, discounts/promotions, UOM/case-vs-bottle handling, conflict rules, and audit fields.
+3. Design a read-only Portal pilot behind feature flags, keeping existing paths available.
+4. Prepare a migration/backfill plan with dry-run counts, duplicate/conflict reports, missing-field review, and rollback requirements.
+5. Build parity checks and UAT scripts for representative customers, distributors, states, products, package sizes, promotions, and effective-date boundaries.
+6. Prepare sales-user communication/training after read-only parity is accepted.
+7. Require explicit approval gates before any production pricing insert/update/delete or Portal cutover.
+
+Input Codex may need from you:
+- Which pricing source should be treated as the current business reference.
+- Known exception rules for customers, distributors, states, promotions, and effective dates.
+- The Portal screens or sales workflows where pricing accuracy matters first.
+- Any sales users who should help validate the read-only pilot.
+
+Tracking:
+Codex scope path: /Users/werkstatt/ops/docs/2026-04-19-pricing-unification-portal-scope.md
+Local task key: ops-pricing-unification-portal-2026-04-19
+
+No production pricing data or Portal behavior has been changed.

@@ -1,0 +1,15 @@
+Robert,
+
+Here is the concise next-step plan for the Mac mini AI services after today's cleanup.
+
+Current state: Workspaceboard, Frank, and Avignon are still running as user LaunchAgents in gui/501. That means the admin console should stay logged in until we deliberately migrate the services that do not need a GUI user session.
+
+Recommended next steps:
+
+1. Inventory which services truly need GUI/user context and which can run headless.
+2. Decide LaunchAgent vs. LaunchDaemon per service, starting with Workspaceboard, Frank, and Avignon.
+3. Create and test replacement service plists safely, without unloading the current working services first.
+4. Verify Workspaceboard, Frank, and Avignon after a controlled reboot/logout simulation.
+5. Only after that, consider logging out the old workstation GUI session.
+
+No standing monitors should be closed during this. Keep Workspaceboard, Frank, Avignon, homebrew httpd, downloads-to-shared, keepawake, and Bitdefender in place while we do the launchd migration work.

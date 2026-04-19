@@ -42,6 +42,13 @@ The runtime binding was intentionally localhost-only from the earlier narrow-exp
 - Local runtime health: `http://127.0.0.1:17878/api/status` returned `ok: true`, host `Macmini.lan`, and `tmux_available: true`.
 - Unauthenticated direct LAN runtime check: `http://192.168.55.17:17878/api/status` returned `401 Unauthorized` with a Portal login redirect, confirming direct runtime auth validation is still active.
 
+### 2026-04-17 Relapse Check
+
+- Symptom: Robert reported `http://192.168.55.17/workspaceboard/` and then direct `http://192.168.55.17:17878/` were not serving after a Workspaceboard relaunch/reinstall.
+- Cause: the installed LaunchAgent plist had reverted to `CODEX_DASHBOARD_HOST=127.0.0.1`; Node was running but listening only on `127.0.0.1:17878`, so Apache `/workspaceboard/` returned the iframe wrapper while the iframe target on the LAN host was connection-refused.
+- Runtime fix: updated `/Users/admin/Library/LaunchAgents/com.koval.workspaceboard.plist` back to `CODEX_DASHBOARD_HOST=0.0.0.0`, then `bootout`/`bootstrap`/`kickstart` reloaded `com.koval.workspaceboard`.
+- Verification at 2026-04-17 15:19 CDT: launchd reported `CODEX_DASHBOARD_HOST => 0.0.0.0`, `lsof` showed `TCP *:17878 (LISTEN)`, local and Apache `/workspaceboard/api/status` returned `ok: true`, unauthenticated direct LAN `/api/status` returned `401 Unauthorized`, unauthenticated direct LAN `/` returned `302` to `/login/`, `/workspaceboard/` returned the LAN iframe URL, and `/workspaceboard/task-management-light.html` plus its JS asset returned `200`.
+
 ## Rollback Plan
 
 From `/Users/werkstatt/workspaceboard` on Mac mini:

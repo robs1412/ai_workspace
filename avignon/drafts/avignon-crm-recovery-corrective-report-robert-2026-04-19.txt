@@ -1,0 +1,29 @@
+Robert,
+
+Avignon CRM recovery is no longer being treated as simply waiting on Sonat.
+
+I checked the Frank-side Claude/Avignon context and coordinated the visible Avignon worker `b583edb6` plus Task Manager. The relevant Frank item is your forwarded `CRM additions: target/link decisions needed` message from April 19, along with the Claude/Frank bridge context. I did not print private source bodies, contact fields, or credentials.
+
+Current recovery state:
+- Completed: Importer completed the five importer-safe CRM rows as Import ID 56 with no phpList or filter action.
+- Completed: Portal completed the bounded account/activity work for sources 5 and 9.
+- Still unresolved: source 1 has duplicate/contact and target-account ambiguity; source 10 has distributor/account ambiguity; source 7 is status/update-only unless the source context proves otherwise.
+
+Email-quality correction:
+- The prior Avignon email to Sonat was too source-heavy and framed the work as a passive Sonat wait.
+- The corrected path is to produce a short answer sheet with one decision row per unresolved source: source id, action needed, safest default, exact answer format, and what Avignon will do after the answer.
+- Robert/Frank/Claude context should remain attached to the recovery route; Avignon should not send more broad or vague decision emails.
+
+Proposed next action:
+1. Avignon worker `b583edb6` should privately re-check the source artifacts and Robert-forwarded context.
+2. If existing context identifies a safe target, route that bounded action to the correct Portal/Importer worker.
+3. If ambiguity remains, send one corrected Sonat-facing email from Avignon, with Robert copied for visibility, using the new CC support. Claude should only be copied if Robert wants Claude in the CRM decision thread; otherwise keep Claude context in Frank/Task Manager notes.
+4. The corrected Sonat email should not include raw source dumps. It should ask for exact names or `create new` in a compact table.
+
+No CRM/Portal mutation, phpList action, broad import, OAuth/Papers/.205/MCP work, runtime config change, service restart, or credential access was performed in this correction pass.
+
+Frank/Avignon coordination refs:
+- Avignon worker: `b583edb6`
+- Task Manager: `3e1329a0`
+- Private Frank context capture: `frank/drafts/claude-avignon-context-frank-mail-2026-04-19.private.txt`
+- Private Avignon quality review: `avignon/drafts/avignon-crm-email-quality-review-2026-04-19.private.txt`

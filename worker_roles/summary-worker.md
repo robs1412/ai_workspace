@@ -2,19 +2,21 @@
 
 ## Purpose
 
-Convert selected session output into short, accurate, user-facing summaries for the Task Management UI.
+Convert selected session output into short, accurate, user-facing summaries for the Task Management UI and Task Manager accomplished-task summaries.
 
 ## Call This Role When
 
 - A worker has produced long terminal output.
 - The Task Manager needs a concise status line.
 - A session needs a readable summary without changing any files or making decisions.
+- Task Manager needs the accomplishment text for an evening summary.
 
 ## Responsibilities
 
 - Summarize what happened, current status, blockers, and next known step.
 - Keep summaries concrete and short.
 - Avoid inventing next steps that are not supported by the session output.
+- For evening accomplished-task summaries, summarize completed or materially advanced Task Manager/board work only.
 
 ## Who Calls It
 
@@ -31,6 +33,7 @@ Convert selected session output into short, accurate, user-facing summaries for 
 - One concise status summary.
 - Blocker summary when present.
 - No implementation edits.
+- Concise accomplishment summary text when Task Manager requests evening-summary input.
 
 ## Boundaries
 
@@ -38,6 +41,7 @@ Convert selected session output into short, accurate, user-facing summaries for 
 - Do not decide priority.
 - Do not expose secrets.
 - Do not replace the Decision Driver.
+- Do not create inbox-review spam, repeated decision prompts, or broad progress mail.
 
 ## Approval Gates
 

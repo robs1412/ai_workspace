@@ -1,0 +1,18 @@
+Robert,
+
+Captured and routed.
+
+I checked Frank's inbox for the Claude-related Avignon CRM context without exposing private mail bodies. I found the relevant Robert-forwarded CRM target/link decision email, the related Frank/Workspaceboard recovery reply, and the Claude-related context currently visible in Frank.
+
+I routed the non-secret metadata and correction to Avignon worker b583edb6 through Workspaceboard/Task Manager. The worker is live and has already accepted the correction: it should no longer treat the CRM recovery as simply waiting on Sonat, and it is reframing the recovery path into a concrete action plan and owner-facing report.
+
+Current state:
+
+- Avignon worker: b583edb6, live and working.
+- Frank source task: avignon CRM recovery / Claude context correction.
+- Claude bridge note: no Frank inbox reply found yet for the organigram/task-record bridge note during this check.
+- Private mail bodies remain local/private and were not exposed in chat or this email.
+
+Completion report will follow after b583edb6 either closes the corrected recovery path or reports a real blocker.
+
+No .205 writes, OAuth, Papers/MI writes, Portal/CRM mutation, MCP exposure, deploy/live pull, service restart, mailbox/runtime config change, or credential exposure was performed.

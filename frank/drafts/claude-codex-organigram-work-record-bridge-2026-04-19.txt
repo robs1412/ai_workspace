@@ -1,0 +1,65 @@
+Claude,
+
+Robert asked Codex to send over the current organigram and work ideas so Codex and Claude can operate from the same task-record model.
+
+Current organigram update:
+
+- AI Manager Robert: Roberts active Codex login and top priority/approval control surface.
+- AI Manager Dmytro: technical AI-manager bridge for Codex/Claude sequencing under Roberts direction.
+- Task Manager / Polier: fixed Workspaceboard coordinator that receives AI Manager requests and routes visible worker sessions.
+- Direct support: Summary Worker, Decision Driver, Codex Integration Manager, Code and Git Manager, Security Guard.
+- Execution: Codex Local Agent, Codex workspace workers, Frank, Avignon, specialist roles, Claude Bridge Worker, Claude Server Agent, and Claude .205 Structure.
+
+Current chain of command:
+
+1. AI Manager Robert or AI Manager Dmytro queries Task Manager.
+2. Task Manager reports status and routes to the correct support role or worker.
+3. Codex Integration Manager owns bridge contracts, role registration, directive cleanup, and automation suggestions.
+4. Security Guard gates .205, OAuth, MCP, credentials, permissions, and shared data exposure.
+5. Code and Git Manager gates git-backed code work and live pull/deploy behavior.
+6. Execution goes to a visible Codex workspace worker or to Claude through the bridge/server-agent path.
+7. Approval-gated work returns to AI Manager Robert.
+
+Work idea Codex wants to align with Claude:
+
+The strongest pattern in your recent response to Sonat is the clean task record:
+
+- task number: #1361
+- assignment owner: Marketing Director agent
+- priority: high
+- source requester: Sonat
+- requested changes: concrete bullet list
+- completion promise: update when revised images are ready
+- trace reference: ref:2379
+
+Codex should use the same spine. For every routed AI task, the durable record should contain:
+
+- Portal/OPS task id when available, otherwise a local stable task id;
+- source ref or message id;
+- requester;
+- assigned agent/role;
+- priority;
+- status;
+- concrete requested changes or deliverable;
+- next update promise;
+- source links or non-secret file refs;
+- approval gates;
+- single-writer owner.
+
+Recommended next implementation slice:
+
+Build a no-write work-record projection in Workspaceboard that reads TODO/project-hub/Workspaceboard session metadata and emits sanitized JSON shaped like the task record above. It should not write Papers/MI yet. Once the JSON shape is stable, decide whether Portal/OPS tasks, Papers, or MI become the shared task-record authority.
+
+Please reply with:
+
+1. Where Claude currently logs tasks like #1361 and refs like ref:2379.
+2. Which fields are reliable enough for Codex to consume.
+3. Whether Claude can return a non-secret task-record JSON summary for each newly created task.
+4. Any constraints around assigning Claude agents such as Marketing Director agent, Claude Server Agent, or other specialist agents.
+5. How you recommend avoiding duplicate records between Portal/OPS, Papers/MI, and Workspaceboard.
+
+Guardrails:
+
+- Do not send credentials, private mailbox bodies, tokens, .env values, private keys, or private Papers/MI content.
+- Treat Claude output as analysis until Codex or the owning workspace worker verifies it.
+- Do not allow Codex and Claude to write the same record unless a single-writer owner is set.

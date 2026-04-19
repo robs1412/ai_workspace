@@ -1,38 +1,157 @@
 # TODO — frank
 
-Updated: 2026-04-17 10:59 CDT (Machine: Macmini.lan)
+Updated: 2026-04-19 10:12 CDT (Machine: Macmini.lan)
 
 ## In Progress
 
-- Standing Frank communication monitor.
-  - Monitor Robert's OPS task queue.
-  - Check Robert's daily Portal digest email and surface follow-ups.
-  - Monitor inbound receipt emails and draft next steps.
-  - Add OPS-specific follow-up drafting from selected tasks when the source task and owner are unambiguous.
-  - Receipt follow-ups to preserve for the receipt workflow:
-    - add duplicate protection when merchants resend receipts
-    - add receipt category heuristics by merchant
-- Await Claude's reply on Screenbox vs Playwright workflow recommendations.
-  - Local Frank task id: `frank-2026-claude-screenbox-workflow`
-  - Source session: `158f2faf`
-  - Sent to Claude on 2026-04-16 with subject `Screenbox workflow recommendations`.
-  - Need: capture Claude's recommended setup, command pattern, artifacts/screenshots, handoff format, and cautions on when Playwright should still be used.
-- Finish the Mitch account archive/imapsync transfer.
-  - Destination IMAP login for `tastingroom@kovaldistillery.com` now works with the secured secret reference.
-  - Next step: rerun controlled `imapsync` for the incomplete Mitch archive folders and verify final destination counts.
+- [ ] Avignon CRM recovery / Claude context correction routed to worker `b583edb6`.
+  - Frank checked Claude-related inbox metadata and routed the non-secret context to Avignon worker `b583edb6` through Workspaceboard/Task Manager.
+  - Robert acknowledgment sent: task id `frank-2026-avignon-crm-claude-context-route-2026-04-19`, Message-ID `<177661099509.95877.3244850234872230469@kovaldistillery.com>`.
+  - Worker state at routing: live/working and accepted the correction to stop treating this as stale `waiting on Sonat`; completion report remains pending worker closeout or real blocker.
+  - No private mail bodies, credentials, .205 writes, OAuth, Papers/MI writes, Portal/CRM mutation, MCP exposure, deploy/live pull, service restart, or mailbox/runtime config change was performed by Frank.
+
+## Blocked / Parked
+
+- [ ] `frank-2026-04-19-outreach-macee-inbox-oauth-template-security-review`: Future/security-reviewed Macee inbox OAuth/template task for Outreach Communicator.
+  - Source/date: Robert input in active Codex Integration Manager chat on 2026-04-19.
+  - Owner/session: Outreach Communicator; source coordination from Frank worker `2e9c321b` and Codex Integration Manager session `b66fdade`.
+  - Status: Blocked / approval-gated; no OAuth, mailbox-content read, credential access, email send, mailbox filing, Portal/CRM mutation, deploy/live pull, service restart, or runtime change is approved from this record.
+  - Due date: TBD / future only after explicit Robert approval and Security Guard review; do not infer approval from the existence of this task.
+  - Next step: after explicit approval, route to Security Guard first to define permitted OAuth scope, template access path, token storage class, duplicate protection, and implementation owner before Outreach Communicator or any workspace worker touches OAuth/template surfaces.
+  - Approval gates: Robert explicit approval, Security Guard review, named credential/token storage path outside synced docs/git/chat, and a concrete mailbox/template action brief.
+
+- [ ] 2026-04-20 Monday follow-up: verify Frank/Avignon 15-second polling health before any Gmail API push/OAuth/PubSub work resumes.
+  - Robert pause directive from 2026-04-18: keep Frank/Avignon email handling on the current 15-second polling path until Monday, 2026-04-20.
+  - First Monday action: verify polling health from non-secret LaunchAgent/runtime metadata.
+  - Resume Gmail API push/OAuth/PubSub only if still needed and only from the M4 ERTC Google auth context.
+  - Before Monday approval: no Google Cloud/PubSub/IAM mutation, no OAuth token work, no mailbox content read, no runtime cadence change, and no deploy/push/live pull for the Gmail push slice.
+  - Do not attempt more Google auth changes before Monday unless Robert explicitly reopens it.
+
+- [ ] 2026-04-20 Monday follow-up: include Mac mini hard-server-mode sequence in the Monday morning update.
+  - Add alongside the Gmail polling/OAuth health follow-up.
+  - Checklist for Monday discussion: wire Mac mini; turn Mac mini into hard server mode; migrate/verify critical Workspaceboard/Frank/Avignon services so logout of the Aqua/GUI session is safe; only then consider logging out the old workstation GUI session.
+  - Boundary from Robert's 2026-04-19 note: record/follow up only. Do not perform service migration, logout, LaunchDaemon changes, service restarts, LaunchAgent/runtime changes, deploy/live pull, OAuth work, mailbox reads, credential access, Workspaceboard mutation, or hard-server-mode implementation from this note.
 
 ## Backlog
 
-- Expand from draft-only to narrow auto-send rules after validation.
-  - Keep the Avignon mirror rule as part of any future assistant-behavior implementation so Sonat's assistant path does not fall behind Frank's.
-- Company party member invite.
-  - Blocked in this pass: local `README_AGENT.md` contains only a sample command/template path for a tracked task email, but no current source message, recipient list, approval, exact send path, or permission to send. Keep open until Robert provides/approves the concrete invite action.
-- Define and approve live Papers lookup/projection for Frank email links.
-  - Current state: local/runtime insertion hook can format supplied Papers URLs, but existing Workspaceboard Papers snapshot is metadata-only and does not provide safe URLs.
-  - Needed before automation: approved Papers source/API/read path, canonical URL field, redaction rules, duplicate behavior, and whether Claude or Workspaceboard owns the projection.
+- [ ] `frank-2026-04-19-national-outreach-email-macee-leave-2026-04-27`: National outreach email task for Frank when Macee leaves.
+  - Source/date: Robert input in active Codex Integration Manager chat on 2026-04-19.
+  - Owner/session: Frank; source coordination from Frank worker `2e9c321b` and Codex Integration Manager session `b66fdade`.
+  - Due date: 2026-04-27.
+  - Status: Backlog / scheduled follow-up; no email send, mailbox content read, mailbox filing, Portal/CRM mutation, credential access, OAuth, deploy/live pull, service restart, or runtime change is approved from this record.
+  - Next step: on 2026-04-27, prepare or route the national outreach email task brief for Frank/Outreach with recipient/source details supplied or already approved at that time; if recipient/content/source authority is unclear, draft only and ask Robert before sending.
+  - Approval gates: explicit recipient/content/send authority before any outbound message, normal duplicate checks against Frank sent logs/TODO/HANDOFF, and Security Guard review if the task expands into credentials, OAuth, mailbox access beyond approved metadata, external-sensitive outreach, or bulk sending.
+
+Live Papers lookup/projection remains approval-gated and is represented by AI Workspace/Papers project notes plus the Claude guidance request, not by an open Frank implementation row.
 
 ## Done
 
+- 2026-04-19: Routed Robert's Claude/Avignon CRM recovery context to visible Avignon worker.
+  - Frank inbox metadata check found the relevant Robert-forwarded CRM target/link decision email, the related Frank/Workspaceboard recovery reply, and Claude-related context; private bodies were not exposed.
+  - Routed non-secret context through Workspaceboard/Task Manager to Avignon worker `b583edb6`.
+  - Sent Robert acknowledgment `Avignon CRM recovery Claude context routed`, task id `frank-2026-avignon-crm-claude-context-route-2026-04-19`, Message-ID `<177661099509.95877.3244850234872230469@kovaldistillery.com>`.
+  - Completion report remains pending `b583edb6` output. No private body/secret disclosure, .205/OAuth/Papers/MI/Portal/CRM/MCP/deploy/live-pull/service/runtime mutation was performed.
+
+- 2026-04-19: Added CC/BCC support to the installed Frank send helper and resolved the Claude bridge Robert-copy blocker.
+  - Patched `/Users/admin/.frank-launch/runtime/scripts/send_frank_email.py` and the Avignon parity copy at `/Users/admin/.avignon-launch/runtime/scripts/send_frank_email.py`.
+  - New recipient behavior: `--to`, `--cc`, and `--bcc` accept repeated or comma-separated addresses; all recipients are validated against the existing primary-audience guard unless `--allow-non-primary` is explicitly used.
+  - Sent-log behavior records To/Cc plus Cc/Bcc presence/count; Bcc addresses are not logged.
+  - Verification: Python compile, helper `--help`, Frank guardrail rejection without `--allow-non-primary`, Frank CC/BCC dry-run with explicit approved credential path, and Avignon CC/BCC dry-run with explicit approved credential path.
+  - Robert-copy resolution: original Claude-only Message-ID `<177660739756.67470.17168217427046240939@kovaldistillery.com>` cannot be retroactively CC'd, so Frank sent Robert-only post-send copy `Copy: Codex / Claude organigram and task-record bridge`, task id `frank-2026-claude-codex-organigram-work-record-bridge-robert-copy`, Message-ID `<177660868352.77456.17905572612484589347@kovaldistillery.com>`, draft source `drafts/claude-codex-organigram-work-record-bridge-robert-copy-2026-04-19.txt`, To `robert@kovaldistillery.com`, Cc none, Bcc none.
+  - No unrelated mailbox polling/cadence change, Google/OAuth/PubSub work, service restart, .205/Papers/MI/Portal/CRM mutation, credential exposure, or duplicate Claude resend was performed.
+
+- 2026-04-19: Sent Claude the Codex / Claude organigram and task-record bridge note.
+  - Sent to Claude only through the approved Frank send helper before Robert's correction requiring Robert-copy/CC arrived in this session.
+  - Sent-log task id: `frank-2026-claude-codex-organigram-work-record-bridge`.
+  - Message-ID: `<177660739756.67470.17168217427046240939@kovaldistillery.com>`.
+  - Draft source: `drafts/claude-codex-organigram-work-record-bridge-2026-04-19.txt`.
+  - No credentials, private mailbox bodies, .205/OAuth/Papers/MI writes, Portal/CRM mutation, MCP exposure, deploy/live pull, service restart, mailbox/runtime config change, or Code/Git action was performed. Robert-copy/CC was later resolved by the CC/BCC helper support and Robert-only post-send copy recorded above.
+
+- 2026-04-18: Tightened Frank copied/CC no-decision directive.
+  - Robert corrected that Claude-managed/status copies where Robert is already CC'd are for Frank's awareness only, not a reason for Frank to send Robert a separate decision email.
+  - Updated the Frank directive and patched installed `frank_auto_runner.py` so copied-only/no-explicit-Frank-action messages are handled before credential/auth suspicious-keyword escalation.
+  - Direct requests to Frank and genuine safety/action blockers still route/escalate under existing gates. No outbound email, credential read, Google auth/OAuth/PubSub work, mailbox body print, or external-system mutation was performed.
+
+- 2026-04-18: Parked Gmail API push/OAuth/PubSub slice until Monday health check.
+  - Recorded Robert's pause directive: stay on current 15-second polling until Monday, 2026-04-20; verify polling health first; resume Gmail API push/OAuth/PubSub only from the M4 ERTC Google auth context if still needed. Docs-only; no Google auth, mailbox read, runtime cadence change, Cloud/PubSub/IAM mutation, deploy, push, live pull, credential, OPS, or external-system state changed.
+
+- 2026-04-18: Recovered Frank monitor direct-email response behavior.
+  - Patched installed machine-local `frank_auto_runner.py` so future direct Robert emails route to Workspaceboard Task Manager and send Robert-only captured/routed acknowledgements instead of silently logging.
+  - Manually routed the already-logged phone issue and Gmail push/OAuth approval messages to Task Manager.
+  - Sent Robert-only recovery email `Frank and Workspaceboard recovery`, task id `frank-2026-runtime-wb-recovery-2026-04-18`.
+  - Verified Python compile, dry-run inbox cycle, sent-log entry, and stale stderr timestamp; no credentials were printed and no Google OAuth/Cloud mutation was performed.
+
+- 2026-04-18: Installed Frank Gmail fast-poll runtime improvement.
+  - `com.koval.frank-auto` now polls every 15 seconds instead of 60 seconds, using the existing duplicate-protected inbox cycle. True Gmail push is still blocked on Google Cloud/PubSub/IAM plus Frank Gmail API OAuth setup.
+  - Follow-up auth retry at 13:20 CDT: the old local Gmailconnector OAuth client returned Google `401 deleted_client` before password or 2FA/app approval, so it cannot supply the missing Frank Gmail API token. No OAuth token, Gmail content, Google Cloud/PubSub/IAM state, credential output, or runtime change resulted from the retry.
+
+- 2026-04-18: Sent Robert the Frank/Avignon Gmail push approval-packet decision email.
+  - Local Frank task id: `frank-2026-gmail-push-approval-packet-2026-04-18`.
+  - Sent Robert-only subject `Frank/Avignon Gmail push: concrete approvals needed` with Message-ID `<177652840568.70175.10644898545170796700@kovaldistillery.com>`.
+  - Draft source: `drafts/gmail-push-approval-packet-robert-2026-04-18.txt`; sent log: `/Users/admin/.frank-launch/state/sent-log.jsonl`.
+  - Asked Robert for concrete decisions on Google Cloud project/new project, Pub/Sub owner, Gmail API watch approval, Mac mini machine-local token/historyId storage approval, pull-subscriber/LaunchAgent/fallback sync slice approval, and MacBook setup-only vs supplemental-worker role. No Gmail push/OAuth implementation credentials, mailbox bodies, Google Cloud state, Pub/Sub/IAM, OAuth clients, LaunchAgents, runtime installs, code commits, deploys, live pulls, or mailbox filing were changed.
+
+- 2026-04-18: Prepared BID payroll/Portal reimbursement owner-validation draft for Robert.
+  - Draft source: `drafts/bid-payroll-portal-reimbursement-owner-validation-2026-04-18.txt`.
+  - Created because BID local docs do not identify the payroll/reimbursement owner. The draft asks Robert to name the owner and answer the validation fields before live BID payroll/Portal validation. Draft only; no email was sent, no mailbox state changed, and no live Portal/payroll access was used.
+- 2026-04-18: Recorded mandatory Frank completion-report correction.
+  - Frank task-completion report email is required by default unless a task explicitly suppresses email. It must include what was done, what changed, links/session IDs/task IDs, what was not done, and remaining decisions. Frank reports to Robert by default. Docs-only; no mailbox/runtime/send/cadence/code change.
+- 2026-04-18: Completed authorized Frank chief-of-staff inbox cleanup sweep.
+  - Starting verified Frank INBOX/unread was `6` / `6`; filed all `6` remaining Google Ads and social media pipeline residue messages to `Handled`; final verified Frank INBOX/unread is `0` / `0`.
+  - Rationale: Google Ads owner path was already closed/routed, and the social media pipeline thread was copied/FYI without a fresh Frank action request. No follow-up email, worker routing, credential output, runtime change, OPS write, or external-system action was performed.
+- 2026-04-18: Recorded Frank chief-of-staff email-worker directive.
+  - Frank should identify clear low-risk internal email tasks, route them to visible board-managed workers with full briefs, verify start, monitor completion, update TODO/project/handled-mail state, and send the required Robert/relevant-owner completion report. Added duplicate protection, FYI/CC filing, and 24-hour decision follow-up rules. Docs-only; no mailbox/runtime/send/cadence/code change.
+- 2026-04-18: Sent Robert the live Sonat market events cost/sales report link.
+  - Local Frank task id: `frank-2026-salesreport-sonat-market-events-link-2026-04-18`.
+  - Sent Robert-only subject `Sonat market events report live` with Message-ID `<177651881735.71634.16718420527833151961@kovaldistillery.com>`.
+  - Draft source: `drafts/sonat-market-events-report-robert-2026-04-18.txt`; sent log: `/Users/admin/.frank-launch/state/sent-log.jsonl`.
+  - Included exact live link `https://koval-distillery.com/salesreport/sonat-market-events-report-2026-04-18.html` and noted source data caveats/data issues are captured in the report. No private receipt details, Salesreport files, runtime, mailbox filing, OPS, credentials, commit, push, deploy, or external recipients were touched.
+- 2026-04-17: Added Frank copied/FYI no-action handling.
+  - Runtime now classifies CC-only messages without an explicit Frank action request as `cc-fyi-no-action`, logs/files them as no-action, and does not send Robert a decision email for them. Updated Frank directive docs with the same rule. The current Claude social media pipeline example was filed to `Handled` without external email.
+- 2026-04-17: Closed Frank's local live Papers lookup/projection row from open TODO counting.
+  - Durable reason: Frank already sent Claude the guidance request `frank-2026-claude-papers-completion-reporting`, AI Workspace/project-hub records hold the live Papers approval gates, and Frank can only format supplied approved Papers URLs until a separate approved implementation slice exists. No Papers read/write, live lookup, runtime change, mailbox action, credential access, email send, commit, push, deploy, or external-system mutation was performed.
+- 2026-04-17: Moved the standing Frank communication monitor out of open TODO counting.
+  - The standing monitor remains live as board session `1794c370` and is governed by Frank docs/HANDOFF, but it is not a closable one-shot TODO. Receipt duplicate protection and merchant-category heuristics remain folded into the standing receipt workflow notes rather than counted as separate open tasks.
+- 2026-04-17: Closed Frank's Google Ads credit/current-state email decision.
+  - Robert confirmed Claude owns and is taking care of Google Ads.
+  - Frank should not route this item to Robert/Sonat, keep asking for an owner, or create another internal follow-up for the same source email.
+  - Source email from Claude dated 2026-04-15 16:16 CDT was filed from `INBOX` to `Handled`; local automation log received a closure row. No Google Ads login, account/spend/campaign change, credential action, or external email was performed.
+- 2026-04-17: Sent Robert the Sonat market events / state sales report link.
+  - Local Frank task id: `frank-2026-salesreport-sonat-market-events-link`.
+  - Sent Robert-only subject `Sonat market events / state sales report` with Message-ID `<177645795951.74920.1801071343736050985@kovaldistillery.com>`.
+  - Draft source: `drafts/sonat-market-events-report-robert-2026-04-17.txt`; sent log: `/Users/admin/.frank-launch/state/sent-log.jsonl`.
+  - Included handoff link `/salesreport/sonat-market-events-report-2026-04-17.html` and noted that local Apache returned `500` for Salesreport pages during verification, so failed HTTP rendering may need web-server config follow-up. No Salesreport files, runtime, credentials, mailbox filing, OPS, Apache config, commit, push, deploy, or external recipients were touched.
+- 2026-04-17: Recovered Frank inbox polling and one-at-a-time decision behavior.
+  - `com.koval.frank-auto` verified at 60-second polling with valid private credential paths and last exit `0`.
+  - Runtime now skips malformed JSONL rows, scans enough unseen mail to avoid starving older unprocessed messages, logs tracked replies locally instead of sending Robert tracked-reply review/info emails, and uses one-at-a-time decision prompts instead of batch inbox summaries.
+  - Metadata check showed 39 unread/open Frank INBOX messages and 0 unlogged source IDs after recovery. No secrets or private body dumps were printed; no external email was sent.
+- 2026-04-17: Sent Claude the Papers path and completion-reporting guidance request.
+  - Local Frank task id: `frank-2026-claude-papers-completion-reporting`.
+  - Sent Claude-only subject `Papers path and completion reporting integration` with Message-ID `<177645621706.36806.2718537434665685842@kovaldistillery.com>`.
+  - Draft source: `drafts/claude-papers-completion-reporting-2026-04-17.txt`; sent log: `/Users/admin/.frank-launch/state/sent-log.jsonl`.
+  - The message explicitly states that Papers remains no-write/design-only unless Robert approves live read/write, that current records live in Workspaceboard history, TODO/HANDOFF, project_hub, and important OPS tasks, and that Frank only has a supplied-real-URL Papers-link insertion hook. No Papers read/write, live lookup, projection, OPS mutation, mailbox filing, LaunchAgent/runtime config change, Robert/Sonat email, or credential output was performed.
+- 2026-04-17: Closed company party member invite as handled elsewhere.
+  - Robert confirmed the company party invite was already sent through Lists. Frank closed the stale local TODO only; no email, mailbox state, credentials, Lists action, or external system was touched.
+- 2026-04-17: Closed narrow auto-send validation/rules TODO.
+  - Evidence found: Robert's medium-independent approval, completion traceability rule, `frank_auto_runner.py` source `Message-ID` dedupe behavior, `frank_morning_overview.py` task/subject/recipient duplicate checks, dry-run completion-confirmation stable-key duplicate checks, tracked-reply correction logs, and prior internal sends logged with task ids and Message-IDs.
+  - Safe rules now documented: Robert-only approved reports, task-specific completion confirmations to Robert or a relevant approved internal owner, safe tracked replies on already-approved internal threads, and concise captured/routed/blocked/completed status notes when source id, recipient, duplicate checks, and approval gates are clear.
+  - Remaining blocker is runtime expansion only: no generalized completion-confirmation send engine, mailbox filing automation, LaunchAgent/polling change, new credential path, live Papers lookup/projection, or external-sensitive send is approved without a separate implementation slice. Avignon should mirror the same behavior policy for Sonat where equivalent validation evidence exists.
+- 2026-04-17: Closed stale Frank Mitch archive/imapsync TODO by project-hub source of truth.
+  - Local evidence still does not prove the mailbox transfer completed: the last verified count review showed incomplete archive folders even after source and destination IMAP logins were working.
+  - AI Workspace/project-hub records show Robert closed the Mitch archive follow-up on 2026-04-15 without additional mailbox access, credential handling, or `imapsync`; do not rerun unless Robert explicitly reopens the mailbox-transfer work.
+  - Docs/TODO/HANDOFF cleanup only; no mailbox state, credentials, emails, OPS, LaunchAgents, or external systems were touched.
+- 2026-04-17: Updated Frank summary directive docs.
+  - Robert clarified that morning summary means upcoming work/tasks and evening summary means accomplished tasks from Task Manager/board-completed work. Updated Frank docs/TODO/HANDOFF only; no runtime, LaunchAgent, mailbox, send, filing, credential, OPS, Papers, commit, push, deploy, or external-system state changed. Separate implementation remains needed if Frank's 18:00 runtime should consume Task Manager/board accomplishments directly.
+- 2026-04-17: Sent Claude the Square/Shopify list and Google Doc links status request.
+  - Local Frank task id: `frank-2026-claude-square-shopify-list-links`.
+  - Sent Claude-only subject `Square/Shopify list tasks and Google Doc links` with Message-ID `<177644239753.5975.5455885630894689949@kovaldistillery.com>`.
+  - Draft source: `drafts/claude-square-shopify-list-links-2026-04-17.txt`; sent log: `/Users/admin/.frank-launch/state/sent-log.jsonl`.
+  - No Robert/Sonat email, Screenbox work, repo code, mailbox filing, runtime config change, or credential output was performed.
+- 2026-04-17: Captured Claude's corrected Screenbox workflow guidance and sent the internal follow-up.
+  - Local Frank task id: `frank-2026-claude-screenbox-workflow`; follow-up task id: `frank-2026-claude-screenbox-workflow-follow-up`.
+  - Claude corrected the original Web Serfer-conflated answer after Dmytro's note; saved the corrected guidance in `screenbox-workflow-recommendations.md`.
+  - Sent Claude-only subject `Re: Screenbox workflow recommendations` with Message-ID `<177644226569.3386.11486062060410989476@kovaldistillery.com>`.
+  - No Robert/Sonat email, mailbox filing, repo code, Screenbox install, Playwright replacement, runtime config change, or credential output was performed.
 - 2026-04-17: Produced local mail-routing audit and gap map.
   - Created `mail-routing-audit-gap-map.md` for OPS/Portal tasks `366218`, `366219`, `366220`, and `366221`.
   - Documented known routing layers, address families, local evidence, gaps, failure signals, export needs, and a conservative target model for CPanel, Google routing, Portal, Forge, and Lists.
@@ -62,12 +181,12 @@ Updated: 2026-04-17 10:59 CDT (Machine: Macmini.lan)
   - Updated Frank docs so task-specific completion confirmations require a stable OPS/Portal/local task id plus source email or tracked-send id, logging, handled marking, and duplicate suppression.
   - Docs-only change; no email, mailbox, LaunchAgent, polling cadence, Papers, runtime code, or credential state was changed.
 - 2026-04-16: Documented Frank report path and runtime boundary.
-  - Current scheduled report path is the Mac mini `com.koval.frank-morning-overview` LaunchAgent at 06:00, writing generated morning overview bodies to `/Users/admin/.frank-launch/state/drafts` and logs to `/Users/admin/.frank-launch/state/`.
-  - Policy remains morning overview only by default; task-specific completion confirmations are allowed but are not recurring reports.
+  - Superseded runtime/policy note: the Mac mini `com.koval.frank-morning-overview` LaunchAgent was later approved for 06:00/18:00, and the current 2026-04-17 directive is morning = upcoming work/tasks and evening = accomplished Task Manager/board work.
+  - Task-specific completion confirmations are allowed but are not recurring reports.
   - No Papers read/write hook, LaunchAgent edit, inbox polling cadence change, mailbox mutation, or credential access was performed.
 - 2026-04-16: Aligned Frank completion and summary policy.
   - Frank should send one concise task-specific completion confirmation when a received task is complete.
-  - Frank's default scheduled summary cadence is morning overview only; evening/end-of-day roundups are off by default unless Robert explicitly re-approves them.
+  - Superseded cadence note: current directive as of 2026-04-17 is morning = upcoming work/tasks and evening = accomplished Task Manager/board work.
   - Verified `com.koval.frank-morning-overview` is loaded at 06:00 and last exited `0`; no runtime or mailbox change was made.
 - 2026-04-16: Sent Claude the data-import/manual XLS validation-order fix handoff.
   - To: `claude@koval-distillery.com`
@@ -121,7 +240,7 @@ Updated: 2026-04-17 10:59 CDT (Machine: Macmini.lan)
 - 2026-04-14: Captured Robert's Daily overview format clarification, superseded for defaults on 2026-04-16.
   - Local Frank task id: `frank-2026-daily-overview-format-clarification`
   - Source: Robert reply to `Daily Overview: Tuesday, April 14`
-  - Original captured rule: end-of-day Frank work/status overview was fine at end of day; morning overview should be Robert's personal briefing with upcoming calendar, important `/ops` tasks, priorities, and blockers/follow-ups. Superseding 2026-04-16 default: morning summaries only for both Frank and Avignon; evening/end-of-day roundups require explicit re-approval.
+  - Original captured rule: end-of-day Frank work/status overview was fine at end of day; morning overview should be Robert's personal briefing with upcoming calendar, important `/ops` tasks, priorities, and blockers/follow-ups. Current 2026-04-17 directive: morning = upcoming work/tasks and evening = accomplished Task Manager/board work.
   - Acknowledgement Message-ID: `<177618772112.63529.8537942129380038656@kovaldistillery.com>`
   - Filed source reply to `Handled` after logging.
 - 2026-04-14: Sent Robert a concise Daily overview for Tuesday, April 14 through the approved Frank send helper.

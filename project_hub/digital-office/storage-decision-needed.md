@@ -1,7 +1,7 @@
 # OAuth/Token Storage Policy Review
 
-- Status: policy review completed; implementation still blocked on storage-path approval if Google Drive-backed automation is requested.
-- Reviewed: 2026-04-16 17:18 CDT on Macmini.lan.
+- Status: policy closed; rejected storage targets are closed as policy, and implementation remains blocked before any OAuth/token handling or Drive-backed automation.
+- Reviewed: 2026-04-16 17:18 CDT on Macmini.lan; blocker review updated 2026-04-17.
 - Scope: local Digital Office planning docs only.
 
 ## Boundary Held
@@ -16,7 +16,7 @@ Where should OAuth credentials and token caches live if future Digital Office pr
 
 ## Recommendation
 
-Use machine-local storage or an approved secret manager/keychain path. Do not store OAuth credentials, refresh tokens, access tokens, client secrets, private keys, or app passwords in Google Drive-synced planning folders, Google Drive-synced runtime folders, Papers records, normal manifests, or git.
+Use machine-local storage or an approved secret manager/keychain path. Do not store OAuth credentials, refresh tokens, access tokens, client secrets, private keys, app passwords, token caches, or session secrets in Google Drive-synced planning folders, Google Drive-synced runtime folders, Papers records, normal manifests, logs, chat, or git.
 
 Default implementation rule:
 
@@ -24,7 +24,7 @@ Default implementation rule:
 - Shared automation: use an approved secret manager, Google-managed service account/delegated app flow, or local keychain-backed provisioning path with least privilege, named owner, rotation/revocation procedure, and non-secret reference labels in project-hub only.
 - Documentation: record only the storage class, owner, app/client label, scope summary, and rotation/revocation procedure. Never record token values, client secrets, private keys, or refresh tokens.
 
-This recommendation is strong enough for Task Manager, Decision Driver, Security Guard, and future implementation workers to reject Google Drive-synced or git-tracked token storage without asking Robert again.
+This recommendation is strong enough for Task Manager, Decision Driver, Security Guard, and future implementation workers to reject Google Drive-synced, Papers-backed, manifest/log/chat, or git-tracked token storage without asking Robert again.
 
 ## Options
 
@@ -49,11 +49,11 @@ Acceptable if Robert wants shared automation across machines or unattended worke
 
 Tradeoff: needs a real access/rotation owner and a least-privilege review.
 
-### Option C: Google Drive-Synced OAuth Storage
+### Option C: Google Drive-Synced Or Broadly Replicated OAuth Storage
 
 Rejected by policy unless Robert explicitly overrides the recommendation after Security Guard review.
 
-- Would place OAuth material in a sync system that already holds planning files and is visible across machines.
+- Would place OAuth material in a sync system, planning record, normal manifest/log/chat, or repository surface that already exists for broad coordination rather than secret custody.
 - Increases accidental exposure, stale token, and broad replication risk.
 - Should require explicit Robert approval, Security Guard review, and a written rotation/revocation plan before use.
 
@@ -61,8 +61,13 @@ Rejected by policy unless Robert explicitly overrides the recommendation after S
 
 No Digital Office projection code should read, create, copy, or store Google Drive OAuth material. The projection pack can reference Google Drive documents as source paths only when already present as non-secret planning records.
 
-If future Drive-backed automation is requested, the exact remaining human decision is:
+Closed policy:
 
-> Approve Option A as the default storage path for this project, or name the approved secret manager/keychain/service-account path for Option B.
+- Implementation workers may reject Google Drive-synced files/folders, Papers records, normal manifests, logs, chat, and git as token or credential storage without further escalation.
+- Non-secret docs may record only the storage class, owner, app/client label, scope summary, rotation/revocation procedure, and non-secret reference labels.
 
-Until that approval exists, Google Drive-backed ingestion/export/sync automation remains blocked. Local no-write projection work that does not touch OAuth, Drive, Papers, runtime, or email can continue.
+Implementation gate if future Drive-backed automation is requested:
+
+> Use Option A as the default storage class for per-machine automation, or name the approved secret manager/keychain/service-account path for shared automation.
+
+Until an implementation slice is approved, Google Drive-backed ingestion/export/sync automation remains blocked. Local no-write projection work that does not touch OAuth, Drive, Papers, runtime, or email can continue.

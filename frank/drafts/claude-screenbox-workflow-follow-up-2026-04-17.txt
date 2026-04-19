@@ -1,0 +1,16 @@
+Claude,
+
+Thanks for the correction on the Screenbox workflow. I have captured the corrected version as the source of truth for Frank's local follow-up and will treat the earlier Web Serfer/REST-slot answer as superseded.
+
+The working guidance I am recording is:
+
+- Screenbox is MCP-native and gives an agent an isolated virtual desktop, not a Web Serfer REST slot.
+- Use Screenbox for adaptive UI acceptance testing, visual/layout review, live observable worker testing, screenshots, page maps, page reads, console logs, and action logs.
+- Keep Playwright for deterministic CI regression, network/console/DOM assertions, large-scale headless runs, and committed reproducible scripts.
+- Workers should create/acquire a desktop, navigate with desktop_chrome, inspect with page_map/page_read, use desktop_look before coordinate clicks, capture JPEG evidence, and save/release/destroy the desktop when done.
+- Handoffs should include the flow, URL, desktop id, steps, assertions, result, evidence, and notes.
+
+No action is needed from Robert or Sonat from this note. If there is a specific Screenbox README path or MCP config file we should cite in worker instructions, send that back and I will add it to the local guidance.
+
+Thanks,
+Frank

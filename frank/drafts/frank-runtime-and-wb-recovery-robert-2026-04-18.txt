@@ -1,0 +1,20 @@
+Hi Robert,
+
+I found the failure and corrected the active path.
+
+Frank did receive both messages, but the active poller was classifying direct Robert instructions as local-routing/no-email. That meant the messages were logged and then went silent instead of creating a visible Task Manager route or sending you an acknowledgement.
+
+I patched the installed Frank runtime so future direct Robert emails route to Task Manager and send a Robert-only captured/routed acknowledgement. I also manually routed the two already-logged items to Task Manager because the old runtime had already marked them processed.
+
+Workspaceboard was also not a phone/VPN issue. The Mac mini board runtime had drifted back to localhost-only. I restored the LaunchAgent to the documented external bind, and verified direct unauthenticated LAN access returns 401 instead of board data.
+
+Current phone URL to try after MI login:
+https://wb.koval.lan/workspaceboard/task-management-light.html
+
+Still not done:
+- I did not perform the Google OAuth / Gmail push sign-in yet.
+- I did not expose or print credentials.
+- I did not change Google Cloud/OAuth state.
+- I did not broaden external email sends.
+
+Frank

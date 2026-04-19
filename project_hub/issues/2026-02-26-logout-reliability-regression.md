@@ -4,12 +4,19 @@
 - Date Opened: `2026-02-26`
 - Owner: `Codex`
 - Priority: `P1`
-- Status: `In Progress`
+- Status: `Policy approved; implementation gated`
 
 ## Scope
 
 - Resolve persistent re-login/logout failure reported after prior shared-machine logout fix.
 - Harden explicit logout so a sign-out from Portal/OPS clears all related SSO artifacts in `/login`.
+
+## Approved Policy
+
+- 2026-04-17 Robert approved the default OPS/Portal persistence policy for the next Security Guard-reviewed implementation slice.
+- Explicit logout revokes Login/OPS/Portal artifacts globally.
+- Next-day Portal/OPS access requires a fresh Login handoff/user action unless longer app persistence is explicitly approved.
+- This approval does not authorize auth/session code changes, production session mutation, deploy, live pull, live credentialed login tests, credential/token/keychain access, or production data/session writes without the normal Security Guard and implementation gates.
 
 ## Reported Symptoms
 
@@ -40,4 +47,3 @@
 2. Confirm redirect to portal login and no silent re-entry.
 3. Visit `/ops/start.php` in same browser and confirm redirect to `/login`.
 4. Repeat with hard refresh and incognito.
-

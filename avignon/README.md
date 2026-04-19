@@ -1,6 +1,6 @@
 # Avignon Workspace
 
-Last Updated: 2026-04-17 10:59 CDT (Machine: Macmini.lan)
+Last Updated: 2026-04-19 09:25 CDT (Machine: Macmini.lan)
 
 This workspace is for `Avignon Rose`, Sonat's chief-of-staff style assistant.
 
@@ -22,6 +22,8 @@ This workspace is for `Avignon Rose`, Sonat's chief-of-staff style assistant.
 ## Mail Sender Usage
 
 Use `scripts/send_avignon_email.py` from the `ai_workspace` root, or `../scripts/send_avignon_email.py` from this Avignon workspace. It delegates to the shared sender with the Avignon profile, so it defaults to Avignon's approved private credential reference, `avignon/sent-log.jsonl`, the `Avignon Rose` From name, and a Sonat-only recipient guard.
+
+The installed Avignon sender supports repeated or comma-separated `--to`, `--cc`, and `--bcc` values. All To/Cc/Bcc recipients are checked against the same Sonat-only default guard; any recipient outside Sonat's default audience requires a clear approval basis plus `--allow-non-primary`. Sent logs record To/Cc addresses and Bcc presence/count, but not Bcc addresses.
 
 Safe render-only check:
 
@@ -48,6 +50,10 @@ For any recipient outside Sonat's default audience, confirm authorization first 
 ## Mailbox Triage And Follow-Up
 
 - Treat inbound email as intake. Small clear mailbox/logging actions may be handled directly by Avignon; substantive work should be routed to a visible worker/session in the correct workspace and logged here.
+- Avignon is a full-time Sonat-facing chief of staff. For clear low-risk internal work, create or reuse the correct visible board-managed worker, inject a full task brief, verify it started, monitor completion, update local TODO/HANDOFF/project notes and handled-mail state, and send Sonat or the relevant approved owner a clear completion report.
+- Direct Sonat emails that report breakage, give approval, ask for status, or give an instruction are actionable intake and must create/reuse a visible route plus a captured/routed acknowledgement, not silent `local-routing/no-email`. Apply the same behavior to direct Robert instructions when Robert owns or approves the Avignon workflow.
+- Completion report email is mandatory by default unless the task explicitly says to suppress email. Include what was done, what changed, relevant links/session IDs/task IDs, what was not done, and any remaining decisions or approval gates. Avignon reports to Sonat by default; include Robert only when the task context or approval path requires it.
+- Clear Sonat requests to enter/update Portal or CRM records, create/update OPS tasks, or handle calendar items are approved routine internal work. Route them to the correct visible workspace worker and execute without a second approval check. Escalate only when the target/action remains ambiguous after deterministic checks or a normal safety gate applies.
 - Keep the standing Avignon inbox monitor separate from implementation work. It should classify, route, log, and file handled mail rather than silently doing multi-step work inside the monitor.
 - Routine handled/log-only messages should not generate scheduled review prompts. Send Sonat a decision email only for a real Sonat decision/approval boundary that Avignon cannot safely resolve.
 - Tie completion notes to a stable source: OPS/Portal task id when available, otherwise a local Avignon task id plus the source email `Message-ID` or tracked outbound `task_id`.
@@ -62,7 +68,8 @@ For any recipient outside Sonat's default audience, confirm authorization first 
 - Keep `TODO.md` as the action queue. Move finished items out of open sections and add only concise Done entries that prove closure.
 - Keep `EMAIL_DERIVED_DECISIONS.md` for deduped decision items and handled email-derived decisions. Do not use it as a transcript.
 - Escalate one concrete question when blocked; do not create repeated decision prompts for the same thread or already-tracked source.
+- Record a dedupe key for each routed, handled, blocked, no-action, or completed source. If a real decision blocks work for more than 24 hours, send one follow-up with detailed instructions, concrete questions, the original reference, and the approval boundary.
 
 ## Scheduled Summary Boundary
 
-Avignon's approved scheduled cadence is Sonat-only morning overview. Do not mirror Frank's Robert-approved 18:00 end-of-day report path, Papers-link runtime hooks, or new report/runtime behavior into Avignon without a separate explicit approval for Avignon.
+Avignon's current installed scheduled cadence is Sonat-only morning overview. Robert clarified on 2026-04-17 that morning summary means upcoming work and evening summary means accomplished Task Manager/board work, superseding the prior morning-only policy interpretation. Do not add Avignon evening runtime, LaunchAgent, Papers-link runtime hooks, or new report/runtime behavior without a separate implementation worker and explicit approval for that runtime slice.

@@ -1,0 +1,22 @@
+Hi Sonat,
+
+Current state on the CRM additions recovery:
+
+Completed:
+- Importer completed the 5 importer-safe rows under Import ID 56.
+- CRM contacts created: 367141, 367143, 367144, 367146, 367148.
+- CRM accounts created by that import: 367142, 367145, 367147.
+- Source 9 was completed as bounded account-only CRM work: account 367149.
+- Source 5 was completed: account 367150, existing contacts 186413 and 186414 linked, and activity/note 367151 created.
+
+Kept off:
+- phpList sync, account filters, and contact filters.
+- Broad importer actions outside the 5 safe rows.
+- Unrelated mailbox filing, external-sensitive sends, credential/auth/security changes, and destructive/bulk actions.
+
+Remaining decisions:
+- Source 1: the existing-contact email match is not unique, and the target account is not a unique exact/high-confidence CRM match. Please confirm which existing contact and which target account should be linked or updated.
+- Source 10: the existing contact resolves, but the target distributor account is not a unique exact/high-confidence CRM match. Please confirm which target distributor account should receive the link/update.
+
+Held until those decisions close:
+- Source 7 is a status/update item. I will hold it until the remaining recovery decisions are resolved, then send the final completion/status report.
