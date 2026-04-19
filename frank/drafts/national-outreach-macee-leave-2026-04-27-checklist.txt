@@ -1,0 +1,73 @@
+Title: April 27 national outreach / Macee leave checklist
+Task ID: frank-2026-04-19-national-outreach-email-macee-leave-2026-04-27
+Prepared: 2026-04-19 10:19 CDT
+Owner: Frank
+Workspace: /Users/werkstatt/ai_workspace/frank
+Mode: No-send checklist only
+
+Purpose
+
+Prepare the April 27 national outreach handoff so Frank or Outreach can act quickly when Macee leaves, without sending email, reading mailbox content, changing mailbox state, or touching credentials/runtime now.
+
+Source Record
+
+- Robert input in active Codex Integration Manager chat on 2026-04-19.
+- Source coordination sessions recorded locally: Frank worker 2e9c321b and Codex Integration Manager session b66fdade.
+- Due date: 2026-04-27.
+
+No-Send Boundary
+
+- Do not send an email from this checklist.
+- Do not read mailbox content to fill missing details.
+- Do not file or mutate mailbox state.
+- Do not access credentials, OAuth tokens, Gmail API push setup, templates, Portal/CRM, or runtime config.
+- Do not start bulk or external-sensitive outreach without explicit approval.
+
+April 27 Checklist
+
+- Confirm whether Macee has actually left or whether Robert still wants the outreach held.
+- Confirm the approved audience:
+  - exact recipient list or list source
+  - To/Cc/Bcc rules
+  - any exclusions or suppressed contacts
+- Confirm the approved sender/persona:
+  - Frank, Outreach Communicator, Robert, or another named owner
+  - signature and reply-to expectations
+- Confirm approved content:
+  - subject line
+  - message goal
+  - required facts
+  - links or attachments
+  - language Robert wants included or avoided
+- Check duplicate protection before any send:
+  - this local task ID
+  - Frank TODO/HANDOFF
+  - relevant draft filenames
+  - sent-log task IDs if send authority is later approved
+- If any recipient, content, list-source, sender, or timing authority is unclear, draft only and ask Robert.
+- If the task expands into credentials, OAuth, mailbox/template access, external-sensitive outreach, or bulk sending, route to Security Guard before implementation.
+
+Draft-Brief Fields For A Future Worker
+
+- Local task ID: frank-2026-04-19-national-outreach-email-macee-leave-2026-04-27
+- Owner: Frank unless Robert reassigns to Outreach Communicator
+- Deliverable: approved national outreach draft or routed worker brief
+- Completion report recipient: Robert by default
+- Required proof before closure:
+  - durable draft/checklist path
+  - whether any email was sent
+  - if sent later, Message-ID and sent-log task ID
+  - if not sent, exact blocker
+  - any remaining approval gates
+
+Current Blockers
+
+- Recipient list/source is not approved in local records.
+- Message content and subject are not approved in local records.
+- Send authority is not approved in local records.
+- Mailbox/template access is not approved for this task.
+- Security Guard review is required if the task expands beyond a simple approved draft/routing brief.
+
+Current Durable Location
+
+- /Users/werkstatt/ai_workspace/frank/drafts/national-outreach-macee-leave-2026-04-27-checklist.txt
