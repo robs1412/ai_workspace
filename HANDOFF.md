@@ -1,10 +1,19 @@
 # Codex Session Handoff
 
-Last Updated: 2026-04-19 10:12 CDT (Machine: Macmini.lan)
+Last Updated: 2026-04-19 10:50 CDT (Machine: Macmini.lan)
 
 Use this file for cross-machine/session handoffs.
 
 ## Current Workflow Handoff
+
+- Code/Git Manager owner-aware AI Workspace merge completed at `2026-04-19 10:50 CDT`.
+  - Source refs fetched: `origin/main` at `32d5ded` (`Add AI bridge manager handoff docs`) and Workspaceboard organigram commit `88cd7a3` (`Add AI manager roles to organigram`).
+  - Local preservation commit: `35dd6da` (`Preserve Mac mini AI workspace state`).
+  - Local merge commit: `30be59a` (`Merge remote-tracking branch 'origin/main'`).
+  - Conflict resolution: kept Mac mini canonical side for `HANDOFF.md`, `TODO.md`, `frank/HANDOFF.md`, `frank/TODO.md`, `project_hub/INDEX.md`, `worker_roles/operating-model.md`, `frank/drafts/claude-codex-organigram-work-record-bridge-2026-04-19.txt`, and `project_hub/issues/2026-04-19-codex-claude-papers-integration-plan.md` because origin still contained older/pre-send or planning-only state. Origin-only transfer/export helper docs and scripts were integrated.
+  - Concurrent Avignon non-private action-plan records were preserved in the merge; private/mailbox-adjacent `.private.txt` and `.meta.json` artifacts remain untracked and local.
+  - Current local branch state after merge: `main...origin/main [ahead 3]`; no push performed.
+  - No `.205`, OAuth, Papers/MI write, Portal/CRM mutation, mailbox credential exposure, MCP exposure, deploy, live pull, service restart, reset, rebase, force-push, dirty-file discard, or private artifact staging was performed.
 
 - AI Manager / Codex Integration synthesis recorded at `2026-04-19 10:14 CDT`.
   - Source: MacBook `origin/main` commit `32d5ded` and Workspaceboard organigram commit `88cd7a3`, reconciled into the Mac mini dirty tree under Code/Git Manager merge review.

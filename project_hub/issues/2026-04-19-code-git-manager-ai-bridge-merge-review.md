@@ -239,3 +239,33 @@ Remaining state:
 
 - `ai_workspace` remains dirty/divergent: `main...origin/main [ahead 1, behind 8]`.
 - No full AI Workspace merge, pull over dirty files, staging, commit, push, deploy, live pull, service restart, reset, rebase, force-push, `.205` access, OAuth, Papers/MI write, Portal/CRM mutation, mailbox credential exposure, or MCP exposure was performed.
+
+## Owner-Aware Merge Completion Addendum
+
+2026-04-19 10:50 CDT: Robert approved proceeding with the full owner-aware local merge/commit. Code/Git Manager completed it locally.
+
+Commits:
+
+- Local preservation commit: `35dd6da` (`Preserve Mac mini AI workspace state`)
+- Local merge commit: `30be59a` (`Merge remote-tracking branch 'origin/main'`)
+- Source origin head: `32d5ded` (`Add AI bridge manager handoff docs`)
+- Workspaceboard organigram source already integrated: `88cd7a3` (`Add AI manager roles to organigram`)
+
+Merge conflict decision:
+
+- Kept the Mac mini canonical side for `HANDOFF.md`, `TODO.md`, `frank/HANDOFF.md`, `frank/TODO.md`, `project_hub/INDEX.md`, `worker_roles/operating-model.md`, `frank/drafts/claude-codex-organigram-work-record-bridge-2026-04-19.txt`, and `project_hub/issues/2026-04-19-codex-claude-papers-integration-plan.md`.
+- Reason: Mac mini records were newer and contained the actual Frank bridge send, Robert-copy resolution, current worker routing, Gmail pause, chief-of-staff/completion-report rules, source-access cleanup, TODO-count cleanup, and live blocker state. Origin versions were older MacBook planning/pre-send records.
+- Integrated origin-only transfer/export docs and helper scripts after the preservation commit.
+- Preserved concurrent Avignon non-private CRM action-plan records in the merge.
+- Left private/mailbox-adjacent local artifacts untracked: Avignon `.private.txt` drafts and Frank Claude/Avignon `.private.txt`/`.meta.json` artifacts.
+
+Verification after merge:
+
+- `rg -n '^(<<<<<<<|=======|>>>>>>>)'` returned no conflict markers.
+- `git diff --check HEAD~2..HEAD` passed.
+- `python3 -m py_compile` passed for the merged Python helper scripts under `scripts/`.
+- Final local state before this closeout note: `main...origin/main [ahead 3]`, with only private/mailbox-adjacent artifacts untracked.
+
+Boundaries preserved:
+
+- No push, deploy, live pull, service restart, reset, rebase, force-push, dirty-file discard, `.205` access, OAuth, Papers/MI write, Portal/CRM mutation, mailbox credential exposure, MCP exposure, or private artifact staging was performed.
