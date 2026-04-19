@@ -34,17 +34,14 @@ Updated: 2026-04-19 10:12 CDT (Machine: Macmini.lan)
 
 ## Backlog
 
-- [ ] `frank-2026-04-19-national-outreach-email-macee-leave-2026-04-27`: National outreach email task for Frank when Macee leaves.
-  - Source/date: Robert input in active Codex Integration Manager chat on 2026-04-19.
-  - Owner/session: Frank; source coordination from Frank worker `2e9c321b` and Codex Integration Manager session `b66fdade`.
-  - Due date: 2026-04-27.
-  - Status: Backlog / scheduled follow-up; no email send, mailbox content read, mailbox filing, Portal/CRM mutation, credential access, OAuth, deploy/live pull, service restart, or runtime change is approved from this record.
-  - Next step: on 2026-04-27, prepare or route the national outreach email task brief for Frank/Outreach with recipient/source details supplied or already approved at that time; if recipient/content/source authority is unclear, draft only and ask Robert before sending.
-  - Approval gates: explicit recipient/content/send authority before any outbound message, normal duplicate checks against Frank sent logs/TODO/HANDOFF, and Security Guard review if the task expands into credentials, OAuth, mailbox access beyond approved metadata, external-sensitive outreach, or bulk sending.
-
 Live Papers lookup/projection remains approval-gated and is represented by AI Workspace/Papers project notes plus the Claude guidance request, not by an open Frank implementation row.
 
 ## Done
+
+- 2026-04-19: Finished the April 27 national outreach / Macee leave no-send checklist brief.
+  - Durable checklist: `drafts/national-outreach-macee-leave-2026-04-27-checklist.txt`.
+  - Scope: local draft/checklist only. No email was sent; no mailbox content was read; no mailbox filing, Portal/CRM mutation, credential access, OAuth, deploy/live pull, service restart, runtime change, or template access was performed.
+  - Remaining blockers for any actual outreach: recipient/list source, content/subject, sender/persona, timing, and send authority must be explicitly approved; Security Guard review is required if the task expands into credentials, OAuth, mailbox/template access, external-sensitive outreach, or bulk sending.
 
 - 2026-04-19: Routed Robert's Claude/Avignon CRM recovery context to visible Avignon worker.
   - Frank inbox metadata check found the relevant Robert-forwarded CRM target/link decision email, the related Frank/Workspaceboard recovery reply, and Claude-related context; private bodies were not exposed.
