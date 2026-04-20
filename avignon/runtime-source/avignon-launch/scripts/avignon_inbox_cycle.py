@@ -9,6 +9,7 @@ import os
 import re
 import subprocess
 import sys
+import time
 import urllib.parse
 import urllib.error
 import urllib.request
@@ -323,50 +324,54 @@ def direct_owner_report_target(owner: str) -> dict:
     return {"to": SONAT_EMAIL, "cc": ""}
 
 
+def looks_like_action_request_direct(message: dict) -> bool:
+    body = re.sub(r"\s+", " ", str(message.get("body", "") or "").strip()).lower()
+    text = f"{message.get('subject', '')} {body}".lower()
+    action_patterns = [
+        r"\badd\s+(someone|person|contact|account|customer|lead|prospect)\b",
+        r"\b(create|add|update|enter|record|link|route|handle|process|complete|review|send|schedule|invite|follow up|follow-up)\b",
+        r"\b(crm|portal|ops|account|contact|activity|sample request|samples|calendar|task|quote|pricing|dedupe)\b",
+        r"\bplease\s+(add|create|update|enter|record|route|handle|process|send|schedule|invite|follow up)\b",
+        r"\bcan you\s+(add|create|update|enter|record|route|handle|process|send|schedule|invite|follow up)\b",
+    ]
+    return any(re.search(pattern, text) for pattern in action_patterns)
+
+
 def looks_like_no_action_direct(message: dict) -> bool:
     body = re.sub(r"\s+", " ", str(message.get("body", "") or "").strip()).lower()
     text = f"{message.get('subject', '')} {body}".lower()
     if re.fullmatch(r"(ok|okay|thanks|thank you|ok thanks|okay thanks|ok thank you|got it|sounds good)[.! ]*", body):
         return True
+    if looks_like_action_request_direct(message):
+        return False
     patterns = [
-        "fyi",
-        "thank you",
-        "thanks",
         "for your records",
         "for our records",
         "keep as a record",
         "no action",
         "no need",
+        "no action needed",
+        "nothing needed",
         "can be archived",
         "can all be archived",
         "archive this",
     ]
-    return any(pattern in text for pattern in patterns)
+    if any(pattern in text for pattern in patterns):
+        return True
+    return bool(re.fullmatch(r"(fyi|for your records|for our records)[.! ]*", body))
 
 
 def looks_like_sensitive_or_suspicious(message: dict) -> bool:
     text = f"{message.get('subject', '')} {message.get('body', '')}".lower()
     patterns = [
-        "password",
-        "passcode",
-        "login code",
-        "2fa",
-        "credential",
-        "api key",
-        "secret",
-        "wire",
-        "payment",
-        "bank",
-        "legal",
-        "contract",
-        "delete all",
-        "bulk delete",
-        "production",
-        "deploy",
-        "oauth",
-        "token",
+        r"\b(password|passcode|login code|2fa|credential|api key|secret)\b",
+        r"\b(wire|payment|bank)\b",
+        r"\b(legal review|legal issue|legal matter|legal approval|legal compliance|compliance matter)\b",
+        r"\b(contract|agreement|msa|nda)\b",
+        r"\b(delete all|bulk delete)\b",
+        r"\b(production|deploy|oauth|token)\b",
     ]
-    return any(pattern in text for pattern in patterns)
+    return any(re.search(pattern, text) for pattern in patterns)
 
 
 def looks_like_robert_avignon_instruction(message: dict) -> bool:
@@ -418,6 +423,22 @@ def get_json(path: str, timeout: int = 8) -> dict:
         return json.loads(raw) if raw else {}
 
 
+def wait_for_session_prompt(session_id: str, timeout_seconds: float = 18.0) -> bool:
+    deadline = time.monotonic() + timeout_seconds
+    query = urllib.parse.urlencode({"session_id": session_id})
+    while time.monotonic() < deadline:
+        try:
+            payload = get_json(f"/api/session-history?{query}", timeout=5)
+        except Exception:
+            time.sleep(0.5)
+            continue
+        history = str(payload.get("history") or "")
+        if "OpenAI Codex" in history and ("\n›" in history or "\ngpt-" in history):
+            return True
+        time.sleep(0.5)
+    return False
+
+
 def build_direct_owner_prompt(message: dict, owner: str, route: dict) -> str:
     source_id = normalize_message_id(str(message.get("message_id") or ""))
     report_target = direct_owner_report_target(owner)
@@ -460,10 +481,11 @@ def create_visible_direct_owner_route(message: dict, owner: str) -> dict:
     route["session_title"] = str(session.get("title") or session.get("display_name") or route["session_title"])
     if not route["session_id"] or not route["session_title"]:
         raise RuntimeError("Workspaceboard did not return a visible session id/title.")
+    wait_for_session_prompt(route["session_id"])
     prompt = build_direct_owner_prompt(message, owner, route)
     delivered = post_json(
         "/api/session-message",
-        {"session_id": route["session_id"], "message": prompt, "wait_ms": 1400},
+        {"session_id": route["session_id"], "message": prompt, "wait_ms": 5000},
         timeout=10,
     )
     route["prompt_delivery"] = delivered.get("prompt_delivery") if isinstance(delivered.get("prompt_delivery"), dict) else {}
@@ -518,7 +540,17 @@ def send_avignon_owner_email(subject: str, body: str, task_id: str, to_addr: str
     if result.returncode != 0:
         raise RuntimeError(result.stderr.strip() or result.stdout.strip() or "Avignon direct-owner email send failed")
     match = re.search(r"Message-ID:\s*(\S+)", result.stdout)
-    return match.group(1) if match else ""
+    if match:
+        return match.group(1)
+    if SENT_LOG.exists():
+        for line in reversed(SENT_LOG.read_text(encoding="utf-8", errors="replace").splitlines()[-120:]):
+            try:
+                row = json.loads(line)
+            except Exception:
+                continue
+            if row.get("task_id") == task_id and row.get("message_id"):
+                return str(row.get("message_id"))
+    return ""
 
 
 def compose_direct_owner_ack(message: dict, owner: str, route: dict) -> str:
