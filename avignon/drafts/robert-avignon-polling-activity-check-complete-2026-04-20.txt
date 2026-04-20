@@ -1,0 +1,29 @@
+Robert,
+
+Point first: Avignon is polling on the 15-second path, but the direct-Robert acknowledgement path had a send-guard bug.
+
+What I found:
+
+- The LaunchAgent has `StartInterval` set to `15`.
+- The Avignon log shows real cycles roughly every 17-20 seconds, which is normal launchd/runtime overhead around a 15-second interval.
+- The failure was not the scheduler. It was Avignon's direct-Robert route: when the recipient was Robert-only, the send helper required `--allow-non-primary`; the runtime only added that flag when there was a Cc. That caused Avignon to crash and retry, which created repeated `Activity check` worker sessions.
+
+What I changed:
+
+- Patched the installed Avignon runtime so any direct-owner report to a non-Sonat recipient, including Robert-only, passes the explicit non-primary send flag.
+- Mirrored the same patch into the git-backed Avignon runtime source.
+- Verified both files compile and have matching SHA-256.
+- Verified the acknowledgement for your `Activity check` sent to Robert.
+
+What I cleaned up:
+
+- I am closing the duplicate `Activity check` worker sessions created by the crash/retry loop.
+- I am filing the source message to `Handled` after this completion report so Avignon returns to inbox zero.
+
+What I did not do:
+
+- No OAuth, token, credential, Google Cloud/Pub/Sub, LaunchAgent reload, service restart, deploy, CRM/Portal/OPS mutation, external email, reset, clean, or destructive action.
+
+Remaining note: this fixes the direct-Robert send crash. If you want Avignon to file routed direct-owner items immediately after acknowledgement instead of holding the source email open until worker completion, that is a workflow policy change; right now the runtime is intentionally conservative and keeps active direct-owner work visible until completion or blocker reporting.
+
+Avignon

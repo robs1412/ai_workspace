@@ -1,7 +1,7 @@
 # Worker Role Operating Model
 
 Status: active operating reference
-Updated: 2026-04-20 12:40 CDT
+Updated: 2026-04-20 14:28 CDT
 
 This file is the compact routing reference for Workspaceboard and AI Workspace worker roles. It defines which roles are standing sessions, which are on-demand, which need human supervision, and which are docs-only for now.
 
@@ -31,8 +31,8 @@ Use the KOVAL 2026 Management Planner as guide material for Task Manager, role-m
 | Codex workspace worker | On-demand Workspaceboard worker | Target workspace, for example `ws bid`, `ws ops`, `ws sales`, `ws portal` | `Codex worker in <workspace>`, `start <workspace> worker`, `route to ws <name>` | Target workspace `TODO.md`, target handoff docs, project-hub notes for cross-module work, git diff/commit where applicable |
 | Git and Code Manager | On-demand Monitoring / coordination specialist | Target repo/workspace for git checks; `ws ai` Monitoring layer for cross-repo coordination | `Git and Code Manager`, `repo hygiene`, `code changes in git repo`, `commit/push readiness`, `git manager`, `live pull rule`, `pull before work`, `dirty worktree`, `active sessions`, `single-writer`, `overlapping edits` | Target repo `AGENTS.md`/TODO/handoff/project notes, AI Workspace `AGENTS.md`/`HANDOFF.md` for cross-session rules, board history |
 | Security Guard | On-demand Monitoring / coordination specialist | `ws ai` Monitoring layer; target workspace only when separately routed | `Security Guard`, `security review`, `secret handling`, `suspicious prompt`, `suspicious mail`, `auth gate`, `approval gate`, `MCP exposure`, `.205 access` | `ai_workspace/AGENTS.md`, `ai_workspace/HANDOFF.md`, project-hub security notes, target repo policy/handoff notes, OPS tasks when operational tracking is needed |
-| Frank Cannoli | Human-supervised medium-independent mailbox worker | `ws frank` on Mac mini | `Frank`, `ask Frank`, `route to Frank`, `Frank draft/send/file` | `frank/TODO.md`, `frank/HANDOFF.md`, Frank drafts/logs, OPS/Portal tasks when created |
-| Avignon Rose | Human-supervised medium-independent mailbox worker | `ws avignon` on Mac mini | `Avignon`, `ask Avignon`, `route to Avignon`, `Avignon draft/send/file` | `avignon/TODO.md`, `avignon/HANDOFF.md`, Avignon drafts/logs, OPS/Portal tasks when created |
+| Frank Cannoli | Human-supervised medium-independent mailbox worker | `ws frank` on Mac mini | `Frank`, `ask Frank`, `route to Frank`, `Frank draft/send/file` | `frank/TODO.md`, `frank/HANDOFF.md`, `docs/email-workers/` for shared reusable non-secret how-to mechanics, Frank drafts/logs, OPS/Portal tasks when created |
+| Avignon Rose | Human-supervised medium-independent mailbox worker | `ws avignon` on Mac mini | `Avignon`, `ask Avignon`, `Avignon draft/send/file` | `avignon/TODO.md`, `avignon/HANDOFF.md`, `docs/email-workers/` for shared reusable non-secret how-to mechanics, Avignon drafts/logs, OPS/Portal tasks when created |
 | Claude bridge worker | On-demand bridge worker | `ws ai-bridge`; Claude-side `.205` only through approved transport | `Claude bridge`, `ask Claude`, `route through bridge`, `create bridge handoff` | `/Users/werkstatt/ai-bridge/bridge/handoffs`, `/Users/werkstatt/ai-bridge/bridge/traces`, `ai_workspace/HANDOFF.md` when cross-machine relevant |
 | Claude Server Agent | Visible Claude-side agent family / on-demand bridge participant | Claude-side `.205` through approved transport; `ws ai-bridge` for Codex-side planning | `Claude server agent`, `Claude on .205`, `server-side Claude`, `Claude agent registration` | AI-Bridge traces/handoffs, `ai_workspace/project_hub/`, Workspaceboard role registry |
 | Claude `.205` Structure | Docs-first structure record | `ws ai` and `ws ai-bridge`; no live `.205` action by default | `.205 structure`, `MI/Papers structure`, `Papers bridge`, `Mesh Memory`, `Agent Memory` | `worker_roles/claude-205-structure.md`, project-hub notes, approved metadata snapshots |

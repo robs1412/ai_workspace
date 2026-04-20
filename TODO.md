@@ -1,6 +1,6 @@
 # TODO — ai_workspace
 
-Updated: 2026-04-20 13:50 CDT (Machine: Macmini.lan)
+Updated: 2026-04-20 14:37 CDT (Machine: Macmini.lan)
 
 ## In Progress
 
@@ -16,6 +16,7 @@ _No active AI Workspace implementation item. Next safe work is blocker/session t
   - 2026-04-20 13:41 CDT verification: Avignon INBOX `0` after Robert's 12:59 CDT correction was answered and filed; source mirror `avignon/runtime-source/avignon-launch/scripts/avignon_inbox_cycle.py` matches installed runtime SHA-256 `2655a463f17f79eac24746894807100c0cdfc99f4f4bfa353b4752bc4924fc30`.
   - Code/Git closeout completed and pushed: commit `6da393e` / `Preserve Avignon inbox runtime source mirror` pushed to `origin/main`. No LaunchAgent restart/reload, OAuth/auth, CRM/Portal/OPS mutation, deploy, or external send is pending under this item.
   - 2026-04-20 14:14 CDT follow-through recovery for the six handled Sonat CRM/activity sources completed through Portal worker `8ef5557d`; Avignon sent Sonat the task-specific completion report with Robert copied, Message-ID `<177671241834.23190.8046335433489445221@kovaldistillery.com>`. This closes the immediate six-item CRM blocker; broader direct-owner runtime/reporting policy remains represented by this closeout item and Avignon's remaining runtime gates.
+  - 2026-04-20 14:37 CDT second live polling incident fixed: Avignon was polling but crashing on Robert-only direct-owner acknowledgement/report sends because the non-primary send flag was not passed without a Cc. Installed runtime and source mirror now pass the flag for any non-Sonat direct-owner recipient, short `ok/thank you/thanks/got it` replies are no-action, duplicate `Activity check` sessions were closed, and final Avignon INBOX/unread verified `0` / `0`. Source-mirror commit/push remains the only closeout action for this patch.
 
 - Secure Info/files context intake: plan is recorded; implementation is blocked on Robert/Security Google Drive API and storage approvals.
   - Source Message-ID: `<CAAtX44ZX0u0toGJ7O4grpZY7j6MW9n_S=Anj8M8k-sQhY4gZXQ@mail.gmail.com>`; file-management worker session `0774d4a8` reported a truncated source after `Project: File management.` and is attached here pending clarification. Note: the supplied Message-ID `<CAAtX44Z0DxQ+ruJfOY2fSA2Un617-dfQiF3BQ7R8aaxDiQiQrA@mail.gmail.com>` is already recorded locally for the AI Improvement Manager role-expansion project, so Frank should ask Robert to clarify the source/context before treating it as unambiguous.
@@ -95,6 +96,12 @@ _No active AI Workspace implementation item. Next safe work is blocker/session t
 _No separate AI Workspace backlog items. Source-owned continuations are already represented by the matching Waiting-family blocker above and should resume in the owning workspace only after that blocker clears._
 
 ## Done
+
+- **2026-04-20** Avignon direct-Robert polling crash fixed.
+  - Live issue: launchd was firing on the 15-second path, but Avignon crashed when sending Robert-only direct-owner acknowledgements/reports. Patched installed runtime and git-backed source mirror to pass the explicit non-primary send flag for any non-Sonat direct-owner report target, added no-action handling for short acknowledgement replies, verified compile/hash/log health, sent Robert the completion report, filed the source/reply to `Handled`, closed duplicate `Activity check` sessions, and verified Avignon INBOX/unread `0` / `0`. No OAuth/auth/token, LaunchAgent reload/restart, deploy, CRM/Portal/OPS mutation, external send, reset, clean, or destructive action.
+
+- **2026-04-20** Shared Frank/Avignon email-worker how-to memory path recorded.
+  - Source Message-ID `<CAAtX44a6UFPuHJd7tn83fsMjAiV+mbesOk35=r23yDTvY4u=bw@mail.gmail.com>`; session `0a741b92` / `Shared email-worker how-to memory path`. Chosen path: `docs/email-workers/` for reusable non-secret Frank/Avignon email-worker mechanics. Related Avignon Activity check sessions recorded as references only and not closed or steered by this docs task: `77ab92b0`, `b41fd0c0`, `302c78cd`, `872a7398`, `e2e4211f`, `f026a3fe`, `b606a500`, `77c34016`. Docs/planning only; no private mailbox bodies, secrets, auth/OAuth, mailbox moves, runtime/cadence, external send, deploy/restart, commit/push/reset/clean, or production mutation.
 
 - **2026-04-20** AI Improvement Manager role description expanded.
   - Source Message-ID `<CAAtX44Z0DxQ+ruJfOY2fSA2Un617-dfQiF3BQ7R8aaxDiQiQrA@mail.gmail.com>`; session `124bba8f` / `AI Improvement Manager role expansion`; report target Frank -> Robert. Expanded the existing role docs with concrete process-improvement checks, update opportunities, workflow analytics review, EOD inputs/outputs, routing boundaries, report structure, examples, and approval gates. Changed files: `worker_roles/ai-improvement-manager.md`, `worker_roles/operating-model.md`, `worker_roles/README.md`, `project_hub/issues/2026-04-20-ai-improvement-manager-role-expansion.md`, `project_hub/INDEX.md`, `TODO.md`, `HANDOFF.md`, and `frank/HANDOFF.md`. Docs/planning only; no runtime, scheduler, mailbox, analytics integration, production, deploy, commit, or push action.

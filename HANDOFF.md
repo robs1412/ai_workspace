@@ -1,10 +1,26 @@
 # Codex Session Handoff
 
-Last Updated: 2026-04-20 14:14 CDT (Machine: Macmini.lan)
+Last Updated: 2026-04-20 14:37 CDT (Machine: Macmini.lan)
 
 Use this file for cross-machine/session handoffs.
 
 ## Current Workflow Handoff
+
+- 2026-04-20 14:37 CDT Avignon live polling incident fixed:
+  - Robert reported Avignon was still not behaving like a 15-second worker and Frank was responding first. Evidence showed `com.koval.avignon-auto` is configured with `StartInterval` `15` and the live out log continued cycling around the 15-second path; stdout updated at `2026-04-20 14:36:53 CDT` and stderr had not updated since the pre-fix crash loop at `14:28:19 CDT`.
+  - Root cause was not launchd cadence. Avignon crashed on direct-Robert acknowledgement/report sends because `send_avignon_owner_email()` passed `--allow-non-primary` only when there was a Cc. Robert-only Avignon workflow reports are approved non-primary recipients, so the helper rejected them and the cycle retried.
+  - Patched installed runtime `/Users/admin/.avignon-launch/runtime/scripts/avignon_inbox_cycle.py` and source mirror `avignon/runtime-source/avignon-launch/scripts/avignon_inbox_cycle.py` so any non-Sonat direct-owner recipient gets the explicit send flag.
+  - Also patched short direct-owner no-action replies like `ok`, `thank you`, `thanks`, `got it`, and `sounds good` so they file cleanly instead of starting a worker.
+  - Verification: installed/source SHA-256 match `8596be8e28a302e15644bed2581aaff50ff3ba1ee1523b1d50cd12eb7f02614a`; `python3 -m py_compile` passed; Avignon sent Robert the acknowledgement and completion report; Robert's `Ok, thank you` reply filed to `Handled`; duplicate `Activity check` worker sessions were closed; final Avignon INBOX/unread verified `0` / `0`.
+  - No OAuth/token/credential work, Google Cloud/PubSub/IAM, LaunchAgent reload/restart, deploy, CRM/Portal/OPS mutation, external send, reset, clean, or destructive action occurred.
+
+- 2026-04-20 14:28 CDT shared Frank/Avignon email-worker how-to memory path recorded:
+  - Source Message-ID: `<CAAtX44a6UFPuHJd7tn83fsMjAiV+mbesOk35=r23yDTvY4u=bw@mail.gmail.com>`; subject `Fwd: Activity check`; worker session `0a741b92` / `Shared email-worker how-to memory path`.
+  - Chosen shared path: `docs/email-workers/`. It is owned by AI Workspace Task Manager / Email Coordinator and is for reusable, non-secret Frank/Avignon email-worker mechanics only.
+  - Created `docs/email-workers/README.md` with purpose, what belongs there, exclusions, naming rules, ownership rules, Frank/Avignon usage steps, source reference, and related session references.
+  - Updated `worker_roles/operating-model.md` so Frank and Avignon durable memory surfaces include `docs/email-workers/` for shared reusable how-to mechanics.
+  - Related visible Avignon Activity check sessions found in Workspaceboard status and not closed or steered by this docs task: `77ab92b0`, `b41fd0c0`, `302c78cd`, `872a7398`, `e2e4211f`, `f026a3fe`, `b606a500`, `77c34016` (`waiting` / `needs-input` at check time).
+  - Scope preserved: docs/planning only. No private forwarded Activity check content, mailbox body dump, secrets, credentials, OAuth/auth, mailbox move, runtime/cadence, external send, deploy/restart, commit/push/reset/clean, or production mutation was performed.
 
 - 2026-04-20 14:14 CDT Avignon/Sonat handled-mail CRM recovery completed:
   - Robert approved bounded source-detail recovery for six recovered Sonat CRM/activity sources that had been filed to `Handled` without proper follow-through.

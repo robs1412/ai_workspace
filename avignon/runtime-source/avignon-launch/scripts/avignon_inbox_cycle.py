@@ -324,9 +324,14 @@ def direct_owner_report_target(owner: str) -> dict:
 
 
 def looks_like_no_action_direct(message: dict) -> bool:
-    text = f"{message.get('subject', '')} {message.get('body', '')}".lower()
+    body = re.sub(r"\s+", " ", str(message.get("body", "") or "").strip()).lower()
+    text = f"{message.get('subject', '')} {body}".lower()
+    if re.fullmatch(r"(ok|okay|thanks|thank you|ok thanks|okay thanks|ok thank you|got it|sounds good)[.! ]*", body):
+        return True
     patterns = [
         "fyi",
+        "thank you",
+        "thanks",
         "for your records",
         "for our records",
         "keep as a record",
@@ -476,6 +481,9 @@ def write_direct_owner_body_file(kind: str, dedupe_key: str, body: str) -> Path:
 
 def send_avignon_owner_email(subject: str, body: str, task_id: str, to_addr: str, cc_addr: str = "") -> str:
     body_path = write_direct_owner_body_file("direct-owner", task_id, body)
+    recipients = {to_addr.strip().lower()}
+    if cc_addr:
+        recipients.add(cc_addr.strip().lower())
     cmd = [
         sys.executable,
         str(SCRIPT_DIR / "send_frank_email.py"),
@@ -491,7 +499,9 @@ def send_avignon_owner_email(subject: str, body: str, task_id: str, to_addr: str
         task_id,
     ]
     if cc_addr:
-        cmd.extend(["--cc", cc_addr, "--allow-non-primary"])
+        cmd.extend(["--cc", cc_addr])
+    if any(addr and addr != SONAT_EMAIL for addr in recipients):
+        cmd.append("--allow-non-primary")
     result = subprocess.run(
         cmd,
         text=True,

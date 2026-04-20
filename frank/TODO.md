@@ -1,6 +1,6 @@
 # TODO — frank
 
-Updated: 2026-04-20 12:01 CDT (Machine: Macmini.lan)
+Updated: 2026-04-20 15:02 CDT (Machine: Macmini.lan)
 
 ## In Progress
 
@@ -95,6 +95,10 @@ _No active Frank implementation/routing items._
 Live Papers lookup/projection remains approval-gated and is represented by AI Workspace/Papers project notes plus the Claude guidance request, not by an open Frank implementation row.
 
 ## Done
+
+- 2026-04-20: Completed Frank vs Avignon captured/routed receipt template parity check.
+  - Source Message-ID `<CAAtX44bCjzkXSKDa9sYc8ZP7qfvvRQ5gUxteLJ2aMJh7HnVfOg@mail.gmail.com>`; worker session `00d4fd0c`; coordinated with shared-memory session `0a741b92`.
+  - Finding: Avignon's better captured/routed receipt comes from its 2026-04-20 direct-owner runtime patch and Activity-check follow-up, while Frank policy is current but installed `frank_auto_runner.py` is not runtime-parity complete. Docs-only note added under `../docs/email-workers/`; runtime parity requires separate Code/Git + Security route.
 
 - 2026-04-20: Recorded Robert's approval for the AI Improvement Manager EOD review workflow.
   - Approval source Message-ID `<CAAtX44a_fFqVJX8Er+eRC8t_uZ0+_zzneSCVYc5EepNmtB=gTQ@mail.gmail.com>` attaches to the prior EOD follow-up source `<CAAtX44ZFzwjpws1QUxnxm8recMTXURppJL7c-VCV5Qft_Z1wjw@mail.gmail.com>`.

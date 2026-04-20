@@ -1,6 +1,6 @@
 # TODO — avignon
 
-Updated: 2026-04-20 14:14 CDT (Machine: Macmini.lan)
+Updated: 2026-04-20 14:34 CDT (Machine: Macmini.lan)
 
 ## In Progress
 
@@ -14,10 +14,10 @@ No active Avignon-local implementation item.
   - Code/Git follow-up fix applied: previously logged non-direct INBOX residue now preserves the old archive-to-`Handled` behavior; direct-owner monitor/hold/closeout logic applies only to direct-owner records or direct-owner states.
   - Code/Git second follow-up fix applied: Workspaceboard status timeout/connection/API failures while monitoring pending direct-owner sessions now return a non-archivable `session-status-unavailable` hold instead of crashing the cycle.
   - Live incident fix applied after Robert reported a 12:59 CDT email still open at 13:33 CDT: Robert-as-approver closeout targets are recomputed as Robert-only instead of trusting stale stored `to Sonat, cc Robert` metadata, and previously logged pending direct-owner rows preserve owner/session/current-state metadata instead of degrading into generic residue.
-  - Source preservation updated: current installed script was copied to git-backed mirror `runtime-source/avignon-launch/scripts/avignon_inbox_cycle.py`; SHA-256 matches installed runtime `2655a463f17f79eac24746894807100c0cdfc99f4f4bfa353b4752bc4924fc30`.
-  - Verification passed: `python3 -m py_compile`, installed/source hash match, and live INBOX verification after manual incident closeout showed Avignon INBOX `0`.
-  - Git closeout completed: source mirror commit `6da393e` / `Preserve Avignon inbox runtime source mirror` was pushed to `origin/main`.
-  - Remaining gates: reinstall/sync from source to installed runtime, LaunchAgent restart/reload, live mailbox cycle, deploy, mailbox move, OAuth/auth, and CRM/Portal/OPS mutation all require separate explicit approval.
+  - Second live incident fix applied after Robert's `Activity check`: direct-Robert acknowledgements now pass the approved non-primary send flag when the report target is Robert-only, and direct-owner no-action classification now catches short `ok/thank you/thanks/got it` replies so they are filed instead of routed.
+  - Verification passed: `python3 -m py_compile`, installed/source hash match `8596be8e28a302e15644bed2581aaff50ff3ba1ee1523b1d50cd12eb7f02614a`, Avignon log showed live cycles around the 15-second interval, duplicate `Activity check` sessions were closed, Robert received completion report `<177671344565.35603.10510580350308148588@kovaldistillery.com>`, and final Avignon INBOX/unread verified `0` / `0`.
+  - Git closeout completed for the earlier source mirror: commit `6da393e` / `Preserve Avignon inbox runtime source mirror` was pushed to `origin/main`. The current second live incident patch is ready for source-mirror commit/push after final review.
+  - Remaining gates: LaunchAgent restart/reload, deploy, mailbox OAuth/auth, CRM/Portal/OPS mutation, and any broader workflow policy change all require separate explicit approval.
 
 - Gmail push parked follow-up:
   - Monday, 2026-04-20: verify Frank/Avignon 15-second polling health before any Gmail API push/OAuth/PubSub work resumes.
@@ -55,6 +55,11 @@ No active Avignon-local implementation item.
   - No mailbox move/unfile/reclassify, CRM/Portal mutation, external reply, credential/auth/OAuth, LaunchAgent/runtime, production, deploy, commit, or push was performed by this audit.
 
 ## Done
+
+- 2026-04-20: Fixed Avignon direct-Robert polling crash and restored inbox-zero behavior.
+  - Root cause: Avignon was polling, but Robert-only direct-owner acknowledgement/report sends did not pass the explicit non-primary send flag unless a Cc existed, so the cycle crashed and retried. Patched installed runtime and source mirror so any non-Sonat direct-owner recipient gets the flag. Also classified short `ok/thank you/thanks/got it/sounds good` direct replies as no-action.
+  - Verification: `python3 -m py_compile` passed; installed/source SHA-256 matched `8596be8e28a302e15644bed2581aaff50ff3ba1ee1523b1d50cd12eb7f02614a`; live log continued around the 15-second interval; stderr stopped updating after the pre-fix crash loop; Robert received Avignon's completion report; Robert's `Ok, thank you` reply filed to `Handled`; duplicate `Activity check` sessions were closed; final Avignon INBOX/unread `0` / `0`.
+  - No OAuth/auth/token, LaunchAgent reload/restart, deploy, CRM/Portal/OPS mutation, external send, reset, clean, or destructive action occurred.
 
 - 2026-04-20: Completed six recovered Sonat CRM/activity items and sent Sonat the required report.
   - Worker/session: `8ef5557d` / `Portal Avignon Sonat CRM recovery work`; private packet `drafts/crm-activity-source-detail-packets-2026-04-20.private.json`; redacted summary `drafts/crm-activity-source-detail-summary-2026-04-20.md`.
