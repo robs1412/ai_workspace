@@ -210,7 +210,7 @@ Blocked or special-review types:
 
 Robert needs to approve or provide:
 
-1. Drive folder or Shared Drive IDs, preferably human-created first.
+1. Drive folder or Shared Drive IDs, preferably human-created first. Robert supplied the Frank/Avignon shared target on 2026-04-20: `https://drive.google.com/drive/folders/0AP-Yf32mH4IHUk9PVA` / ID `0AP-Yf32mH4IHUk9PVA`.
 2. Allowed Google accounts and whether Frank/Avignon/Codex have any access or only Robert uploads/approves.
 3. OAuth vs service account / delegated Workspace decision.
 4. OAuth client/source or Google Cloud project/app label for Drive API.

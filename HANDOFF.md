@@ -1,10 +1,30 @@
 # Codex Session Handoff
 
-Last Updated: 2026-04-20 14:37 CDT (Machine: Macmini.lan)
+Last Updated: 2026-04-20 15:25 CDT (Machine: Macmini.lan)
 
 Use this file for cross-machine/session handoffs.
 
 ## Current Workflow Handoff
+
+- 2026-04-20 15:25 CDT Workspaceboard bridge work-record exporter source implementation completed and pushed:
+  - Robert approved proceeding with the narrow Workspaceboard source implementation after Code/Git ownership scoping.
+  - Workspaceboard commit: `74fd65f` / `Add bridge work-record exporter`, pushed to `git@github.com:robs1412/workspaceboard.git` `main`.
+  - Changed files: `/Users/werkstatt/workspaceboard/server/bridge-work-record-exporter.js`, `/Users/werkstatt/workspaceboard/server/index.js`, and `/Users/werkstatt/workspaceboard/server/test/bridge-work-record-exporter.test.js`.
+  - Endpoint added in source: `GET /api/bridge/work-records`, returning a no-write work-record projection from the canonical bridge task register plus deterministic `unmapped_sources[]` for Workspaceboard sessions without canonical task IDs.
+  - Verification passed: `node --check server/index.js`, `node --check server/bridge-work-record-exporter.js`, `node --test server/test/bridge-work-record-exporter.test.js`, and `npm test` in `/Users/werkstatt/workspaceboard/server`.
+  - Boundary preserved: source commit/push only. No Workspaceboard runtime reinstall/restart, LaunchAgent change, deploy/live pull, live endpoint verification, `.205`, OAuth, Papers/MI access/write, Portal/CRM mutation, mailbox/private-body access, credential exposure, reset, clean, or external send occurred. Existing dirty Workspaceboard UI/auth/nav/TODO/HANDOFF/backup files remain untouched and unstaged.
+
+- 2026-04-20 15:22 CDT Robert supplied the Frank/Avignon shared Google Drive target:
+  - Shared Drive/folder URL: `https://drive.google.com/drive/folders/0AP-Yf32mH4IHUk9PVA`; safe ID recorded as `0AP-Yf32mH4IHUk9PVA`.
+  - This clears only the "Drive folder/shared-drive ID" part of the Secure Info/files context intake blocker.
+  - Remaining approvals before any Drive API work: allowed accounts, OAuth versus service-account/delegated model, exact Drive scopes, token storage path/class and revocation owner, whether any runtime path outside `/Users/werkstatt/ai_workspace` is approved, local download versus stream-only handling, first safe test file/folder and sensitivity tier, and non-secret audit log location.
+  - No Drive API call, OAuth flow, token write, folder permission change, upload/download/move/delete, mailbox read, Papers/MI write, runtime change, deploy, commit, push, or production change occurred.
+
+- 2026-04-20 15:20 CDT open Salesreport/BID sessions were pushed forward:
+  - Salesreport session `e894bd97` received Robert's clarification: audit missing sales reports by month using local non-secret files/import records/docs, not only RNDC NY/activity-report framing.
+  - BID session `3a3caa2d` received the continuation prompt for BID import finance CLI maintenance gate design.
+  - BID session `1fec713d` received the continuation prompt for the BID finance action-report owner decision packet.
+  - Prompt delivery returned `ok: true` for all three and each session moved to `working`. Gates preserved: no credentials, live DB/source mutation, external sends, deploy/live pull, reset, clean, or destructive/bulk operations.
 
 - 2026-04-20 14:56 CDT Importer XLS mapping fix Code/Git closeout completed locally:
   - Importer worker `c8847e47` / `Importer XLS validation-order fix local verification` completed the bounded sparse-XLSX column mapping fix and Code/Git review.
