@@ -6,6 +6,14 @@ Use this file for cross-machine/session handoffs.
 
 ## Current Workflow Handoff
 
+- 2026-04-20 14:48 CDT Code/Git ownership resolved for the AI-Bridge Workspaceboard exporter:
+  - Session `fc01a91d` / `Code Git Manager merge review AI bridge and workspaceboard organigram commits` completed the read-only scoping pass for `bridge-20260419-workspaceboard-exporter-file-ownership-request`.
+  - Decision: future implementation should add `/Users/werkstatt/workspaceboard/server/bridge-work-record-exporter.js`; touch `/Users/werkstatt/workspaceboard/server/index.js` only for `require('./bridge-work-record-exporter')` and `GET /api/bridge/work-records`; do not touch dirty `/Users/werkstatt/workspaceboard/server/digital-office-index.js`.
+  - Endpoint shape: `GET /api/bridge/work-records` returns a no-write schema-aligned projection with `records[]`, `unmapped_sources[]`, `warnings[]`, and `closed_gates[]`; do not overload `/api/digital-office-index`.
+  - ID policy: `records[].task_id` must be a canonical bridge task ID, approved OPS/Portal ID, or already documented stable local bridge ID. Discovered sources without canonical IDs go to `unmapped_sources[]` with deterministic `projection_ref`; do not mint parallel task IDs.
+  - Dirty-worktree boundary: avoid current Workspaceboard dirty files, including TODO/HANDOFF, nav/auth/page/organigram files, `server/digital-office-index.js`, and all untracked `.bak` artifacts unless their owner explicitly hands them off.
+  - Still gated: no Workspaceboard code implementation, commit, push, deploy/live pull, runtime reinstall, service restart, reset, clean, OAuth/token work, `.205`, Papers/MI read/write, Portal/CRM mutation, credentials/private mailbox access, MCP exposure/config change, or external send without separate approval.
+
 - 2026-04-20 14:37 CDT Avignon live polling incident fixed:
   - Robert reported Avignon was still not behaving like a 15-second worker and Frank was responding first. Evidence showed `com.koval.avignon-auto` is configured with `StartInterval` `15` and the live out log continued cycling around the 15-second path; stdout updated at `2026-04-20 14:36:53 CDT` and stderr had not updated since the pre-fix crash loop at `14:28:19 CDT`.
   - Root cause was not launchd cadence. Avignon crashed on direct-Robert acknowledgement/report sends because `send_avignon_owner_email()` passed `--allow-non-primary` only when there was a Cc. Robert-only Avignon workflow reports are approved non-primary recipients, so the helper rejected them and the cycle retried.
