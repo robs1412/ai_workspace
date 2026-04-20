@@ -116,3 +116,13 @@ Recover two user-visible failures reported by Robert:
 - On iPhone, distinguish the remaining failure: DNS/server-not-found, certificate/trust/secure-connection error, or redirect/login cookie loop.
 - Route the approved Google OAuth / Gmail push work through Security Guard and a dedicated implementation worker before credential/OAuth operations.
 - Decide whether the source Frank runtime should be moved from machine-local patching into a versioned repo path so this fix survives future runtime reinstalls.
+
+## 2026-04-19 18:53 CDT Update — Phone Send UX Slice
+
+- Source: Frank-routed Robert direct request, Message-ID `<CAAtX44ZRicy+8Rap2oNq9pqjZN7F1YwLzUspNw-k0F2CDeAuhw@mail.gmail.com>`, subject `Fix send in phone page`.
+- Local Workspaceboard source fix: `task-manager-phone.html` now loads `assets/task-manager-phone.js?v=11`; the phone client clears the composer immediately into a queued/sending state, disables Send/template buttons while sending, blocks duplicate sends, shows progress copy for long requests, restores failed messages for retry, sends with `wait_ms: 0`, and defers summary refresh.
+- Local timing did not reproduce a 15s backend send delay: Task Manager history was about `0.13s`, Task Manager summary was about `0.11s`, and management overview was about `5.09s` during read-only checks.
+- Current auth/serving split remains: local runtime is healthy at Workspaceboard `v0.76`; direct `.17`/`macmini.lan` page hosts intentionally return `403`; direct LAN runtime API returns `401`; unauthenticated `wb.koval.lan` redirects to MI login; the redacted MI login response still showed a host-only `PHPSESSID` with no `.koval.lan` domain attribute.
+- Guardrails: no `.205`, Traefik/proxy, DNS, LaunchAgent, service runtime, OAuth/auth credential, live session/cookie, production, deploy, live pull, commit, push, or restart action was performed.
+- Verification: JS/PHP syntax checks, `npm test` in Workspaceboard `server` (`25` passing), local source Apache checks, and a non-mutating DOM/fetch harness with delayed mocked send passed. Chrome headless crashed before screenshot capture.
+- Remaining approvals: Code/Git Manager closeout before commit/push/deploy/reinstall; Security Guard/Login/.205 owner approval before any auth-cookie, proxy, certificate/DNS, or service-runtime mutation.
