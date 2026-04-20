@@ -1,0 +1,39 @@
+Hi Sonat,
+
+Quick correction: my earlier CRM note used internal source numbers. That is not useful on your side.
+
+Here is the plain-English version.
+
+Already done:
+- The five safe CRM additions were entered through Import ID 56.
+- The completed account-only/activity items are also done.
+- The list of new accounts and contacts was sent in my previous email.
+
+Still missing before I can finish the remaining CRM cleanup:
+
+1. Alexis Harris / SOPHY Hyde Park / Mesler Kitchen Bar Lounge
+- I found more than one possible existing CRM contact match.
+- I also could not safely pick one exact target account.
+
+Please reply with:
+- Use this account for Alexis:
+- Use this existing contact record, or create new:
+
+2. Stephen Beck / Lanterna Distributors
+- Stephen's contact information appears to already exist in CRM.
+- I could not safely pick one exact distributor account for Lanterna.
+
+Please reply with:
+- Use this Lanterna distributor/account record, or create new:
+
+3. Your request for a list of what was added
+- I treated that as a status request and answered it with the new-account/new-contact list.
+
+Please reply with:
+- That status request is complete: yes/no
+
+I will not make the remaining CRM links until those answers are clear.
+
+Best,
+
+Avignon

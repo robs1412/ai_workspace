@@ -1,0 +1,21 @@
+Sonat,
+
+Point first: I could not safely complete the six recovered CRM/activity items yet.
+
+Portal recovery worker session 8ef5557d checked approved non-secret local state for task avignon-sonat-handled-mail-recovery-2026-04-20. The only locally available state for these sources is header/log metadata, which is not enough to verify your instruction, the correct account/contact/activity target, dedupe state, or routine-action authority.
+
+No CRM, Portal, or OPS records were created, updated, linked, merged, deleted, marked reviewed, or otherwise changed. No mailbox move, private body/contact-field output, credential/auth/OAuth work, deploy/restart, commit/push/reset/clean, or destructive/bulk action occurred.
+
+Blocked source Message-IDs:
+- <CALbLtzx03Rzzqnn1M+0yZifY6-4YfQeekeVgK3+zKyQQbN0JCQ@mail.gmail.com>
+- <CALbLtzyPwnuk=Msw0wgFtDsOEnNk5QhiD+E9ZP7tRuqQouKDgw@mail.gmail.com>
+- <CALbLtzxSioFqgNL61KHSHVxVu9ZSnYGujC3YeS-j+OBPs+v4Yw@mail.gmail.com>
+- <CALbLtzxCAaOdQZohyM0m67A6mCWbbMCjTSOaMTi7W+RR2k3_2Q@mail.gmail.com>
+- <CALbLtzzm--wq-DqFsW8ePfVEAsgKAuiH1-gpB7Tehb=VUUDULg@mail.gmail.com>
+- <CALbLtzx71n0bqs1_GJ+7WvDgt6jxNC5Wwi9tQRpq2X5rZh2nzg@mail.gmail.com>
+
+Recommended next action: send or approve a minimal non-secret target packet for each Message-ID with the account/contact/activity target, field payload, activity date/type/content if applicable, existing-record match or dedupe key, and any routine-action boundary.
+
+Once that packet is available, I can route the exact Portal/CRM work without guessing and will send the task-specific completion report after the records are handled.
+
+Avignon

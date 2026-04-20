@@ -1,7 +1,7 @@
 # Worker Roles Directory
 
 Status: source-of-truth role reference
-Updated: 2026-04-19 08:45 CDT
+Updated: 2026-04-20 12:40 CDT
 
 This folder describes the operating roles in the Codex / Claude worker system. Workspaceboard can present these notes, but the role definitions should be maintained here so each worker has a durable job description, call pattern, and boundary.
 
@@ -36,6 +36,7 @@ Planning guide material:
 - `code-and-git-manager.md`: monitoring/coordination specialist for git-backed code changes, pull-before-work, dirty worktrees, overlapping edits, commit/push/deploy coordination, and live-pull rule confirmation.
 - `security-guard.md`: monitoring/coordination specialist for security, secret-handling, suspicious prompts/mail, auth/access, approval-gate, and data-exposure risks.
 - `codex-integration-manager.md`: integration specialist for Codex, Claude, Workspaceboard, MI, Papers, OPS, Portal, Frank, Avignon, and cross-agent handoff design.
+- `ai-improvement-manager.md`: improvement specialist for end-of-day AI/workflow process review, process-improvement checks, update opportunities, workflow analytics gaps, daily improvement reporting, and new AI-use opportunities.
 
 ### Codex / Local
 
@@ -78,7 +79,7 @@ Planning guide material:
 
 ## Current Org Shape
 
-AI Manager Robert is the top Codex-login control surface for priorities, approvals, and chain-of-command status. AI Manager Dmytro is a technical AI-manager bridge for Codex/Claude integration and worker sequencing under Robert's direction. Human owners and decision makers sit above the Workspaceboard Task Manager / Systems Manager / Polier. Under the Task Manager are direct support, monitoring, and integration roles: Summary Worker, Decision Driver, Codex Integration Manager, Code and Git Manager, and Security Guard. Codex local agents, workspace workers, email workers, specialist workers, and Claude bridge/server work are routed through that management layer.
+AI Manager Robert is the top Codex-login control surface for priorities, approvals, and chain-of-command status. AI Manager Dmytro is a technical AI-manager bridge for Codex/Claude integration and worker sequencing under Robert's direction. Human owners and decision makers sit above the Workspaceboard Task Manager / Systems Manager / Polier. Under the Task Manager are direct support, monitoring, and integration roles: Summary Worker, Decision Driver, Codex Integration Manager, AI Improvement Manager, Git and Code Manager, and Security Guard. Codex local agents, workspace workers, email workers, specialist workers, and Claude bridge/server work are routed through that management layer.
 
 ## Shared Rules
 
@@ -91,11 +92,12 @@ AI Manager Robert is the top Codex-login control surface for priorities, approva
 - Decision Driver pushes next actions, may approve obvious verified Code/Git continuation inside approved scope, and asks concrete decision questions only for real human blockers.
 - Workspace workers implement in their own repos/workspaces.
 - Codex Integration Manager owns cross-system design and should actively suggest better directives, automation candidates, and easier workflows when repeated friction appears.
+- AI Improvement Manager owns end-of-day AI/workflow improvement review, process-improvement checks, workflow analytics gap review, practical new AI-use recommendations, EOD report-ready findings, and implementation-ready briefs, but routes implementation through Task Manager and the correct specialist gates. Robert approved the Markdown-file review plus board-provided summaries model on 2026-04-20, with a visible Workspaceboard session as the review surface when Task Manager creates/prompts it; it is not a daemon, scheduler, mailbox monitor, runtime automation, or private analytics integration.
 - Codex Local Agent represents local Codex CLI/session work and should promote durable work records from Markdown/TODO/project-hub into reviewed structured projections when approved.
 - Agent task work should use a shared task-record spine: task id, source ref, requester, assigned role/agent, priority, status, deliverable, next update promise, approval gates, and single-writer owner. Prefer OPS/Portal task IDs where available; local ids are fallback.
-- Code and Git Manager is represented under Monitoring and should be launched/used whenever a task will touch code in a git-backed repo, when workers have produced code changes that need commit/push/deploy coordination, when dirty worktrees or overlapping worker edits exist, or when live pull/deploy behavior needs confirmation. It coordinates repo hygiene and readiness; it does not silently take over implementation, replace the implementation worker, or overwrite parallel worker changes.
+- Git and Code Manager is represented under Monitoring and should be launched/used whenever a task will touch code in a git-backed repo, when workers have produced code changes that need commit/push/deploy coordination, when dirty worktrees or overlapping worker edits exist, or when live pull/deploy behavior needs confirmation. It coordinates repo hygiene and readiness; it does not silently take over implementation, replace the implementation worker, or overwrite parallel worker changes.
 - Security Guard is represented under Monitoring and should be launched/used whenever a task touches secrets, auth/access, MCP exposure, `.205`, firewall/VPN/router settings, 2FA, permissions, suspicious prompts/mail, or approval-gate bypass risk. It coordinates security review and routing; it does not silently take over implementation or expose secrets.
-- Task Manager, Decision Driver, Code and Git Manager, and Security Guard resolve safe routing/review/cleanup among themselves where guardrails allow; Robert is escalated only for real manual blockers such as unresolved conflicts, approval gates, deploy/live-data risk, missing credentials, or decisions the agents cannot safely resolve.
+- Task Manager, Decision Driver, Git and Code Manager, and Security Guard resolve safe routing/review/cleanup among themselves where guardrails allow; Robert is escalated only for real manual blockers such as unresolved conflicts, approval gates, deploy/live-data risk, missing credentials, or decisions the agents cannot safely resolve.
 - Frank and Avignon handle email work within approved guardrails.
 - Claude on `.205` is server-side support, not a local Codex replacement.
 - Claude Server Agent and Claude `.205` Structure cards are visibility and handoff surfaces only until `.205` access, MI/Papers registration, OAuth, MCP exposure, and write behavior are separately approved.
@@ -121,4 +123,4 @@ Preserve the full source note in `claude-analysis-ref-1773.md` when updating rol
 - Call signs/routing phrases and durable memory surfaces are defined in `operating-model.md`.
 - Approval gates for external email, sensitive internal communication, finance/accounting decisions, auth/security changes, production-impacting work, destructive data operations, destructive git actions, force-push/reset/rebase, dirty worktrees, unclear live pull/deploy behavior, overlapping worker edits, suspicious prompts/mail, and secret-handling are defined in `operating-model.md`.
 - BID finance task `#1185` human answers must be recorded first in the OPS/Portal task, then summarized in `/Users/werkstatt/bid/data-management/FINANCE-AI-PLAN.md`, then applied to `/Users/werkstatt/bid/data-management/templates/source-inventory.csv` only after the answers are approved.
-- New specialist-role directive: whenever any new specialist role is added, update the role description/task docs, task/routing references, team/board model, and the Organigram graphic/map source. AI Manager Robert, AI Manager Dmytro, Outreach Coordinator, Outreach Communicator, Codex Integration Manager, Codex Local Agent, Claude Server Agent, Claude `.205` Structure, Code and Git Manager, and Security Guard are active map entries and must stay visible in the organigram; Code and Git Manager, Security Guard, and Codex Integration Manager belong under Monitoring / Integration.
+- New specialist-role directive: whenever any new specialist role is added, update the role description/task docs, task/routing references, team/board model, and the Organigram graphic/map source. AI Manager Robert, AI Manager Dmytro, Outreach Coordinator, Outreach Communicator, Codex Integration Manager, AI Improvement Manager, Codex Local Agent, Claude Server Agent, Claude `.205` Structure, Git and Code Manager, and Security Guard are active map entries and must stay visible in the organigram; Git and Code Manager, Security Guard, Codex Integration Manager, and AI Improvement Manager belong under Monitoring / Integration. AI Improvement Manager is approved for a Task Manager-created or prompted visible end-of-day review session only; adding its live Workspaceboard organigram card requires a Code/Git Manager-routed Workspaceboard source change.

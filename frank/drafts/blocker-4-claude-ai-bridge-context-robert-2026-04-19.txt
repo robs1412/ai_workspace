@@ -1,0 +1,7 @@
+Robert,
+
+Work session: 4a3d38b5 / Frank one by one blocker emails.
+
+Blocker 4 is an external wait: Claude/AI Bridge backup context and next-step status are still pending.
+
+Boundary: no AI Bridge, Claude external routing, backup implementation, Papers/MI access, runtime, deploy, git, or credential work should proceed from Frank until that context arrives or you give a new explicit instruction.

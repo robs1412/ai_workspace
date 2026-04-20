@@ -1,0 +1,39 @@
+Robert,
+
+Short answer: Avignon appears not to be reliably responding to Sonat because the installed Avignon runtime may be failing before or inside the inbox-confirmation cycle. The Avignon audit did not find a safe missing Sonat catch-up completion report in the checked non-secret records.
+
+What was checked:
+- Routed and audited Avignon non-secret records through Avignon audit session `774c8dfb` (`Avignon Sonat confirmation reliability`), now waiting/needs-input after audit.
+- Confirmed recent Sonat-facing sends were found/logged for pricing scope, new CRM records, CRM remaining decisions, Meeting with Robert scheduled, and the diagnostic delivery test.
+- Checked the Code/Git boundary through session `f92b4b8c`; likely affected files are installed-only under `/Users/admin/.avignon-launch/runtime/scripts/...`, not git-backed under `/Users/werkstatt`.
+- Checked the Security boundary through session `cee4abaa`; the decision is that Robert approval is required before inspecting or hotfixing the installed Avignon runtime.
+
+Working diagnosis:
+The likely blocker is runtime reliability, not a clearly identified unsent Sonat report. Avignon's launchd Python 3.9 path may fail importing installed `send_frank_email.py` because of `str | None` syntax, interrupting the inbox/confirmation flow even when direct helper sends work.
+
+Trace IDs:
+- Source Message-ID: `<CAAtX44aTafv2TwV47RdxaH-pG-HHx-Em4CBKC0T0f69sy_6HcQ@mail.gmail.com>`
+- Frank session: `f6f9dd35`
+- Avignon audit: `774c8dfb`
+- Code/Git Manager: `f92b4b8c`
+- Security review: `cee4abaa`
+- Local task ID: `frank-avignon-sonat-response-status-2026-04-19`
+
+What was not done:
+No secrets or mailbox bodies were exposed. No runtime/code/auth/credential/OAuth/LaunchAgent/mailbox mutation was performed. No restart, deploy, mailbox filing/archive/label change, or new Avignon email send was done.
+
+Approval needed:
+Please approve or decline a bounded installed-runtime review/hotfix under `/Users/admin/.avignon-launch/runtime/scripts/` for only these files:
+- `send_frank_email.py`
+- `avignon_inbox_cycle.py`
+- directly imported helper files only if needed to resolve the same Python 3.9 import/runtime issue
+
+Limits if approved:
+- No mailbox bodies.
+- No credentials, OAuth files, private files, or secret output.
+- No email sends.
+- No mailbox filing/archive/label mutation.
+- No LaunchAgent restart or cadence change unless separately approved.
+- If a fix is needed, limit it to Python 3.9 compatibility, preserve timestamped backups, run `py_compile` and no-send dry-run checks, then report exact changed files and the remaining restart approval needed.
+
+Frank

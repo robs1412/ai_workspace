@@ -1,0 +1,26 @@
+Robert,
+
+This is the task-specific completion/status report for the Workspaceboard phone-page send request, source Message-ID <CAAtX44ZRicy+8Rap2oNq9pqjZN7F1YwLzUspNw-k0F2CDeAuhw@mail.gmail.com>.
+
+Local implementation is complete for the narrow phone-send UX slice. Workspaceboard implementation session 359eb00b fixed the task-manager-phone send flow so the composer clears immediately into queued/sending state, send/template buttons are disabled while sending, duplicate sends are blocked, long-send progress is visible, failed messages restore, sends use wait_ms: 0, and summary refresh is deferred.
+
+Code/Git closeout session cee6a6e7 reviewed the slice and recommends a narrow commit/push only. It is not ready for a whole-worktree commit or deploy because the Workspaceboard worktree has unrelated dirty files and .bak artifacts outside this phone-send slice, including workspaceboard_auth.php and nav/UI files.
+
+Narrow source slice files:
+- /Users/werkstatt/workspaceboard/assets/task-manager-phone.js
+- /Users/werkstatt/workspaceboard/task-manager-phone.html
+- /Users/werkstatt/workspaceboard/TODO.md
+- /Users/werkstatt/workspaceboard/HANDOFF.md
+- /Users/werkstatt/ai_workspace/project_hub/issues/2026-04-18-frank-workspaceboard-response-incident.md
+
+Verification passed: node --check on changed/relevant JS, PHP lint on changed/relevant PHP/PHP-served pages, Workspaceboard server npm test with 25/25 passing, local Apache source route check at http://127.0.0.1/workspaceboard/task-manager-phone.html, and a non-mutating delayed-send DOM/fetch harness. Chrome screenshot verification did not complete because local Chrome crashed before writing the image.
+
+User-facing route: https://wb.koval.lan/workspaceboard/task-manager-phone.html. The local Apache source route reflects the source changes now. The direct Node LaunchAgent runtime still serves the installed copy until an approved reinstall/deploy is done. Nothing has been committed, pushed, deployed, live-pulled, restarted, or reinstalled.
+
+Runtime/auth diagnostics were unchanged: runtime is healthy at board_version 0.76, direct .17/macmini.lan page hosts intentionally return 403, direct LAN runtime API returns 401, and unauthenticated wb.koval.lan redirects to MI login. Login persistence, auth-cookie, proxy, Login/MI, .205, DNS, TLS, and related serving work are separate approval-gated work and were not changed.
+
+Please approve the next two steps when ready:
+1. Stage only the narrow phone-send slice files above, then commit and push that slice.
+2. After that commit/push, separately approve the Workspaceboard runtime reinstall/deploy so the direct Node LaunchAgent runtime serves the installed copy.
+
+Frank

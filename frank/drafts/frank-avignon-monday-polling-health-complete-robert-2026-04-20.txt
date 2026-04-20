@@ -1,0 +1,34 @@
+Robert,
+
+Monday polling health verification is complete for `com.koval.frank-auto` and `com.koval.avignon-auto`.
+
+Source Message-ID: `<CAAtX44ay8Bar_6e7Q50SD7hAhu4mW0_eNfhO7A1aOGYFtW-XxA@mail.gmail.com>`
+Session: `b8f42d66` / `Frank Avignon Monday polling health verify`
+Task ID: `frank-avignon-monday-polling-health-complete-2026-04-20`
+
+Health result: clean enough to proceed to a separate OAuth/PubSub planning and approval step only. This does not approve implementation.
+
+What was checked:
+- AI workspace TODO/append state.
+- LaunchAgent plist metadata for `com.koval.frank-auto` and `com.koval.avignon-auto`.
+- LaunchAgent enabled/disabled metadata.
+- Process presence, stdout/stderr timestamps, and sanitized recent JSONL/log event summaries.
+- No mailbox bodies, secrets, OAuth/token data, credentials, or private content were read.
+
+Findings:
+- Both plists exist and define `RunAtLoad=true` and `StartInterval=15`.
+- `print-disabled` shows both labels enabled.
+- Active service visibility and last-exit status could not be confirmed from this Background launchd manager shell because `gui/501` was not printable and `user/501` did not find either service. I am treating that as a verification limitation, not a health blocker, because fresh log cadence was present.
+- Frank appears healthy enough: `frank-auto-launchd.out.log` advanced from 09:57:02 CDT to 09:57:35 CDT during a 20-second recheck. Recent stdout repeatedly said no new unseen messages required action. The tracked instruction was captured, routed, acknowledged, and filed as previously logged inbox residue. Metadata showed duplicate protection and handled-mail behavior: `previously-logged-inbox-residue`, `archived_to_handled=true`, and routed primary-instruction acknowledgement. Older Frank stderr had lock-overlap and Python 3.9 type-union compatibility traceback entries, but stderr did not advance during this check.
+- Avignon appears healthy: `avignon-auto-launchd.out.log` and `automation-log.jsonl` advanced to 09:57:43 CDT. Recent monitor cycles were roughly every 16-18 seconds, matching the 15-second cadence plus overhead. Recent metadata showed inbox count moving 1 to 0 with `handled_archived_count=1`, then back to 0/0. Older Avignon stderr had lock-overlap, Python 3.9 compatibility traceback, and one IMAP SSL EOF entry, but stderr did not advance during the live recheck.
+
+Exact next approval wording:
+
+"Monday polling health for com.koval.frank-auto and com.koval.avignon-auto is clean enough to proceed to OAuth/PubSub planning only. Approve a planning/design slice from the M4 ERTC Google auth context for Gmail API push architecture, required Google Cloud project/topic/subscription/IAM decisions, users.watch scope, machine-local historyId/token storage proposal, fallback polling behavior, and Security Guard review. This approval must not perform OAuth, Pub/Sub/IAM mutation, users.watch, subscriber setup, token/history work, LaunchAgent/runtime changes, mailbox-content reads, deploy, commit, push, or production mutation."
+
+What was not done:
+- No OAuth, Pub/Sub, IAM, `users.watch`, subscriber, Gmail history/token work.
+- No LaunchAgent/runtime changes, cadence changes, mailbox-content reads, deploy, commit, push, or production mutation.
+- No auth, credential, token, or secret material was read or printed.
+
+Remaining blocker/approval: Robert approval is needed for the separate planning/design slice above. Implementation remains closed unless separately approved after planning and Security Guard review.

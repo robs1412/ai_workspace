@@ -20,6 +20,9 @@ from typing import Any
 
 DEFAULT_TO = "robert@kovaldistillery.com"
 DEFAULT_FROM_NAME = "Frank Cannoli"
+DEFAULT_SIGNATURE_NOTE = (
+    "[Signature rendered by the approved send helper. The HTML signature uses linked text for X.]"
+)
 
 
 def workspace_root() -> Path:
@@ -142,25 +145,34 @@ def build_body(args: argparse.Namespace, subject: str, confirmation_key: str) ->
         "",
         f"{owner},",
         "",
-        args.done.strip(),
+        f"{args.done.strip()} This task is complete.",
         "",
-        "This task is complete.",
+        "I recorded the task id, source reference, worker/session details, and duplicate key below so this confirmation can be traced later without resurfacing the same work as a new request.",
         "",
-        "Reference:",
-        f"- Task ID: {args.task_id}",
+        "ID block:",
     ]
     if args.source_message_id:
         lines.append(f"- Source Message-ID: {args.source_message_id.strip()}")
+    lines.extend(
+        [
+            f"- Dedupe key: {args.dedupe_key.strip() or confirmation_key}",
+            f"- Local task ID: {args.task_id}",
+            f"- Board/Codex session ID: {args.board_session.strip() or args.worker.strip() or 'not available'}",
+            f"- Claude/bridge task ID: {args.claude_task_id.strip() or 'not available'}",
+            f"- OPS/Portal task ID: {args.ops_task_id.strip() or 'none created'}",
+            f"- Outbound Message-ID: {args.outbound_message_id.strip() or 'not sent yet'}",
+            f"- Current status: {args.status.strip() or 'completed'}",
+        ]
+    )
     if args.tracked_task_id:
         lines.append(f"- Tracked outbound task_id: {args.tracked_task_id.strip()}")
-    if args.worker:
-        lines.append(f"- Worker/session: {args.worker.strip()}")
     lines.extend(
         [
             f"- Completion confirmation key: {confirmation_key}",
             "",
             "[DRY RUN ONLY - not sent]",
             "",
+            DEFAULT_SIGNATURE_NOTE,
         ]
     )
     return "\n".join(lines)
@@ -190,6 +202,12 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--owner", default="Robert", help="Human owner name used in the draft.")
     parser.add_argument("--subject", default="", help="Optional preview subject.")
     parser.add_argument("--worker", default="", help="Optional worker/session reference.")
+    parser.add_argument("--board-session", default="", help="Visible board/Codex session id.")
+    parser.add_argument("--dedupe-key", default="", help="Stable local dedupe key.")
+    parser.add_argument("--claude-task-id", default="", help="Claude task/ref id, if supplied by Claude or bridge logs.")
+    parser.add_argument("--ops-task-id", default="", help="OPS/Portal task id when one was created.")
+    parser.add_argument("--outbound-message-id", default="", help="Outbound report Message-ID, if already known.")
+    parser.add_argument("--status", default="completed", help="Current task status for the ID block.")
     parser.add_argument(
         "--drafts-dir",
         default=str(workspace_root() / "drafts"),

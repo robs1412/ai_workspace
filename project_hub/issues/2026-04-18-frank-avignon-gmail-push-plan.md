@@ -5,7 +5,7 @@
 - Date Completed:
 - Owner: AI Workspace / Frank / Avignon / Security Guard
 - Priority: Medium
-- Status: Parked until Monday, 2026-04-20; 15-second polling remains active and true Gmail push is paused pending polling-health verification
+- Status: OAuth continuation blocked before execution pending approved Frank/Avignon token storage path/storage class and exact minimum Gmail API scope; OAuth client/source metadata is approved; 15-second polling remains active as backup
 
 ## Scope
 
@@ -204,6 +204,70 @@ To roll back the immediate runtime change, restore the backup plists and reload 
 2. After the Monday health check only, decide whether true Gmail push is still needed.
 3. If still needed, resume from the M4 ERTC Google auth context under credential/token guardrails; do not use the deleted local Gmailconnector OAuth client.
 4. Code and Git Manager: review any future runtime-code patch before commit, push, deploy, live pull, reload, or closeout.
+
+## 2026-04-20 OAuth Continuation Blocker
+
+Source Message-ID: `<CAAtX44bSqrWb2twfLvj_45oOkFLKcSDtjGQ6fqwRbm16xBSprA@mail.gmail.com>`.
+
+Robert approved the OAuth next step after the Monday polling-health verification and directed that the existing 15-second polling path stay in place as backup. Task Manager then clarified the guardrail: continue only inside OAuth-next-step scope, do not open or print `.private` credential contents, do not rely on `/Users/admin` credential/token paths except documented non-secret runtime metadata, do not mutate Pub/Sub/IAM/subscriber/project/LaunchAgent/runtime state, and stop if no documented approved Frank/Avignon token storage path exists.
+
+Outcome: stopped before OAuth. No documented approved Frank/Avignon token storage path was found under the current workspace-boundary guardrail. The generic Gmail export path documents `~/.config/koval-gmail-export/token.json` for ERTC/read-only exports, but it is not a documented Frank/Avignon push token store. The older `/Users/werkstatt/Gmailconnector` route remains unsuitable because the prior attempt was documented as `401 deleted_client`.
+
+Verification and metadata only:
+
+- Read active TODO/append queues and this project note.
+- Located Gmail/OAuth docs and scripts by filename/content while excluding `.private` and other secret paths from broad searches.
+- Confirmed `.private` credential candidates exist by path/metadata only after the guardrail clarification; no credential values were used for OAuth.
+- Confirmed the documented LaunchAgent plist backup state still has `StartInterval` `15` for both Frank and Avignon. `launchctl print` did not return additional state from this shell context, so live last-exit/state was not revalidated here.
+
+Not done:
+
+- No OAuth authorization flow, browser login, token creation, token refresh, token validation, mailbox read/search/export, Pub/Sub/IAM/project mutation, subscriber/webhook work, LaunchAgent/cadence/runtime/production change, external-sensitive email, deploy, live pull, commit, push, or service restart.
+
+Exact next approval needed:
+
+- Approve the named Frank/Avignon OAuth token storage path and storage class.
+- Approve the minimum Gmail API scope for this assistant-mailbox purpose.
+- Approve the OAuth client/source to use, replacing the deleted Gmailconnector client.
+- If the approved token/client path is outside `/Users/werkstatt/ai_workspace`, explicitly approve that path and state whether only metadata checks or actual token writes are allowed.
+
+## 2026-04-20 OAuth Client/Source Partial Approval
+
+Continuation source Message-ID: `<CAAtX44ampWj6PrHdE4meHgrUqWsSn=eoUC49h7Rxuc99dC9=+g@mail.gmail.com>`.
+
+Robert supplied the approved OAuth client/source metadata:
+
+- Google Cloud project: `gmailconnector-485021`
+- OAuth client id: `261057116535-9gf1pqfg090mm2038sackt82p1r8t8i9.apps.googleusercontent.com`
+
+This clears the prior OAuth client/source blocker only. No Google Console page was opened, no Google Cloud/IAM/PubSub/project/API setting was read or mutated, and no OAuth/browser flow was started.
+
+Remaining blocker before OAuth login/token generation:
+
+- Named Frank/Avignon token storage path and storage class.
+- Exact minimum Gmail API scope for this assistant-mailbox token flow. The existing Security Guard checklist gives preferences and boundaries (`gmail.metadata` if headers/metadata are sufficient; `gmail.readonly` only if body read is explicitly required), but this continuation still needs the exact scope to authorize.
+- If the approved token path is outside `/Users/werkstatt/ai_workspace`, explicit approval for that path and for token writes there.
+
+Not done:
+
+- No OAuth authorization flow, browser login, token write, token validation, mailbox read/search/export, Pub/Sub/IAM/project/subscriber mutation, LaunchAgent/cadence/runtime/production change, external-sensitive email, deploy, live pull, commit, push, or service restart.
+
+## 2026-04-20 OAuth Approval Reaffirmation
+
+Additional source Message-ID: `<CAAtX44ZUHKpHbNWANyLc8bA9wK3X5bxqnUfPP3QrCm9zyJrhnQ@mail.gmail.com>`.
+
+Robert reaffirmed that OAuth work is approved for the same Gmail push/OAuth/Pub/Sub blocker thread. This is attached as approval/dedupe evidence for the existing OAuth task, not a new work item.
+
+Current narrowed state:
+
+- OAuth work is approved in principle.
+- OAuth client/source metadata is approved: project `gmailconnector-485021`, client id `261057116535-9gf1pqfg090mm2038sackt82p1r8t8i9.apps.googleusercontent.com`.
+- OAuth/browser login/token generation remains blocked until the named Frank/Avignon token storage path/storage class and exact minimum Gmail API scope are approved.
+- If the approved token path is outside `/Users/werkstatt/ai_workspace`, explicit approval for that path and for token writes there is still required.
+
+Not done:
+
+- No OAuth authorization flow, browser login, token write/read/validation, mailbox read/search/export, Pub/Sub/IAM/project/subscriber mutation, Google Console access, LaunchAgent/cadence/runtime/production change, external-sensitive email, deploy, live pull, commit, push, or service restart.
 
 ## 2026-04-19 Security Guard OAuth Follow-Up Review
 

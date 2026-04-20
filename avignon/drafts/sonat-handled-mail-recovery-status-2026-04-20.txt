@@ -1,0 +1,33 @@
+Sonat,
+
+I found a batch of your recent messages that Avignon had filed to Handled before the normal acknowledgement and completion trace was complete. I am correcting that trace now.
+
+Captured in visible Avignon worker session:
+- Title: Avignon handled-mail confirmation recovery audit
+- Local session reference: ttys038 / Codex PID 63107
+- Task id: avignon-sonat-handled-mail-recovery-2026-04-20
+
+Already handled or previously reported:
+- The April 17 CRM additions batch was recovered through Importer session 86dc0b04 and Portal session 44b8a370, with status reports already sent. The only remaining CRM blocker is whether Stephen Beck should stay as-is/no link update or be linked/updated under a specific named CRM account/distributor.
+- The Robert meeting request was completed and confirmed separately.
+
+Newly captured from Handled, not yet completed:
+- Add activity to CRM, source Message-ID <CALbLtzx03Rzzqnn1M+0yZifY6-4YfQeekeVgK3+zKyQQbN0JCQ@mail.gmail.com>
+- CRM addition, source Message-ID <CALbLtzyPwnuk=Msw0wgFtDsOEnNk5QhiD+E9ZP7tRuqQouKDgw@mail.gmail.com>
+- CRM addition, source Message-ID <CALbLtzxSioFqgNL61KHSHVxVu9ZSnYGujC3YeS-j+OBPs+v4Yw@mail.gmail.com>
+- CRM addition, source Message-ID <CALbLtzxCAaOdQZohyM0m67A6mCWbbMCjTSOaMTi7W+RR2k3_2Q@mail.gmail.com>
+- CRM addition, source Message-ID <CALbLtzzm--wq-DqFsW8ePfVEAsgKAuiH1-gpB7Tehb=VUUDULg@mail.gmail.com>
+- CRM addition and activity update requested, source Message-ID <CALbLtzx71n0bqs1_GJ+7WvDgt6jxNC5Wwi9tQRpq2X5rZh2nzg@mail.gmail.com>
+- Process for Sample Requests, source Message-ID <CALbLtzwCqmadr7Wg2jnZC5MeyFLf2hNCgMdypva69P2UWwg_FQ@mail.gmail.com>
+
+What I did not do:
+- No CRM or Portal records were changed.
+- No customer or external replies were sent.
+- No mailbox deletion, auth, OAuth, credential, LaunchAgent, or production changes were made.
+
+Next:
+- I will route the CRM/activity items to the correct visible Portal/Importer worker path before any record changes.
+- I will route the sample-request process item to the correct internal owner/workspace before treating it as complete.
+- I will send task-specific completion reports when those items are actually completed or report the concrete blocker if one remains.
+
+Avignon

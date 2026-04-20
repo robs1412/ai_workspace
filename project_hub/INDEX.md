@@ -1,7 +1,31 @@
 # AI Workspace Project Hub
-Last Updated: 2026-04-19 10:16 CDT (Machine: Macmini.lan)
+Last Updated: 2026-04-20 12:41 CDT (Machine: Macmini.lan)
 
 ## Open
+
+- **2026-04-20 Workspaceboard / AI Work Product Backup Plan**
+  - Master ID: `AI-INC-20260420-WORKSPACEBOARD-AI-BACKUP-01`
+  - Detail log: `project_hub/issues/2026-04-20-workspaceboard-ai-backup-plan.md`
+  - Repos: `ai_workspace`, `workspaceboard`, `ai-bridge`; future approved implementation may touch machine-local Workspaceboard/Frank/Avignon runtime metadata and an approved external/offsite target such as `.200`
+  - Status: planning complete and implementation blocked pending explicit approvals. The plan recommends git for committed source/planning records, encrypted artifact snapshots for approved non-git assistant work product, restore testing to an approved temporary path, and an external/offsite mirror only after Robert/Claude/Dmytro confirm target, encryption, retention, cadence, and runtime-state boundaries. No backup, rsync, tar, mount, `.200`/`.205` access, credential access, runtime copy, schedule, deploy, commit, push, or live pull was performed.
+
+- **2026-04-20 Secure Info / Files Context Intake Plan**
+  - Master ID: `AI-INC-20260420-INFO-FILES-CONTEXT-INTAKE-01`
+  - Detail log: `project_hub/issues/2026-04-20-secure-info-files-context-intake-plan.md`
+  - Repos: `ai_workspace`; future approved implementation may touch `ai-bridge`, Workspaceboard, machine-local token storage, and Google Drive API/Google Cloud only after explicit approval
+  - Status: docs-only plan added from Robert/Frank source Message-ID `<CAAtX44ZX0u0toGJ7O4grpZY7j6MW9n_S=Anj8M8k-sQhY4gZXQ@mail.gmail.com>` in session `516e1be9`; file-management worker session `0774d4a8` is attached here, not opened as a separate project, because the available excerpt was truncated after `Project: File management.` and overlaps the secure files/context plan. Note: the Message-ID supplied for that worker, `<CAAtX44Z0DxQ+ruJfOY2fSA2Un617-dfQiF3BQ7R8aaxDiQiQrA@mail.gmail.com>`, is already recorded locally for the AI Improvement Manager role-expansion project, so Frank should ask Robert to clarify the source/context before treating it as unambiguous. Recommended model is restricted human-created Google Drive intake for raw files plus non-secret AI Workspace/AI-Bridge metadata records and later Papers/MI projection only after separate approval. Implementation remains blocked pending Drive folder/shared-drive IDs, allowed accounts, OAuth vs service-account decision, exact scopes, token storage class/path, approved local path if outside `/Users/werkstatt/ai_workspace`, audit/dedupe rules, initial file/sensitivity approval, and Robert's clarification of the file-management goal/source-of-truth/first safe test. No Drive/API/OAuth/token/folder/permission/mailbox/Papers/MI/runtime/production/file movement change was performed.
+
+- **2026-04-20 Frank/Avignon Scheduled Report Runtime Health**
+  - Master ID: `AI-INC-20260420-FRANK-AVIGNON-SCHEDULED-REPORTS-01`
+  - Detail log: `project_hub/issues/2026-04-20-frank-avignon-scheduled-report-runtime-health.md`
+  - Repos: `ai_workspace`, machine-local Frank/Avignon LaunchAgent/runtime state
+  - Status: bounded remediation partially completed. Installed Avignon scheduled-report plist now has both 06:00 and 18:00 intervals and both report helper dry-runs completed without sending. The report labels remain enabled but not loaded because user/gui launchd bootstrap failed in the current logged-out/non-Aqua context and non-interactive sudo is unavailable. No secrets, mailbox bodies, OAuth, Google Cloud/PubSub/IAM, polling-daemon cadence, Workspaceboard runtime, production deploy, commit, or push changed.
+
+- **2026-04-19 Salesreport Audit Gaps Project**
+  - Master ID: `AI-INC-20260419-SALESREPORT-AUDIT-GAPS-PROJECT-01`
+  - Detail log: `project_hub/issues/2026-04-19-salesreport-audit-gaps-project.md`
+  - Repos: `salesreport`, `ai_workspace`; linked routing context in Frank session `58df8905` and Login auth-review session `3b39ab64`
+  - Status: docs-only Salesreport project/TODO/HANDOFF setup recorded from source Message-ID `<CAAtX44bsQgSRQbpS4126g-DtLhDoyXvYK0=f0t9FM5us-mvvwQ@mail.gmail.com>` and routed session `53d9ca8f`. Known audit gaps and approval gates are documented; no report code, production data, saved reports, CRM/account records, auth/password state, external sends, deploy, live pull, commit, or push changed. Clarification remains needed for the truncated `But - I mea...` source tail before expanding scope.
 
 - **2026-04-19 Pricing Unification / Portal Pricing Scope**
   - Master ID: `AI-INC-20260419-PRICING-UNIFICATION-PORTAL-01`
@@ -13,19 +37,19 @@ Last Updated: 2026-04-19 10:16 CDT (Machine: Macmini.lan)
   - Master ID: `AI-INC-20260419-CODEX-CLAUDE-PAPERS-01`
   - Detail log: `project_hub/issues/2026-04-19-codex-claude-papers-integration-plan.md`
   - Repos: `ai_workspace`, `workspaceboard`, `ai-bridge`, future MI/Papers/.205 surfaces
-  - Status: active routing recorded. Codex/Claude/Integration roles are present in local role docs and Workspaceboard organigram source; Frank/Macee/national outreach dated task records and the Security Guard OAuth checklist are created; Portal existing-account summary and read-only MI/Papers registration designs are produced and waiting for approval/input. Live `.205`, MI/Papers writes, OAuth, Portal/CRM mutation, mailbox credential/content access, MCP exposure, deploy/live pull, and service restart remain closed.
+  - Status: Robert's 2026-04-20 blocker-thread reply `<CAAtX44bSgMHtL+Y96sCn+g63U7FLpzbYQ0fCCm48Gc4vtA1QUA@mail.gmail.com>` and follow-up approval `<CAAtX44ZYxUpzOLz1UXNUT-C8CnQSXxGy0hge3ojxW+f3PwBHWw@mail.gmail.com>` are attached as approval/dedupe evidence for the existing no-write/read-only integration plan, not duplicate tasks. Codex/Claude/Integration roles are present in local role docs and Workspaceboard organigram source; AI-Bridge schema/template/registration artifacts are produced; safe AI-Bridge-local implementation added `bridge/memory/work-record-projection-source-map.json` and `bridge/traces/2026-04-20-approved-next-steps-implementation.md`; Frank/Macee/national outreach dated task records and the Security Guard OAuth checklist are created; Portal existing-account summary and read-only MI/Papers registration designs are produced. Next safe action is Code/Git Manager resolution of the Workspaceboard exporter file-ownership request before any code implementation. Live `.205`, MI/Papers writes, OAuth, Portal/CRM mutation, mailbox credential/content access, MCP exposure, deploy/live pull, and service restart remain closed.
 
 - **2026-04-18 Frank / Workspaceboard Response Recovery**
   - Master ID: `AI-INC-20260418-FRANK-WB-RESPONSE-01`
   - Detail log: `project_hub/issues/2026-04-18-frank-workspaceboard-response-incident.md`
   - Repos: `ai_workspace`, `workspaceboard`, `login`, machine-local Frank runtime, Mac mini Workspaceboard LaunchAgent
-  - Status: Frank direct-email routing/ack recovery is complete and Workspaceboard runtime is rebound to `0.0.0.0:17878`; Robert's phone still failed through the MI auth gateway. Local Login source now accepts the gateway `redirect=` handoff for approved Workspaceboard URLs, but live recovery remains blocked on approved Login rollout plus confirmation that live Login issues `.koval.lan` domain session cookies for the `mi.koval.lan` to `wb.koval.lan` transition. Monday update should also include the Mac mini hard-server-mode path: wire Mac mini, migrate/verify Workspaceboard/Frank/Avignon critical services before Aqua/GUI logout, then only consider old workstation GUI logout; no service migration/restart/logout/LaunchDaemon change is approved by this note.
+  - Status: Frank direct-email routing/ack recovery is complete and Workspaceboard runtime is rebound to `0.0.0.0:17878`; Robert's phone still failed through the MI auth gateway. Phone send UX fix commit `60277b5d5c5fbea14a5fe86ef1ecf7cb701a9c82` is pushed and verified present in local Apache and Node runtime routes, but no fresh LaunchAgent reinstall was run during closeout because the Workspaceboard checkout has unrelated dirty work and the installer rsyncs the whole tree. Local Login source now accepts the gateway `redirect=` handoff for approved Workspaceboard URLs, and the 2026-04-20 Login/Auth owner pass classified the remaining approval path 3 as mixed but likely blocked on live Login/MI cookie-domain runtime config or `.205` proxy/TLS/iPhone behavior rather than another broad Login code edit. Exact next action is Security Guard plus `.205`/MI owner approved non-secret live config/header check for `.koval.lan` cookie metadata and `wb.koval.lan` forward-auth behavior; any config/proxy/DNS/TLS/session-policy/service change still needs separate narrow approval and rollback. Monday update should also include the Mac mini hard-server-mode path: wire Mac mini, migrate/verify Workspaceboard/Frank/Avignon critical services before Aqua/GUI logout, then only consider old workstation GUI logout; no service migration/restart/logout/LaunchDaemon change is approved by this note.
 
 - **2026-04-18 Frank/Avignon Gmail Push Planning**
   - Master ID: `AI-INC-20260418-FRANK-AVIGNON-GMAIL-PUSH-01`
   - Detail log: `project_hub/issues/2026-04-18-frank-avignon-gmail-push-plan.md`
   - Repos: `ai_workspace`, future approved work may touch Frank/Avignon machine-local runtime state and Google Cloud Pub/Sub/Gmail API
-  - Status: parked until Monday, 2026-04-20. Keep `com.koval.frank-auto` and `com.koval.avignon-auto` on the current 15-second duplicate-protected polling path, verify polling health first on Monday, and resume true Gmail push/OAuth/PubSub only from the M4 ERTC Google auth context if still needed. 2026-04-19 Security Guard review added a non-secret checklist for Frank/Avignon and future Macee inbox/template OAuth planning. Before approval/reopen: no Google auth changes, OAuth token work, Google Cloud/Pub/Sub/IAM mutation, mailbox content reads, cadence changes, deploy/push/live pull, external sends, or subscriber work.
+  - Status: OAuth continuation approved by Robert after Monday polling health, reaffirmed in source `<CAAtX44ZUHKpHbNWANyLc8bA9wK3X5bxqnUfPP3QrCm9zyJrhnQ@mail.gmail.com>`, and Robert provided approved OAuth client/source metadata for project `gmailconnector-485021` with client id `261057116535-9gf1pqfg090mm2038sackt82p1r8t8i9.apps.googleusercontent.com`. Execution remains blocked because no documented approved Frank/Avignon token storage path/storage class or exact minimum Gmail API scope has been approved. Keep `com.koval.frank-auto` and `com.koval.avignon-auto` on the current 15-second duplicate-protected polling path. No OAuth flow, token write, mailbox read, Pub/Sub/IAM/project/subscriber mutation, cadence/runtime/production change, external send, deploy, push, or live pull was performed in the 2026-04-20 continuation.
 
 - **2026-04-17 Frank/Avignon Runtime CRM Intake Audit**
   - Master ID: `AI-INC-20260417-FRANK-AVIGNON-RUNTIME-CRM-INTAKE-01`
@@ -95,6 +119,18 @@ Last Updated: 2026-04-19 10:16 CDT (Machine: Macmini.lan)
   - Status: default OPS/Portal persistence policy approved 2026-04-17; explicit logout revokes Login/OPS/Portal artifacts globally, and next-day Portal/OPS access requires a fresh Login handoff/user action unless longer app persistence is explicitly approved. Implementation remains gated on Security Guard review and no live/session/credential/deploy action is approved by this policy record.
 
 ## Completed
+
+- **2026-04-20 AI Improvement Manager Role Expansion**
+  - Master ID: `AI-INC-20260420-AI-IMPROVEMENT-MANAGER-ROLE-EXPANSION-01`
+  - Detail log: `project_hub/issues/2026-04-20-ai-improvement-manager-role-expansion.md`
+  - Repos: `ai_workspace`
+  - Status: completed docs/planning expansion from source Message-ID `<CAAtX44Z0DxQ+ruJfOY2fSA2Un617-dfQiF3BQ7R8aaxDiQiQrA@mail.gmail.com>` in session `124bba8f`. Expanded the existing AI Improvement Manager role with concrete process-improvement checks, update opportunities, workflow analytics review, EOD inputs/outputs, routing boundaries, report structure, examples, and approval gates. No runtime, scheduler, mailbox, analytics integration, production, deploy, commit, or push action was performed.
+
+- **2026-04-19 Codex User Password-Reset Gate Review**
+  - Master ID: `AI-INC-20260419-CODEX-PASSWORD-RESET-GATE-01`
+  - Detail log: `project_hub/issues/2026-04-19-codex-user-password-reset-gate-review.md`
+  - Repos: `login`, `ai_workspace`, shared CRM/Login auth database state for Codex user id `1332`
+  - Status: completed after Robert approval on 2026-04-20; updated only Codex user id `1332` password verifier fields from the approved local credential source and verified `reset_required=0`. No password/hash/token/.env content, unrelated user, accessmatrix flag, code, commit, push, deploy, live session, routing, DNS/TLS, or auth policy change was performed. If OPS task creation remains blocked, user id `1332` currently has non-secret access metadata `koval_portal=0`, `koval_ops=0`, and blank `portal_status`; changing those flags needs separate explicit approval.
 
 - **2026-04-18 Salesreport Market Events Static HTML Cleanup**
   - Master ID: `AI-INC-20260418-SALESREPORT-MARKET-EVENTS-STATIC-HTML-CLEANUP-01`

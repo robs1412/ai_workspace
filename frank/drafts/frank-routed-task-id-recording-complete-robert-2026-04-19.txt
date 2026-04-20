@@ -1,0 +1,31 @@
+Hi Robert,
+
+I added a Frank routed-task ID recording convention and updated the local completion-confirmation preview helper so future routed-email closeouts can carry the same compact ID block. The convention keeps the source Message-ID, Frank local task ID, visible board/Codex session ID, Claude/bridge task ID, OPS/Portal task ID, outbound Message-ID, dedupe key, and current status as separate fields.
+
+I aligned it with the AI Workspace bridge notes and Claude's `task #...` / `ref:...` pattern without making up unavailable IDs. When Claude or an approved bridge log has a task/ref, Frank records it; when it does not, the field says `not available`. OPS/Portal IDs remain preferred when created through the approved path, but the historical Frank source/local/session IDs stay attached.
+
+What changed:
+- Added `routed-task-id-recording.md` as Frank's local ID-block convention/template.
+- Updated `scripts/frank_completion_confirmation.py` dry-run output to render the compact ID block.
+- Recorded this task in Frank TODO/HANDOFF with the source Message-ID, dedupe key, local task ID, board session `bff2d116`, current status, and the unavailable Claude/OPS IDs explicitly marked.
+
+Verification:
+- Read Frank TODO/HANDOFF and non-secret AI Workspace bridge/task-record notes.
+- Confirmed the existing bridge notes reference Claude's `task #1361` / `ref:2379` pattern and prefer OPS/Portal IDs when available.
+- Ran Python compile on the completion-confirmation helper.
+- Ran a preview-only completion report to verify the new ID block renders correctly.
+
+Not done:
+- I did not read private mailbox bodies beyond the source metadata already provided.
+- I did not create OPS/Portal tasks, change OAuth/auth, alter polling cadence, mutate runtime LaunchAgents, deploy, push, or touch production systems.
+- I did not invent a Claude/bridge task ID or OPS/Portal ID for this source.
+
+ID block:
+- Source Message-ID: <CAAtX44asa5JXGUhiF7KXuNzCC4dnfFvjGhyAXjFON62Qq=DnbA@mail.gmail.com>
+- Dedupe key: frank-routed-task-id-recording-CAAtX44asa5JXGUhiF7KXuNzCC4dnfFvjGhyAXjFON62Qq-DnbA
+- Local task ID: frank-2026-04-19-routed-task-id-recording-workflow
+- Board/Codex session ID: bff2d116
+- Claude/bridge task ID: not available
+- OPS/Portal task ID: none created
+- Outbound Message-ID: logged on this email's send record
+- Current status: completed

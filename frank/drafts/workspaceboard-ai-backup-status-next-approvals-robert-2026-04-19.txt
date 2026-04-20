@@ -1,0 +1,20 @@
+Robert,
+
+I reviewed the local AI Workspace, Workspaceboard, project-hub, Frank/Avignon, and AI-Bridge records for backup coverage, and I also asked Claude for the .200 external-drive context. Claude request sent to claude@koval-distillery.com with you copied, subject `Backup context for Workspaceboard and AI work product`, Message-ID `<177664819744.56612.7942568387030999886@kovaldistillery.com>`. We are now waiting on Claude's non-secret details about what .200 backs up, cadence, encryption/versioning, retention, and restore testing.
+
+Current state: git protects committed and pushed repo work, but it does not protect dirty/untracked local changes or runtime-only state. The important gaps are Workspaceboard runtime/session metadata, session attachments/history, Frank/Avignon machine-local logs/drafts/decision records, installed runtime/LaunchAgent metadata, and AI-Bridge local artifacts that are not yet protected by a remote from this machine.
+
+Recommended model: keep git as the source-code/planning backup, add encrypted local snapshots for non-git runtime and assistant records, then mirror approved encrypted snapshots to an external/offsite target. Secrets, OAuth tokens, app passwords, private keys, .env values, and private mailbox bodies should stay out of git and plain manifests and only be handled through an approved encrypted/keychain/secret-manager path.
+
+Next steps:
+1. Wait for Claude's .200 external-drive backup details and fold them into the plan.
+2. Have Code/Git Manager review dirty/untracked backup-critical docs/artifacts before relying on git coverage.
+3. Draft a non-secret backup inventory and restore-test checklist.
+4. Have Security Guard review sensitive-state backup boundaries.
+5. Only after approval, implement a backup/snapshot workflow and restore test.
+
+Approvals needed before implementation: approve the backup destination model, approve whether .200 external drive is in scope, approve encrypted handling for sensitive machine-local state, and approve any restore test that touches runtime or external media.
+
+Status: design/status complete; no backup implementation performed.
+
+Frank

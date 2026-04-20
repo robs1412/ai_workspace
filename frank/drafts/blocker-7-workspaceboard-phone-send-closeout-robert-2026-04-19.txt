@@ -1,0 +1,9 @@
+Robert,
+
+Work session: 4a3d38b5 / Frank one by one blocker emails.
+
+Blocker 7 is Workspaceboard phone-send Code/Git closeout.
+
+Do you approve Code/Git to stage, commit, and push only the narrow reviewed Workspaceboard phone-send slice?
+
+Boundary: deploy, runtime reinstall, LaunchAgent restart, auth/Login/MI work, DNS/TLS/proxy changes, and any live pull remain separate approval-gated steps.

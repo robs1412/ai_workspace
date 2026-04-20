@@ -1,0 +1,32 @@
+Robert,
+
+Point first: I could not safely complete the six recovered CRM/activity items because the recovered local state does not contain the actual business details needed to make CRM changes.
+
+What is missing, in human terms:
+
+- which account or company each request belongs to
+- which contact or person is involved, if any
+- whether Avignon should create a new account/contact or update an existing one
+- the exact fields and values to enter
+- for activities: the activity type, date, notes, and which account/contact the activity belongs to
+- how to identify duplicates or the intended existing CRM record
+- whether Avignon may proceed as routine once those details are supplied
+
+The recovered metadata only gives broad labels such as "Add activity to CRM," "CRM addition," and "CRM addition and activity update requested." It does not include the names, companies, record targets, field values, activity notes, or duplicate clues needed to act without guessing.
+
+The prior Message-ID-only blocker I sent Sonat was not useful enough for Robert/Sonat action. Going forward, Avignon decision and blocker emails must include human-readable context first: subject, name/company, action needed, current blocker, and recommended next step. Source IDs should be trace references only, not the decision surface.
+
+No CRM, Portal, or OPS records were created, updated, linked, merged, deleted, marked reviewed, or otherwise changed.
+
+Recommended next action: Robert or Sonat can send a simple list or table with one row per requested CRM/activity change:
+
+- company/account
+- contact/person
+- action: create, update, or activity
+- field values, or activity note/date/type
+- duplicate or existing-record clue
+- approval for Avignon to proceed as routine once the row is clear
+
+Trace reference: Portal recovery worker session 8ef5557d handled the six recovered CRM/activity sources from task avignon-sonat-handled-mail-recovery-2026-04-20. Source Message-IDs are available in Avignon TODO/HANDOFF as backup references.
+
+Avignon

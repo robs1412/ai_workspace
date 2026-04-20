@@ -1,0 +1,9 @@
+Robert,
+
+Work session: 4a3d38b5 / Frank one by one blocker emails.
+
+Blocker 2 is the open CRM target/link decision.
+
+Which exact CRM target/link should Avignon use for the remaining CRM records?
+
+Boundary: no CRM, Portal, importer, or live-data mutation should proceed until the exact target/link is named and duplicate risk is resolved.

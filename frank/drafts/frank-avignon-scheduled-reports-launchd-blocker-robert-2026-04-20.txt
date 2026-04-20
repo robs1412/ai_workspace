@@ -1,0 +1,32 @@
+Robert,
+
+Context:
+Frank/Avignon scheduled-report runtime remediation was completed as far as the current non-privileged/user-session boundary allows. Source worker `f704aa61` inspected the installed scheduled-report LaunchAgents after the daily updates incident and applied the bounded fix that was available without password handling or privileged launchd changes.
+
+Result:
+`com.koval.frank-morning-overview` already had both 06:00 and 18:00 `StartCalendarInterval` entries, so no final functional Frank plist change was needed. `com.koval.avignon-morning-overview` was updated so Avignon now has both 06:00 and 18:00 schedule entries using Avignon runtime/log paths.
+
+Verification:
+`plutil -lint` passes for both installed plists. The relevant admin-owned runtime/log directories are writable. Both Frank and Avignon helpers completed explicit EOD `--dry-run` checks without sending. `launchctl enable user/501` completed for both labels.
+
+Decision/blocker state:
+Both labels remain enabled but not loaded as services in `user/501`. `launchctl bootstrap user/501` failed with error 5, `bootstrap gui/501` failed with error 125, legacy `load -w` exited 134, and `sudo -n bootstrap` was unavailable because sudo requires a password. No password prompt was opened or handled.
+
+Proposed safe next action:
+Keep the current partial fix in place and perform the load verification from an active Aqua/gui user session, or approve a separate privileged/hard-server-mode launchd remediation slice that can migrate or load these services safely after reboot/logged-out state.
+
+Approval boundary:
+This slice did not change secrets, passwords, tokens, private keys, credential contents, mailbox bodies, OAuth, Gmail push, Pub/Sub, IAM, Google Cloud, DNS, TLS, router, `.205`, Workspaceboard runtime, production deploy state, code commits/pushes, polling cadence, `com.koval.frank-auto`, or `com.koval.avignon-auto`. It also did not perform privileged launchd work or password handling.
+
+Needed:
+Either an active Aqua/gui user-session launch/load step for these user LaunchAgents, or explicit approval for the separate privileged/hard-server-mode launchd remediation path.
+
+Next:
+Frank/Avignon scheduled-report paths and Avignon morning/evening schedule entries are now in place. The remaining blocker is launchd loading after reboot/logged-out state; once the load boundary is cleared, the next check should confirm both scheduled-report labels are loaded and ready for the 06:00 and 18:00 runs.
+
+Source tracking:
+- Source Message-ID: <CAAtX44YHbyyXDVws5=DRs+77N3O63WEf_+TBnD1yUaBvDTVaoQ@mail.gmail.com>
+- Source Message-ID: <CAAtX44bzZ3kojULqhSxsNdOFRKXqzxg0uwsZDkR1F4sb3JNK3w@mail.gmail.com>
+- Source worker: `f704aa61` / Frank Avignon scheduled reports remediation approved
+
+Frank

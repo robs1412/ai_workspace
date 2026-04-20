@@ -1,0 +1,92 @@
+Robert,
+
+Resending the recent Frank completion reports that were logged as sent but missed. I am bundling them here to avoid five separate messages. The diagnostic tests were received, so this resend uses the same working send path.
+
+Skipped: `Dmytro calendar meeting added` was not resent because your follow-up on the thread was logged as a thanks/positive acknowledgement. Original Message-ID: <177663294486.17936.11663904666152187963@kovaldistillery.com>.
+
+1. Salesreport audit gaps and Monday follow-up
+
+Original Message-ID: <177663298539.20068.1942596357120237443@kovaldistillery.com>
+Task ID: frank-2026-salesreport-audit-summary-monday-gaps-2026-04-19
+Visible session: 58df8905
+Source Message-ID: <CAAtX44aFMW1gypQ7GGOnBKe4j2uzDm=MvwpBaqGxBzvF6A20xw@mail.gmail.com>
+
+Frank reviewed the local Salesreport audit materials and summarized the open gaps. The existing read-only audit surfaces are Prior-Month Production Edits and Shipped-vs-Bottled Mismatches. Remaining decisions are mostly source-owner definitions: canonical shipped-vs-bottled SQL/formula rules, close timestamp and created-after-close behavior, soft-delete handling, shipment/open-picklist/loss semantics, access scope, and whether the sub-2000-lb production check belongs in Salesreport or a Portal-owned audit rule.
+
+AI sales reporting remains gated. The smallest safe first monthly packet is CRM-backed Illinois sales summaries plus National Sales Assistant re-engagement and lost-account sections. Top-product ranking and warehouse-vs-distribution comparison are seeded but should wait for approved definitions and source ownership.
+
+What was not done: no raw OPS DB/API bypass, no production mutation, no deploy/live pull, no commit/push, no runtime change, and no infrastructure handling. Remaining blocker: the intended silent OPS task `Fill Salesreport audit gaps from Frank summary`, due 2026-04-20 and assigned to Codex, could not be created because `/Users/werkstatt/ops/scripts/create_codex_task.php` returned `Portal access requires the mandatory security password reset`. The `.205 / wb` bad-gateway issue remains separate in Workspaceboard session `f9f2b030`.
+
+2. Claude Papers email-text follow-up complete
+
+Original Message-ID: <177663320427.29902.13714328536849715424@kovaldistillery.com>
+Task ID: frank-2026-claude-papers-email-text-follow-up-2026-04-19
+Visible session: ba40b59d
+Source Message-ID: <CAAtX44YrM-iyMkG220Dai+jzW2afC_S+yjaQwGXA+vaL3N-QUQ@mail.gmail.com>
+
+Frank attached your source instruction to the existing Claude AI workspace route instead of creating a duplicate route. Claude had already replied on the tracked thread with the Papers assessment resent as email text, so Frank did not send a duplicate nudge to Claude.
+
+What changed: TODO/HANDOFF now record the source Message-ID, dedupe key, existing route, visible session, and completion status. The local record notes Claude's email-text response source as <666e4b258f67e6cf755422bd3a381480.claude@koval-distillery.com>.
+
+What was not done: no Papers access, Papers/MI read/write, credential/auth work, runtime cadence change, deploy, commit/push, or destructive action. Remaining blocker: none for this follow-up.
+
+3. Frank and Avignon email formatting fixed
+
+Original Message-ID: <177663349322.36871.5513170878204110685@kovaldistillery.com>
+Task ID: frank-avignon-email-context-signature-fix-2026-04-19
+Visible session: 0636ae32
+Source Message-ID: <CAAtX44b2TeGjyqiz9Eu8hSt7HjyUDioP7eoVO7SQ1z4m_EKmgw@mail.gmail.com>
+
+Frank updated the installed Frank and Avignon send/capture/report formatting surfaces so future outbound messages from those paths include useful context paragraphs before reference details. The default Frank and Avignon signatures were restored; Avignon keeps Avignon-specific role/company details and does not copy Robert's personal title/contact details.
+
+Verification: Python compile passed; Frank send-helper dry-run, Avignon send-helper dry-run, Avignon morning-summary dry-run, Frank direct-capture acknowledgement preview, and Frank completion-confirmation preview all rendered expanded context plus restored signatures.
+
+What was not done: no OAuth/auth, credential change, polling cadence change, mailbox filing, production mutation, deploy, push, or external test email.
+
+4. Frank signature social links fixed
+
+Original Message-ID: <177663402412.48555.7577548409194901162@kovaldistillery.com>
+Task ID: frank-signature-social-links-fix-2026-04-19
+Visible session: 9f7823b5
+Source Message-ID: <CAAtX44Zdop6K5a=5tzQ+3u2-bFBVLs9jdfxZEsPis-LvnX5a6Q@mail.gmail.com>
+
+The first completion note was superseded by your follow-up: it still showed the X URL visibly. The task was amended afterward so the rendered HTML signature uses linked text `X` with target `http://www.x.com/kovaldistillery` for both Frank and Avignon. Avignon's role/contact identity remains intact.
+
+Verification: Python compile passed for both installed helpers; Frank and Avignon dry-run HTML alternatives contained the X anchor, and rendered-text checks confirmed the raw X URL was not visible text.
+
+What was not done: no OAuth/auth, credential change, polling cadence change, mailbox filing, production mutation, deploy, push, or external test email. No second completion report was sent before this resend.
+
+5. Frank routed task ID recording workflow complete
+
+Original Message-ID: <177663408472.52512.7962573480166008562@kovaldistillery.com>
+Task ID: frank-2026-04-19-routed-task-id-recording-workflow
+Visible session: bff2d116
+Source Message-ID: <CAAtX44asa5JXGUhiF7KXuNzCC4dnfFvjGhyAXjFON62Qq=DnbA@mail.gmail.com>
+
+Frank added a local routed-task ID recording convention and updated the completion-confirmation preview helper so future routed-email closeouts carry a compact ID block: source Message-ID, dedupe key, local task ID, board/Codex session ID, Claude/bridge task ID when supplied, OPS/Portal task ID when created, outbound Message-ID, and current status.
+
+Verification: read Frank TODO/HANDOFF and non-secret bridge/task-record notes, confirmed Claude's `task #...` / `ref:...` pattern and OPS/Portal ID preference, Python compile passed, and preview-only completion output rendered the ID block correctly.
+
+What was not done: no private mailbox body read beyond supplied metadata, no OPS/Portal task creation, no OAuth/auth, no polling cadence change, no LaunchAgent/runtime mutation, no deploy/push, and no invented Claude/OPS ID. For this source, Claude/bridge task ID is not available and OPS/Portal task ID is none created.
+
+6. Runtime Python 3.9 send-helper repair and delivery diagnostic
+
+Task/session: diagnostic session 39727394
+Frank diagnostic Message-ID: <177663972039.28215.562038281291676544@kovaldistillery.com>
+Avignon diagnostic Message-ID: <177663972039.28210.698276931497231166@kovaldistillery.com>
+
+Frank/Avignon send-helper import failures were checked after Task Manager reported Python 3.9 crashes from `html_body: str | None = None`. The active installed helpers already use the Python 3.9-safe `html_body=None`, and `rg` found no remaining `| None` annotations in either helper. Backups were preserved before verification.
+
+Verification: Python 3.9.6 `py_compile` passed for both helpers; script-directory import checks passed; both helpers loaded `--help`; fresh launchd stdout advanced normally after the old 16:32 CDT error-log entries. The two diagnostic emails were sent with the explicit private credential plus state sent-log override path and were confirmed received.
+
+What was not done: no credential contents were read or printed, no OAuth/auth change, no Google Workspace/quarantine work, no DNS/routing/LaunchAgent/polling cadence change, no production mutation, and no git action.
+
+Avignon visibility note
+
+I did not resend Sonat-only Avignon reports to Robert. Recent Avignon reports found in local non-secret sent logs:
+
+- `New CRM accounts and contacts entered`, sent to Sonat only, Message-ID <177661321931.37680.11405389492595920280@kovaldistillery.com>. Sonat's tracked reply was logged no-action, so it appears received.
+- `CRM cleanup: plain-English remaining decisions`, sent to Sonat with Robert cc, Message-ID <177661436956.52315.8467458566500911223@kovaldistillery.com>. Robert and Sonat tracked replies were logged no-action, so it appears received and was not resent.
+- `Meeting with Robert scheduled`, sent to Sonat only, Message-ID <177663586164.17202.3915562064317338952@kovaldistillery.com>. Robert was invited through Google Calendar; this was not copied as an email report.
+
+No remaining resend blocker from this pass.

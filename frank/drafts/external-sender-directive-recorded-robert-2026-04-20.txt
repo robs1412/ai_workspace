@@ -1,0 +1,54 @@
+Subject: External sender handling directive recorded
+To: robert@kovaldistillery.com
+Task ID: frank-avignon-external-sender-directive-recorded-2026-04-20
+
+Subject: Re: External sender handling plan drafted
+
+From/date: Robert Birnecker <robert@kovaldistillery.com> / Mon, 20 Apr 2026 09:31:57 -0700.
+
+Context:
+You approved the external-sender handling plan for Frank and Avignon. I also recorded your confirming reply from the blocker thread: "I just approved in next e-mail, yes."
+
+Source IDs:
+- Approval Message-ID: <CAAtX44ZtTzCMqg-eZgO2X5rfkf+hhF2CzOzv+uyHe=T0GN7QRw@mail.gmail.com>
+- Confirmation Message-ID: <CAAtX44YfMtfrf_dA69mw7uLZvuBO=j-kZraJYskdLYjrPr9gvA@mail.gmail.com>
+- Original plan source Message-ID: <CAAtX44YqrppVfTaoFxJqVRpNZgYy2XLWDvSeoBiwjiCyg-=eKQ@mail.gmail.com>
+- Prior blocker email Message-ID: <177665435606.75142.13942827033074478850@kovaldistillery.com>
+
+What changed:
+- The external-sender plan is now recorded as an approved active directive for both Frank and Avignon.
+- External senders must not receive internal control-surface confirmations: no captured/routed/worker-started/completion/blocker notes, board/session/task status, source Message-IDs, TODO/HANDOFF details, or approval-gate language.
+- External replies, when allowed, must be normal business responses only.
+- Default external handling is internal log/file, draft-only, visible internal routing, or human-approved send by category.
+- External auto-send remains disabled unless a separate approval names the sender class, template, allowed facts, recipients, duplicate checks, and stop conditions.
+
+Files updated:
+- /Users/werkstatt/ai_workspace/AGENTS.md
+- /Users/werkstatt/ai_workspace/frank/AGENTS.md
+- /Users/werkstatt/ai_workspace/avignon/AGENTS.md
+- /Users/werkstatt/ai_workspace/worker_roles/frank-cannoli.md
+- /Users/werkstatt/ai_workspace/worker_roles/avignon-rose.md
+- /Users/werkstatt/ai_workspace/frank/external-sender-email-handling-plan.md
+- /Users/werkstatt/ai_workspace/TODO.md
+- /Users/werkstatt/ai_workspace/frank/TODO.md
+- /Users/werkstatt/ai_workspace/avignon/TODO.md
+- /Users/werkstatt/ai_workspace/HANDOFF.md
+- /Users/werkstatt/ai_workspace/frank/HANDOFF.md
+- /Users/werkstatt/ai_workspace/avignon/HANDOFF.md
+
+Approval boundary:
+This approval sets the directive only. It does not approve external auto-send, new templates, mailbox settings, runtime changes, OAuth/auth work, credential handling, production/deploy work, LaunchAgent/daemon changes, git commits/pushes, or live pulls.
+
+Needed:
+Nothing else is needed for the directive itself. Future external auto-send still needs a separate named sender class/template approval.
+
+Next:
+Frank and Avignon should apply this rule during inbox triage and routed work. If an external reply is needed and no named template covers it, draft or ask for human approval before sending.
+
+Decision state:
+Approved and recorded. The two 2026-04-20 approval Message-IDs are attached to the same directive update for dedupe, so blocker 1 should not resurface as an open decision unless you change the directive.
+
+No prohibited action occurred:
+No external-sensitive email was sent, no mailbox bodies were read or quoted, no secrets/credentials/tokens/private keys were exposed, and no mailbox settings, runtime daemons, auth/OAuth, production, deploy, git, LaunchAgent, or destructive state was changed.
+
+Frank

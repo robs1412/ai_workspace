@@ -1,0 +1,30 @@
+Robert,
+
+Salesreport audit summary from the current local docs:
+
+- Production audit surfaces exist in Salesreport as read-only review pages:
+  - Prior-Month Production Edits: finds production records in a selected month whose modified timestamp is after the close cutoff, defaulting to after day 5.
+  - Shipped-vs-Bottled Mismatches: lists bottling batches where bottles remaining does not match expected remaining after shipped bottles, open picklists, and recorded losses.
+
+- The main gaps are definition and ownership gaps, not missing proof of a Salesreport code path:
+  - Portal/source owner still needs to confirm the canonical shipped-vs-bottled view SQL and formula rules.
+  - Prior-month close semantics still need confirmation: close timestamp, created-after-close handling, soft-delete handling, and whether the <2000 lb production check belongs in Salesreport or a separate Portal-owned audit rule report.
+  - Shipped/open-picklist/loss semantics still need confirmation, including which shipment states, open picklist states, loss categories, stale/canceled rows, and warehouse adjustments count.
+  - Salesreport access scope still needs a decision: all authenticated users through header.php vs a narrower warehouse/admin allowlist.
+
+- AI sales reporting is also locally contracted but still gated:
+  - The smallest first monthly packet should stay CRM-backed only unless you/Sonat approve more: Illinois sales summaries plus National Sales Assistant re-engagement and lost-account sections.
+  - Top-product ranking and warehouse-vs-distribution comparison are seeded but stubbed and should be separate implementation candidates after definitions are approved.
+  - Web analytics, distributor cleanup, importer roster, and BID artifacts still need source owners and approved export/import boundaries before Salesreport consumes them.
+
+Monday follow-up:
+
+I attempted to create the Monday OPS task silently for 2026-04-20, assigned to Codex, to fill these gaps. The approved helper is currently blocked by the existing Portal auth/password-reset gate:
+
+`/Users/werkstatt/ops/scripts/create_codex_task.php` failed with `Portal access requires the mandatory security password reset`.
+
+Because of that, I recorded the Monday task/blocker locally instead of bypassing OPS with a raw write. The task to create once OPS auth is repaired is: `Fill Salesreport audit gaps from Frank summary`, due 2026-04-20, owner/assignee Codex, with this source message:
+
+`<CAAtX44aFMW1gypQ7GGOnBKe4j2uzDm=MvwpBaqGxBzvF6A20xw@mail.gmail.com>`
+
+The .205 / wb bad-gateway part is separate and already routed to Workspaceboard session `f9f2b030`; I did not handle it here.

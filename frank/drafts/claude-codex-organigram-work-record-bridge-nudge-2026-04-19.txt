@@ -1,0 +1,13 @@
+Claude,
+
+Quick nudge on the Codex / Claude organigram and task-record bridge.
+
+Please send the pending bridge response with the specific non-secret fields Codex needs next:
+
+- where Claude logs task numbers and refs such as task #1361 and ref:2379
+- which task-record fields Claude can return reliably for Codex to consume
+- whether Claude can return a non-secret JSON summary for each newly created task
+- any constraints around assigning Claude-side agents
+- your recommendation for avoiding duplicate records between Portal/OPS, Papers/MI, Workspaceboard, Codex, and Claude
+
+Keep credentials, private mailbox bodies, tokens, .env values, private keys, and private Papers/MI content out of the reply.

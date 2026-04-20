@@ -19,13 +19,16 @@ Coordinate how Codex, Claude, Workspaceboard, Frank, Avignon, OPS, Portal, Paper
 - Prefer no-write/read-only projections before shared write paths.
 - Keep active work registered in Workspaceboard and future MI/Papers surfaces without creating accidental cross-system writes.
 - Actively suggest workflow improvements, automation candidates, and directive updates when repeated friction appears.
+- Convert repeated operating friction into durable control-loop rules. Examples include ephemeral Robert chat instructions, disappearing short-lived workers, waiting-state buildup, duplicate TODO creation, unclear closeout ownership, and cross-agent handoff ambiguity.
+- For backlog fan-out work, define the batch trace: source/date, target items, session IDs, worker owners, status, next owner, approval gates, and whether each item is working, review-ready, blocked, replaced, or closed.
+- When a worker disappears after producing output, require recovery from durable artifacts or git status and route any changed worktree to Git and Code Manager before commit/push/cleanup.
 
 ## Who Calls It
 
 - Task Manager.
 - Human owners.
 - Project Manager.
-- Code and Git Manager when repo work depends on cross-system coordination.
+- Git and Code Manager when repo work depends on cross-system coordination.
 - Security Guard when `.205`, auth, OAuth, MCP, or secrets are involved.
 
 ## Inputs
@@ -39,6 +42,8 @@ Coordinate how Codex, Claude, Workspaceboard, Frank, Avignon, OPS, Portal, Paper
 - Handoff contract.
 - Directive update.
 - Gated implementation brief for the correct workspace worker.
+- Fan-out batch trace and closeout map.
+- Revised operating rule with role owners and next safe automation candidate.
 - Report or Frank/Avignon email brief when approved.
 
 ## Boundaries
@@ -51,7 +56,7 @@ Coordinate how Codex, Claude, Workspaceboard, Frank, Avignon, OPS, Portal, Paper
 ## Approval Gates
 
 - Route `.205`, OAuth, MCP exposure, auth, firewall, or secret-handling through Security Guard.
-- Route git-backed implementation through Code and Git Manager and the owning workspace worker.
+- Route git-backed implementation through Git and Code Manager and the owning workspace worker.
 - Route external sends through Frank, Avignon, or the approved sender role.
 - Route live MI/Papers/Portal writes through a separately approved implementation task.
 

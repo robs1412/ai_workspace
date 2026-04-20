@@ -126,3 +126,44 @@ Recover two user-visible failures reported by Robert:
 - Guardrails: no `.205`, Traefik/proxy, DNS, LaunchAgent, service runtime, OAuth/auth credential, live session/cookie, production, deploy, live pull, commit, push, or restart action was performed.
 - Verification: JS/PHP syntax checks, `npm test` in Workspaceboard `server` (`25` passing), local source Apache checks, and a non-mutating DOM/fetch harness with delayed mocked send passed. Chrome headless crashed before screenshot capture.
 - Remaining approvals: Code/Git Manager closeout before commit/push/deploy/reinstall; Security Guard/Login/.205 owner approval before any auth-cookie, proxy, certificate/DNS, or service-runtime mutation.
+
+## 2026-04-20 Login/Auth Owner Update — Approval Path 3 Classification
+
+- Source approvals reviewed:
+  - `<CAAtX44b7U2LQkRgT6-oxN2gd8eWKojDqiHufesghsF91tO0r_A@mail.gmail.com>` on 2026-04-19 19:04:14 -0500, summary `Approve both`.
+  - `<CAAtX44b_=rOy4RdMZpJpJiCGMmjv32WOO_0BHkor2hGx10SDDQ@mail.gmail.com>` on 2026-04-19 19:04:52 -0500, summary `Approve all 3`.
+- Login/Auth worker classification: mixed issue, but the next unresolved blocker is live Login/MI runtime config or `.205` proxy/TLS/iPhone behavior, not a broad new Login source-code change.
+- Evidence checked:
+  - Login TODO/HANDOFF/AGENTS and AI Workspace safety policy.
+  - Login commits `90f397a` and `8c338d8`.
+  - Login code paths for `redirect=` handling, absolute Workspaceboard redirect allowlisting, session cookie domain handling, session cookie refresh, SSO cookie domain handling, and env loading.
+  - Existing Login SSO persistence preflight doc.
+  - Workspaceboard auth dependency showing canonical host gating, trusted `.205` forward-auth source, and remote allowlist behavior.
+- Findings:
+  - Local Login source already accepts the MI gateway `redirect=` parameter and only allows absolute post-login redirects to the two approved Workspaceboard hosts under `/workspaceboard`.
+  - Local Login source already supports `LOGIN_SESSION_COOKIE_DOMAIN` and only emits a domain-scoped `PHPSESSID` when the configured domain matches the current non-IP host.
+  - Existing live evidence remains that the MI login response issued host-only `PHPSESSID` with no `Domain=.koval.lan`; that points to missing/not-loaded live cookie-domain runtime config, a proxy/header/runtime mismatch, or a deliberate MI/Login environment policy.
+  - Workspaceboard remote serving depends on `.205` forward auth preserving the canonical `wb.koval.lan` host and sending the expected non-secret identity headers; if that path differs on iPhone, the symptom will look like auth persistence or serving failure.
+- Verification in this pass:
+  - `php -l auth_helpers.php`
+  - `php -l index.php`
+  - `php -l sso_helpers.php`
+  - `php -l /Users/werkstatt/workspaceboard/workspaceboard_auth.php`
+- No safe local Login code change was made. No `.205`, Traefik/proxy, DNS, TLS/cert, credential, `.env`, production DB/session, LaunchAgent, service runtime, deploy, live pull, push, restart, mailbox, or live auth behavior was changed. No secrets or cookie/session values were read or printed.
+- Exact blocker / next owner action: Security Guard plus `.205`/MI owner approval is required for a non-secret live config check confirming whether `LOGIN_SESSION_COOKIE_DOMAIN=.koval.lan` is loaded for `mi.koval.lan`, whether `Set-Cookie` metadata includes `Domain=.koval.lan`, `Secure`, `HttpOnly`, and expected `SameSite`, and whether `.205` forwards authenticated Workspaceboard requests with `Host: wb.koval.lan` and the expected identity headers. Any actual config/proxy/DNS/TLS/session-policy/service change needs a separate narrow approval and rollback path.
+
+## 2026-04-20 11:38 CDT Update — Phone Send Code/Git Closeout Review
+
+- Source approval: Robert replied `Yes, approve` in Message-ID `<CAAtX44ZixNMQH5OdkYtG8nNzbhbJHzECOGj0RyNbN+J-NRgE4g@mail.gmail.com>` for the Workspaceboard phone send closeout blocker.
+- Classification: approval is sufficient for the exact Workspaceboard phone send UX slice, but not for unrelated dirty source work, auth/Login/cookie/proxy/DNS/TLS changes, secret handling, force-push/reset/clean, session cleanup, or broad runtime changes.
+- Commit/push state: source commit `60277b5d5c5fbea14a5fe86ef1ecf7cb701a9c82` (`Fix phone task manager send UX`) is already on `main` and `origin/main`. The commit contains the scoped phone send files: `assets/task-manager-phone.js`, `task-manager-phone.html`, `TODO.md`, and `HANDOFF.md`.
+- Verification in closeout pass:
+  - `node --check assets/task-manager-phone.js`
+  - `php -l task-manager-phone.html`
+  - `git ls-remote origin refs/heads/main` returned `60277b5d5c5fbea14a5fe86ef1ecf7cb701a9c82`
+  - local Apache source page `http://127.0.0.1/workspaceboard/task-manager-phone.html` loads `assets/task-manager-phone.js?v=11`
+  - local Node runtime `http://127.0.0.1:17878/task-manager-phone.html` loads `assets/task-manager-phone.js?v=11`
+  - local Node runtime JS contains the send-in-flight, duplicate-blocking, `wait_ms: 0`, and failed-message restore behavior
+  - unauthenticated `https://wb.koval.lan/workspaceboard/task-manager-phone.html` returns the expected `307` redirect to MI login
+- Deploy/live state: no new commit, push, LaunchAgent reinstall, runtime restart, auth/session/proxy/DNS/TLS mutation, `.205` change, secret access, or production data mutation was performed in this closeout pass. The phone send fix is already present in both the local Apache source route and local Node LaunchAgent runtime.
+- Stop condition for further reinstall: the Workspaceboard checkout currently contains unrelated dirty work and untracked backup files, and `scripts/install_codex_dashboard_launchagent.sh` rsyncs the full checkout into the runtime. Running it now would deploy unrelated changes outside the phone-send approval boundary. Next safe action is to review/commit/move aside the unrelated dirty work or reinstall from a clean source tree pinned to the approved commit.

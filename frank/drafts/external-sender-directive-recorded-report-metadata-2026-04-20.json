@@ -1,0 +1,16 @@
+{
+  "task_id": "frank-avignon-external-sender-directive-recorded-2026-04-20",
+  "mode": "draft_only",
+  "sent": false,
+  "outbound_message_id": null,
+  "to": "robert@kovaldistillery.com",
+  "subject": "External sender handling directive recorded",
+  "approval_source_message_id": "<CAAtX44ZtTzCMqg-eZgO2X5rfkf+hhF2CzOzv+uyHe=T0GN7QRw@mail.gmail.com>",
+  "confirmation_source_message_id": "<CAAtX44YfMtfrf_dA69mw7uLZvuBO=j-kZraJYskdLYjrPr9gvA@mail.gmail.com>",
+  "original_plan_source_message_id": "<CAAtX44YqrppVfTaoFxJqVRpNZgYy2XLWDvSeoBiwjiCyg-=eKQ@mail.gmail.com>",
+  "draft_path": "frank/drafts/external-sender-directive-recorded-robert-2026-04-20.txt",
+  "state": "approved_recorded_deduped",
+  "runtime_changed": false,
+  "mailbox_settings_changed": false,
+  "external_email_sent": false
+}

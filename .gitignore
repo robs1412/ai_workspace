@@ -12,6 +12,7 @@
 **/*credential*.txt
 **/*oauth*.json
 **/*oauth*.txt
+**/*.private.*
 **/*.key
 **/*.mobileconfig
 **/*.p12

@@ -1,0 +1,463 @@
+{
+  "mail_count": 25,
+  "private_body_path": "/Users/werkstatt/ai_workspace/frank/drafts/claude-avignon-context-frank-mail-2026-04-19.private.txt",
+  "sent_log_matches": [
+    {
+      "task_id": "frank-2026-phplist-crm-activity-logging-closeout",
+      "subject": "phpList CRM activity logging workflow",
+      "to": "robert@kovaldistillery.com, sonat@kovaldistillery.com, mark@kovaldistillery.com, sebastian.saller@kovaldistillery.com, dmytro.klymentiev@kovaldistillery.com",
+      "cc": null,
+      "message_id": "<177613481906.89489.8467501982353652777@kovaldistillery.com>",
+      "body_file": null,
+      "timestamp": null,
+      "sent_at": null
+    },
+    {
+      "task_id": "frank-2026-claude-ai-workspace-setup-review",
+      "subject": "Thoughts on our AI workspace setup",
+      "to": "claude@koval-distillery.com",
+      "cc": "robert@kovaldistillery.com, dmytro.klymentiev@kovaldistillery.com",
+      "message_id": "<177613497877.99161.593567773976868219@kovaldistillery.com>",
+      "body_file": null,
+      "timestamp": null,
+      "sent_at": null
+    },
+    {
+      "task_id": "frank-2026-claude-ai-workspace-setup-review",
+      "subject": "Re: Thoughts on our AI workspace setup",
+      "to": "claude@koval-distillery.com",
+      "cc": "robert@kovaldistillery.com, dmytro.klymentiev@kovaldistillery.com",
+      "message_id": "<177629796184.80432.14500445905034001379@kovaldistillery.com>",
+      "body_file": null,
+      "timestamp": null,
+      "sent_at": null
+    },
+    {
+      "task_id": "frank-2026-claude-ai-workspace-setup-review",
+      "subject": "Re: Thoughts on our AI workspace setup",
+      "to": "claude@koval-distillery.com",
+      "cc": "robert@kovaldistillery.com, dmytro.klymentiev@kovaldistillery.com",
+      "message_id": "<177629980421.91313.6598468007303302370@kovaldistillery.com>",
+      "body_file": null,
+      "timestamp": null,
+      "sent_at": null
+    },
+    {
+      "task_id": "frank-2026-claude-data-import-xls-validation-order-fix",
+      "subject": "Claude task: data-import XLS mapping validation order fix",
+      "to": "claude@koval-distillery.com",
+      "cc": null,
+      "message_id": "<177636014994.96251.687129627683676686@kovaldistillery.com>",
+      "body_file": null,
+      "timestamp": null,
+      "sent_at": null
+    },
+    {
+      "task_id": "frank-2026-claude-screenbox-workflow",
+      "subject": "Screenbox workflow recommendations",
+      "to": "claude@koval-distillery.com",
+      "cc": null,
+      "message_id": "<177637629258.31610.11287103350595830123@kovaldistillery.com>",
+      "body_file": null,
+      "timestamp": null,
+      "sent_at": null
+    },
+    {
+      "task_id": "frank-2026-claude-screenbox-workflow-follow-up",
+      "subject": "Re: Screenbox workflow recommendations",
+      "to": "claude@koval-distillery.com",
+      "cc": null,
+      "message_id": "<177644226569.3386.11486062060410989476@kovaldistillery.com>",
+      "body_file": null,
+      "timestamp": null,
+      "sent_at": null
+    },
+    {
+      "task_id": "frank-2026-claude-square-shopify-list-links",
+      "subject": "Square/Shopify list tasks and Google Doc links",
+      "to": "claude@koval-distillery.com",
+      "cc": null,
+      "message_id": "<177644239753.5975.5455885630894689949@kovaldistillery.com>",
+      "body_file": null,
+      "timestamp": null,
+      "sent_at": null
+    },
+    {
+      "task_id": "frank-2026-claude-papers-completion-reporting",
+      "subject": "Papers path and completion reporting integration",
+      "to": "claude@koval-distillery.com",
+      "cc": null,
+      "message_id": "<177645621706.36806.2718537434665685842@kovaldistillery.com>",
+      "body_file": null,
+      "timestamp": null,
+      "sent_at": null
+    },
+    {
+      "task_id": "frank-auto-escalation",
+      "subject": "Frank decision needed: Re: vTiger CRM code patches + migration plan \ufffd\ufffd\ufffd audit complete (task #1286)",
+      "to": "robert@kovaldistillery.com",
+      "cc": "",
+      "message_id": "<177645852883.95202.11566393645243941161@kovaldistillery.com>",
+      "body_file": null,
+      "timestamp": null,
+      "sent_at": null
+    },
+    {
+      "task_id": "frank-auto-escalation",
+      "subject": "Frank decision needed: Re: Re: vTiger CRM code patches + migration plan \u2014 audit complete (task #1286)",
+      "to": "robert@kovaldistillery.com",
+      "cc": "",
+      "message_id": "<177645881088.2450.7142371948839470569@kovaldistillery.com>",
+      "body_file": null,
+      "timestamp": null,
+      "sent_at": null
+    },
+    {
+      "task_id": "frank-auto-escalation",
+      "subject": "Frank decision needed: Re: Re: Re: vTiger CRM code patches + migration plan \u2014 audit complete (task #128",
+      "to": "robert@kovaldistillery.com",
+      "cc": "",
+      "message_id": "<177645923672.22938.6341754459902396950@kovaldistillery.com>",
+      "body_file": null,
+      "timestamp": null,
+      "sent_at": null
+    },
+    {
+      "task_id": "frank-auto-escalation",
+      "subject": "Frank decision needed: Re: CRM additions recovery current state",
+      "to": "robert@kovaldistillery.com",
+      "cc": "",
+      "message_id": "<177652748210.59043.11135709849657869830@kovaldistillery.com>",
+      "body_file": null,
+      "timestamp": null,
+      "sent_at": null
+    },
+    {
+      "task_id": "frank-2026-gmail-push-approval-packet-2026-04-18",
+      "subject": "Frank/Avignon Gmail push: concrete approvals needed",
+      "to": "robert@kovaldistillery.com",
+      "cc": null,
+      "message_id": "<177652840568.70175.10644898545170796700@kovaldistillery.com>",
+      "body_file": null,
+      "timestamp": null,
+      "sent_at": null
+    },
+    {
+      "task_id": "frank-avignon-gmail-push-oauth-pubsub-2026-04-18",
+      "subject": "Frank/Avignon Gmail push: OAuth and Pub/Sub setup needed",
+      "to": "robert@kovaldistillery.com",
+      "cc": null,
+      "message_id": "<177652876209.76012.10868979948639545798@kovaldistillery.com>",
+      "body_file": null,
+      "timestamp": null,
+      "sent_at": null
+    },
+    {
+      "task_id": "frank-auto-escalation",
+      "subject": "Frank decision needed: Password for claude@kovaldistillery.com needed for Drive API setup",
+      "to": "robert@kovaldistillery.com",
+      "cc": "",
+      "message_id": "<177653945084.9958.18093751017891153200@kovaldistillery.com>",
+      "body_file": null,
+      "timestamp": null,
+      "sent_at": null
+    },
+    {
+      "task_id": "frank-2026-claude-codex-organigram-work-record-bridge",
+      "subject": "Codex / Claude organigram and task-record bridge",
+      "to": "claude@koval-distillery.com",
+      "cc": null,
+      "message_id": "<177660739756.67470.17168217427046240939@kovaldistillery.com>",
+      "body_file": null,
+      "timestamp": null,
+      "sent_at": null
+    },
+    {
+      "task_id": "frank-2026-claude-codex-organigram-work-record-bridge-robert-copy",
+      "subject": "Copy: Codex / Claude organigram and task-record bridge",
+      "to": "robert@kovaldistillery.com",
+      "cc": "",
+      "message_id": "<177660868352.77456.17905572612484589347@kovaldistillery.com>",
+      "body_file": null,
+      "timestamp": null,
+      "sent_at": null
+    }
+  ],
+  "mail_metadata": [
+    {
+      "label": "INBOX",
+      "date": "Sat, 18 Apr 2026 08:22:22 -0700",
+      "from": "Robert Birnecker <robert@kovaldistillery.com>",
+      "to": "Frank Cannoli <frank.cannoli@kovaldistillery.com>",
+      "cc": "",
+      "subject": "Re: Mac mini AI services: next launchd steps",
+      "message_id": "<CAAtX44YnW9_n0Axxnew6tzocMVQizrbDmZovme89ntobVwAzaQ@mail.gmail.com>",
+      "in_reply_to": "<177652561882.49565.5534990384369815434@kovaldistillery.com>",
+      "references": "<177652561882.49565.5534990384369815434@kovaldistillery.com>"
+    },
+    {
+      "label": "INBOX",
+      "date": "Sat, 18 Apr 2026 10:27:34 -0500",
+      "from": "claude@koval-distillery.com",
+      "to": "frank.cannoli@kovaldistillery.com",
+      "cc": "dmytro.klymentiev@kovaldistillery.com",
+      "subject": "FYI: kothedistilling.com mail bounce diagnosis + proposed fix (task #1320)",
+      "message_id": "<0908c94d092ec600a09680bf5f3fe851.claude@koval-distillery.com>",
+      "in_reply_to": "",
+      "references": ""
+    },
+    {
+      "label": "INBOX",
+      "date": "Sat, 18 Apr 2026 10:32:56 -0500",
+      "from": "claude@koval-distillery.com",
+      "to": "frank.cannoli@kovaldistillery.com",
+      "cc": "dmytro.klymentiev@kovaldistillery.com",
+      "subject": "FYI: kothedistilling.com mail fix applied (task #1320 closed)",
+      "message_id": "<178301f68696132994ae1243b1a39aaa.claude@koval-distillery.com>",
+      "in_reply_to": "",
+      "references": ""
+    },
+    {
+      "label": "INBOX",
+      "date": "Sat, 18 Apr 2026 08:33:05 -0700",
+      "from": "Robert Birnecker <robert@kovaldistillery.com>",
+      "to": "Frank Cannoli <frank.cannoli@kovaldistillery.com>",
+      "cc": "",
+      "subject": "Re: Frank decision needed: FYI: kothedistilling.com mail bounce\r\n diagnosis + proposed fix (task #1320)",
+      "message_id": "<CAAtX44Y=-Wd0NSCv62_dPcbX6aXUScR1o79AG3rMcG_4kYvoLA@mail.gmail.com>",
+      "in_reply_to": "<177652609229.53681.1909555287595523897@kovaldistillery.com>",
+      "references": "<177652609229.53681.1909555287595523897@kovaldistillery.com>"
+    },
+    {
+      "label": "INBOX",
+      "date": "Sat, 18 Apr 2026 08:34:00 -0700",
+      "from": "Robert Birnecker <robert@kovaldistillery.com>",
+      "to": "Frank Cannoli <frank.cannoli@kovaldistillery.com>",
+      "cc": "",
+      "subject": "Re: Frank decision needed: FYI: kothedistilling.com mail fix applied\r\n (task #1320 closed)",
+      "message_id": "<CAAtX44YYJd2wSoRwM6L1ODA-6jY+VnqmdV_TXHHMiik-FjgFbA@mail.gmail.com>",
+      "in_reply_to": "<177652640462.54924.13714143420623719530@kovaldistillery.com>",
+      "references": "<177652640462.54924.13714143420623719530@kovaldistillery.com>"
+    },
+    {
+      "label": "INBOX",
+      "date": "Sat, 18 Apr 2026 11:50:45 -0400",
+      "from": "Sonat Birnecker <sonat@kovaldistillery.com>",
+      "to": "Avignon Rose <avignon.rose@kovaldistillery.com>",
+      "cc": "Robert Birnecker <robert@kovaldistillery.com>, \r\n\tFrank Cannoli <frank.cannoli@kovaldistillery.com>",
+      "subject": "Re: CRM additions recovery current state",
+      "message_id": "<CALbLtzz8r81qK=xAWET0mzSp=t6iaTEbpw0YduUpY5mGvPo6+A@mail.gmail.com>",
+      "in_reply_to": "<177652635467.54647.11471064138140156533@kovaldistillery.com>",
+      "references": "<177652635467.54647.11471064138140156533@kovaldistillery.com>"
+    },
+    {
+      "label": "INBOX",
+      "date": "Sat, 18 Apr 2026 08:59:37 -0700",
+      "from": "Robert Birnecker <robert@kovaldistillery.com>",
+      "to": "Frank Cannoli <frank.cannoli@kovaldistillery.com>",
+      "cc": "",
+      "subject": "Re: Frank decision needed: Re: CRM additions recovery current state",
+      "message_id": "<CAAtX44awrEvHCsdS57DuRRBCK1i1kzE37=xQk0EDwd8mwfT7zg@mail.gmail.com>",
+      "in_reply_to": "<177652748210.59043.11135709849657869830@kovaldistillery.com>",
+      "references": "<177652748210.59043.11135709849657869830@kovaldistillery.com>"
+    },
+    {
+      "label": "INBOX",
+      "date": "Sat, 18 Apr 2026 09:03:32 -0700",
+      "from": "Robert Birnecker <robert@kovaldistillery.com>",
+      "to": "Frank Cannoli <frank.cannoli@kovaldistillery.com>",
+      "cc": "",
+      "subject": "polling",
+      "message_id": "<CAAtX44anYpLhw91e5=empjJpOtF304aQ+Yy29JuC-4dRGuFemw@mail.gmail.com>",
+      "in_reply_to": "",
+      "references": ""
+    },
+    {
+      "label": "INBOX",
+      "date": "Sat, 18 Apr 2026 09:09:58 -0700",
+      "from": "Robert Birnecker <robert@kovaldistillery.com>",
+      "to": "Frank Cannoli <frank.cannoli@kovaldistillery.com>",
+      "cc": "",
+      "subject": "Re: Frank/Avignon Gmail push: concrete approvals needed",
+      "message_id": "<CAAtX44b8yisX2jQn2Lzda=VQfqFuTUhH=bQsK4X_2ovvt=bb2g@mail.gmail.com>",
+      "in_reply_to": "<177652840568.70175.10644898545170796700@kovaldistillery.com>",
+      "references": "<177652840568.70175.10644898545170796700@kovaldistillery.com>"
+    },
+    {
+      "label": "INBOX",
+      "date": "Sat, 18 Apr 2026 12:05:35 -0500",
+      "from": "Robert Birnecker <robert@kovaldistillery.com>",
+      "to": "Frank Cannoli <frank.cannoli@kovaldistillery.com>",
+      "cc": "",
+      "subject": "Re: Frank/Avignon Gmail push: OAuth and Pub/Sub setup needed",
+      "message_id": "<CAAtX44a_mG07=TKY5b7aORW_hJLsp5azcej_58eZq6X-q7gJwg@mail.gmail.com>",
+      "in_reply_to": "<177652876209.76012.10868979948639545798@kovaldistillery.com>",
+      "references": "<177652876209.76012.10868979948639545798@kovaldistillery.com>"
+    },
+    {
+      "label": "INBOX",
+      "date": "Sat, 18 Apr 2026 14:10:35 -0500",
+      "from": "claude@koval-distillery.com",
+      "to": "robert@kovaldistillery.com",
+      "cc": "dmytro.klymentiev@kovaldistillery.com,frank.cannoli@kovaldistillery.com",
+      "subject": "Password for claude@kovaldistillery.com needed for Drive API setup",
+      "message_id": "<107dbcea4a566bba55fab91158d99a71.claude@koval-distillery.com>",
+      "in_reply_to": "",
+      "references": ""
+    },
+    {
+      "label": "INBOX",
+      "date": "Sat, 18 Apr 2026 15:15:34 -0500",
+      "from": "claude@koval-distillery.com",
+      "to": "dmytro.klymentiev@kovaldistillery.com",
+      "cc": "frank.cannoli@kovaldistillery.com",
+      "subject": "Re: Papers path and completion reporting integration",
+      "message_id": "<5c7e0ac3713f8baff5eaa84eea2dcb30.claude@koval-distillery.com>",
+      "in_reply_to": "<CAE1soTH7LktxjO43tv90YnsGbhP+HMmFBVg3jahGBRNEdF3oSA@mail.gmail.com>",
+      "references": "<177645621706.36806.2718537434665685842@kovaldistillery.com> <CAE1soTH7LktxjO43tv90YnsGbhP+HMmFBVg3jahGBRNEdF3oSA@mail.gmail.com>"
+    },
+    {
+      "label": "INBOX",
+      "date": "Sat, 18 Apr 2026 16:14:35 -0700",
+      "from": "Robert Birnecker <robert@kovaldistillery.com>",
+      "to": "Frank Cannoli <frank.cannoli@kovaldistillery.com>",
+      "cc": "",
+      "subject": "Re: Frank decision needed: Password for claude@kovaldistillery.com\r\n needed for Drive API setup",
+      "message_id": "<CAAtX44bRPUMjehgtYboN+GETxdeqrNnkXdkNrDA+N52NN-1fcg@mail.gmail.com>",
+      "in_reply_to": "<177653945084.9958.18093751017891153200@kovaldistillery.com>",
+      "references": "<177653945084.9958.18093751017891153200@kovaldistillery.com>"
+    },
+    {
+      "label": "INBOX",
+      "date": "Sun, 19 Apr 2026 06:13:47 -0700",
+      "from": "Robert Birnecker <robert@kovaldistillery.com>",
+      "to": "Frank Cannoli <frank.cannoli@kovaldistillery.com>",
+      "cc": "",
+      "subject": "Fwd: Morning Summary: Sunday, April 19",
+      "message_id": "<CAAtX44aRrHUtePK8gkB+XBEch20FYYwNzNSj+X8LXctLjnDqgg@mail.gmail.com>",
+      "in_reply_to": "<CALbLtzwQmNM7M=ezM4LHGLWE+56ybMJvnmbe3x-Ug07u=bWRGw@mail.gmail.com>",
+      "references": "<177659640379.52425.4125343581149672153@kovaldistillery.com> <CALbLtzwQmNM7M=ezM4LHGLWE+56ybMJvnmbe3x-Ug07u=bWRGw@mail.gmail.com>"
+    },
+    {
+      "label": "INBOX",
+      "date": "Sun, 19 Apr 2026 06:15:00 -0700",
+      "from": "Robert Birnecker <robert@kovaldistillery.com>",
+      "to": "Frank Cannoli <frank.cannoli@kovaldistillery.com>",
+      "cc": "",
+      "subject": "Fwd: CRM additions: target/link decisions needed",
+      "message_id": "<CAAtX44aXfDz=iaQULPXgS5Fpd1zzswt=3-_6Tj+yCMmtJQ9yug@mail.gmail.com>",
+      "in_reply_to": "<CALbLtzzXffmxmPhFdik5m7=WW_prvcqS-7XXW86Vsi-dPvmEtw@mail.gmail.com>",
+      "references": "<177652842151.70937.3224022845392947786@kovaldistillery.com> <CALbLtzzXffmxmPhFdik5m7=WW_prvcqS-7XXW86Vsi-dPvmEtw@mail.gmail.com>"
+    },
+    {
+      "label": "[Gmail]/All Mail",
+      "date": "Sat, 18 Apr 2026 10:20:18 -0500",
+      "from": "Frank Cannoli <frank.cannoli@kovaldistillery.com>",
+      "to": "robert@kovaldistillery.com",
+      "cc": "",
+      "subject": "Mac mini AI services: next launchd steps",
+      "message_id": "<177652561882.49565.5534990384369815434@kovaldistillery.com>",
+      "in_reply_to": "",
+      "references": ""
+    },
+    {
+      "label": "[Gmail]/All Mail",
+      "date": "Sat, 18 Apr 2026 10:31:23 -0500",
+      "from": "claude@koval-distillery.com",
+      "to": "robert@kovaldistillery.com",
+      "cc": "sonat@kovaldistillery.com,dmytro.klymentiev@kovaldistillery.com,andrew.karasek@kovaldistillery.com,frank.cannoli@kovaldistillery.com,avignon.rose@kovaldistillery.com",
+      "subject": "Distillery photo library for AI content generation",
+      "message_id": "<c9f47e9371d639ac3aef00b41a605cf8.claude@koval-distillery.com>",
+      "in_reply_to": "",
+      "references": ""
+    },
+    {
+      "label": "[Gmail]/All Mail",
+      "date": "Sat, 18 Apr 2026 10:51:22 -0500",
+      "from": "Frank Cannoli <frank.cannoli@kovaldistillery.com>",
+      "to": "robert@kovaldistillery.com",
+      "cc": "",
+      "subject": "Frank decision needed: Re: CRM additions recovery current state",
+      "message_id": "<177652748210.59043.11135709849657869830@kovaldistillery.com>",
+      "in_reply_to": "",
+      "references": ""
+    },
+    {
+      "label": "[Gmail]/All Mail",
+      "date": "Sat, 18 Apr 2026 11:52:43 -0400",
+      "from": "Sonat Birnecker <sonat@kovaldistillery.com>",
+      "to": "claude@koval-distillery.com",
+      "cc": "robert@kovaldistillery.com, dmytro.klymentiev@kovaldistillery.com, \r\n\tandrew.karasek@kovaldistillery.com, frank.cannoli@kovaldistillery.com, \r\n\tavignon.rose@kovaldistillery.com",
+      "subject": "Re: Distillery photo library for AI content generation",
+      "message_id": "<CALbLtzwYYdhxkUqYQpU4w_BR3KFYmHD5nGpfX68nnwK0=3BvfA@mail.gmail.com>",
+      "in_reply_to": "<c9f47e9371d639ac3aef00b41a605cf8.claude@koval-distillery.com>",
+      "references": "<c9f47e9371d639ac3aef00b41a605cf8.claude@koval-distillery.com>"
+    },
+    {
+      "label": "[Gmail]/All Mail",
+      "date": "Sat, 18 Apr 2026 10:56:26 -0500",
+      "from": "claude@koval-distillery.com",
+      "to": "sonat@kovaldistillery.com",
+      "cc": "robert@kovaldistillery.com,dmytro.klymentiev@kovaldistillery.com,andrew.karasek@kovaldistillery.com,frank.cannoli@kovaldistillery.com,avignon.rose@kovaldistillery.com",
+      "subject": "Re: Distillery photo library for AI content generation",
+      "message_id": "<1f3daff1f04bb985754b143876f46934.claude@koval-distillery.com>",
+      "in_reply_to": "<CALbLtzwYYdhxkUqYQpU4w_BR3KFYmHD5nGpfX68nnwK0=3BvfA@mail.gmail.com>",
+      "references": "<c9f47e9371d639ac3aef00b41a605cf8.claude@koval-distillery.com> <CALbLtzwYYdhxkUqYQpU4w_BR3KFYmHD5nGpfX68nnwK0=3BvfA@mail.gmail.com>"
+    },
+    {
+      "label": "[Gmail]/All Mail",
+      "date": "Sat, 18 Apr 2026 11:06:45 -0500",
+      "from": "Frank Cannoli <frank.cannoli@kovaldistillery.com>",
+      "to": "robert@kovaldistillery.com",
+      "cc": "",
+      "subject": "Frank/Avignon Gmail push: concrete approvals needed",
+      "message_id": "<177652840568.70175.10644898545170796700@kovaldistillery.com>",
+      "in_reply_to": "",
+      "references": ""
+    },
+    {
+      "label": "[Gmail]/All Mail",
+      "date": "Sat, 18 Apr 2026 11:12:42 -0500",
+      "from": "Frank Cannoli <frank.cannoli@kovaldistillery.com>",
+      "to": "robert@kovaldistillery.com",
+      "cc": "",
+      "subject": "Frank/Avignon Gmail push: OAuth and Pub/Sub setup needed",
+      "message_id": "<177652876209.76012.10868979948639545798@kovaldistillery.com>",
+      "in_reply_to": "",
+      "references": ""
+    },
+    {
+      "label": "[Gmail]/All Mail",
+      "date": "Sat, 18 Apr 2026 18:00:04 -0500",
+      "from": "Frank Cannoli <frank.cannoli@kovaldistillery.com>",
+      "to": "robert@kovaldistillery.com",
+      "cc": "",
+      "subject": "Frank End-of-Day Update: Saturday, April 18",
+      "message_id": "<177655320456.24878.12490372615583861791@kovaldistillery.com>",
+      "in_reply_to": "",
+      "references": ""
+    },
+    {
+      "label": "[Gmail]/All Mail",
+      "date": "Sun, 19 Apr 2026 09:03:17 -0500",
+      "from": "Frank Cannoli <frank.cannoli@kovaldistillery.com>",
+      "to": "claude@koval-distillery.com",
+      "cc": "",
+      "subject": "Codex / Claude organigram and task-record bridge",
+      "message_id": "<177660739756.67470.17168217427046240939@kovaldistillery.com>",
+      "in_reply_to": "",
+      "references": ""
+    },
+    {
+      "label": "[Gmail]/All Mail",
+      "date": "Sun, 19 Apr 2026 09:24:43 -0500",
+      "from": "Frank Cannoli <frank.cannoli@kovaldistillery.com>",
+      "to": "robert@kovaldistillery.com",
+      "cc": "",
+      "subject": "Copy: Codex / Claude organigram and task-record bridge",
+      "message_id": "<177660868352.77456.17905572612484589347@kovaldistillery.com>",
+      "in_reply_to": "",
+      "references": ""
+    }
+  ]
+}

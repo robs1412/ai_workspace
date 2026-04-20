@@ -63,4 +63,4 @@ Represent Dmytro as an AI-manager and technical bridge role for Codex/Claude int
 ## Operating Reference
 
 - Exact startup prompt, class, call signs/routing phrases, approval gates, and durable memory surfaces are defined in `operating-model.md`.
-- Chain of command: AI Manager Robert / AI Manager Dmytro -> Task Manager / Polier -> Codex Integration Manager, Security Guard, Code and Git Manager, Decision Driver, Summary Worker -> Codex workspace workers or Claude bridge/server agents.
+- Chain of command: AI Manager Robert / AI Manager Dmytro -> Task Manager / Polier -> Codex Integration Manager, Security Guard, Git and Code Manager, Decision Driver, Summary Worker -> Codex workspace workers or Claude bridge/server agents.

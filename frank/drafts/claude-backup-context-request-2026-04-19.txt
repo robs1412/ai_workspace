@@ -1,0 +1,16 @@
+Claude,
+
+Robert asked how we should back up Workspaceboard and AI work product, and specifically asked Frank to ask you too. He mentioned that you may already move or copy Claude/Papers/AI workspace work product to an external drive on .200.
+
+Please reply with concise, non-secret backup context:
+
+1. What backup process currently exists for Claude/Papers/AI workspace work product, especially any move or copy to an external drive on .200?
+2. What paths or categories are included and excluded? Please describe categories, not secrets.
+3. How often does it run, and is it manual or automated?
+4. Is it encrypted, versioned, and offsite, or only on a local external drive?
+5. How would we restore or test restore if Workspaceboard or AI Workspace state were lost?
+6. What should Workspaceboard, Frank, Avignon, and Codex add so our git-backed work product, project-hub/TODO/HANDOFF records, and non-git runtime/session logs are protected?
+
+Guardrails: please do not send credentials, tokens, private keys, .env values, mailbox bodies, private Papers/MI content, or sensitive operational paths. Category-level descriptions are enough.
+
+Source context: Robert direct instruction, subject Backup, Message-ID <CAAtX44aGWoh4r0=GAM242S4H8LtoreV3tQaCuKdsiQh7Jv+5cA@mail.gmail.com>.

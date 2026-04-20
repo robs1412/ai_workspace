@@ -1,0 +1,15 @@
+Robert,
+
+Complete for the docs-only AI Improvement Manager setup. The visible work session was `e13f147b` / `AI Improvement Manager role setup`, and the Code/Git closeout session was `255859e8` / `Code Git closeout AI Improvement Manager role`. The new role doc is at `/Users/werkstatt/ai_workspace/worker_roles/ai-improvement-manager.md`.
+
+What changed: the AI Improvement Manager role definition was added, the role was registered in the central worker-role map and operating model, and the source Message-ID plus routed-session state were recorded in TODO/HANDOFF. The docs also include the proposed future Workspaceboard session title/prompt for a daily AI-improvement review/report covering process improvements, update opportunities, workflow analytics, and new practical AI uses.
+
+Verification was completed by the source worker and Code/Git Manager: role-reference scans, file review, scoped git/diff checks, `git diff --check`, trailing-whitespace scans, key/token signature scan, and a read-only check of the Workspaceboard organigram source. Code/Git found no blocking issues and recommended parking the docs-only setup for your review. No commit/push should happen from the current dirty `ai_workspace` worktree yet because unrelated overlapping dirty changes are present.
+
+Not done: no standing AI Improvement Manager session, daily schedule, automation, LaunchAgent, runtime service, OAuth/credential work, mailbox-content access, live Workspaceboard visual organigram card, commit, push, deploy, live pull, external email, or production mutation was performed. The workflow docs include the role, but the live Workspaceboard visual organigram still needs a separate Workspaceboard source change in `/Users/werkstatt/workspaceboard/worker-organigram.php`, routed through Code/Git Manager before edit/commit/push/deploy/runtime refresh.
+
+Remaining decisions: choose whether AI Improvement Manager should be on-demand only, a standing visible Workspaceboard session, or a scheduled daily-report workflow, and choose the daily report recipient/cadence. Security Guard review is required before any workflow analytics integration, mailbox-content use, OAuth, credentials, LaunchAgent/schedule/runtime service, `.205`, MI/Papers/MCP, or permission changes.
+
+Source Message-ID: `<CAAtX44a_J500uEU+8hpFcOHH25fmb8EHRJJAY6rjORy00=mgQQ@mail.gmail.com>`
+
+Frank

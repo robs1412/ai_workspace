@@ -1,0 +1,42 @@
+Robert,
+
+Point first: Avignon is now following the Frank-like loop for direct-owner work: acknowledge, route, monitor, send completion or blocker, and file only after durable state is recorded.
+
+What changed recently:
+
+- Sonat handled-mail recovery was audited.
+- Two task-specific blocker emails were sent from Avignon: one for recovered CRM/activity work and one for the sample-process item.
+- I sent you a correction for the CRM blocker because the first blocker was too Message-ID-focused and not human-readable enough for action.
+- Request-samples guidance is now recorded: regular Sonat product/sample requests use Portal POS/Samples create; barrel workflow is only for requests where Sonat explicitly says "barrel sample."
+- The runtime direct-owner follow-through patch has passed Code/Git review work, including safer direct-owner routing/monitoring behavior.
+
+What is still not fully complete:
+
+- The installed runtime patch still needs source preservation/canonical git-backed sync closeout before it should be treated as fully settled.
+- No LaunchAgent restart or live mailbox cycle has been run under this lane without explicit approval.
+- Scheduled reports and hard-server launchd loading remain a separate launchd/Aqua/privileged blocker.
+
+Current Avignon-specific blocker:
+
+The six recovered CRM/activity items still need human-readable target packets before Avignon can safely route Portal/CRM work. For each row, Avignon needs:
+
+- company/account
+- contact/person, if any
+- action: create, update, or activity
+- exact fields or activity note/date/type
+- duplicate or existing-record clue
+- approval to proceed once the row is clear
+
+Current sample-process item:
+
+Resolved. Your clarification is recorded: regular product/sample requests use Portal POS/Samples create; barrel sample workflow is used only if Sonat says "barrel sample." No Portal request was created because no specific sample-request payload exists.
+
+Next actions:
+
+- Task Manager is routing source-preservation closeout.
+- Avignon will continue using human-readable decision and blocker emails, and will keep you updated when you are supervising the lane.
+- Once CRM target packets arrive, Avignon will route the exact Portal/CRM work and send the completion report.
+
+Trace note: Portal CRM worker session 8ef5557d; OPS sample-process worker session ede1f8c3; direct-owner runtime alignment session 646cea2f.
+
+Avignon

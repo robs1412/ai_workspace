@@ -1,0 +1,16 @@
+Sonat,
+
+Robert asked us to make sure you received the Avignon email updates that were owed.
+
+Current status:
+
+- Recent Avignon task emails to you are present in the sent log, including the CRM recovery/current-state notes, the new CRM accounts/contacts report, the plain-English CRM cleanup decision note, the Monday Robert meeting confirmation, and the diagnostic Avignon delivery test.
+- I did a bounded runtime review of the Avignon Python 3.9 path. The suspected import/compile issue was not reproduced in the approved runtime check, and no runtime files needed to be changed.
+- The current polling output is cycling successfully and shows inbox-zero checks completing. I did not restart LaunchAgents, change polling cadence, touch credentials/OAuth/Google Cloud/PubSub, or mutate mailbox state beyond the approved send/logging path.
+
+What remains open:
+
+- The CRM cleanup still needs the plain-English target/link answers already sent to you: the unresolved Alexis Harris/SOPHY Hyde Park/Mesler Kitchen Bar Lounge choice, the Stephen Beck/Lanterna distributor/account choice, and whether your status/list item should be included in final closeout.
+- The Gmail push/OAuth/PubSub work remains parked; the safe next step is the already-recorded Monday polling-health check before any auth or push work resumes.
+
+No action is needed from you on the runtime review itself. The action item is only the CRM target/link decisions when you have them.

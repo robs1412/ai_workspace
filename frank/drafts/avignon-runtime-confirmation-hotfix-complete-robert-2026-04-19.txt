@@ -1,0 +1,50 @@
+Robert,
+
+Complete. The bounded Avignon installed-runtime review/hotfix was performed under the approval from your `approve` reply.
+
+Result:
+- The suspected Python 3.9 issue was not reproducible in the current installed Avignon runtime.
+- `/usr/bin/python3` and `python3` both report Python 3.9.6.
+- `python3.9` is not installed as a separate command.
+- Runtime files still contain annotations like `str | None` and `Path | None`, but the affected files use `from __future__ import annotations`, and they compile/import cleanly under Python 3.9.6.
+- `list[...]` and `dict[...]` usage is Python 3.9-compatible.
+
+Files checked:
+- `/Users/admin/.avignon-launch/runtime/scripts/send_frank_email.py`
+- `/Users/admin/.avignon-launch/runtime/scripts/avignon_inbox_cycle.py`
+- `/Users/admin/.avignon-launch/runtime/scripts/frank_paths.py`
+- `/Users/admin/.avignon-launch/runtime/scripts/assistant_decision_email.py`
+- `/Users/admin/.avignon-launch/runtime/scripts/avignon_morning_overview.py`
+- Direct helper metadata/compile checks for `frank_auto_runner.py`, `frank_inbox_monitor.py`, and `frank_portal_receipt.py`
+
+Files changed:
+- No installed runtime Python files changed.
+- No backups were created because no runtime edit was needed.
+- Avignon tracking was updated in `TODO.md` and `HANDOFF.md`.
+
+Verification performed:
+- `/usr/bin/python3 --version`, `python3 --version`, and `python3.9 --version` checks: Python 3.9.6 for `/usr/bin/python3` and `python3`; `python3.9` command not found.
+- `/usr/bin/python3 -m py_compile` passed for the approved scripts.
+- Imports passed with `PYTHONPATH=/Users/admin/.avignon-launch/runtime/scripts /usr/bin/python3` for `send_frank_email`, `avignon_inbox_cycle`, `frank_paths`, `assistant_decision_email`, and `avignon_morning_overview`.
+- `send_frank_email.py --help` passed without credential access.
+
+Trace IDs:
+- Approval source Message-ID: `<CAAtX44ZbSRL-xm9os0OeuBABU82PnkjAQJ16VQnqWiupkqXfmw@mail.gmail.com>`
+- Original source Message-ID: `<CAAtX44aTafv2TwV47RdxaH-pG-HHx-Em4CBKC0T0f69sy_6HcQ@mail.gmail.com>`
+- Frank session: `f6f9dd35`
+- Avignon runtime worker: `880138a3`
+- Prior Avignon audit: `774c8dfb`
+- Code/Git Manager: `f92b4b8c`
+- Security review: `cee4abaa`
+- Local task ID: `frank-avignon-runtime-confirmation-hotfix-complete-2026-04-19`
+
+Boundaries kept:
+- No email was sent by Avignon.
+- No mailbox body or mailbox state was inspected or mutated.
+- No credentials, OAuth files, tokens, or secrets were read or printed.
+- No deploy, commit, push, restart, reset, clean, or session closure was performed.
+- No LaunchAgent restart or cadence change was needed because no runtime code changed.
+
+This closes the bounded runtime-hotfix approval thread. The only remaining possible next step would be a separate forced live-cycle health check, restart, cadence change, or mailbox-state test if you want one; that was outside this approval and would need separate routing/approval.
+
+Frank

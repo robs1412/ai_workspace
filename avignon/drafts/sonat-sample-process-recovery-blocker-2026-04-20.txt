@@ -1,0 +1,22 @@
+Sonat,
+
+Point first: I could not safely complete the recovered Process for Sample Requests item yet.
+
+OPS worker session ede1f8c3 checked approved non-secret local records for source Message-ID <CALbLtzwCqmadr7Wg2jnZC5MeyFLf2hNCgMdypva69P2UWwg_FQ@mail.gmail.com>. The source body, target process, and requested action are not available from approved metadata.
+
+Local evidence shows Portal owns the existing POS/Samples sample-request surface. Separate planning notes say barrel/sample follow-up ownership must not be assumed, so I am not guessing which path you intended.
+
+No local process artifact was created, no task was created or updated, and no mailbox action, CRM/Portal/OPS mutation, external reply, auth/OAuth work, deploy, commit, push, reset, or clean was performed.
+
+Recommended next action: please confirm what you want Avignon to do for "Process for Sample Requests":
+
+- document or update an SOP
+- route a Portal POS/Samples workflow change
+- create or update an OPS/Portal task
+- take another specific internal action
+
+Please also confirm whether this is for regular POS/sample requests or barrel sample follow-up, the expected owner/workspace, and the safe next action.
+
+Once that is clear, I can route the exact work without guessing and send the task-specific completion report after it is handled.
+
+Avignon

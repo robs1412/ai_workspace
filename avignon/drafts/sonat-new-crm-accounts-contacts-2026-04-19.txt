@@ -1,0 +1,39 @@
+Hi Sonat,
+
+Here is the current list of new CRM accounts and contacts I entered for you over the past 10 days, based on the completed Avignon/importer recovery records.
+
+New accounts:
+- 366780 - Eataly - Boston
+- 366784 - Ramsey's - Boston
+- 366786 - Backyard Wine - Boston
+- 366789 - Whiskey and Wine - Boston
+- 367142 - Fallow Kin
+- 367145 - Lifetime - Lake Zurich
+- 367147 - Rndc Usa
+- 367149 - four Boston MA
+- 367150 - multiple MA
+
+New contacts:
+- 366781 - Alfonso
+- 366782 - Carol
+- 366783 - Allison Johnson
+- 366785 - Lili
+- 366787 - Ganga
+- 366788 - Golden
+- 366790 - Peter
+- 367141 - Bridget Savage
+- 367143 - Thomas Mahne
+- 367144 - Mel Carroll
+- 367146 - Lisa Stephan
+- 367148 - Birk Walton
+
+Notes:
+- Import ID 52 created the April 15 business-card CRM additions.
+- Import ID 56 created the April 18 five-row CRM recovery additions.
+- Source 9 created account 367149.
+- Source 5 created account 367150 and linked existing contacts 186413 and 186414; those two were existing contacts, not new contacts.
+- Source 1 and Source 10 are still waiting on exact target/duplicate decisions, so they are not included as completed new records.
+
+Best,
+
+Avignon

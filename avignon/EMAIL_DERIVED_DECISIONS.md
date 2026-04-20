@@ -1,22 +1,87 @@
 # Email-Derived Decisions — avignon
 
-Updated: 2026-04-19 10:03 CDT (Machine: Macmini.lan)
+Updated: 2026-04-20 13:36 CDT (Machine: Macmini.lan)
 
 ## Open
 
+- `avignon-email-review-crm-addition-and-activity-update-requested`
+  - Needed: Sonat sent a direct CRM/activity request that Avignon filed to `Handled` after generic ambiguous-review logging. Source Message-ID `<CALbLtzx71n0bqs1_GJ+7WvDgt6jxNC5Wwi9tQRpq2X5rZh2nzg@mail.gmail.com>`.
+  - Next: Waiting on Robert to approve bounded source-detail recovery or on Robert/Sonat to provide a human-readable target table before any Portal/CRM write.
+  - Decision: Session `8ef5557d` blocked this source because approved non-secret metadata lacks deterministic account/contact/activity target, field payload, activity date/type/content, existing-record match, and dedupe key. Sonat blocker report sent 2026-04-20, subject `CRM/activity recovery blocked: source details needed`, Message-ID `<177670759491.94577.6982548554446206105@kovaldistillery.com>`, draft `drafts/sonat-crm-activity-recovery-blocker-2026-04-20.txt`. Robert human-readable correction sent 2026-04-20, Message-ID `<177670777142.96602.16061256851726520967@kovaldistillery.com>`, draft `drafts/robert-crm-recovery-human-readable-details-needed-2026-04-20.txt`. Robert source-detail path sent 2026-04-20, Message-ID `<177671017432.9834.12022155147795059@kovaldistillery.com>`, draft `drafts/robert-crm-recovery-source-detail-path-2026-04-20.txt`; it treats original mailbox source-detail recovery as approval-gated. No CRM/Portal/OPS mutation occurred.
+
+- `avignon-email-review-crm-addition`
+  - Needed: Four April 20 Sonat direct CRM-addition messages were filed to `Handled` as duplicate ambiguous review without proper acknowledgement/status. Source Message-IDs `<CALbLtzyPwnuk=Msw0wgFtDsOEnNk5QhiD+E9ZP7tRuqQouKDgw@mail.gmail.com>`, `<CALbLtzxSioFqgNL61KHSHVxVu9ZSnYGujC3YeS-j+OBPs+v4Yw@mail.gmail.com>`, `<CALbLtzxCAaOdQZohyM0m67A6mCWbbMCjTSOaMTi7W+RR2k3_2Q@mail.gmail.com>`, and `<CALbLtzzm--wq-DqFsW8ePfVEAsgKAuiH1-gpB7Tehb=VUUDULg@mail.gmail.com>`.
+  - Next: Waiting on Robert to approve bounded source-detail recovery or on Robert/Sonat to provide human-readable target tables before any Portal/CRM write.
+  - Decision: Session `8ef5557d` blocked these four sources because approved non-secret metadata lacks deterministic account/contact/activity targets, field payloads, existing-record matches, and dedupe keys. Sonat blocker report sent 2026-04-20, subject `CRM/activity recovery blocked: source details needed`, Message-ID `<177670759491.94577.6982548554446206105@kovaldistillery.com>`, draft `drafts/sonat-crm-activity-recovery-blocker-2026-04-20.txt`. Robert human-readable correction sent 2026-04-20, Message-ID `<177670777142.96602.16061256851726520967@kovaldistillery.com>`, draft `drafts/robert-crm-recovery-human-readable-details-needed-2026-04-20.txt`. Robert source-detail path sent 2026-04-20, Message-ID `<177671017432.9834.12022155147795059@kovaldistillery.com>`, draft `drafts/robert-crm-recovery-source-detail-path-2026-04-20.txt`; it treats original mailbox source-detail recovery as approval-gated. No CRM/Portal/OPS mutation occurred.
+
+- `avignon-email-review-ai-generated-bottle-images-policy-clarification-needed`
+  - Needed: Avignon received an email that was not clearly safe to auto-handle. Subject: `Re: AI-generated bottle images -- policy clarification needed`.
+  - Next: Review only in the approved mailbox/workspace context and decide whether to route, reply, or hold.
+  - Decision: Confirm the owner/action for this email-derived item; do not send Sonat a generic review prompt unless a real Sonat decision remains.
+
+- `avignon-email-review-add-activity-to-crm`
+  - Needed: Sonat sent a direct CRM activity request that Avignon filed to `Handled` after generic ambiguous-review logging. Source Message-ID `<CALbLtzx03Rzzqnn1M+0yZifY6-4YfQeekeVgK3+zKyQQbN0JCQ@mail.gmail.com>`.
+  - Next: Waiting on Robert to approve bounded source-detail recovery or on Robert/Sonat to provide a human-readable target table before any Portal/CRM write.
+  - Decision: Session `8ef5557d` blocked this source because approved non-secret metadata lacks deterministic account/contact/activity target, field payload, activity date/type/content, existing-record match, and dedupe key. Sonat blocker report sent 2026-04-20, subject `CRM/activity recovery blocked: source details needed`, Message-ID `<177670759491.94577.6982548554446206105@kovaldistillery.com>`, draft `drafts/sonat-crm-activity-recovery-blocker-2026-04-20.txt`. Robert human-readable correction sent 2026-04-20, Message-ID `<177670777142.96602.16061256851726520967@kovaldistillery.com>`, draft `drafts/robert-crm-recovery-human-readable-details-needed-2026-04-20.txt`. Robert source-detail path sent 2026-04-20, Message-ID `<177671017432.9834.12022155147795059@kovaldistillery.com>`, draft `drafts/robert-crm-recovery-source-detail-path-2026-04-20.txt`; it treats original mailbox source-detail recovery as approval-gated. No CRM/Portal/OPS mutation occurred.
+
+- `avignon-email-review-distillery-photo-library-for-ai-content-generation`
+  - Needed: Avignon received an email that was not clearly safe to auto-handle. Subject: `Distillery photo library for AI content generation`.
+  - Next: Review only in the approved mailbox/workspace context and decide whether to route, reply, or hold.
+  - Decision: Confirm the owner/action for this email-derived item.
+
 - `avignon-sonat-crm-intake-recovery-2026-04-17`
   - Needed: Ten Sonat-originated Avignon messages on 2026-04-17 with CRM-addition subjects were archived to `Handled` after generic `avignon-email-review-*` logging, without visible CRM/import routing or completion confirmation. Recovery execution has now completed all deterministic non-ambiguous CRM work: Importer session `86dc0b04` completed Import ID `56` for the 5 importer-safe rows, and Portal session `44b8a370` completed source `9` and source `5`.
-  - Next: Action-plan review completed 2026-04-19 and recorded at `drafts/avignon-crm-recovery-action-plan-review-2026-04-19.md`. Do not route further Portal/Importer mutation unless the exact target answers are supplied. Do not send the existing source-heavy private answer-sheet draft as-is.
-  - Decision: Safe resolution is not possible from the currently recorded context. Source `1` remains blocked on target-account plus duplicate/existing-contact ambiguity; source `10` remains blocked on distributor/account ambiguity; source `7` is held as status/update-only for final closeout. If Robert approves another follow-up, send one concise Avignon note to Sonat with Robert copied for visibility using only this exact answer format: Source `1` target account or `create new`; Source `1` existing contact record to link/update or `create new`; Source `10` distributor/account or `create new`; Source `7` include as status/update-only in final closeout yes/no. Frank owner-path report `frank-avignon-crm-recovery-corrected-path-2026-04-19` was sent to Robert with Message-ID `<177661098259.95485.12446032407156880410@kovaldistillery.com>`. Prior Sonat status/current-state/decision emails were sent under task ids `avignon-sonat-crm-intake-recovery-2026-04-17-status-2026-04-18`, `avignon-sonat-crm-intake-recovery-2026-04-17-follow-up-2026-04-18`, `avignon-sonat-crm-intake-recovery-2026-04-17-current-state-2026-04-18`, and `avignon-sonat-crm-intake-recovery-2026-04-17-target-link-decisions-2026-04-18`; the last Sonat email is now treated as a quality issue, not the current waiting state.
+  - Next: 2026-04-20 target-link recheck found a partial Sonat answer in prior mail. Do not route further Portal/Importer mutation until a worker verifies existing CRM records and treats source `10` either as a no-op or uses a specific confirmed target account/distributor.
+  - Decision: Partially resolved by Sonat reply `<CALbLtzyj0A=Vs8z5ftYRYeP+V2c_Bup_iRBR=DCck=-LzbO_WA@mail.gmail.com>`. Source `1` points Alexis Harris to existing CRM handling under `Sophy Hotel - Hyde Park`; source `7` status closeout is complete/yes; source `10` says Stephen Beck is already in the system and should not be added again but does not name a distributor/account link target. If target-link work is still expected for source `10`, the exact needed answer is whether to leave Stephen Beck as-is/no link update or link/update the existing contact under a specific named CRM account/distributor. Frank owner-path report `frank-avignon-crm-recovery-corrected-path-2026-04-19` was sent to Robert with Message-ID `<177661098259.95485.12446032407156880410@kovaldistillery.com>`. Prior Sonat status/current-state/decision emails were sent under task ids `avignon-sonat-crm-intake-recovery-2026-04-17-status-2026-04-18`, `avignon-sonat-crm-intake-recovery-2026-04-17-follow-up-2026-04-18`, `avignon-sonat-crm-intake-recovery-2026-04-17-current-state-2026-04-18`, and `avignon-sonat-crm-intake-recovery-2026-04-17-target-link-decisions-2026-04-18`; the last Sonat email is now treated as a quality issue, not the current waiting state.
 - `avignon-email-review-lander-journal-your-input-needed-on-brand-voice-section-name`
   - Needed: Consolidated Lander Journal brand-voice/section-name thread review item. Earlier timestamped items for this same thread were duplicates created by the decision-email loop.
   - Next: Keep one local review item only; do not email Sonat again unless a fresh approval boundary is identified.
   - Decision: Determine internally whether Avignon can route/answer/file this thread, or escalate one concrete question if genuinely blocked.
+
+- `avignon-email-review-new-ai-research-tools-with-fact-checking`
+  - Needed: Avignon received an email that was not clearly safe to auto-handle. Subject: `New: AI Research Tools with fact-checking`.
+  - Next: Review only in the approved mailbox/workspace context and decide whether to route, reply, or hold.
+  - Decision: Confirm the owner/action for this email-derived item.
+
+- `avignon-email-review-connecteam`
+  - Needed: Avignon received an email that was not clearly safe to auto-handle. Subject: `Connecteam`.
+  - Next: Review only in the approved mailbox/workspace context and decide whether to route, reply, or hold.
+  - Decision: Confirm the owner/action for this email-derived item.
+
+- `avignon-email-review-monthly-sales-report-which-saved-reports-to-include`
+  - Needed: Avignon received an email that was not clearly safe to auto-handle. Subject: `Monthly sales report -- which saved reports to include?`.
+  - Next: Review only in the approved mailbox/workspace context and decide whether to route, reply, or hold.
+  - Decision: Confirm the owner/action for this email-derived item.
 ## Waiting On Sonat Email
 
 No current Avignon email-derived items are waiting on Sonat email approval from Avignon inbox.
 
 ## Routed / Handled
+
+- `avignon-email-review-process-for-sample-requests`
+  - Needed: Sonat sent a direct process-related request that Avignon filed to `Handled` after generic ambiguous-review logging. Source Message-ID `<CALbLtzwCqmadr7Wg2jnZC5MeyFLf2hNCgMdypva69P2UWwg_FQ@mail.gmail.com>`.
+  - Next: Treat as resolved by Robert's clarification and recorded standing guidance. Regular product/sample requests go through Portal POS/Samples create; barrel-sample workflow is used only when Sonat explicitly says `barrel sample`.
+  - Decision: Robert clarified on 2026-04-20 that the SOP Sonat sent was for Avignon to record a directive. Guidance recorded in `REQUEST_SAMPLES_GUIDANCE.md` and `AGENTS.md`: use `https://portal.koval-distillery.com/#/pos-and-samples/sample-request/create` for regular sample/product requests; if Sonat asks for products, it is not a barrel sample unless she says `barrel sample`. No Portal sample request was created because no specific sample-request payload was supplied. Prior blocker email to Sonat remains logged as a quality issue; no follow-up email to Robert was needed because the clarification was clear. OPS session `ede1f8c3` is reconciled/review-ready and should be parked, not treated as an active blocker.
+
+- `avignon-sonat-handled-mail-recovery-2026-04-20`
+  - Needed: Robert reported that Avignon had 10+ Sonat emails in `Handled` with no visible acknowledgement/completion trace.
+  - Next: Keep duplicate protection in place. Wait for Robert to approve bounded source-detail recovery or for Robert/Sonat to supply specific CRM/activity target packets before any further Portal/CRM routing or mutation; the sample-process item is resolved as recorded standing guidance.
+  - Decision: Audited 35 Sonat-origin `Handled` messages since 2026-04-17 at header/log level. Sent Sonat catch-up status with Robert copied, subject `Avignon handled-mail recovery status`, Message-ID `<177670584365.66611.2391124488123910456@kovaldistillery.com>`. Follow-through reports sent Sonat-only on 2026-04-20: CRM/activity six-source blocker, subject `CRM/activity recovery blocked: source details needed`, Message-ID `<177670759491.94577.6982548554446206105@kovaldistillery.com>`; sample-process blocker, subject `Sample-process recovery blocked: direction needed`, Message-ID `<177670763603.94833.14163510464486881700@kovaldistillery.com>`. Robert human-readable correction sent Robert-only because the CRM/activity blocker was too Message-ID-focused: subject `Avignon CRM recovery: human-readable details needed`, Message-ID `<177670777142.96602.16061256851726520967@kovaldistillery.com>`. Robert source-detail path sent Robert-only after Robert corrected the ask, subject `Avignon CRM recovery: source-detail recovery path`, Message-ID `<177671017432.9834.12022155147795059@kovaldistillery.com>`. Reconciliation: session `8ef5557d` output is routed/reported and review-ready while the CRM business blocker remains missing target packets or bounded source-detail approval; session `ede1f8c3` is resolved/review-ready as guidance recorded. No mailbox move/unfile/reclassify, source-body print, CRM/Portal/OPS mutation, external reply, credential/auth/OAuth, LaunchAgent/runtime, production, deploy, commit, push, reset, or cleanup occurred.
+
+- `avignon-robert-frank-crm-target-link-check-2026-04-20`
+  - Needed: Robert asked Frank to double check with Avignon whether Sonat's prior emails resolved the CRM target link. Source Message-ID `<CAAtX44YhuBQTJ=6xx6RBioG4WY==B994tZPjbW3bdBtNMbS5ew@mail.gmail.com>`; continuation permission/source Message-ID `<CAAtX44Zhz0i41owpAdyPBoWWNWLz_9=E=RVqu4KSKodeunf_iQ@mail.gmail.com>`.
+  - Next: Report to Task Manager/Frank that Avignon found a partial answer in Sonat's prior email. Do not mutate CRM/Portal/OPS until the existing records are verified and source `10` is treated either as an explicit no-op or assigned a specific target account/distributor.
+  - Decision: Partially resolved. Checked Avignon TODO/HANDOFF/decision ledger, non-private action-plan review, draft filenames, narrow sent/automation-log metadata, and minimum necessary Avignon Gmail records. Found Sonat reply `<CALbLtzyj0A=Vs8z5ftYRYeP+V2c_Bup_iRBR=DCck=-LzbO_WA@mail.gmail.com>`: source `1` points Alexis Harris to existing CRM handling under `Sophy Hotel - Hyde Park`; source `7` status closeout is complete/yes; source `10` says Stephen Beck is already in the system and should not be added again but does not name a distributor/account link target. Recorded durable dedupe state in TODO/HANDOFF; no private mailbox body text, CRM/Portal/OPS mutation, mailbox filing, external-sensitive email, credential/auth/runtime/deploy/git, or production state change occurred.
+
+- `avignon-sonat-email-delivery-status-2026-04-19`
+  - Needed: Robert replied to Frank's Avignon runtime review completion report, source Message-ID `<CAAtX44a0j6bXPbJNh=Q7Cmm34H91KfFZ6c2iEtLb-as8+ittxA@mail.gmail.com>`, approving what was necessary to get Sonat the Avignon emails.
+  - Next: Treat the Sonat-facing status/catch-up report as completed; remaining CRM target/link decisions stay under the existing CRM recovery item, and Gmail push/OAuth/PubSub remains parked pending Monday polling-health verification.
+  - Decision: Sent Sonat subject `Avignon email delivery status` with Robert copied through the approved Avignon route; Message-ID `<177665295551.68733.4913818806070436873@kovaldistillery.com>`. No credential/OAuth/Google Cloud/PubSub, LaunchAgent restart/cadence, mailbox-body read, CRM/Portal mutation, deploy, push, commit, reset, or external-sensitive send occurred.
+
+- `avignon-sonat-meeting-with-robert-2026-04-20`
+  - Needed: Sonat emailed Avignon on 2026-04-19 asking for a Monday morning meeting with Robert and a Google invite to Robert.
+  - Next: Treat clear Sonat calendar/meeting/invite requests as directives, not ambiguous review; this is also a completion-confirmation traceability example for the Robert escalation.
+  - Decision: Created `Meeting with Robert` on Sonat's calendar for Monday, April 20, 2026, 9:00-9:30 AM Central, invited Robert through Google Calendar, and sent Sonat confirmation `Meeting with Robert scheduled` under task id `avignon-sonat-meeting-with-robert-2026-04-20`; sent metadata recorded Message-ID `<177663586164.17202.3915562064317338952@kovaldistillery.com>`.
 
 - `avignon-email-review-new-automated-social-media-content-pipeline-instagram-facebo`
   - Needed: Claude/Robert social media pipeline thread reported an internal Instagram/Facebook draft-generation workflow and ended with the pipeline ready when needed.

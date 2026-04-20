@@ -1,0 +1,10 @@
+Robert,
+
+Work session: 4a3d38b5 / Frank one by one blocker emails.
+Related policy session: efea2fde / Frank external sender email policy plan.
+
+Blocker 1 is the external-sender email rule for Frank and Avignon.
+
+Do you approve the Frank-local external-sender interim rule for both Frank and Avignon, and should I mirror a concise version into the central AI Workspace policy docs?
+
+Decision boundary: no external auto-send will be enabled unless separately approved by named sender class/template.

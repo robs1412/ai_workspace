@@ -1,0 +1,18 @@
+Hi Robert,
+
+Work session: df1aa895 / Frank daily updates missing status check.
+Source Message-ID: <CAAtX44bvRKy+y9-pc6q2YtRNxagu-v=efSToCHVZvfXTz70HDg@mail.gmail.com>
+
+I checked non-secret local evidence only: Frank and Avignon sent logs, automation logs, launch stdout/stderr timestamps, current LaunchAgent plist metadata, and local TODO/HANDOFF state. I did not read mailbox bodies, print credentials, change OAuth/auth, alter LaunchAgents, mutate production, or send as Avignon.
+
+Result: Frank's Sunday 6:00 AM overview was sent, but I found no sent-log entry for Frank's Sunday 6:00 PM end-of-day roundup and no sent-log entry for Frank's Monday 6:00 AM morning overview before your 6:32 AM note. I sent both missing Robert-only catch-up reports now:
+- Frank End-of-Day Update: Sunday, April 19, Message-ID <177668493968.32295.4155531079385169941@kovaldistillery.com>
+- Morning Overview: Monday, April 20, Message-ID <177668494056.32305.7274393911093652375@kovaldistillery.com>
+
+Avignon: local evidence shows Avignon did send Sonat the Sunday morning summary at 6:00 AM, Message-ID <177659640379.52425.4125343581149672153@kovaldistillery.com>, and also sent Sonat the approved Avignon email delivery/status report at 9:42 PM, Message-ID <177665295551.68733.4913818806070436873@kovaldistillery.com>, with you copied. I found no Avignon sent-log entry for a Monday morning summary before this check, and no scheduled Avignon EOD send. The active Avignon scheduled-report plist is morning-only at 6:00 AM.
+
+Likely blocker/cause from local logs: both scheduled-report launch stdout files stopped at Sunday 6:00 AM, and `launchctl list` did not show the Frank or Avignon morning-overview labels as currently loaded. The Frank Sunday EOD also had a 4:54 PM dry-run row with a routed-task report blocker, but no later 6:00 PM sent row. I did not reload or edit any LaunchAgents under this task boundary.
+
+Next safe action: route a separate runtime-health session to inspect/reload the existing Frank/Avignon scheduled-report LaunchAgents and fix the report helper environment/log path issue. Avignon should get its own visible session before any Sonat catch-up email is sent as Avignon.
+
+Frank

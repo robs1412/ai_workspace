@@ -70,3 +70,9 @@ Attachment extraction completed into `/Users/kovaladmin/Library/CloudStorage/Goo
 Mark Gmail read-only OAuth completed and token retained locally under `~/.config/koval-gmail-export/token-mark.json`; token contents were not printed. The same uncapped ERTC/Leyton/Levin query exported 499 matching messages to `/Users/kovaladmin/Library/CloudStorage/GoogleDrive-robert@kovaldistillery.com/My Drive/2026 ERTC work/02_Communications/gmail-export-mark`. The folder contains 499 `.eml` files, 499 per-message metadata sidecars, `gmail-export-mark-manifest.csv`, and `gmail-export-mark-summary.json`.
 
 Attachment extraction completed into `/Users/kovaladmin/Library/CloudStorage/GoogleDrive-robert@kovaldistillery.com/My Drive/2026 ERTC work/02_Communications/gmail-export-mark-attachments`. The extractor saved 111 likely real attachments with `attachments-manifest.csv` and skipped 2,054 inline/signature-like files without exporting their binaries. Saved attachment types: 68 PDF, 23 XLSX, 12 DOCX, 6 JPG, 1 HEIC, 1 ICS.
+
+## 2026-04-20 Tax Records Receipt Update
+
+Robert reported that a copy of the 2020 Q4 Form 941 file has now been received and placed in `/Users/kovaladmin/Library/CloudStorage/GoogleDrive-robert@kovaldistillery.com/My Drive/2026 ERTC work/03_Tax_records`. This closes the previously noted missing-item status for the 2020 Q4 941 within the 2018-2023 quarter-by-quarter payroll-tax-return set.
+
+This Mac mini `admin` session could not directly access the `kovaladmin` Google Drive mount path, so the document itself was not opened or inspected here.

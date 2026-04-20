@@ -1,0 +1,9 @@
+Robert,
+
+Work session: 4a3d38b5 / Frank one by one blocker emails.
+
+Blocker 6 is the OPS Connecteam final read-only packet.
+
+Should the final Connecteam packet wait for a fresh approved export/read-only export path before closeout?
+
+Boundary: no Connecteam write, live resync, credential access, external send, OPS mutation, or production change should happen from this blocker email.

@@ -1,0 +1,32 @@
+Robert,
+
+Complete. Sonat was sent the Avignon email delivery/status report.
+
+Avignon sent:
+- Subject: `Avignon email delivery status`
+- To: `sonat@kovaldistillery.com`
+- Cc: `robert@kovaldistillery.com`
+- Avignon task ID: `avignon-sonat-email-delivery-status-2026-04-19`
+- Avignon Message-ID: `<177665295551.68733.4913818806070436873@kovaldistillery.com>`
+
+I am recording closure of your approval/request from this thread:
+- Source Message-ID: `<CAAtX44a0j6bXPbJNh=Q7Cmm34H91KfFZ6c2iEtLb-as8+ittxA@mail.gmail.com>`
+- Avignon delivery session: `ceca06e7`
+- Avignon Code/Git closeout session: `daa8d16f`
+
+Verification reported by Avignon:
+- Dry-run rendered cleanly with Sonat as To and Robert copied.
+- The send helper returned `sent`.
+- Avignon sent-log contains the Message-ID above.
+- Live polling stdout showed recent inbox-zero cycles.
+
+Not done:
+- No private email body content is included here.
+- No secrets, credentials, OAuth/token material, mailbox bodies, LaunchAgent restart/cadence change, deploy, push, commit, reset, clean, Google Cloud/Pub/Sub/IAM, CRM/Portal mutation, customer/vendor external-sensitive send, or mailbox archive/state mutation beyond the approved send/log path.
+- No Code/Git commit/push/deploy is approved; Avignon Code/Git closeout for docs/log/draft hygiene is separate.
+
+Remaining blockers:
+- CRM target/link decisions remain open.
+- Gmail push/OAuth/Pub/Sub remains parked pending the Monday polling-health check.
+
+Frank

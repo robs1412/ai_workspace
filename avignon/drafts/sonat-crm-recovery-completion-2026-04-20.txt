@@ -1,0 +1,26 @@
+Sonat,
+
+Point first: the six recovered CRM/activity items are now complete in Portal CRM.
+
+Completed:
+
+- Jessica Claude was already present and linked to Martignetti. I added the recap activity from you as activity 367205.
+- Breakthru VA was added as account 367206. Amanda Proper was added as contact 367207.
+- Bascom's Chop House was added as account 367208. Cory Alan Whitehurst was added as contact 367209.
+- Birk Walton was already present. I linked him to RNDC FL account 14342 and added the barrel-program activity records connected to Cory/Bascom's and Birk/RNDC FL as activities 367210 and 367211.
+- Michael Cavin was added under RNDC MI account 64246 as contact 367212.
+- Dan Schaden was added under RNDC MI account 64246 as contact 367213, with the Detroit-rep note.
+- Jose Garcia was added under Favorite Brands account 130091 as contact 367214. The source spelling was treated as the existing Favorite Brands account after duplicate lookup.
+- Vinocopia was already present as account 367202, and Matt Holland was already present as contact 367203. I updated the missing Vinocopia account fields from the approved source packet and verified Matt remains linked to Vinocopia.
+
+What I did not do:
+
+- I did not create duplicates for Jessica Claude, Birk Walton, Vinocopia, or Matt Holland.
+- I did not remove Birk Walton's prior existing RNDC USA link.
+- I did not send any external email.
+
+Verification completed: the created and updated account/contact/activity records are active, contact-account links are present, and the activities are attached to the intended account/contact records under your owner path.
+
+The earlier blocker was that Avignon had filed these to Handled without enough follow-through. That is corrected for these six items, and the workflow has been tightened so direct CRM requests from you should route, complete, and report back instead of being filed silently.
+
+Avignon

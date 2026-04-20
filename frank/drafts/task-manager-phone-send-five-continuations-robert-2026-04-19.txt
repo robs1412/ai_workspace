@@ -1,0 +1,69 @@
+Robert,
+
+Task Manager update: the Workspaceboard phone-send rollout is live, and the five additional continuations you asked to continue have been routed or completed to their current safe stopping points.
+
+1. Workspaceboard phone-send rollout: complete under your approval emails
+
+Original source Message-ID: <CAAtX44ZRicy+8Rap2oNq9pqjZN7F1YwLzUspNw-k0F2CDeAuhw@mail.gmail.com>
+Approval emails recorded: <CAAtX44b7U2LQkRgT6-oxN2gd8eWKojDqiHufesghsF91tO0r_A@mail.gmail.com> ("Approve both") and <CAAtX44b_=rOy4RdMZpJpJiCGMmjv32WOO_0BHkor2hGx10SDDQ@mail.gmail.com> ("Approve all 3").
+Sessions: implementation 359eb00b; prior Code/Git review cee6a6e7; rollout continuation 1d00dac7; Frank prior report b7da35b0.
+
+The approved narrow slice was committed and pushed. Workspaceboard commit 60277b5d5c5fbea14a5fe86ef1ecf7cb701a9c82 is on origin/main at git@github.com:robs1412/workspaceboard.git. Files: assets/task-manager-phone.js, task-manager-phone.html, TODO.md, HANDOFF.md. AI Workspace incident-log commit 5435b2d8656511b629d4146a6f43fb773c51613c is on origin/main at git@github.com:robs1412/ai_workspace.git. File: project_hub/issues/2026-04-18-frank-workspaceboard-response-incident.md.
+
+Verification before commit passed: node --check assets/task-manager-phone.js, php -l task-manager-phone.html, and npm test in server with 25/25 passing. Runtime reinstall copied the updated runtime/dependencies, but launchctl bootstrap/kickstart returned "Domain does not support specified action" from that shell. The worker verified installed runtime files were updated, then used the approved bounded fallback: TERM only Workspaceboard Node runtime PID 4949; KeepAlive relaunched PID 44571 on *:17878.
+
+Post-rollout checks passed: http://127.0.0.1:17878/task-manager-phone.html serves assets/task-manager-phone.js?v=11; the runtime asset contains sendInFlight, "Already sending", wait_ms 0, and "Message restored for retry"; /api/status is ok with board_version 0.76 and tmux_available true. Direct LAN runtime status still returns 401. Unauthenticated https://wb.koval.lan/workspaceboard/task-manager-phone.html still 307 redirects to MI login, which is expected/auth-gated.
+
+Dirty state remains in Workspaceboard and AI Workspace outside the committed slice; unrelated files and .bak artifacts were preserved. Note: rollout worker session 1d00dac7 is board-marked launch-failed/closed because the Workspaceboard runtime restart interrupted that tmux-backed session; Task Manager captured its completion output before the restart effect.
+
+2. Login/Auth approval path 3: classified; exact next approval needed
+
+Session 3eb6c959 made no code/config/runtime mutation. Docs-only classification was recorded in Login HANDOFF/TODO and the AI project-hub incident. Finding: the issue is mixed, but the next unresolved blocker is likely live Login/MI cookie-domain runtime config or .205 proxy/TLS/iPhone behavior, not a broad new Login source-code edit. Local Login already supports redirect= handoff and LOGIN_SESSION_COOKIE_DOMAIN. Existing live evidence showed host-only PHPSESSID without Domain=.koval.lan.
+
+Verification passed: php -l auth_helpers.php, index.php, sso_helpers.php, and /Users/werkstatt/workspaceboard/workspaceboard_auth.php.
+
+Approval needed: approve Security Guard + .205/MI owner non-secret live config/header check to confirm live Login/MI has .koval.lan cookie-domain config loaded; confirm Set-Cookie metadata only (names, Domain, Secure, HttpOnly, SameSite, lifetime; no cookie/session values); and confirm .205 forwards wb.koval.lan with expected non-secret identity headers. Any actual config/proxy/DNS/TLS/session-policy/service change still needs a separate narrow approval and rollback path.
+
+3. OPS Connecteam final read-only packet: complete; external resync still blocked
+
+Session f379d18c completed a local read-only recheck against existing April 9 exported workbook files. Command ran without --apply: php scripts/connecteam_staging_parity.php --from=2026-03-31 --to=2026-05-30.
+
+Result unchanged: 151/151 staged Connecteam rows matched OPS Outreach events with linked shifts; 0 missing OPS events; 0 linked-shift mismatches; 0 safe-to-apply rows; 0 review-needed rows; 17 unique users; 0 unmapped/ambiguous. Added docs/2026-04-19-connecteam-final-read-only-continuation-packet.md.
+
+Approval/blocker: true final external Connecteam re-sync/export remains blocked. Please provide fresh Connecteam export files or approve a read-only Connecteam export path with credentials handled outside chat.
+
+4. Portal existing-account summary docs closeout: docs ready; commit and live lookup gated
+
+Session 5efdbe4b completed the docs-only closeout recommendation. Dirty files are untracked docs: docs/existing-account-summary-workflow.md and docs/existing-account-summary-dry-run-2026-04-19.md. An untracked HANDOFF.md appears to belong to a separate duplicate-records Portal task and should not be bundled without explicit approval.
+
+Verification appropriate for docs-only passed: docs reviewed, fabricated fixture dry run only, and sensitive-data scan found no direct emails/phones/credentials/private IDs.
+
+Approval needed: approve preserving/committing the two docs-only files. Separately approve any later read-only live/sample lookup plus field list, Robert-default recipient rule, approved-owner delegation, and private contact exclusion.
+
+5. Salesreport RNDC New York / missing state reports: local audit complete; business/source question remains
+
+Session e894bd97 recorded the local-only audit continuation in Salesreport HANDOFF and doc/salesreport-audit-gaps-project-2026-04-19.md.
+
+Local artifacts show New York distribution totals in Sonat snapshots: $20,301.00 distribution sales, 161.00 distribution cases, and 87 distribution invoices, while WH invoice amount/cases/invoices are zero. The same snapshots caveat that no Sonat account-linked New York activity reports were found in February/March and no NY distribution invoices were found in those months inside the reviewed window. Local search did not find a separate RNDC New York source file/report export/2025-2026 state-report ledger.
+
+Decision needed from you/Sonat: clarify whether the New York issue is (A) missing Sonat/CRM account-linked February/March activity reports, (B) missing RNDC New York distributor/state sales source data, or (C) both. If proof beyond static artifacts is needed, approve a read-only production report rerun/export scoped to Sonat + New York + Dec 2025 through Apr 2026, with February/March broken out by activity rows and distribution invoices.
+
+6. Frank/Avignon Monday polling health: complete; Gmail push not urgent
+
+Session 562f8c19 completed the read-only health check. Both are still configured for 15-second polling. Avignon latest cycle: 0 inbox start/end, no decisions. Frank latest output: no new unseen messages requiring action. No stuck lock files. Old stderr errors are from before the helper fix; logs continued advancing afterward.
+
+No mailbox bodies, OAuth/token files, credentials, .env, Keychain, Pub/Sub/IAM, LaunchAgent changes, restarts, deploys, pushes, live pulls, or mailbox mutations were touched.
+
+Finding: current polling path looks healthy; Gmail push/OAuth is not urgent. Only if you still want true Gmail push, the next step is an explicit approval/setup bundle from the M4 ERTC Google auth context under Security Guard.
+
+7. AI-Bridge no-write schema/template package: local artifacts complete; preservation gated
+
+Session 85f18680 completed the local no-write docs/schema/template package. Changed/untracked files include README.md, TODO.md, CLAUDE-CODEX-NEXT-STEPS.md, bridge/schemas/work-record.schema.json, bridge/schemas/readonly-registration-records.json, bridge/templates/codex-claude-handoff.md, bridge/traces/*, and bridge/handoffs docs.
+
+Verification passed: jq empty passed for work-record.schema.json and readonly-registration-records.json. No live MI/Papers/Workspaceboard publication, external mutation, deploy, push, commit, reset, .205 access, OAuth, MCP config changes, or secrets were touched.
+
+Approval needed: approve Code/Git closeout/commit-push for the no-write local artifact package if you want it preserved. Publishing to live MI/Papers/Workspaceboard remains separately gated.
+
+I will keep following the approval-gated items to completion and keep the actual implementation, deploy, restart, mailbox, OAuth, and live-system changes behind their separate approval gates.
+
+Frank

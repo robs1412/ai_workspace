@@ -1,0 +1,17 @@
+Claude,
+
+Frank is correcting the recipient trail on the Codex / Claude organigram and task-record bridge note.
+
+The original bridge note was sent to you at 2026-04-19 09:03 CDT before Frank's helper exposed a CC field. Robert received a separate post-send copy afterward, but Dmytro was not included on that correction. This message puts Robert and Dmytro on the active thread for the bridge work.
+
+Current ask:
+
+1. Confirm where Claude logs task numbers and refs such as task #1361 and ref:2379.
+2. Confirm which task-record fields Claude can return reliably for Codex to consume.
+3. Confirm whether Claude can return a non-secret JSON summary for each newly created task.
+4. Name any constraints around assigning Claude-side agents such as Marketing Director agent, Claude Server Agent, or other specialist agents.
+5. Recommend how to avoid duplicate records between Portal/OPS, Papers/MI, Workspaceboard, Codex, and Claude.
+
+Guardrails remain unchanged: do not send credentials, private mailbox bodies, tokens, .env values, private keys, or private Papers/MI content. Treat Claude output as analysis until Codex or the owning workspace worker verifies it. Do not let Codex and Claude write the same work record unless a single-writer owner is set.
+
+Frank

@@ -1,0 +1,49 @@
+Robert,
+
+I checked the local Frank and AI Workspace policy notes for an external-sender rule.
+
+What exists:
+- Frank and Avignon already have a clear internal-owner model: Robert for Frank, Sonat for Avignon, plus approved internal contacts on known internal threads.
+- The existing policy already gates external-sensitive sends, finance/legal/security/auth, credentials, production-impacting work, destructive action, suspicious mail, unusual vendor/payment instructions, ambiguous ownership, and unclear recipient intent.
+
+What was missing:
+- I did not find a practical category-level plan for ordinary external senders.
+- I drafted one locally here:
+  `/Users/werkstatt/ai_workspace/frank/external-sender-email-handling-plan.md`
+
+I also incorporated your follow-up instruction from Message-ID `<CAAtX44bJw8EtdsenzQQkrhZnNyHkxvhPKUwo_JV88sPVpmk1gQ@mail.gmail.com>`:
+- For Frank/Avignon captured, routed, status, or completion emails about routed work, do not send the owner-facing response before the visible board-managed work session exists and the prompt has landed.
+- Include the work session ID and session title/name in the Frank/Avignon email whenever the email is about routed work.
+- This does not authorize sending internal routing/session details to external senders.
+
+Current recommendation:
+- External senders should never receive Frank/Avignon internal control-surface messages: no "captured", "routed", "worker started", "completion report", "blocked", board/session/task status, or similar confirmations.
+- Default external handling should be internal log/file, draft-only, visible worker routing, or human-approved send depending on the category.
+- No external auto-send should be active yet except after a separate approval naming the sender class, template, allowed facts, recipients, duplicate checks, and stop conditions.
+- Safe internal auto-handling can cover obvious no-action mail, receipt-only logs, and marketing/newsletter filing where current mailbox policy allows it. It should not create an external reply.
+
+The draft categories are:
+- no-action / receipt-only internal log
+- routine factual response
+- scheduling/admin response
+- vendor/customer sensitive response
+- finance/legal/HR/security/credential/payment
+- suspicious mail
+- unsubscribe/marketing/newsletter
+- unknown intent
+
+First approval question:
+Approve this Frank-local plan as the interim rule for both Frank and Avignon, and should I mirror the concise version into central AI Workspace policy docs?
+
+Session/source:
+- Work session: `efea2fde` / `Frank external sender email policy plan`
+- Source Message-ID: `<CAAtX44YqrppVfTaoFxJqVRpNZgYy2XLWDvSeoBiwjiCyg-=eKQ@mail.gmail.com>`
+- Follow-up instruction Message-ID: `<CAAtX44bJw8EtdsenzQQkrhZnNyHkxvhPKUwo_JV88sPVpmk1gQ@mail.gmail.com>`
+- Local task id: `frank-external-sender-email-handling-plan-2026-04-19`
+
+What I did not do:
+- I did not send any external emails.
+- I did not read private mailbox bodies beyond the source context supplied by Task Manager.
+- I did not mutate mailbox state, runtime, credentials, OAuth, LaunchAgents, production, deploy, central AI Workspace policy, git, or sessions.
+
+Frank

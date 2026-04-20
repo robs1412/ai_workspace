@@ -4,7 +4,7 @@
 - Date: 2026-04-19
 - Owner: AI Workspace / Codex Integration Manager
 - Repos/surfaces: `ai_workspace`, `workspaceboard`, future `ai-bridge`, future MI/Papers/.205 surfaces
-- Status: active routing started; live `.205`, MI, Papers, OAuth, Portal data, and mailbox runtime changes are not started
+- Status: no-write/read-only plan approved for docs/task-record continuation; live `.205`, MI, Papers, OAuth, Portal data, and mailbox runtime changes are not started
 
 ## Robert Request
 
@@ -250,6 +250,62 @@ Evidence captured:
 - Robert approved a fixture-only dry run for the Portal existing-account/contact summary format in Codex chat on 2026-04-19. Original worker `ba888628` was no longer visible in the board API, so replacement worker `d3f5b188` was created and accepted the dry-run brief.
 - AI-Bridge worker `f66bd3cb` produced `/Users/werkstatt/ai-bridge/bridge/traces/2026-04-19-read-only-registration-design.md`.
 
+## Concrete Bridge Task Register
+
+Source: Robert directive at 2026-04-19 12:13 CDT: convert bridge plan into concrete tasks and visible worker/session routes.
+
+Register status: active. These task records are the durable source for the Codex/Claude/Papers/MI bridge until they are superseded by real OPS/Portal records or an approved shared work-record system. They preserve the closed gates: no `.205` writes, OAuth, Papers/MI writes, Portal/CRM mutation, MCP exposure, deploy/live pull, service restart, mailbox credential exposure, or credential/private-mailbox content exposure without separate approval.
+
+Read-only actionability rule, added from Robert's 2026-04-19 directive: read-only does not mean passive. Every read-only audit, design, or fixture packet must end with owner, workspace, status, next safe action, approval boundary, and either a visible worker/session route or a dated follow-up/request task. If the next step is blocked by missing source/export/approval, create a specific request task naming the needed source/export/approval. If implementation is safe but not approved, create an implementation-ready task brief with closed gates listed.
+
+## 2026-04-20 Approval / Dedupe Attachment
+
+Source Message-ID: `<CAAtX44bSgMHtL+Y96sCn+g63U7FLpzbYQ0fCCm48Gc4vtA1QUA@mail.gmail.com>`; classification `tracked-primary-instruction`; source subject `Re: Blocker 4: Claude and AI Bridge context`; from/date Robert Birnecker `<robert@kovaldistillery.com>` / Mon, 20 Apr 2026 09:33:19 -0700.
+
+Robert wrote: "Hi, I think I approved a plan already." This source is attached to the existing integration task/dedupe state and does not create a duplicate work item.
+
+Additional implementation approval source Message-ID: `<CAAtX44ZYxUpzOLz1UXNUT-C8CnQSXxGy0hge3ojxW+f3PwBHWw@mail.gmail.com>`; classification `tracked-primary-instruction`; source subject `Re: AI bridge status: Claude, integration state, next 5 steps`; from/date Robert Birnecker `<robert@kovaldistillery.com>` / Mon, 20 Apr 2026 10:29:27 -0700. Robert wrote: "Great. Let's add to plan and implement." This source attaches to the same no-write/read-only bridge plan and does not create a duplicate work item.
+
+The already-approved plan, as reflected in this register, is:
+
+- use a no-write/read-only work-record projection before any shared write path;
+- use AI Workspace TODO, project-hub, and Workspaceboard metadata as the current source material;
+- use `/Users/werkstatt/ai-bridge/bridge/schemas/work-record.schema.json`, `/Users/werkstatt/ai-bridge/bridge/templates/codex-claude-handoff.md`, `/Users/werkstatt/ai-bridge/bridge/schemas/readonly-registration-records.json`, and `/Users/werkstatt/ai-bridge/bridge/memory/work-record-projection-source-map.json` as the local contract/artifact bundle;
+- route Workspaceboard exporter/view implementation only after Code/Git Manager resolves file ownership, endpoint shape, non-canonical projection ID policy, and dirty-worktree ownership;
+- keep live `.205`, Papers/MI, OAuth, Portal/CRM, mailbox credential/content, MCP exposure, deploy/live pull, service restart, and external email send gates closed until separately approved.
+
+Safe internal implementation completed from the new approval: AI-Bridge added `/Users/werkstatt/ai-bridge/bridge/memory/work-record-projection-source-map.json` and `/Users/werkstatt/ai-bridge/bridge/traces/2026-04-20-approved-next-steps-implementation.md`. These are local non-secret planning/source-map artifacts only.
+
+Current next safe action: resolve `bridge-20260419-workspaceboard-exporter-file-ownership-request` through Code/Git Manager and the Workspaceboard owner before any code implementation. If Robert asks for a status email, Frank should use the completion/blocker report from the AI-Bridge session rather than treating the approval as a fresh request.
+
+| Task id | Owner / workspace | Status | Next action | Approval boundary | Source pointer |
+| --- | --- | --- | --- | --- | --- |
+| `bridge-20260419-work-record-schema` | Codex Integration Manager + AI-Bridge worker / `ai-bridge`; visible session `82027764` | Local contract ready; 2026-04-20 source-map implementation added. | Use `bridge/schemas/work-record.schema.json` plus `bridge/memory/work-record-projection-source-map.json` as the contract for exporter/view planning. | Schema/docs/source-map only; no `.205`, MI/Papers write, MCP exposure, OAuth, Portal/CRM mutation, mailbox content read, deploy/live pull, service restart, or credential exposure. | This note, sections `Claude Task-Record Pattern To Adopt`, `Phase 2`, and `Immediate Next Build`; AI-Bridge session `82027764`; approval source `<CAAtX44ZYxUpzOLz1UXNUT-C8CnQSXxGy0hge3ojxW+f3PwBHWw@mail.gmail.com>`. |
+| `bridge-20260419-readonly-exporter-plan` | Codex Integration Manager + Code/Git Manager / `workspaceboard`; visible scoping session `657f4780` | Scoping complete; specific file-ownership request created. | Use session `657f4780` output as the implementation-ready brief and resolve `bridge-20260419-workspaceboard-exporter-file-ownership-request` before opening an implementation worker. | Planning/docs/scoping only until Code/Git Manager assigns file ownership; no dirty-file discard, no pull over dirty trees, no deploy/live pull, no service restart, no runtime change, no shared-system write. | This note, `Phase 2: No-Write Papers/MI Projection`; AI-Bridge schema `bridge/schemas/work-record.schema.json`; Workspaceboard scoping session `657f4780`. |
+| `bridge-20260419-workspaceboard-exporter-implementation-brief` | Code/Git Manager + Workspaceboard worker / `workspaceboard` | Implementation-ready, not approved to code yet. | After AI-Bridge schema output is reviewed, create a Workspaceboard worker brief for a read-only JSON exporter/view using `bridge/schemas/work-record.schema.json`; Code/Git Manager must assign file ownership before edits. | No implementation until Code/Git Manager approves dirty-worktree ownership; no runtime change, deploy/live pull, service restart, MCP change, MI/Papers write, `.205` access, OAuth, Portal/CRM mutation, or credential exposure. | Derived from `bridge-20260419-readonly-exporter-plan` and Robert's read-only actionability directive. |
+| `bridge-20260419-workspaceboard-exporter-file-ownership-request` | Code/Git Manager + Workspaceboard owner / `workspaceboard` | Specific request task from scoping session `657f4780`. | Decide whether implementation may touch `server/digital-office-index.js` or must add `server/bridge-work-record-exporter.js`; decide endpoint shape (`/api/bridge/work-records` vs `/api/digital-office-index`); decide non-canonical projection ID policy; confirm active session `8c23b19d` does not own related files. | No implementation, dirty-file discard, git pull over dirty tree, commit, push, deploy/live pull, service restart, runtime change, MCP exposure, `.205`, OAuth, Papers/MI write/read, Portal/CRM mutation, mailbox/private-body access, or credential exposure. | Workspaceboard scoping session `657f4780`; derived from `bridge-20260419-readonly-exporter-plan`. |
+| `bridge-20260419-codex-claude-handoff-template` | AI-Bridge worker / `ai-bridge`; visible session `82027764` | Review-ready from no-write session output. | Review `bridge/templates/codex-claude-handoff.md`; use it for future Claude roundtrip tasks after source verification. | Template/docs only; Claude output remains analysis until verified by Codex or target worker; no `.205`, MCP, OAuth, Papers/MI write, Portal/CRM mutation, deploy/live pull, or service restart. | This note, `Phase 3: Codex-Claude Handoff Contract`; AI-Bridge session `82027764`. |
+| `bridge-20260419-claude-task-logging-roundtrip` | Frank + Codex Integration Manager / `frank`, `ai` | Waiting on Claude response. | When Claude replies to Frank's corrected bridge note, map Claude's task id/status fields into this register or a successor task record and route any implementable work to a visible worker. | No mailbox credential/private body exposure; no external resend unless separately approved; no `.205`, Papers/MI write, Portal/CRM mutation, MCP exposure, deploy/live pull, or service restart. | Frank task `frank-2026-claude-codex-organigram-work-record-bridge-cc-follow-up`; Message-ID `<177661269639.29604.14362403569930801531@kovaldistillery.com>`. |
+| `bridge-20260419-claude-task-logging-response-request` | Frank / `frank`; visible session `86f1b736` | Frank nudge sent; waiting on Claude response, not Robert. | Watch for Claude's reply; when it arrives, map task id/source ref/owner/status/next action/approval gates into this register or successor task records. | No mailbox credential/private body exposure; no broad resend; no external-sensitive content; no `.205`, Papers/MI write, MCP exposure, deploy/live pull, service restart, or credential exposure. | Derived from `bridge-20260419-claude-task-logging-roundtrip`; original Frank Message-ID `<177661269639.29604.14362403569930801531@kovaldistillery.com>`; nudge Message-ID `<177661959602.5921.17895643980954120746@kovaldistillery.com>`; nudge session `86f1b736`. |
+| `bridge-20260419-portal-existing-summary` | Portal design + Frank summary path / `portal`, `frank` | Fixture-only dry run completed or parked for review; live path blocked. | Use the fixture output to create a live-read approval request and implementation-ready brief rather than leaving the design passive. | No Portal/CRM mutation, no production DB write, no private contact detail broadcast, no email send, no deploy/live pull/restart. | Task `ai-cim-20260419-portal-existing-account-summary`; sessions `ba888628`, `d3f5b188`; `Phase 4`. |
+| `bridge-20260419-portal-live-lookup-approval-request` | Portal owner + Frank / `portal`, `frank` | Specific approval request task. | Ask Robert/source owner to approve or reject a read-only Portal/CRM lookup path, allowed account/contact fields, link format, recipient/copy behavior for Frank's summary, and whether fixture wording is acceptable. | Until approved: no live Portal/CRM read, no mutation, no private details in chat/email, no send, no deploy/live pull/restart. | Derived from read-only Portal summary packet and Robert's read-only actionability directive. |
+| `bridge-20260420-papers-readonly-wrapper-approval` | Workspaceboard + Security Guard / `workspaceboard`, `ai` | Specific approval request task dated 2026-04-20. | Ask Robert to approve or reject live read-only Workspaceboard access to Papers through the deny-by-default wrapper and name initial allowed scopes/collections/document IDs. | No Papers writes, credential/auth handling, `.205` access, MCP config change, LaunchAgent/runtime change, production mutation, private mailbox-body exposure, deploy, push, or live pull. | Source/access blocker; Papers scoping sessions `c6421ac1`, `778ef252`; Security Guard `c2e66c43`; Code/Git Manager `9a4787cd`. |
+| `bridge-20260419-security-205-papers-access-note` | Security Guard / `ai`; visible session `99244c6e` | Closed as security decision record. | If `.205`/Papers access is still needed, ask Robert/Security to approve a separate workflow that names host, identity, allowed scope, secure credential channel, audit logging, recovery path, and exact execution gate before access. | No `.private` read, credential/token/key/password inspection or printing, SSH, `.205` access, live Papers/MI access, MCP config change, AGENTS operational access-note, auth change, service/runtime change, deploy/live pull, or destructive action. | Frank direct-email source Message-ID `<CAAtX44aR35SbgE+bSb7w_KKqXPvZ8-xt7xM8waJUzoRLV0gpqg@mail.gmail.com>`; dedupe key `frank-direct-email:CAAtX44aR35SbgE+bSb7w_KKqXPvZ8-xt7xM8waJUzoRLV0gpqg:205-papers-access-note`; `AGENTS.md` non-secret access-documentation rule. |
+| `bridge-20260420-frank-avignon-oauth-health` | Security Guard + Frank/Avignon / `ai`, `frank`, `avignon` | Dated follow-up for Monday 2026-04-20. | Verify polling health first; only then decide whether Gmail API push/OAuth is still needed. | No OAuth, Google auth, Pub/Sub/IAM, mailbox content read, token/path disclosure, runtime cadence change, deploy/live pull/restart, or external send before explicit approval. | Task `ai-cim-20260419-oauth-monday-follow-up`; project log `2026-04-18-frank-avignon-gmail-push-plan.md`. |
+| `bridge-20260427-macee-outreach-template-review` | Frank/Outreach Communicator / `frank`, future `ops` if approved | Dated follow-up for 2026-04-27 unless Robert approves earlier sanitized-source review. | Review whether supplied sanitized examples or approved mailbox-owner/OAuth path exists for Macee usual-booking templates; create a worker only when source access is approved. | No Macee OAuth, mailbox content read, credential exposure, external send, Portal/CRM mutation, deploy/live pull/restart. | Task `ai-cim-20260419-macee-outreach-templates`; Frank task `frank-2026-04-19-outreach-macee-inbox-oauth-template-security-review`. |
+| `bridge-20260427-national-outreach-brief` | Frank/Outreach Communicator / `frank` | Dated follow-up for 2026-04-27. | Prepare or route the national outreach task brief; draft-only if recipient/content/send authority is unclear. | No email send until audience/copy/sender/timing are approved or covered by standing workflow. | Task `ai-cim-20260419-national-outreach-20260427`; Frank task `frank-2026-04-19-national-outreach-email-macee-leave-2026-04-27`. |
+| `bridge-20260419-readonly-registration-schema` | AI-Bridge worker + Codex Integration Manager / `ai-bridge`, `ai`; visible session `82027764` | Review-ready from no-write session output; live registration blocked. | Review `bridge/schemas/readonly-registration-records.json`, then route Workspaceboard/MI publication only if Robert separately approves a live read-only path. | No `.205`, MI/Papers write, MCP exposure/config change, OAuth, Portal/CRM mutation, mailbox credential/content exposure, deploy/live pull/restart. | Task `ai-cim-20260419-active-registration-readonly`; trace `/Users/werkstatt/ai-bridge/bridge/traces/2026-04-19-read-only-registration-design.md`; AI-Bridge session `82027764`. |
+| `bridge-20260419-role-validation` | Codex Integration Manager / `ai`, `workspaceboard` | Closed for source validation; monitor for live drift. | Reopen only if Workspaceboard live organigram drifts from source or role docs lose the AI Manager/Codex/Claude entries. | No Workspaceboard runtime/restart/deploy or live mutation from this closed validation task. | Task `ai-cim-20260419-role-validation`; `Role And Organigram Updates`. |
+
+Visible worker/session routing at 2026-04-19 12:13 CDT:
+
+- Reused Codex Integration Manager session `b66fdade` as the coordinating session for this task register and future bridge-status conversion; prompt delivery was verified and the session entered `working`.
+- Created AI-Bridge worker session `82027764`, `AI Bridge no-write task-record schema and handoff templates`, for the currently safe no-write bundle: `bridge-20260419-work-record-schema`, `bridge-20260419-codex-claude-handoff-template`, and `bridge-20260419-readonly-registration-schema`. Prompt delivery was verified and the session entered `working`.
+- Created Workspaceboard scoping session `657f4780`, `Workspaceboard Code/Git scope for bridge readonly exporter`, for the read-only Code/Git/file-ownership pass on `bridge-20260419-readonly-exporter-plan`. Prompt delivery was verified. The session produced an implementation-ready brief and specific request task `bridge-20260419-workspaceboard-exporter-file-ownership-request`.
+- Frank visible session `86f1b736`, `Frank nudge Claude on bridge and Avignon context`, sent the specific Claude response request for `bridge-20260419-claude-task-logging-response-request`; the task is now waiting on Claude response rather than Robert input.
+- Defer Workspaceboard exporter/view code implementation until `bridge-20260419-workspaceboard-exporter-file-ownership-request` is resolved, Code/Git Manager assigns file ownership against the dirty worktrees, and Robert separately approves any code/runtime step.
+- Keep OAuth, Macee mailbox/template, national outreach, Portal live lookup, Papers/MI ingestion, and Claude roundtrip items as dated or response-blocked task records rather than freeform notes.
+
 ## 2026-04-19 Open TODO Worker Push
 
 Source: Robert chat directive on 2026-04-19 to work faster across the `17` open TODO items and open at least `10` more workers.
@@ -270,6 +326,30 @@ Action taken: created or advanced `12` additional visible workers, all bounded t
 | `6be8c383` | `bid` | BID finance action-report owner decision packet | launched / needs-input | no finance credentials, QuickBooks, live/current package reads, imports, scrapers, emails, deploys, commits/pushes, production writes, or `.205` |
 | `657a7024` | `bid` | BID payroll reimbursement owner decision packet | finished / review-ready | no payroll credentials, live Portal/payroll access, email send, imports, production validation, deploy, commit/push, or production writes |
 | `dd9187e4` | `avignon` | Avignon CRM recovery blocker action-plan review | launched / needs-input | no private body/contact-field printing, phpList, broad import, Portal/CRM mutation, mailbox filing, credential work, destructive change, or external-sensitive send |
+
+## 2026-04-19 Directive Revision
+
+Source: Robert chat directive on 2026-04-19: review the directives again, improve the plan, and make the whole worker/TODO/fan-out flow more fluid.
+
+Observed friction:
+
+- Robert chat instructions can become ephemeral if they are not converted immediately into task-record rows and project-hub traces.
+- Short-lived workers can disappear from the board API after producing files or useful output.
+- Opening many workers is not the same as completion; the batch needs prompt verification, status sweeps, safe nudges, blocker recording, and Code/Git closeout.
+- Waiting states were sometimes treated as parking instead of a cue to push the safe next action.
+- Closeout ownership was unclear for doc/planning workers that changed git-backed files but did not produce application code.
+
+Directive updates made:
+
+- `AGENTS.md`: added the Fast fan-out control-loop rule, Orphaned-output rule, and Codex Integration Manager fluidity rule.
+- `worker_roles/codex-integration-manager.md`: expanded responsibilities and outputs to include fan-out batch traces, closeout maps, durable control-loop rules, and orphaned-output recovery.
+- `worker_roles/task-manager-polier.md`: added fast fan-out and orphaned-output operating references for Task Manager.
+- `worker_roles/decision-driver.md`: clarified that waiting workers in fan-out should receive one safe bounded continuation or an internal route before surfacing Robert decisions.
+- `worker_roles/operating-model.md`: updated the Task Manager and Codex Integration Manager startup prompts with the fan-out, sweep, orphaned-output recovery, and directive-revision expectations.
+
+Next safe automation candidate:
+
+- Workspaceboard should eventually expose a first-class fan-out batch object that tracks source/date, launched worker IDs, prompt-delivery state, latest status, changed files, Code/Git closeout route, and real blockers. That would reduce manual API/status sweeps and make the open-worker pattern easier to audit. This is a design recommendation only; no Workspaceboard runtime/code change was performed in this directive pass.
 
 
 ## Open Gates

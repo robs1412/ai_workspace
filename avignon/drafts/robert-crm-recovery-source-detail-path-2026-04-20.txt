@@ -1,0 +1,48 @@
+Robert,
+
+Point first: correction received. Avignon should not make you or Sonat work from questions, source ids, or old Message-IDs. The useful response is the business packet Avignon has, the exact business packet Avignon does not have, and the safest next action.
+
+What Avignon actually has right now:
+
+- Six recovered CRM/activity sources from the Sonat handled-mail recovery lane.
+- One source is labeled `Add activity to CRM`.
+- Four sources are labeled `CRM addition`.
+- One source is labeled `CRM addition and activity update requested`.
+- Portal recovery worker session `8ef5557d` checked the approved non-secret local state and blocked before making any CRM/Portal/OPS change.
+- The sample-request correction is already fixed in Avignon guidance: regular Sonat product/sample requests go to Portal POS/Samples create; barrel-sample workflow is used only when Sonat explicitly says `barrel sample`.
+
+The actual blocker:
+
+The recovered local state has subjects/classification only. It does not have the account/company, contact/person, field values, activity details, duplicate clues, or approval-to-proceed packet needed for the requested CRM entries.
+
+In plain terms, Avignon does not yet know which company or account each CRM request belongs to, which person is involved, what field values to enter, what activity note/date/type to create, whether an existing record should be updated instead of creating a new one, or whether each item is approved as routine once the target is clear.
+
+Recommended next action:
+
+Avignon/Task Manager should run a bounded source-detail recovery pass for those six messages. That pass would read only the minimum necessary original message content and attachments needed to extract the business target packet, then route the exact Portal/CRM work through the correct visible worker. It would not print private mailbox bodies in chat, expose credentials, make OAuth/auth changes, send external replies, or mutate CRM/Portal/OPS until the target packet is clear.
+
+Because that next step requires reading original mailbox source detail, I am treating it as approval-gated. If you approve it, the useful instruction is:
+
+Approve Avignon source-detail recovery for the six CRM/activity sources. Extract only the minimum business target packet for account/company, contact/person, action, field values or activity note/date/type, duplicate clues, and whether routine CRM entry may proceed once clear.
+
+If you do not want Avignon to read those source details, the fallback is a simple table from you or Sonat with one row per item:
+
+- source label: Add activity to CRM, CRM addition, or CRM addition and activity update requested
+- company/account
+- contact/person
+- action: create, update, or activity
+- field values or activity note/date/type
+- duplicate or existing-record clue
+- approval to proceed once the row is clear
+
+What I am doing next:
+
+- I am recording this correction in Avignon TODO/HANDOFF/decision state.
+- This Robert correction source can be filed as handled after this response is logged.
+- The CRM recovery itself remains blocked until source-detail recovery is approved or a human-readable table is supplied.
+
+What was not done: no source bodies were printed, no credentials/OAuth/auth work was touched, no external reply was sent, and no CRM/Portal/OPS record was changed.
+
+Relevant trace: task `avignon-robert-crm-recovery-source-detail-path-2026-04-20`; prior Portal worker session `8ef5557d`; handled-mail recovery task `avignon-sonat-handled-mail-recovery-2026-04-20`.
+
+Avignon

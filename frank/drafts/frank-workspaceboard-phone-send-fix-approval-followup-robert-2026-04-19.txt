@@ -1,0 +1,23 @@
+Robert,
+
+One clarification on the Workspaceboard phone-page report I just sent: this is not fully closed while rollout is still approval-gated. Frank will follow this task to completion until you approve the next step and it is routed, or you decline/park it.
+
+The implementation blocker is not a code failure. The blocker is closeout/live rollout approval.
+
+Please approve or park these exact next steps:
+1. Approve staging only the narrow phone-send slice and committing/pushing it:
+   - /Users/werkstatt/workspaceboard/assets/task-manager-phone.js
+   - /Users/werkstatt/workspaceboard/task-manager-phone.html
+   - /Users/werkstatt/workspaceboard/TODO.md
+   - /Users/werkstatt/workspaceboard/HANDOFF.md
+   - /Users/werkstatt/ai_workspace/project_hub/issues/2026-04-18-frank-workspaceboard-response-incident.md
+2. After that commit/push, approve Workspaceboard runtime reinstall/deploy/restart so the Node LaunchAgent installed copy serves the updated phone page.
+3. Treat auth persistence / Login / MI / .205 / cookie / DNS/TLS/proxy work as a separate approval-gated path. That work was not changed by this phone-send slice.
+
+Current tracking:
+- Source Message-ID: <CAAtX44ZRicy+8Rap2oNq9pqjZN7F1YwLzUspNw-k0F2CDeAuhw@mail.gmail.com>
+- Workspaceboard implementation session: 359eb00b
+- Code/Git closeout session: cee6a6e7
+- Prior status report Message-ID: <177664330460.41426.7979208972214506910@kovaldistillery.com>
+
+Frank

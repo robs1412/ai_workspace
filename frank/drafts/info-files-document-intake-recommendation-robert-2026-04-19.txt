@@ -1,0 +1,14 @@
+Robert,
+
+I routed the document-intake question and got a security-aware operating recommendation.
+
+Recommended default: use a restricted Robert-owned Google Drive intake area for actual documents, paired with git-backed AI Workspace / AI-Bridge metadata records for routing, source IDs, sensitivity tier, approvals, and summaries. Do not use git, chat, normal logs, Papers, MI, or email as the raw storage location for sensitive files or credentials. Papers/MI should stay a later approved projection/index target, not the first live intake store.
+
+Suggested handling:
+- public/reference docs: URL or sanitized Markdown refs are fine;
+- internal business docs: restricted Drive storage plus metadata record;
+- sensitive docs/secrets/credentials: Security Guard/private credential handling only;
+- Google Docs/Drive links: log metadata first, read/download only after explicit scope approval;
+- email attachments: classify first, then move/copy only through the approved intake workflow.
+
+Nothing was created, shared, downloaded, or permission-changed. The next decision is whether you approve setting up the restricted intake folder and who should initially have access: Robert only, Robert + Frank, Robert + Frank + Avignon, or a broader internal group.

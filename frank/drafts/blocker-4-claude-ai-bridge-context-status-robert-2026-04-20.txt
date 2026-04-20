@@ -1,0 +1,31 @@
+Subject: Blocker 4: Claude / AI Bridge context status
+
+Robert,
+
+I attached your approval reply to the existing Codex / Claude / AI Bridge integration task instead of creating a duplicate work item.
+
+Source Message-ID:
+<CAAtX44bSgMHtL+Y96sCn+g63U7FLpzbYQ0fCCm48Gc4vtA1QUA@mail.gmail.com>
+
+Current state:
+
+- Existing Master ID: AI-INC-20260419-CODEX-CLAUDE-PAPERS-01.
+- Existing register: ai_workspace/project_hub/issues/2026-04-19-codex-claude-papers-integration-plan.md, section "Concrete Bridge Task Register".
+- Existing/related sessions: Codex Integration Manager b66fdade, relaunched continuation 05d93895, AI-Bridge no-write artifact worker 82027764, Workspaceboard exporter scoping worker 657f4780, Frank Claude-response nudge 86f1b736.
+- The approved plan is the no-write/read-only work-record projection path: use AI Workspace TODO, project-hub, and Workspaceboard metadata as source material; use the AI-Bridge schema/template/registration artifacts as the contract; then route any Workspaceboard exporter/view work only after Code/Git Manager resolves file ownership.
+
+What is ready:
+
+- /Users/werkstatt/ai-bridge/bridge/schemas/work-record.schema.json
+- /Users/werkstatt/ai-bridge/bridge/templates/codex-claude-handoff.md
+- /Users/werkstatt/ai-bridge/bridge/schemas/readonly-registration-records.json
+
+Next safe action:
+
+Route bridge-20260419-workspaceboard-exporter-file-ownership-request through Code/Git Manager. That request must decide whether implementation may touch server/digital-office-index.js or should add server/bridge-work-record-exporter.js, choose the endpoint shape, decide the non-canonical projection ID policy, and confirm dirty-worktree/session file ownership before any code edits.
+
+Still gated:
+
+No .205 access, Papers/MI live data or writes, OAuth, Google Cloud, Portal/CRM mutation, mailbox credential/content exposure, MCP exposure, deploy/live pull, runtime config change, service restart, commit, or push has been done from this continuation.
+
+Frank

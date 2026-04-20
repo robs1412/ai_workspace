@@ -1,0 +1,24 @@
+Robert,
+
+Superseded local record: Robert's follow-up clarified that this completion note was still wrong because it displayed the X URL visibly. The local signature task was amended afterward so the rendered HTML signature uses linked text `X` with target `http://www.x.com/kovaldistillery` for both Frank and Avignon. No second completion report was sent before linked-text verification.
+
+I corrected Frank's outbound signature social links. The X link now renders as:
+
+X: https://x.com/kovaldistillery
+
+I changed the installed Frank send helper and the git-backed Frank completion-confirmation preview helper. Avignon was affected because the parity/shared send helper profile carried the same social-link value, so I corrected the same X link there as well and left Avignon's role/contact details unchanged.
+
+Verification completed:
+- Python compile passed for all touched scripts.
+- Frank and Avignon helper render previews show the corrected X, Instagram, and Facebook lines.
+- Frank completion-confirmation preview shows the corrected signature.
+
+Reference:
+- Source Message-ID: <CAAtX44Zdop6K5a=5tzQ+3u2-bFBVLs9jdfxZEsPis-LvnX5a6Q@mail.gmail.com>
+- Dedupe key: frank-signature-social-links-fix-CAAtX44Zdop6K5a-5tzQ-3u2-bFBVLs9jdfxZEsPis-LvnX5a6Q
+- Visible worker/session: 9f7823b5
+- Changed installed surfaces: /Users/admin/.frank-launch/runtime/scripts/send_frank_email.py and /Users/admin/.avignon-launch/runtime/scripts/send_frank_email.py
+- Changed git-backed helper: frank/scripts/frank_completion_confirmation.py
+- Backups: .bak-20260419-signature-social-links copies under both installed runtime script directories
+
+I did not change OAuth/auth, credentials, polling cadence, mailbox filing, production systems, deploy/push state, or send any external test mail.

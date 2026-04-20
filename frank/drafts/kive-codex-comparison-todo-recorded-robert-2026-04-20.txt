@@ -1,0 +1,11 @@
+Robert,
+
+Recorded this as a later, non-urgent Frank/AI TODO:
+
+`frank-kive-codex-capability-comparison-later-2026-04-20` - investigate Kive and compare it to Codex capabilities.
+
+Source tracking is attached to Message-ID `<CAAtX44aHsgMTWqCOWBSfCSORgmps39srq=eeN=An5DBY-RHAng@mail.gmail.com>` with dedupe key `frank-kive-codex-capability-comparison-later-CAAtX44aHsgMTWqCOWBSfCSORgmps39srq-eeN-An5DBY-RHAng`, so this forwarded email should not resurface as a fresh task.
+
+Session reference: `019dab8c-081f-7a33-b56c-1a2ac5a2f624` / Frank email-specific Kive TODO capture.
+
+I did not research Kive, contact anyone, touch credentials, change systems, deploy anything, or take any external-sensitive action. This was just the TODO/HANDOFF/log capture for later.

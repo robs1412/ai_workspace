@@ -1,0 +1,13 @@
+Hi Robert,
+
+I updated the Frank and Avignon outbound formatting surfaces that control the local approved send helpers and the main capture/report-style paths. Future messages from those paths should carry a useful paragraph or two of context before the reference details, instead of compressing the reason for the email into one line. I also restored default assistant signatures for Frank and Avignon; Avignon's signature uses Avignon-specific role/company details and does not copy your personal title or contact details.
+
+I verified the change with dry-run output only: Frank send-helper preview, Avignon send-helper preview, Avignon morning-summary preview, Frank direct-capture acknowledgement preview, and the Frank completion-confirmation preview all rendered expanded context plus the restored signature. I did not change OAuth/auth, credentials, polling cadence, mailbox filing, production systems, deploy/push state, or send any external test mail.
+
+Reference:
+- Source Message-ID: <CAAtX44b2TeGjyqiz9Eu8hSt7HjyUDioP7eoVO7SQ1z4m_EKmgw@mail.gmail.com>
+- Dedupe key: frank-avignon-email-context-signature-fix-CAAtX44b2TeGjyqiz9Eu8hSt7HjyUDioP7eoVO7SQ1z4m_EKmgw
+- Visible worker/session: 0636ae32
+- Changed installed runtime files: /Users/admin/.frank-launch/runtime/scripts/send_frank_email.py, /Users/admin/.avignon-launch/runtime/scripts/send_frank_email.py, /Users/admin/.frank-launch/runtime/scripts/assistant_decision_email.py, /Users/admin/.avignon-launch/runtime/scripts/assistant_decision_email.py, /Users/admin/.frank-launch/runtime/scripts/frank_auto_runner.py, /Users/admin/.avignon-launch/runtime/scripts/avignon_morning_overview.py
+- Changed git-backed helper: /Users/werkstatt/ai_workspace/frank/scripts/frank_completion_confirmation.py
+- Backups: matching .bak-20260419-context-signature copies in the installed runtime script directories

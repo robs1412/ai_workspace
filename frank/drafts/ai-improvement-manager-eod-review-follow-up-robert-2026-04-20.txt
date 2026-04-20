@@ -1,0 +1,26 @@
+Robert,
+
+Subject: Re: AI Improvement Manager role setup complete
+From/date: Robert Birnecker <robert@kovaldistillery.com> / Mon, 20 Apr 2026 10:45:31 -0500
+Context: You clarified that the AI Improvement Manager should review our work and interaction at the end of the day. You suggested either a standing visible Workspaceboard session or just reading the Markdown files at end of day.
+
+Proposed safe next action: Use end-of-day Markdown-file review as the operating source model, with a standing visible Workspaceboard session only as the review surface if Task Manager creates/prompts it. The session should read approved non-secret TODO/HANDOFF/project-hub/role docs plus board-provided summaries, then produce an end-of-day improvement report.
+
+Approval boundary: This does not approve a daemon, scheduler, LaunchAgent, runtime cadence change, mailbox monitor, OAuth, credential access, private mailbox-body review, private analytics, production access, deploy, push, live pull, or external-system mutation. Any scheduled automation, live analytics integration, mail/report delivery change, Workspaceboard organigram source edit, or runtime change still needs the normal Task Manager route, with Code/Git Manager and Security Guard where applicable.
+
+Needed: I recommend Task Manager create the visible review session below if you accept this as today's operating model. If you do not want another visible session, the role can still run as an end-of-day docs review from Markdown files and board summaries.
+
+Next: Task Manager can create/prompt the visible session with:
+
+Title: AI Improvement Manager end-of-day review
+
+Prompt:
+You are the AI Improvement Manager. Work in /Users/werkstatt/ai_workspace and follow AGENTS.md. This is a visible end-of-day review session, not a daemon or scheduler. Review only approved non-secret Markdown state and board-provided summaries for today's AI Workspace work and interactions: TODO.md, ToDo-append.md, HANDOFF.md, relevant project-hub notes, worker_roles/, and Task Manager/Summary Worker summaries. Identify process improvements, repeated blockers, prompt/role gaps, workflow analytics gaps, and practical new AI-use opportunities. Do not implement code, change runtime, create schedules, send mail, read credentials, access private mailbox bodies, inspect private analytics, mutate production, deploy, push, live pull, alter LaunchAgents, or edit outside approved docs/planning scope. Produce an end-of-day improvement report with: top improvement opportunities, interaction patterns observed, evidence used, recommended owner/route, approval gates, items not touched, and any implementation-ready briefs for Task Manager to route through Code/Git Manager, Security Guard, Frank, Avignon, Codex Integration Manager, or a workspace worker.
+
+Decision state: Recommendation recorded. Standing visible session is recommended as a Task Manager-created review surface, not as background automation. No standing session was started by this docs-only worker.
+
+Files updated: /Users/werkstatt/ai_workspace/worker_roles/ai-improvement-manager.md, /Users/werkstatt/ai_workspace/worker_roles/README.md, /Users/werkstatt/ai_workspace/worker_roles/operating-model.md, /Users/werkstatt/ai_workspace/TODO.md, /Users/werkstatt/ai_workspace/HANDOFF.md, and this Frank draft.
+
+Confirmation: No secrets, credentials, OAuth, mailbox content, runtime daemons, LaunchAgents, cadence, production systems, deploys, pushes, live pulls, external sends, or Workspaceboard runtime/organigram source changes were touched.
+
+Frank
