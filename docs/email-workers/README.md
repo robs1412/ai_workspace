@@ -67,3 +67,5 @@ The related Avignon sessions were recorded as visible references only. They were
 ## Current Notes
 
 - `2026-04-20-shared-captured-routed-receipts.md`: non-secret Frank/Avignon captured-routed receipt parity finding, including the Avignon direct-owner runtime-patch source of the newer receipt behavior and the approval-gated Frank runtime path if parity is required.
+- 2026-04-20 follow-up `220cf4d4` confirmed the reusable template rule: owner-facing captured/routed acknowledgements for routed work must include the visible work session ID plus session title/task name after prompt delivery.
+- `2026-04-20-shared-reminder-approval-request-clarity.md`: non-secret reminder and approval-request clarity rule for Claude/bridge/email workers. Use a real approved Papers/work-record link when allowed, or a clear human-readable item description, requested approval, and safe next action. Do not send context-poor Message-ID-only reminders.

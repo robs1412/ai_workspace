@@ -2,8 +2,12 @@
 
 Status: active non-secret comparison note
 Created: 2026-04-20
-Source Message-ID: `<CAAtX44bCjzkXSKDa9sYc8ZP7qfvvRQ5gUxteLJ2aMJh7HnVfOg@mail.gmail.com>`
-Worker session: `00d4fd0c` / `Frank vs Avignon captured/routed receipt template parity check`
+Source Message-IDs:
+- `<CAAtX44bCjzkXSKDa9sYc8ZP7qfvvRQ5gUxteLJ2aMJh7HnVfOg@mail.gmail.com>`
+- `<CAAtX44b5Y=gPoaF+KifBOf048XzmG+bOnqiQ8baLK4dFmwk9Kw@mail.gmail.com>`
+Worker sessions:
+- `00d4fd0c` / `Frank vs Avignon captured/routed receipt template parity check`
+- `220cf4d4` / `Frank response template session-name parity`
 Related shared-memory session: `0a741b92` / `Shared email-worker how-to memory path`
 
 ## Finding
@@ -17,6 +21,8 @@ Avignon's newer captured/routed receipt is better because Avignon received a dir
 - Hold pending direct-owner work out of `Handled` until completion or blocker closeout.
 
 The Activity-check incident was related but not the general template source. It exposed a direct-Robert Avignon runtime send bug and created repeated Activity-check worker sessions. The reusable improvement is the direct-owner runtime path above, not private Activity-check content.
+
+The 2026-04-20 Frank follow-up session `220cf4d4` confirmed the same template standard for Frank docs: owner-facing captured/routed acknowledgements should name the visible work session id and title/task name after prompt delivery, not only say that the request was routed to a generic Task Manager session.
 
 ## Frank Parity
 

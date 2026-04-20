@@ -1,6 +1,6 @@
 # TODO — frank
 
-Updated: 2026-04-20 15:02 CDT (Machine: Macmini.lan)
+Updated: 2026-04-20 16:24 CDT (Machine: Macmini.lan)
 
 ## In Progress
 
@@ -95,6 +95,31 @@ _No active Frank implementation/routing items._
 Live Papers lookup/projection remains approval-gated and is represented by AI Workspace/Papers project notes plus the Claude guidance request, not by an open Frank implementation row.
 
 ## Done
+
+- 2026-04-20: Fixed Frank duplicate-send incident on `Re: Thoughts on our AI workspace setup`.
+  - Incident worker/session: `b52ee3b8` / `Frank duplicate-send incident on Re: Thoughts on our AI workspace setup`.
+  - Source Message-ID attached to existing Claude reminder clarity and duplicate incident state: `<CAAtX44YjKEPU8JFCxn4YHhRvbavA=z__BdJcjsE8Gvwgcw+esA@mail.gmail.com>`.
+  - Existing thread/task: `frank-2026-claude-ai-workspace-setup-review`; related clarity task `frank-2026-claude-reminder-approval-request-clarity-2026-04-20`; prior worker `ba40b59d`; clarity worker `2b49cc07`; shared-memory session `0a741b92`.
+  - Duplicate no-send state: runtime now suppresses additional hard-coded Claude Papers-access replies for this thread/task once a prior sent-log row exists for task `frank-2026-claude-ai-workspace-setup-review`, recipient `claude@koval-distillery.com`, and subject family `Thoughts on our AI workspace setup`.
+  - Duplicates identified from non-secret sent/automation metadata: the same hard-coded Frank Papers-access reply was sent to `claude@koval-distillery.com`, Cc `robert@kovaldistillery.com, dmytro.klymentiev@kovaldistillery.com`, subject `Re: Thoughts on our AI workspace setup`, task id `frank-2026-claude-ai-workspace-setup-review`, including 2026-04-20 sends at 15:44:49 CDT (`<177671788958.59079.5470613761835820887@kovaldistillery.com>`), 15:47:51 CDT (`<177671807114.61235.11279513472119548721@kovaldistillery.com>`), 15:52:15 CDT (`<177671833529.64701.5789135938088187357@kovaldistillery.com>`), and 16:09:27 CDT (`<177671936753.75476.13631369818157545834@kovaldistillery.com>`). A distinct internal clarity note was also sent at 15:46:26 CDT (`<177671798680.60460.12942410313309167058@kovaldistillery.com>`), but that was not the repeated hard-coded Papers-access reply.
+  - Root cause: installed `/Users/admin/.frank-launch/runtime/scripts/frank_auto_runner.py` classifies each new Claude tracked reply containing Papers/Codex/Frank terms as `tracked-claude-papers-access-followup` and sends the fixed `compose_claude_papers_access_reply()` body. Suppression only checks whether the current source Message-ID already exists in `automation-log.jsonl`; it does not suppress by thread/task/recipient/body intent or prior sent-log rows. Robert-thread captured acknowledgements also repeated because `frank-primary-intake-ack` is source-message based and lacks thread/task ack suppression.
+  - Runtime fix: patched installed `/Users/admin/.frank-launch/runtime/scripts/frank_auto_runner.py` and git-backed source mirror `runtime-source/frank-launch/scripts/frank_auto_runner.py` with a sent-log guard for `tracked-claude-papers-access-followup`. Duplicate hits now log `duplicate-claude-papers-access-reply-suppressed-no-send` and file the duplicate source to `Handled` without sending Claude another copy.
+  - Verification: `python3 -m py_compile` passed for installed and source mirror; installed/source SHA-256 matched; synthetic guard returned true for the existing Claude task and false for an empty sent log; Frank INBOX metadata check showed no Claude-thread item waiting in INBOX after the fix.
+  - Robert response status: no apology/status email was sent during this fix to avoid adding more noise to the incident.
+
+- 2026-04-20: Completed Frank response-template session-name parity follow-up.
+  - Source Message-IDs `<CAAtX44b5Y=gPoaF+KifBOf048XzmG+bOnqiQ8baLK4dFmwk9Kw@mail.gmail.com>` and `<CAAtX44bCjzkXSKDa9sYc8ZP7qfvvRQ5gUxteLJ2aMJh7HnVfOg@mail.gmail.com>`; worker session `220cf4d4` / `Frank response template session-name parity`; shared-memory session `0a741b92`.
+  - Finding: Avignon's template includes routed session id/title because its 2026-04-20 direct-owner runtime path creates a visible session, injects the prompt, records session id/title plus prompt-delivery/current-state metadata, and composes the acknowledgement with `visible work session [id] / [title]`. Frank installed runtime parity is still gated, but Frank local guidance now requires the same owner-facing template behavior.
+  - Changed files: `AGENTS.md`, `routed-task-id-recording.md`, `../docs/email-workers/2026-04-20-shared-captured-routed-receipts.md`, `../docs/email-workers/README.md`, `HANDOFF.md`, `TODO.md`, and `completion-confirmation-log.jsonl`.
+  - Required behavior: after prompt delivery, Frank captured/routed responses for routed Robert work must include visible session ID plus session title/task name, not generic `Task Manager session` language alone.
+  - Runtime/code state: installed Frank runtime not changed; parity for `/Users/admin/.frank-launch/runtime/scripts/frank_auto_runner.py` requires separate Code/Git Manager + Security Guard approval. No private body output, secrets, mailbox moves, OAuth/auth, LaunchAgent/runtime/cadence change, production mutation, commit, push, reset, or clean.
+
+- 2026-04-20: Recorded Claude reminder / approval-request clarity correction for the existing Papers thread.
+  - Source Message-ID `<CAAtX44Zg2PPzb0QQzW39oKV34fGhOKpdEVDtgzLOZBBwTOf9pA@mail.gmail.com>`; Robert approval source Message-ID `<CAAtX44aN7wuVdKP4762YLgn2AOoFAZAk3spq2JG6JU5=SWPN1g@mail.gmail.com>`; dedupe key `frank-2026-claude-ai-workspace-setup-review|CAAtX44Zg2PPzb0QQzW39oKV34fGhOKpdEVDtgzLOZBBwTOf9pA`.
+  - Attached to existing Frank task `frank-2026-claude-ai-workspace-setup-review`, subject `Thoughts on our AI workspace setup` / Papers follow-up, prior worker `ba40b59d`, current session `2b49cc07`.
+  - Rule recorded in shared non-secret email-worker notes: Claude/bridge reminders and approval requests should include a direct approved Papers/work-record link when available, or a clear human-readable description of the item, the requested approval, and the safe next action. Avoid vague Message-ID-only or context-poor reminders.
+  - Shared note: `../docs/email-workers/2026-04-20-shared-reminder-approval-request-clarity.md`; shared-memory path/session `0a741b92`.
+  - Claude internal note sent to `claude@koval-distillery.com` with Robert copied, subject `Re: Thoughts on our AI workspace setup`, task id `frank-2026-claude-reminder-approval-request-clarity-2026-04-20`, outbound Message-ID `<177671798680.60460.12942410313309167058@kovaldistillery.com>`, draft `drafts/claude-reminder-approval-request-clarity-2026-04-20.txt`. The approval source was attached afterward; no duplicate Claude note was sent. No private mailbox bodies, secrets, Papers/MI access, `.205` access, OAuth/auth, runtime/cadence change, mailbox move, deploy, commit, push, reset, or clean was performed.
 
 - 2026-04-20: Completed Frank vs Avignon captured/routed receipt template parity check.
   - Source Message-ID `<CAAtX44bCjzkXSKDa9sYc8ZP7qfvvRQ5gUxteLJ2aMJh7HnVfOg@mail.gmail.com>`; worker session `00d4fd0c`; coordinated with shared-memory session `0a741b92`.

@@ -1,6 +1,6 @@
 # Email-Derived Decisions — avignon
 
-Updated: 2026-04-20 13:36 CDT (Machine: Macmini.lan)
+Updated: 2026-04-20 16:00 CDT (Machine: Macmini.lan)
 
 ## Open
 
@@ -57,6 +57,21 @@ Updated: 2026-04-20 13:36 CDT (Machine: Macmini.lan)
 No current Avignon email-derived items are waiting on Sonat email approval from Avignon inbox.
 
 ## Routed / Handled
+
+- `avignon-direct-owner-sonat-CALbLtzwcFiUScRURX-DkwJ7mp27PFmV2TdDUj439MG75rMVi-g-mail-gmail-com`
+  - Needed: Sonat direct-owner `CRM Addition` source was misfiled as `direct-owner-no-action` and recovered as active direct-owner work.
+  - Next: Closed. Preserve duplicate protection; do not resurface unless a new source message arrives or Sonat/Robert explicitly reopens it.
+  - Decision: Captured/routed acknowledgement sent to Sonat, Message-ID `<177671812569.61830.8920961406442089856@kovaldistillery.com>`. Portal worker `c0adcd3b` completed the routine CRM entry by creating account `367220`, contact `367221`, and association history row `5019`; read-back verification passed. Completion report sent Sonat-only, subject `CRM Addition complete: Paustis Wine`, Message-ID `<177671883829.74072.5914688977487091142@kovaldistillery.com>`, draft `drafts/sonat-crm-addition-paustis-wine-complete-2026-04-20.txt`. No Robert copy was required.
+
+- `avignon-direct-owner-sonat-gabi-training-draft-2026-04-20`
+  - Needed: Sonat asked Avignon to draft an email for Gabi about continuing training and adding filed training materials for Gabi to learn and consider. Source Message-ID `<CALbLtzyn5huDS5VXjeoe-rHqDtYDAWNjoTd0b6jDHAvTq4jJkg@mail.gmail.com>`; dedupe key `avignon-direct-owner-sonat-CALbLtzyn5huDS5VXjeoe-rHqDtYDAWNjoTd0b6jDHAvTq4jJkg-mail-gmail-com`.
+  - Next: Wait for Sonat to provide the actual filed training materials/source packet or approve bounded source recovery before the Gabi email can be finalized with attachments/materials. Do not send to Gabi under this task.
+  - Decision: Visible Avignon worker session `e6caa9bd` prepared `drafts/sonat-gabi-continuing-training-materials-2026-04-20.txt`. Local approved-file search found only references to `avignon-new-hire-training-template-reference-2026-04-12`, not the actual training packet. Sent Sonat the task-specific report/blocker, subject `Gabi training draft ready; materials packet needed`, Message-ID `<177671864897.72894.4011226924901203280@kovaldistillery.com>`, body draft `drafts/sonat-gabi-training-draft-report-2026-04-20.txt`. No mailbox body was printed or quoted; no OAuth/auth/token work, mailbox mutation, external reply to Gabi, CRM/Portal/OPS mutation, runtime/deploy, git commit, push, reset, or clean action occurred.
+
+- `avignon-direct-owner-completion-report-boundary-2026-04-20`
+  - Needed: Robert reaffirmed Avignon's direct-owner handling boundary after follow-through fixes.
+  - Next: Apply this to future direct Sonat work, and to Robert messages when Robert is acting as Avignon workflow manager/approver. Keep the source out of `Handled` until a visible routed worker completes or hits a real blocker, state is updated, and the required report has been sent or the send gate is explicitly logged.
+  - Decision: Report target is Sonat by default; copy Robert only when task context, approval path, or active supervision requires it. Completion/blocker reports must include what was done, what changed, what was not done, remaining decisions or approval gates, and relevant session/task IDs. Approval boundary remains no credential/private-mailbox-body exposure in chat, no OAuth/token/auth work, no external replies, no unclear CRM/Portal/OPS mutation, and no guessing at pricing, account commitments, or CRM duplicate/target handling. This entry is docs/state only; no source item was filed to `Handled` by this update.
 
 - `avignon-email-review-process-for-sample-requests`
   - Needed: Sonat sent a direct process-related request that Avignon filed to `Handled` after generic ambiguous-review logging. Source Message-ID `<CALbLtzwCqmadr7Wg2jnZC5MeyFLf2hNCgMdypva69P2UWwg_FQ@mail.gmail.com>`.

@@ -1,6 +1,6 @@
 # TODO — avignon
 
-Updated: 2026-04-20 14:34 CDT (Machine: Macmini.lan)
+Updated: 2026-04-20 16:00 CDT (Machine: Macmini.lan)
 
 ## In Progress
 
@@ -55,6 +55,21 @@ No active Avignon-local implementation item.
   - No mailbox move/unfile/reclassify, CRM/Portal mutation, external reply, credential/auth/OAuth, LaunchAgent/runtime, production, deploy, commit, or push was performed by this audit.
 
 ## Done
+
+- 2026-04-20: Completed recovered Sonat direct-owner CRM Addition for Paustis Wine.
+  - Source Message-ID `<CALbLtzwcFiUScRURX_DkwJ7mp27PFmV2TdDUj439MG75rMVi-g@mail.gmail.com>`; dedupe key `avignon-direct-owner-sonat-CALbLtzwcFiUScRURX-DkwJ7mp27PFmV2TdDUj439MG75rMVi-g-mail-gmail-com`; Avignon intake session `8c9e97c2`; Portal worker `c0adcd3b`.
+  - Portal completed deterministic duplicate checks, created CRM account `367220`, created CRM contact `367221`, linked the contact to the account, and created association history row `5019`.
+  - Sonat completion report sent subject `CRM Addition complete: Paustis Wine`, Message-ID `<177671883829.74072.5914688977487091142@kovaldistillery.com>`, draft `drafts/sonat-crm-addition-paustis-wine-complete-2026-04-20.txt`. No Robert copy was needed.
+  - No private contact fields were printed in chat; no external email, destructive/bulk action, merge/delete, OAuth/auth/token work, deploy/restart, commit/push/reset/clean, or unrelated CRM change occurred from Avignon.
+
+- 2026-04-20: Corrected Sonat's Gabi continuing-training draft with filed materials and Avignon SOP/persona source.
+  - Source Message-ID `<CALbLtzyn5huDS5VXjeoe-rHqDtYDAWNjoTd0b6jDHAvTq4jJkg@mail.gmail.com>`; dedupe key `avignon-direct-owner-sonat-CALbLtzyn5huDS5VXjeoe-rHqDtYDAWNjoTd0b6jDHAvTq4jJkg-mail-gmail-com`; draft `drafts/sonat-gabi-continuing-training-materials-2026-04-20.txt`.
+  - Correction: the earlier `materials packet needed` blocker was wrong. Robert pointed out that Sonat had already sent the links/materials and separate Avignon SOP/persona guidance. Bounded handled-mail recovery found and recorded the relevant sources: April 11 `New Hire Sample Training Email`, April 12 `Re: New Hire Sample Training Email`, April 11 `Re: Avignon persona blurb`, April 11 `Re: Avignon task-flow decision options`, and the April 20 `Sample email` request.
+  - Private operational source packet: `drafts/gabi-training-source-synthesis-2026-04-20.private.md`; public-safe index: `GABI_TRAINING_SOURCE_INDEX.md`.
+  - Corrected Sonat-facing draft/report: `drafts/sonat-gabi-continuing-training-materials-corrected-2026-04-20.txt`; sent to Sonat, subject `Corrected Gabi training draft`, Message-ID `<177671939004.75578.4686539983907647172@kovaldistillery.com>`. No email was sent to Gabi; Sonat must approve or edit before any Gabi send. No private body/Drive-link output in chat, auth/OAuth/token, CRM/Portal/OPS mutation, runtime/deploy, git reset/clean, or destructive action occurred.
+
+- 2026-04-20: Reaffirmed Avignon direct-owner completion/report boundary.
+  - Robert clarified that direct-owner work must not be filed to `Handled` until the visible route has either completed or hit a real blocker, Avignon TODO/HANDOFF/decision state is updated, and the required report is sent to Sonat by default with Robert copied only when the task context or approval path requires it. The report shape is what was done, what changed, what was not done, remaining decisions or approval gates, and relevant session/task IDs. This was docs/state only; no mailbox body read, email send, CRM/Portal/OPS mutation, OAuth/auth/token work, external reply, runtime change, deploy, commit, push, reset, or clean occurred.
 
 - 2026-04-20: Fixed Avignon direct-Robert polling crash and restored inbox-zero behavior.
   - Root cause: Avignon was polling, but Robert-only direct-owner acknowledgement/report sends did not pass the explicit non-primary send flag unless a Cc existed, so the cycle crashed and retried. Patched installed runtime and source mirror so any non-Sonat direct-owner recipient gets the flag. Also classified short `ok/thank you/thanks/got it/sounds good` direct replies as no-action.

@@ -558,6 +558,20 @@ def send_plain_email(
     return str(msg["Message-ID"])
 
 
+def claude_papers_access_reply_already_sent(sent_log: dict[str, dict]) -> bool:
+    for row in sent_log.values():
+        task_id = str(row.get("task_id") or "")
+        to_addr = str(row.get("to") or "")
+        subject = str(row.get("subject") or "").lower()
+        if (
+            task_id == CLAUDE_WORKSPACE_THREAD_TASK
+            and email_list_contains(to_addr, CLAUDE_EMAIL)
+            and "thoughts on our ai workspace setup" in subject
+        ):
+            return True
+    return False
+
+
 def compose_claude_papers_access_reply() -> str:
     signature = SEND_PROFILES["frank"]["signature"]
     return (
@@ -995,19 +1009,29 @@ def main() -> int:
                     )
                     action["decision"] = "routed-primary-instruction-ack-sent" if route_ok else "primary-instruction-route-blocked-ack-sent"
                 elif classification == "tracked-claude-papers-access-followup":
-                    action["sent_message_id"] = send_plain_email(
-                        sender_email,
-                        app_pw,
-                        Path(args.sent_log),
-                        action["reply_to"],
-                        f"Re: {message.get('subject', '').removeprefix('Re:').strip()}",
-                        compose_claude_papers_access_reply(),
-                        CLAUDE_WORKSPACE_THREAD_TASK,
-                        args.dry_run,
-                        args.from_name,
-                        action["cc"],
-                    )
-                    action["decision"] = "sent-internal-answer-with-robert-dmytro-cc"
+                    if claude_papers_access_reply_already_sent(sent_log):
+                        action["decision"] = "duplicate-claude-papers-access-reply-suppressed-no-send"
+                        if not args.dry_run:
+                            action["archived_to_handled"] = archive_email(
+                                sender_email,
+                                app_pw,
+                                source_message_id,
+                                "Handled",
+                            )
+                    else:
+                        action["sent_message_id"] = send_plain_email(
+                            sender_email,
+                            app_pw,
+                            Path(args.sent_log),
+                            action["reply_to"],
+                            f"Re: {message.get('subject', '').removeprefix('Re:').strip()}",
+                            compose_claude_papers_access_reply(),
+                            CLAUDE_WORKSPACE_THREAD_TASK,
+                            args.dry_run,
+                            args.from_name,
+                            action["cc"],
+                        )
+                        action["decision"] = "sent-internal-answer-with-robert-dmytro-cc"
                 elif classification in {
                     "primary-test",
                     "tracked-reply-approval-gate",
