@@ -97,6 +97,9 @@ _No separate AI Workspace backlog items. Source-owned continuations are already 
 
 ## Done
 
+- **2026-04-20** Importer XLS mapping fix committed locally; push blocked by GitHub credential helper.
+  - Importer worker `c8847e47` completed local verification for the sparse-XLSX validation-order fix. Code/Git closeout committed `/Users/werkstatt/importer` as `e1b41cf` / `Preserve sparse XLSX importer column mapping`; repo is clean and ahead `origin/main` by 1. Push failed with macOS HTTPS credential/keychain error `failed to get: -25308`; no credential/keychain/SSH changes were attempted.
+
 - **2026-04-20** Avignon direct-Robert polling crash fixed.
   - Live issue: launchd was firing on the 15-second path, but Avignon crashed when sending Robert-only direct-owner acknowledgements/reports. Patched installed runtime and git-backed source mirror to pass the explicit non-primary send flag for any non-Sonat direct-owner report target, added no-action handling for short acknowledgement replies, verified compile/hash/log health, sent Robert the completion report, filed the source/reply to `Handled`, closed duplicate `Activity check` sessions, and verified Avignon INBOX/unread `0` / `0`. No OAuth/auth/token, LaunchAgent reload/restart, deploy, CRM/Portal/OPS mutation, external send, reset, clean, or destructive action.
 

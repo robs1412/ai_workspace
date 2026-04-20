@@ -6,6 +6,13 @@ Use this file for cross-machine/session handoffs.
 
 ## Current Workflow Handoff
 
+- 2026-04-20 14:56 CDT Importer XLS mapping fix Code/Git closeout completed locally:
+  - Importer worker `c8847e47` / `Importer XLS validation-order fix local verification` completed the bounded sparse-XLSX column mapping fix and Code/Git review.
+  - Local importer commit: `e1b41cf` / `Preserve sparse XLSX importer column mapping`.
+  - Changed files: `/Users/werkstatt/importer/index.php`, `/Users/werkstatt/importer/distributor_contacts.php`, `/Users/werkstatt/importer/TODO.md`, and new `/Users/werkstatt/importer/HANDOFF.md`.
+  - Verification: `php -l index.php`, `php -l distributor_contacts.php`, `php -l db_functions.php`, `git diff --check`, staged secret scan, and scoped diff review passed. No live import/UI run, DB mutation, customer XLS/body dump, credential/auth work, external system, deploy/restart, reset, clean, or destructive action occurred.
+  - Push blocker: `git push origin main` failed with the local macOS HTTPS credential/keychain error `failed to get: -25308` / `fatal: could not read Username for 'https://github.com': Device not configured`. Remote is `https://github.com/robs1412/importer.git`; importer is clean but ahead `origin/main` by 1. Do not change Keychain/credentials/SSH from chat without a separate approved credential workflow.
+
 - 2026-04-20 14:48 CDT Code/Git ownership resolved for the AI-Bridge Workspaceboard exporter:
   - Session `fc01a91d` / `Code Git Manager merge review AI bridge and workspaceboard organigram commits` completed the read-only scoping pass for `bridge-20260419-workspaceboard-exporter-file-ownership-request`.
   - Decision: future implementation should add `/Users/werkstatt/workspaceboard/server/bridge-work-record-exporter.js`; touch `/Users/werkstatt/workspaceboard/server/index.js` only for `require('./bridge-work-record-exporter')` and `GET /api/bridge/work-records`; do not touch dirty `/Users/werkstatt/workspaceboard/server/digital-office-index.js`.
