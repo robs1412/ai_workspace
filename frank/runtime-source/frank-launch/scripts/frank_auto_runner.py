@@ -265,11 +265,30 @@ def action_slug(value: str) -> str:
 
 
 def direct_primary_dedupe_key(message: dict) -> str:
-    source_id = normalize_message_id(str(message.get("message_id") or ""))
+    source_id = normalize_message_id(str(message.get("message_id") or message.get("source_message_id") or ""))
     if source_id:
         compact = re.sub(r"[^a-zA-Z0-9]+", "-", source_id.strip("<>")).strip("-")
         return f"frank-direct-primary-{compact[:90]}"
     return f"frank-direct-primary-{action_slug(message.get('subject', ''))}"
+
+
+def direct_primary_thread_task_id(action: dict) -> str:
+    task_id = str(action.get("task_id") or "").strip()
+    if task_id and task_id != "frank-primary-intake-ack":
+        return task_id
+    original_subject = normalize_subject_for_compare(str(action.get("original_subject") or action.get("subject") or ""))
+    original_to = ",".join(normalize_email_list(str(action.get("original_to") or ROBERT_EMAIL)))
+    if task_id:
+        return f"{task_id}|{original_subject}|{original_to}"
+    return f"{original_subject}|{original_to or ROBERT_EMAIL}"
+
+
+def direct_primary_thread_key(action: dict) -> str:
+    return "|".join([
+        direct_primary_thread_task_id(action),
+        normalize_subject_for_compare(str(action.get("subject") or action.get("original_subject") or "")),
+        str(action.get("classification") or "").strip().lower(),
+    ])
 
 
 def direct_primary_session_title(message: dict) -> str:
@@ -358,10 +377,8 @@ def looks_like_approval_gated_tracked_reply(message: dict) -> bool:
 
 
 def subject_starts_with_reply_to(subject: str, expected: str) -> bool:
-    normalized = re.sub(r"\s+", " ", (subject or "").strip().lower())
-    expected = re.sub(r"\s+", " ", expected.strip().lower())
-    while normalized.startswith("re:"):
-        normalized = normalized[3:].strip()
+    normalized = normalize_subject_for_compare(subject)
+    expected = normalize_subject_for_compare(expected)
     return normalized.startswith(expected)
 
 
@@ -537,39 +554,119 @@ def send_plain_email(
     dry_run: bool,
     from_name: str,
     cc_addr: str = "",
+    log_fields: dict | None = None,
 ) -> str:
+    subject = re.sub(r"[\r\n]+", " ", str(subject or "")).strip()
     to_addrs = [addr.strip() for addr in to_addr.split(",") if addr.strip()]
     cc_addrs = [addr.strip() for addr in cc_addr.split(",") if addr.strip()]
     msg = build_message(sender_email, from_name, to_addrs, cc_addrs, [], subject, body)
     if not dry_run:
         send_message(sender_email, app_pw, msg)
-        append_sent_log(
-            sent_log_path,
-            {
-                "task_id": task_id,
-                "to": to_addr,
-                "subject": subject,
-                "message_id": msg["Message-ID"],
-                "date": msg["Date"],
-                "from": msg["From"],
-                "cc": cc_addr,
-            },
-        )
+        sent_row = {
+            "task_id": task_id,
+            "to": to_addr,
+            "subject": subject,
+            "message_id": msg["Message-ID"],
+            "date": msg["Date"],
+            "from": msg["From"],
+            "cc": cc_addr,
+        }
+        if log_fields:
+            sent_row.update(log_fields)
+        append_sent_log(sent_log_path, sent_row)
     return str(msg["Message-ID"])
 
 
-def claude_papers_access_reply_already_sent(sent_log: dict[str, dict]) -> bool:
+def normalize_subject_for_compare(subject: str) -> str:
+    normalized = re.sub(r"\s+", " ", (subject or "").strip().lower())
+    while normalized.startswith("re:"):
+        normalized = normalized[3:].strip()
+    return normalized
+
+
+def normalize_email_list(value: str) -> tuple[str, ...]:
+    return tuple(sorted(addr.strip().lower() for addr in (value or "").split(",") if addr.strip()))
+
+
+def sent_log_has_row(
+    sent_log: dict[str, dict],
+    *,
+    to_addr: str,
+    subject: str,
+    thread_task_id: str = "",
+    body_intent: str = "",
+    cc_addr: str = "",
+    fallback_task_ids: tuple[str, ...] = (),
+) -> bool:
+    normalized_to = normalize_email_list(to_addr)
+    normalized_cc = normalize_email_list(cc_addr)
+    normalized_subject = normalize_subject_for_compare(subject)
+    for row in sent_log.values():
+        row_to = normalize_email_list(str(row.get("to") or ""))
+        row_cc = normalize_email_list(str(row.get("cc") or ""))
+        row_subject = normalize_subject_for_compare(str(row.get("subject") or ""))
+        row_thread_task_id = str(row.get("thread_task_id") or row.get("task_id") or "")
+        row_body_intent = str(row.get("body_intent") or "")
+        row_task_id = str(row.get("task_id") or "")
+        if row_to != normalized_to or row_subject != normalized_subject:
+            continue
+        if normalized_cc and row_cc != normalized_cc:
+            continue
+        if body_intent:
+            if row_body_intent == body_intent and (not thread_task_id or row_thread_task_id == thread_task_id):
+                return True
+            if row_body_intent:
+                continue
+        if thread_task_id and row_thread_task_id == thread_task_id:
+            return True
+        if fallback_task_ids and row_task_id in fallback_task_ids:
+            return True
+    return False
+
+
+def claude_papers_access_reply_already_sent(sent_log: dict[str, dict], subject: str) -> bool:
     for row in sent_log.values():
         task_id = str(row.get("task_id") or "")
         to_addr = str(row.get("to") or "")
-        subject = str(row.get("subject") or "").lower()
+        row_subject = str(row.get("subject") or "")
         if (
             task_id == CLAUDE_WORKSPACE_THREAD_TASK
             and email_list_contains(to_addr, CLAUDE_EMAIL)
-            and "thoughts on our ai workspace setup" in subject
+            and normalize_subject_for_compare(row_subject) == normalize_subject_for_compare(subject)
         ):
             return True
-    return False
+    return sent_log_has_row(
+        sent_log,
+        to_addr=CLAUDE_EMAIL,
+        cc_addr=f"{ROBERT_EMAIL}, {DMYTRO_EMAIL}",
+        subject=subject,
+        thread_task_id=CLAUDE_WORKSPACE_THREAD_TASK,
+        body_intent="claude-papers-access-fixed-reply",
+    )
+
+
+def remember_sent_row(
+    sent_log: dict[str, dict],
+    *,
+    message_id: str,
+    task_id: str,
+    to_addr: str,
+    subject: str,
+    cc_addr: str = "",
+    extra: dict | None = None,
+) -> None:
+    if not message_id:
+        return
+    row = {
+        "task_id": task_id,
+        "to": to_addr,
+        "subject": subject,
+        "message_id": message_id,
+        "cc": cc_addr,
+    }
+    if extra:
+        row.update(extra)
+    sent_log[normalize_message_id(message_id)] = row
 
 
 def compose_claude_papers_access_reply() -> str:
@@ -690,6 +787,39 @@ def create_visible_direct_primary_route(action: dict) -> dict:
     )
     route["prompt_delivery"] = delivered.get("prompt_delivery") if isinstance(delivered.get("prompt_delivery"), dict) else {}
     return route
+
+
+def find_existing_direct_primary_route(automation_log: dict[str, list[dict]], action: dict) -> dict | None:
+    expected_key = direct_primary_thread_key(action)
+    matches: list[dict] = []
+    for rows in automation_log.values():
+        for row in rows:
+            if not isinstance(row, dict):
+                continue
+            row_thread_key = str(row.get("thread_key") or "")
+            if not row_thread_key and str(row.get("routed_session_id") or ""):
+                row_thread_key = direct_primary_thread_key(row)
+            if row_thread_key != expected_key:
+                continue
+            if str(row.get("routed_session_id") or ""):
+                matches.append(row)
+    return matches[-1] if matches else None
+
+
+def direct_primary_ack_already_sent(
+    sent_log: dict[str, dict],
+    action: dict,
+    assistant_name: str,
+    notify: str,
+) -> bool:
+    return sent_log_has_row(
+        sent_log,
+        to_addr=notify,
+        subject=f"{assistant_name} captured: {str(action.get('subject') or '')[:80]}",
+        thread_task_id=direct_primary_thread_task_id(action),
+        body_intent="direct-primary-route-ack",
+        fallback_task_ids=("frank-primary-intake-ack", f"{action.get('dedupe_key', '')}-ack"),
+    )
 
 
 def route_to_task_manager(action: dict, assistant_name: str) -> tuple[bool, str]:
@@ -818,6 +948,76 @@ def monitor_direct_primary_action(action: dict, sender_email: str, app_pw: str, 
         "completion_message_id": message_id,
         "archivable_now": True,
     }
+
+
+def route_direct_primary_message(
+    action: dict,
+    automation_log: dict[str, list[dict]],
+    sent_log: dict[str, dict],
+    sender_email: str,
+    app_pw: str,
+    sent_log_path: Path,
+    notify: str,
+    assistant_name: str,
+    dry_run: bool,
+    from_name: str,
+) -> None:
+    action["dedupe_key"] = direct_primary_dedupe_key(action)
+    action["thread_key"] = direct_primary_thread_key(action)
+    action["thread_task_id"] = direct_primary_thread_task_id(action)
+    existing_route = find_existing_direct_primary_route(automation_log, action)
+    if existing_route:
+        route = {
+            "workspace": str(existing_route.get("routed_workspace") or "frank"),
+            "session_id": str(existing_route.get("routed_session_id") or ""),
+            "session_title": str(existing_route.get("routed_session_title") or ""),
+            "prompt_delivery": existing_route.get("prompt_delivery") if isinstance(existing_route.get("prompt_delivery"), dict) else {},
+        }
+    else:
+        route = create_visible_direct_primary_route(action)
+    route_ok = bool(route["session_id"])
+    route_detail = route["session_id"]
+    route_title = route["session_title"]
+    action.update({
+        "routed_workspace": route["workspace"],
+        "routed_session_id": route["session_id"],
+        "routed_session_title": route["session_title"],
+        "prompt_delivery": route["prompt_delivery"],
+        "current_state": "routed_pending_completion",
+        "owner": "robert",
+        "completion_target": "visible-worker-completion-or-blocker",
+        "report_target": ROBERT_EMAIL,
+    })
+    if direct_primary_ack_already_sent(sent_log, action, assistant_name, notify):
+        action["decision"] = "routed-primary-ack-already-sent-no-resend" if route_ok else "primary-route-blocked-ack-already-sent-no-resend"
+        action["no_send"] = True
+        return
+    log_fields = {
+        "body_intent": "direct-primary-route-ack",
+        "thread_key": action["thread_key"],
+        "thread_task_id": action["thread_task_id"],
+    }
+    action["sent_message_id"] = send_plain_email(
+        sender_email,
+        app_pw,
+        sent_log_path,
+        notify,
+        f"{assistant_name} captured: {str(action.get('subject') or '')[:80]}",
+        compose_primary_ack(action, assistant_name, route_ok, route_detail, route_title),
+        f"{action['dedupe_key']}-ack",
+        dry_run,
+        from_name,
+        log_fields=log_fields,
+    )
+    remember_sent_row(
+        sent_log,
+        message_id=str(action.get("sent_message_id") or ""),
+        task_id=f"{action['dedupe_key']}-ack",
+        to_addr=notify,
+        subject=f"{assistant_name} captured: {str(action.get('subject') or '')[:80]}",
+        extra=log_fields,
+    )
+    action["decision"] = "routed-primary-instruction-ack-sent" if route_ok else "primary-instruction-route-blocked-ack-sent"
 
 
 @contextmanager
@@ -953,64 +1153,36 @@ def main() -> int:
                 elif classification == "assistant-review-reply":
                     action["decision"] = "logged-local-follow-up"
                 elif classification == "tracked-primary-thread-instruction":
-                    action["dedupe_key"] = direct_primary_dedupe_key(message)
-                    route = create_visible_direct_primary_route(action)
-                    route_ok = bool(route["session_id"])
-                    route_detail = route["session_id"]
-                    route_title = route["session_title"]
-                    action.update({
-                        "routed_workspace": route["workspace"],
-                        "routed_session_id": route["session_id"],
-                        "routed_session_title": route["session_title"],
-                        "prompt_delivery": route["prompt_delivery"],
-                        "current_state": "routed_pending_completion",
-                        "owner": "robert",
-                        "completion_target": "visible-worker-completion-or-blocker",
-                        "report_target": ROBERT_EMAIL,
-                    })
-                    action["sent_message_id"] = send_plain_email(
+                    route_direct_primary_message(
+                        action,
+                        automation_log,
+                        sent_log,
                         sender_email,
                         app_pw,
                         Path(args.sent_log),
                         args.notify,
-                        f"{args.assistant_name} captured: {message.get('subject', '')[:80]}",
-                        compose_primary_ack(action, args.assistant_name, route_ok, route_detail, route_title),
-                        f"{action['dedupe_key']}-ack",
+                        args.assistant_name,
                         args.dry_run,
                         args.from_name,
                     )
-                    action["decision"] = "routed-primary-instruction-ack-sent" if route_ok else "primary-instruction-route-blocked-ack-sent"
                 elif classification == "tracked-primary-instruction":
-                    action["dedupe_key"] = direct_primary_dedupe_key(message)
-                    route = create_visible_direct_primary_route(action)
-                    route_ok = bool(route["session_id"])
-                    route_detail = route["session_id"]
-                    route_title = route["session_title"]
-                    action.update({
-                        "routed_workspace": route["workspace"],
-                        "routed_session_id": route["session_id"],
-                        "routed_session_title": route["session_title"],
-                        "prompt_delivery": route["prompt_delivery"],
-                        "current_state": "routed_pending_completion",
-                        "owner": "robert",
-                        "completion_target": "visible-worker-completion-or-blocker",
-                        "report_target": ROBERT_EMAIL,
-                    })
-                    action["sent_message_id"] = send_plain_email(
+                    route_direct_primary_message(
+                        action,
+                        automation_log,
+                        sent_log,
                         sender_email,
                         app_pw,
                         Path(args.sent_log),
                         args.notify,
-                        f"{args.assistant_name} captured: {message.get('subject', '')[:80]}",
-                        compose_primary_ack(action, args.assistant_name, route_ok, route_detail, route_title),
-                        f"{action['dedupe_key']}-ack",
+                        args.assistant_name,
                         args.dry_run,
                         args.from_name,
                     )
-                    action["decision"] = "routed-primary-instruction-ack-sent" if route_ok else "primary-instruction-route-blocked-ack-sent"
                 elif classification == "tracked-claude-papers-access-followup":
-                    if claude_papers_access_reply_already_sent(sent_log):
+                    claude_subject = f"Re: {message.get('subject', '').removeprefix('Re:').strip()}"
+                    if claude_papers_access_reply_already_sent(sent_log, claude_subject):
                         action["decision"] = "duplicate-claude-papers-access-reply-suppressed-no-send"
+                        action["no_send"] = True
                         if not args.dry_run:
                             action["archived_to_handled"] = archive_email(
                                 sender_email,
@@ -1024,12 +1196,22 @@ def main() -> int:
                             app_pw,
                             Path(args.sent_log),
                             action["reply_to"],
-                            f"Re: {message.get('subject', '').removeprefix('Re:').strip()}",
+                            claude_subject,
                             compose_claude_papers_access_reply(),
                             CLAUDE_WORKSPACE_THREAD_TASK,
                             args.dry_run,
                             args.from_name,
                             action["cc"],
+                            log_fields={"body_intent": "claude-papers-access-fixed-reply", "thread_task_id": CLAUDE_WORKSPACE_THREAD_TASK},
+                        )
+                        remember_sent_row(
+                            sent_log,
+                            message_id=str(action.get("sent_message_id") or ""),
+                            task_id=CLAUDE_WORKSPACE_THREAD_TASK,
+                            to_addr=action["reply_to"],
+                            subject=claude_subject,
+                            cc_addr=action["cc"],
+                            extra={"body_intent": "claude-papers-access-fixed-reply", "thread_task_id": CLAUDE_WORKSPACE_THREAD_TASK},
                         )
                         action["decision"] = "sent-internal-answer-with-robert-dmytro-cc"
                 elif classification in {
@@ -1044,33 +1226,22 @@ def main() -> int:
                     "primary-input",
                 }:
                     if classification in {"primary-forward", "primary-input"}:
-                        action["dedupe_key"] = direct_primary_dedupe_key(message)
-                        route = create_visible_direct_primary_route(action)
-                        route_ok = bool(route["session_id"])
-                        route_detail = route["session_id"]
-                        route_title = route["session_title"]
-                        action.update({
-                            "routed_workspace": route["workspace"],
-                            "routed_session_id": route["session_id"],
-                            "routed_session_title": route["session_title"],
-                            "prompt_delivery": route["prompt_delivery"],
-                            "current_state": "routed_pending_completion",
-                            "owner": "robert",
-                            "completion_target": "visible-worker-completion-or-blocker",
-                            "report_target": ROBERT_EMAIL,
-                        })
-                        action["sent_message_id"] = send_plain_email(
+                        route_direct_primary_message(
+                            action,
+                            automation_log,
+                            sent_log,
                             sender_email,
                             app_pw,
                             Path(args.sent_log),
                             args.notify,
-                            f"{args.assistant_name} captured: {message.get('subject', '')[:80]}",
-                            compose_primary_ack(action, args.assistant_name, route_ok, route_detail, route_title),
-                            f"{action['dedupe_key']}-ack",
+                            args.assistant_name,
                             args.dry_run,
                             args.from_name,
                         )
-                        action["decision"] = "routed-primary-input-ack-sent" if route_ok else "primary-input-route-blocked-ack-sent"
+                        if action.get("decision") == "routed-primary-instruction-ack-sent":
+                            action["decision"] = "routed-primary-input-ack-sent"
+                        elif action.get("decision") == "primary-instruction-route-blocked-ack-sent":
+                            action["decision"] = "primary-input-route-blocked-ack-sent"
                     else:
                         action["decision"] = "logged-local-routing-no-email" if classification == "tracked-reply-approval-gate" else "logged-no-action"
                     if action["decision"] == "logged-no-action" and not args.dry_run:
