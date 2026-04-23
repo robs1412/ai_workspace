@@ -456,6 +456,7 @@ def build_direct_owner_prompt(message: dict, owner: str, route: dict) -> str:
             f"Redacted context summary: {safe_summary(message) or '(no body summary available)'}",
             "",
             "Goal: handle this as Avignon, Sonat's Strategic Market Architect and trusted consigliere. Start with the point, be concise, and convert the request into a concrete next action.",
+            "Acknowledgement rule: if this is a quick-answer item and the answer is available in the same pass, send the answer directly and do not send a separate captured/routed receipt. Use a captured/routed acknowledgement only when the work will take a moment, is otherwise invisible, or is not immediately answerable.",
             "Required mechanics: create or reuse the correct visible worker route for substantive work, verify it started, monitor it to completion or a real blocker, update Avignon TODO/HANDOFF/decision state, and report back before the source item is filed to Handled.",
             f"Completion report target: {report_target['to']}. {cc_line}",
             "Report shape: what was done, what changed, what was not done, remaining decisions or approval gates, and relevant session/task IDs.",
@@ -834,6 +835,18 @@ def find_existing_calendar_event(calendar_id: str, source_message_id: str, start
     return None
 
 
+def calendar_confirmation_task_id(start_at: datetime) -> str:
+    return f"avignon-sonat-meeting-with-robert-{start_at.strftime('%Y-%m-%d-%H%M')}"
+
+
+def calendar_confirmation_already_sent(sent_log: dict[str, dict], start_at: datetime) -> bool:
+    task_id = calendar_confirmation_task_id(start_at)
+    for row in sent_log.values():
+        if (row.get("task_id") or "") == task_id:
+            return True
+    return False
+
+
 def send_calendar_confirmation(start_at: datetime, event: dict, source_message_id: str) -> str:
     drafts_dir = Path(os.environ.get("AVIGNON_DRAFTS_DIR", "/Users/admin/.avignon-launch/state/drafts")).expanduser()
     drafts_dir.mkdir(parents=True, exist_ok=True)
@@ -854,7 +867,7 @@ def send_calendar_confirmation(start_at: datetime, event: dict, source_message_i
         ]
     ).rstrip() + "\n"
     body_path.write_text(body, encoding="utf-8")
-    task_id = f"avignon-sonat-meeting-with-robert-{start_at.strftime('%Y-%m-%d')}"
+    task_id = calendar_confirmation_task_id(start_at)
     result = subprocess.run(
         [
             sys.executable,
@@ -886,12 +899,14 @@ def send_calendar_confirmation(start_at: datetime, event: dict, source_message_i
     return task_id
 
 
-def handle_sonat_robert_calendar_directive(message: dict) -> str:
+def handle_sonat_robert_calendar_directive(message: dict, sent_log: dict[str, dict]) -> str:
     calendar_id = "sonat@kovaldistillery.com"
     source_message_id = str(message.get("message_id") or "")
     start_at = calendar_directive_start(message)
     existing = find_existing_calendar_event(calendar_id, source_message_id, start_at)
     if existing:
+        if calendar_confirmation_already_sent(sent_log, start_at):
+            return "calendar-directive-existing-event-no-new-email"
         send_calendar_confirmation(start_at, existing, source_message_id)
         return "calendar-directive-existing-event-confirmation-sent"
 
@@ -911,6 +926,8 @@ def handle_sonat_robert_calendar_directive(message: dict) -> str:
             "attendees": [{"email": "robert@kovaldistillery.com"}],
         },
     )
+    if calendar_confirmation_already_sent(sent_log, start_at):
+        return "calendar-directive-event-created-no-new-email"
     send_calendar_confirmation(start_at, event, source_message_id)
     return "calendar-directive-event-created-confirmation-sent"
 
@@ -922,7 +939,7 @@ def route_message(message: dict, sent_log: dict, assistant_email: str) -> tuple[
     decision_items: list[str] = []
 
     if is_sonat_robert_calendar_directive(message):
-        decision = handle_sonat_robert_calendar_directive(message)
+        decision = handle_sonat_robert_calendar_directive(message, sent_log)
         return "calendar-directive", decision, decision_items
 
     if is_decision_email_reply(message):

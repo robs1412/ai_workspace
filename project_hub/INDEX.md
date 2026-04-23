@@ -1,7 +1,13 @@
 # AI Workspace Project Hub
-Last Updated: 2026-04-20 12:41 CDT (Machine: Macmini.lan)
+Last Updated: 2026-04-23 CDT (Machine: Macmini.lan)
 
 ## Open
+
+- **2026-04-21 AI Health Manager LaunchAgent Activation**
+  - Master ID: `AI-INC-20260421-AI-HEALTH-MANAGER-LAUNCHAGENT-01`
+  - Detail log: `project_hub/issues/2026-04-21-ai-health-manager-launchagent-activation.md`
+  - Repos: `ai_workspace`, machine-local LaunchAgent state
+  - Status: source-backed report-only health check and plist are prepared. Robert clarified server mode only. Health Manager now has an analogous prepared system LaunchDaemon plist at `/Users/werkstatt/ai_workspace/tmp/ai-health-manager/com.koval.ai-health-manager.system.plist`, label `com.koval.ai-health-manager`, `UserName=admin`, cadence `900` seconds, report-only. It is not loaded because `/Library/LaunchDaemons` is root-owned and noninteractive sudo is unavailable. Next step is local admin install/bootstrap/kickstart for this Health-Manager-only plist; do not handle the password in chat.
 
 - **2026-04-20 Workspaceboard / AI Work Product Backup Plan**
   - Master ID: `AI-INC-20260420-WORKSPACEBOARD-AI-BACKUP-01`
@@ -13,13 +19,7 @@ Last Updated: 2026-04-20 12:41 CDT (Machine: Macmini.lan)
   - Master ID: `AI-INC-20260420-INFO-FILES-CONTEXT-INTAKE-01`
   - Detail log: `project_hub/issues/2026-04-20-secure-info-files-context-intake-plan.md`
   - Repos: `ai_workspace`; future approved implementation may touch `ai-bridge`, Workspaceboard, machine-local token storage, and Google Drive API/Google Cloud only after explicit approval
-  - Status: docs-only plan added from Robert/Frank source Message-ID `<CAAtX44ZX0u0toGJ7O4grpZY7j6MW9n_S=Anj8M8k-sQhY4gZXQ@mail.gmail.com>` in session `516e1be9`; file-management worker session `0774d4a8` is attached here, not opened as a separate project, because the available excerpt was truncated after `Project: File management.` and overlaps the secure files/context plan. Note: the Message-ID supplied for that worker, `<CAAtX44Z0DxQ+ruJfOY2fSA2Un617-dfQiF3BQ7R8aaxDiQiQrA@mail.gmail.com>`, is already recorded locally for the AI Improvement Manager role-expansion project, so Frank should ask Robert to clarify the source/context before treating it as unambiguous. Recommended model is restricted human-created Google Drive intake for raw files plus non-secret AI Workspace/AI-Bridge metadata records and later Papers/MI projection only after separate approval. Implementation remains blocked pending Drive folder/shared-drive IDs, allowed accounts, OAuth vs service-account decision, exact scopes, token storage class/path, approved local path if outside `/Users/werkstatt/ai_workspace`, audit/dedupe rules, initial file/sensitivity approval, and Robert's clarification of the file-management goal/source-of-truth/first safe test. No Drive/API/OAuth/token/folder/permission/mailbox/Papers/MI/runtime/production/file movement change was performed.
-
-- **2026-04-20 Frank/Avignon Scheduled Report Runtime Health**
-  - Master ID: `AI-INC-20260420-FRANK-AVIGNON-SCHEDULED-REPORTS-01`
-  - Detail log: `project_hub/issues/2026-04-20-frank-avignon-scheduled-report-runtime-health.md`
-  - Repos: `ai_workspace`, machine-local Frank/Avignon LaunchAgent/runtime state
-  - Status: bounded remediation partially completed. Installed Avignon scheduled-report plist now has both 06:00 and 18:00 intervals and both report helper dry-runs completed without sending. The report labels remain enabled but not loaded because user/gui launchd bootstrap failed in the current logged-out/non-Aqua context and non-interactive sudo is unavailable. No secrets, mailbox bodies, OAuth, Google Cloud/PubSub/IAM, polling-daemon cadence, Workspaceboard runtime, production deploy, commit, or push changed.
+  - Status: docs-only plan added from Robert/Frank source Message-ID `<CAAtX44ZX0u0toGJ7O4grpZY7j6MW9n_S=Anj8M8k-sQhY4gZXQ@mail.gmail.com>` in session `516e1be9`; file-management worker session `0774d4a8` is attached here, not opened as a separate project, because the available excerpt was truncated after `Project: File management.` and overlaps the secure files/context plan. Robert's 2026-04-22 `Next project` request, source Message-ID `<CAAtX44a=rFARtKyiDJ8Ha45KiH+AkJhNXPeaTJ1_UYifyY9LqQ@mail.gmail.com>`, is also attached here because it continues the same file/folder management lane; Frank visible route `b7f9729b` and AI Workspace planning route `f0846b6f` are the related sessions. The first-slice plan is docs-only: login-named user-root file spaces, one shared/general Drive area, a non-secret folder register, human-created folders first, metadata-only test folder, and staged copy planning before any transfer. Robert's continuation source `<CAAtX44YSN9Mr+xcP9woKfcKhONgVYYU73bV7xhqFkf1Nkue52A@mail.gmail.com>` approved that docs-only model. Robert's clarification source `<CAAtX44a4y1DxTkza-T-Eg0huGXDOvzgO4wC7EPZUdG0KCs3Wrw@mail.gmail.com>` says user-root folders are named by login, for example `admin` and `sonat`; Frank/Avignon Google accounts have shared Drive access after approval; arbitrary top-level folders are not the user-root model; and the next test stays inside the approved shared Drive model. Implementation remains blocked pending Robert's first low-risk login-root/test folder or name plus allowed accounts, OAuth vs service-account decision, exact scopes, token storage class/path, approved local path if outside `/Users/werkstatt/ai_workspace`, audit/dedupe rules, and initial file/sensitivity approval. No Drive/API/OAuth/token/folder/permission/mailbox/Papers/MI/runtime/production/file movement change was performed.
 
 - **2026-04-19 Salesreport Audit Gaps Project**
   - Master ID: `AI-INC-20260419-SALESREPORT-AUDIT-GAPS-PROJECT-01`
@@ -37,7 +37,7 @@ Last Updated: 2026-04-20 12:41 CDT (Machine: Macmini.lan)
   - Master ID: `AI-INC-20260419-CODEX-CLAUDE-PAPERS-01`
   - Detail log: `project_hub/issues/2026-04-19-codex-claude-papers-integration-plan.md`
   - Repos: `ai_workspace`, `workspaceboard`, `ai-bridge`, future MI/Papers/.205 surfaces
-  - Status: Robert's 2026-04-20 blocker-thread reply `<CAAtX44bSgMHtL+Y96sCn+g63U7FLpzbYQ0fCCm48Gc4vtA1QUA@mail.gmail.com>` and follow-up approval `<CAAtX44ZYxUpzOLz1UXNUT-C8CnQSXxGy0hge3ojxW+f3PwBHWw@mail.gmail.com>` are attached as approval/dedupe evidence for the existing no-write/read-only integration plan, not duplicate tasks. Codex/Claude/Integration roles are present in local role docs and Workspaceboard organigram source; AI-Bridge schema/template/registration artifacts are produced; safe AI-Bridge-local implementation added `bridge/memory/work-record-projection-source-map.json` and `bridge/traces/2026-04-20-approved-next-steps-implementation.md`; Frank/Macee/national outreach dated task records and the Security Guard OAuth checklist are created; Portal existing-account summary and read-only MI/Papers registration designs are produced. Next safe action is Code/Git Manager resolution of the Workspaceboard exporter file-ownership request before any code implementation. Live `.205`, MI/Papers writes, OAuth, Portal/CRM mutation, mailbox credential/content access, MCP exposure, deploy/live pull, and service restart remain closed.
+  - Status: Robert's 2026-04-20 blocker-thread reply `<CAAtX44bSgMHtL+Y96sCn+g63U7FLpzbYQ0fCCm48Gc4vtA1QUA@mail.gmail.com>` and follow-up approval `<CAAtX44ZYxUpzOLz1UXNUT-C8CnQSXxGy0hge3ojxW+f3PwBHWw@mail.gmail.com>` are attached as approval/dedupe evidence for the existing no-write/read-only integration plan, not duplicate tasks. 2026-04-22 Papers API approval intake `<CAAtX44YuOqo8n3pjaX7oSeUXHZ22E=__SQe6XZbgvHa=QmwmgA@mail.gmail.com>` supplied Papers pointer `https://papers.koval.lan/e4bd10fa-b121-435f-b5c4-d5d2ec74948c` / task `#1372` (`Papers API Access for Codex/Frank Runtime`, Active, 2026-04-20) and cleared only the next source-only Workspaceboard route for a deny-by-default read-only Papers wrapper. Robert's option B follow-up `<CAAtX44aEoCLf0Mfc2xv-xuGQ0yc4dkn=n3XKQuLOEG_6po6nrg@mail.gmail.com>` is now complete at source/test level in Workspaceboard route `cb518c23`: added `server/papers-readonly-wrapper.js` and `server/test/papers-readonly-wrapper.test.js`; verification passed `node --check`, focused 9/9 test, and full server `npm test` 37/37. Codex/Claude/Integration roles are present in local role docs and Workspaceboard organigram source; AI-Bridge schema/template/registration artifacts are produced; safe AI-Bridge-local implementation added `bridge/memory/work-record-projection-source-map.json` and `bridge/traces/2026-04-20-approved-next-steps-implementation.md`; Workspaceboard work-record exporter source commit `74fd65f` is complete but not live; Portal existing-account summary and read-only MI/Papers registration designs are produced. Next safe action is Code/Git review before commit/push or runtime wiring for the Papers wrapper. Live `.205`, Papers/MI writes, private Papers body reads without named scope/document IDs, OAuth/auth/token work, Portal/CRM/OPS mutation, mailbox credential/content access, MCP config/runtime changes, deploy/live pull, LaunchAgent/service restart, and external-sensitive replies remain closed.
 
 - **2026-04-18 Frank / Workspaceboard Response Recovery**
   - Master ID: `AI-INC-20260418-FRANK-WB-RESPONSE-01`
@@ -119,6 +119,30 @@ Last Updated: 2026-04-20 12:41 CDT (Machine: Macmini.lan)
   - Status: default OPS/Portal persistence policy approved 2026-04-17; explicit logout revokes Login/OPS/Portal artifacts globally, and next-day Portal/OPS access requires a fresh Login handoff/user action unless longer app persistence is explicitly approved. Implementation remains gated on Security Guard review and no live/session/credential/deploy action is approved by this policy record.
 
 ## Completed
+
+- **2026-04-23 Avignon Calendar Confirmation Dedupe Live Fix**
+  - Master ID: `AI-INC-20260423-AVIGNON-CALENDAR-DEDUPE-01`
+  - Detail log: `project_hub/issues/2026-04-23-avignon-calendar-confirmation-dedupe-live-fix.md`
+  - Repos: `ai_workspace`, machine-local Avignon runtime
+  - Status: completed 2026-04-23; Avignon now dedupes Sonat calendar confirmations by meeting slot in both the source mirror and installed `/Users/admin` runtime, so an already-confirmed `Meeting with Robert` slot no longer sends another identical owner confirmation.
+
+- **2026-04-22 Salesreport Coverage Colors Live Deploy**
+  - Master ID: `AI-INC-20260422-SALESREPORT-COVERAGE-COLORS-LIVE-DEPLOY-01`
+  - Detail log: `project_hub/issues/2026-04-22-salesreport-coverage-colors-live-deploy.md`
+  - Repos: `salesreport`, live Salesreport worktree
+  - Status: completed from Robert's `Push to live` approval. Local/origin/live all verified at `d94a8ced60cc8a9295a1f0b02f78dffc981d24f4` (`Clarify coverage audit colors`), touching only `sales_report_coverage_audit.php`; live PHP lint, menu evidence, and authenticated CLI render passed; the pre-existing live `.htaccess` modification was preserved.
+
+- **2026-04-22 Frank/Avignon Scheduled Report Runtime Health**
+  - Master ID: `AI-INC-20260420-FRANK-AVIGNON-SCHEDULED-REPORTS-01`
+  - Detail log: `project_hub/issues/2026-04-20-frank-avignon-scheduled-report-runtime-health.md`
+  - Repos: `ai_workspace`, machine-local Frank/Avignon LaunchAgent/runtime state
+  - Status: Robert accepted the current state as no further immediate blocker: if a scheduled report does not arrive, he will let us know. Current server-mode email workers are registered as system LaunchDaemons with last exit `0`: `com.koval.frank-auto` runs from `/Library/LaunchDaemons/com.koval.frank-auto.plist`, `runs=11982`; `com.koval.avignon-auto` runs from `/Library/LaunchDaemons/com.koval.avignon-auto.plist`, `runs=12891`. Health check was clean: board OK, `0` unhealthy, remediation not needed. Prepared scheduled-report server-mode plist payloads remain available under `/Users/werkstatt/ai_workspace/tmp/frank-avignon-registration/`, but no further launchd action should be taken unless a scheduled send actually fails.
+
+- **2026-04-21 AI Health Manager Role Setup**
+  - Master ID: `AI-INC-20260421-AI-HEALTH-MANAGER-ROLE-SETUP-01`
+  - Detail log: `project_hub/issues/2026-04-21-ai-health-manager-role-setup.md`
+  - Repos: `ai_workspace`, `workspaceboard`
+  - Status: completed docs/source/organigram setup from Robert's direct chat request on 2026-04-21. Added the AI Health Manager role for board/session health checks, stale-session classification, one safe focused nudge, standing monitor liveness review, and concise health reports. Added the role to the Workspaceboard organigram feed. No live scheduler, daemon, LaunchAgent, runtime cadence, service restart, mailbox mutation, email send, auth/OAuth, commit, push, deploy, reset, clean, or production change was performed.
 
 - **2026-04-20 AI Improvement Manager Role Expansion**
   - Master ID: `AI-INC-20260420-AI-IMPROVEMENT-MANAGER-ROLE-EXPANSION-01`

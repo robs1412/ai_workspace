@@ -1,22 +1,12 @@
 # TODO — frank
 
-Updated: 2026-04-20 16:24 CDT (Machine: Macmini.lan)
+Updated: 2026-04-23 CDT (Machine: Macmini.lan)
 
 ## In Progress
 
-_No active Frank implementation/routing items._
+None currently.
 
 ## Blocked / Parked
-
-- [ ] `frank-avignon-scheduled-reports-launchd-blocker-2026-04-20`: Scheduled-report runtime remediation partially fixed Avignon schedule, but Frank/Avignon scheduled-report LaunchAgents remain blocked at the user launchd loading boundary.
-  - Source Message-IDs: `<CAAtX44YHbyyXDVws5=DRs+77N3O63WEf_+TBnD1yUaBvDTVaoQ@mail.gmail.com>` (`Re: Daily updates incident final report`, Tue, 21 Apr 2026 00:42:55 +0900) and `<CAAtX44bzZ3kojULqhSxsNdOFRKXqzxg0uwsZDkR1F4sb3JNK3w@mail.gmail.com>` (`Re: Daily update send status check`, Mon, 20 Apr 2026 10:43:14 -0500).
-  - Source worker: `f704aa61` / `Frank Avignon scheduled reports remediation approved`.
-  - Robert-only completion/blocker report sent, subject `Frank/Avignon scheduled reports: partial fix and launchd blocker`, task id `frank-avignon-scheduled-reports-launchd-blocker-2026-04-20`, Message-ID `<177670038813.68233.3384470854535767002@kovaldistillery.com>`, draft `drafts/frank-avignon-scheduled-reports-launchd-blocker-robert-2026-04-20.txt`.
-  - Result reported: Frank installed plist already had 06:00 and 18:00 entries; Avignon installed plist now has 06:00 and 18:00 entries with Avignon runtime/log paths; both plists lint; both helpers completed EOD `--dry-run`; both labels are enabled.
-  - Blocker: both labels remain enabled but not loaded as services in `user/501`; `bootstrap user/501` failed error 5, `bootstrap gui/501` failed error 125, legacy `load -w` exited 134, and `sudo -n bootstrap` was unavailable because sudo requires a password. No password prompt or handling occurred.
-  - Needed: active Aqua/gui user-session launch/load verification or separately approved privileged/hard-server-mode launchd remediation.
-  - Duplicate/handled status: both source Message-IDs are logged here, in `completion-confirmation-log.jsonl`, and in the Frank automation log as handled/blocked for duplicate suppression; IMAP archive-by-Message-ID found no matching current INBOX items to move, so no mailbox bodies were read.
-  - Boundaries observed: no secrets, passwords, tokens, private keys, credential contents, mailbox bodies, OAuth, Gmail push, Pub/Sub, IAM, Google Cloud, DNS, TLS, router, `.205`, Workspaceboard runtime, production deploy, code commit/push, polling cadence, `com.koval.frank-auto`, `com.koval.avignon-auto`, privileged launchd work, or password handling was changed or accessed by this report session.
 
 - [ ] `frank-avignon-oauth-token-storage-blocked-2026-04-20`: Frank/Avignon Gmail push OAuth continuation blocked before OAuth because the approved token storage path/scope/client are not documented.
   - Source Message-ID: `<CAAtX44bSqrWb2twfLvj_45oOkFLKcSDtjGQ6fqwRbm16xBSprA@mail.gmail.com>`; classification `tracked-primary-instruction`; subject `Re: Monday polling health verification complete`; from Robert Birnecker `<robert@kovaldistillery.com>` on Tue, 21 Apr 2026 00:38:04 +0900 / Mon, 20 Apr 2026 10:38:04 CDT.
@@ -96,6 +86,404 @@ Live Papers lookup/projection remains approval-gated and is represented by AI Wo
 
 ## Done
 
+- 2026-04-23: Closed Frank/Avignon scheduled-report launchd verification.
+  - `system/com.koval.frank-morning-overview` and `system/com.koval.avignon-morning-overview` both show 06:00 and 18:00 calendar triggers, `runs = 2`, and `last exit code = 0`.
+  - Fresh launchd output logs were present at `2026-04-23 06:00` in `/Users/admin/.frank-launch/state/frank-morning-overview-launchd.out.log` and `/Users/admin/.avignon-launch/state/avignon-morning-overview-launchd.out.log`, so the earlier first-run verification blocker is no longer open.
+
+- 2026-04-22: Reassigned Robert's Galien 4/25 OPS task to Robert.
+  - Source Message-ID `<CAAtX44YG4KYJKP3r3C-6PGYx5Cw59GCorTgX=4_LtA2j3sm-Hg@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44YG4KYJKP3r3C-6PGYx5Cw59GCorTgX-4-LtA2j3sm-Hg-mail-gmail-com`; local task id `frank-ops-task-galien-assign-robert-2026-04-22`.
+  - Classification: OPS/Portal task mutation through the normal OPS-owned route, not a shared Frank/Avignon mechanic, Frank customization, Avignon customization, or runtime change.
+  - Visible OPS route `18a1765e` / `OPS reassign Galien task to Robert` started with prompt delivery verified and completed.
+  - Result: existing OPS/Portal task `367335` / `Galien 4/25` is now owner Robert (`1`) and assignee Robert (`1`); creator remains Robert (`1`), status `Not Started`, dates `2026-04-25`, deleted `0`, and notifications suppressed.
+  - Robert completion report sent, subject `Galien OPS task assigned to Robert`, Message-ID `<177690143747.27286.2467104035576366419@kovaldistillery.com>`; source filed to `Handled`.
+  - Boundaries: no duplicate task, private mailbox body output, credentials, OAuth/auth, unrelated OPS/Portal/CRM mutation, deploy, commit, push, reset, or clean.
+
+- 2026-04-22: Created Robert's Galien 4/25 OPS task.
+  - Source Message-ID `<CAAtX44Zb2CU85-qX64ND3BbhEY3b5C2vKL2WFt6X7u+BTPZC3Q@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44Zb2CU85-qX64ND3BbhEY3b5C2vKL2WFt6X7u-BTPZC3Q-mail-gmail-com`; local task id `frank-ops-task-galien-2026-04-25`.
+  - Classification: OPS task mutation through the normal OPS-owned route, not a Frank/Avignon operating change, Frank customization, Avignon customization, or runtime change.
+  - Visible OPS route `0dd44003` / `OPS task creation: Galien 4/25` started with verified prompt delivery and completed after Frank supplied the verified task id.
+  - Result: OPS/Portal task `367335` / `Galien 4/25` created for 2026-04-25 with notes for roof, bugspray, SimpliSafe, smoke detector, grass, and pressure washer; verified status `Not Started`, creator Robert (`1`), owner/assignee Codex (`1332`), deleted `0`, and notifications suppressed.
+  - Robert completion report sent, subject `Galien OPS task created`, Message-ID `<177690097373.2075.5245446608621197498@kovaldistillery.com>`, draft `drafts/ops-task-galien-robert-2026-04-22.txt`; source filed to `Handled` and archive returned `true`.
+  - Duplicate runtime route `055fe41c` / `Frank direct Robert: ops task` was marked complete in the automation log after the completion report so the delayed captured/routed acknowledgement remains suppressed.
+  - Boundary: the first normal helper attempts hit the known stale service-login/password-reset fallback and returned no task ID; no credentials, tokens, private mailbox bodies, OAuth/auth change, external-sensitive reply, unrelated OPS/Portal mutation, deploy, commit, push, reset, or clean occurred.
+
+- 2026-04-22: Recorded Robert's Avignon EOD content correction.
+  - Source Message-ID `<CAAtX44YnFp8iHLCaXjD6u-TVtXn89K9F0EqVoMsadY_KNrAm1A@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44YnFp8iHLCaXjD6u-TVtXn89K9F0EqVoMsadY-KNrAm1A-mail-gmail-com`; local task id `frank-avignon-eod-content-correction-2026-04-22`.
+  - Classification: Avignon customization. Visible Avignon route `1166051b` / `Avignon EOD content correction` started with prompt delivery verified and completed the docs/state update.
+  - Result: Avignon `AGENTS.md`, `README.md`, `TODO.md`, and `HANDOFF.md` now say Sonat-facing EOD updates should report Avignon-owned business progress, completed/advanced Sonat tasks, market/CRM/distributor/account/calendar/sample follow-through, plain-English blockers, and recommended next actions, not a Frank-style technical implementation report.
+  - Robert completion report sent, subject `Avignon EOD content corrected`, Message-ID `<177689954215.26695.15044731723121478798@kovaldistillery.com>`, draft `drafts/avignon-eod-content-correction-robert-2026-04-22.txt`; source filed to `Handled` and archive returned `true`.
+  - Boundaries: docs/state only; no private mailbox body read/output, Sonat private SOP exposure, email send from Avignon, mailbox filing by Avignon, CRM/Portal/OPS mutation, credential/auth/OAuth work, installed runtime or LaunchAgent edit, deploy, commit, push, reset, or clean occurred. Evening runtime/schedule changes remain separately approval-gated.
+
+- 2026-04-22: Repaired the separate Workspaceboard health issue from Robert's acknowledgement-delay follow-up.
+  - Source Message-ID `<CAAtX44YOU=LDnO32CJ=aUgbhhQyx8kpHsMgYqFO6ET3sxCjn5w@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44YOU-LDnO32CJ-aUgbhhQyx8kpHsMgYqFO6ET3sxCjn5w-mail-gmail-com`; local task id `frank-workspaceboard-health-repair-after-ack-delay-2026-04-22`.
+  - Classification: Workspaceboard runtime change, not a shared Frank/Avignon mechanic, Frank customization, or Avignon customization.
+  - Reused visible route `19ebceed` / `AI Health Manager`; related prior route `94cab2c2` / `Frank direct Robert: Re: Frank acknowledgement delay updated`.
+  - Result: AI Health Manager used the approved listener-only repair for the hung local Workspaceboard status endpoint; it terminated only the verified `/Users/admin/.workspaceboard-launch/runtime/app/server/index.js` listener, launchd restarted it, and follow-up health checks reported `board_ok=true`, `unhealthy=0`, and `board_remediation=not-needed`.
+  - Remaining gate: Workspaceboard `/api/status` is healthy but slow, taking about 12 seconds for the large raw payload; any latency/performance fix needs a separate Workspaceboard route. Avignon parity remains separate if wanted.
+  - Robert completion report sent, subject `Workspaceboard health repaired after acknowledgement-delay follow-up`, Message-ID `<177689585273.3861.10422259815733162547@kovaldistillery.com>`, draft `drafts/workspaceboard-health-repair-after-ack-delay-robert-2026-04-22.txt`; source filed to `Handled`.
+  - Boundaries: no Avignon runtime change, OAuth/auth/token/credential work, private mailbox body output, CRM/Portal/OPS mutation, production deploy, git history rewrite, router/DNS/TLS, `.205`, broad Workspaceboard config/code change, reset, or clean.
+
+- 2026-04-22: Closed duplicate Robert `Push to live` source for the Salesreport coverage color update.
+  - Source Message-ID `<CAAtX44Yg1dwZp-PWCsNT3Snm7Pz1CinwtZyJMj9Qr6e2aULB_g@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44Yg1dwZp-PWCsNT3Snm7Pz1CinwtZyJMj9Qr6e2aULB-g-mail-gmail-com`; local task id `frank-salesreport-coverage-colors-live-push-2026-04-22`.
+  - Visible closeout route `694f5921` / `Salesreport coverage colors live push closeout` reached `finished` / `review-ready` and verified local, `origin/master`, and live Salesreport are all at `d94a8ced60cc8a9295a1f0b02f78dffc981d24f4` with local/live PHP lint passing.
+  - Existing Robert report `Salesreport coverage colors pushed live`, Message-ID `<177689549278.75321.3640896249543803945@kovaldistillery.com>`, already covers the same live-push result, so no duplicate report was sent minutes later. Current-source closeout draft recorded at `drafts/salesreport-coverage-colors-live-push-robert-2026-04-22.txt`; source filed to `Handled`.
+
+- 2026-04-22: Pushed the Salesreport coverage color update live for Robert.
+  - Source Message-ID `<CAAtX44agqfLmPbhXumc0zyLh+QE7Q52Z2oLOKKySv=rpL+wVKQ@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44agqfLmPbhXumc0zyLh-QE7Q52Z2oLOKKySv-rpL-wVKQ-mail-gmail-com`; local task id `frank-salesreport-coverage-colors-live-push-2026-04-22`.
+  - Visible Salesreport route `ce9f42e9` / `Salesreport coverage colors live push`; prompt delivery returned `delivered=true`.
+  - Result: commit `d94a8ced60cc8a9295a1f0b02f78dffc981d24f4` (`Clarify coverage audit colors`) is on `origin/master` and live `/home/koval/public_html/salesreport`.
+  - Verification: local and live `php -l sales_report_coverage_audit.php`; live HEAD equals `d94a8ce`; live file contains the new green/red CRM-invoice labels and explicit saved/inventory labels; old `saved / inv` shorthand and inventory-yellow class are absent. Live `.htaccess` remains the only dirty live file and was not touched.
+  - Robert completion report sent, subject `Salesreport coverage colors pushed live`, Message-ID `<177689549278.75321.3640896249543803945@kovaldistillery.com>`, draft `drafts/salesreport-coverage-colors-live-push-robert-2026-04-22.txt`; source filed to `Handled`.
+  - Boundaries: no saved-report execution/backfill, CRM/Portal/OPS mutation, OAuth/auth/token/credential work, private mailbox body output, reset, clean, unrelated file staging, or live `.htaccess` edit occurred.
+
+- 2026-04-22: Installed and verified Frank acknowledgement-delay behavior in the live mailbox runtime.
+  - Source Message-ID `<CAAtX44Z060hSYyee2Yasae+8CgW20NN0bx9ML7Meu-9p-+jv_w@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44Z060hSYyee2Yasae-8CgW20NN0bx9ML7Meu-9p-jv-w-mail-gmail-com`; local task id `frank-direct-owner-ack-delay-live-runtime-install-2026-04-22`.
+  - Runtime-created visible route `94cab2c2` / `Frank direct Robert: Re: Frank acknowledgement delay updated`; prompt delivery was logged as landed.
+  - Result: installed `/Users/admin/.frank-launch/runtime/scripts/frank_auto_runner.py` matches the source mirror for the 10-minute acknowledgement delay, and the live `system/com.koval.frank-auto` LaunchDaemon is registered/running as `admin`, interval `15`, last exit `0`.
+  - Added an installed/source transition guard so old pending direct-owner routes with a prior acknowledgement stored as `sent_message_id` or `ack_sent_message_id` do not receive another delayed captured/routed receipt; backup: `/Users/admin/.frank-launch/runtime/scripts/frank_auto_runner.py.bak-20260422-165913-ack-delay-transition`.
+  - Robert reports sent, subjects `Correction: Frank acknowledgement delay is live` and `Frank acknowledgement delay installed live`, Message-IDs `<177689509762.47921.17557552831152727959@kovaldistillery.com>` and `<177689521977.54839.15630491976351482409@kovaldistillery.com>`; source filed to `Handled`.
+  - Transition note: this source already received duplicate captured/routed receipts `<177689498460.37966.151164316214138533@kovaldistillery.com>` and `<177689508544.45865.9388355899607693813@kovaldistillery.com>` before the guard was installed. Do not send more status on this source unless Robert asks.
+  - Remaining gates: Avignon parity is separate if wanted; Workspaceboard `/api/status` still timed out after the approved listener-only restart and needs a separate health route. No new live mailbox content cycle, private body output, OAuth/auth/token/credential change, CRM/Portal/OPS mutation, commit, push, deploy, production change, reset, or clean occurred.
+
+- 2026-04-22: Recorded Robert's file-spaces user-root folder clarification.
+  - Source Message-ID `<CAAtX44a4y1DxTkza-T-Eg0huGXDOvzgO4wC7EPZUdG0KCs3Wrw@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44a4y1DxTkza-T-Eg0huGXDOvzgO4wC7EPZUdG0KCs3Wrw-mail-gmail-com`; local task id `frank-file-spaces-user-root-clarification-2026-04-22`.
+  - Visible AI Workspace route `b9d1cc9a` / `File spaces user-root clarification` started with verified prompt delivery.
+  - Result: AI Workspace TODO/HANDOFF/project-hub state now records that user-root folders are login-named, for example `admin` and `sonat`; Frank/Avignon shared Drive access is planning context only until auth/API/storage approvals; and arbitrary top-level folders are not the user-root model.
+  - Robert completion report sent, subject `File spaces user roots clarified`, Message-ID `<177689474450.22924.1785726146828394791@kovaldistillery.com>`, draft `drafts/file-spaces-user-root-clarification-robert-2026-04-22.txt`; source filed to `Handled`.
+  - Remaining gates: first low-risk login-root/test folder packet plus Drive/API/OAuth/browser-auth/token-storage approvals. No Drive/API/OAuth/auth, folder/file movement, permission/share change, Papers/MI, `.205`, CRM/Portal/OPS, production/deploy/commit/push, private mailbox body output, or credential handling occurred.
+
+- 2026-04-22: Set Portal reset-password-required flag for Robert's forwarded login issue.
+  - Source Message-ID `<CAAtX44ZFCkBTsVyEC6WUyd9T6-UyjwjMHeGp-jH4WbZ3jWg8Ww@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44ZFCkBTsVyEC6WUyd9T6-UyjwjMHeGp-jH4WbZ3jWg8Ww-mail-gmail-com`; local task id `frank-portal-reset-password-flag-login-issue-2026-04-22`.
+  - Frank intake route `ab251670` / `Frank direct Robert: Fwd: Unable to Login to Portal`; Portal worker route `e43d1fa8` / `Portal reset-password flag for login issue`; prompt delivery verified and worker reached `finished` / `review-ready`.
+  - Result: Portal user `1286` / `Benjamin Goodman` now has `koval_additionaluser.login_portal_security_rollout.reset_required=1`; read-back confirmed active/not-deleted user, active Portal access, status `Active`, and flag active.
+  - Robert completion report sent, subject `Portal reset-password flag set`, Message-ID `<177689454996.7772.8162003816952193522@kovaldistillery.com>`, draft `drafts/portal-reset-password-flag-login-issue-robert-2026-04-22.txt`; source filed to `Handled`.
+  - Boundaries: no password generation/view/print/reset/send, reset-link/token/session-cookie/credential-path output, personal email in chat, private mailbox-body output, unrelated Portal/CRM/OPS mutation, commit, push, deploy, restart, live pull, reset, or clean.
+
+- 2026-04-22: Completed Robert's acknowledgement-delay correction for Frank direct-owner routed work.
+  - Source Message-ID `<CAAtX44bbHgL9AyoY_Q7p9eGiRM9DnJbUgRsTEoUp5sjdSgU4zw@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44bbHgL9AyoY-Q7p9eGiRM9DnJbUgRsTEoUp5sjdSgU4zw-mail-gmail-com`; local task id `frank-direct-owner-ack-delay-2026-04-22`.
+  - Visible Frank route `7e96ac60` / `Frank acknowledgement delay rule`; prompt delivery was verified in Workspaceboard history and the worker produced a completed implementation summary. After the later Workspaceboard listener repair, board status showed `blocked` / `launch-failed`, so this Frank session carried the source/docs update, verification, owner report, and filing to closure.
+  - Result: Frank runtime-source and installed Frank mailbox runtime now hold direct-owner captured/routed acknowledgements for 10 minutes. If the routed worker completes or blocks before then, Frank sends only the completion/blocker report; if still pending after 10 minutes, Frank sends one delayed captured/routed receipt with visible session id/title.
+  - Shared docs and Frank guidance now record this as a shared mechanic plus Frank runtime-source behavior; Avignon runtime was not changed in this slice.
+  - Verification: `python3 -m py_compile runtime-source/frank-launch/scripts/frank_auto_runner.py` passed; synthetic non-mailbox tests passed for no immediate ack, no early delayed ack, delayed ack after 10 minutes, and completion-before-ack closeout.
+  - Installed runtime backup: `/Users/admin/.frank-launch/runtime/scripts/frank_auto_runner.py.bak-20260422-ack-delay`; installed runtime now matches the source mirror for `frank_auto_runner.py`.
+  - Robert completion report sent, subject `Frank acknowledgement delay updated`, Message-ID `<177689485983.31435.15697372758174276187@kovaldistillery.com>`, draft `drafts/frank-direct-owner-ack-delay-robert-2026-04-22.txt`; correction sent after live runtime propagation, subject `Correction: Frank acknowledgement delay is live`, Message-ID `<177689509762.47921.17557552831152727959@kovaldistillery.com>`, draft `drafts/frank-direct-owner-ack-delay-runtime-installed-robert-2026-04-22.txt`; source filed to `Handled`.
+  - Workspaceboard status timed out during final route monitoring; performed only the approved narrow repair by terminating the verified Workspaceboard node listener for `/Users/admin/.workspaceboard-launch/runtime/app/server/index.js` on port `17878`; launchd restarted it and `/api/status` recovered.
+  - Remaining gates: live mailbox cycle, commit, push, deploy/restart beyond the running installed file update, Avignon runtime changes, and any auth/OAuth/credential work remain separate approvals/routes.
+
+- 2026-04-22: Completed Robert's Organigram Marketing Manager / Prospecting role follow-up.
+  - Source Message-ID `<CAAtX44ZTNusYCdcY-bSaXMyP9JzZ089LDSXY6C+35Ydf59WyWQ@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44ZTNusYCdcY-bSaXMyP9JzZ089LDSXY6C-35Ydf59WyWQ-mail-gmail-com`; local task id `frank-organigram-marketing-prospecting-roles-2026-04-22`.
+  - Visible Workspaceboard route `b8ab5111` / `Organigram Marketing Manager and Prospecting roles` started with verified prompt delivery and completed the docs/source role update.
+  - Result: `worker_roles/marketing-manager.md` now defines Marketing Manager for organized Forge-based marketing sends to distributors, magazines, media, and approved campaign audiences; `prospecting-worker.md` now explicitly remains the existing Prospecting role instead of creating a duplicate.
+  - Verification: `php -l /Users/werkstatt/workspaceboard/worker-organigram.php` passed; local organigram JSON endpoint includes `marketing-manager` and `prospecting-worker`; role docs contain the expected Marketing Manager / Prospecting / Forge / distributor / magazine references.
+  - Code/Git review sessions `3f9b5bbe` and `b5740ed1` found the remaining gate: do not commit/push as-is because Workspaceboard and AI Workspace have unrelated dirty changes and mixed edits in shared role docs; a later closeout should stage only the Marketing Manager / Prospecting hunks plus `worker_roles/marketing-manager.md`, or get an explicit bundling decision.
+  - Robert completion report sent, subject `Organigram Marketing Manager and Prospecting roles added`, Message-ID `<177689417009.80733.3089084339059593599@kovaldistillery.com>`, draft `drafts/organigram-marketing-prospecting-roles-robert-2026-04-22.txt`; source filed to `Handled`.
+  - No external sends beyond the Robert report, credentials/OAuth/auth work, Forge/CRM/Portal/OPS mutation, commit, push, deploy/live pull, runtime reinstall/restart, reset, clean, or unrelated dirty-worktree cleanup occurred.
+
+- 2026-04-22: Completed Robert's Salesreport coverage color/label correction request.
+  - Source Message-ID `<CAAtX44ZXw2DHs51wQC+9z9udSm11qwfuip2GOCKWurtuqFFF9w@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44ZXw2DHs51wQC-9z9udSm11qwfuip2GOCKWurtuqFFF9w-mail-gmail-com`; local task id `frank-salesreport-coverage-colors-labels-2026-04-22`.
+  - Visible Salesreport route `efacde66` / `Salesreport coverage colors and labels` started with verified prompt delivery and reached `finished` / `review-ready`.
+  - Result: `sales_report_coverage_audit.php` now colors state/month cells by CRM invoice count only: 1+ invoices green, 0 invoices red. The old compact `saved / inv` wording is replaced with explicit `Saved runs` and `Inventory snapshots` labels.
+  - Verification: `php -l sales_report_coverage_audit.php` passed; authenticated CLI render as Codex admin confirmed the new labels, no ambiguous `inv` shorthand, no inventory-only yellow class, 378 green invoice-count cells, and 447 zero-count red cells.
+  - Robert completion report sent, subject `Salesreport coverage colors clarified`, Message-ID `<177689425655.86327.9894114083769459280@kovaldistillery.com>`, draft `drafts/salesreport-coverage-colors-labels-robert-2026-04-22.txt`; source filed to `Handled`.
+  - Duplicate manual report also sent, subject `Salesreport coverage colors updated`, Message-ID `<177689429162.89360.3900493454780581883@kovaldistillery.com>`. Do not send another report for this source unless Robert asks for a resend.
+  - Remaining gates: change is local only; no commit, push, live pull/deploy, CRM/Portal/OPS mutation, saved-report run/backfill, reset, clean, auth/OAuth/token work, private mailbox body output, or production data write occurred.
+
+- 2026-04-22: Enforced Robert's Frank/Avignon customization split approval.
+  - Source Message-ID `<CAAtX44b_He9L7Y0UNdKWVernC+M+B7C3J0EvvnjBs_zfW-9Arg@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44b-He9L7Y0UNdKWVernC-M-B7C3J0EvvnjBs-zfW-9Arg-mail-gmail-com`; local task id `frank-avignon-customization-boundary-auto-enforcement-2026-04-22`.
+  - Visible route `a8c00b8e` / `Frank Avignon customization enforcement approval` started with verified prompt delivery.
+  - Result: future Frank direct-owner task briefs now include automatic customization-boundary classification; shared docs and Frank AGENTS now state every Frank/Avignon operating change must be labeled `shared mechanic`, `Frank customization`, `Avignon customization`, or `runtime change` before implementation.
+  - Verification: `python3 -m py_compile runtime-source/frank-launch/scripts/frank_auto_runner.py` and `git diff --check` on the touched enforcement files passed.
+  - Robert completion report sent, subject `Frank/Avignon customization enforcement active`, Message-ID `<177689406508.74175.5007831679325899542@kovaldistillery.com>`, draft `drafts/frank-avignon-customization-boundary-auto-enforcement-robert-2026-04-22.txt`; source filed to `Handled`.
+  - Remaining gates: installed mailbox runtime refresh, LaunchAgent/cadence change, auth/OAuth, CRM/Portal/OPS work, commit/push/deploy/live pull, and Avignon behavior changes remain separate routes/approvals.
+
+- 2026-04-22: Recorded Robert's approval of the file-spaces docs-only folder model.
+  - Source Message-ID `<CAAtX44YSN9Mr+xcP9woKfcKhONgVYYU73bV7xhqFkf1Nkue52A@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44YSN9Mr-xcP9woKfcKhONgVYYU73bV7xhqFkf1Nkue52A-mail-gmail-com`; local task id `frank-file-spaces-folder-model-approved-2026-04-22`.
+  - Visible AI Workspace route `7b9c8b4c` / `File spaces approval inventory next action` started with verified prompt delivery and completed docs-only reconciliation.
+  - Result: AI Workspace state now records the folder-model approval and makes the first non-secret inventory packet the concrete next action.
+  - Robert completion report sent, subject `File spaces folder model approved`, Message-ID `<177689401263.69568.4078702633448943484@kovaldistillery.com>`, draft `drafts/file-spaces-folder-model-approved-robert-2026-04-22.txt`; source filed to `Handled`.
+  - Remaining gates: target user/role list, shared/general Drive owner, top-level folders to classify, first low-risk test folder, metadata-only vs copy-only first test, and separate Drive/API/auth/storage approvals.
+  - No Drive/API/OAuth/auth, folder/file movement, permission/share change, Papers/MI, `.205`, CRM/Portal/OPS mutation, production/deploy/commit/push, mailbox body access, or credential handling occurred.
+
+- 2026-04-22: Completed Robert's Organigram role-detail improvement request.
+  - Source Message-ID `<CAAtX44baHuwQ8WywSG35QpYK5aQphqwC41HoAKiWCqWgiu3KkQ@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44baHuwQ8WywSG35QpYK5aQphqwC41HoAKiWCqWgiu3KkQ-mail-gmail-com`; local task id `frank-organigram-improvements-2026-04-22`.
+  - Frank intake route `4d6735c1` and Workspaceboard implementation route `2aa62821` / `Organigram role detail HTML sections` started with verified prompt delivery; implementation reached `finished` / `review-ready`.
+  - Result: `worker-organigram.html` now renders role details as structured HTML sections from existing Markdown headings, keeps unknown future `##` sections visible, and keeps raw source Markdown collapsed for audit. No role docs were edited.
+  - Verification: `php -l worker-organigram.html`, `php -l worker-organigram.php`, extracted inline JS `node --check`, `git diff --check -- worker-organigram.html`, local Apache page load, and live role JSON parse all passed.
+  - Robert completion report sent, subject `Organigram role details improved`, Message-ID `<177689292025.1223.2761642190043880993@kovaldistillery.com>`, draft `drafts/organigram-improvements-robert-2026-04-22.txt`; source filed to `Handled`.
+  - Remaining gates: commit/push/deploy/runtime reinstall and any role-doc Persona enrichment remain separate approvals. No private mailbox body output, credential/OAuth/auth work, CRM/Portal/OPS mutation, external-sensitive reply, commit, push, deploy, live pull, restart, reset, clean, or unrelated dirty-worktree cleanup occurred.
+
+- 2026-04-22: Recorded Frank/Avignon email-worker customization boundary for Robert.
+  - Source Message-ID `<CAAtX44YeivxNcoG3cOeCQZ9zHC+F+t1D267geCGaJOVdevOjag@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44YeivxNcoG3cOeCQZ9zHC-F-t1D267geCGaJOVdevOjag-mail-gmail-com`; local task id `frank-avignon-email-worker-customization-boundary-2026-04-22`.
+  - Visible Frank route `3b50c350` / `Frank direct Robert: Re: Frank captured: Fwd: Morning Summary: Wednesday, April 22` started and prompt delivery was verified in Workspaceboard history.
+  - Result: added shared non-secret customization-boundary note `docs/email-workers/2026-04-22-shared-email-worker-customization-boundary.md` and linked it from shared email-worker README; updated Frank and Avignon AGENTS guidance so shared mechanics stay separate from Frank/Avignon persona customization.
+  - Robert completion report sent, subject `Frank/Avignon customization split recorded`, Message-ID `<177689288279.97724.11495119269620681134@kovaldistillery.com>`, draft `drafts/frank-avignon-email-worker-customization-boundary-robert-2026-04-22.txt`; source filed to `Handled`.
+  - Boundaries: no private mailbox body output, no Sonat private SOP text copied, no credentials/OAuth/auth work, no CRM/Portal/OPS mutation, no runtime/LaunchAgent/cadence change, no commit/push/deploy/reset/clean.
+
+- 2026-04-22: Completed Robert's `Next project` file/folder-management intake.
+  - Source Message-ID `<CAAtX44a=rFARtKyiDJ8Ha45KiH+AkJhNXPeaTJ1_UYifyY9LqQ@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44a-rFARtKyiDJ8Ha45KiH-AkJhNXPeaTJ1-UYifyY9LqQ-mail-gmail-com`; local task id `frank-file-spaces-next-project-intake-2026-04-22`.
+  - Frank visible route `b7f9729b` / `Frank direct Robert: Next project`; AI Workspace planning route `f0846b6f` / `File spaces project next action` reached `finished` / `review-ready`.
+  - Result: attached the request to the existing Secure Info / Files Context Intake project, not a new project. The first slice is docs-only: per-user file spaces, one shared/general Drive area, non-secret folder register, human-created folders first, metadata-only test folder, and staged copy planning before any file transfer.
+  - Transfer recommendation: inventory and map existing folders first, prefer copy-only test before any move, leave originals untouched until Robert approves cleanup/archive, and keep private/sensitive/unclear material in owner/private or quarantine areas.
+  - Robert completion report sent, subject `File spaces next project plan`, Message-ID `<177689270989.84054.8138890847945796766@kovaldistillery.com>`, draft `drafts/file-spaces-next-project-robert-2026-04-22.txt`; source filed to `Handled`.
+  - Remaining gates: Robert must approve the folder model and supply a first non-secret inventory packet before implementation; no Drive/API/OAuth/token/auth, folder creation, permission/share change, move/copy/upload/download/delete, local raw-file cache, Papers/MI, `.205`, production/deploy/commit/push, CRM/Portal/OPS mutation, private mailbox body, credential, or secret exposure occurred.
+
+- 2026-04-22: Completed Robert's Salesreport coverage page menu/live follow-up.
+  - Source Message-ID `<CAAtX44bvqcyL1gaR_r9_-evPVKXUdyMZGTPBiNQY2FvADZrx9g@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44bvqcyL1gaR-r9-evPVKXUdyMZGTPBiNQY2FvADZrx9g-mail-gmail-com`; local task id `frank-salesreport-coverage-menu-live-push-2026-04-22`.
+  - Visible Salesreport route `119ab441` / `Salesreport coverage menu link live push` started, accepted the prompt, and finished review-ready.
+  - Result: confirmed `_menu.php` already links `Monthly Report Coverage Audit` under `Advanced Sales Reports` for saved-report admins; committed `sales_report_coverage_audit.php` update as `9a3612412e96850d64c4bf7b73b8266686fda6ff` (`Show state month coverage audit`), pushed `origin/master`, and fast-forwarded live `/home/koval/public_html/salesreport` to the same SHA.
+  - Verification: local `php -l sales_report_coverage_audit.php`, local `php -l _menu.php`, `git diff --check`, authenticated local CLI render as Codex admin, live `php -l` for both files, live menu grep, and live `git rev-parse HEAD` passed. Live pre-existing `.htaccess` modification remains untouched.
+  - Robert completion report sent, subject `Salesreport coverage page linked and live`, Message-ID `<177689253210.70150.6518658520336757769@kovaldistillery.com>`, draft `drafts/salesreport-coverage-menu-live-push-robert-2026-04-22.txt`; source filed to `Handled`.
+
+- 2026-04-22: Completed Robert's Salesreport state/month coverage page request.
+  - Source Message-ID `<CAAtX44b1MpcgZ0+xyXHMh4fVScHdBTuLvyVBiiA_k5EEG-vprg@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44b1MpcgZ0-xyXHMh4fVScHdBTuLvyVBiiA-k5EEG-vprg-mail-gmail-com`; local task id `frank-salesreport-state-month-coverage-page-2026-04-22`.
+  - Visible Salesreport worker/session `5d517ae6` updated `sales_report_coverage_audit.php` into an authenticated/admin-gated read-only state/month matrix for January 2025 through March 2026.
+  - Verification: `php -l sales_report_coverage_audit.php`, `git diff --check`, and authenticated local CLI render as Codex admin passed; no commit, push, deploy, live pull, saved-report execution/backfill, CRM/Portal/OPS/auth/OAuth/token mutation, or credential exposure.
+  - Robert completion report sent, subject `Salesreport state/month coverage page complete`, Message-ID `<177689192278.24228.9146194411131980659@kovaldistillery.com>`, draft `drafts/salesreport-state-month-coverage-page-robert-2026-04-22.txt`; source filed to `Handled`.
+
+- 2026-04-22: Completed read-only Salesreport state/month coverage report for Robert.
+  - Source Message-ID `<CAAtX44YAHoQXz+9WmMMPY_LQL5NZbs+L-YxtdkeLuFyrTY1=Xg@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44YAHoQXz-9WmMMPY-LQL5NZbs-L-YxtdkeLuFyrTY1-Xg-mail-gmail-com`; local task id `frank-salesreport-state-month-coverage-audit-2026-04-22`.
+  - Visible Salesreport worker/session `809a94a7` verified the read-only coverage: Illinois has CRM invoice data for Dec 2025, Jan 2026, and Feb 2026; New York has CRM invoice data for Dec 2025 and Jan 2026, with no New York CRM invoice rows found for Feb 2026.
+  - No monthly saved-report run rows were found for Dec 2025-Feb 2026; inventory snapshot evidence in that window exists only for Jan 2026 and includes IL/NY lines.
+  - Salesreport `HANDOFF.md` and Frank `HANDOFF.md` were updated; Robert report sent, subject `Salesreport state/month coverage checked`, Message-ID `<177689087847.50726.8258281096274982231@kovaldistillery.com>`, draft `drafts/salesreport-state-month-coverage-robert-2026-04-22.txt`; source filed to `Handled`.
+  - Boundaries: no private mailbox body output, credential/token/OAuth/auth work, saved-report execution/backfill, CRM/Portal/OPS or production mutation, code/deploy/live-pull/commit/push/reset/clean.
+
+- 2026-04-22: Completed Outreach calendar sync next-action intake for Robert.
+  - Source Message-ID `<CAAtX44Z3oqgWhY2REQsaZvSnrUiQgH7kO5FdhMKwiFPtym+kVw@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44Z3oqgWhY2REQsaZvSnrUiQgH7kO5FdhMKwiFPtym-kVw-mail-gmail-com`; local task id `frank-outreach-calendar-sync-next-action-2026-04-22`.
+  - Visible OPS/Outreach route `2d35cbfb` / `Outreach calendar sync next action`; prompt delivery was verified and the worker reported the concrete operating answer.
+  - Result: when Robert provides Outreach dates, ask for a structured packet with event/account name, exact date, start/end time/timezone, venue/address, contact or buyer if known, tentative/confirmed status, products/SKUs or tasting focus if relevant, staffing need/assignee/open-shift expectation, notes/confirmation source, and whether the request is check-only or should be staged for OPS/Connecteam review.
+  - OPS durable note added at `/Users/werkstatt/ops/HANDOFF.md` for future Outreach Coordinator use; no Frank open TODO remains.
+  - Robert completion report sent, subject `Outreach calendar sync next action`, Message-ID `<177689068434.36748.788368204384620755@kovaldistillery.com>`, draft `drafts/outreach-calendar-sync-next-action-robert-2026-04-22.txt`; source filed to `Handled`.
+  - Remaining gates: actual date checks need Robert's specific date packet/action; Connecteam-to-OPS remains read-only/queued until fresh export files or an explicitly approved read-only export path exists; calendar/OPS mutations require separate clear target/action and approval.
+  - Boundaries: no private mailbox body output, calendar event-detail read, OAuth/token/auth work, calendar create/edit/delete/sync, OPS/Portal/CRM mutation, Connecteam export/import/`--apply`, notification change, deploy, push, reset, or clean.
+
+- 2026-04-22: Completed `/ops`-linked calendar inventory for Robert's calendar lookup answer.
+  - Source Message-ID `<CAAtX44aZsJwS81FnS+iUEJgoOr_pTPe9B9c2d6vc=X66577VfA@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44aZsJwS81FnS-iUEJgoOr-pTPe9B9c2d6vc-X66577VfA-mail-gmail-com`; local task id `frank-ops-linked-calendar-inventory-2026-04-22`.
+  - Visible route `cad4fd69` / `OPS linked calendar inventory`; prompt delivery was verified and the worker reached `finished` / `review-ready`.
+  - Result: `/ops` links General OPS bookings/events to `KOVAL Events`, Market Events to `KOVAL Natl. Offsite Events`, and Outreach Events to `KOVAL Outreach Events`; Frank's existing calendar helper sees all three calendars.
+  - Robert completion report sent, subject `OPS-linked calendars verified`, Message-ID `<177689028561.8076.113985799102862099@kovaldistillery.com>`, draft `drafts/ops-linked-calendar-inventory-robert-2026-04-22.txt`; source filed to `Handled`.
+  - Remaining next action: Robert still needs to provide the exact date/time range and desired lookup/action before Frank reads event details or performs any calendar/OPS sync work.
+  - Boundaries: no private ICS secret tokens, credentials/tokens, mailbox bodies, event bodies, OAuth/auth work, calendar mutation, OPS/Portal/CRM mutation, external-sensitive reply, commit, push, deploy, reset, or clean.
+
+- 2026-04-22: Completed Portal Company Card Receipt entry for Atlanta Breakfast Club Order #84.
+  - Source Message-ID `<CAAtX44bUTFHRXRTWvQri+wcXopcE=LWyGhWJV8sEE=+=UMfjPg@mail.gmail.com>` and continuation `<CAAtX44a7mNaYxGZVrZ+qMwGm6mCsgA0DJKAYF2iwnv0d6qiiJg@mail.gmail.com>` remained attached to the existing receipt task, not treated as a duplicate.
+  - Portal receipt ID `367313` created by this worker through the approved Portal API path for Robert Birnecker / card ending `0995`, charge date `2026-04-21`, amount `$56.46`, merchant/order `Atlanta Breakfast Club - Order #84`, category `Promotional Events` (Portal category ID `5`, matching Robert's `Promotional Event` instruction).
+  - Duplicate check before create: no matching Portal receipt found for user/date/amount/merchant/order in the 2026-04-20 through 2026-04-22 API result.
+  - Verification: read-back of receipt `367313` confirmed name, user, date/amount/category payload, and `FilesCount=0`.
+  - Supporting source handling: receipt notes record Robert's visible-session receipt packet and source metadata; no private mailbox body or private receipt attachment was accessed, and no external receipt file/link was attached.
+  - Local receipt log: `portal-receipts-log.jsonl`.
+
+- 2026-04-22: Completed Robert-approved Papers option B source slice.
+  - Source Message-ID `<CAAtX44aEoCLf0Mfc2xv-xuGQ0yc4dkn=n3XKQuLOEG_6po6nrg@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44aEoCLf0Mfc2xv-xuGQ0yc4dkn-n3XKQuLOEG-6po6nrg-mail-gmail-com`; local task id `frank-papers-readonly-wrapper-source-slice-2026-04-22`.
+  - Visible route: `cb518c23` / `Papers read-only wrapper source slice`.
+  - Workspaceboard changed files: `server/papers-readonly-wrapper.js` and `server/test/papers-readonly-wrapper.test.js`.
+  - Verification reported by worker: `node --check`, focused wrapper test 9/9, and full server `npm test` 37/37 passed.
+  - Robert completion report sent, subject `Papers option B source slice complete`, Message-IDs `<177688926861.38496.4110998451188893845@kovaldistillery.com>` and duplicate `<177688928768.40284.7213457612263394469@kovaldistillery.com>`; source filed to `Handled`. Do not send another duplicate report for this source.
+  - Remaining gates: Code/Git review, commit/push, deploy/restart/runtime wiring, auth/token/session storage, and body-level Papers reads remain separately approval-gated.
+
+- 2026-04-22: Verified additional calendar access for Robert/Frank and Avignon-through-Frank.
+  - Source Message-ID `<CAAtX44aWPJekWJw15Hay2uQMmyo3Xjc=8OpGD1V-_Us8Zk=S6Q@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44aWPJekWJw15Hay2uQMmyo3Xjc-8OpGD1V-Us8Zk-S6Q-mail-gmail-com`; local task id `frank-additional-calendar-access-inventory-2026-04-22`.
+  - Verified the approved Frank helper can list calendars and that `KOVAL Natl. Offsite Events`, `KOVAL Outreach Events`, Robert's calendar, and Sonat's calendar are already visible/selected.
+  - No Google permission change was needed; Avignon can use the Frank helper path unless a separate Avignon helper is approved later.
+  - Remaining optional next route: multi-calendar reporting support if Robert wants morning summaries/lookups to include more than Robert's calendar.
+  - Robert completion report sent, subject `Additional calendar access verified`, Message-ID `<177688905952.21281.4796391899706157315@kovaldistillery.com>`; source filed to `Handled`.
+
+- 2026-04-22: Sent Robert the exact calendar lookup question and paused before lookup/mutation.
+  - Source Message-ID `<CAAtX44a-APgDVPcTApoP0+-n65LFdvy=Mh13bNpQBhgo6k2yHA@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44a-APgDVPcTApoP0-n65LFdvy-Mh13bNpQBhgo6k2yHA-mail-gmail-com`; local task id `frank-calendar-lookup-exact-question-2026-04-22`.
+  - Visible route `60319dea` / `Frank direct Robert: Re: Calendar lookup clarification`; Workspaceboard status and prompt delivery were verified after the board recovered.
+  - One-question email sent to Robert, subject `Calendar lookup: exact question`, Message-ID `<177688981368.76043.10068296499152375678@kovaldistillery.com>`, draft `drafts/calendar-lookup-exact-question-robert-2026-04-22.txt`.
+  - Exact question sent: which calendar or shared calendar to check, what exact date/time range to use, and what action to take, such as availability lookup, event search, or event add.
+  - Current state: waiting on Robert's answer before any calendar lookup, event-detail access, OAuth/token/auth work, or calendar create/edit/delete.
+
+- 2026-04-22: Recovered Workspaceboard/calendar access and made AI Health Manager remediate a hung board.
+  - Source Message-ID `<CAAtX44a-APgDVPcTApoP0+-n65LFdvy=Mh13bNpQBhgo6k2yHA@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44a-APgDVPcTApoP0-n65LFdvy-Mh13bNpQBhgo6k2yHA-mail-gmail-com`; local task id `frank-calendar-access-board-route-fixed-2026-04-22`.
+  - Fixed the immediate board issue by terminating only the hung Workspaceboard node listener and letting `system/com.koval.workspaceboard` restart it; verified `GET http://127.0.0.1:17878/api/status` returns `200 OK`.
+  - Updated `scripts/ai_health_check.py` so AI Health Manager now performs that narrow Workspaceboard listener repair automatically when the status endpoint fails or times out, with cooldown logging.
+  - Fixed Frank calendar helper config to use the existing private client file beside the private token; verified calendar listing succeeds and includes Robert and Sonat calendars.
+  - Verification: `python3 -m py_compile` passed for the edited scripts, and a live AI Health Manager run reported `board_ok=true`, `board_remediation=not-needed`, and `unhealthy=0`.
+
+- 2026-04-22: Tried the Papers connection path and reported the concrete blocker.
+  - Source Message-ID `<CAAtX44YyHQb3YtnJmWJH6XTgDHsRK6SMDesC7-GS9HaCeZ0XCw@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44YyHQb3YtnJmWJH6XTgDHsRK6SMDesC7-GS9HaCeZ0XCw-mail-gmail-com`; local task id `frank-papers-connectivity-check-blocked-2026-04-22`.
+  - Reused the existing Papers/AI-Bridge lane: `4c992431`, `c6421ac1`, `c2e66c43`, `9a4787cd`, `778ef252`, `82027764`, and `f0ab7450`. Workspaceboard API timed out, so the visible route fallback was the current Frank workspace Codex session.
+  - Metadata-only checks to the Papers MCP endpoint and supplied Papers task URL reached the Papers host but returned `HTTP/2 307` redirects to MI login.
+  - Result: Papers is reachable, but Frank/Codex cannot read the document or connect as Codex until the approved identity plus exact read scopes/document IDs are supplied and the deny-by-default read-only wrapper route is implemented.
+  - Robert blocker report sent to `robert@kovaldistillery.com`, subject `Papers connection blocked at MI login`, task id `frank-papers-connectivity-check-blocked-2026-04-22`, Message-IDs `<177688013113.66087.7301373102648079480@kovaldistillery.com>` and duplicate `<177688013436.66321.12627653128707248234@kovaldistillery.com>`, draft `drafts/papers-connectivity-check-blocked-robert-2026-04-22.txt`.
+  - Duplicate-send note: do not send another report for this blocker unless Robert replies with new approval/details.
+  - Source filed to `Handled` after report and archive returned `true`; metadata-only verification showed `INBOX=0`, `Handled=1`.
+  - Boundaries: no Papers document body read, credentials/OAuth/auth/token/Keychain work, `.205`, Papers/MI write, MCP config/runtime/LaunchAgent/deploy, Portal/CRM/OPS mutation, external-sensitive reply, commit/push/reset/clean, or private mailbox body output.
+
+- 2026-04-22: Recorded Robert's Codex browser-authentication note for future KOVAL-system work.
+  - Source Message-ID `<CAAtX44a90LOqqU57=qWnBNTLvENyC44xhSSdZ8j2wE09ggTt2Q@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44a90LOqqU57-qWnBNTLvENyC44xhSSdZ8j2wE09ggTt2Q-mail-gmail-com`; local task id `frank-codex-browser-auth-note-recorded-2026-04-22`.
+  - Changed `AGENTS.md`, `WHAT_TO_DO.md`, and `README_AGENT.md` so future Frank/Codex browser-authenticated work on OPS, Portal, Contact Report, Salesreport, Login, and related KOVAL systems uses the approved Codex user path, with any 2FA handled only through the approved non-secret Codex-owned 2FA/DB-query route.
+  - Visible route: runtime-created route `c105bd8d` / `Frank direct Robert: Re: Salesreport live pull complete`; prompt delivery was logged as landed. This Frank workspace session completed the closeout after local Workspaceboard status checks timed out.
+  - Robert completion report sent to `robert@kovaldistillery.com`, subject `Codex browser-authentication note recorded`, Message-ID `<177687980104.45049.16059484628742323188@kovaldistillery.com>`, draft `drafts/codex-browser-auth-note-recorded-robert-2026-04-22.txt`; source filed to `Handled` afterward and metadata-only verification showed `INBOX=0`, `Handled=1`.
+  - Boundaries: no private mailbox body output, credential values, 2FA codes, OAuth/token/auth work, browser login, CRM/Portal/OPS mutation, production change, deploy, commit, push, reset, or cleanup.
+
+- 2026-04-22: Cleared two older Frank send/file-only blockers after Robert approved the hardened runtime path.
+  - Calendar source `<CAAtX44ZpmrY+9GoFNmcdzRWSpSWe4=zDVuVXDBEFwO+g3H14XA@mail.gmail.com>`: Robert report sent, subject `Calendar lookup clarification`, Message-ID `<177687958547.30560.17325835242495265712@kovaldistillery.com>`, draft `drafts/frank-calendar-availability-answer-robert-2026-04-22.txt`; source filed to `Handled`.
+  - Papers source `<CAAtX44YuOqo8n3pjaX7oSeUXHZ22E=__SQe6XZbgvHa=QmwmgA@mail.gmail.com>`: Robert report sent, subject `Papers API access: approval route updated`, Message-ID `<177687958547.30565.13262736437477665675@kovaldistillery.com>`, draft `drafts/papers-api-access-approval-intake-robert-2026-04-22.txt`; source filed to `Handled`.
+  - Remaining calendar work is a separate narrow runtime/calendar-helper verification; remaining Papers work still needs explicit allowed scopes/document IDs and separate runtime/security approval.
+
+- 2026-04-22: Completed Salesreport live pull and fixed the recurring send/Git path blockers.
+  - Source Message-ID `<CAAtX44YYkk5=Lvagv=-ikgGVqPF34TwTAMWMBREC4TUNtvGuHw@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44YYkk5-Lvagv-ikgGVqPF34TwTAMWMBREC4TUNtvGuHw-mail-gmail-com`; local task id `frank-salesreport-live-pull-status-2026-04-22`.
+  - Result: Salesreport fix committed as `5cf3e47 Fix warehouse rep flow purchase traces`, pushed to GitHub `master`, and live-pulled on `/home/koval/public_html/salesreport` to `5cf3e47`.
+  - Going-forward fix: local Salesreport `origin` now uses `git@github.com:robs1412/salesreport.git`, avoiding the HTTPS/macOS keychain prompt path that blocked push/fetch from this shell.
+  - Robert completion report sent, subject `Salesreport live pull complete`, Message-ID `<177687949006.23708.10183447993635732370@kovaldistillery.com>`, draft `drafts/salesreport-live-pull-status-robert-2026-04-22.txt`; source filed to `Handled` afterward by Message-ID.
+  - Verification: local PHP lint and diff check passed; GitHub push succeeded; live server `git log` shows `5cf3e47`; direct unauthenticated public curl still returns the website front-door 404, so browser verification requires an authenticated Salesreport session.
+
+- 2026-04-22: Corrected Frank morning-summary wording guidance after Robert's forwarded Wednesday summary.
+  - Source Message-ID `<CAAtX44Z0y0qcr+PQKYucFNoLhJ7=s10NvW=m6O7r4+XvgVChkw@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44Z0y0qcr-PQKYucFNoLhJ7-s10NvW-m6O7r4-XvgVChkw-mail-gmail-com`; local task id `frank-morning-summary-plain-english-correction-2026-04-22`.
+  - Changed `AGENTS.md` and `WHAT_TO_DO.md` so future morning summaries/catch-ups lead with Robert's day, priorities, decisions, and blockers rather than scheduler/source/session/task trace details.
+  - Visible route: current Frank workspace Codex session; Workspaceboard API timed out, so no board session id was recorded.
+  - Verification: `python3 -m py_compile scripts/frank_daily_report.py runtime-source/frank-launch/scripts/frank_auto_runner.py` passed.
+  - Robert completion report sent, subject `Frank morning summary wording fixed`, Message-ID `<177687441688.66625.12637560392181951341@kovaldistillery.com>`, draft `drafts/frank-morning-summary-correction-robert-2026-04-22.txt`; source filed to `Handled` afterward and verified `INBOX=0`, `Handled=1`.
+  - Boundaries: no private mailbox body output, credentials/OAuth/auth work, LaunchAgent/runtime/cadence change, CRM/Portal/OPS mutation, production/deploy/commit/push/reset/clean, or external-sensitive reply.
+
+- 2026-04-22: Fixed Salesreport WH rep flow wrong purchase IDs for bottling `14481`.
+  - Source Message-ID `<CAAtX44ZBPki37KBZOg6QTPBPPBTUipDDOuG9ujAY_O55kieOCg@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44ZBPki37KBZOg6QTPBPPBTUipDDOuG9ujAY-O55kieOCg-mail-gmail-com`; local task id `frank-salesreport-wh-rep-flow-purchase-trace-fix-2026-04-22`.
+  - Visible route: Salesreport workspace TODO/HANDOFF plus this workspace session; Workspaceboard API timed out, so no board session id was recorded.
+  - Changed `/Users/werkstatt/salesreport/wh_rep_flow.php` so mashing purchase traces use `inventory_history.item_order_number_invoice`, matching the mashing detail page.
+  - Verification: `php -l wh_rep_flow.php` passed; bottling `14481` backward trace now shows mashing `4218` purchase IDs `695`, `583`, `606`, `620`, `685`, and `699` instead of the old wrong `613`, `651`, `711`, `719`, and `721`.
+  - Robert completion report sent, subject `Salesreport WH rep flow purchase IDs fixed`, Message-ID `<177687352343.703.17572613765856036098@kovaldistillery.com>`, draft `drafts/salesreport-wh-rep-flow-purchase-trace-fix-robert-2026-04-22.txt`; source filed to `Handled` afterward by Message-ID.
+  - Boundaries: no private mailbox body output, credentials/OAuth/auth work, CRM/Portal/OPS mutation, production data write, external-sensitive reply, commit, push, deploy, live pull, reset, or clean.
+
+- 2026-04-22: Corrected AI Improvement Manager status after Robert's clarification.
+  - Source Message-ID: `<CAAtX44Zfe5vj+YL+WnJRrtV-5N8NkgGTe0Z672mdN_01MdqmVw@mail.gmail.com>`; subject `AI improvement manager`.
+  - Correct status: the source of truth is live Markdown from `/Users/werkstatt/ai_workspace/worker_roles`, shown at `https://wb.koval.lan/workspaceboard/worker-organigram.html`; there are 30 readable role docs plus the README overview.
+  - Removed the incorrect Workspaceboard phone-button queue item and no longer treat this as a Google Drive or phone-page task. Workspaceboard source now resolves role/workspace paths from `/Users/werkstatt`, not old Google Drive fallbacks.
+
+- 2026-04-22: Verified Robert's LaunchAgent installation follow-up.
+  - Source Message-ID `<CAAtX44aA-=DgyHBmM5FVM5ZWXbuEWW2TUY3Wyxw08-DtN8F18g@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44aA-DgyHBmM5FVM5ZWXbuEWW2TUY3Wyxw08-DtN8F18g-mail-gmail-com`; local task id `frank-launchagent-install-verification-2026-04-22`.
+  - Created visible Frank worker route `bda9804e` / `Frank LaunchAgent install verification`; prompt delivery was verified and the route reached `finished` / `review-ready`.
+  - Read-only launchd verification: `system/com.koval.frank-morning-overview` and `system/com.koval.avignon-morning-overview` are now installed as system LaunchDaemons with 06:00 and 18:00 calendar triggers and `runs = 0`; `system/com.koval.ai-health-manager` is installed with `run interval = 900 seconds`, `runs = 2`, last exit `0`.
+  - Robert report sent to `robert@kovaldistillery.com`, subject `LaunchAgent install verification`, Message-ID `<177686469994.85900.12740072221676380936@kovaldistillery.com>`, draft `drafts/frank-launchagent-install-verification-robert-2026-04-22.txt`; source filed to `Handled` afterward by Message-ID.
+  - Boundaries: no private mailbox body output, credentials/OAuth/auth work, LaunchAgent/runtime/cadence mutation, service restart, CRM/Portal/OPS mutation, commit/push/deploy/reset/clean.
+
+- 2026-04-22: Verified Julie Feyerer's TrackTime vacation-hours correction through the approved `/ops` DB path.
+  - Continuation source Message-ID `<CAAtX44Y5oNNg0GLci7f-yWuKiHAWZPTuHOjMm+hrMHq29D2Dbw@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44Y5oNNg0GLci7f-yWuKiHAWZPTuHOjMm-hrMHq29D2Dbw-mail-gmail-com`; local task id `frank-tracktime-julie-feyerer-vacation-hours-verified-2026-04-22`.
+  - Reused the prior task context from source `<CAAtX44bFfRvrjQjjuJzmcr9Cp6hAzekoud=6CsBcmrjsJ+MRUw@mail.gmail.com>` and created visible OPS worker route `a50ec184` / `TrackTime Julie Feyerer vacation hours correction`; prompt delivery was verified by Workspaceboard/tmux transcript.
+  - OPS/TrackTime verification: Julie Feyerer resolves uniquely to user id `1307`; `koval_tracktime.vacationrequests` has no rows for her; no Julie logging row currently has `paid_hours=8` or `unpaid_hours=8`; the relevant `2026-04-20` leave-style row is `logging.trackid=57954`, already `paid_hours=2.00`, `unpaid_hours=0.00`, `vacation_request_id=0`.
+  - TrackTime mutation: none in this pass. No duplicate write was performed because the DB is already at `2.00` and there is no current unambiguous `8` hour Julie target.
+  - Report/source filing: Robert completion report sent, subject `Julie Feyerer TrackTime correction verified`, Message-ID `<177686356876.7794.8191529348568342633@kovaldistillery.com>`, draft `drafts/tracktime-julie-feyerer-vacation-hours-verified-robert-2026-04-22.txt`; continuation source filed to `Handled` and verified `INBOX=0`, `Handled=1`.
+  - 2026-04-22 15:31 CDT concise follow-up status report sent per current request, subject `Julie Feyerer TrackTime status`, Message-ID `<177688987734.80168.17227846655590805273@kovaldistillery.com>`, draft `drafts/tracktime-julie-feyerer-vacation-hours-status-robert-2026-04-22.txt`; body included OPS verified state, no write needed/performed, TrackTime already showing 2 paid hours for Julie's 2026-04-20 leave-style log, and worker/session `a50ec184` only.
+  - Boundaries: no private mailbox body output, no credentials/OAuth/auth work, no external-sensitive reply, no unrelated Portal/CRM/OPS mutation, no commit/push/deploy/reset/clean.
+
+- 2026-04-22: Reported Frank/Avignon communication and LaunchAgent status to Robert.
+  - Source Message-ID `<CAAtX44ajQQKUHfU+xgM7KX8+sivLQEvaXNADVm_i6R-tj2kGWQ@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44ajQQKUHfU-xgM7KX8-sivLQEvaXNADVm-i6R-tj2kGWQ-mail-gmail-com`; local task id `frank-communication-launchagents-status-2026-04-22`.
+  - Installed Frank runtime had already captured/routed the source as session `143dce0b`; this session created visible status route `5f6f66a0` / `Frank communication and LaunchAgent status` and verified prompt delivery.
+  - Read-only status: Workspaceboard responded; standing Frank `eadc2912` and Avignon `cf7294fb` mailbox sessions were live/monitoring; `system/com.koval.frank-auto` and `system/com.koval.avignon-auto` are system LaunchDaemons with 15-second intervals and last exit `0`.
+  - Robert report sent to `robert@kovaldistillery.com`, subject `Communication and LaunchAgent status`, Message-ID `<177686322480.82886.12258359625987491217@kovaldistillery.com>`, draft `drafts/frank-communication-launchagents-status-robert-2026-04-22.txt`; source filed to `Handled` afterward by Message-ID.
+  - Remaining blocker: scheduled Frank/Avignon morning/evening report services and AI Health Manager are prepared but not installed/loaded in the system domain; they still need Robert/admin privileged install/bootstrap. No runtime, LaunchAgent, OAuth, mailbox-body, CRM/Portal/OPS, commit, push, deploy, reset, or clean action was performed.
+
+- 2026-04-22: Resent Portal welcome email for user 1338 after corrected username.
+  - Source Message-ID `<CAAtX44YKe=jH1-+Yv50EM9x3H=ett-oxTJftCy1qGfLswLcyzw@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44YKe-jH1-Yv50EM9x3H-ett-oxTJftCy1qGfLswLcyzw-mail-gmail-com`; local task id `frank-portal-user-1338-welcome-resent-2026-04-22`.
+  - Reused visible Portal worker `004e2172` / `Portal user create for Part-Time KOVAL COT Member`; prompt delivery verified and worker completed the resend.
+  - Portal user `1338` remains active, role `H12`, group `169` / COTeam; current username verified as corrected in Portal.
+  - Welcome resend sent, Message-ID `<177686235618.30728.14985748203138565173@kovaldistillery.com>`; password was not regenerated.
+  - Robert completion report sent, subject `Portal user 1338 welcome resent`, Message-ID `<177686258132.45563.7518209272575502592@kovaldistillery.com>`, draft `drafts/portal-user-1338-welcome-resent-robert-2026-04-22.txt`.
+  - Source filed to `Handled` after the report; archive-by-Message-ID returned true.
+  - Boundaries: no recipient email, password, welcome body, hashes, tokens, private mailbox body, broad export/search, unrelated Portal/CRM/OPS mutation, commit, push, deploy, reset, or clean.
+
+- 2026-04-22: Recorded Portal user-creation username rule in the how-to.
+  - Source Message-ID `<CAAtX44a=r0as=3Wp4AFKGTx5znZLDkEk-HeJ_oaa3dONj2do7Q@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44a-r0as-3Wp4AFKGTx5znZLDkEk-HeJ-oaa3dONj2do7Q-mail-gmail-com`; local task id `frank-portal-user-creation-username-rule-recorded-2026-04-22`.
+  - Visible route/session reused: `004e2172` / `Portal user create for Part-Time KOVAL COT Member`.
+  - Changed: `/Users/werkstatt/portal/docs/portal-user-creation-runbook.md` now states that Portal usernames must be `firstnamelastname` with no spaces or symbols; `/Users/werkstatt/portal/HANDOFF.md` records the docs-only closeout.
+  - Robert completion report sent to `robert@kovaldistillery.com`, subject `Portal user-creation username rule recorded`, Message-ID `<177686250912.41275.14357279992014262089@kovaldistillery.com>`, draft `drafts/portal-user-creation-username-rule-recorded-robert-2026-04-22.txt`.
+  - Source filed to `Handled` after the report.
+  - Boundaries: no private mailbox body output, no personal email/password/token output, no OAuth/auth, no CRM/Portal/OPS mutation, no external-sensitive reply, no commit/push/deploy/reset/clean.
+
+- 2026-04-22: Answered Robert's direct AI bridge/Papers implementation status question.
+  - Source Message-ID `<CAAtX44b3O7T+JmkpAARhCpXP0R9Bc-9WPx4+cJ7taa+eYxAtjQ@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44b3O7T-JmkpAARhCpXP0R9Bc-9WPx4-cJ7taa-eYxAtjQ-mail-gmail-com`; local task id `frank-ai-bridge-papers-implementation-status-2026-04-22`.
+  - Visible route/session: `f0ab7450` / `Frank direct Robert: Fwd: Thoughts on our AI workspace setup`; prompt delivery logged as landed by Frank runtime. Reused existing AI workspace/Papers route context `46839a3c`, AI-Bridge worker `82027764`, Workspaceboard scoping `657f4780`, Papers MCP scoping `c6421ac1`, and wrapper design worker `778ef252`.
+  - Result reported: AI bridge is implemented up to the approved safe boundary: local AI-Bridge work-record contract/artifacts are present, and Workspaceboard source has exporter commit `74fd65f` / `Add bridge work-record exporter`. Papers-live integration is not implemented.
+  - Robert completion report sent to `robert@kovaldistillery.com`, subject `AI bridge / Papers status`, Message-ID `<177686215677.17599.2423795013873613052@kovaldistillery.com>`, draft `drafts/ai-bridge-papers-implementation-status-robert-2026-04-22.txt`.
+  - Source filed to `Handled` after report. Remaining gate: Robert/Security approval for read-only Workspaceboard access to Papers through the deny-by-default wrapper, including initial allowed scopes/collections/document IDs.
+  - Boundaries: no Papers/MI/`.205` access, OAuth/auth/token/credential work, mailbox body output, Portal/CRM mutation, deploy/live pull, service restart, MCP config/runtime change, external send, commit/push/reset/clean, or private content disclosure.
+
+- 2026-04-22: Created Robert calendar reminder for the MacBook/BID finance transfer blocker.
+  - Local task id `frank-macbook-online-bid-finance-reminder-2026-04-22-1000`.
+  - Duplicate check found no existing local sent-log/draft/TODO/HANDOFF match and no matching Robert calendar event for `MacBook BID finance` on 2026-04-22 before creation.
+  - No approved one-off delayed Frank email scheduler was available; used the existing approved Frank Google Calendar path instead.
+  - Created event on `robert@kovaldistillery.com` for Wednesday 2026-04-22 10:00-10:15 AM Central, title `Reminder: keep MacBook online for BID finance transfer`, event id `l80jh62cbfp4ril8h3or26a12g`, with explicit Google Calendar email and popup reminders at event start.
+  - Purpose: keep the MacBook online so the BID finance worker can perform the narrow read-only transfer of the four Google Drive CSVs to `/Users/werkstatt/bid/data-management/finance-action-reports/source-packages/2026-03-approved/`.
+  - Boundaries: no immediate email sent, no file transfer, no mailbox body output, no credentials/tokens printed, no OAuth setup, no launchd/scheduler/cadence change, and no broad calendar changes.
+
+- 2026-04-22: Sent one-time Frank morning catch-up report to Robert.
+  - Duplicate check before send found no existing `frank-morning-overview-2026-04-22`, `Frank morning catch-up: Wednesday, April 22`, or matching Wednesday morning sent-log/draft row in the approved Frank sent logs or local Frank state.
+  - Sent to `robert@kovaldistillery.com` only, subject `Frank morning catch-up: Wednesday, April 22`, task id `frank-morning-catch-up-2026-04-22`, Message-ID `<177685826462.75538.1080692240219784394@kovaldistillery.com>`, draft `drafts/frank-morning-catch-up-2026-04-22-robert.txt`.
+  - High-level contents: known calendar state from local Frank records, OPS priorities from safe digest helper, active Frank follow-ups, and blockers including scheduled-report service registration/load, Portal receipt access, OAuth token-storage approval, Claude Drive credential setup, and pending Robert decisions.
+  - Remaining blocker: scheduled-report service is not loaded/registered and remains routed separately for registration cleanup.
+  - Boundaries: no launchd/scheduler/cadence/OAuth/Google Cloud/mailbox bulk state/commit/push/deploy/standing-monitor changes; no private mailbox bodies, secrets, credentials, payment details, sensitive finance contents, OAuth tokens, or private attachment contents included.
+
+- 2026-04-21: Sent one-time Frank evening catch-up report to Robert.
+  - Duplicate check before send found no existing `frank-eod-summary-2026-04-21`, `Frank End-of-Day Update: Tuesday, April 21`, or matching Tuesday evening catch-up sent-log row in the approved Frank sent logs.
+  - Sent to `robert@kovaldistillery.com` only, subject `Frank evening catch-up: Tuesday, April 21`, task id `frank-evening-catch-up-2026-04-21`, Message-ID `<177682249029.26305.681201332004313094@kovaldistillery.com>`, draft `drafts/frank-evening-catch-up-2026-04-21-robert.txt`.
+  - High-level contents: completed/routed work from 2026-04-21, including Portal user creation/audit, AI Health Manager setup/organigram follow-up, AI workspace status, Frank/Avignon quick-answer guidance, and Atlanta Breakfast Club receipt category correction; open blockers including scheduled-report LaunchAgent load, Portal receipt access, OAuth token-storage approval, Claude Drive credential setup, and waiting blocker decisions.
+  - Source email filing: none. This was a one-time recovery send from local Frank state, not a mailbox-source filing task.
+  - Boundaries: no launchd/scheduler/cadence/OAuth/Google Cloud/mailbox bulk state/commit/push/deploy/standing-monitor changes; no private mailbox bodies, secrets, credentials, payment details, OAuth tokens, or sensitive finance contents included.
+
+- 2026-04-21: Extended the quick-answer acknowledgement rule to Avignon.
+  - Source Message-ID `<CAAtX44a7d1gQbmUP8psrGbLfLojdSL-i1oq16+V3j8yiL-A2ww@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44a7d1gQbmUP8psrGbLfLojdSL-i1oq16-V3j8yiL-A2ww-mail-gmail-com`; local task id `frank-avignon-quick-answer-acknowledgement-parity-2026-04-21`.
+  - Visible route/session: runtime-created route `98927cc3` / `Frank direct Robert: Re: Frank quick-answer acknowledgement rule updated`; prompt delivery logged as landed. The installed runtime sent the old-style captured/routed acknowledgement for this continuation before this correction completed, Message-ID `<177680247920.35136.7068528242959597525@kovaldistillery.com>`.
+  - Changed: Avignon now explicitly mirrors Frank's quick-answer rule for direct Sonat work and Robert-as-Avignon-owner/approver work. Answer directly when safe in the same pass; reserve captured/routed acknowledgements for substantive, invisible, or not-immediately-answerable work after the visible route exists and the prompt has landed.
+  - Changed files: `../avignon/AGENTS.md`, `../avignon/README.md`, `../avignon/runtime-source/avignon-launch/scripts/avignon_inbox_cycle.py`, `../docs/email-workers/2026-04-20-shared-captured-routed-receipts.md`, and draft `drafts/frank-avignon-quick-answer-acknowledgement-parity-robert-2026-04-21.txt`.
+  - Robert completion report sent to `robert@kovaldistillery.com`, subject `Avignon quick-answer acknowledgement rule updated`, Message-ID `<177680272793.48360.6984213170238431370@kovaldistillery.com>`; source filed to `Handled` afterward by Message-ID and metadata-only check showed `INBOX=0`, `Handled=1`.
+  - Verification: `python3 -m py_compile /Users/werkstatt/ai_workspace/avignon/runtime-source/avignon-launch/scripts/avignon_inbox_cycle.py` passed. No installed `/Users/admin` runtime edit, LaunchAgent/cadence/restart, OAuth/auth, credential exposure, mailbox body output, CRM/Portal/OPS mutation, production change, external reply, commit/push/deploy/reset/clean was performed.
+
+- 2026-04-21: Recorded Robert's quick-answer acknowledgement rule for Frank direct-owner mail.
+  - Source Message-ID `<CAAtX44ZuPXdbA-qFeJeZ=Vmw0BeYttzVoyPTSEgPDx3fh-90-A@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44ZuPXdbA-qFeJeZ-Vmw0BeYttzVoyPTSEgPDx3fh-90-A-mail-gmail-com`; local task id `frank-quick-answer-acknowledgement-rule-updated-2026-04-21`.
+  - Visible route/session: runtime-created route `bdb05ff6` / `Frank direct Robert: Change in E-mail worker receipt acknowledgement`; prompt delivery logged as landed. The existing runtime sent the old captured/routed acknowledgement before this correction took effect, Message-ID `<177680182886.349.1211342754890183555@kovaldistillery.com>`.
+  - Changed: Frank guidance now says quick answers should be sent directly without a separate captured/routed receipt; captured/routed acknowledgements are for work that will take a moment, is otherwise invisible, or is not immediately answerable.
+  - Changed files: `AGENTS.md`, `PERSONA.md`, `README_AGENT.md`, `routed-task-id-recording.md`, `runtime-source/frank-launch/scripts/frank_auto_runner.py`, and draft `drafts/frank-quick-answer-acknowledgement-rule-updated-robert-2026-04-21.txt`.
+  - Robert completion report sent to `robert@kovaldistillery.com`, subject `Frank quick-answer acknowledgement rule updated`, Message-ID `<177680206673.19247.1579608510445500699@kovaldistillery.com>`; source filed to `Handled` afterward by Message-ID and verified `INBOX=0`, `Handled=1`.
+  - Verification: `python3 -m py_compile runtime-source/frank-launch/scripts/frank_auto_runner.py` passed. No installed `/Users/admin` runtime edit, LaunchAgent/cadence change, OAuth/auth, credential exposure, mailbox body output, CRM/Portal/OPS mutation, production change, external reply, commit/push/deploy/reset/clean was performed.
+
+- 2026-04-21: Answered Robert's AI Health Manager organigram follow-up.
+  - Source Message-ID `<CAAtX44buo93c5azUvSXGg1GCbe1OXT1oV0CSU064vCY0YuSCog@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44buo93c5azUvSXGg1GCbe1OXT1oV0CSU064vCY0YuSCog-mail-gmail-com`; visible route/session reused `a3b9518c` / `AI Health Manager setup verification`.
+  - Precise state after Robert's served-endpoint correction: source/role docs are updated. `/Users/werkstatt/workspaceboard/worker-organigram.php` contains `ai-health-manager` / `AI Health Manager`; `/Users/werkstatt/ai_workspace/worker_roles/ai-health-manager.md`, `worker_roles/README.md`, `worker_roles/operating-model.md`, and the project-hub setup note are present.
+  - Served-runtime limitation: Robert checked `http://127.0.0.1:17878/worker-organigram.php`; it serves raw PHP from the installed Workspaceboard runtime under `/Users/admin/.workspaceboard-launch/runtime/app/server/index.js`, and that served raw copy does not include `ai-health-manager` / `AI Health Manager`. The installed/served runtime copy appears stale and needs a separate Workspaceboard runtime/deploy/refresh route through Code/Git Manager.
+  - Robert report had already been sent, subject `AI Health Manager organigram updated`, Message-ID `<177680159436.87473.3614229912245441341@kovaldistillery.com>`; source filed to `Handled` after report. Local draft corrected afterward at `drafts/ai-health-manager-organigram-follow-up-robert-2026-04-21.txt`.
+  - Remaining gate: 15-minute scheduled Health Manager activation and Workspaceboard runtime refresh both require separate Code/Git Manager/Security-reviewed approval as applicable. No `/Users/admin` edit, service restart, deploy, runtime/cadence/auth/OAuth/git, CRM/Portal/OPS, or private mailbox body work was performed by this correction.
+
+- 2026-04-21: Closed AI Health Manager setup completion report and source filing.
+  - Source Message-IDs `<CAAtX44bxhZr7MFfeW-ASxp8xMs0QfiOBzL5ste1QOvLYRrQdSw@mail.gmail.com>` and `<CAAtX44Yc_1wkf=-StNpDzs3-nq+3nP804SrRwCpSs4FdkdE2aA@mail.gmail.com>`; visible route/session `a3b9518c` / `AI Health Manager setup verification`.
+  - Completion report to Robert was sent by the Frank runtime, subject `Frank complete: Add AI Health Manager`, Message-ID `<177677072344.81555.15260020338997057499@kovaldistillery.com>`. This session also sent the prepared Robert-only completion report under the same approval gate, subject `AI Health Manager setup verified`, Message-ID `<177680118543.61123.844999442017570010@kovaldistillery.com>`.
+  - Under Robert's approved send/file gate, verified both related source messages are out of `INBOX` and present in `Handled`.
+  - Remaining gate: any 15-minute AI Health Manager scheduler/runtime/LaunchAgent activation still requires separate Code/Git Manager and Security Guard reviewed approval. No runtime/cadence/auth/OAuth/deploy/git changes were made.
+
+- 2026-04-21: Completed Part-Time KOVAL COT Member Portal user creation and welcome mail.
+  - Source Message-ID `<CAAtX44Z572LicRjm=jUPzD21S0rQXdAg1k8toMejD4seKCAhaw@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44Z572LicRjm-jUPzD21S0rQXdAg1k8toMejD4seKCAhaw-mail-gmail-com`; visible route/session `004e2172` / `Portal user create for Part-Time KOVAL COT Member`.
+  - Continuation source Message-ID `<CAAtX44aVC+2FConW0QEm0pyZMVbccMks5nb8kH62q=iEX=rK_w@mail.gmail.com>` was attached to the same route/session, not treated as a duplicate. Captured acknowledgement Message-ID `<177678306146.79889.17591805461408055583@kovaldistillery.com>`.
+  - Private source recovery created `drafts/portal-user-create-cot-member-source-packet-2026-04-21.private.json`; private values were not printed in chat or non-private notes.
+  - Portal result: exact duplicate checks returned no user/contact matches; created active Portal user ID `1338`, role `H12` / COTeam, group/team `169` / COTeam, non-exempt hourly part-time salary `$22.00/hour`.
+  - Welcome mail sent to the new user, Message-ID `<177678312779.83008.2186218211736350097@kovaldistillery.com>`; no password or personal email was printed in chat or non-private notes.
+  - Robert completion report sent to `robert@kovaldistillery.com`, subject `Part-time COTeam Portal user created`, task id `frank-portal-user-create-cot-member-complete-2026-04-21`, Message-ID `<177678322108.86390.14941572473736165929@kovaldistillery.com>`, draft `drafts/portal-user-create-cot-member-complete-robert-2026-04-21.txt`.
+  - Original and continuation sources filed to `Handled` by Message-ID after the completion report sent. No unrelated Portal/CRM/OPS mutation, OAuth/auth, commit, push, deploy, reset, or clean occurred.
+
+- 2026-04-21: Sent one consolidated Robert-only AI workspace setup/location status update.
+  - Covered source lanes: `frank-papers-http-option-conditional-recorded-2026-04-20` and `frank-direct-owner-point-first-wording-fix-2026-04-20`; no separate duplicate closeouts sent.
+  - Source Message-IDs covered: `<CAAtX44Z8C5fLCJTje2H9TK47Pvnyi42wAk1QuhBbq446LGgF7g@mail.gmail.com>` and `<CAAtX44a1USPZ8aASkuKAJz+hZwHgDe-2ZojmVT+CrSwGu2fubA@mail.gmail.com>`.
+  - Sessions covered: `46839a3c` / `Frank direct Robert: Re: Thoughts on our AI workspace setup`, `ce53bf70` / `Frank direct Robert: Re: AI workspace location clarification recorded`, `27fc879f` / `Frank direct-owner opening wording cleanup`, prior route `e10ae595`, and Papers scoping workers `c6421ac1` / `778ef252`.
+  - Sent to `robert@kovaldistillery.com` only, subject `AI workspace setup/location status`, task id `frank-ai-workspace-location-consolidated-update-2026-04-21`, Message-ID `<177678273335.69769.722368853977488463@kovaldistillery.com>`, draft `drafts/ai-workspace-location-consolidated-update-robert-2026-04-21.txt`.
+  - Both pending source messages were filed to `Handled` by Message-ID after durable sent-log/local logging. No Claude, Dmytro, external, or additional thread email was sent; no private body output, secrets/auth/OAuth, runtime/LaunchAgent/cadence change, commit/push/deploy/reset/clean occurred.
+
+- 2026-04-21: Completed Robert option 4 Frank wording/template update for direct-owner replies.
+  - Approval: Robert approved option 4 in chat on 2026-04-21. Related source Message-ID `<CAAtX44a1USPZ8aASkuKAJz+hZwHgDe-2ZojmVT+CrSwGu2fubA@mail.gmail.com>`; task id `frank-direct-owner-point-first-wording-fix-2026-04-20`; visible route/session `27fc879f` / `Frank direct-owner opening wording cleanup`.
+  - Changed: Frank captured/routed/status/closeout guidance and source-template mirror now require concise point-first prose and forbid the literal opener `Point first:`; captured/routed responses still keep visible session ID plus session/task title where available.
+  - Changed files: `AGENTS.md`, `README_AGENT.md`, `routed-task-id-recording.md`, `drafts/direct-owner-point-first-wording-fix-robert-2026-04-20.txt`, `runtime-source/frank-launch/scripts/frank_auto_runner.py`, `TODO.md`, `HANDOFF.md`, and `completion-confirmation-log.jsonl`.
+  - Verification: `python3 -m py_compile runtime-source/frank-launch/scripts/frank_auto_runner.py` passed. No separate duplicate Robert email was sent for this lane; it is covered by consolidated update `<177678273335.69769.722368853977488463@kovaldistillery.com>`, and the source was filed to `Handled` after that send. No installed runtime changed, restart/cadence/deploy performed, commit, push, reset, or clean. Code/Git Manager review is required before any commit/push/deploy/installed-runtime update/restart.
+
+- 2026-04-21: Sent Robert the missed Tuesday morning catch-up update.
+  - Source Message-ID `<CAAtX44aWJXoSMMf99jFPUq1thgKPd3UkGoLYHFHnGQoghYWJ+A@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44aWJXoSMMf99jFPUq1thgKPd3UkGoLYHFHnGQoghYWJ-A-mail-gmail-com`; visible route/session `f9bf61a1` / `Frank morning update missing 2026-04-21`.
+  - Captured acknowledgement was already sent as Message-ID `<177677192207.13775.13716324987715921960@kovaldistillery.com>`.
+  - Catch-up sent to `robert@kovaldistillery.com`, subject `Frank morning catch-up: Tuesday, April 21`, task id `frank-morning-update-catch-up-2026-04-21`, Message-ID `<177678259444.64505.10868995008681269867@kovaldistillery.com>`, body draft `drafts/morning-catch-up-2026-04-21-robert.txt`.
+  - Included high-level missed-report cause from approved local state, current priorities, active blockers, and next actions. Source filed to `Handled` by Message-ID after the catch-up report; metadata-only verification showed `INBOX=0`, `Handled=1`.
+  - Boundaries observed: no private mailbox body output, secrets/credentials/tokens, OAuth/auth work, CRM/Portal/OPS mutation, runtime/LaunchAgent/cadence change, commit/push/deploy/reset/clean, or external-sensitive send.
+
+- 2026-04-20: Recorded Robert's current AI workspace location clarification.
+  - Source Message-ID `<CAAtX44auLDO3-4Kmaym8U0hHApTD+N63gZX6837iffps=b-gkw@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44auLDO3-4Kmaym8U0hHApTD-N63gZX6837iffps-b-gkw-mail-gmail-com`; visible route/session `e10ae595` / `Frank direct Robert: Re: Thoughts on our AI workspace setup`; captured/routed acknowledgement Message-ID `<177672245989.87985.18104143018082186711@kovaldistillery.com>`.
+  - Changed: `../worker_roles/README.md` and `../worker_roles/operating-model.md` now record that Codex with Workspaceboard, organigram, and git-backed `werkstatt` role/repo surface currently lives on Mac mini `192.168.55.230`; user entry point is `https://wb.koval.lan/workspaceboard/`; durable role source is `/Users/werkstatt/ai_workspace/worker_roles`.
+  - Report/file state: Robert closeout sent, subject `AI workspace location clarification recorded`, task id `frank-ai-workspace-location-clarification-recorded-2026-04-20`, Message-ID `<177672270761.91653.11412316317436276579@kovaldistillery.com>`, draft `drafts/ai-workspace-location-clarification-recorded-robert-2026-04-20.txt`; source filed to `Handled` by Message-ID after the report was sent. No DNS/router, runtime, LaunchAgent, service restart, OAuth/auth, mailbox body, credential, deploy/live-pull, `.205`, production, commit, push, or external-sensitive action occurred.
+
 - 2026-04-20: Fixed Frank duplicate-send incident on `Re: Thoughts on our AI workspace setup`.
   - Incident worker/session: `b52ee3b8` / `Frank duplicate-send incident on Re: Thoughts on our AI workspace setup`.
   - Source Message-ID attached to existing Claude reminder clarity and duplicate incident state: `<CAAtX44YjKEPU8JFCxn4YHhRvbavA=z__BdJcjsE8Gvwgcw+esA@mail.gmail.com>`.
@@ -104,7 +492,9 @@ Live Papers lookup/projection remains approval-gated and is represented by AI Wo
   - Duplicates identified from non-secret sent/automation metadata: the same hard-coded Frank Papers-access reply was sent to `claude@koval-distillery.com`, Cc `robert@kovaldistillery.com, dmytro.klymentiev@kovaldistillery.com`, subject `Re: Thoughts on our AI workspace setup`, task id `frank-2026-claude-ai-workspace-setup-review`, including 2026-04-20 sends at 15:44:49 CDT (`<177671788958.59079.5470613761835820887@kovaldistillery.com>`), 15:47:51 CDT (`<177671807114.61235.11279513472119548721@kovaldistillery.com>`), 15:52:15 CDT (`<177671833529.64701.5789135938088187357@kovaldistillery.com>`), and 16:09:27 CDT (`<177671936753.75476.13631369818157545834@kovaldistillery.com>`). A distinct internal clarity note was also sent at 15:46:26 CDT (`<177671798680.60460.12942410313309167058@kovaldistillery.com>`), but that was not the repeated hard-coded Papers-access reply.
   - Root cause: installed `/Users/admin/.frank-launch/runtime/scripts/frank_auto_runner.py` classifies each new Claude tracked reply containing Papers/Codex/Frank terms as `tracked-claude-papers-access-followup` and sends the fixed `compose_claude_papers_access_reply()` body. Suppression only checks whether the current source Message-ID already exists in `automation-log.jsonl`; it does not suppress by thread/task/recipient/body intent or prior sent-log rows. Robert-thread captured acknowledgements also repeated because `frank-primary-intake-ack` is source-message based and lacks thread/task ack suppression.
   - Runtime fix: patched installed `/Users/admin/.frank-launch/runtime/scripts/frank_auto_runner.py` and git-backed source mirror `runtime-source/frank-launch/scripts/frank_auto_runner.py` with a sent-log guard for `tracked-claude-papers-access-followup`. Duplicate hits now log `duplicate-claude-papers-access-reply-suppressed-no-send` and file the duplicate source to `Handled` without sending Claude another copy.
+  - Code/Git closeout: session `4dfc8d9f` / `Code Git Frank duplicate-send suppression review` committed the scoped source fix as `7286cf54039d4cd9c59052f1ff913216732a8146` (`Harden Frank thread duplicate suppression`). Commit includes only `frank/runtime-source/frank-launch/scripts/frank_auto_runner.py`; unrelated dirty state remains uncommitted.
   - Verification: `python3 -m py_compile` passed for installed and source mirror; installed/source SHA-256 matched; synthetic guard returned true for the existing Claude task and false for an empty sent log; Frank INBOX metadata check showed no Claude-thread item waiting in INBOX after the fix.
+  - Remaining non-code blocker: repo is ahead `origin/main` by one commit and still has unrelated dirty state; no push, deploy, restart, live pull, mailbox cycle, or correction email was performed from this incident lane.
   - Robert response status: no apology/status email was sent during this fix to avoid adding more noise to the incident.
 
 - 2026-04-20: Completed Frank response-template session-name parity follow-up.
