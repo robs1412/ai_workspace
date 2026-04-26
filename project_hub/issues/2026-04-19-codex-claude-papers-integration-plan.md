@@ -73,6 +73,15 @@ Current boundary:
 - Do not use Papers/Mesh/Rein write or mutation-capable tools until the token path is available and the specific logging/write slice is scoped.
 - The current shell has no `infisical` binary and no relevant token environment variables, so Papers reads/writes and Papers logging are blocked on approved Infisical/token availability.
 
+## 2026-04-26 Token Setup Request
+
+Frank sent Claude a token setup request at 15:39 CDT, copied to Robert and Dmytro:
+
+- task id: `frank-claude-mcp-token-setup-request-2026-04-26`
+- subject: `Frank follow-up: MCP token setup for Codex/Frank runtime`
+
+The request asks for non-secret setup metadata only: Infisical project/environment/path, expected environment variable names, Mac mini loading method, any `infisical` CLI install step, minimum read-only scope, separate Papers logging/write scope if different, and the approved first Papers write-log target. It explicitly asks Claude not to send raw token values or other secret material in email.
+
 ## 2026-04-24 `.205` Login Metadata Correction
 
 Source: local approved private reference surface under `ws ai`, file `/Users/werkstatt/ai_workspace/.private/passwords/claude-user.txt`.
