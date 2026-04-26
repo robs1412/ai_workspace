@@ -1,10 +1,18 @@
 # TODO — avignon
 
-Updated: 2026-04-23 CDT (Machine: Macmini.lan)
+Updated: 2026-04-25 CDT (Machine: Macmini.lan)
 
 ## In Progress
 
-No active Avignon-local implementation item.
+- Monday reminders owner-note delivery:
+  - Source Message-ID `<CALbLtzxaTAUHz-M2DPYNnU_yVaCb6ghvg-nhoVfsnfYeaNixFw@mail.gmail.com>`; dedupe key `avignon-direct-owner-sonat-CALbLtzxaTAUHz-M2DPYNnU-yVaCb6ghvg-nhoVfsnfYeaNixFw-mail-gmail-com`; local task id `avignon-direct-owner-sonat-monday-reminders-2026-04-25`.
+  - Substance is complete: Sonat's note is now a concrete Monday, April 27 follow-up list covering Lipman's new brand manager, distributor outreach on fall activations, Dina, Steve Hirsch, and a Hotel Zachary check, while preserving ambiguity flags instead of guessing at the second Lipman contact or the Nebraska/Minnesota company.
+  - Blocker: the completion draft is ready at `drafts/sonat-monday-reminders-2026-04-25.txt`, but this workspace has no approved in-scope Sonat send path under `/Users/werkstatt`, so the source should not be treated as filed to `Handled` until the report is sent or an approved sender route is used.
+
+- Google Ads natural-ingredients owner-note delivery:
+  - Source Message-ID `<CALbLtzw8GKZA=Mkydz-x0QbFM_WQAPkg4pvuzbiOAxiLZd8MQw@mail.gmail.com>`; dedupe key `avignon-direct-owner-sonat-CALbLtzw8GKZA-Mkydz-x0QbFM-WQAPkg4pvuzbiOAxiLZd8MQw-mail-gmail-com`.
+  - Substance is complete: Sonat's note adds one concrete copy guardrail to the existing Google Ads owner lane. Use `100% natural ingredients` only where accurate and applicable, alongside the standing rule to keep health claims out.
+  - Blocker: the completion draft is ready at `drafts/sonat-google-ads-natural-ingredients-direction-2026-04-25.txt`, but this workspace has no approved in-scope Sonat send path under `/Users/werkstatt`, so the source should not be treated as filed to `Handled` until the report is sent or an approved sender route is used.
 
 ## Waiting Next Step
 
@@ -18,12 +26,59 @@ No active Avignon-local implementation item.
   - Review artifact: `drafts/avignon-crm-recovery-action-plan-review-2026-04-19.md`.
   - Newly found Sonat answers: Alexis Harris should be handled under the existing `Sophy Hotel - Hyde Park` CRM context; the status/closeout request is complete/yes; Stephen Beck is already in CRM and should not be added again.
   - Robert decision on 2026-04-22: leave Stephen Beck as-is in CRM. Treat the Stephen Beck item as no new contact and no link/update needed unless a new explicit request arrives.
-  - Before any further CRM mutation, a Portal/Importer worker should verify the existing records and use only the bounded answer above; do not infer a Stephen Beck account link from the old Lanterna prompt.
+  - Alexis Harris is no longer waiting on Sonat. The remaining action is a narrow Portal verification/write-closeout pass: confirm the existing `Sophy Hotel - Hyde Park` target and complete or explicitly close the Alexis Harris CRM handling from the recovered source.
+  - Do not infer a Stephen Beck account link from the old Lanterna prompt; Stephen Beck is treated as closed/no-op unless a new explicit request arrives.
   - Avignon worker `b583edb6` should use the private Frank context capture at `/Users/werkstatt/ai_workspace/frank/drafts/claude-avignon-context-frank-mail-2026-04-19.private.txt` and metadata at `/Users/werkstatt/ai_workspace/frank/drafts/claude-avignon-context-frank-mail-2026-04-19.meta.json`, plus private Avignon source artifacts, without printing private bodies/contact fields.
   - If Robert approves another follow-up, send one concise Avignon note to Sonat with Robert copied for visibility; copy Claude only if Robert explicitly wants Claude in the CRM decision thread.
   - Do not run phpList actions, broad imports, unrelated mailbox filing, credential work, destructive changes, or external-sensitive sends under this routine CRM authority.
 
 ## Done
+
+- 2026-04-25: Converted Sonat's Google Ads natural-ingredients reply into a concrete owner-path next action.
+  - Source Message-ID `<CALbLtzw8GKZA=Mkydz-x0QbFM_WQAPkg4pvuzbiOAxiLZd8MQw@mail.gmail.com>`; dedupe key `avignon-direct-owner-sonat-CALbLtzw8GKZA-Mkydz-x0QbFM-WQAPkg4pvuzbiOAxiLZd8MQw-mail-gmail-com`.
+  - Classification: same-pass direct-owner quick answer inside the existing Google Ads owner path, not a reopened Avignon ad-account task and not a new visible-worker route.
+  - Concrete next action: in the existing Claude/Sonat Google Ads lane, use `100% natural ingredients` only where it is accurate and applicable, and keep health-claim language out.
+  - Created Sonat completion draft `drafts/sonat-google-ads-natural-ingredients-direction-2026-04-25.txt`. Delivery remains blocked pending an approved send path inside the `/Users/werkstatt` boundary; no Google Ads login, spend/config/admin change, OAuth/auth/token work, mailbox-body disclosure, CRM/Portal/OPS mutation, or external-sensitive send occurred.
+
+- 2026-04-25: Converted Sonat's Google Ads creative-direction reply into standing copy guardrails for the routed owner lane.
+  - Source Message-ID `<CALbLtzxEncZCJH3U3pmAhz4ZmU1H84ZvCP1xxwJPXg8wyxDh8g@mail.gmail.com>`; dedupe key `avignon-direct-owner-sonat-CALbLtzxEncZCJH3U3pmAhz4ZmU1H84ZvCP1xxwJPXg8wyxDh8g-mail-gmail-com`.
+  - Classification: same-pass direct-owner quick answer inside the existing Google Ads owner path, not a reopened Avignon ad-account task and not a new visible-worker route.
+  - Concrete next action: keep `Just add bubbles.` as the standing Cranberry Gin line, and treat `most awarded Chicago spirit` as retired for Dry Gin unless Sonat supplies a preferred replacement line.
+  - Created Sonat completion draft `drafts/sonat-google-ads-copy-guardrails-2026-04-25.txt`. No Google Ads login, spend/config/admin change, OAuth/auth/token work, mailbox-body disclosure, CRM/Portal/OPS mutation, or external-sensitive send occurred.
+
+- 2026-04-24: Converted Robert's Google Ads keyword-direction reply into a concrete owner-path next action.
+  - Source Message-ID `<CAAtX44YEMuzYv5qwT7wCc05yqXyerkYj=foZ845DtccsAdZvCQ@mail.gmail.com>`; dedupe key `avignon-direct-owner-robert-approver-CAAtX44YEMuzYv5qwT7wCc05yqXyerkYj-foZ845DtccsAdZvCQ-mail-gmail-com`.
+  - Classification: same-pass direct-owner quick answer, not a new routed-worker item. Robert's note is a clear policy/input signal for the existing owner lane: alternate keywords are acceptable, but health statements must stay out.
+  - Concrete next action: keep Google Ads on the existing Claude/Sonat owner path and revise the keyword set there to compliant alternatives. Do not reopen Avignon's lane unless Robert explicitly asks for a new Avignon scope.
+  - Created Robert completion draft `drafts/robert-google-ads-keyword-direction-2026-04-24.txt`. No Google Ads login, account review, spend/config/admin action, OAuth/auth/token work, mailbox-body read, CRM/Portal/OPS mutation, deploy, or git change occurred.
+
+- 2026-04-24: Closed Sonat's direct-owner `Re: The Cultivater` reply from the exact runtime-routed source as a no-action quick closeout.
+  - Source Message-ID `<CALbLtzwQGMLkhs04Acr9_24VDyskEXm4317acJNdhUsP_trwMQ@mail.gmail.com>`; dedupe key `avignon-direct-owner-sonat-CALbLtzwQGMLkhs04Acr9-24VDyskEXm4317acJNdhUsP-trwMQ-mail-gmail-com`; visible routed session `1daf03eb` (`Avignon direct Sonat: The Cultivater`) already existed and prompt delivery was recorded as landed.
+  - Classification: same-pass direct-owner completion/approval capture, not a new work request. The provided context is only a thank-you/completion note, so the concrete next action is to leave the lane closed and file the source to `Handled` unless a fresh Sonat message creates a new deliverable.
+  - Correction recorded: the runtime had already sent a captured/routed acknowledgement before review, but no additional acknowledgement, answer, CRM/Portal/OPS mutation, OAuth/auth/token work, or external-sensitive send should occur from this closeout.
+
+- 2026-04-23: Recorded Sonat's `Re: The Cultivater` approval reply and closed the intake as handled.
+  - Source Message-ID `<CALbLtzwHSN8hV5WpKqDMgphf0g84SWqF4GEuw-m3a9C_w5ivXA@mail.gmail.com>`; dedupe key `avignon-direct-owner-sonat-CALbLtzwHSN8hV5WpKqDMgphf0g84SWqF4GEuw-m3a9C-w5ivXA-mail-gmail-com`.
+  - Classification: same-pass direct-owner approval capture. Sonat approved the item, said she already shared it with Oona, and noted that Robert registered the domain. No new blocker, decision, or invisible follow-through remained for Avignon to route.
+  - Next action: file the source to `Handled` and leave the lane closed unless a fresh Sonat message creates a concrete new deliverable or follow-up request.
+  - No visible worker route, reply draft, CRM/Portal/OPS mutation, mailbox-body read, credential/auth/OAuth work, or external-sensitive send was needed.
+
+- 2026-04-23: Answered Robert's direct-owner Google Ads follow-through as an Avignon quick-answer closeout.
+  - Source Message-ID `<CAAtX44Z4HtBQhRih2nT4EV_BKX4hOjPGAzoDvNHrLROc-82yJQ@mail.gmail.com>`; dedupe key `avignon-direct-owner-robert-approver-CAAtX44Z4HtBQhRih2nT4EV-BKX4hOjPGAzoDvNHrLROc-82yJQ-mail-gmail-com`.
+  - Status answer: Avignon has no new active Google Ads work. The lane was already routed out on 2026-04-17 to the Claude/Sonat owner path. Avignon still shows Google Ads task `#1317` as routed/handled, and the broader AI Workspace tracker still shows Google Ads session `258b4242` closed/routed out with Frank worker `e8735579` on the owner path.
+  - Created Robert reply draft `drafts/robert-google-ads-follow-through-2026-04-23.txt` for the same-pass direct answer. No Google Ads login, spend/config/admin action, OAuth/auth/token work, mailbox-body read, CRM/Portal/OPS mutation, deploy, or git change occurred.
+
+- 2026-04-23: Recorded Robert's Avignon plain-prose opening correction.
+  - Source Message-ID `<CAAtX44Yk08_ZsyFvCHXZ=4QwrQfLBn7T_qpL2AvLkfzKVkLXkQ@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44Yk08-ZsyFvCHXZ-4QwrQfLBn7T-qpL2AvLkfzKVkLXkQ-mail-gmail-com`; local task id `frank-avignon-plain-prose-opening-rule-2026-04-23`.
+  - Classification: `Avignon customization` after a shared-mechanic check confirmed this was a same-pass direct-owner answer, not a routed-worker or runtime slice.
+  - Changed: `EMAIL_PERSONA.md` and `AGENTS.md` now explicitly require Avignon to start with the point in plain prose and forbid the literal opener `Point first:` while keeping the existing concise, action-oriented next-step rule.
+  - What changed: durable Avignon guidance now matches the Robert-facing wording rule Frank already carries for direct-owner closeouts and Robert-supervised Avignon replies.
+  - What was not done: no runtime/LaunchAgent/mailbox/send-path change, no OAuth/auth/token work, no CRM/Portal/OPS mutation, and no historical draft backfill beyond the already-corrected live Google Ads status draft.
+
+- 2026-04-23: Answered Robert's direct-owner Google Ads status follow-up as an Avignon quick-answer closeout.
+  - Source Message-ID `<CAAtX44bA-9JQaM1tAsAU=KsijsxVoUvFCCSttnYNJmD_st6SHQ@mail.gmail.com>`; dedupe key `avignon-direct-owner-robert-approver-CAAtX44bA-9JQaM1tAsAU-KsijsxVoUvFCCSttnYNJmD-st6SHQ-mail-gmail-com`.
+  - Status answer: this lane is already routed out of Avignon. Robert confirmed on 2026-04-17 that the Google Ads credit/current-state item is owned by Claude and Sonat. Avignon's decision ledger still shows task `#1317` as routed/handled, and the broader AI Workspace tracker still shows Google Ads session `258b4242` closed/routed out with Frank worker `e8735579` on the owner path.
+  - Created Robert reply draft `drafts/robert-google-ads-status-2026-04-23.txt` for the quick-answer response. No Google Ads login, spend/config/admin action, OAuth/auth/token work, mailbox-body read, CRM/Portal/OPS mutation, deploy, or git change occurred.
 
 - 2026-04-23: Deployed the Avignon calendar confirmation dedupe fix to the installed runtime.
   - Patched the source mirror and installed `/Users/admin` runtime so the Sonat/Robert calendar-directive path checks the sent log before sending a second confirmation for the same meeting slot.

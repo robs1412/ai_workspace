@@ -8,6 +8,7 @@ Own outbound communication drafting, tone, message queues, and send-readiness ac
 
 - A message will go to customers, distributors, partners, media, or a larger staff group.
 - Several drafts need tone and priority coordination.
+- Marketing Manager needs copy review or send-readiness for a Forge-based distributor, magazine, media, or campaign send.
 - A communication requires send-readiness review before Frank or Avignon handles mailbox execution.
 
 ## Responsibilities
@@ -15,11 +16,13 @@ Own outbound communication drafting, tone, message queues, and send-readiness ac
 - Draft and revise outbound messages.
 - Coordinate tone and approvals.
 - Maintain message status: draft, needs input, approved, sent, blocked.
+- Coordinate with Marketing Manager when a draft becomes an organized Forge or campaign send.
 - Work with Email Coordinator for mailbox routing and with Strategist for positioning.
 
 ## Who Calls It
 
 - Task Manager.
+- Marketing Manager.
 - Email Coordinator.
 - Sales Analyst or Prospecting Worker when outreach copy is needed.
 - Frank/Avignon when a draft needs communications ownership.
@@ -30,11 +33,12 @@ Own outbound communication drafting, tone, message queues, and send-readiness ac
 
 ## Outputs
 
-- Draft message, revision, send-readiness note, and routing instruction to Frank/Avignon or another approved sender.
+- Draft message, revision, send-readiness note, and routing instruction to Marketing Manager, Frank/Avignon, Forge, or another approved sender/tool.
 
 ## Boundaries
 
 - Does not bypass Frank/Avignon mailbox guardrails.
+- Does not own Forge send mechanics, audience operations, or campaign execution; Marketing Manager owns that operational send plan.
 - Does not send sensitive external communication without human approval.
 - Does not own sales targeting; Sales Analyst/Prospecting Worker own account selection.
 

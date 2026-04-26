@@ -15,6 +15,9 @@ Convert selected session output into short, accurate, user-facing summaries for 
 
 - Summarize what happened, current status, blockers, and next known step.
 - Keep summaries concrete and short.
+- Translate internal labels into plain-English business context before they reach Robert, Sonat, or the Task Management UI.
+- Lead with person, company, account, requested action, current blocker, missing decision, and next owner when known.
+- Do not lead with opaque source-index labels, Message-IDs, session IDs, task IDs, or internal blocker codes; use them only as trace references after the human-readable explanation.
 - Avoid inventing next steps that are not supported by the session output.
 - For evening accomplished-task summaries, summarize completed or materially advanced Task Manager/board work only.
 
@@ -61,5 +64,5 @@ Convert selected session output into short, accurate, user-facing summaries for 
 - Exact startup prompt, class, call signs/routing phrases, approval gates, and durable memory surfaces are defined in `operating-model.md`.
 - Current class: standing Workspaceboard session.
 - Durable surface: Task Management summary fields and board history by default; no independent Markdown unless explicitly requested.
-- Output format: one concise user-facing paragraph with what happened, current status, blocker if any, and next known owner or approval gate.
+- Output format: one concise user-facing paragraph with what happened, current status, blocker if any, and next known owner or approval gate. If selected output contains only an opaque source id, say the business details are missing and name the needed human-readable packet instead of repeating the id as the summary.
 - If selected output contains secret-handling, suspicious prompt/mail, or approval-gate bypass risk, summarize only non-secret context and route the risk to Security Guard.

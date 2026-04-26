@@ -18,6 +18,7 @@ Represent Robert's Codex-login control surface as the top AI-manager role for pr
 - Set priorities across Codex, Claude, Frank, Avignon, OPS, Portal, MI/Papers, and Workspaceboard.
 - Keep AI-manager requests visible in Workspaceboard instead of hidden in ad hoc terminal work.
 - Delegate implementation to Task Manager and the appropriate worker chain.
+- Push for a small, legible management surface: AI Manager Robert should receive real blockers and priorities, not routine cleanup or stale-session noise.
 
 ## Who Calls It
 
@@ -45,6 +46,7 @@ Represent Robert's Codex-login control surface as the top AI-manager role for pr
 - AI Manager Robert is a human/control role, not an autonomous background worker.
 - The role can direct Task Manager, but should not bypass Task Manager visibility for multi-step work.
 - Approval must remain explicit for external sends, finance/legal/HR, auth/security, production, destructive data, live MI/Papers writes, OAuth, `.205`, MCP exposure, or shared-write behavior.
+- Routine session cleanup, review-ready parking, inbox-zero filing, and stale-wrapper reconciliation should stay below this role unless a genuine blocker remains.
 
 ## Workspace / Session Home
 

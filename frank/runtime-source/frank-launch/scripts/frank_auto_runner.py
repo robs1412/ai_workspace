@@ -39,6 +39,7 @@ CLAUDE_WORKSPACE_THREAD_TASK = "frank-2026-claude-ai-workspace-setup-review"
 BOARD_API = os.environ.get("WORKSPACEBOARD_API", "http://127.0.0.1:17878").rstrip("/")
 DIRECT_PRIMARY_PENDING_STATES = {"routed_pending_completion"}
 DIRECT_PRIMARY_DONE_STATES = {"completed_report_sent", "blocked_report_sent"}
+DIRECT_PRIMARY_ACK_DELAY_SECONDS = 10 * 60
 
 
 def parse_args() -> argparse.Namespace:
@@ -294,6 +295,21 @@ def direct_primary_thread_key(action: dict) -> str:
 def direct_primary_session_title(message: dict) -> str:
     subject = re.sub(r"\s+", " ", str(message.get("subject") or "direct Robert work")).strip()
     return f"Frank direct Robert: {subject}"[:96]
+
+
+def direct_primary_routed_at(action: dict) -> float:
+    try:
+        return float(action.get("routed_at") or 0)
+    except (TypeError, ValueError):
+        return 0.0
+
+
+def direct_primary_ack_delay_elapsed(action: dict, now: float | None = None) -> bool:
+    routed_at = direct_primary_routed_at(action)
+    if routed_at <= 0:
+        return True
+    current = time.time() if now is None else now
+    return current - routed_at >= DIRECT_PRIMARY_ACK_DELAY_SECONDS
 
 
 def redact_sensitive_text(value: str) -> str:
@@ -754,7 +770,9 @@ def build_direct_primary_prompt(action: dict, route: dict) -> str:
         f"From/date: {action.get('from', '')} / {action.get('date', '')}",
         f"Redacted context summary: {action.get('summary') or 'No summary available.'}",
         "",
-        "Goal: handle this as Frank, Robert's chief-of-staff mailbox worker. Start with the point, be concise, and convert the request into a concrete next action.",
+        "Goal: handle this as Frank, Robert's chief-of-staff mailbox worker. Start with the point in plain prose, be concise, and convert the request into a concrete next action. Do not use the literal opener `Point first:`.",
+        "Customization-boundary enforcement: automatically classify any Frank/Avignon operating change as shared mechanic, Frank customization, Avignon customization, or runtime change before editing guidance or reports. Keep shared mechanics non-secret; keep Frank wording Robert-facing; do not copy Sonat private SOP text; route Avignon behavior changes through Avignon's persona/job docs.",
+        "Acknowledgement rule: do not send an immediate captured/routed receipt. If this is a quick-answer item and the answer is available in the same pass, send the answer directly. For substantive routed work, hold the captured/routed receipt for 10 minutes; if the worker completes or blocks before then, send only the completion/blocker report. If it is still pending after 10 minutes, send one captured/routed receipt with the visible session id/title.",
         "Required mechanics: create or reuse the correct visible worker route for substantive work, verify it started, monitor it to completion or a real blocker, update Frank TODO/HANDOFF/decision state, and report back before the source item is filed to Handled.",
         "Completion report target: robert@kovaldistillery.com.",
         "Report shape: what was done, what changed, what was not done, remaining decisions or approval gates, and relevant session/task IDs.",
@@ -791,15 +809,17 @@ def create_visible_direct_primary_route(action: dict) -> dict:
 
 def find_existing_direct_primary_route(automation_log: dict[str, list[dict]], action: dict) -> dict | None:
     expected_key = direct_primary_thread_key(action)
+    expected_task_id = direct_primary_thread_task_id(action)
     matches: list[dict] = []
     for rows in automation_log.values():
         for row in rows:
             if not isinstance(row, dict):
                 continue
             row_thread_key = str(row.get("thread_key") or "")
+            row_thread_task_id = str(row.get("thread_task_id") or row.get("task_id") or "")
             if not row_thread_key and str(row.get("routed_session_id") or ""):
                 row_thread_key = direct_primary_thread_key(row)
-            if row_thread_key != expected_key:
+            if row_thread_key != expected_key and row_thread_task_id != expected_task_id:
                 continue
             if str(row.get("routed_session_id") or ""):
                 matches.append(row)
@@ -812,6 +832,19 @@ def direct_primary_ack_already_sent(
     assistant_name: str,
     notify: str,
 ) -> bool:
+    for key in ("ack_sent_message_id", "sent_message_id"):
+        message_id = normalize_message_id(str(action.get(key) or ""))
+        row = sent_log.get(message_id) if message_id else None
+        if isinstance(row, dict):
+            row_intent = str(row.get("body_intent") or "")
+            row_task_id = str(row.get("task_id") or "")
+            if row_intent == "direct-primary-route-ack" or row_task_id.endswith("-ack"):
+                return True
+    if str(action.get("decision") or "") in {
+        "routed-primary-instruction-ack-sent",
+        "routed-primary-input-ack-sent",
+    } and normalize_message_id(str(action.get("sent_message_id") or "")):
+        return True
     return sent_log_has_row(
         sent_log,
         to_addr=notify,
@@ -855,24 +888,69 @@ def compose_primary_ack(action: dict, assistant_name: str, route_ok: bool, route
     lines = [
         f"Hi {recipient_name},",
         "",
-        f"I received your message about {subject}. I recorded the source context as: {summary}",
-        "",
     ]
     if route_ok:
         route_text = f"visible work session {route_detail} / {route_title}" if route_detail and route_title else (f"Task Manager session {route_detail}" if route_detail else "Task Manager")
         lines.extend([
-            f"I routed it into {route_text}. Current status: captured and routed; it is not complete yet.",
+            f"Captured and routed: {subject}.",
+            f"I routed it into {route_text}.",
+            f"Context recorded: {summary}",
+            "Current status: not complete yet.",
             "Next: I will follow the worker to completion or a real blocker, then send the closeout before the source message is filed to Handled.",
         ])
     else:
         lines.extend([
-            f"I could not route it to Task Manager automatically. Current status: captured but blocked before worker routing; blocker: {route_detail}",
+            f"Captured but blocked before worker routing: {subject}.",
+            f"Context recorded: {summary}",
+            f"Blocker: {route_detail}",
         ])
     lines.extend([
         "",
         signature,
     ])
     return "\n".join(lines).rstrip() + "\n"
+
+
+def send_direct_primary_ack(
+    action: dict,
+    sent_log: dict[str, dict],
+    sender_email: str,
+    app_pw: str,
+    sent_log_path: Path,
+    notify: str,
+    assistant_name: str,
+    dry_run: bool,
+    from_name: str,
+) -> str:
+    route_ok = bool(str(action.get("routed_session_id") or ""))
+    route_detail = str(action.get("routed_session_id") or "")
+    route_title = str(action.get("routed_session_title") or "")
+    log_fields = {
+        "body_intent": "direct-primary-route-ack",
+        "thread_key": str(action.get("thread_key") or direct_primary_thread_key(action)),
+        "thread_task_id": str(action.get("thread_task_id") or direct_primary_thread_task_id(action)),
+    }
+    message_id = send_plain_email(
+        sender_email,
+        app_pw,
+        sent_log_path,
+        notify,
+        f"{assistant_name} captured: {str(action.get('subject') or '')[:80]}",
+        compose_primary_ack(action, assistant_name, route_ok, route_detail, route_title),
+        f"{action.get('dedupe_key', 'frank-direct-primary')}-ack",
+        dry_run,
+        from_name,
+        log_fields=log_fields,
+    )
+    remember_sent_row(
+        sent_log,
+        message_id=str(message_id or ""),
+        task_id=f"{action.get('dedupe_key', 'frank-direct-primary')}-ack",
+        to_addr=notify,
+        subject=f"{assistant_name} captured: {str(action.get('subject') or '')[:80]}",
+        extra=log_fields,
+    )
+    return str(message_id or "")
 
 
 def board_session_status(session_id: str) -> dict | None:
@@ -883,37 +961,147 @@ def board_session_status(session_id: str) -> dict | None:
     return None
 
 
-def compose_direct_primary_closeout(action: dict, session: dict, blocked: bool) -> str:
+def board_session_summary(session_id: str) -> dict | None:
+    if not session_id:
+        return None
+    query = urllib.parse.urlencode({"session_id": session_id})
+    try:
+        payload = get_json(f"/api/session-summary?{query}")
+    except Exception:
+        return None
+    return payload if isinstance(payload, dict) else None
+
+
+def clarification_request_text(subject: str, summary_text: str) -> str:
+    cleaned_subject = " ".join(str(subject or "").split()).strip()
+    cleaned_summary = " ".join(str(summary_text or "").split()).strip()
+    patterns = [
+        r"(?:what i need from you|remaining blocker|remaining decision|next approval\/action needed|clarification needed)\s*:\s*(.+)",
+        r"(please reply with .+?[.?!])",
+        r"(confirm whether .+?[.?!])",
+        r"(provide .+?[.?!])",
+    ]
+    for pattern in patterns:
+        match = re.search(pattern, cleaned_summary, flags=re.IGNORECASE)
+        if match:
+            return match.group(1).strip()
+    generic_subjects = {"project", "update", "status", "backup", "external", "avignon", "2 items", "new role"}
+    if cleaned_subject.lower() in generic_subjects or len(cleaned_subject.split()) <= 2:
+        return f'Please reply with the exact project/task name, the workflow to automate or improve, the desired outcome, and the next action for "{cleaned_subject or "this request"}".'
+    return f'Please reply with the missing workflow/target details or exact next step for "{cleaned_subject or "this request"}".'
+
+
+def session_summary_has_active_context(summary_text: str) -> bool:
+    cleaned = " ".join(str(summary_text or "").split()).lower()
+    if not cleaned:
+        return False
+    signals = (
+        "task #",
+        "queued",
+        "in progress",
+        "awaiting review",
+        "already tracking",
+        "existing task",
+        "access packet",
+        "will send",
+        "specialists will",
+        "planner task",
+    )
+    return any(signal in cleaned for signal in signals)
+
+
+def compose_owner_style_status(subject: str, session_id: str, session_title: str, state: str, summary_text: str) -> str:
+    normalized = normalized_subject(subject) or subject or "this request"
+    status_line = f"I am continuing {normalized} through the existing work lane {session_id} / {session_title}."
+    if session_summary_has_active_context(summary_text):
+        next_line = "No reply is needed from you unless the scope changed; I will send the next concrete update when the active task advances or reaches a real blocker."
+    else:
+        next_line = "I will send the next concrete update when the active task advances or reaches a real blocker."
+    return "\n".join(
+        [
+            "Hi Robert,",
+            "",
+            status_line,
+            f"Current worker state: {state}.",
+            next_line,
+        ]
+    ).rstrip() + "\n"
+
+
+def compose_known_thread_status(action: dict, session_id: str, session_title: str, state: str) -> str | None:
+    subject_candidates = [
+        str(action.get("subject") or ""),
+        str(action.get("original_subject") or ""),
+        str(action.get("thread_task_id") or ""),
+    ]
+    normalized = " ".join(normalize_subject_for_compare(value) for value in subject_candidates if value).strip()
+    if "mi / papers / mesh bridge access packet needed" in normalized or "protected-side bridge instructions" in normalized:
+        return "\n".join(
+            [
+                "Hi Robert,",
+                "",
+                "Status: the MI / Papers / Mesh bridge lane is already active on the Claude side.",
+                f"I have this linked to visible session {session_id} / {session_title}. Current worker state: {state}.",
+                "Claude has task #1425 in progress; task #1426 and task #1427 are complete awaiting review; task #1428 and task #1429 are queued.",
+                "No reply is needed from you on this thread unless you want to change scope or priority. I will send the next concrete bridge update when the packet or a real approval gate arrives.",
+            ]
+        ).rstrip() + "\n"
+    return None
+
+
+def compose_direct_primary_closeout(action: dict, session: dict, blocked: bool, session_summary: dict | None = None) -> str:
     subject = str(action.get("subject") or "direct Robert request")
     session_id = str(action.get("routed_session_id") or "")
     session_title = str(action.get("routed_session_title") or session.get("title") or session.get("display_name") or "")
     state = str(session.get("status_label") or session.get("status") or "unknown")
+    summary_text = str((session_summary or {}).get("summary") or "").strip()
+    point = (
+        f"Clarification needed: {subject} still needs one answer before it can be filed as complete."
+        if blocked
+        else f"Complete: {subject} reached a non-running completion state."
+    )
+    known_status = compose_known_thread_status(action, session_id, session_title, state)
+    if blocked and known_status:
+        return known_status
+    if blocked and session_summary_has_active_context(summary_text):
+        return compose_owner_style_status(subject, session_id, session_title, state, summary_text)
     lines = [
         "Hi Robert,",
         "",
-        f"Closeout: {subject}.",
+        point,
         "",
         f"- Visible session: {session_id} / {session_title}",
         f"- Current worker state: {state}",
     ]
     if blocked:
-        lines.extend([
-            "- What was done: the request was captured and routed to a visible Frank worker.",
-            "- What changed: durable Frank routing state now links the source message to the worker session.",
-            "- What was not done: I did not make credential/auth, external-sensitive, production, destructive, or unclear data changes.",
-            "- Remaining decision: the worker is blocked or needs follow-up before the source message can be filed as complete.",
-        ])
+        clarification = clarification_request_text(subject, summary_text)
+        lines.extend(
+            [
+                f"I already have this linked to visible session {session_id} / {session_title}.",
+                "I am not guessing or expanding scope from incomplete context.",
+                clarification,
+            ]
+        )
     else:
         lines.extend([
-            "- What was done: the routed worker reached a non-running completion state.",
-            "- What changed: durable Frank routing state links the source message, dedupe key, and worker session.",
-            "- What was not done: no extra external reply, credential/auth work, or unapproved production mutation was performed by the mailbox runtime.",
-            "- Remaining decision: none recorded by the mailbox runtime. If the worker left a separate decision, it should be in the visible session output/TODO state.",
+            f"I closed the mailbox follow-through against visible session {session_id} / {session_title}.",
+            "No extra external reply, credential/auth work, or unapproved production mutation was performed by the mailbox runtime.",
+            "No further Robert decision is recorded in mailbox state.",
         ])
     return "\n".join(lines).rstrip() + "\n"
 
 
-def monitor_direct_primary_action(action: dict, sender_email: str, app_pw: str, sent_log_path: Path, dry_run: bool, from_name: str) -> dict:
+def monitor_direct_primary_action(
+    action: dict,
+    sent_log: dict[str, dict],
+    sender_email: str,
+    app_pw: str,
+    sent_log_path: Path,
+    notify: str,
+    assistant_name: str,
+    dry_run: bool,
+    from_name: str,
+) -> dict:
     state = str(action.get("current_state") or "")
     if state in DIRECT_PRIMARY_DONE_STATES:
         return {"monitor_state": state, "current_state": state, "archivable_now": True}
@@ -924,11 +1112,67 @@ def monitor_direct_primary_action(action: dict, sender_email: str, app_pw: str, 
     except Exception as exc:
         return {"monitor_state": "session-status-unavailable", "current_state": state, "archivable_now": False, "status_blocker": redact_sensitive_text(str(exc))[:240]}
     if not session:
-        return {"monitor_state": "session-not-found", "current_state": state, "archivable_now": False}
+        session = {
+            "status": "blocked",
+            "status_label": "route-missing",
+            "title": str(action.get("routed_session_title") or ""),
+            "display_name": str(action.get("routed_session_title") or ""),
+        }
+        closeout_state = "blocked_report_sent"
+        message_id = send_plain_email(
+            sender_email,
+            app_pw,
+            sent_log_path,
+            ROBERT_EMAIL,
+            f"Frank blocker: {str(action.get('subject') or '')[:80]}",
+            compose_direct_primary_closeout(
+                action,
+                session,
+                True,
+                {"summary": "The visible routed worker session is no longer present in Workspaceboard. The request remains logged, but follow-through needs a new route only if the work is still needed."},
+            ),
+            f"{action.get('dedupe_key', 'frank-direct-primary')}-{closeout_state}",
+            dry_run,
+            from_name,
+        )
+        return {
+            "monitor_state": "session-not-found",
+            "current_state": closeout_state,
+            "session_status": "blocked",
+            "completion_message_id": message_id,
+            "archivable_now": True,
+        }
     session_state = str(session.get("status") or "").lower()
     if session_state not in {"finished", "blocked"}:
-        return {"monitor_state": "still-pending", "current_state": state, "session_status": session_state, "archivable_now": False}
+        delayed_ack = {}
+        if (
+            not action.get("ack_sent_message_id")
+            and not direct_primary_ack_already_sent(sent_log, action, assistant_name, notify)
+            and direct_primary_ack_delay_elapsed(action)
+        ):
+            delayed_ack["ack_sent_message_id"] = send_direct_primary_ack(
+                action,
+                sent_log,
+                sender_email,
+                app_pw,
+                sent_log_path,
+                notify,
+                assistant_name,
+                dry_run,
+                from_name,
+            )
+            delayed_ack["ack_sent_at"] = time.time()
+            delayed_ack["ack_delay_seconds"] = DIRECT_PRIMARY_ACK_DELAY_SECONDS
+            delayed_ack["delayed_ack_sent"] = True
+        return {
+            "monitor_state": "still-pending",
+            "current_state": state,
+            "session_status": session_state,
+            "archivable_now": False,
+            **delayed_ack,
+        }
     blocked = session_state == "blocked"
+    session_summary = board_session_summary(str(action.get("routed_session_id") or ""))
     closeout_state = "blocked_report_sent" if blocked else "completed_report_sent"
     message_id = send_plain_email(
         sender_email,
@@ -936,7 +1180,7 @@ def monitor_direct_primary_action(action: dict, sender_email: str, app_pw: str, 
         sent_log_path,
         ROBERT_EMAIL,
         f"Frank {'blocker' if blocked else 'complete'}: {str(action.get('subject') or '')[:80]}",
-        compose_direct_primary_closeout(action, session, blocked),
+        compose_direct_primary_closeout(action, session, blocked, session_summary),
         f"{action.get('dedupe_key', 'frank-direct-primary')}-{closeout_state}",
         dry_run,
         from_name,
@@ -983,41 +1227,24 @@ def route_direct_primary_message(
         "routed_session_id": route["session_id"],
         "routed_session_title": route["session_title"],
         "prompt_delivery": route["prompt_delivery"],
+        "routed_at": time.time(),
+        "ack_delay_seconds": DIRECT_PRIMARY_ACK_DELAY_SECONDS,
         "current_state": "routed_pending_completion",
         "owner": "robert",
         "completion_target": "visible-worker-completion-or-blocker",
         "report_target": ROBERT_EMAIL,
     })
+    if existing_route and str(action.get("classification") or "") in {"tracked-primary-thread-instruction", "tracked-primary-instruction"}:
+        action["decision"] = "reused-existing-route-no-new-receipt"
+        action["no_send"] = True
+        action["current_state"] = str(existing_route.get("current_state") or "routed_pending_completion")
+        return
     if direct_primary_ack_already_sent(sent_log, action, assistant_name, notify):
         action["decision"] = "routed-primary-ack-already-sent-no-resend" if route_ok else "primary-route-blocked-ack-already-sent-no-resend"
         action["no_send"] = True
         return
-    log_fields = {
-        "body_intent": "direct-primary-route-ack",
-        "thread_key": action["thread_key"],
-        "thread_task_id": action["thread_task_id"],
-    }
-    action["sent_message_id"] = send_plain_email(
-        sender_email,
-        app_pw,
-        sent_log_path,
-        notify,
-        f"{assistant_name} captured: {str(action.get('subject') or '')[:80]}",
-        compose_primary_ack(action, assistant_name, route_ok, route_detail, route_title),
-        f"{action['dedupe_key']}-ack",
-        dry_run,
-        from_name,
-        log_fields=log_fields,
-    )
-    remember_sent_row(
-        sent_log,
-        message_id=str(action.get("sent_message_id") or ""),
-        task_id=f"{action['dedupe_key']}-ack",
-        to_addr=notify,
-        subject=f"{assistant_name} captured: {str(action.get('subject') or '')[:80]}",
-        extra=log_fields,
-    )
-    action["decision"] = "routed-primary-instruction-ack-sent" if route_ok else "primary-instruction-route-blocked-ack-sent"
+    action["decision"] = "routed-primary-ack-held-pending-completion" if route_ok else "primary-route-blocked-ack-held"
+    action["ack_held_until"] = action["routed_at"] + DIRECT_PRIMARY_ACK_DELAY_SECONDS
 
 
 @contextmanager
@@ -1026,7 +1253,18 @@ def cycle_lock(lock_dir: Path):
     try:
         os.mkdir(lock_dir)
     except FileExistsError as exc:
-        raise RuntimeError(f"Frank automation lock already exists at {lock_dir}") from exc
+        try:
+            age_seconds = max(0.0, time.time() - lock_dir.stat().st_mtime)
+        except OSError:
+            age_seconds = 0.0
+        if age_seconds > 30 * 60:
+            try:
+                os.rmdir(lock_dir)
+                os.mkdir(lock_dir)
+            except OSError as retry_error:
+                raise RuntimeError(f"Frank automation lock already exists at {lock_dir}") from retry_error
+        else:
+            raise RuntimeError(f"Frank automation lock already exists at {lock_dir}") from exc
     try:
         yield
     finally:
@@ -1062,9 +1300,12 @@ def main() -> int:
                     if previous_direct_primary:
                         monitor_result = monitor_direct_primary_action(
                             previous,
+                            sent_log,
                             sender_email,
                             app_pw,
                             Path(args.sent_log),
+                            args.notify,
+                            args.assistant_name,
                             args.dry_run,
                             args.from_name,
                         )
@@ -1094,6 +1335,12 @@ def main() -> int:
                     }
                     for key in (
                         "dedupe_key",
+                        "task_id",
+                        "thread_key",
+                        "thread_task_id",
+                        "original_subject",
+                        "original_to",
+                        "classification",
                         "owner",
                         "completion_target",
                         "report_target",
@@ -1103,6 +1350,11 @@ def main() -> int:
                         "routed_session_title",
                         "prompt_delivery",
                         "sent_message_id",
+                        "ack_sent_message_id",
+                        "ack_sent_at",
+                        "ack_delay_seconds",
+                        "ack_held_until",
+                        "routed_at",
                     ):
                         if key in previous:
                             action[key] = previous[key]

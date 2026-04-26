@@ -36,11 +36,39 @@ if FRANK_SCRIPT_DIR.exists() and str(FRANK_SCRIPT_DIR) not in sys.path:
 
 from frank_google_calendar import calendar_request, ensure_valid_token, load_client_config
 
-AI_ROOT = Path(os.environ.get("AI_WORKSPACE_ROOT", SCRIPT_DIR.parent)).expanduser()
-AVIGNON_ROOT = Path(os.environ.get("AVIGNON_WORKSPACE_ROOT", AI_ROOT / "avignon")).expanduser()
-CREDS = Path(
-    os.environ.get("AVIGNON_CREDS_FILE", AI_ROOT / ".private" / "passwords" / "avignon-secret.txt")
-).expanduser()
+CANONICAL_AI_ROOT = Path("/Users/werkstatt/ai_workspace")
+
+
+def resolve_existing_path(*candidates) -> Path:
+    first_valid = None
+    for candidate in candidates:
+        if not candidate:
+            continue
+        if first_valid is None:
+            first_valid = candidate
+        if candidate.exists():
+            return candidate
+    if first_valid is None:
+        raise ValueError("At least one candidate path is required.")
+    return first_valid
+
+
+AI_ROOT = resolve_existing_path(
+    Path(os.environ.get("AI_WORKSPACE_ROOT", "")).expanduser() if os.environ.get("AI_WORKSPACE_ROOT") else None,
+    CANONICAL_AI_ROOT,
+    SCRIPT_DIR.parent,
+)
+AVIGNON_ROOT = resolve_existing_path(
+    Path(os.environ.get("AVIGNON_WORKSPACE_ROOT", "")).expanduser() if os.environ.get("AVIGNON_WORKSPACE_ROOT") else None,
+    AI_ROOT / "avignon",
+    SCRIPT_DIR.parent,
+)
+CREDS = resolve_existing_path(
+    Path(os.environ.get("AVIGNON_CREDS_FILE", "")).expanduser() if os.environ.get("AVIGNON_CREDS_FILE") else None,
+    CANONICAL_AI_ROOT / ".private" / "passwords" / "avignon-secret.txt",
+    AI_ROOT / ".private" / "passwords" / "avignon-secret.txt",
+    AVIGNON_ROOT / ".private" / "passwords" / "avignon-secret.txt",
+)
 SENT_LOG = Path(os.environ.get("AVIGNON_SENT_LOG", AVIGNON_ROOT / "sent-log.jsonl")).expanduser()
 AUTO_LOG = Path(os.environ.get("AVIGNON_AUTOMATION_LOG", AVIGNON_ROOT / "automation-log.jsonl")).expanduser()
 DECISIONS = Path(
@@ -79,6 +107,35 @@ def decode_value(value: str) -> str:
 def sender_email(value: str) -> str:
     match = re.search(r"<([^>]+)>", value or "")
     return (match.group(1) if match else (value or "")).strip().lower()
+
+
+def email_list_contains(value: str, email: str) -> bool:
+    return email.lower() in (value or "").lower()
+
+
+def is_copied_only(message: dict, assistant_email: str) -> bool:
+    return email_list_contains(message.get("cc", ""), assistant_email) and not email_list_contains(
+        message.get("to", ""), assistant_email
+    )
+
+
+def explicitly_requests_assistant_action(message: dict, assistant_name: str, assistant_email: str) -> bool:
+    subject = message.get("subject", "")
+    body = message.get("body", "")
+    local_part = assistant_email.split("@", 1)[0]
+    assistant_tokens = {
+        assistant_name.strip().lower(),
+        local_part.strip().lower(),
+        local_part.split(".", 1)[0].strip().lower(),
+    }
+    text = re.sub(r"\s+", " ", f"{subject} {body}".lower())
+    action_verbs = r"(please|can you|could you|would you|need you to|route|handle|file|archive|create|update|check|fix|send|draft|reply|ask|tell|schedule|log|record|escalate)"
+    for token in assistant_tokens:
+        if token and re.search(rf"\b{re.escape(token)}\b[^.?!]{{0,120}}\b{action_verbs}\b", text):
+            return True
+        if token and re.search(rf"\b{action_verbs}\b[^.?!]{{0,120}}\b{re.escape(token)}\b", text):
+            return True
+    return False
 
 
 def normalized_subject(value: str) -> str:
@@ -377,6 +434,12 @@ def looks_like_sensitive_or_suspicious(message: dict) -> bool:
 def looks_like_robert_avignon_instruction(message: dict) -> bool:
     if sender_email(message.get("from", "")) != ROBERT_EMAIL:
         return False
+    if is_copied_only(message, "avignon.rose@kovaldistillery.com") and not explicitly_requests_assistant_action(
+        message,
+        "Avignon",
+        "avignon.rose@kovaldistillery.com",
+    ):
+        return False
     text = f"{message.get('subject', '')} {message.get('body', '')}".lower()
     if not re.search(r"\b(avignon|sonat|crm|portal|handled mail|completion report|acknowledge|route)\b", text):
         return False
@@ -663,36 +726,110 @@ def board_session_status(session_id: str) -> dict | None:
     return None
 
 
-def compose_direct_owner_closeout(action: dict, session: dict, blocked: bool) -> str:
+def board_session_summary(session_id: str) -> dict | None:
+    if not session_id:
+        return None
+    query = urllib.parse.urlencode({"session_id": session_id})
+    try:
+        payload = get_json(f"/api/session-summary?{query}")
+    except Exception:
+        return None
+    return payload if isinstance(payload, dict) else None
+
+
+def clarification_request_text(subject: str, summary_text: str) -> str:
+    cleaned_subject = " ".join(str(subject or "").split()).strip()
+    cleaned_summary = " ".join(str(summary_text or "").split()).strip()
+    patterns = [
+        r"(?:what i need from you|remaining blocker|remaining decision|next approval\/action needed|clarification needed)\s*:\s*(.+)",
+        r"(please reply with .+?[.?!])",
+        r"(confirm whether .+?[.?!])",
+        r"(provide .+?[.?!])",
+    ]
+    for pattern in patterns:
+        match = re.search(pattern, cleaned_summary, flags=re.IGNORECASE)
+        if match:
+            return match.group(1).strip()
+    generic_subjects = {"project", "update", "status", "backup", "external", "avignon", "2 items", "new role"}
+    if cleaned_subject.lower() in generic_subjects or len(cleaned_subject.split()) <= 2:
+        return f'Please reply with the exact project/task name, the workflow to automate or improve, the desired outcome, and the next action for "{cleaned_subject or "this request"}".'
+    return f'Please reply with the missing workflow/target details or exact next step for "{cleaned_subject or "this request"}".'
+
+
+def session_summary_has_active_context(summary_text: str) -> bool:
+    cleaned = " ".join(str(summary_text or "").split()).lower()
+    if not cleaned:
+        return False
+    signals = (
+        "task #",
+        "queued",
+        "in progress",
+        "awaiting review",
+        "already tracking",
+        "existing task",
+        "access packet",
+        "will send",
+        "specialists will",
+        "planner task",
+    )
+    return any(signal in cleaned for signal in signals)
+
+
+def compose_owner_style_status(subject: str, session_id: str, session_title: str, state: str, summary_text: str, owner: str) -> str:
+    normalized = normalized_subject(subject) or subject or "this request"
+    greeting = "Hi Robert," if owner == "robert-approver" else "Hi Sonat,"
+    status_line = f"I am continuing {normalized} through the existing work lane {session_id} / {session_title}."
+    if session_summary_has_active_context(summary_text):
+        next_line = "No reply is needed from you unless the scope changed; I will send the next concrete update when the active task advances or reaches a real blocker."
+    else:
+        next_line = "I will send the next concrete update when the active task advances or reaches a real blocker."
+    return "\n".join(
+        [
+            greeting,
+            "",
+            status_line,
+            f"Current worker state: {state}.",
+            next_line,
+        ]
+    ).rstrip() + "\n"
+
+
+def compose_direct_owner_closeout(action: dict, session: dict, blocked: bool, session_summary: dict | None = None) -> str:
     subject = str(action.get("subject") or "direct-owner request")
     state = str(session.get("status_label") or session.get("status") or "unknown")
     session_id = str(action.get("routed_session_id") or "")
     session_title = str(action.get("routed_session_title") or session.get("title") or session.get("display_name") or "")
     greeting = "Hi Robert," if str(action.get("owner") or "") == "robert-approver" else "Hi Sonat,"
+    summary_text = str((session_summary or {}).get("summary") or "").strip()
     lines = [
         greeting,
         "",
-        f"Closeout: {normalized_subject(subject) or subject}.",
+        (
+            f"Clarification needed: {normalized_subject(subject) or subject}."
+            if blocked
+            else f"Closeout: {normalized_subject(subject) or subject}."
+        ),
         "",
         f"- Visible session: {session_id} / {session_title}",
         f"- Current worker state: {state}",
     ]
+    if blocked and session_summary_has_active_context(summary_text):
+        return compose_owner_style_status(subject, session_id, session_title, state, summary_text, str(action.get("owner") or "sonat"))
     if blocked:
+        clarification = clarification_request_text(subject, summary_text)
         lines.extend(
             [
-                "- What was done: the request was captured and routed to a visible Avignon worker.",
-                "- What changed: durable Avignon routing state now links the source message to the worker session.",
-                "- What was not done: I did not make account, pricing, CRM duplicate/target, credential, auth, or external-send commitments from incomplete context.",
-                "- Remaining decision: the worker is blocked or needs follow-up before the source message can be filed as complete.",
+                f"I already have this linked to visible session {session_id} / {session_title}.",
+                "I am not guessing or expanding scope from incomplete context.",
+                clarification,
             ]
         )
     else:
         lines.extend(
             [
-                "- What was done: the routed worker reached a non-running completion state.",
-                "- What changed: durable Avignon routing state links the source message, dedupe key, and worker session.",
-                "- What was not done: no extra external reply, credential/auth work, or unapproved CRM/Portal/OPS mutation was performed by the mailbox runtime.",
-                "- Remaining decision: none recorded by the mailbox runtime. If the worker left a separate decision, it should be in the visible session output/TODO state.",
+                f"I closed the mailbox follow-through against visible session {session_id} / {session_title}.",
+                "No extra external reply, credential/auth work, or unapproved CRM/Portal/OPS mutation was performed by the mailbox runtime.",
+                "No further owner decision is recorded in mailbox state.",
             ]
         )
     return "\n".join(lines).rstrip() + "\n"
@@ -714,17 +851,44 @@ def monitor_direct_owner_action(action: dict) -> dict:
             "status_blocker": redact_sensitive_text(str(exc))[:240],
         }
     if not session:
-        return {"monitor_state": "session-not-found", "current_state": state}
+        target = direct_owner_report_target(str(action.get("owner") or "sonat"))
+        closeout_state = "blocked_report_sent"
+        task_id = f"{action.get('dedupe_key', 'avignon-direct-owner')}-{closeout_state}"
+        message_id = send_avignon_owner_email(
+            f"Avignon blocker: {str(action.get('subject') or '')[:80]}",
+            compose_direct_owner_closeout(
+                action,
+                {
+                    "status": "blocked",
+                    "status_label": "route-missing",
+                    "title": str(action.get("routed_session_title") or ""),
+                    "display_name": str(action.get("routed_session_title") or ""),
+                },
+                True,
+                {"summary": "The visible routed worker session is no longer present in Workspaceboard. The request remains logged, but follow-through needs a new route only if the work is still needed."},
+            ),
+            task_id,
+            str(target.get("to") or SONAT_EMAIL),
+            str(target.get("cc") or ""),
+        )
+        return {
+            "monitor_state": "session-not-found",
+            "current_state": closeout_state,
+            "session_status": "blocked",
+            "completion_message_id": message_id,
+            "archivable_now": True,
+        }
     session_state = str(session.get("status") or "").lower()
     if session_state not in {"finished", "blocked"}:
         return {"monitor_state": "still-pending", "current_state": state, "session_status": session_state}
     blocked = session_state == "blocked"
+    session_summary = board_session_summary(str(action.get("routed_session_id") or ""))
     target = direct_owner_report_target(str(action.get("owner") or "sonat"))
     closeout_state = "blocked_report_sent" if blocked else "completed_report_sent"
     task_id = f"{action.get('dedupe_key', 'avignon-direct-owner')}-{closeout_state}"
     message_id = send_avignon_owner_email(
         f"Avignon {'blocker' if blocked else 'complete'}: {str(action.get('subject') or '')[:80]}",
-        compose_direct_owner_closeout(action, session, blocked),
+        compose_direct_owner_closeout(action, session, blocked, session_summary),
         task_id,
         str(target.get("to") or SONAT_EMAIL),
         str(target.get("cc") or ""),
@@ -937,6 +1101,22 @@ def route_message(message: dict, sent_log: dict, assistant_email: str) -> tuple[
     subject = message.get("subject", "")
     lowered = f"{subject} {from_email}".lower()
     decision_items: list[str] = []
+
+    if (
+        from_email == SONAT_EMAIL
+        and is_copied_only(message, assistant_email)
+        and not explicitly_requests_assistant_action(message, "Avignon", assistant_email)
+    ):
+        body = " ".join(str(message.get("body") or "").split()).lower()
+        if re.fullmatch(r"(ok|okay|thanks|thank you|ok thanks|okay thanks|ok thank you|got it|sounds good|done)[.! ]*", body):
+            return "tracked-reply-info", "logged-no-action", decision_items
+
+    if (
+        from_email == ROBERT_EMAIL
+        and is_copied_only(message, assistant_email)
+        and not explicitly_requests_assistant_action(message, "Avignon", assistant_email)
+    ):
+        return "cc-fyi-no-action", "logged-no-action", decision_items
 
     if is_sonat_robert_calendar_directive(message):
         decision = handle_sonat_robert_calendar_directive(message, sent_log)

@@ -39,6 +39,13 @@ sync_backups/
 frank/completion-confirmation-log.jsonl
 frank/drafts/completion-confirmation-*.txt
 
+# Mailbox/runtime-generated assistant artifacts
+frank/*.jsonl
+avignon/*.jsonl
+frank/drafts/
+avignon/drafts/
+*.send-body.txt
+
 # Embedded implementation clones should live under /Users/werkstatt/<repo>
 screenbox/
 external/

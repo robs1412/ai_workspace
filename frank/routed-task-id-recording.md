@@ -6,7 +6,7 @@ Frank routed-email work must carry a compact, durable ID block in local TODO/HAN
 
 Use real IDs only. Do not invent a Claude task number, bridge ref, OPS/Portal ID, outbound Message-ID, or board session ID when it is not available yet. Write `none created`, `not available`, or `not applicable` instead.
 
-Captured/routed acknowledgements for direct Robert work must name the visible work route after prompt delivery. Do not send Robert only generic `Task Manager session` language when a visible session ID and title/task name exist.
+Captured/routed acknowledgements for direct Robert work must name the visible work route after prompt delivery. Do not send Robert only generic `Task Manager session` language when a visible session ID and title/task name exist. Do not send this acknowledgement at all for quick-answer items that can be answered directly in the same pass; send the answer instead and log the handled state.
 
 ## Canonical ID Block
 
@@ -45,11 +45,15 @@ Every Frank completion report for routed email-derived work should include:
 5. Remaining blocker or decision, if any.
 6. The ID block above.
 
+Style rule for Robert-facing captured/routed, status, blocker, and closeout replies: start with the point as the first sentence, but do not use the literal opener `Point first:`. The point should read as normal prose, not a label. When the reply has more than one thought, split it into short paragraphs with a blank line between them so the message scans cleanly.
+
 For Claude/Codex bridge work, keep Claude's `task #...` / `ref:...` separate from Frank's local task id and the board/Codex session id. If an OPS/Portal task is created later, add it without replacing historical source, local, board, or outbound Message-ID fields.
 
 ## Captured/Routed Acknowledgement Template
 
-Use this shape for direct Robert owner-facing captured/routed acknowledgements after the visible worker session exists and the prompt has landed:
+Use this shape for direct Robert owner-facing captured/routed acknowledgements only after the visible worker session exists, the prompt has landed, and the 10-minute acknowledgement delay has elapsed with the worker still pending:
+
+Do not use this shape for quick answers. If Frank already has the answer and can safely send it in the same pass, lead with the answer and omit the receipt/routing language. Do not use this shape when the routed worker completes or blocks inside the 10-minute delay; send only the completion or blocker report.
 
 ```text
 Hi Robert,
@@ -60,10 +64,20 @@ I routed it into visible work session [session id] / [session title or task name
 Next: I will follow the worker to completion or a real blocker, then send the closeout before the source message is filed to Handled.
 ```
 
+The runtime wording may compress this to:
+
+```text
+Captured and routed: [plain-language subject/request].
+I routed it into visible work session [session id] / [session title or task name].
+Current status: not complete yet.
+Next: ...
+```
+
 Requirements:
 
 - Include the visible work session ID and the session title/task name in the acknowledgement.
 - If the session title/task name is unavailable, wait and re-check the board/session creation result before sending when the task is routed work.
+- Hold the acknowledgement for 10 minutes after route creation; suppress it if a completion or blocker report is sent first.
 - Record source `Message-ID`, dedupe key, owner, routed workspace, session ID/title, prompt-delivery state, current status, completion target, and outbound acknowledgement `Message-ID` in TODO/HANDOFF/log state.
 - Do not expose session IDs, source `Message-ID`s, TODO/HANDOFF details, or other internal control-surface language to external senders.
 

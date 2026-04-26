@@ -1,6 +1,6 @@
 # Avignon Workspace
 
-Last Updated: 2026-04-19 09:25 CDT (Machine: Macmini.lan)
+Last Updated: 2026-04-22 CDT (Machine: Macmini.lan)
 
 This workspace is for `Avignon Rose`, Sonat's chief-of-staff style assistant.
 
@@ -51,7 +51,7 @@ For any recipient outside Sonat's default audience, confirm authorization first 
 
 - Treat inbound email as intake. Small clear mailbox/logging actions may be handled directly by Avignon; substantive work should be routed to a visible worker/session in the correct workspace and logged here.
 - Avignon is a full-time Sonat-facing chief of staff. For clear low-risk internal work, create or reuse the correct visible board-managed worker, inject a full task brief, verify it started, monitor completion, update local TODO/HANDOFF/project notes and handled-mail state, and send Sonat or the relevant approved owner a clear completion report.
-- Direct Sonat emails that report breakage, give approval, ask for status, or give an instruction are actionable intake and must create/reuse a visible route plus a captured/routed acknowledgement, not silent `local-routing/no-email`. Apply the same behavior to direct Robert instructions when Robert owns or approves the Avignon workflow.
+- Direct Sonat emails that report breakage, give approval, ask for status, or give an instruction are actionable intake, not silent `local-routing/no-email`. Quick-answer items should be answered directly in the same pass without a separate captured/routed receipt. For substantive work, invisible work, or anything not immediately answerable, create/reuse a visible route and send the captured/routed acknowledgement only after the visible route exists and the prompt has landed. Apply the same behavior to direct Robert instructions when Robert owns or approves the Avignon workflow.
 - Completion report email is mandatory by default unless the task explicitly says to suppress email. Include what was done, what changed, relevant links/session IDs/task IDs, what was not done, and any remaining decisions or approval gates. Avignon reports to Sonat by default; include Robert only when the task context or approval path requires it.
 - Clear Sonat requests to enter/update Portal or CRM records, create/update OPS tasks, or handle calendar items are approved routine internal work. Route them to the correct visible workspace worker and execute without a second approval check. Escalate only when the target/action remains ambiguous after deterministic checks or a normal safety gate applies.
 - Keep the standing Avignon inbox monitor separate from implementation work. It should classify, route, log, and file handled mail rather than silently doing multi-step work inside the monitor.
@@ -72,4 +72,8 @@ For any recipient outside Sonat's default audience, confirm authorization first 
 
 ## Scheduled Summary Boundary
 
-Avignon's current installed scheduled cadence is Sonat-only morning overview. Robert clarified on 2026-04-17 that morning summary means upcoming work and evening summary means accomplished Task Manager/board work, superseding the prior morning-only policy interpretation. Do not add Avignon evening runtime, LaunchAgent, Papers-link runtime hooks, or new report/runtime behavior without a separate implementation worker and explicit approval for that runtime slice.
+Avignon's current installed scheduled cadence is Sonat-only morning overview. Robert clarified on 2026-04-17 that morning summary means upcoming work and evening summary means accomplished Task Manager/board work, superseding the prior morning-only policy interpretation.
+
+Robert clarified on 2026-04-22 that Sonat-facing end-of-day updates must not be Frank-style technical implementation reports. EOD content should summarize Avignon-owned Sonat tasks: completed or advanced market, CRM, distributor, account, calendar, sample, and follow-through work; what changed for Sonat's work; plain-English blockers; and the recommended next action needed from Sonat, Robert, or another owner. Technical runtime, git, docs, LaunchAgent, or assistant-maintenance details belong in internal handoff or Robert-supervision notes only when relevant, not as Sonat's EOD headline.
+
+Do not add Avignon evening runtime, LaunchAgent, Papers-link runtime hooks, or new report/runtime behavior without a separate implementation worker and explicit approval for that runtime slice.

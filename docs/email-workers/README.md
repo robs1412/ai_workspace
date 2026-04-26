@@ -55,6 +55,12 @@ Use `shared` only when the guidance is persona-neutral mechanics. Use `frank-to-
 4. Keep worker-specific persona and recipient behavior in `frank/` or `avignon/` docs. Link to the shared note instead of duplicating shared mechanics.
 5. If private source content is needed to understand the lesson, keep it in the approved private source path and write only a sanitized rule here.
 
+## Owner-Facing Clarity Rule
+
+Do not put opaque internal labels in owner-facing summaries, blocker emails, morning/evening updates, or Task Manager status lines. Source-index labels, Message-IDs, session IDs, task IDs, and internal blocker codes are trace references, not the explanation.
+
+Write the plain-English business context first: person, company, account, requested action, current blocker, missing decision, recommended next step, and what the assistant will do after the answer arrives. If the business details are unknown, say that and ask for a simple human-readable packet or table instead of asking the owner to resolve an internal id.
+
 ## Current Source Reference
 
 - Source Message-ID: `<CAAtX44a6UFPuHJd7tn83fsMjAiV+mbesOk35=r23yDTvY4u=bw@mail.gmail.com>`
@@ -68,4 +74,8 @@ The related Avignon sessions were recorded as visible references only. They were
 
 - `2026-04-20-shared-captured-routed-receipts.md`: non-secret Frank/Avignon captured-routed receipt parity finding, including the Avignon direct-owner runtime-patch source of the newer receipt behavior and the approval-gated Frank runtime path if parity is required.
 - 2026-04-20 follow-up `220cf4d4` confirmed the reusable template rule: owner-facing captured/routed acknowledgements for routed work must include the visible work session ID plus session title/task name after prompt delivery.
+- 2026-04-22 Frank acknowledgement-delay correction: Frank direct-owner routed-work receipts are held for 10 minutes. If the worker completes or blocks first, send only the completion/blocker report; if still pending after 10 minutes, send one captured/routed receipt. Avignon runtime was not changed in this slice.
+- 2026-04-22 follow-up `7e96ac60` recorded the acknowledgement-delay rule: hold direct primary-owner captured/routed receipts for 10 minutes, suppress them when completion/blocker closeout is ready first, and send one delayed receipt only if the worker is still pending.
 - `2026-04-20-shared-reminder-approval-request-clarity.md`: non-secret reminder and approval-request clarity rule for Claude/bridge/email workers. Use a real approved Papers/work-record link when allowed, or a clear human-readable item description, requested approval, and safe next action. Do not send context-poor Message-ID-only reminders.
+- 2026-04-22 clarification: Summary Worker, Frank, and Avignon must translate internal source labels into plain-English business context before owner-facing output. Example shape: "Stephen Beck already exists in CRM; decide whether to leave him as-is or link/update that existing contact under a named account," not an internal source-index blocker label.
+- `2026-04-22-shared-email-worker-customization-boundary.md`: Frank and Avignon share mechanics, not persona. Robert approved automatic enforcement on 2026-04-22: classify each operating change as `shared mechanic`, `Frank customization`, `Avignon customization`, or `runtime change` before implementation. Shared routing/reporting/dedupe mechanics live here or in shared policy; Frank customization stays in Frank docs, Avignon customization stays in Avignon docs and must respect Sonat's SOP/persona references without exposing private source text.

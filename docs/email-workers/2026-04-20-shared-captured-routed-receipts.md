@@ -2,6 +2,7 @@
 
 Status: active non-secret comparison note
 Created: 2026-04-20
+Updated: 2026-04-22
 Source Message-IDs:
 - `<CAAtX44bCjzkXSKDa9sYc8ZP7qfvvRQ5gUxteLJ2aMJh7HnVfOg@mail.gmail.com>`
 - `<CAAtX44b5Y=gPoaF+KifBOf048XzmG+bOnqiQ8baLK4dFmwk9Kw@mail.gmail.com>`
@@ -24,6 +25,10 @@ The Activity-check incident was related but not the general template source. It 
 
 The 2026-04-20 Frank follow-up session `220cf4d4` confirmed the same template standard for Frank docs: owner-facing captured/routed acknowledgements should name the visible work session id and title/task name after prompt delivery, not only say that the request was routed to a generic Task Manager session.
 
+Robert's 2026-04-21 quick-answer correction applies to both Frank and Avignon. Direct primary-owner items that can be answered safely in the same pass should be answered directly and should not receive a separate captured/routed receipt. Captured/routed acknowledgements are for work that will take a moment, is otherwise invisible to the owner, or is not immediately answerable.
+
+Robert's 2026-04-22 acknowledgement-noise correction adds a timing rule for direct primary-owner routed work: hold captured/routed acknowledgements for 10 minutes. If the routed worker completes or blocks before that delay expires, send only the task-specific completion or blocker report and file the source after logging. If the worker is still pending after 10 minutes, send one captured/routed acknowledgement that names the visible session id/title, then continue monitoring to completion or blocker closeout. This is a shared mechanic; persona and recipient routing remain Frank- or Avignon-specific. The 2026-04-22 source slice applies the behavior to Frank runtime-source only; Avignon runtime is unchanged in that slice.
+
 ## Frank Parity
 
 Frank's policy docs already require the same direct-owner mechanics for Robert. The installed Frank runtime is not fully at parity with the newer Avignon implementation.
@@ -45,7 +50,7 @@ Because those are installed mailbox/runtime behaviors under `/Users/admin/.frank
 
 ## Safe Template Standard
 
-For internal primary-owner captured/routed acknowledgements, use this non-secret shape after the visible worker exists and the prompt has landed:
+For internal primary-owner captured/routed acknowledgements, use this non-secret shape only when a separate acknowledgement is needed, after the visible worker exists and the prompt has landed, and the applicable acknowledgement delay has elapsed while the worker is still pending:
 
 ```text
 Hi [Owner],
@@ -60,6 +65,8 @@ Worker-specific persona and owner routing still apply:
 
 - Frank reports to Robert by default.
 - Avignon reports to Sonat by default and reports to Robert when Robert is acting as Avignon workflow owner/approver.
+- Quick answers should be answered directly in the same pass without a separate captured/routed receipt.
+- Routed-work acknowledgements should be held for 10 minutes and suppressed if the completion or blocker report is ready first.
 - External senders must not receive internal captured/routed/control-surface receipts.
 
 ## Required Route If Runtime Parity Is Approved

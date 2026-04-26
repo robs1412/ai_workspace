@@ -1,6 +1,6 @@
 # Frank Cannoli Mail Agent
 
-Last Updated: 2026-04-19 09:25 CDT (Machine: Macmini.lan)
+Last Updated: 2026-04-22 13:05 CDT (Machine: Macmini.lan)
 
 ## Purpose
 
@@ -15,7 +15,8 @@ Current design:
 - task records live locally and can be expanded as the workflow matures
 - task-specific completion confirmations are policy-approved only when tied to a stable task/email id, logged, duplicate-checked, and allowed by recipient/approval gates
 - clear low-risk internal email tasks should be routed to visible board-managed workers in the correct workspace, with Frank tracking source id, worker/session id, completion state, handled-mail filing, and the mandatory owner-facing completion report unless the task explicitly suppresses email
-- direct Robert emails that report breakage, give approval, ask for status, or give an instruction are actionable intake and must create/reuse a visible route plus a captured/routed acknowledgement, not silent `local-routing/no-email`
+- direct Robert emails that report breakage, give approval, ask for status, or give an instruction are actionable intake; quick-answer items should be answered directly without a separate receipt, while substantive/invisible work must create or reuse a visible route and get a captured/routed acknowledgement only when it will take a moment
+- browser authentication for KOVAL systems should use the approved Codex user path for Codex/Frank worker access, with any 2FA handled only through the approved non-secret Codex-owned 2FA/DB-query route; do not expose credential values, private 2FA codes, tokens, mailbox bodies, or credential paths in local notes or owner-facing messages
 
 This is manual by default. An optional scheduled `launchd` runner now exists for controlled inbox triage, but the default deployment mode remains `draft-only`.
 
@@ -132,8 +133,10 @@ Board-managed task flow:
 2. For a clear task, create or reuse the correct visible workspace worker and send a full brief with source id, task id, owner, workspace, outcome, constraints, approval gates, deliverable, verification expectation, and completion-report recipient.
 3. Verify from board status/history or tmux/session history that the prompt started.
 4. Monitor the worker until it reports completion or a real approval blocker.
-5. Update Frank TODO/HANDOFF/project notes and source handled-mail state, then send or draft the completion report. The report is required by default unless the task explicitly suppresses email; it should state what was done, what changed, relevant links/session IDs/task IDs, what was not done, and any remaining decisions or approval gates.
+5. Update Frank TODO/HANDOFF/project notes and source handled-mail state, then send or draft the answer, completion report, or blocker report. For quick-answer items, send the answer directly instead of first sending a captured/routed receipt. For substantive routed work, hold the captured/routed receipt for 10 minutes after route creation; if completion or blocker closeout happens first, send only that closeout. If the worker is still pending after 10 minutes, send one captured/routed receipt with the visible session id/title. The completion report is required by default unless the task explicitly suppresses email; it should state what was done, what changed, relevant links/session IDs/task IDs, what was not done, and any remaining decisions or approval gates.
 6. Record the dedupe key so the same email/thread is not surfaced repeatedly; if a real decision blocks work for more than 24 hours, send one follow-up with concrete questions and the approval boundary.
+
+Robert-facing drafting note: for quick answers, answer directly and do not send a separate routing receipt. For routed work, the receipt is delayed 10 minutes and suppressed when the closeout arrives first. Start captured/routed, status, blocker, and closeout replies with the point, but do not write the literal label `Point first:`. Open with the actual point as a normal sentence, keep visible session/task ID plus session/task title in captured/routed responses when available, and split multi-part replies into short paragraphs with a blank line between sections.
 
 Daily report helper usage:
 

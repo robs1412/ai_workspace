@@ -1,12 +1,76 @@
 # TODO — frank
 
-Updated: 2026-04-23 CDT (Machine: Macmini.lan)
+Updated: 2026-04-24 CDT (Machine: Macmini.lan)
 
 ## In Progress
 
 None currently.
 
+## Done
+
+- 2026-04-24: Corrected the follow-up paragraph spacing on Robert's MI / Papers / Mesh thread and answered the complaint directly as a Frank wording fix.
+
+- 2026-04-24: Corrected the MI / Papers / Mesh bridge follow-up so Robert gets one explicit decision question instead of a routing summary.
+  - Source Message-ID `<CAAtX44Y15n-eHNaKF66rwAeUBjw5rGo9A+XzWi59KbRDQ_VUTQ@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44Y15n-eHNaKF66rwAeUBjw5rGo9A-XzWi59KbRDQ-VUTQ-mail-gmail-com`; local task id `frank-mi-papers-mesh-question-correction-2026-04-24`.
+  - Classification: direct-owner thread correction on the existing MI / Papers / Mesh bridge lane, not a shared Frank/Avignon mechanic change, Frank customization, Avignon customization, or runtime change.
+  - Result: reused visible AI Workspace route `2894c746` / `Claude MI Papers Mesh access packet`, updated durable Frank/project state, and drafted the Robert-facing correction at `drafts/mi-papers-mesh-question-correction-robert-2026-04-24.txt`.
+  - What changed: this lane now asks Robert one concrete yes/no question about whether Frank should send the narrow Claude access-packet request now, limited to the MI/Papers access path, initial approved Papers scope/document IDs, and Mesh / Agent Memory read-only surfaces.
+  - What was not done: no Claude send, no `.205`/MI/Papers auth or body read, no OAuth/token/credential work, no Portal/CRM/OPS mutation, and no external-sensitive reply.
+
+- 2026-04-24: Recorded Robert's Frank paragraph-spacing preference as a same-pass wording closeout.
+  - Source Message-ID `<CAAtX44Yzzpx1A-O6o0QfKVSk-P_idshjYk8HH3qRuQ0qw_1yDg@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44Yzzpx1A-O6o0QfKVSk-P-idshjYk8HH3qRuQ0qw-1yDg-mail-gmail-com`; local task id `frank-response-paragraph-spacing-rule-2026-04-24`.
+  - Classification: `Frank customization`. Shared-mechanic check confirmed this was a same-pass direct-owner wording correction, so no visible worker route or delayed captured/routed receipt was needed.
+  - Result: updated `AGENTS.md`, `PERSONA.md`, `README_AGENT.md`, and `routed-task-id-recording.md` so Frank now uses short paragraphs with a blank line between sections while preserving the existing plain-prose opening rule. Robert-facing completion draft prepared at `drafts/frank-response-paragraph-spacing-robert-2026-04-24.txt`.
+  - What changed: durable Frank guidance now says the opening point should stand on its own and multi-part replies should breathe instead of landing as one dense block. What was not done: no runtime/mailbox/send-path/auth/OAuth/token work, no CRM/Portal/OPS mutation, and no Avignon-doc change.
+
+- 2026-04-23: Attached Robert's AI implementation point list to the active project lane and converted it into a concrete packet next step.
+  - Source Message-ID `<CAAtX44btKnpxPK7qFpmG4et9ZsaBa4PjQ7zZH-KkP6y8wxrN7Q@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44btKnpxPK7qFpmG4et9ZsaBa4PjQ7zZH-KkP6y8wxrN7Q-mail-gmail-com`; local task id `frank-ai-implementation-project-packet-followup-2026-04-23`.
+  - Classification: AI implementation project routing and planning state, not a shared Frank/Avignon mechanic, Frank customization, Avignon customization, or runtime change.
+  - Visible Frank source session `61480a55` / `Frank direct Robert: Re: Frank follow-up: AI implementation project packet` was verified in local Workspaceboard status; overlapping project lane `26b5a380` / `Frank direct Robert: project` remains the correct route and currently shows `review-ready`.
+  - Result: durable Frank state now holds a starter point list for the AI implementation packet: recurring task template (`description`, `detailed workflow`, `output on set date/repeat`), Binny's scraper (currently scraped via Playwright and pushed to BID), and a bottling / inventory forecast monthly lane. Robert-facing completion draft prepared at `drafts/ai-implementation-project-packet-robert-2026-04-23.txt`.
+  - What changed: the project lane is no longer blocked on a missing point list; the next worker action is now to normalize these three starter items into workspace-owned task packets and request only the remaining missing fields per item. What was not done: no OPS task creation, no CRM/Portal/OPS mutation, no auth/OAuth/token work, and no external-sensitive reply.
+
+- 2026-04-23: Recorded Robert's Avignon plain-prose opening correction as a Frank same-pass closeout.
+  - Source Message-ID `<CAAtX44Yk08_ZsyFvCHXZ=4QwrQfLBn7T_qpL2AvLkfzKVkLXkQ@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44Yk08-ZsyFvCHXZ-4QwrQfLBn7T-qpL2AvLkfzKVkLXkQ-mail-gmail-com`; local task id `frank-avignon-plain-prose-opening-rule-2026-04-23`.
+  - Classification: `Avignon customization`. Shared-mechanic check confirmed this was a same-pass direct-owner wording correction, so no visible worker route or captured/routed receipt was needed.
+  - Result: updated `../avignon/EMAIL_PERSONA.md` and `../avignon/AGENTS.md` so Avignon now explicitly starts with the point in plain prose and does not use the literal opener `Point first:`. This leaves the existing next-action requirement and Sonat-facing persona boundaries intact.
+  - Robert-facing completion draft prepared at `drafts/avignon-plain-prose-opening-rule-robert-2026-04-23.txt`.
+  - What changed: durable Frank and Avignon state now treat this as an Avignon wording-governance fix, not a Google Ads reopening or runtime change. What was not done: no runtime/mailbox/send-path/auth/OAuth/token work, no CRM/Portal/OPS mutation, and no historical draft sweep.
+
+- 2026-04-23: Corrected Robert's Avignon Google Ads reply-pattern concern as a Frank same-pass closeout.
+  - Source Message-ID `<CAAtX44bBjZ9UoMQX0xK3eSA=68aMeXhXxkpqzFJKd5C=ZX6tTw@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44bBjZ9UoMQX0xK3eSA-68aMeXhXxkpqzFJKd5C-ZX6tTw-mail-gmail-com`; local task id `frank-avignon-google-ads-reply-pattern-correction-2026-04-23`.
+  - Classification: shared mechanic check plus Avignon customization. Shared mechanic: quick-answer direct-owner replies should answer directly without an unnecessary captured/routed receipt. Avignon customization: the Robert-facing Google Ads status answer must start in plain prose, avoid the retired literal opener `Point first:`, stay concise, and convert the thread into one concrete next action.
+  - Result: confirmed the underlying Google Ads owner path was already correct and that the actual defect was the reply shape. Corrected `../avignon/drafts/robert-google-ads-status-2026-04-23.txt` so it now starts with plain prose and keeps the next action on the Claude/Sonat owner lane instead of sounding like the older response pattern.
+  - Robert-facing completion draft prepared at `drafts/avignon-google-ads-reply-pattern-correction-robert-2026-04-23.txt`.
+  - What changed: durable Frank state now records this source as a wording-pattern correction, not a Google Ads reopening. What was not done: no Google Ads login/account review/spend/config/admin action, no OAuth/auth/token work, no CRM/Portal/OPS mutation, and no external-sensitive reply.
+  - Remaining decision: none unless Robert wants Avignon to reopen Google Ads with explicit owned scope.
+
 ## Blocked / Parked
+
+- [ ] `frank-drive-oauth-client-source-clarification-2026-04-24`: Robert approved the Drive OAuth execution model except for the exact OAuth client/source or Google project/app label.
+  - Source Message-ID: `<CAAtX44YP11jVyzBPzLQMOETWsXb+QQM7=m-oRMqey-7ED1YfaA@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44YP11jVyzBPzLQMOETWsXb-QQM7-m-oRMqey-7ED1YfaA-mail-gmail-com`; subject `Re: Shared Drive OAuth implementation approval needed for Frank / Avignon / Claude path`; from Robert Birnecker `<robert@kovaldistillery.com>` on Fri, 24 Apr 2026 13:47:04 -0400.
+  - Classification: Shared Drive OAuth implementation approval reply on the existing secure-files lane, not a shared Frank/Avignon mechanic, Frank customization, Avignon customization, or runtime change.
+  - Visible Frank route: existing thread session `36758fa1` / `Frank direct Robert: Re: Shared Drive OAuth implementation approval needed for Frank / Avignon /`; Workspaceboard confirms it live/working. Duplicate helper session `3fad38b8` was closed so the source stays attached to one visible route only.
+  - Approved by Robert in this reply: first execution identity `Frank`; Claude Task `#1326` Infisical-backed model approved; token storage `Infisical preferred` with temporary Mac mini local storage allowed if needed; revocation/rotation owner `Codex / Frank`; non-secret audit log `on Mac mini`; and the narrow first slice approved as proposed (`drive.metadata.readonly` only, shared Drive `0AP-Yf32mH4IHUk9PVA` only, metadata-only, no content reads/writes).
+  - Remaining blocker: Robert answered `Please clarify` on the OAuth client/source question, so implementation still needs the exact approved Drive OAuth client/source or Google project/app label before any live OAuth setup begins.
+  - Concrete next action: identify whether the existing Claude Drive lane and Task `#1326` already names a reusable client/source for Frank's metadata-only run; if not, send Robert one short clarification note naming the concrete candidate client/source instead of asking the abstract question again.
+  - Robert-facing draft prepared: `drafts/drive-oauth-client-source-clarification-robert-2026-04-24.txt`.
+  - Boundaries observed: no OAuth/browser login, token creation/write/refresh/validation, Google Drive/API/IAM mutation, mailbox-body output in chat, credential lookup, Portal/CRM/OPS mutation, external-sensitive reply, deploy, commit, push, reset, or clean.
+
+- [ ] `frank-report-automation-project-intake-2026-04-23`: Robert wants report automation/new-report work turned into a multi-task project; the starter point list is attached now, but per-item routing and output details are still incomplete.
+  - Source Message-ID: `<CAAtX44Y8ADfAXaLEHudsqR620vWDe-zXZ7Wv4OnogDsf37tDqQ@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44Y8ADfAXaLEHudsqR620vWDe-zXZ7Wv4OnogDsf37tDqQ-mail-gmail-com`; subject `project`; from Robert Birnecker `<robert@kovaldistillery.com>` on Thu, 23 Apr 2026 17:58:52 -0400.
+  - Classification: project/workspace routing and planning state, not a shared Frank/Avignon mechanic, Frank customization, Avignon customization, or runtime change.
+  - Visible Frank route `26b5a380` / `Frank direct Robert: project` created; prompt delivery returned `delivered=true` and the intake prompt landed in session history.
+  - Continuation source attached on 2026-04-23: Message-ID `<CAAtX44b=13KfiRyd6msXvVHNvUEzt-D0NP42s08NYK2yExLYnA@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44b-13KfiRyd6msXvVHNvUEzt-D0NP42s08NYK2yExLYnA-mail-gmail-com`; subject `Re: Frank clarification needed: project`; from Robert Birnecker `<robert@kovaldistillery.com>` on Thu, 23 Apr 2026 15:23:52 -0700.
+  - Continuation classification: AI implementation project clarification and routing/planning state, not a shared Frank/Avignon mechanic, Frank customization, Avignon customization, or runtime change.
+  - Clarification received: the project name is `AI implementation`; Robert expects the task list to be generated from the points in his earlier email; desired outcome is automation of those tasks and better/new reporting where applicable.
+  - Existing visible Frank route `26b5a380` remains the correct route. Local board summary checked on 2026-04-23 showed the route started; later local `/api/status` output on 2026-04-23 showed the overlap route still live and `review-ready`, while the current source session `61480a55` is the active Frank intake surface for the latest follow-up.
+  - Follow-up source attached on 2026-04-23: Message-ID `<CAAtX44btKnpxPK7qFpmG4et9ZsaBa4PjQ7zZH-KkP6y8wxrN7Q@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44btKnpxPK7qFpmG4et9ZsaBa4PjQ7zZH-KkP6y8wxrN7Q-mail-gmail-com`; subject `Re: Frank follow-up: AI implementation project packet`; from Robert Birnecker `<robert@kovaldistillery.com>` on Thu, 23 Apr 2026 16:38:48 -0700.
+  - Follow-up classification: AI implementation project packet detail, not a shared Frank/Avignon mechanic, Frank customization, Avignon customization, or runtime change.
+  - Point list now attached from Robert's redacted summary: recurring task template with task description / detailed workflow / output on set date or repeat cadence; Binny's scraper currently scraped via Playwright and pushed to BID; bottling / inventory forecast on a monthly cadence.
+  - Concrete next action revised: normalize those three starter items into one AI implementation packet with per-item source system/input, desired output, cadence/trigger, target workspace, and whether an OPS Codex task should be created after routing is confirmed.
+  - Current blocker: the point list now exists, but item 1 and the bottling / inventory forecast lane still need final system-of-record, output shape, and target workspace details before Frank can safely create OPS tasks or route implementation work without guessing.
+  - Robert-facing drafts: initial `drafts/report-automation-project-intake-robert-2026-04-23.txt`; clarification answer `drafts/ai-implementation-project-clarification-robert-2026-04-23.txt`; packet follow-up `drafts/ai-implementation-project-packet-robert-2026-04-23.txt`.
 
 - [ ] `frank-avignon-oauth-token-storage-blocked-2026-04-20`: Frank/Avignon Gmail push OAuth continuation blocked before OAuth because the approved token storage path/scope/client are not documented.
   - Source Message-ID: `<CAAtX44bSqrWb2twfLvj_45oOkFLKcSDtjGQ6fqwRbm16xBSprA@mail.gmail.com>`; classification `tracked-primary-instruction`; subject `Re: Monday polling health verification complete`; from Robert Birnecker `<robert@kovaldistillery.com>` on Tue, 21 Apr 2026 00:38:04 +0900 / Mon, 20 Apr 2026 10:38:04 CDT.
@@ -22,6 +86,11 @@ None currently.
   - Source Message-ID: `<CAAtX44YV+ufv=AVs9+S7DyAt7XTJ0pVfzg-c9oYfM=HphmgKaw@mail.gmail.com>`; classification `tracked-primary-instruction`; subject `Re: Fwd: Password for claude@kovaldistillery.com needed for Drive API setup`; from Robert on 2026-04-20 10:35:37 -0500.
   - Work session: `5e6261fa` / Frank email-specific work session; Security review session `026a8ee8` / `Security review Claude Drive password request`.
   - Robert blocker report sent to `robert@kovaldistillery.com` only, subject `Claude Drive credential setup: safe next step needed`, task id `frank-claude-drive-credential-setup-blocked-2026-04-20`, Message-ID `<177669959173.63330.7018280144492669297@kovaldistillery.com>`, draft `drafts/claude-drive-credential-setup-safe-next-step-robert-2026-04-20.txt`.
+  - Continuation source attached on 2026-04-23: Message-ID `<CAAtX44bG7j9C5S1a5eKnBWGfKaxdg4vni5TK8Rkw9ra-ugUV9Q@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44bG7j9C5S1a5eKnBWGfKaxdg4vni5TK8Rkw9ra-ugUV9Q-mail-gmail-com`; subject `Fwd: Reminder: Workspace admin approval for Claude Drive OAuth (~2 min)`; from Robert on Thu, 23 Apr 2026 15:20:46 -0700.
+  - Classification for the 2026-04-23 continuation: Claude Drive auth/admin-approval follow-up, not a shared Frank/Avignon mechanic, Frank customization, Avignon customization, or runtime change.
+  - Result of the continuation review: this reminder does not clear the existing auth boundary. Frank can attach it as approval/dedupe evidence and convert it into one concrete next action, but should not open the admin-approval flow, perform browser auth, retrieve credentials, or mutate Google/OAuth/Drive settings from this source alone.
+  - Concrete next action for Robert: have the approved human admin complete the workspace admin approval interactively, then confirm the existing non-secret setup packet for the Claude Drive lane if it is still not already settled: account, project/app, minimum scopes, token-storage location/class, and whether any Google Cloud/IAM/Drive API change is approved or whether this is only the admin-consent step.
+  - Robert-facing continuation draft prepared at `drafts/claude-drive-workspace-admin-approval-blocked-robert-2026-04-23.txt`; no new visible route was created because the blocker answer was available in the same pass, so the delayed captured/routed receipt remains suppressed.
   - State: blocked pending human physical credential entry by Robert/Dmytro or an approved secure secret-manager/keychain workflow where agents receive only a non-secret reference, plus non-secret confirmation of account, Drive API/OAuth project/app, minimum scopes, allowed token storage location, and whether Google Cloud/IAM/Drive API changes are approved or only human credential entry is approved.
   - Duplicate/handled status: runtime automation log already recorded the source and filed it to `Handled`; keep this TODO row as the active blocker record so the source does not resurface as a fresh decision.
   - Boundaries observed: no Claude password/app password, regular login, token, credential-file contents, server credential file, Google/OAuth/Drive/IAM mutation, production/runtime change, mailbox body dump, or secret material was accessed or printed by this session.
@@ -85,6 +154,14 @@ None currently.
 Live Papers lookup/projection remains approval-gated and is represented by AI Workspace/Papers project notes plus the Claude guidance request, not by an open Frank implementation row.
 
 ## Done
+
+- 2026-04-23: Converted Robert's MI / Papers / Mesh bridge approval into the next-step Claude access packet.
+  - Source Message-ID `<CAAtX44aMxx6qRPNu6NUw5WmfSmQh=KqW2pAcAwoepqzkWOoTDA@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44aMxx6qRPNu6NUw5WmfSmQh-KqW2pAcAwoepqzkWOoTDA-mail-gmail-com`; local task id `frank-mi-papers-mesh-access-packet-approval-2026-04-23`.
+  - Classification: integration routing/approval state on the existing Codex/Claude/Papers lane, not a shared Frank/Avignon mechanic, Frank customization, Avignon customization, or runtime change.
+  - Visible AI Workspace route `2894c746` / `Claude MI Papers Mesh access packet` started with prompt delivery verified.
+  - Result: Frank reused the existing Codex / Claude / Papers integration lane, drafted the Claude-facing packet at `drafts/claude-mi-papers-mesh-access-instructions-2026-04-23.txt`, and drafted the Robert-facing closeout at `drafts/mi-papers-mesh-access-packet-approved-robert-2026-04-23.txt`.
+  - What was not done: no email send, no `.205`/MI/Papers auth or body read, no OAuth/token/credential work, no Portal/CRM/OPS mutation, and no external-sensitive reply.
+  - Remaining gate: Claude still needs to supply the exact approved MI/Papers access path, initial body-read scope or document IDs if any, and the concrete Mesh / Agent Memory read-only surfaces before live protected access can move.
 
 - 2026-04-23: Closed Frank/Avignon scheduled-report launchd verification.
   - `system/com.koval.frank-morning-overview` and `system/com.koval.avignon-morning-overview` both show 06:00 and 18:00 calendar triggers, `runs = 2`, and `last exit code = 0`.

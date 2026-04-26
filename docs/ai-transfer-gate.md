@@ -1,6 +1,6 @@
 # AI Transfer Gate
 
-Short-lived file transfer gate for cases where the primary AI worker (`Macmini.lan` / `.17`) needs to fetch a file from a front-facing workstation such as the M4 or MacBook.
+Short-lived file transfer gate for cases where the primary AI worker (`Macmini.lan` / Ethernet `.230`) needs to fetch a file from a front-facing workstation such as the M4 or MacBook.
 
 ## Security Model
 
@@ -10,7 +10,7 @@ Short-lived file transfer gate for cases where the primary AI worker (`Macmini.l
 - The approval code is shown once and is not stored in plaintext.
 - Grants expire by default after five minutes and are consumed after one successful fetch.
 - The grant approves one exact resolved file path, not a directory browse.
-- `~/Downloads - shared` is the one always-allowed folder. Files and folders placed there can be fetched from `.17` without a one-time code.
+- `~/Downloads - shared` is the one always-allowed folder. Files and folders placed there can be fetched from the Mac mini Ethernet source `.230` without a one-time code.
 - Shared-folder access is constrained by resolved paths; `..`, absolute paths, and symlink escapes are rejected or skipped.
 - Audit logs record metadata only: timestamps, grant id, file path, basename, size, outcome, and SSH source. They do not record file contents or approval codes.
 
@@ -24,7 +24,7 @@ On the M4 or MacBook, install a restricted `authorized_keys` line for the Mac mi
 /Users/werkstatt/ai_workspace/scripts/ai_transfer_gate.py install-authorized-key \
   --public-key /path/to/macmini-to-workstation.pub \
   --gate-path /Users/werkstatt/ai_workspace/scripts/ai_transfer_gate.py \
-  --from-host 192.168.55.17
+  --from-host 192.168.55.230
 ```
 
 Review the printed line. Then apply:
@@ -33,7 +33,7 @@ Review the printed line. Then apply:
 /Users/werkstatt/ai_workspace/scripts/ai_transfer_gate.py install-authorized-key \
   --public-key /path/to/macmini-to-workstation.pub \
   --gate-path /Users/werkstatt/ai_workspace/scripts/ai_transfer_gate.py \
-  --from-host 192.168.55.17 \
+  --from-host 192.168.55.230 \
   --replace-existing \
   --apply
 ```
@@ -83,7 +83,7 @@ The helper prompts for the six-digit approval code without echo.
 
 ## Always-Allow Shared Folder
 
-On the M4, put files or folders here when `.17` should be able to fetch them without a code:
+On the M4, put files or folders here when Mac mini Ethernet `.230` should be able to fetch them without a code:
 
 ```text
 ~/Downloads - shared
