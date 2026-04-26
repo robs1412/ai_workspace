@@ -44,6 +44,35 @@ Frank sent a direct follow-up to Claude copied to Robert and Dmytro:
 
 The ask is for Claude to reply in email body with the MI auth path, Papers first body-read scope/document IDs/`ALLOWED_PATHS`, Mesh read-only surface, Agent Memory read-only surface, Screenbox endpoint/MCP path, and any remaining Robert sign-off items. The email explicitly asks Claude not to send credentials, tokens, private keys, session cookies, or broad access instructions.
 
+## 2026-04-26 Packet Received And First Tool Check
+
+Claude replied at 15:14 CDT. The message was found in Gmail All Mail, not Frank INBOX or Handled.
+
+Trace:
+
+- Message-ID: `<ced9d6f4a696eecd49cb9c94ea4586dd.claude@kovaldistillery.com>`
+- subject: `Re: Frank follow-up: protected-side bridge instructions for MI / Papers / Mesh / Agent Memory / Screenbox`
+
+Non-secret packet summary:
+
+- MI, Papers, Mesh, Agent Memory, Screenbox, and Rein surfaces are marked ready.
+- Papers allowed paths are `teams/ai-team` and `teams/it`.
+- Claude says no remaining Robert sign-off items for those named surfaces.
+- Access beyond Papers / Mesh / MI / Screenbox / Rein requires new Robert approval.
+- Unified single-key auth is not available yet; Claude references task `#1438`.
+
+First live checks:
+
+- `http://papers.koval.lan/mcp` is reachable but returns `401 Unauthorized: Bearer token required`.
+- `http://mesh.koval.lan/mcp` is reachable but returns `401 Unauthorized: Bearer token required`.
+- `http://screenbox.koval.lan/mcp` initializes successfully with MCP protocol `2025-03-26`.
+- `screenbox_info` succeeded and returned running desktop/tool inventory.
+
+Current boundary:
+
+- Do not use Papers/Mesh/Rein write or mutation-capable tools until the token path is available and the specific logging/write slice is scoped.
+- The current shell has no `infisical` binary and no relevant token environment variables, so Papers reads/writes and Papers logging are blocked on approved Infisical/token availability.
+
 ## 2026-04-24 `.205` Login Metadata Correction
 
 Source: local approved private reference surface under `ws ai`, file `/Users/werkstatt/ai_workspace/.private/passwords/claude-user.txt`.
