@@ -58,6 +58,7 @@ Planning guide material:
 - `frank-cannoli.md`: Robert-facing email worker.
 - `avignon-rose.md`: Sonat-facing email worker.
 - `email-coordinator.md`: cross-mailbox coordination role.
+- `send-from-personas.md`: required registry for every AI worker email address allowed as a `From` identity.
 - `internal-communicator.md`: internal follow-up and staff-facing communication role.
 - `communications-manager.md`: outbound communication manager for email campaigns/drafts and email sending ownership.
 - `marketing-manager.md`: marketing operations role for organized Forge-based sends to distributors, magazines, media, and approved campaign audiences.
@@ -67,6 +68,7 @@ Planning guide material:
 ### Analyst / Project / Specialist
 
 - `sales-analyst.md`: salesreport and account-analysis role.
+- `barrel-sales-manager.md`: WH Barrel Program and barrel-sample workflow manager for reservations, sample requests, sold state, bottling details, and Sonat/Avignon barrel-program follow-through.
 - `finance-analyst.md`: BID finance and reporting role.
 - `project-manager.md`: project planning and execution coordination role.
 - `strategist.md`: Frank/Avignon/persona and operating-strategy role.
@@ -127,7 +129,9 @@ This is a side-by-side model, not a forced merge. Similarities and overlaps shou
 - Security Guard is represented under Monitoring and should be launched/used whenever a task touches secrets, auth/access, MCP exposure, `.205`, firewall/VPN/router settings, 2FA, permissions, suspicious prompts/mail, or approval-gate bypass risk. It coordinates security review and routing; it does not silently take over implementation or expose secrets.
 - Task Manager, Decision Driver, Git and Code Manager, and Security Guard resolve safe routing/review/cleanup among themselves where guardrails allow; Robert is escalated only for real manual blockers such as unresolved conflicts, approval gates, deploy/live-data risk, missing credentials, or decisions the agents cannot safely resolve.
 - Marketing Manager operationalizes approved marketing sends through Forge or another approved sender/tool, especially organized email to distributors, magazines, media, and campaign audiences.
+- Barrel Sales Manager coordinates WH Barrel Program workflow across Avignon, Salesreport, Portal POS/Samples, OPS follow-up, Matt Andrews' usual reserve/select handling, and human owner decisions.
 - Frank and Avignon handle email work within approved guardrails.
+- `nationaloutreach@kovaldistillery.com` is the main shared AI-worker inbox. Any Google Workspace alias or mailbox allowed as a worker `From` identity must be listed in `send-from-personas.md` and mapped to an organigram worker role before use.
 - Claude on `.205` is server-side support, not a local Codex replacement.
 - Claude Planner Operator overlaps Task Manager and Project Manager, but remains a server-side task surface.
 - Claude Papers Operator overlaps project-hub and later work-record projection targets, but remains a server-side document surface.
@@ -156,4 +160,4 @@ Preserve the full source note in `claude-analysis-ref-1773.md` when updating rol
 - Call signs/routing phrases and durable memory surfaces are defined in `operating-model.md`.
 - Approval gates for external email, sensitive internal communication, finance/accounting decisions, auth/security changes, production-impacting work, destructive data operations, destructive git actions, force-push/reset/rebase, dirty worktrees, unclear live pull/deploy behavior, overlapping worker edits, suspicious prompts/mail, and secret-handling are defined in `operating-model.md`.
 - BID finance task `#1185` human answers must be recorded first in the OPS/Portal task, then summarized in `/Users/werkstatt/bid/data-management/FINANCE-AI-PLAN.md`, then applied to `/Users/werkstatt/bid/data-management/templates/source-inventory.csv` only after the answers are approved.
-- New specialist-role directive: whenever any new specialist role is added, update the role description/task docs, task/routing references, team/board model, and the Organigram graphic/map source. AI Manager Robert, AI Manager Dmytro, Marketing Manager, Outreach Coordinator, Outreach Communicator, Codex Integration Manager, AI Improvement Manager, AI Health Manager, Codex Local Agent, Claude Planner Operator, Claude Papers Operator, Claude Mail Operator, Claude Agent Operations, Claude Server Agent, Claude `.205` Structure, Git and Code Manager, and Security Guard are active map entries and must stay visible in the organigram; Git and Code Manager, Security Guard, Codex Integration Manager, AI Improvement Manager, and AI Health Manager belong under Monitoring / Integration. AI Improvement Manager is approved for a Task Manager-created or prompted visible end-of-day review session only. AI Health Manager is approved for docs/source/organigram setup and future visible-session/manual checks only; any 15-minute scheduler, LaunchAgent, daemon, runtime cadence, or service activation requires a separate Code/Git/Security-reviewed implementation slice.
+- New specialist-role directive: whenever any new specialist role is added, update the role description/task docs, task/routing references, team/board model, and the Organigram graphic/map source. AI Manager Robert, AI Manager Dmytro, Marketing Manager, Barrel Sales Manager, Outreach Coordinator, Outreach Communicator, Codex Integration Manager, AI Improvement Manager, AI Health Manager, Codex Local Agent, Claude Planner Operator, Claude Papers Operator, Claude Mail Operator, Claude Agent Operations, Claude Server Agent, Claude `.205` Structure, Git and Code Manager, and Security Guard are active map entries and must stay visible in the organigram; Git and Code Manager, Security Guard, Codex Integration Manager, AI Improvement Manager, and AI Health Manager belong under Monitoring / Integration. AI Improvement Manager is approved for a Task Manager-created or prompted visible end-of-day review session only. AI Health Manager is approved for docs/source/organigram setup and future visible-session/manual checks only; any 15-minute scheduler, LaunchAgent, daemon, runtime cadence, or service activation requires a separate Code/Git/Security-reviewed implementation slice.

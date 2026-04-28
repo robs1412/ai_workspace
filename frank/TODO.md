@@ -8,6 +8,46 @@ None currently.
 
 ## Done
 
+- 2026-04-27: Confirmed Papers body fetch after Claude's `include_content` correction.
+  - Source Message-ID `<CAAtX44ZxjuvqjyXRAML=NSxPBhsGarQT9z63ZzLb7vyG8BFRJQ@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44ZxjuvqjyXRAML-NSxPBhsGarQT9z63ZzLb7vyG8BFRJQ-mail-gmail-com`; local task id `frank-claude-papers-include-content-fetch-confirmed-2026-04-27`.
+  - Classification: runtime/read-only verification on the Claude/Papers/MCP lane, not a shared mechanic, Frank customization, or Avignon customization.
+  - Result: read-only MCP check with session-aware JSON-RPC and `papers_get` using `guid` plus `include_content: true` returned body content for the current access packet GUID `b46ee853-96aa-4181-a6c2-a947517df78f`, task `#1425`, task `#1429`, task `#1457`, and the MCP token setup worklog.
+  - What changed: the packet-body blocker is closed for read-only verification; the prior `content: null` result was caused by caller usage/session handling, not a still-missing packet body after Claude's update.
+  - All-thread reply sent to Claude with Robert and Dmytro copied, subject `Re: Codex MCP follow-up: Papers packet body is empty`, Message-ID `<177733555426.15825.6889489241668158360@kovaldistillery.com>`; draft `drafts/papers-include-content-fetch-confirmed-2026-04-27.txt`; visible Frank session `73418218`; source filed to `Handled`.
+  - What was not done: no Papers write tools, OAuth/auth/token storage change, raw token output, packet body pasted into email, `.205` access, CRM/Portal/OPS mutation, deploy, commit, push, reset, or clean.
+
+- 2026-04-27: Recorded Robert's Avignon greeting and closing correction.
+  - Source Message-ID `<CAAtX44bzFy7wJWj1tQEnVv+Us3G5w_nGb4_-WGcgHLMTRD7HCA@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44bzFy7wJWj1tQEnVv-Us3G5w-nGb4-WGcgHLMTRD7HCA-mail-gmail-com`; local task id `frank-avignon-email-greeting-closing-required-2026-04-27`.
+  - Classification: Avignon customization, not shared mechanic, Frank customization, or runtime change. Same-pass docs/state correction was available, so no captured/routed receipt or new visible worker route was needed.
+  - Result: Avignon persona, job, agent, and market-SOP guidance now say complete outbound emails must include a greeting and concise closing before the Avignon signature.
+  - What changed: the existing April 26 format guidance is tightened into a hard Avignon email-format rule for quick answers, captured/routed acknowledgements, blocker notes, completion reports, and document/report responses, while preserving the point-first plain-prose body rule.
+  - Robert completion report sent, subject `Avignon greeting and closing rule recorded`, Message-ID `<177732011054.60825.17331792045589264232@kovaldistillery.com>`; draft `drafts/avignon-email-greeting-closing-required-robert-2026-04-27.txt`; source filed to `Handled`.
+  - What was not done: no Sonat private SOP text copied, no runtime/mailbox automation change, no OAuth/auth/token work, no CRM/Portal/OPS mutation, no external-sensitive reply, no deploy, commit, push, reset, or clean.
+
+- 2026-04-27: Corrected the Asher/Venetia setup state so they remain separate workers.
+  - Source Message-ID `<CAAtX44ZH5m0W-PaydFJWY-xVmJHv1kXGgxdMAt1-9gs-NzJfQw@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44ZH5m0W-PaydFJWY-xVmJHv1kXGgxdMAt1-9gs-NzJfQw-mail-gmail-com`; local task id `frank-asher-venetia-separate-workers-clarification-2026-04-27`.
+  - Classification: shared email-worker setup mechanic/source-state correction, not Frank customization, Avignon customization, or runtime change.
+  - Result: shared setup docs and worker-role records now state that Asher and Venetia are two distinct worker identities: one Asher mailbox/workspace/header-only route and one Venetia mailbox/workspace/header-only route.
+  - What changed: the prior no-duplicate guidance is narrowed so it cannot be read as merging Asher and Venetia; do not combine them into one shared persona, inbox, workspace, or route, and do not create duplicates for either worker.
+  - Robert completion report sent, subject `Asher and Venetia separation clarified`, Message-ID `<177731919032.57423.10813232829006814988@kovaldistillery.com>`; draft `drafts/asher-venetia-separate-workers-clarification-robert-2026-04-27.txt`; source filed to `Handled`.
+  - What was not done: no credential exposure, private mailbox body output, OAuth/token/auth work, runtime/LaunchDaemon mutation, Asher/Venetia mailbox action, external-sensitive reply, CRM/Portal/OPS mutation, deploy, commit, push, reset, or clean.
+
+- 2026-04-27: Recorded Robert's Asher/Venetia duplicate and loop clarification.
+  - Source Message-ID `<CAAtX44bqdeTLqGSTmHJ6fp-izQKv6syFgPqvaSGfrz5vuf1UQA@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44bqdeTLqGSTmHJ6fp-izQKv6syFgPqvaSGfrz5vuf1UQA-mail-gmail-com`; local task id `frank-asher-venetia-no-duplicates-loop-clarification-2026-04-27`.
+  - Classification: shared email-worker setup mechanic/source-state correction, not Frank customization, Avignon customization, or runtime change.
+  - Result: shared setup docs and worker-role records now say Asher and Venetia should have one mailbox/workspace/header-only LaunchDaemon route each, no duplicates; Robert also reported no `.230` loop for this setup thread, so no runtime-loop incident is open from this source alone.
+  - What changed: future Asher/Venetia work should audit existing account/workspace/LaunchDaemon/sent-log state before creating anything new or treating this as a loop repair.
+  - What was not done: no credential exposure, private mailbox body output, OAuth/token/auth work, runtime/LaunchDaemon mutation, Asher/Venetia mailbox action, external-sensitive reply, CRM/Portal/OPS mutation, deploy, commit, push, reset, or clean.
+
+- 2026-04-27: Verified Asher and Venetia live header-only polling after Robert reported the polling/LaunchDaemons were installed.
+  - Source Message-ID `<CAAtX44bXwbSsnNnkqFD5-2CCLLuL5Y9d8z02yDjw=YzEjA5SUg@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44bXwbSsnNnkqFD5-2CCLLuL5Y9d8z02yDjw-YzEjA5SUg-mail-gmail-com`; local task id `frank-asher-venetia-live-polling-verification-2026-04-27`.
+  - Classification: runtime state verification plus shared email-worker mechanic state, not Frank customization or Avignon customization. No new Avignon persona text or Sonat private SOP text was copied.
+  - Result: read-only launchd checks showed `system/com.koval.asher-auto` and `system/com.koval.venetia-auto` installed under `/Library/LaunchDaemons/`, running as `admin`, configured for 60-second intervals, with repeated runs and last exit code `0`; runtime logs showed header-only polling only.
+  - What changed: corrected shared setup docs plus Asher/Venetia local `AGENTS.md`, `README.md`, `TODO.md`, and `HANDOFF.md` so the current state is live header-only polling with body reads, filing, deletes, external replies, routine authority, and send behavior still gated.
+  - Robert completion report sent, subject `Asher and Venetia live polling verified`, Message-ID `<177730240287.57704.4247128428120772193@kovaldistillery.com>`; draft `drafts/asher-venetia-live-polling-verified-robert-2026-04-27.txt`; source filed to `Handled`.
+
+- 2026-04-26: Added Frank's passive-CC answer-memory mechanism: `CC_LEARNING_LEDGER.md`, `PERSONA.md`, and `AGENTS.md` now tell Frank to learn concise non-secret reusable lessons from Robert CC threads without sending acknowledgements unless action is requested or a real gate exists.
+
 - 2026-04-24: Corrected the follow-up paragraph spacing on Robert's MI / Papers / Mesh thread and answered the complaint directly as a Frank wording fix.
 
 - 2026-04-24: Corrected the MI / Papers / Mesh bridge follow-up so Robert gets one explicit decision question instead of a routing summary.

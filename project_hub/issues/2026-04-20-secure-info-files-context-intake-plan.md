@@ -489,6 +489,115 @@ Current blocker:
 
 - Live execution is blocked because `INFISICAL_MACHINE_ENV_FILE` is not set in this shell, the `infisical` CLI is not currently present on this execution path, and the Frank refresh token is not confirmed in Infisical. The local OAuth client JSON path exists, and the local temporary token path is missing. No OAuth/token/API action was performed.
 
+Superseded on 2026-04-26 for Frank only by Robert's temporary local-token approval below.
+
+## 2026-04-26 Infisical Path Confirmed / OAuth Readiness Check
+
+Robert confirmed Infisical as the persistence path for this lane.
+
+Local non-secret check:
+
+- `infisical` is not currently available on this shell's execution path.
+- No relevant `INFISICAL_*`, `GOOGLE_DRIVE_*`, `KOVAL_TOKEN`, or `SCREENBOX_API_KEY` variables are loaded in this shell.
+- Python Google API dependencies are not installed in the default `python3` environment: `google.oauth2.credentials`, `googleapiclient.discovery`, and `google.auth.transport.requests`.
+- The approved local OAuth client JSON exists at `.private/google-oauth/frank-drive-desktop-client.json`.
+- The OAuth client JSON has required structure: client ID present, client secret present, auth URI present, token URI present, and one redirect URI. Secret values were not printed.
+- `authorize_frank_drive.py show-config --json` resolves the expected metadata-only helper config for `frank.cannoli@kovaldistillery.com`.
+
+Shortest path to working OAuth:
+
+1. Install or provide the approved Infisical CLI/wrapper on the Mac mini execution path.
+2. Load an approved machine-identity env file by setting `INFISICAL_MACHINE_ENV_FILE`, without printing its values.
+3. Install Google API dependencies in a local venv or approved runtime environment, not by modifying system Python unexpectedly.
+4. Run `authorize_frank_drive.py authorize` with default scope `https://www.googleapis.com/auth/drive.metadata.readonly` and login hint `frank.cannoli@kovaldistillery.com`.
+5. Write only the resulting refresh token to Infisical as `GOOGLE_DRIVE_FRANK_REFRESH_TOKEN`.
+6. Ensure Infisical already contains or receives `GOOGLE_DRIVE_CLIENT_ID` and `GOOGLE_DRIVE_CLIENT_SECRET` for the approved `KOVAL Agents Drive` client.
+7. Remove, quarantine, or securely retain the temporary local token file according to the approved cleanup rule after the refresh token is in Infisical.
+8. Verify with `test.sh` and `list.sh 0AP-Yf32mH4IHUk9PVA --json`; both remain metadata-only and target the approved shared Drive.
+
+Still not done:
+
+- no OAuth browser flow was started;
+- no token was created, printed, stored, or migrated;
+- no Infisical read/write was attempted;
+- no Drive API call was made;
+- no Python package install, runtime config change, commit, push, deploy, reset, clean, folder permission change, upload, download, move, or delete was performed.
+
+## 2026-04-26 Frank Local OAuth Completed
+
+Robert approved temporary local token storage to get the connection working immediately, with Infisical remaining the later migration target.
+
+Implementation:
+
+- added local-token fallback support to the reviewed Drive bundle;
+- created local private venv `.private/venvs/gdrive/`;
+- installed Google API Python dependencies into that venv only;
+- completed OAuth for `frank.cannoli@kovaldistillery.com`;
+- stored the local token at `.private/google-oauth/frank-google-drive-token.json`;
+- set `.private/google-oauth/` to `0700` and the token/client files to `0600`.
+
+Verification:
+
+- `GOOGLE_DRIVE_USE_LOCAL_TOKEN=1 .private/venvs/gdrive/bin/python project_hub/artifacts/gdrive-frank-metadata-bundle/drive.py test --drive-id 0AP-Yf32mH4IHUk9PVA`
+- result: authentication OK for shared Drive `0AP-Yf32mH4IHUk9PVA`;
+- `GOOGLE_DRIVE_USE_LOCAL_TOKEN=1 .private/venvs/gdrive/bin/python project_hub/artifacts/gdrive-frank-metadata-bundle/drive.py list --folder-id 0AP-Yf32mH4IHUk9PVA --json`
+- result: `[]`.
+
+Temporary relay note:
+
+- the terminal could not open a GUI browser and direct high-port LAN callback failed;
+- a temporary Workspaceboard relay was used only to forward the OAuth callback to the local listener;
+- the relay source and runtime file were removed after use.
+
+Avignon status:
+
+- Avignon OAuth was initially blocked because the Google login required Avignon's password;
+- Robert asked to move the password from `.private` to `Downloads-shared`; this was refused because shared-folder credential movement is not allowed;
+- Robert then used the approved public-key SSH plus interactive-read pattern to access the credential without moving it into a shared folder;
+- Avignon OAuth completed and wrote `.private/google-oauth/avignon-google-drive-token.json`.
+
+Avignon verification:
+
+- `GOOGLE_DRIVE_USE_LOCAL_TOKEN=1 GOOGLE_DRIVE_LOCAL_TOKEN_FILE=/Users/werkstatt/ai_workspace/.private/google-oauth/avignon-google-drive-token.json .private/venvs/gdrive/bin/python project_hub/artifacts/gdrive-frank-metadata-bundle/drive.py test --drive-id 0AP-Yf32mH4IHUk9PVA`
+- result: authentication OK for shared Drive `0AP-Yf32mH4IHUk9PVA`;
+- `GOOGLE_DRIVE_USE_LOCAL_TOKEN=1 GOOGLE_DRIVE_LOCAL_TOKEN_FILE=/Users/werkstatt/ai_workspace/.private/google-oauth/avignon-google-drive-token.json .private/venvs/gdrive/bin/python project_hub/artifacts/gdrive-frank-metadata-bundle/drive.py list --folder-id 0AP-Yf32mH4IHUk9PVA --json`
+- result: `[]`.
+
+Still not done:
+
+- no Drive content read, upload, download, move, delete, folder permission change, Google Cloud/IAM/Pub/Sub change, Infisical write, commit, push, deploy, reset, clean, or production mutation was performed;
+- no token, client secret, password, auth code, or private credential value was printed or written to docs.
+
+## 2026-04-26 Read/Write Test Upload
+
+Robert clarified that the Drive connection should be read/write for now.
+
+OAuth scope update:
+
+- Frank and Avignon local tokens were re-consented with `https://www.googleapis.com/auth/drive.metadata.readonly` plus `https://www.googleapis.com/auth/drive.file`.
+- Full Drive scope was not requested.
+- Google OAuth scopes cannot be restricted to only one Shared Drive ID; the current restriction is enforced by the local tool defaults and commands targeting shared Drive `0AP-Yf32mH4IHUk9PVA`.
+- For hard isolation later, use a dedicated Google identity or service account that only has AI Cloud access.
+
+Implementation:
+
+- added `upload-text` to the reviewed local Drive helper;
+- created small local test text files under `.private/google-oauth/`;
+- uploaded only to AI Cloud shared Drive `0AP-Yf32mH4IHUk9PVA`;
+- removed the temporary Workspaceboard OAuth relay from source and runtime after consent.
+
+Results:
+
+- Frank/Codex upload: `codex-ai-cloud-write-test-2026-04-26.txt`, Drive ID `17goeACNIHozMVq3XCOIHZMfKBcCzdZZa`, link `https://drive.google.com/file/d/17goeACNIHozMVq3XCOIHZMfKBcCzdZZa/view?usp=drivesdk`.
+- Avignon upload: `avignon-ai-cloud-write-test-2026-04-26.txt`, Drive ID `1y1qng1H79HVyiYQiATJae3feEwiIImig`, link `https://drive.google.com/file/d/1y1qng1H79HVyiYQiATJae3feEwiIImig/view?usp=drivesdk`.
+- Metadata list after upload showed both files in shared Drive `0AP-Yf32mH4IHUk9PVA`.
+
+Still not done:
+
+- no file content readback;
+- no delete, move, folder permission change, broad Drive listing, Google Cloud/IAM/Pub/Sub change, Infisical write, deploy, commit, push, reset, clean, or production mutation;
+- no token, client secret, password, auth code, or private credential value was printed or written to docs.
+
 ## File-Management Clarification Packet
 
 Because the file-management source was truncated after `Project: File management.`, the following details are missing before implementation can start:

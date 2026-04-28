@@ -14,8 +14,27 @@ import json
 import os
 import subprocess
 import sys
+import time
+from pathlib import Path
 
 SECRETS_ENV = os.environ.get("INFISICAL_MACHINE_ENV_FILE", "/srv/secrets/machine-identity.env")
+DEFAULT_CLIENT_FILE = Path(
+    os.environ.get(
+        "GOOGLE_DRIVE_CLIENT_FILE",
+        "/Users/werkstatt/ai_workspace/.private/google-oauth/frank-drive-desktop-client.json",
+    )
+)
+DEFAULT_LOCAL_TOKEN_FILE = Path(
+    os.environ.get(
+        "GOOGLE_DRIVE_LOCAL_TOKEN_FILE",
+        "/Users/werkstatt/ai_workspace/.private/google-oauth/frank-google-drive-token.json",
+    )
+)
+USE_LOCAL_TOKEN = os.environ.get("GOOGLE_DRIVE_USE_LOCAL_TOKEN", "").lower() in {
+    "1",
+    "true",
+    "yes",
+}
 
 SECRET_CLIENT_ID = os.environ.get("GOOGLE_DRIVE_CLIENT_ID_SECRET_NAME", "GOOGLE_DRIVE_CLIENT_ID")
 SECRET_CLIENT_SECRET = os.environ.get("GOOGLE_DRIVE_CLIENT_SECRET_SECRET_NAME", "GOOGLE_DRIVE_CLIENT_SECRET")
@@ -32,6 +51,10 @@ ALLOW_BROAD_LIST = os.environ.get("GOOGLE_DRIVE_ALLOW_BROAD_LIST", "").lower() i
     "yes",
 }
 TOKEN_URI = "https://oauth2.googleapis.com/token"
+
+
+def configured_scopes():
+    return [scope for scope in str(DEFAULT_SCOPE).split() if scope]
 
 
 def load_machine_identity_env():
@@ -106,7 +129,40 @@ def get_secret(name, access_token, env):
     return value
 
 
-def build_credentials():
+def load_oauth_client(path):
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    config = payload.get("installed") or payload.get("web") or payload
+    if not config.get("client_id"):
+        raise RuntimeError(f"OAuth client file missing client_id: {path}")
+    return config
+
+
+def build_local_credentials():
+    from google.oauth2.credentials import Credentials
+
+    client_config = load_oauth_client(DEFAULT_CLIENT_FILE)
+    if not DEFAULT_LOCAL_TOKEN_FILE.exists():
+        raise RuntimeError(
+            "Local Google Drive token file is missing. Run authorize_frank_drive.py authorize first."
+        )
+    token_payload = json.loads(DEFAULT_LOCAL_TOKEN_FILE.read_text(encoding="utf-8"))
+    refresh_token = token_payload.get("refresh_token")
+    if not refresh_token:
+        raise RuntimeError("Local Google Drive token file does not contain a refresh_token.")
+    scopes = token_payload.get("scope", DEFAULT_SCOPE)
+    if isinstance(scopes, str):
+        scopes = scopes.split()
+    return Credentials(
+        token=token_payload.get("access_token"),
+        refresh_token=refresh_token,
+        token_uri=client_config.get("token_uri", TOKEN_URI),
+        client_id=client_config["client_id"],
+        client_secret=client_config.get("client_secret"),
+        scopes=scopes or configured_scopes(),
+    )
+
+
+def build_infisical_credentials():
     from google.oauth2.credentials import Credentials
 
     access_token, env = get_infisical_token()
@@ -120,8 +176,14 @@ def build_credentials():
         token_uri=TOKEN_URI,
         client_id=client_id,
         client_secret=client_secret,
-        scopes=[DEFAULT_SCOPE],
+        scopes=configured_scopes(),
     )
+
+
+def build_credentials():
+    if USE_LOCAL_TOKEN or (not Path(SECRETS_ENV).exists() and DEFAULT_LOCAL_TOKEN_FILE.exists()):
+        return build_local_credentials()
+    return build_infisical_credentials()
 
 
 def build_service():
@@ -184,6 +246,33 @@ def cmd_list(args):
             print(f"{item['id']}\t{item['name']:<60}\t{mime:<35}\t{size_str}")
 
 
+def cmd_upload_text(args):
+    from googleapiclient.http import MediaFileUpload
+
+    service = build_service()
+    target_id = args.folder_id or DEFAULT_TEST_DRIVE_ID
+    source_path = Path(args.path).expanduser()
+    if not source_path.exists():
+        raise RuntimeError(f"Upload source does not exist: {source_path}")
+    metadata = {
+        "name": args.name or source_path.name,
+        "mimeType": "text/plain",
+    }
+    if target_id:
+        metadata["parents"] = [target_id]
+    media = MediaFileUpload(str(source_path), mimetype="text/plain", resumable=False)
+    created = service.files().create(
+        body=metadata,
+        media_body=media,
+        fields="id,name,mimeType,parents,webViewLink",
+        supportsAllDrives=True,
+    ).execute()
+    if args.json:
+        print(json.dumps(created, indent=2))
+    else:
+        print(f"uploaded {created.get('id')} {created.get('name')}")
+
+
 def cmd_folder_id(args):
     import re
 
@@ -221,6 +310,17 @@ def cmd_test(args):
         print(f"  {item['id']}  {item['name']}")
 
 
+def cmd_whoami(args):
+    service = build_service()
+    resp = service.about().get(fields="user(emailAddress,displayName,permissionId)").execute()
+    user = resp.get("user", {})
+    print(f"Drive authentication OK for {user.get('emailAddress', '(unknown email)')}")
+    if user.get("displayName"):
+        print(f"Display name: {user['displayName']}")
+    if user.get("permissionId"):
+        print(f"Permission ID: {user['permissionId']}")
+
+
 def main():
     parser = argparse.ArgumentParser(description="Google Drive metadata-only tool for Frank")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -235,11 +335,21 @@ def main():
     p = sub.add_parser("test", help="Test authentication against the approved shared Drive")
     p.add_argument("--drive-id")
 
+    sub.add_parser("whoami", help="Test authentication and print non-secret Drive user metadata")
+
+    p = sub.add_parser("upload-text", help="Upload one text file to an approved folder or Shared Drive")
+    p.add_argument("path")
+    p.add_argument("--folder-id", default=DEFAULT_TEST_DRIVE_ID)
+    p.add_argument("--name")
+    p.add_argument("--json", action="store_true")
+
     args = parser.parse_args()
     dispatch = {
         "list": cmd_list,
         "folder-id": cmd_folder_id,
         "test": cmd_test,
+        "whoami": cmd_whoami,
+        "upload-text": cmd_upload_text,
     }
     try:
         dispatch[args.command](args)

@@ -2,17 +2,20 @@
 
 ## Purpose
 
-Coordinate email work across Frank, Avignon, Communications Manager, OPS tasks, and Portal records.
+Coordinate email work across Frank, Avignon, the National Outreach AI-worker inbox, Communications Manager, OPS tasks, and Portal records.
 
 ## Call This Role When
 
 - Mailbox work spans Robert/Sonat or multiple assistants.
+- Mailbox work arrives at `nationaloutreach@kovaldistillery.com` or another shared-worker address.
 - An email-derived task needs routing into OPS, Portal, receipts, or a worker queue.
 - A human needs to know who owns an email follow-up.
+- A worker wants to send from an alias and needs the allowed persona checked first.
 
 ## Responsibilities
 
-- Assign email items to Frank, Avignon, Communications Manager, or a module worker.
+- Assign email items to Frank, Avignon, National Outreach, Communications Manager, or a module worker.
+- Enforce `send-from-personas.md`: no send-from identity is enabled unless it maps to a worker role and persona.
 - Keep email-derived tasks from disappearing in inboxes.
 - Track whether a message is draft-only, ready for approval, sent, or blocked.
 - Maintain escalation notes for sensitive items.
@@ -39,6 +42,7 @@ Coordinate email work across Frank, Avignon, Communications Manager, OPS tasks, 
 - Does not own external tone/campaign strategy; that belongs to Communications Manager or Strategist.
 - Does not send sensitive emails without approval.
 - Does not perform mailbox cleanup directly unless assigned as a mailbox worker.
+- Does not add or use Google Workspace send-from aliases without a corresponding role/persona record.
 
 ## Approval Gates
 
@@ -51,6 +55,8 @@ Coordinate email work across Frank, Avignon, Communications Manager, OPS tasks, 
 ## Handoff Surfaces
 
 - Frank/Avignon handoff files.
+- `worker_roles/send-from-personas.md`.
+- National Outreach private setup/log state for non-secret verification events.
 - OPS/Portal task records.
 - Communications queue once defined.
 

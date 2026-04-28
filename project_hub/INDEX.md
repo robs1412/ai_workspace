@@ -1,7 +1,13 @@
 # AI Workspace Project Hub
-Last Updated: 2026-04-24 CDT (Machine: Macmini.lan)
+Last Updated: 2026-04-27 CDT (Machine: Macmini.lan)
 
 ## Open
+
+- **2026-04-27 Whole Foods Portal to OPS Outreach Sync**
+  - Master ID: `AI-INC-20260427-WHOLE-FOODS-OPS-SYNC-01`
+  - Detail log: `project_hub/issues/2026-04-27-whole-foods-ops-sync.md`
+  - Repos: `ai_workspace`; future approved implementation may touch `ops` and authenticated WFM demo portal state
+  - Status: first approved import complete. Import rule is approved-only: buyer-pending or otherwise not-approved Whole Foods events must be noted but not imported as confirmed OPS Outreach events. Credential blocker resolved and private portal crawl covered April-June. Robert supplied buyer-approval evidence for Request `312022`; six OPS Outreach events `857`-`862` and linked shifts `5184`-`5189` were created, with deterministic account/product links. Confirmation was sent from National Outreach to Sonat and Robert. Remaining sync work: requests `310465`, `310468`, `310470`, and `310472` remain pending/not approved and must not be imported until buyer approval evidence exists.
 
 - **2026-04-21 AI Health Manager LaunchAgent Activation**
   - Master ID: `AI-INC-20260421-AI-HEALTH-MANAGER-LAUNCHAGENT-01`
@@ -120,13 +126,43 @@ Last Updated: 2026-04-24 CDT (Machine: Macmini.lan)
   - Detail log: `project_hub/issues/2026-03-02-portal-weekly-shift-vacation-digest.md`
   - Repos: `koval-crm` (portal notifications backend)
 
+## Completed
+
+- **2026-04-27 Barrel Sales API Path Fix**
+  - Master ID: `AI-INC-20260427-BARREL-SALES-API-PATH-01`
+  - Detail log: `project_hub/issues/2026-04-27-barrel-sales-api-path-fix.md`
+  - Repos: `salesreport`, `portal`, `ai_workspace`
+  - Status: completed. Repaired the WH barrel Salesreport CRM wrapper so barrel write actions prefer the active Salesreport session/Codex identity instead of falling through to the stale service-account path. Then fixed and deployed the Portal sold-button path so barrel project/tasks are created before notification send, notification failure cannot skip task creation, and project/task creator attribution follows `barrel_details.sold_by`. Barrels `9513` and `9346` on sample request `2678` are sold by Sonat user id `3`, linked to active projects `367538` and `367554`, and each project now has 13 active child tasks after the two generic promote/social tasks per barrel were canceled and removed from active workflow. All project/task creator, owner, modified, and task-history rows were corrected to Sonat; Matt bottling tasks are `367552` and `367568`; removed promote tasks are `367546`, `367547`, `367562`, and `367563`. Live backend is `koval-crm-backend:v20260427barrelc`, and future sold-button projects no longer create promote/social tasks. Avignon emailed Claude with Sonat and Robert copied, then sent a correction telling Claude not to work from the removed promote task IDs. No credential/token value was printed and no password reset, OAuth change, live pull, commit, push, pricing/account commitment, or unrelated production mutation was performed.
+
+- **2026-04-27 Barrel Sales Manager Role Setup**
+  - Master ID: `AI-INC-20260427-BARREL-SALES-MANAGER-ROLE-01`
+  - Detail log: `project_hub/issues/2026-04-27-barrel-sales-manager-role.md`
+  - Repos: `ai_workspace`, `workspaceboard`
+  - Status: completed docs/source/organigram setup from Robert's direct chat request. Added the Barrel Sales Manager role for WH Barrel Program reservations, barrel sample requests, sold/unsold state, bottling details, task flow, and Avignon/Sonat barrel-program follow-through. Added Avignon barrel-program guidance and registered the role in the Workspaceboard organigram feed. No live Salesreport/Portal/OPS action, email send, auth/OAuth, deploy, live pull, commit, push, reset, clean, or production mutation was performed.
+
+- **2026-04-27 National Outreach AI Worker Inbox**
+  - Master ID: `AI-INC-20260427-NATIONALOUTREACH-AI-WORKER-INBOX-01`
+  - Detail log: `project_hub/issues/2026-04-27-nationaloutreach-ai-worker-inbox.md`
+  - Repos: `ai_workspace`, machine-local National Outreach mailbox setup state
+  - Status: completed; full-body/send-capable runtime installed; Codex/National Outreach Drive API OAuth pending. `nationaloutreach@kovaldistillery.com` is documented as the main shared AI-worker inbox while Frank and Avignon remain separate. Send-from identities now have a registry at `worker_roles/send-from-personas.md`, mapped to worker roles/personas before use; `macee.maddox@kovaldistillery.com` is no longer allowed as a send-from identity because Macee has left. IMAP/SMTP setup verification succeeded, standard AI-worker labels were created, full-body review succeeded for 300 recent messages, and approved queued send processing is enabled. First route counts: Outreach Coordinator `222`, Marketing Manager `49`, Email Coordinator `11`, Internal Communicator `5`, Security Guard/sensitive-review `13`. Robert installed `com.koval.nationaloutreach-auto`. Codex/National Outreach Drive API bundle is prepared under `project_hub/artifacts/gdrive-codex-nationaloutreach-bundle/`; OAuth for `nationaloutreach@kovaldistillery.com` remains the next interactive step.
+
+- **2026-04-26 phpList COT Campaign Send Screen**
+  - Master ID: `AI-INC-20260426-PHPLIST-COT-SEND-SCREEN-01`
+  - Detail log: `project_hub/issues/2026-04-26-phplist-cot-campaign-send-screen.md`
+  - Repos: `lists`, live phpList database
+  - Status: completed. Draft campaign `552` was structurally normalized for phpList send/test handling, internal lists `72` and `73` were assigned owner `1`, and a defensive ownerless-list guard was added in `sendemaillib.php`. One requested test for campaign `552` was sent to Robert. Dmytro's sendable phpList subscriber was added to list `95` (`Management Group incl Dmytro`), and Workspaceboard now reports Lists open count `0`. Local commit `c9373b2` exists; GitHub push was blocked by credential-helper error `-25308`, so the one-file live patch was deployed over SSH with a live backup.
+
+- **2026-04-26 Avignon Live Data Reports**
+  - Master ID: `AI-INC-20260426-AVIGNON-LIVE-DATA-REPORTS-01`
+  - Detail log: `project_hub/issues/2026-04-26-avignon-live-data-reports.md`
+  - Repos: `salesreport`, `contactreport`, `ai_workspace`
+  - Status: completed. Live Salesreport is at `409e791`, live Contactreport is at `4d81ec2`, unauthenticated checks land on the Salesreport login gate without exposing report content, and Sonat was sent the corrected gated links plus four additional live strategic/outreach report links.
+
 - **2026-02-26 Logout Reliability Regression (Portal/OPS/Login SSO)**
   - Master ID: `AI-INC-20260226-LOGOUT-02`
   - Detail log: `project_hub/issues/2026-02-26-logout-reliability-regression.md`
   - Repos: `login` (shared SSO/logout layer affecting `portal` and `ops`)
   - Status: default OPS/Portal persistence policy approved 2026-04-17; explicit logout revokes Login/OPS/Portal artifacts globally, and next-day Portal/OPS access requires a fresh Login handoff/user action unless longer app persistence is explicitly approved. Implementation remains gated on Security Guard review and no live/session/credential/deploy action is approved by this policy record.
-
-## Completed
 
 - **2026-04-23 BID Live Transmit Route Diagnostic**
   - Master ID: `AI-INC-20260423-BID-LIVE-TRANSMIT-ROUTE-01`

@@ -18,6 +18,7 @@ Last Updated: 2026-04-23 16:10 CDT (Machine: Macmini.lan)
 - If a secret is accidentally exposed in chat, rotate it immediately and confirm rotation without re-printing the new secret.
 - For account setup tasks, report only non-secret metadata in chat (username, user ID, role/group, status).
 - Share or store credentials only through approved secure channels outside chat.
+- Approved local-owner access pattern for machine-local credentials: use public-key SSH to the source machine, open the credential interactively on that machine, and have Robert type it directly into the target login/consent screen. Do not move credential files into shared folders such as `Downloads-shared`, and do not print credential values with `cat`, `grep`, `sed`, screenshots, chat, logs, git, or project notes. See `docs/credential-access-methods.md`.
 - `.205`/Papers/MI access documentation must stay non-secret and approval-oriented. Do not store passwords, credential paths, private key material, operational bypass details, or step-by-step unauthorized access instructions in `AGENTS.md`, TODOs, handoffs, project-hub logs, Papers records, chat, or git. If future `.205` or Papers access is approved, document only the owner approval, allowed scope, secure credential channel, audit/logging expectation, rollback/recovery contact, and explicit execution gate.
 
 ## Codex Terminal Install (npm)

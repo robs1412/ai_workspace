@@ -1,6 +1,6 @@
 # Codex / Claude / Papers Integration Plan
 
-- Last Updated: 2026-04-26 CDT (Machine: Macmini.lan)
+- Last Updated: 2026-04-27 CDT (Machine: Macmini.lan)
 
 - Master ID: `AI-INC-20260419-CODEX-CLAUDE-PAPERS-01`
 - Date: 2026-04-19
@@ -81,6 +81,94 @@ Frank sent Claude a token setup request at 15:39 CDT, copied to Robert and Dmytr
 - subject: `Frank follow-up: MCP token setup for Codex/Frank runtime`
 
 The request asks for non-secret setup metadata only: Infisical project/environment/path, expected environment variable names, Mac mini loading method, any `infisical` CLI install step, minimum read-only scope, separate Papers logging/write scope if different, and the approved first Papers write-log target. It explicitly asks Claude not to send raw token values or other secret material in email.
+
+## 2026-04-26 Robert Approval On Token Setup Coordination
+
+Robert replied at 15:53 CDT that the Dmytro MCP token setup path sounds good.
+
+- source Message-ID: `<CAAtX44aALTT3p8n=FSh-kJSrdynhWJJA-WucFRE69QXV8iv6yw@mail.gmail.com>`
+- dedupe key: `frank-direct-primary-CAAtX44aALTT3p8n-FSh-kJSrdynhWJJA-WucFRE69QXV8iv6yw-mail-gmail-com`
+- classification: runtime-change approval evidence
+- visible routes: runtime source route `829ca764` / `Frank direct Robert: Re: Frank follow-up: MCP token setup for Codex/Frank runtime`; lane context route `ff8ac103` / `Claude protected-side packet follow-up`
+- Robert reports: runtime blocker report `<177723704055.51434.16419250366598123221@kovaldistillery.com>`; manual completion report `<177723704451.52327.11294613156516533780@kovaldistillery.com>`
+
+Durable effect: approval is attached only to the existing non-secret Dmytro/Claude setup coordination. It does not authorize Frank/Codex to read, print, store, rotate, or write token values from this pass, and it does not authorize MCP/runtime config changes, deploys, `.205` access, MI/Papers private reads, or write/logging tools.
+
+Next safe action: Dmytro/Claude should provide the requested non-secret Infisical/env setup metadata or confirm the setup is complete; any raw secret values must stay in the approved secret channel and out of email, chat, TODO/HANDOFF, project notes, and git.
+
+## 2026-04-26 Claude Token Packet Verified
+
+Robert asked Codex to check Claude's token email to Frank. The packet was found in Frank Gmail All Mail / Handled state.
+
+Trace:
+
+- Message-ID: `<56ab638e5cbfdb26c00bc1bd53833cf0.claude@kovaldistillery.com>`
+- subject: `Re: Frank follow-up: MCP token setup for Codex/Frank runtime`
+- date: 2026-04-26 16:17 CDT
+
+Non-secret validation:
+
+- `KOVAL_TOKEN` is present and JWT-shaped.
+- `SCREENBOX_API_KEY` is present.
+- Plain non-MCP curl requests return `406 application/json`, which indicates the server expects MCP-compatible headers rather than proving auth failure.
+- Proper MCP JSON-RPC `initialize` requests returned `200 text/event-stream` with result objects for Papers, Mesh, Rein, and Screenbox.
+
+Current effect:
+
+- Token delivery is no longer the blocker for ephemeral/manual MCP checks.
+- Durable Codex/Frank runtime configuration remains gated because the raw values were received by email rather than through the preferred Infisical/env path.
+- Before writing config, env files, or secrets, decide the approved persistence path: Infisical/env loading preferred, or explicit temporary local storage with cleanup/migration rules.
+
+## 2026-04-27 Durable Path Chosen
+
+Robert approved Codex/AI Manager choosing the durable path without another yes/no approval round.
+
+Chosen path:
+
+- Infisical-backed durable secret/config loading for Codex/Frank runtime.
+- Temporary Mac mini local-only validation is allowed only as a bridge when necessary.
+- Raw tokens, private keys, session cookies, and credential values must not be printed, emailed, committed, or written to chat, TODOs, handoffs, project notes, or git.
+
+Current Frank/Claude state:
+
+- Claude sent a tracked reply on 2026-04-27 12:01 CDT for task `#1425`, summarized in Frank automation state as complete with all subtasks created/dispatched.
+- Robert's later status follow-up reused visible route `e4bc7286`.
+- AI Workspace route `ff8ac103` was updated with the durable-path decision and instructed to convert Claude's newer instructions into a concrete non-secret implementation packet before asking Robert again.
+
+Next safe action:
+
+- Use the Infisical path as the default.
+- Implement as a source-reviewed loader contract first, not as ad hoc token persistence: Codex/Frank runtime should obtain `KOVAL_TOKEN` and `SCREENBOX_API_KEY` from Infisical at process start or manual command invocation, expose them only as process environment, and avoid writing raw values into repo files, TODO/HANDOFF, project notes, chat, or email.
+- Use the email-delivered token packet only for already-approved temporary Mac mini local validation, not as the durable source of truth.
+- Before coding or installing a runtime change, require the exact non-secret loader contract: Infisical project, environment, secret path, secret names for `KOVAL_TOKEN` and `SCREENBOX_API_KEY`, and the reviewed loader/wrapper or CLI install command/path for Mac mini.
+- If implementation still lacks exact non-secret setup metadata, stop only on that specific missing item rather than asking Robert for another broad approval.
+- Keep Papers/Mesh/Rein mutation-capable tools closed unless a separate write/logging slice is explicitly scoped.
+
+Scope preserved:
+
+- no token value was printed, copied into docs, committed, or persisted;
+- no Codex/Frank config file was edited;
+- no Papers/Mesh/Rein/Screenbox mutation tool was called;
+- no `.205`, OAuth, deploy, runtime restart, commit, push, reset, clean, CRM/Portal/OPS mutation, or external-sensitive send was performed.
+
+## 2026-04-27 MCP Local Fallback Loader
+
+AI Manager added `scripts/mcp_runtime_env.py` and `docs/mcp-runtime-secret-loading.md`.
+
+Current loader behavior:
+
+- prefer Infisical when `INFISICAL_EXPORT_COMMAND` is configured, or when `INFISICAL_PROJECT_ID`, `INFISICAL_ENV`, and `INFISICAL_PATH` are configured with an available `infisical` CLI;
+- otherwise use owner-only local fallback `.private/mcp-runtime/mcp.env`;
+- print only non-secret status, source metadata, and key-presence checks.
+
+Robert approved using local storage if needed. The fallback was populated from Claude's already-received token packet in Frank `Handled` without printing raw values. The file is chmod `600` and remains ignored by git under `.private/`.
+
+Non-secret verification:
+
+- `scripts/mcp_runtime_env.py status` reports `KOVAL_TOKEN` and `SCREENBOX_API_KEY` present, with `KOVAL_TOKEN` JWT-shaped.
+- MCP `initialize` checks through the loader returned `200 text/event-stream` and result payloads for Papers, Mesh, Rein, and Screenbox.
+
+Remaining preferred cleanup path: migrate the same required keys to Infisical once the non-secret contract is available: project/environment, secret path, secret names, and reviewed loader/wrapper or CLI install command. No token values were printed, emailed, committed, or written to TODO/HANDOFF/project notes.
 
 ## 2026-04-24 `.205` Login Metadata Correction
 
@@ -730,6 +818,25 @@ Not done: no live Papers body read, credentials/OAuth/auth/token work, `.205`, M
 Robert asked Frank to read the Papers record and try to connect. Frank did not open or read the Papers document body. Metadata-only `GET` checks to `https://papers.koval.lan/mcp` and the supplied Papers task URL both reached the Papers host and returned `HTTP/2 307` redirects to `https://mi.koval.lan/login?...` with zero response body bytes.
 
 Result: Papers is reachable, but the current Frank/Codex path is stopped at MI login. The source-only wrapper slice is now implemented; body-level reads still need the approved Codex/Frank access identity and exact allowed scopes, collections, or document IDs. No OAuth, token, credential, `.205`, Papers body read/write, MCP config/runtime, deploy, Portal/CRM/OPS mutation, or external-sensitive send occurred.
+
+## 2026-04-27 MCP Read-Only Discovery
+
+After Robert approved using the local fallback bridge first, Codex used `scripts/mcp_runtime_env.py` for read-only MCP checks. No raw token values were printed, no mutation tools were called, and no Papers/Mesh/Rein writes were attempted.
+
+Papers search now finds the relevant records:
+
+- `#1425`: `teams/ai-team/agents/pm/assessments/2026-04-23-task-1425.md`, GUID `2f17dd19-f946-4665-9b0f-ef7e41c67fbb`, title `Assessment: Workspaceboard Bridge Access Packet (Task #1425)`.
+- `#1429`: `teams/it/infrastructure/worklog/2026-04-23-codex-frank-access-packet.md`, GUID `c06213b1-acf7-4340-afaf-60be4cf75b3f`, title `Codex Access Packet - Apr 23`.
+- `#1457`: `teams/ai-team/agents/pm/assessments/2026-04-26-task-1457.md`, GUID `0b3b8562-ae07-4c99-b13f-a2092e7a6c65`, title `Assessment: Codex/Frank runtime token setup on Mac mini`.
+- Token setup worklog: `teams/it/infrastructure/worklog/2026-04-26-codex-frank-mcp-token-setup.md`, GUID `c7d38d75-3e73-420c-ad65-56fd5490b8d5`, title `Codex/Frank MCP Token Setup - Apr 26`.
+
+However, `papers_get` returns metadata only for these records: `content: null`, with no versions and no threads. Mesh search returns no matching records for `#1425`, `#1429`, `#1457`, `Claude protected-side access packet`, or `MCP token setup`. Rein initializes and exposes workflow/task tools, but `task_status` does not recognize Planner IDs `1425`, `1429`, or `1457`.
+
+Current result: MCP connectivity and auth are working, but the body-bearing access packet is still missing from the reachable records. Next safe action is to ask Claude/Dmytro to republish/fill the Papers packet body or supply the actual body-bearing Papers path. The Infisical cleanup path remains preferred, but it is not blocking read-only MCP connectivity through the local fallback.
+
+Follow-up sent: Frank emailed Claude, copied Robert and Dmytro, at 2026-04-27 16:49 CDT. Task id `frank-claude-papers-packet-body-needed-2026-04-27`; subject `Codex MCP follow-up: Papers packet body is empty`; Message-ID `<177732656712.98163.9008625912925477410@kovaldistillery.com>`; draft `frank/drafts/claude-papers-packet-body-needed-2026-04-27.txt`. The email asks Claude to republish/fill the Papers packet body, provide the actual body-bearing Papers path/GUID, or reply with the non-secret packet body directly, and explicitly excludes credentials, tokens, private keys, session cookies, raw secret values, and credential file paths.
+
+2026-04-27 follow-up result: Claude updated task `#1474` with the `include_content` guidance, and Dmytro asked whether Frank could fetch bodies with those instructions. Frank verified read-only through `scripts/mcp_runtime_env.py`: keeping the MCP session ID from `initialize` and calling `papers_get` with `guid` plus `include_content: true` returns body content for current access packet GUID `b46ee853-96aa-4181-a6c2-a947517df78f`, task `#1425`, task `#1429`, task `#1457`, and the MCP token setup worklog. Frank replied to Claude with Robert and Dmytro copied, Message-ID `<177733555426.15825.6889489241668158360@kovaldistillery.com>`, and filed Robert's direct source to `Handled`. The packet-body verification blocker is closed; remaining cleanup is the preferred Infisical/durable runtime path. No Papers writes, OAuth/auth/token storage change, raw token output, packet body text in email/chat/docs, `.205`, CRM/Portal/OPS mutation, deploy, commit, push, reset, or clean occurred.
 
 Visible worker/session routing at 2026-04-19 12:13 CDT:
 

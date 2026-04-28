@@ -61,6 +61,10 @@ Do not put opaque internal labels in owner-facing summaries, blocker emails, mor
 
 Write the plain-English business context first: person, company, account, requested action, current blocker, missing decision, recommended next step, and what the assistant will do after the answer arrives. If the business details are unknown, say that and ask for a simple human-readable packet or table instead of asking the owner to resolve an internal id.
 
+## First-Person Self-Reference Rule
+
+When an email worker writes as itself, it should refer to itself in the first person, not the third person. For example, write "here is my internal memo" instead of "here is Asher's internal memo" when the message is sent from Asher's persona. Names remain appropriate in signatures, role labels, headers, or when one worker is describing another worker.
+
 ## Current Source Reference
 
 - Source Message-ID: `<CAAtX44a6UFPuHJd7tn83fsMjAiV+mbesOk35=r23yDTvY4u=bw@mail.gmail.com>`
@@ -79,3 +83,4 @@ The related Avignon sessions were recorded as visible references only. They were
 - `2026-04-20-shared-reminder-approval-request-clarity.md`: non-secret reminder and approval-request clarity rule for Claude/bridge/email workers. Use a real approved Papers/work-record link when allowed, or a clear human-readable item description, requested approval, and safe next action. Do not send context-poor Message-ID-only reminders.
 - 2026-04-22 clarification: Summary Worker, Frank, and Avignon must translate internal source labels into plain-English business context before owner-facing output. Example shape: "Stephen Beck already exists in CRM; decide whether to leave him as-is or link/update that existing contact under a named account," not an internal source-index blocker label.
 - `2026-04-22-shared-email-worker-customization-boundary.md`: Frank and Avignon share mechanics, not persona. Robert approved automatic enforcement on 2026-04-22: classify each operating change as `shared mechanic`, `Frank customization`, `Avignon customization`, or `runtime change` before implementation. Shared routing/reporting/dedupe mechanics live here or in shared policy; Frank customization stays in Frank docs, Avignon customization stays in Avignon docs and must respect Sonat's SOP/persona references without exposing private source text.
+- `2026-04-27-shared-first-person-self-reference.md`: all email workers and approved send-from personas should refer to themselves in first person when writing as themselves, such as "my internal memo" rather than "Asher's internal memo."

@@ -9,6 +9,7 @@ import argparse
 import base64
 import hashlib
 import json
+import os
 import secrets
 import subprocess
 import sys
@@ -20,15 +21,24 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 from pathlib import Path
 
 DEFAULT_CLIENT_FILE = Path(
-    "/Users/werkstatt/ai_workspace/.private/google-oauth/frank-drive-desktop-client.json"
+    os.environ.get(
+        "GOOGLE_DRIVE_CLIENT_FILE",
+        "/Users/werkstatt/ai_workspace/.private/google-oauth/frank-drive-desktop-client.json",
+    )
 )
 DEFAULT_TOKEN_FILE = Path(
-    "/Users/werkstatt/ai_workspace/.private/google-oauth/frank-google-drive-token.json"
+    os.environ.get(
+        "GOOGLE_DRIVE_LOCAL_TOKEN_FILE",
+        "/Users/werkstatt/ai_workspace/.private/google-oauth/frank-google-drive-token.json",
+    )
 )
-DEFAULT_SCOPE = "https://www.googleapis.com/auth/drive.metadata.readonly"
-DEFAULT_LOGIN_HINT = "frank.cannoli@kovaldistillery.com"
+DEFAULT_SCOPE = os.environ.get("GOOGLE_DRIVE_SCOPE", "https://www.googleapis.com/auth/drive.metadata.readonly")
+DEFAULT_LOGIN_HINT = os.environ.get("GOOGLE_DRIVE_LOGIN_HINT", "frank.cannoli@kovaldistillery.com")
 GOOGLE_AUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth"
 GOOGLE_TOKEN_URL = "https://oauth2.googleapis.com/token"
+GOOGLE_DEVICE_CODE_URL = "https://oauth2.googleapis.com/device/code"
+CALLBACK_BIND = os.environ.get("GOOGLE_DRIVE_OAUTH_CALLBACK_BIND", "127.0.0.1")
+RELAY_FILE = os.environ.get("GOOGLE_DRIVE_OAUTH_RELAY_FILE", "")
 
 
 def parse_args() -> argparse.Namespace:
@@ -72,6 +82,56 @@ def parse_args() -> argparse.Namespace:
         help="Print the URL only; do not try to open the local browser.",
     )
 
+    device = subparsers.add_parser(
+        "device-authorize",
+        help="Run the device-code OAuth flow for approval from another browser.",
+    )
+    device.add_argument(
+        "--scope",
+        action="append",
+        default=[],
+        help="OAuth scope to request. Defaults to drive.metadata.readonly.",
+    )
+    device.add_argument(
+        "--timeout",
+        type=int,
+        default=900,
+        help="Seconds to wait for device authorization.",
+    )
+
+    manual = subparsers.add_parser(
+        "manual-authorize",
+        help="Run OAuth consent and read the failed localhost callback URL from a private file.",
+    )
+    manual.add_argument(
+        "--scope",
+        action="append",
+        default=[],
+        help="OAuth scope to request. Defaults to drive.metadata.readonly.",
+    )
+    manual.add_argument(
+        "--login-hint",
+        default=DEFAULT_LOGIN_HINT,
+        help="Google account hint for the consent screen.",
+    )
+    manual.add_argument(
+        "--callback-file",
+        required=True,
+        help="Private file where the full failed localhost callback URL will be pasted.",
+    )
+    manual.add_argument(
+        "--redirect-port",
+        type=int,
+        default=58080,
+        help="Loopback redirect port to include in the OAuth URL.",
+    )
+    manual.add_argument(
+        "--timeout",
+        type=int,
+        default=900,
+        help="Seconds to wait for the callback file.",
+    )
+
     show = subparsers.add_parser("show-config", help="Print the resolved local config.")
     show.add_argument("--json", action="store_true")
     return parser.parse_args()
@@ -86,7 +146,7 @@ def load_client_config(path: Path) -> dict:
 
 
 def default_scopes(explicit_scopes: list[str]) -> list[str]:
-    return explicit_scopes or [DEFAULT_SCOPE]
+    return explicit_scopes or [scope for scope in str(DEFAULT_SCOPE).split() if scope]
 
 
 def ensure_parent_dir(path: Path) -> None:
@@ -102,6 +162,29 @@ def save_token(path: Path, token_payload: dict) -> None:
         normalized["expires_at"] = int(time.time()) + int(expires_in) - 60
     path.write_text(json.dumps(normalized, indent=2, ensure_ascii=True) + "\n", encoding="utf-8")
     path.chmod(0o600)
+
+
+def write_relay_file(path: str, port: int, redirect_uri: str) -> None:
+    if not path:
+        return
+    relay_path = Path(path).expanduser()
+    ensure_parent_dir(relay_path)
+    payload = {
+        "port": port,
+        "redirect_uri": redirect_uri,
+        "created_at": int(time.time()),
+    }
+    relay_path.write_text(json.dumps(payload, indent=2, ensure_ascii=True) + "\n", encoding="utf-8")
+    relay_path.chmod(0o600)
+
+
+def remove_relay_file(path: str) -> None:
+    if not path:
+        return
+    try:
+        Path(path).expanduser().unlink()
+    except FileNotFoundError:
+        pass
 
 
 def urlsafe_b64(data: bytes) -> str:
@@ -156,7 +239,7 @@ class OAuthCallbackHandler(BaseHTTPRequestHandler):
 
 
 def run_local_callback_server() -> tuple[HTTPServer, threading.Thread]:
-    server = HTTPServer(("127.0.0.1", 0), OAuthCallbackHandler)
+    server = HTTPServer((CALLBACK_BIND, 0), OAuthCallbackHandler)
     thread = threading.Thread(target=server.handle_request, daemon=True)
     thread.start()
     return server, thread
@@ -182,6 +265,52 @@ def exchange_code_for_tokens(client_config: dict, code: str, redirect_uri: str, 
     )
     with urllib.request.urlopen(request, timeout=30) as response:
         return json.loads(response.read().decode("utf-8"))
+
+
+def request_device_code(client_config: dict, scopes: list[str]) -> dict:
+    payload = {
+        "client_id": client_config["client_id"],
+        "scope": " ".join(scopes),
+    }
+    client_secret = client_config.get("client_secret")
+    if client_secret:
+        payload["client_secret"] = client_secret
+    data = urllib.parse.urlencode(payload).encode("utf-8")
+    request = urllib.request.Request(
+        GOOGLE_DEVICE_CODE_URL,
+        data=data,
+        headers={"Content-Type": "application/x-www-form-urlencoded"},
+        method="POST",
+    )
+    with urllib.request.urlopen(request, timeout=30) as response:
+        return json.loads(response.read().decode("utf-8"))
+
+
+def exchange_device_code_for_tokens(client_config: dict, device_code: str) -> tuple[dict | None, str | None]:
+    payload = {
+        "client_id": client_config["client_id"],
+        "device_code": device_code,
+        "grant_type": "urn:ietf:params:oauth:grant-type:device_code",
+    }
+    client_secret = client_config.get("client_secret")
+    if client_secret:
+        payload["client_secret"] = client_secret
+    data = urllib.parse.urlencode(payload).encode("utf-8")
+    request = urllib.request.Request(
+        GOOGLE_TOKEN_URL,
+        data=data,
+        headers={"Content-Type": "application/x-www-form-urlencoded"},
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=30) as response:
+            return json.loads(response.read().decode("utf-8")), None
+    except urllib.error.HTTPError as exc:
+        try:
+            payload = json.loads(exc.read().decode("utf-8"))
+        except Exception:
+            payload = {}
+        return None, payload.get("error") or f"http_{exc.code}"
 
 
 def open_browser(url: str) -> None:
@@ -214,6 +343,7 @@ def command_authorize(args: argparse.Namespace) -> int:
 
     server, thread = run_local_callback_server()
     redirect_uri = f"http://127.0.0.1:{server.server_port}/oauth2callback"
+    write_relay_file(RELAY_FILE, int(server.server_port), redirect_uri)
     state = secrets.token_urlsafe(24)
     code_verifier = urlsafe_b64(secrets.token_bytes(64))
     code_challenge = urlsafe_b64(hashlib.sha256(code_verifier.encode("ascii")).digest())
@@ -232,6 +362,7 @@ def command_authorize(args: argparse.Namespace) -> int:
     thread.join(args.timeout)
     query = getattr(server, "oauth_query", None)
     server.server_close()
+    remove_relay_file(RELAY_FILE)
     if not query:
         print("Authorization callback was not received before timeout.", file=sys.stderr)
         return 1
@@ -253,10 +384,129 @@ def command_authorize(args: argparse.Namespace) -> int:
     return 0
 
 
+def command_device_authorize(args: argparse.Namespace) -> int:
+    client_path = Path(args.client_file).expanduser()
+    token_path = Path(args.token_file).expanduser()
+    client_config = load_client_config(client_path)
+    scopes = default_scopes(args.scope)
+    device_payload = request_device_code(client_config, scopes)
+    verification_url = (
+        device_payload.get("verification_url")
+        or device_payload.get("verification_uri")
+        or "https://www.google.com/device"
+    )
+    user_code = device_payload["user_code"]
+    device_code = device_payload["device_code"]
+    interval = int(device_payload.get("interval", 5))
+    expires_in = int(device_payload.get("expires_in", args.timeout))
+    deadline = time.time() + min(args.timeout, expires_in)
+
+    print(f"Client file: {client_path}", flush=True)
+    print(f"Token file: {token_path}", flush=True)
+    print(f"Scopes: {' '.join(scopes)}", flush=True)
+    print(f"Verification URL: {verification_url}", flush=True)
+    print(f"User code: {user_code}", flush=True)
+    print("Waiting for Google device authorization...", flush=True)
+
+    while time.time() < deadline:
+        token_payload, error = exchange_device_code_for_tokens(client_config, device_code)
+        if token_payload:
+            save_token(token_path, token_payload)
+            print("authorized", flush=True)
+            print(token_path, flush=True)
+            return 0
+        if error == "authorization_pending":
+            time.sleep(interval)
+            continue
+        if error == "slow_down":
+            interval += 5
+            time.sleep(interval)
+            continue
+        print(f"Google returned an OAuth error: {error}", file=sys.stderr, flush=True)
+        return 1
+    print("Authorization was not completed before timeout.", file=sys.stderr, flush=True)
+    return 1
+
+
+def read_manual_callback(callback_file: Path, timeout: int) -> str | None:
+    deadline = time.time() + timeout
+    last_size = -1
+    while time.time() < deadline:
+        if callback_file.exists():
+            try:
+                text = callback_file.read_text(encoding="utf-8").strip()
+            except UnicodeDecodeError:
+                text = callback_file.read_text(errors="ignore").strip()
+            if text and len(text) == last_size:
+                return text
+            last_size = len(text)
+        time.sleep(2)
+    return None
+
+
+def command_manual_authorize(args: argparse.Namespace) -> int:
+    client_path = Path(args.client_file).expanduser()
+    token_path = Path(args.token_file).expanduser()
+    callback_file = Path(args.callback_file).expanduser()
+    ensure_parent_dir(callback_file)
+    try:
+        callback_file.unlink()
+    except FileNotFoundError:
+        pass
+    callback_file.touch(mode=0o600, exist_ok=True)
+    callback_file.chmod(0o600)
+
+    client_config = load_client_config(client_path)
+    scopes = default_scopes(args.scope)
+    redirect_uri = f"http://127.0.0.1:{int(args.redirect_port)}/oauth2callback"
+    state = secrets.token_urlsafe(24)
+    code_verifier = urlsafe_b64(secrets.token_bytes(64))
+    code_challenge = urlsafe_b64(hashlib.sha256(code_verifier.encode("ascii")).digest())
+    auth_url = build_auth_url(client_config, redirect_uri, scopes, args.login_hint, state, code_challenge)
+
+    print(f"Client file: {client_path}", flush=True)
+    print(f"Token file: {token_path}", flush=True)
+    print(f"Redirect URI: {redirect_uri}", flush=True)
+    print(f"Scopes: {' '.join(scopes)}", flush=True)
+    print(f"Callback file: {callback_file}", flush=True)
+    print("", flush=True)
+    print(auth_url, flush=True)
+    print("", flush=True)
+    print("Paste the full failed localhost callback URL into the callback file.", flush=True)
+
+    callback_text = read_manual_callback(callback_file, args.timeout)
+    if not callback_text:
+        print("Manual callback file was not populated before timeout.", file=sys.stderr, flush=True)
+        return 1
+
+    parsed = urllib.parse.urlparse(callback_text.splitlines()[0].strip())
+    query = urllib.parse.parse_qs(parsed.query)
+    if query.get("state", [""])[0] != state:
+        print("OAuth state mismatch.", file=sys.stderr, flush=True)
+        return 1
+    if "error" in query:
+        print(f"Google returned an OAuth error: {query['error'][0]}", file=sys.stderr, flush=True)
+        return 1
+    code = query.get("code", [""])[0]
+    if not code:
+        print("Authorization code missing from manual callback URL.", file=sys.stderr, flush=True)
+        return 1
+
+    token_payload = exchange_code_for_tokens(client_config, code, redirect_uri, code_verifier)
+    save_token(token_path, token_payload)
+    callback_file.write_text("", encoding="utf-8")
+    callback_file.chmod(0o600)
+    print("authorized", flush=True)
+    print(token_path, flush=True)
+    return 0
+
+
 def main() -> int:
     args = parse_args()
     dispatch = {
         "authorize": command_authorize,
+        "device-authorize": command_device_authorize,
+        "manual-authorize": command_manual_authorize,
         "show-config": command_show_config,
     }
     return dispatch[args.command](args)

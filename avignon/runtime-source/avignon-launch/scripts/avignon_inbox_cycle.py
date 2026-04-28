@@ -1102,20 +1102,14 @@ def route_message(message: dict, sent_log: dict, assistant_email: str) -> tuple[
     lowered = f"{subject} {from_email}".lower()
     decision_items: list[str] = []
 
-    if (
-        from_email == SONAT_EMAIL
-        and is_copied_only(message, assistant_email)
-        and not explicitly_requests_assistant_action(message, "Avignon", assistant_email)
+    if is_copied_only(message, assistant_email) and not explicitly_requests_assistant_action(
+        message,
+        "Avignon",
+        assistant_email,
     ):
         body = " ".join(str(message.get("body") or "").split()).lower()
         if re.fullmatch(r"(ok|okay|thanks|thank you|ok thanks|okay thanks|ok thank you|got it|sounds good|done)[.! ]*", body):
             return "tracked-reply-info", "logged-no-action", decision_items
-
-    if (
-        from_email == ROBERT_EMAIL
-        and is_copied_only(message, assistant_email)
-        and not explicitly_requests_assistant_action(message, "Avignon", assistant_email)
-    ):
         return "cc-fyi-no-action", "logged-no-action", decision_items
 
     if is_sonat_robert_calendar_directive(message):

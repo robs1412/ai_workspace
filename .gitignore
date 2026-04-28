@@ -42,6 +42,9 @@ frank/drafts/completion-confirmation-*.txt
 # Mailbox/runtime-generated assistant artifacts
 frank/*.jsonl
 avignon/*.jsonl
+asher/*.jsonl
+venetia/*.jsonl
+nationaloutreach/*.jsonl
 frank/drafts/
 avignon/drafts/
 *.send-body.txt

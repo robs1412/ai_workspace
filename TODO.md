@@ -1,8 +1,20 @@
 # TODO — ai_workspace
 
-Updated: 2026-04-26 CDT (Machine: Macmini.lan)
+Updated: 2026-04-27 CDT (Machine: Macmini.lan)
 
 ## In Progress
+
+- National Outreach / Whole Foods portal to OPS Outreach sync is active; first approved import is complete and future pending approvals still need refresh.
+  - Directive recorded at `nationaloutreach/WHOLE_FOODS_TASTING_PLANNING.md`; project log `project_hub/issues/2026-04-27-whole-foods-ops-sync.md`.
+  - Rule: import only buyer-approved Whole Foods portal events into OPS Outreach; pending/not-approved events must be noted in the import report and not treated as scheduled OPS events.
+  - WFM account-facing tasting requests should remain KOVAL Bourbon-only unless explicitly approved otherwise; internal COTeam notes should add suggested samples from recent account sales when available, including what sold and when it was last sold.
+  - Follow-up implementation needed: add a routed Salesreport/OPS integrated check for recent account product orders using `https://www.koval-distillery.com/salesreport/salesinvoicereport.php` as the initial reference.
+  - Credential blocker resolved: `.private/logins/wholefoods.txt` is present and a private authenticated crawl succeeded.
+  - 2026-04-27 inventory found 42 April-June scheduled event rows across request numbers `310465`, `310468`, `310470`, `310472`, and `312022`.
+  - 2026-04-27 Robert supplied buyer-approval email evidence for Request `312022`; six approved rows were imported into OPS Outreach as event bookings `857`-`862` with linked shifts `5184`-`5189`.
+  - 2026-04-27 coverage recheck complete: 42/42 WFM portal rows are in OPS, 0 missing, 42/42 have linked Outreach shifts, 28 fully assigned, 14 open/unassigned. Final HTML-table report with 14 light-red open/unassigned rows sent to Sonat and Robert from National Outreach, Message-ID `<177734005946.38159.11756804899585654178@kovaldistillery.com>`.
+  - Future WFM coverage reports should use `nationaloutreach/templates/whole-foods-ops-coverage-report.md`; future Binny's coverage reports should use `nationaloutreach/templates/binnys-ops-coverage-report.md`.
+  - Remaining sync work: requests `310465`, `310468`, `310470`, and `310472` remain pending/not approved and must not be imported until buyer approval evidence exists.
 
 - Claude protected-side access packet follow-up is active.
   - Claude already replied on 2026-04-23, but the replies were sitting in Frank's `Handled` mailbox rather than current `INBOX`, so the real state is now corrected in `HANDOFF.md` and `frank/HANDOFF.md`.
@@ -13,41 +25,21 @@ Updated: 2026-04-26 CDT (Machine: Macmini.lan)
   - 2026-04-26 Robert approved asking Claude again if the packet was not in Frank's INBOX. Header-only INBOX check found `0` current Claude messages. Frank sent a direct follow-up to Claude at 15:08 CDT, copied to Robert and Dmytro, task id `frank-claude-protected-side-direct-request-2026-04-26`, asking for the packet in the email body.
   - 2026-04-26 Claude replied at 15:14 CDT in Gmail All Mail, not INBOX or Handled. The packet says MI, Papers, Mesh, Agent Memory, Screenbox, and Rein surfaces are ready and no additional Robert sign-off is needed for those surfaces. First live tool check reached Papers/Mesh but both require bearer auth; Screenbox MCP initialized and `screenbox_info` succeeded. Current blocker for Papers/Mesh use and Papers logging is approved Infisical/token availability in this shell.
   - 2026-04-26 Frank sent Claude token-setup request at 15:39 CDT, copied to Robert and Dmytro, task id `frank-claude-mcp-token-setup-request-2026-04-26`, asking for Infisical/env setup metadata only and no raw token values in email.
-
-- Frank Drive metadata-only OAuth slice is active in visible worker `2c763f5b`.
-  - Worker brief scope: verify the reviewed local bundle under `project_hub/artifacts/gdrive-frank-metadata-bundle/`, identify exact remaining token/Infisical/env inputs, and stop with a blocker before any live OAuth, token write, Drive API call, Google Cloud/IAM change, runtime install, commit, push, deploy, reset, or clean.
-  - Worker result: prep verified; OAuth is not ready yet because `INFISICAL_MACHINE_ENV_FILE` is not set in this shell, `infisical` CLI is not present on this execution path, and the Frank refresh token is not confirmed in Infisical. Next safe action is approved Infisical execution inputs, or explicit temporary OAuth/token migration approval.
-
-- AI Workspace git hygiene inventory is active in visible worker `7bfa9aa0`.
-  - Worker brief scope: non-destructive classification of the dirty tree into durable source/policy changes, likely-git project logs/artifacts, runtime/log/draft artifacts, and owner-review-required items. No clean, delete, reset, stash, commit, push, rebase, or discard is approved.
-  - Worker result: durable docs/source/project records are commit candidates; `frank/drafts/`, `avignon/drafts/`, `frank/*.jsonl`, and `avignon/*.jsonl` should stay out of git by default because they are mailbox/runtime-derived.
+  - 2026-04-26 Robert replied at 15:53 CDT that the Dmytro MCP token setup path sounds good. Source Message-ID `<CAAtX44aALTT3p8n=FSh-kJSrdynhWJJA-WucFRE69QXV8iv6yw@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44aALTT3p8n-FSh-kJSrdynhWJJA-WucFRE69QXV8iv6yw-mail-gmail-com`. Classification: runtime-change approval evidence. Runtime-created Frank route `829ca764` / `Frank direct Robert: Re: Frank follow-up: MCP token setup for Codex/Frank runtime` verified prompt delivery, sent Robert blocker report `<177723704055.51434.16419250366598123221@kovaldistillery.com>`, and filed the source to `Handled`; a manual Frank completion report also sent as `<177723704451.52327.11294613156516533780@kovaldistillery.com>` after the local draft/send pass. The approval is also attached to existing AI route `ff8ac103` / `Claude protected-side packet follow-up` as lane context. Next action remains Dmytro/Claude supplying non-secret Infisical/env setup metadata or confirming setup completion; raw token values stay out of email, chat, docs, and git.
+  - 2026-04-26 Claude's token packet was found in Frank's Gmail All Mail / Handled state, Message-ID `<56ab638e5cbfdb26c00bc1bd53833cf0.claude@kovaldistillery.com>`. In-memory validation only: `KOVAL_TOKEN` was present and JWT-shaped, `SCREENBOX_API_KEY` was present, and MCP `initialize` returned `200 text/event-stream` with result payloads for Papers, Mesh, Rein, and Screenbox. No token values were printed or written. Current safe state: MCP access is ready for an approved ephemeral/manual run, but not yet installed into durable Codex/Frank config. Remaining gate is explicit approval for where to persist secrets/config, or an approved Infisical/env loading path.
+  - 2026-04-27 Robert approved Codex/AI Manager choosing the durable path without another yes/no. Chosen path: Infisical-backed durable secret/config loading. Temporary Mac mini local validation may be used only as a bridge when needed, with no raw tokens printed, emailed, committed, or written to chat/docs. Session `ff8ac103` was updated with this decision and told to use Claude's newer instructions from Frank state before asking Robert again.
+  - 2026-04-27 local non-secret status check found no `infisical` CLI on this execution path and no currently exported `INFISICAL_*`, `KOVAL_TOKEN`, or `SCREENBOX_API_KEY` environment variables in this shell. Frank live automation state shows Claude task `#1457` / MCP token setup was marked complete and the email-delivered token packet was validated in memory, but the usable durable loader contract is still missing locally. Exact remaining blocker: a non-secret Infisical contract for Mac mini Codex/Frank runtime, specifically project/environment, secret path, secret names for `KOVAL_TOKEN` and `SCREENBOX_API_KEY`, and the reviewed loader/wrapper or CLI install command. Do not request or accept raw token values in email/chat/docs/git.
+  - 2026-04-27 AI Manager installed a source-reviewed MCP env loader at `scripts/mcp_runtime_env.py` with docs at `docs/mcp-runtime-secret-loading.md`. It prefers Infisical when configured and falls back to owner-only local storage at `.private/mcp-runtime/mcp.env`. The fallback was populated from Claude's already-received token packet in Frank `Handled` without printing values; the file is chmod `600` and ignored by git. Non-secret verification: loader status reports both required keys present, and MCP `initialize` checks returned `200 text/event-stream` with result payloads for Papers, Mesh, Rein, and Screenbox. Remaining cleanup/preferred path: replace the local fallback with the Infisical contract when project/environment/path/loader details are available.
+  - 2026-04-27 follow-up MCP read-only discovery found the indexed Papers records for `#1425`, `#1429`, and `#1457`: `teams/ai-team/agents/pm/assessments/2026-04-23-task-1425.md`, `teams/it/infrastructure/worklog/2026-04-23-codex-frank-access-packet.md`, `teams/ai-team/agents/pm/assessments/2026-04-26-task-1457.md`, and `teams/it/infrastructure/worklog/2026-04-26-codex-frank-mcp-token-setup.md`. `papers_get` returns metadata for these records but `content: null`, with no versions or threads. Mesh has no matching records for those task IDs, and Rein `task_status` does not recognize Planner task IDs `1425`, `1429`, or `1457`. Current blocker is therefore no longer MCP connectivity; it is missing source body content in the reachable Papers records or needing Claude/Dmytro to republish the packet body.
+  - 2026-04-27 Frank emailed Claude, copied Robert and Dmytro, asking for the missing non-secret packet body or actual body-bearing Papers path. Task id `frank-claude-papers-packet-body-needed-2026-04-27`; subject `Codex MCP follow-up: Papers packet body is empty`; Message-ID `<177732656712.98163.9008625912925477410@kovaldistillery.com>`. The ask explicitly excludes credentials, tokens, private keys, session cookies, raw secret values, and credential file paths.
+  - 2026-04-27 Claude updated the packet and Dmytro asked whether Frank could fetch bodies with the new instructions. Read-only verification succeeded with MCP session preservation and `papers_get` using `guid` plus `include_content: true`; current access packet GUID `b46ee853-96aa-4181-a6c2-a947517df78f`, task `#1425`, task `#1429`, task `#1457`, and the MCP token setup worklog all returned body content. Frank replied to Claude with Robert and Dmytro copied, Message-ID `<177733555426.15825.6889489241668158360@kovaldistillery.com>`, and filed Robert's direct source to `Handled`. The packet-body verification blocker is closed; remaining cleanup is the preferred Infisical/durable runtime path.
 
 ## Waiting for Next Step
 
-- Secure Info/files context intake is no longer blocked on top-level approval.
-  - Approved defaults: shared AI Google Drive; raw files allowed; secure-intake path `.private/ai-workspace/secure-info/{inbox,processed,archive,metadata}/`; originals stay in `archive/`; normalized files move to `processed/`; one JSON sidecar per processed basename in `metadata/`.
-  - Minimum sidecar schema: `source_path`, `archive_path`, `processed_path`, `ingested_at`, `source_system`, `owner`, `tags`, `sha256`, `mime_type`, `notes`.
-  - Default owner mapping: `robert`, `frank`, `avignon`, otherwise `ai-workspace`.
-  - Approved `source_system`: `google_drive`, `gmail_frank`, `gmail_avignon`, `papers`, `manual_upload`, `workspace_export`, `other`.
-  - Tags should stay lowercase slugs. Processed filenames should carry a `YYYYMMDD-` prefix.
-  - Remaining blocker is implementation/wiring, not policy approval.
-
-- Gmail OAuth is no longer blocked on policy approval.
-  - Approved storage paths: `.private/ai-workspace/oauth/gmail/frank/` and `.private/ai-workspace/oauth/gmail/avignon/`.
-  - Approved scope: full-account access for both Frank and Avignon.
-  - Remaining blocker is concrete implementation and secret material wiring, not scope/storage approval.
-
 - Codex / Claude / Papers integration is no longer blocked on top-level go/no-go approval.
   - Body reads are approved.
-  - The real blocker is the protected-side technical packet / exact usable access details, currently being chased through Claude's `#1425/#1429` task path and Frank's 2026-04-25 follow-up.
-
-- OPS / outreach may proceed now.
-  - Robert said re-import will happen later today; treat that as the expected next data refresh, not as a reason to hold implementation.
-  - Remaining blockers are concrete source/data conditions, not the prior go/no-go gate.
-
-- Sales / analytics / reporting should operate in provisional mode until a real owner exists.
-  - No dedicated owner exists.
-  - Temporary mode: mixed/manual source of truth, generate/analyze only, no upstream writes.
+  - The local bridge path now works through `scripts/mcp_runtime_env.py` using owner-only fallback storage, and MCP initialize checks pass for Papers, Mesh, Rein, and Screenbox.
+  - The real remaining cleanup blocker is the preferred Infisical-backed durable loading path: project/environment, secret path, secret names, and reviewed loader/wrapper or CLI install command. Do not ask Robert for another storage-path decision; ask only for the exact missing non-secret Infisical metadata if Claude/Dmytro have not supplied it.
 
 - Secure Info/files context intake: historical planning record. The older approval blocker is superseded by the 2026-04-25 operating approvals above; keep the notes below as source/context for the implementation slice.
   - Source Message-ID: `<CAAtX44ZX0u0toGJ7O4grpZY7j6MW9n_S=Anj8M8k-sQhY4gZXQ@mail.gmail.com>`; file-management worker session `0774d4a8` reported a truncated source after `Project: File management.` and is attached here pending clarification. Note: the supplied Message-ID `<CAAtX44Z0DxQ+ruJfOY2fSA2Un617-dfQiF3BQ7R8aaxDiQiQrA@mail.gmail.com>` is already recorded locally for the AI Improvement Manager role-expansion project, so Frank should ask Robert to clarify the source/context before treating it as unambiguous.
@@ -105,16 +97,6 @@ Updated: 2026-04-26 CDT (Machine: Macmini.lan)
   - Monday morning update addition from Robert on 2026-04-19: include Mac mini hard-server-mode planning alongside the Gmail polling/OAuth health follow-up. Scope for the update: wire the Mac mini; plan turning the Mac mini into hard server mode; migrate/verify critical Workspaceboard, Frank, and Avignon services so logout of the Aqua/GUI session is safe; only then consider logging out the old workstation GUI session.
   - Hard-server-mode boundaries from this note: no service migration, logout, LaunchDaemon change, service restart, LaunchAgent/runtime change, runtime cadence change, OAuth work, mailbox read, credential access, Workspaceboard mutation, deploy, push, or live pull is approved by adding this follow-up.
 
-- OPS/outreach decisions: Connecteam staged-window parity approved; remaining blocker is final read-only re-sync/export plus OPS market account/contact product rules before live writes.
-  - Connecteam source: ops commit `18d32a04ddaf5257214d62340eda7e044a1ef3d8`, including docs and `scripts/connecteam_staging_parity.php`.
-  - Approved 2026-04-18: Robert accepted OPS Outreach as parity-ready for the staged Connecteam window `2026-03-31` to `2026-05-30`. The approval covers the docs-only packet `ops/docs/2026-04-17-connecteam-parity-readiness-approval-packet.md`, where `151/151` staged rows matched OPS with linked shifts, `0` safe-to-apply rows, `0` review-needed rows, and a clean `17`-user crosswalk.
-  - 2026-04-20 blocker reply: source Message-ID `<CAAtX44YOhLG9thNhpXnT4g=sAG468rEcf1nGteTjgEWjvwNMww@mail.gmail.com>` says there is no new export info now and "We will have more April 27 - remind me at 11am." Current next action is the existing Frank/Task Manager follow-up on Monday 2026-04-27 at 11:00 AM local time; no final export/re-sync request should be re-surfaced before then unless Robert provides fresh export material or explicit new approval.
-  - Worker-ready OPS next task: run one final read-only Connecteam re-sync/export before decommission, regenerate/review parity, bridge-plan, and user-crosswalk artifacts, and produce a new approval packet showing deltas since the approved staged window. Boundary: no `--apply`, no Connecteam decommission, no OPS/Portal/CRM mutation, no Google sync mutation, no notification send, no auth/canonical-rule change, no deploy, no push, no live pull, and no source-task closure.
-  - Market improvements source: ops commit `478593f3329c49aec9a30ce0464f2f507394a60e`, `docs/2026-04-16-ops-market-improvements-plan.md`.
-  - Market narrowed next slice: keep work to read-only `market_readiness` / `ops.market_events.v1` export preview and Code/Git review of any already-produced local OPS slice. Do not start account/contact creation from OPS yet.
-  - Decisions still needed from Robert/source owners: final Connecteam re-sync/export scheduling details and decommission go/no-go after the final packet; whether zero-shift Outreach events are tentative holds or hard-blocked; Outreach notification groups/channels; claim/unclaim approval and cutoff rules; reminder timing/channels; canonical account/activity behavior when multiple links exist; account/contact request owner and approver; direct OPS CRM creation vs pending Portal/CRM review; duplicate-match rules; required account category mapping; Salesreport consumption shape; audit/retention fields.
-  - Approval gates still closed: no `--apply`, decommission, live schedule change, notification send, auth/access change, canonical data-rule change, CRM account/contact mutation, Salesreport production-table/import change, deploy, push, live pull, or source task closure until explicitly approved.
-
 - Source/access blockers: narrowed to remaining read-only source inputs; Google Ads is routed out of Codex access tracking.
   - Shopify/Square signup recurring checks: lists commit `e2ce6afd8706372d2375b7dd50c4c4a0c63091e4`, `docs/signup-recurring-checks-review-2026-04-16.md`; local Lists evidence shows no Square signup implementation and only a Shopify Forge planner reference. Frank sent Claude the status request `frank-2026-claude-square-shopify-list-links` on 2026-04-17; needs Claude/source owner reply with OPS task IDs, source-of-truth record, Google Doc/Drive links if any, and an approved read-only export/report/API path before Lists/Forge can do real counts.
   - PHPList legacy send-history inventory: lists commit `075cd358b784e47c246ef4f5fbd02cfab66facdd`, `docs/phplist-legacy-send-history-read-only-inventory-plan-2026-04-16.md`; needs sanitized export or approved read-only DB/export path.
@@ -125,19 +107,46 @@ Updated: 2026-04-26 CDT (Machine: Macmini.lan)
   - 2026-04-18 11:04 CDT local-docs sweep: no new safe source inputs were found for Shopify/Square, PHPList, Postmaster, Papers live read access, or MacBook wake-cause. Remaining work still needs supplied read-only material or explicit approval; no mailbox bodies, credentials, external systems, source APIs, production DBs, or runtime state were accessed.
   - Approval gates: no credentials, production DB reads/exports, source-system API access, live account changes, DB mutation, deletion, restore, cleanup, or system-setting changes until each read-only path is approved.
 
-- Sales/analytics/reporting decisions: define owners, report semantics, source-of-truth boundaries, and import contracts before implementation or cleanup.
-  - Portal production audit source: portal commit `2e076c6c8e47ce54140ddc95704f574adb9f8333`, `docs/production-audit-enhancements.md`; needs edit-trail definitions, prior-month edit handling, `<2000 lb` rule semantics, and Salesreport handoff decision for shipped-vs-bottled work.
-  - Recurring sales/data operations source: salesreport commit `8004fd93f97ccc0f65db8f4755523facb1370271`, `doc/recurring-sales-data-ops-review-2026-04-16.md`; needs importer roster owner, BID refresh cadence, CRM mutation approval, and cleanup owner for distributor/account changes.
-  - Distributor cleanup source: salesreport commit `dd58319202d308f86c8e20f2cf31b12413b0ddae`, `doc/distributor-account-cleanup-report-workflow-2026-04-16.md`; needs approved production read/export path and owner/source-of-truth definition for mutations.
-  - Web analytics funnel source: salesreport commit `85971d9004d1d73c49751d52080a5ec7587f9780`, `doc/web-analytics-funnel-source-review-2026-04-16.md`; final readiness session `d73ed365`; needs analytics source of truth, scoped surfaces, funnel definitions, aggregate export owner, and import contract.
-  - AI sales analytics decision-matrix source: `/Users/werkstatt/salesreport/doc/sales-analytics-decision-matrix-2026-04-18.md`; local docs-only slice completed for OPS `366208`. Current decision packet: wired CRM-backed summaries and National Sales Assistant CRM sections are candidates for an approved first monthly packet; top-product and channel-comparison reports are stubbed; new prospects/open-status/web analytics remain outside-source/manual until owners approve inputs.
-  - Approval gates: no `saved_reports` DB writes/runs, account changes, tracking changes, production data mutation, deploy, external analytics-system write, CRM mutation, or access-control change without explicit approval.
-
 ## Backlog
 
 _No separate AI Workspace backlog items. Source-owned continuations are already represented by the matching Waiting-family blocker above and should resume in the owning workspace only after that blocker clears._
 
 ## Done
+
+- **2026-04-27** Barrel Sales API path fixed and Beatrix barrels marked sold.
+  - Updated the two WH barrel Salesreport pages so barrel write actions use the active Salesreport/Codex user path instead of the stale service-account fallback. Marked barrels `9513` and `9346` sold on sample request `2678`; readback confirms `selection_status = 2`, `sold_by = 3`, and Sonat user id `3` on the latest sold-history entries.
+
+- **2026-04-27** Barrel Sales Manager role and Avignon barrel-program guidance added.
+  - Added `worker_roles/barrel-sales-manager.md`, Avignon barrel-program guidance, role index/operating-model entries, Workspaceboard organigram feed entry, and project-hub closeout. Scope stayed docs/source only; no live Salesreport, Portal, OPS, email, auth, deploy, commit, or production mutation.
+
+- **2026-04-27** Asher and Venetia persona packets incorporated.
+  - Retrieved Sonat's handled Cultivater editor source and attachment privately through Avignon's mailbox path, then incorporated reusable guidance into `asher/PERSONA.md`, `venetia/PERSONA.md`, the local worker docs, and the role registry. Asher now owns the heritage/provenance/organic farming/food and drink voice; Venetia owns the sustainable fashion/green design/legislation/material-science voice. Sent Sonat the Asher packet, Venetia packet, and Asher internal memo with Robert copied. Body reads, filing, deletes, routine action authority, broad external sending, and runtime changes remain gated pending a separate action-policy approval.
+
+- **2026-04-27** National Outreach AI-worker inbox setup completed.
+  - `nationaloutreach@kovaldistillery.com` is documented as the main shared AI-worker inbox, with Frank and Avignon kept separate. Added the send-from persona registry, National Outreach persona/workspace notes, setup verifier, and updated Outreach/Email Coordinator routing docs. Full-body review succeeded for 300 recent messages and approved queued send processing is enabled. Robert ran the LaunchDaemon install helper. Macee was removed as an outbound send-from identity after Robert clarified she has left. Codex/National Outreach Drive OAuth is complete via private callback-file method; `whoami` verifies `nationaloutreach@kovaldistillery.com`; and the shared Drive write test uploaded `nationaloutreach-codex-write-test-2026-04-27.txt` as Drive file `10KLYqHsIF3yyvYC2CUZdv8aHIMFDWipH`.
+
+- **2026-04-27** Secure Info/files local intake wiring completed.
+  - Added private local folder structure under `.private/ai-workspace/secure-info/{inbox,processed,archive,metadata}/`.
+  - Added `scripts/secure_info_intake.py` and `docs/secure-info-intake.md`; validation passed with an empty dry run, Python compile, and a disposable private test file.
+  - The helper writes metadata sidecars only and does not print file contents, upload to Drive, read mailboxes, call Papers, or mutate external systems.
+
+- **2026-04-27** Closed stale OPS/outreach and Sales reporting prompts.
+  - Robert clarified the OPS/Connecteam follow-up was completed and recorded already. Local OPS state records the fresh COT Connecteam import through 2026-07-05 with `238/238` matched rows and no decommission/notification/live-pull mutation.
+  - Robert clarified Sonat already received the reports. Avignon state records live report sends to Sonat on 2026-04-26, including gated live reports and additional strategic reports/OPS Outreach overview.
+
+- **2026-04-27** Closed completed Drive OAuth and git hygiene worker rows from active queue.
+  - Frank and Avignon Drive OAuth/write-test state is recorded as working with local owner-only tokens; Infisical migration remains a cleanup preference, not an active worker blocker.
+  - AI Workspace git hygiene inventory completed as a non-destructive classification pass. No clean, reset, stash, commit, push, rebase, delete, or secret exposure occurred.
+
+- **2026-04-26** Parked Frank/Avignon Gmail API push/OAuth as optional infrastructure.
+  - Robert confirmed phone access is fine and the practical mailbox path is current polling, not Gmail push. Frank and Avignon already have working 15-second mail polling, while Drive OAuth is a separate completed connection path for Drive access.
+  - Current state: no active Gmail API/push OAuth blocker should surface in Avignon/Frank decision or waiting queues unless Robert explicitly reopens push delivery. No OAuth/token work, mailbox read, Google Cloud/Pub/Sub/IAM mutation, LaunchAgent/cadence change, deploy, or runtime change occurred from this cleanup.
+
+- **2026-04-26** OPS Portal Manual v3.0 created.
+  - Added `/Users/werkstatt/ops/docs/portal_manual.php` as the current all-office Portal manual, linked it from the OPS Manuals sidebar, and validated PHP syntax. The manual covers current Portal CRM, activities, tasks/projects, samples, receipts/reimbursements, production, warehouse, reports/docs, user/security areas, and OPS cross-references.
+
+- **2026-04-26** Avignon/Frank passive-CC answer memory updated.
+  - Read Sonat's current Avignon-INBOX CC'd Google Ads/campaign answers, recorded sanitized reusable lessons in Avignon `CC_LEARNING_LEDGER.md`, and added Frank's matching `CC_LEARNING_LEDGER.md` plus persona/agent rules for Robert CC threads. No external reply, campaign activation, CRM/Portal/OPS mutation, auth/token work, runtime change, deploy, or private mailbox-body publication occurred.
 
 - **2026-04-23** AI Health Manager server-mode install reconciled.
   - `system/com.koval.ai-health-manager` is live as a system LaunchDaemon, shows healthy report-only runs, and now appears on the board as `monitoring` instead of active work.

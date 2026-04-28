@@ -1,38 +1,98 @@
 # TODO — avignon
 
-Updated: 2026-04-25 CDT (Machine: Macmini.lan)
+Updated: 2026-04-27 CDT (Machine: Macmini.lan)
 
 ## In Progress
 
-- Monday reminders owner-note delivery:
-  - Source Message-ID `<CALbLtzxaTAUHz-M2DPYNnU_yVaCb6ghvg-nhoVfsnfYeaNixFw@mail.gmail.com>`; dedupe key `avignon-direct-owner-sonat-CALbLtzxaTAUHz-M2DPYNnU-yVaCb6ghvg-nhoVfsnfYeaNixFw-mail-gmail-com`; local task id `avignon-direct-owner-sonat-monday-reminders-2026-04-25`.
-  - Substance is complete: Sonat's note is now a concrete Monday, April 27 follow-up list covering Lipman's new brand manager, distributor outreach on fall activations, Dina, Steve Hirsch, and a Hotel Zachary check, while preserving ambiguity flags instead of guessing at the second Lipman contact or the Nebraska/Minnesota company.
-  - Blocker: the completion draft is ready at `drafts/sonat-monday-reminders-2026-04-25.txt`, but this workspace has no approved in-scope Sonat send path under `/Users/werkstatt`, so the source should not be treated as filed to `Handled` until the report is sent or an approved sender route is used.
-
-- Google Ads natural-ingredients owner-note delivery:
-  - Source Message-ID `<CALbLtzw8GKZA=Mkydz-x0QbFM_WQAPkg4pvuzbiOAxiLZd8MQw@mail.gmail.com>`; dedupe key `avignon-direct-owner-sonat-CALbLtzw8GKZA-Mkydz-x0QbFM-WQAPkg4pvuzbiOAxiLZd8MQw-mail-gmail-com`.
-  - Substance is complete: Sonat's note adds one concrete copy guardrail to the existing Google Ads owner lane. Use `100% natural ingredients` only where accurate and applicable, alongside the standing rule to keep health claims out.
-  - Blocker: the completion draft is ready at `drafts/sonat-google-ads-natural-ingredients-direction-2026-04-25.txt`, but this workspace has no approved in-scope Sonat send path under `/Users/werkstatt`, so the source should not be treated as filed to `Handled` until the report is sent or an approved sender route is used.
+_None._
 
 ## Waiting Next Step
 
-- Gmail push parked follow-up:
-  - Polling-health verification is already satisfied in the current runtime state; keep the Gmail push/OAuth/PubSub slice parked until Robert explicitly reopens it with token-storage and OAuth approvals.
-  - No Google Cloud/PubSub/IAM mutation, OAuth token work, mailbox-content read, or runtime cadence change is authorized from this row.
-
-- CRM recovery next action:
-  - Status: Avignon target-link recheck completed 2026-04-20 after Robert granted permission to inspect minimum necessary Sonat/Avignon email records. Earlier 2026-04-19 action-plan review is superseded only for the newly found Sonat answer.
-  - Completed work: Importer session `86dc0b04` completed Import ID `56` for the 5 importer-safe rows; Portal session `44b8a370` completed two bounded CRM/account rows.
-  - Review artifact: `drafts/avignon-crm-recovery-action-plan-review-2026-04-19.md`.
-  - Newly found Sonat answers: Alexis Harris should be handled under the existing `Sophy Hotel - Hyde Park` CRM context; the status/closeout request is complete/yes; Stephen Beck is already in CRM and should not be added again.
-  - Robert decision on 2026-04-22: leave Stephen Beck as-is in CRM. Treat the Stephen Beck item as no new contact and no link/update needed unless a new explicit request arrives.
-  - Alexis Harris is no longer waiting on Sonat. The remaining action is a narrow Portal verification/write-closeout pass: confirm the existing `Sophy Hotel - Hyde Park` target and complete or explicitly close the Alexis Harris CRM handling from the recovered source.
-  - Do not infer a Stephen Beck account link from the old Lanterna prompt; Stephen Beck is treated as closed/no-op unless a new explicit request arrives.
-  - Avignon worker `b583edb6` should use the private Frank context capture at `/Users/werkstatt/ai_workspace/frank/drafts/claude-avignon-context-frank-mail-2026-04-19.private.txt` and metadata at `/Users/werkstatt/ai_workspace/frank/drafts/claude-avignon-context-frank-mail-2026-04-19.meta.json`, plus private Avignon source artifacts, without printing private bodies/contact fields.
-  - If Robert approves another follow-up, send one concise Avignon note to Sonat with Robert copied for visibility; copy Claude only if Robert explicitly wants Claude in the CRM decision thread.
-  - Do not run phpList actions, broad imports, unrelated mailbox filing, credential work, destructive changes, or external-sensitive sends under this routine CRM authority.
+- 2026-04-27: Blocked Sonat `Draft email needed` direct-owner request pending meeting notes or next-step list.
+  - Source Message-ID `<CALbLtzxSa1o6Dz7WrOMDQ0vgNXN3izHiFpvtgo_XX1JC+1NkNA@mail.gmail.com>`; dedupe key `avignon-direct-owner-sonat-CALbLtzxSa1o6Dz7WrOMDQ0vgNXN3izHiFpvtgo-XX1JC-1NkNA-mail-gmail-com`; canonical visible Avignon route `d6a29eed`; duplicate/secondary route `c1b70191` was closed as duplicate board noise.
+  - Approved local evidence did not include the meeting-notes attachment or next-step list, so Avignon cannot safely draft the external follow-up. Sonat blocker report sent: subject `Meeting follow-up draft blocked: notes needed`, Message-ID `<177733974757.32337.12141908021573628420@kovaldistillery.com>`, draft `drafts/sonat-draft-email-needed-meeting-notes-blocker-2026-04-27.txt`.
+  - Next: when Sonat resends the notes attachment or pastes the next-step list, draft the follow-up email with all next steps and note only that KOVAL has created Rainbow-pack pricing as promised. No external reply, CRM/Portal/OPS mutation, OAuth/auth work, Rainbow pricing details, account commitments, or Robert copy occurred.
 
 ## Done
+
+- 2026-04-27: Completed Sonat `Barrels selected` direct-owner Portal barrel sold request.
+  - Source Message-ID `<CALbLtzy0GxCu_HP7MqXyoQsc-NnP3vMmuPe0oHySbpvLvReRhA@mail.gmail.com>`; dedupe key `avignon-direct-owner-sonat-CALbLtzy0GxCu-HP7MqXyoQsc-NnP3vMmuPe0oHySbpvLvReRhA-mail-gmail-com`; Portal visible route `a0729e2f`.
+  - Portal marked Bourbon barrels `9345`, `9341`, `9514` and Rye barrel `9257` sold by Sonat user `3`. Verified project IDs `367571`, `367585`, `367599`, and `367613`, each with 13 active child tasks and Matt bottling task IDs `367583`, `367597`, `367611`, and `367625`.
+  - Runtime sent Sonat completion report `<177734278899.46585.9380862279605362800@kovaldistillery.com>` and filed the source to `Handled` (`INBOX=0`, `Handled=1`). Manual supervisory pass also sent duplicate completion report `<177734317020.48083.4869052948601361424@kovaldistillery.com>` from `drafts/sonat-barrels-selected-complete-2026-04-27.txt`; do not send another note for this source. No OAuth/token/auth repair, pricing/account commitment, private mailbox-body exposure, external reply, or unrelated Portal/CRM/OPS mutation occurred.
+
+- 2026-04-27: Completed Sonat `Boston Contacts` direct-owner list request.
+  - Source Message-ID `<CALbLtzyubHGyfnyHSMj1ABDZdumj-AQE6-bFh=VHJV2c8=-jwg@mail.gmail.com>`; dedupe key `avignon-direct-owner-sonat-CALbLtzyubHGyfnyHSMj1ABDZdumj-AQE6-bFh-VHJV2c8-jwg-mail-gmail-com`; visible Avignon route `dea1571b`.
+  - Read-only lookup against completed CRM Import ID `52` / prior Importer session `10b9346d` found four Boston accounts and seven contacts; three contact emails were available.
+  - Drafted Sonat completion/list report at `drafts/sonat-boston-contacts-2026-04-27.txt`. No CRM/Portal/OPS mutation, external reply, OAuth/token/auth work, credential exposure, pricing/account commitment, merge/delete/destructive/bulk action, deploy, commit, push, reset, or clean occurred.
+
+- 2026-04-27: Blocked Robert-supervised `SOLD Barrels` request at the Salesreport/CRM auth gate; barrels were not marked sold.
+  - Source Message-ID `<CAAtX44ZBy_N80q4mvzzs0i8WyfNrMyAD_sVE2LEV6ijvJgs+7g@mail.gmail.com>`; dedupe key `avignon-direct-owner-robert-approver-CAAtX44ZBy-N80q4mvzzs0i8WyfNrMyAD-sVE2LEV6ijvJgs-7g-mail-gmail-com`; visible Avignon route `4b92ca0c`.
+  - Recovered only the needed business packet: barrels `9513` and `9346` should be marked sold for Beatrix - Fulton Market from sample request `2678` so sticker processing can start. Read-back verified both barrels are still selected, not sold, on request `2678`; no project/task/sticker workflow was created.
+  - Normal Salesreport/Portal API write path stopped before mutation because the configured CRM API login returned a mandatory service-account password-reset gate. No auth/token/password-reset work was performed.
+  - Runtime sent a generic Robert closeout `<177733560670.16622.12956536498739412675@kovaldistillery.com>` and filed the source to `Handled`; manual correction/blocker report sent Robert-only as `<177733587160.17513.8862821466128772193@kovaldistillery.com>`. Correct state: blocked pending restored approved Codex/CRM API or browser-auth path, then Barrel Sales Manager/Salesreport should mark barrels `9513` and `9346` sold.
+
+- 2026-04-27: Completed Sonat CRM activity submit deterministic slice and blocked the truncated Hornblower slice.
+  - Source Message-ID `<CALbLtzwuw2LLxKSbrehi3VtoLhmBuuC=Ugs7F2t0Yzddd1SC8A@mail.gmail.com>`; dedupe key `avignon-direct-owner-sonat-CALbLtzwuw2LLxKSbrehi3VtoLhmBuuC-Ugs7F2t0Yzddd1SC8A-mail-gmail-com`; Avignon route `bfa60ead`; Portal route `0f383171`.
+  - Portal created and verified CRM activity `367518` for Pogos Wine / Simon Taylor / KOVAL Bourbon back in stock in TX; Hornblower was not touched because the visible source summary was truncated.
+  - Sonat completion/blocker report sent by runtime as Message-ID `<177732250451.77962.3235857936724461639@kovaldistillery.com>`; a manual duplicate closeout was also sent as `<177732251161.77972.15206316838834565002@kovaldistillery.com>`. Source is filed to `Handled`.
+
+- 2026-04-27: Tightened Avignon greeting and closing guidance after Robert correction.
+  - Source Message-ID `<CAAtX44bzFy7wJWj1tQEnVv+Us3G5w_nGb4_-WGcgHLMTRD7HCA@mail.gmail.com>`; Frank local task id `frank-avignon-email-greeting-closing-required-2026-04-27`.
+  - Classification: Avignon customization. Complete outbound Avignon emails now require a greeting and concise closing before the Avignon signature.
+  - Updated `AGENTS.md`, `EMAIL_PERSONA.md`, `PERSONA.md`, `JOB_DESCRIPTION.md`, and `MARKET_SOP.md`. No runtime/mailbox automation change occurred.
+
+- 2026-04-27: Verified Sonat calendar request for Evan at Kincades is on Sonat's calendar.
+  - Source Message-ID `<CALbLtzzkjqGKU-M0pvaYwOcJLO_NYFnvuN46DR2K0dZ5_8N2GQ@mail.gmail.com>`; dedupe key `avignon-direct-owner-sonat-CALbLtzzkjqGKU-M0pvaYwOcJLO-NYFnvuN46DR2K0dZ5-8N2GQ-mail-gmail-com`; visible route `bb6d7b99`.
+  - Frank's shared Google Calendar helper still lists Sonat's calendar with owner access. Duplicate check found an existing event on `sonat@kovaldistillery.com`: `Kincades`, Thursday, April 30, 2026, 9:30-10:30 AM Central, event id `34k127n2ecfd7m43pj7dr5ub54`.
+  - Avignon sent Sonat a correction/update email confirming the meeting is on her calendar and that Avignon can add calendar items going forward: subject `Calendar access is working`, Message-ID `<177731837617.51027.4395356801500735562@kovaldistillery.com>`.
+  - No second event was created, no OAuth/reauthorization/token exposure occurred, and no external invite was sent from this verification.
+
+- 2026-04-27: Closed Cabra CRM row as not-current per Robert.
+  - Robert clarified there is no Cabra CRM item to keep open. Prior Portal worker did not create or update account/contact records because this Mac mini session lacked the approved CRM DB path and the contact full name was not deterministic from visible state.
+
+- 2026-04-27: Sent two previously blocked Sonat completion notes through the approved Avignon send path.
+  - Monday reminders captured: Message-ID `<177730524916.20549.13679117028403794188@kovaldistillery.com>`.
+  - Google Ads natural-ingredients direction captured: Message-ID `<177730525108.20547.227684749471869304@kovaldistillery.com>`.
+  - This clears the stale "no approved send path" blockers; no Google Ads account action, CRM/Portal/OPS mutation, external reply, OAuth/auth/token work, or pricing/account commitment occurred.
+
+- 2026-04-26: Closed stale Avignon-local Alexis Harris / CRM recovery waiting row.
+  - Updated from central state and Robert's correction: Alexis Harris is no longer an open Avignon decision or waiting item; Sonat's answer points to the existing `Sophy Hotel - Hyde Park` context, and Stephen Beck remains no-op/leave-as-is unless a new explicit request arrives.
+  - No new CRM/Portal mutation, mailbox-body read, credential/OAuth work, external send, or owner decision request occurred from this cleanup.
+
+- 2026-04-26: Removed stale Avignon-local Gmail/OAuth parked blocker.
+  - Central AI Workspace state now records OAuth/Drive progress: Frank and Avignon Drive OAuth are working with local tokens and `drive.metadata.readonly` plus `drive.file` for the AI Cloud shared Drive; Gmail OAuth is no longer blocked on top-level policy but remains an implementation/storage wiring lane outside Avignon's local TODO.
+  - No OAuth/token read or write, Google Cloud/PubSub/IAM change, mailbox read, runtime change, or deploy occurred from this cleanup.
+
+- 2026-04-26: Read Sonat's current Avignon-INBOX CC'd Google Ads/campaign answers, recorded sanitized reusable campaign/copy/answer-style memory in `CC_LEARNING_LEDGER.md`, and created the matching Frank passive-CC memory mechanism.
+
+- 2026-04-26: Recorded Sonat's CC-learning instruction for Avignon.
+  - Source Message-ID `<CALbLtzy_hyEkPg6QN=bKPdzryRb1W-4fegzhceWSYx9oVifoOQ@mail.gmail.com>`; dedupe key `avignon-direct-owner-sonat-CALbLtzy-hyEkPg6QN-bKPdzryRb1W-4fegzhceWSYx9oVifoOQ-mail-gmail-com`; local task id `avignon-sonat-cc-learning-rule-2026-04-26`.
+  - Added `CC_LEARNING_LEDGER.md` and updated Avignon guidance so Sonat CCs are learned from and remembered as concise non-secret future-reference lessons, while clear instructions still route through the normal direct-owner workflow. Runtime had already sent Sonat captured acknowledgement `<177724201103.95725.7368744016365678201@kovaldistillery.com>`; sent completion report `drafts/sonat-cc-learning-rule-2026-04-26.txt`, subject `CC learning rule recorded`, Message-ID `<177724220941.4514.773493348491250174@kovaldistillery.com>`. Visible route `06128599` then finished; runtime sent completion Message-ID `<177724229426.7757.10109411801117844627@kovaldistillery.com>` and filed the source to `Handled`.
+  - No mailbox-body read beyond the provided summary, OAuth/auth/token work, CRM/Portal/OPS mutation, external reply, pricing/account commitment, or credential handling occurred.
+
+- 2026-04-26: Implemented Sonat's uploaded Avignon SOP into durable Avignon guidance.
+  - Added `MARKET_SOP.md`, linked it from Avignon persona/job/email/agent docs, and sent Sonat a concise completion confirmation. No external trade send, CRM/Portal/OPS mutation, runtime/cadence change, OAuth/auth/token work, or pricing/DA commitment occurred.
+
+- 2026-04-26: Sent Sonat sample Avignon report formats.
+  - Sent template-only examples for Street Intel Pulse, prior-month performance audit, Friday Drafts & Decanters, tasting opportunity report, and distributor support/DA review. No live source queries or external/CRM/Portal/OPS actions occurred.
+
+- 2026-04-26: Corrected Avignon email format and created actual sample report pages.
+  - Added greeting/signoff and document-response structure to Avignon guidance. Created durable sample HTML reports in Salesreport and Contactreport using demo data and explicit source contracts.
+
+- 2026-04-26: Sent corrected sample HTML report links to Sonat.
+  - Sent working Contactreport mirror links for five actual sample reports. Canonical Salesreport-owned samples remain in Salesreport; Contactreport mirrors are used for reachable links because Salesreport web requests return HTTP 500.
+
+- 2026-04-26: Pushed Avignon sample reports live and re-sent live PHP links.
+  - Salesreport live is at `5cfc254`; Contactreport live is at `b01e8d7`. Sent Sonat the live `www.koval-distillery.com/contactreport/*.php` links under task id `avignon-sonat-live-sample-report-links-2026-04-26`.
+
+- 2026-04-26: Created actual Avignon reports from live data and re-sent Sonat the live links.
+  - Salesreport live is at `bc5bf07`; Contactreport live is at `4a798be`. Reports pull March 2026 sales, April Contact Report activity/tastings, Illinois retail tasting targets, slipped accounts, and support-readiness signals. Sent Sonat subject `Avignon live data reports` under task id `avignon-sonat-live-data-reports-2026-04-26`.
+
+- 2026-04-26: Gated Avignon live reports behind Salesreport/KPI-admin access and re-sent Sonat corrected links.
+  - Salesreport live is at `0178b94`; Contactreport live is at `4d81ec2`. Reports now require the Salesreport login/header gate and allow KPI admin users `admin`, `sonat`, `sebastiansaller`, and `mark`; old Contactreport report URLs redirect to the gated Salesreport versions. Sent Sonat subject `Avignon live reports are now gated` under task id `avignon-sonat-gated-live-data-reports-2026-04-26`.
+
+- 2026-04-26: Added three more Avignon strategic reports plus the OPS Outreach bi-weekly overview.
+  - Salesreport live is at `409e791`. New gated reports cover win-back/inactive accounts, whitespace/POD opportunities, Illinois core SKU velocity, and OPS Outreach bi-weekly readiness. Sent Sonat subject `Avignon additional live reports and Outreach overview` under task id `avignon-sonat-additional-live-reports-outreach-2026-04-26`.
 
 - 2026-04-25: Converted Sonat's Google Ads natural-ingredients reply into a concrete owner-path next action.
   - Source Message-ID `<CALbLtzw8GKZA=Mkydz-x0QbFM_WQAPkg4pvuzbiOAxiLZd8MQw@mail.gmail.com>`; dedupe key `avignon-direct-owner-sonat-CALbLtzw8GKZA-Mkydz-x0QbFM-WQAPkg4pvuzbiOAxiLZd8MQw-mail-gmail-com`.
