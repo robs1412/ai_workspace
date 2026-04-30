@@ -29,6 +29,26 @@ This role is for business workflow management, not hidden data mutation. It shou
 - Portal sample request entry: `https://portal.koval-distillery.com/#/pos-and-samples/sample-requests`
   - Barrel sample requests are submitted through the Portal POS/Samples sample-request area.
 
+## Supporting Review / Reporting Links
+
+- Prior barrel-buyer contact review: `https://www.koval-distillery.com/salesreport/barrel_contact_review.php`
+  - Use this to review prior barrel buyers, their current Portal contacts, primary-contact status, and follow-up readiness.
+  - Use `?include_current=1` when the workflow needs current purchases through today's date, not only prior completed barrel buyers.
+  - The recent account activity column can show related CRM invoices, sample requests, and manual attribution notes without treating them as confirmed sold barrels.
+- Barrel sample conversion report: `https://www.koval-distillery.com/salesreport/barrel_sample_conversion_report.php`
+  - Shows barrel samples sent by account alongside confirmed sold barrels.
+  - Light red rows mean a sample is older than six months with no confirmed barrel purchase inside the six-month post-sample window.
+  - Yellow rows mean the account has an open sample still inside the six-month conversion window.
+- Quick contact review: `https://www.koval-distillery.com/salesreport/quick_contact.php`
+  - Use for quick account/contact lookup while cleaning barrel-buyer contacts or confirming a primary contact.
+- Portal CRM contacts: `https://portal.koval-distillery.com/#/relationship-management/contacts`
+  - Use for live contact management when the Salesreport review page identifies a missing, stale, duplicate, or non-primary contact.
+- Barrel account hitlist: `https://www.koval-distillery.com/salesreport/sales_hitlist_barrel_accounts.php`
+  - Use when barrel follow-up needs account-priority or sales-hitlist context.
+- Manual barrel-activity attribution helper: `salesreport/scripts/record_barrel_activity_attribution.php`
+  - Use only through the approved Salesreport workspace flow when a sample request or invoice is clearly for a different account than the raw source record shows.
+  - Attribution records live in `koval_crm.barrel_activity_account_attribution` and are review context, not proof of a confirmed sold barrel.
+
 ## Typical Human Ownership
 
 - Sonat can request barrel-program work through Avignon.
@@ -41,6 +61,7 @@ This role is for business workflow management, not hidden data mutation. It shou
 - Convert Sonat or Robert barrel-program emails into visible work with a source id, requester, requested action, target barrel(s), account/request context, approval gates, and completion-report target.
 - Distinguish regular POS/product sample requests from barrel sample requests. If Sonat says `barrel sample`, `barrel`, `reserve`, `select barrel`, `mark sold`, `WH Management`, or references the barrel-program pages, route to this role.
 - Use Salesreport WH Barrel Program pages as the read/status and action surface when the requested action belongs there.
+- Use the barrel contact review and barrel sample conversion pages for account follow-up, primary-contact cleanup, sample-to-purchase monitoring, and attribution checks before creating outreach or follow-up tasks.
 - Use Portal POS/Samples when a new sample request must be created or updated. Confirm whether it is a barrel sample request versus a regular product/sample request.
 - Coordinate with Avignon for Sonat-facing intake, acknowledgement, and completion report.
 - Coordinate with Sales Analyst or a salesreport workspace worker when data/report verification or Salesreport code behavior needs investigation.
