@@ -1158,18 +1158,24 @@ def is_sonat_robert_calendar_directive(message: dict, assistant_email: str) -> b
     if is_copied_only(message, assistant_email):
         return False
     text = f"{message.get('subject', '')} {message.get('body', '')}".lower()
+    if re.search(r"\b(did not ask|do not|don't|refrain|stop|please refrain|unless i tell you otherwise)\b", text):
+        return False
     if "robert" not in text:
         return False
     if not re.search(r"\b(meeting|calendar|invite|schedule|create|set up|add)\b", text):
         return False
-    if explicitly_requests_assistant_action(message, "Avignon", assistant_email):
+    direct_avignon_request = re.search(
+        r"\bavignon\b[^.?!]{0,120}\b(please|can you|could you|would you|need you to)\b[^.?!]{0,120}\b(schedule|create|invite|set up|add)\b[^.?!]{0,120}\b(meeting|calendar|invite)\b[^.?!]{0,120}\brobert\b",
+        text,
+    ) or re.search(
+        r"\b(please|can you|could you|would you|need you to)\b[^.?!]{0,120}\bavignon\b[^.?!]{0,120}\b(schedule|create|invite|set up|add)\b[^.?!]{0,120}\b(meeting|calendar|invite)\b[^.?!]{0,120}\brobert\b",
+        text,
+    )
+    if explicitly_requests_assistant_action(message, "Avignon", assistant_email) and direct_avignon_request:
         return True
     if is_reply_or_forward_subject(str(message.get("subject") or "")):
         return False
-    return bool(
-        re.search(r"\b(please|can you|could you|would you|need you to)\b[^.?!]{0,120}\b(schedule|create|invite|set up|add)\b", text)
-        or re.search(r"\b(schedule|create|invite|set up|add)\b[^.?!]{0,120}\b(meeting|calendar|invite)\b", text)
-    )
+    return bool(direct_avignon_request)
 
 
 def find_existing_calendar_event(calendar_id: str, source_message_id: str, start_at: datetime) -> dict | None:
