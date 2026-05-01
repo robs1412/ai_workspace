@@ -356,6 +356,19 @@
 - Task Flow event name is `email_routed` for routed intake and remains `email_classified` for passive review-only intake.
 - Verification passed with `python3 -m py_compile` for source and installed runtime, plus a runtime classifier spot-check on the Maker's Market staffing subject returning Vanessa/Outreach `routed`.
 
+## 2026-05-01 Vanessa Follow-Through Recovery
+
+- Robert flagged that Vanessa emails were still missing after the Task Flow routing fix. Live National Outreach INBOX readback showed five active source messages still open: Christine OPS/tasting-notes follow-up, Maker's Mart Stephen cancellation and coverage request, Matthew Devens new COT member note, Kenosha Women's Market details, and Sonat's already-sent Shiloh acknowledgement.
+- Maker's Mart OPS correction completed: removed Stephen De Sena from shift `4880`; readback shows shift `4880` open/unassigned and shift `5190` still assigned to Zachary Johnson.
+- Vanessa sent Stephen the travel/cancellation acknowledgement, cc Robert. Subject `Re: Saturday 5/2 Makers Market Shift 12-6`; sent-log file `vanessa-stephen-makers-mart-cancel-20260501.sent-1777653409.json`.
+- Vanessa sent the last-minute Maker's Mart coverage alert to COTeam plus Management using the current phpList audience as a direct BCC fallback because live phpList queue execution was not locally available in this session. Subject `Last-minute COT opening: Maker's Mart tomorrow 12-6`; to Robert plus 24 BCC recipients; sent-log file `vanessa-coteam-makers-mart-opening-20260501.sent-1777653406.json`.
+- Vanessa sent Robert the Google Chat post copy, cc Sonat. Subject `Google Chat post: Maker's Mart opening`; sent-log file `vanessa-robert-makers-mart-chat-post-20260501.sent-1777653407.json`.
+- Vanessa sent Christine Cummins the detailed OPS shifts/manual-link email and asked what she means by tasting notes, cc Robert. Subject `OPS shifts and tasting notes`; sent-log file `vanessa-christine-ops-shifts-20260501.sent-1777653404.json`.
+- Vanessa acknowledged Sonat's Matthew Devens new-COT-member note, cc Sebastian, Avignon, and Robert. Subject `Re: New COT team member`; sent-log file `vanessa-sonat-new-cot-member-ack-20260501.sent-1777653408.json`.
+- Kenosha Women's Market details were added to OPS event records `812` and `813` under `important_information` so either related June 28 Kenosha record carries the setup instructions. Readback: both records have nonblank info length `664`.
+- Vanessa sent Sonat the Kenosha OPS-update completion note, cc Robert, and did not send a separate external reply to Shiloh because Sonat had already replied with Vanessa copied. Subject `Re: Submission Form for Kenosha Women's Market`; sent-log file `vanessa-sonat-kenosha-market-ops-update-20260501.sent-1777653475.json`.
+- Filed all five active source messages to `Handled`. Final National Outreach poll readback at 2026-05-01 11:39 CDT: `mailbox_total=0`, `active_inbox_count=0`, `queued_sends_failed=0`.
+
 ## 2026-04-30 Naomi / Ezra Role Correction
 
 - Robert corrected the specialist split: Naomi Stern is now the Finance Operations Coordinator; Ezra Katz is now Special Projects & Legal Affairs. Updated role docs, canonical persona YAMLs, National Outreach README/TODO routing notes, and source plus installed National Outreach classifier routing.
