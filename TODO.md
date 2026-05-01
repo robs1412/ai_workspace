@@ -1,14 +1,23 @@
 # TODO — ai_workspace
 
-Updated: 2026-04-27 CDT (Machine: Macmini.lan)
+Updated: 2026-05-01 CDT (Machine: Macmini.lan)
 
 ## In Progress
+
+- Shared task-flow stabilization is active after the 2026-04-30 implementation.
+  - Implementation exists across National Outreach, Frank, Avignon, existing MySQL tables, the Frank-driven due runner, and the Workspaceboard Task Flow page.
+  - 2026-05-01 reminder failure was corrected: due comparisons now use `America/Chicago`, the due runner is hooked into Frank's running 15-second worker at a five-minute throttle, and duplicate reminder sends are suppressed.
+  - 2026-05-01 validator noise fix: no-action, duplicate/already-handled, and filed/reconciled records with readback now count as closed instead of blocked. Live report readback after the fix: `closeout_issues_shown = 0`, `missing_field_counts = []`.
+  - 2026-05-01 Workspaceboard visibility added: `task-flow.html` now shows due-runner last-run state, notification result, executed scheduled actions, due-now count, and upcoming scheduled records.
+  - Current scheduled action: send Dmytro the KOVAL Agents Drive / Google Sheets API admin reminder at `2026-05-01 10:00:00` Central, copied to Robert. Task-flow key `taskflow-dmytro-koval-agents-gcp-admin-reminder-2026-05-01-1000`. Frank now checks task-flow due items every 60 seconds.
+  - Remaining blocker: Papers projection still needs `papers_create` permission or an approved write client/scope/path from Claude/Dmytro before `scripts/task_flow_papers_project.py` can project completed records to Papers. 2026-05-01 recheck: `papers_create` appears in `tools/list`, but a real non-secret create still returns `Access denied: 'papers_create' is not available for client 'codex'`.
 
 - National Outreach / Whole Foods portal to OPS Outreach sync is active; first approved import is complete and future pending approvals still need refresh.
   - Directive recorded at `nationaloutreach/WHOLE_FOODS_TASTING_PLANNING.md`; project log `project_hub/issues/2026-04-27-whole-foods-ops-sync.md`.
   - Rule: import only buyer-approved Whole Foods portal events into OPS Outreach; pending/not-approved events must be noted in the import report and not treated as scheduled OPS events.
   - WFM account-facing tasting requests should remain KOVAL Bourbon-only unless explicitly approved otherwise; internal COTeam notes should add suggested samples from recent account sales when available, including what sold and when it was last sold.
-  - Follow-up implementation needed: add a routed Salesreport/OPS integrated check for recent account product orders using `https://www.koval-distillery.com/salesreport/salesinvoicereport.php` as the initial reference.
+  - Follow-up implementation completed locally in Salesreport: `chain_store_intelligence.php` now provides a read-only chain/account/product/last-invoice/last-visit view using the existing Chain Invoice Report semantics.
+  - 2026-05-01 Robert clarified the chain-store source model: the existing Salesreport Chain Invoice Report should be the basis for Mariano's, Whole Foods, and similar stores. Treat invoice/bought data as lagging distributor evidence that can be more than a month behind. Binny's can use the recent scraper output as fresher current-placement context when needed, but do not overbuild scraper comparison for ordinary taster reminders. The immediate goal is a practical Vanessa/National Outreach reminder job: tell tasters what products accounts appear to carry so they bring the right samples/materials. Salesreport note recorded at `/Users/werkstatt/salesreport/doc/chain-store-intelligence-basis-2026-05-01.md`; page/helper implemented at `/Users/werkstatt/salesreport/chain_store_intelligence.php` and `/Users/werkstatt/salesreport/chain_store_intelligence_helper.php`; Vanessa job recorded as OPS task `367872`.
   - Credential blocker resolved: `.private/logins/wholefoods.txt` is present and a private authenticated crawl succeeded.
   - 2026-04-27 inventory found 42 April-June scheduled event rows across request numbers `310465`, `310468`, `310470`, `310472`, and `312022`.
   - 2026-04-27 Robert supplied buyer-approval email evidence for Request `312022`; six approved rows were imported into OPS Outreach as event bookings `857`-`862` with linked shifts `5184`-`5189`.
@@ -33,6 +42,7 @@ Updated: 2026-04-27 CDT (Machine: Macmini.lan)
   - 2026-04-27 follow-up MCP read-only discovery found the indexed Papers records for `#1425`, `#1429`, and `#1457`: `teams/ai-team/agents/pm/assessments/2026-04-23-task-1425.md`, `teams/it/infrastructure/worklog/2026-04-23-codex-frank-access-packet.md`, `teams/ai-team/agents/pm/assessments/2026-04-26-task-1457.md`, and `teams/it/infrastructure/worklog/2026-04-26-codex-frank-mcp-token-setup.md`. `papers_get` returns metadata for these records but `content: null`, with no versions or threads. Mesh has no matching records for those task IDs, and Rein `task_status` does not recognize Planner task IDs `1425`, `1429`, or `1457`. Current blocker is therefore no longer MCP connectivity; it is missing source body content in the reachable Papers records or needing Claude/Dmytro to republish the packet body.
   - 2026-04-27 Frank emailed Claude, copied Robert and Dmytro, asking for the missing non-secret packet body or actual body-bearing Papers path. Task id `frank-claude-papers-packet-body-needed-2026-04-27`; subject `Codex MCP follow-up: Papers packet body is empty`; Message-ID `<177732656712.98163.9008625912925477410@kovaldistillery.com>`. The ask explicitly excludes credentials, tokens, private keys, session cookies, raw secret values, and credential file paths.
   - 2026-04-27 Claude updated the packet and Dmytro asked whether Frank could fetch bodies with the new instructions. Read-only verification succeeded with MCP session preservation and `papers_get` using `guid` plus `include_content: true`; current access packet GUID `b46ee853-96aa-4181-a6c2-a947517df78f`, task `#1425`, task `#1429`, task `#1457`, and the MCP token setup worklog all returned body content. Frank replied to Claude with Robert and Dmytro copied, Message-ID `<177733555426.15825.6889489241668158360@kovaldistillery.com>`, and filed Robert's direct source to `Handled`. The packet-body verification blocker is closed; remaining cleanup is the preferred Infisical/durable runtime path.
+  - 2026-05-01 current split: packet-body reads are no longer the blocker. Two concrete follow-ups remain: actual Google Cloud Console admin/API enablement for `koval-agents` / `872255708765`, and Papers `papers_create` permission or approved write client for task-flow projection.
 
 ## Waiting for Next Step
 
@@ -112,6 +122,15 @@ Updated: 2026-04-27 CDT (Machine: Macmini.lan)
 _No separate AI Workspace backlog items. Source-owned continuations are already represented by the matching Waiting-family blocker above and should resume in the owning workspace only after that blocker clears._
 
 ## Done
+
+- **2026-05-01** AI Manager control-lane directive reinforced.
+  - Recorded Robert's direction that AI Manager should supervise through Task Manager/Workspaceboard rather than doing substantive work in the manager chat. Updated AI Workspace startup rules, AI Manager role docs, operating model, and worker-role overview so Task Manager owns worker creation/focus/monitoring while AI Manager reports only real input needs, blockers, approval gates, route/priority decisions, or concise closure. Workspaceboard Task Manager source prompt was also updated; live runtime restart was not performed in this pass.
+
+- **2026-05-01** Shared task-flow reminder/validator visibility hardened.
+  - Fixed Central-time due comparisons, installed due-runner runtime copies, hooked the due runner into the existing Frank worker, scheduled Dmytro's 10:00 AM reminder, corrected no-action/handled false blocked counts, and expanded Workspaceboard Task Flow with runner/upcoming visibility. Verification passed for Python, PHP, Node, installed runtime copies, and live MySQL report readback.
+
+- **2026-04-30** Shared email-worker task flow implemented.
+  - Added shared packet/event capture across National Outreach, Frank, and Avignon; existing MySQL storage in `koval_crm.ai_task_flow_packets` and `koval_crm.ai_task_flow_events`; due reporting; closeout guards; and the separate Workspaceboard Task Flow page. Papers projection remains gated on `papers_create` permission or an approved write client.
 
 - **2026-04-27** Barrel Sales API path fixed and Beatrix barrels marked sold.
   - Updated the two WH barrel Salesreport pages so barrel write actions use the active Salesreport/Codex user path instead of the stale service-account fallback. Marked barrels `9513` and `9346` sold on sample request `2678`; readback confirms `selection_status = 2`, `sold_by = 3`, and Sonat user id `3` on the latest sold-history entries.

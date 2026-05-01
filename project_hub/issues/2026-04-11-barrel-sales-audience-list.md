@@ -44,6 +44,19 @@ No defect. This was a data-workflow build from an append-queue intake item. The 
   - Follow-up commit `5f7d078` after Sonat replied to Avignon: updated `scripts/build_barrel_sales_forge_audience.php` to classify the barrel review rows into cleaned buyer, Japan/Fuyuko, distributor/direct-to-distributor review-only, and ignored rows.
   - Created `doc/barrel-sales-cleaned-sonat-review-2026-04-11.md`, `doc/barrel-sales-japan-fuyuko-review-2026-04-11.md`, and `doc/barrel-sales-distributor-review-2026-04-11.md`.
   - Rebuilt Forge audience `#40` with snapshot `#44` and replaced PHPList list `#140` with the cleaned buyer segment only: `62` cleaned buyer review rows, `35` eligible synced contacts, `8` Japan rows, `13` distributor/direct-to-distributor rows, and `1` ignored U.S. Embassy Tokyo row.
+  - 2026-04-30 pickup update: added a Salesreport-owned primary-contact override path to `barrel_contact_review.php`; `scripts/build_barrel_sales_forge_audience.php` now honors `koval_crm.barrel_contact_primary_override` when the selected contact remains eligible.
+  - 2026-04-30 route update: `barrel_contact_review.php` and `quick_contact.php` now link Portal account/contact records through the current relationship-management routes.
+  - 2026-04-30 live deploy: committed and pushed `30aa009 Add barrel contact primary overrides`; live `/home/koval/public_html/salesreport` fast-forwarded to `30aa009`.
+
+### forge
+
+- Repo Log ID: `FORGE-BARREL-AUDIENCE-PRIMARY-OVERRIDE-20260430`
+- Commit SHA: pending local review/commit.
+- Commit Date: 2026-04-30 local Mac mini work.
+- Change Summary:
+  - Updated `lib/forge_audience.php` so the Forge `barrel_contacts` source workflow reads the same `barrel_contact_primary_override` table and uses the selected primary contact when it is still eligible.
+  - This keeps later Forge previews/rebuilds aligned with the Salesreport barrel review page.
+  - Committed and pushed `f7b68e7 Honor barrel contact primary overrides`; live `/home/koval/public_html/forge` fast-forwarded to `f7b68e7`.
 
 ### ai_workspace
 
@@ -74,6 +87,9 @@ No defect. This was a data-workflow build from an append-queue intake item. The 
   - Suppressed PHPList contacts were filtered before snapshot sync so suppressed contacts were not re-added by the replace-mode sync.
   - `quick_contact.php` lints cleanly and is linked from the Salesreport menu as `Quick Contact Add`.
   - `barrel_contact_review.php` lints cleanly, loads from CLI without fatal errors, and is linked from the Salesreport menu as `Barrel Contact Review`.
+  - 2026-04-30 pickup verification: `php -l` passed for Salesreport `barrel_contact_review.php`, `quick_contact.php`, `scripts/build_barrel_sales_forge_audience.php`, and Forge `lib/forge_audience.php`. Authenticated CLI render as `admin` loaded `barrel_contact_review.php`, showed `Rows loaded: 84`, showed `Make Primary` actions, and rendered current relationship-management Portal account/contact links. Read-back confirms `koval_crm.barrel_contact_primary_override` exists with `0` current overrides before user selections.
+  - 2026-04-30 live verification: live Salesreport PHP lint passed for `barrel_contact_review.php`, `quick_contact.php`, and `scripts/build_barrel_sales_forge_audience.php`; live Forge PHP lint passed for `lib/forge_audience.php`; live authenticated CLI render showed `Rows loaded: 84`, `Make Primary`, and current relationship-management Portal links.
+  - 2026-04-30 Frank sent Robert a summary with Sonat copied, subject `Barrel contact review primary selection is live`, task id `frank-barrel-contact-primary-live-summary-2026-04-30`, Message-ID `<177756652233.89175.4188903910373681536@kovaldistillery.com>`.
   - Live host `/home/koval/public_html/salesreport` is clean at `f90f9fc801c18c71a22d362a53d21ed2ab8dbc6b`; live PHP lint passed for `barrel_contact_review.php` and `quick_contact.php` after the quick-contact follow-up, and previously for `scripts/build_barrel_sales_forge_audience.php` and `_menu.php`.
   - Browser-style live URL check for `https://www.koval-distillery.com/salesreport/barrel_contact_review.php` returns the expected Salesreport login redirect. Plain curl without a browser user agent can be blocked by the site security layer.
   - Browser-style live URL check for `https://www.koval-distillery.com/salesreport/quick_contact.php` returns the expected Salesreport login redirect.

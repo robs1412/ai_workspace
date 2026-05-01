@@ -78,7 +78,7 @@ Robert ran the staged helper and `com.koval.nationaloutreach-auto` is installed 
 The prepared runtime now uses `nationaloutreach_mail_cycle.py`, which:
 
 - reads full message bodies into private state;
-- classifies messages into Outreach Coordinator, Marketing Manager, Internal Communicator, Email Coordinator, or Security Guard review buckets;
+- classifies messages into Outreach Coordinator, Marketing Manager, Internal Communicator, Email Coordinator, Naomi Stern, Ezra Katz, or Security Guard review buckets;
 - writes non-secret metadata/route suggestions to the worker workspace;
 - sends only queued `*.approved.json` drafts from the private outbox; and
 - does not move, delete, or file mailbox messages yet.

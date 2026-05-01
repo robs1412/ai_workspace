@@ -1,6 +1,6 @@
 # TODO — avignon
 
-Updated: 2026-04-27 CDT (Machine: Macmini.lan)
+Updated: 2026-04-30 CDT (Machine: Macmini.lan)
 
 ## In Progress
 
@@ -8,12 +8,76 @@ _None._
 
 ## Waiting Next Step
 
+- 2026-04-30: Blocked Sonat `Contact Addition for portal` pending CRM duplicate-handling confirmation.
+  - Source Message-ID `<CALbLtzxxZOpZcoqnejCQmxSNdsKwJ9do3b=kwVJJPEFCZwSGSw@mail.gmail.com>`; dedupe key `avignon-direct-owner-sonat-CALbLtzxxZOpZcoqnejCQmxSNdsKwJ9do3b-kwVJJPEFCZwSGSw-mail-gmail-com`; visible Avignon route `76a45b5d`; prompt delivery verified; runtime acknowledgement `<177755602431.31433.7380780188504717559@kovaldistillery.com>`.
+  - Portal duplicate check found exact L. Woods account `7069`, alternate L Wood account `267802`, and two active Noah Freedman contacts `334634` and `348006` under the alternate account. Contact `334634` is the best match because it has the General Manager title and phone match, but duplicate handling is not deterministic enough to mutate safely without confirmation.
+  - Runtime prematurely sent a generic completion note `<177755609579.32181.17805060029694167661@kovaldistillery.com>` and filed the source to `Handled` before the duplicate check was resolved. Corrective blocker/decision note sent to Sonat, subject `L. Woods contact: duplicate check needed`, Message-ID `<177755631396.33442.14018294819869236458@kovaldistillery.com>`, draft `drafts/sonat-lwoods-noah-freedman-contact-blocked-2026-04-30.txt`; source is now `INBOX=0` / filed to `Handled`.
+  - Next: if Sonat confirms, link/update contact `334634` to account `7069`; leave contact `348006` untouched unless she separately approves duplicate cleanup.
+  - No CRM/Portal/OPS mutation, external reply, OAuth/token/auth work, credential exposure, pricing/account commitment, merge/delete/destructive/bulk action, or Robert copy occurred.
+
+- 2026-04-28: Blocked Sonat `Draft Email flow up for Lipman meeting?` follow-up pending the same Lipman meeting notes or next-step list.
+  - Source Message-ID `<CALbLtzwizT2zVS5gHNxSbZXR+sMa4UhP26jzz9dDrWQ5P9863w@mail.gmail.com>`; dedupe key `avignon-direct-owner-sonat-CALbLtzwizT2zVS5gHNxSbZXR-sMa4UhP26jzz9dDrWQ5P9863w-mail-gmail-com`; visible Avignon route `1d40d905`; prompt delivery verified; runtime acknowledgement `<177739544188.28543.814426747918045771@kovaldistillery.com>`.
+  - No new meeting notes or next-step packet was present in today's follow-up. Sonat blocker/update sent: subject `Lipman follow-up draft: notes needed`, Message-ID `<177739553311.30023.2011807106086392020@kovaldistillery.com>`, draft `drafts/sonat-lipman-follow-up-draft-blocked-2026-04-28.txt`; source verified `INBOX=0`, `Handled=1`.
+  - Second same-day Sonat follow-up `Draft follow up to TN distributor` was handled as the same underlying blocker: Source Message-ID `<CALbLtzzY4+T_CUvBVGjt+2tLyDMrAzpGz8_jAyLhSmWQGAkjvw@mail.gmail.com>`; dedupe key `avignon-direct-owner-sonat-CALbLtzzY4-T-CUvBVGjt-2tLyDMrAzpGz8-jAyLhSmWQGAkjvw-mail-gmail-com`; visible route `b34ad92b`; prompt delivery verified; runtime acknowledgement `<177739716668.33406.12875136394255232915@kovaldistillery.com>`; runtime closeout `<177739721545.34149.8446771941322519680@kovaldistillery.com>`; manual clearer blocker note sent `<177739729918.34586.5691018561018225924@kovaldistillery.com>` from `drafts/sonat-tn-distributor-lipman-follow-up-still-blocked-2026-04-28.txt`; source verified `INBOX=0`, `Handled=1`. Do not send another note for this source.
+  - Next: when Sonat sends the Lipman meeting notes or exact next-step list, draft the follow-up email and include only the approved point that KOVAL has created Rainbow-pack pricing as promised. No external reply, CRM/Portal/OPS mutation, OAuth/auth work, Rainbow pricing details, account commitments, or Robert copy occurred.
+
 - 2026-04-27: Blocked Sonat `Draft email needed` direct-owner request pending meeting notes or next-step list.
   - Source Message-ID `<CALbLtzxSa1o6Dz7WrOMDQ0vgNXN3izHiFpvtgo_XX1JC+1NkNA@mail.gmail.com>`; dedupe key `avignon-direct-owner-sonat-CALbLtzxSa1o6Dz7WrOMDQ0vgNXN3izHiFpvtgo-XX1JC-1NkNA-mail-gmail-com`; canonical visible Avignon route `d6a29eed`; duplicate/secondary route `c1b70191` was closed as duplicate board noise.
   - Approved local evidence did not include the meeting-notes attachment or next-step list, so Avignon cannot safely draft the external follow-up. Sonat blocker report sent: subject `Meeting follow-up draft blocked: notes needed`, Message-ID `<177733974757.32337.12141908021573628420@kovaldistillery.com>`, draft `drafts/sonat-draft-email-needed-meeting-notes-blocker-2026-04-27.txt`.
   - Next: when Sonat resends the notes attachment or pastes the next-step list, draft the follow-up email with all next steps and note only that KOVAL has created Rainbow-pack pricing as promised. No external reply, CRM/Portal/OPS mutation, OAuth/auth work, Rainbow pricing details, account commitments, or Robert copy occurred.
 
 ## Done
+
+- 2026-04-30: Recorded shared KOVAL signature-format rule for Avignon.
+  - Classification: Avignon customization plus shared non-secret signature mechanic; not a runtime/send-path change.
+  - Result: Avignon guidance now says full Avignon signatures keep the phone number, website, and linked `X | Instagram | Facebook` social-label set on separate lines while preserving Avignon's own role title and Sonat-facing persona.
+  - Related Frank source Message-ID `<CAAtX44ZbDJrTCM2Lf3NGpQBjXdCrP2jQMtSPt+7qexp=D3aVnw@mail.gmail.com>`; shared note `../docs/email-workers/2026-04-30-shared-koval-signature-format.md`.
+  - No Sonat private SOP text copied, no Avignon mailbox action, no Sonat email, no runtime/send-helper edit, no OAuth/token/auth work, no CRM/Portal/OPS mutation, deploy, commit, push, reset, or clean occurred.
+
+- 2026-04-30: Recorded shared sample-request notification verification rule for Avignon.
+  - Classification: shared Frank/Avignon mechanic applied through Avignon guidance; not Avignon persona wording customization and no Sonat private SOP text copied.
+  - Result: Avignon `AGENTS.md` and `REQUEST_SAMPLES_GUIDANCE.md` now require Portal sample-request routes to verify whether regular-sample or barrel-sample notifications were sent before reporting completion.
+  - Related Frank/Portal route: `760e44ab` / `Portal sample request notification follow-up`; related Lanterna request `2707` was not retroactively notified.
+  - No Avignon mailbox action, Sonat email, Portal/CRM/OPS mutation, OAuth/token/auth work, deploy, commit, push, reset, or clean occurred.
+
+- 2026-04-30: Completed Sonat `Barrel 9511` direct-owner Portal barrel sold request.
+  - Source Message-ID `<CALbLtzzPGrqRTV4exKprc70r3AR1QC2vFQLi+9DuqZJpBZD25w@mail.gmail.com>`; dedupe key `avignon-direct-owner-sonat-CALbLtzzPGrqRTV4exKprc70r3AR1QC2vFQLi-9DuqZJpBZD25w-mail-gmail-com`; Portal visible route `81e9221b`.
+  - Portal marked barrel `9511` sold as Sonat user `3`. Verified `selection_status=2`, `barrel_status=1`, `sold_by=3`, `project_id=367785`, latest sold-history row `4356`, 13 active child tasks after canceling/deleting generated generic promote tasks `367793` and `367794`, and Matt bottling task `367799`.
+  - Completion report sent to Sonat, subject `Barrel 9511 sold`, Message-ID `<177756443007.83020.11873823963163012289@kovaldistillery.com>`, draft `drafts/sonat-barrel-9511-sold-complete-2026-04-30.txt`; source verified `INBOX=0`, `Handled=1`.
+  - No OAuth/token/auth repair, pricing/account commitment, private mailbox-body exposure, external email reply, deploy, commit, push, reset, clean, or unrelated Portal/CRM/OPS mutation occurred.
+
+- 2026-04-30: Completed Sonat Avignon SOP reply-style correction and inbox closeout.
+  - Updated Avignon guidance and the installed inbox loop so Sonat-facing acknowledgements/completion notes use SOP-voiced business language and keep Task Manager/session/backend/Handled mechanics internal.
+  - Saved Sonat's prospective-distributor email as durable future draft guidance in `DISTRIBUTOR_PROSPECTING_GUIDANCE.md`; future distributor prospecting emails stay draft-only unless Sonat approves sending.
+  - Sent Sonat the corrected style confirmation, Message-ID `<177755564601.17987.11827350988394095834@kovaldistillery.com>`. Sent Beatrix barrel completion to Sonat with Robert copied, Message-ID `<177755573159.21905.7623416036324092251@kovaldistillery.com>`.
+  - Filed the stale Beatrix/SOLD Barrels residue and distributor-template source to `Handled`; live Avignon INBOX read-back ended at `0`.
+
+- 2026-04-29: Completed Sonat `Report for MN needed` direct-owner Salesreport request.
+  - Source Message-ID `<CALbLtzwbdYHvtb3OP7MtDJwk3v9iTuKyRre0nNTdsfzzDEZuRw@mail.gmail.com>`; dedupe key `avignon-direct-owner-sonat-CALbLtzwbdYHvtb3OP7MtDJwk3v9iTuKyRre0nNTdsfzzDEZuRw-mail-gmail-com`.
+  - Runtime-created Avignon route `b7906172` / `Avignon direct Sonat: Report for MN needed`; prompt delivery verified; runtime acknowledgement `<177751040172.29353.6194738477244705234@kovaldistillery.com>`. Manual duplicate acknowledgement also sent `<177751054853.31332.9167916279533205132@kovaldistillery.com>`; do not send another acknowledgement for this source.
+  - Salesreport route `8e91122e` / `Salesreport Avignon Sonat MN eight-year report` completed review-ready. Created `doc/avignon-sonat-mn-sales-report-2026-04-29.md` and reusable generator `scripts/generate_mn_sales_report.php`.
+  - Read-back: Minnesota window `2018-04-01` through `2026-03-31`; last-two-year account window `2024-04-01` through `2026-03-31`; `444` unique buying accounts, `2,219` invoices, `17,976.00` bottles, `2,996.00` cases, `$337,968.26` extended line revenue; top account in both windows is Surdyk's.
+  - Verification: `php -l scripts/generate_mn_sales_report.php` passed and the generator completed. Completion report sent to Sonat, subject `Minnesota sales report complete`, Message-ID `<177751085180.35295.14468754650729713197@kovaldistillery.com>`, draft `drafts/sonat-mn-sales-report-complete-2026-04-29.txt`; source verified `INBOX=0`, `Handled=1`.
+  - No Robert copy, external reply, OAuth/token/auth work, CRM/Portal/OPS mutation, live web page/deploy, pricing/account commitment, or mailbox-body exposure occurred.
+
+- 2026-04-29: Completed Sonat `Reminder` direct-owner Portal/OPS reminder request.
+  - Source Message-ID `<CALbLtzy_nFu49_zSp1HSHLBHDdmfkhrU_KRXXL5e+bgAs7riOw@mail.gmail.com>`; dedupe key `avignon-direct-owner-sonat-CALbLtzy-nFu49-zSp1HSHLBHDdmfkhrU-KRXXL5e-bgAs7riOw-mail-gmail-com`; visible Avignon route `4440fe90`.
+  - Runtime created the visible route, verified prompt delivery, and sent captured acknowledgement `<177750965657.23539.5847078198421992186@kovaldistillery.com>`.
+  - Created and verified Portal/OPS reminder tasks `367756` / `Reach out to Matthew Devens` and `367757` / `Send Vinocopia MN/account-base information`, both due `2026-04-30`, status `Not Started`, priority `Medium`, notification-enabled, Sonat-owned, and assigned to Sonat user `3`.
+  - Completion report sent to Sonat, subject `Matthew Devens and Vinocopia reminders set`, Message-ID `<177750995960.26638.3533490376687745241@kovaldistillery.com>`, draft `drafts/sonat-reminder-matthew-devens-vinocopia-complete-2026-04-29.txt`; source verified `INBOX=0`, `Handled=1`.
+  - The normal Portal helper was blocked before mutation by the existing mandatory password-reset gate, so Avignon used the prior approved task-table pattern. DataHistory rows `88144` and `88145` exist; post-write duplicate counts are exactly one for each task. No external Vinocopia email, OAuth/token/auth work, pricing/account commitment, or Robert copy occurred.
+
+- 2026-04-28: Completed Sonat `Task` direct-owner Portal/OPS task request for Mark.
+  - Source Message-ID `<CALbLtzzQ_kZHstCa9v=8_54KPQ3J61sVCWH0FE51Bb8ZttyjNg@mail.gmail.com>`; dedupe key `avignon-direct-owner-sonat-CALbLtzzQ-kZHstCa9v-8-54KPQ3J61sVCWH0FE51Bb8ZttyjNg-mail-gmail-com`; visible Avignon route `fc43fe69`.
+  - Created and verified Portal/OPS task `367675` / `Create litre price sheet for KOVAL BIB and Maple Finished whiskies`, due `2026-04-28`, status `Not Started`, priority `Medium`, Sonat-owned and assigned to Mark DeSimone user `21` / `mark@kovaldistillery.com`.
+  - Runtime sent captured acknowledgement `<177740354809.44286.6326923516802455597@kovaldistillery.com>`; manual completion report sent `<177740379632.45309.2889181569836220884@kovaldistillery.com>` from `drafts/sonat-mark-litre-price-sheet-task-complete-2026-04-28.txt`; source verified `INBOX=0`, `Handled=1`.
+  - Durable shortcut recorded: when Sonat says to create a task for `Mark`, use Mark DeSimone / `mark@kovaldistillery.com` unless Sonat specifies a different Mark. No pricing was entered or inferred; no external reply, OAuth/token/auth work, password reset, or unrelated CRM/Portal/OPS mutation occurred.
+
+- 2026-04-28: Completed Sonat `Add Activity for CA sell sheets` direct-owner Portal task request.
+  - Source Message-ID `<CALbLtzy4Jq2H0i_V0RFo+VjwPTsdFxo8RhvC+RyNyZ=3q7iWqQ@mail.gmail.com>`; dedupe key `avignon-direct-owner-sonat-CALbLtzy4Jq2H0i-V0RFo-VjwPTsdFxo8RhvC-RyNyZ-3q7iWqQ-mail-gmail-com`; Portal route `0e1a683f`.
+  - Portal created and verified task `367665` / `Complete CA-market sell sheets`, due `2026-05-01`, status `Not Started`, priority `Medium`, Sonat-owned and assigned to Andrew Karasek user `1197`.
+  - Runtime sent captured acknowledgement `<177739361579.21929.7947809473496777811@kovaldistillery.com>`; manual completion report sent `<177739397672.25677.10808788030066725433@kovaldistillery.com>` from `drafts/sonat-ca-sell-sheets-task-complete-2026-04-28.txt`; source verified `INBOX=0`, `Handled=1`.
+  - Andrew matched exactly one active Portal user by email; pre-write duplicate check found no matching active sell-sheet task for the 2026-04-28 through 2026-05-04 window; post-write matching duplicate count is exactly one. No OAuth/token/auth repair, private mailbox-body exposure, pricing/account commitment, external reply, or unrelated Portal/CRM/OPS mutation occurred.
 
 - 2026-04-27: Completed Sonat `Barrels selected` direct-owner Portal barrel sold request.
   - Source Message-ID `<CALbLtzy0GxCu_HP7MqXyoQsc-NnP3vMmuPe0oHySbpvLvReRhA@mail.gmail.com>`; dedupe key `avignon-direct-owner-sonat-CALbLtzy0GxCu-HP7MqXyoQsc-NnP3vMmuPe0oHySbpvLvReRhA-mail-gmail-com`; Portal visible route `a0729e2f`.
@@ -25,11 +89,11 @@ _None._
   - Read-only lookup against completed CRM Import ID `52` / prior Importer session `10b9346d` found four Boston accounts and seven contacts; three contact emails were available.
   - Drafted Sonat completion/list report at `drafts/sonat-boston-contacts-2026-04-27.txt`. No CRM/Portal/OPS mutation, external reply, OAuth/token/auth work, credential exposure, pricing/account commitment, merge/delete/destructive/bulk action, deploy, commit, push, reset, or clean occurred.
 
-- 2026-04-27: Blocked Robert-supervised `SOLD Barrels` request at the Salesreport/CRM auth gate; barrels were not marked sold.
+- 2026-04-30: Verified Robert-supervised `SOLD Barrels` request is now complete in live Salesreport.
   - Source Message-ID `<CAAtX44ZBy_N80q4mvzzs0i8WyfNrMyAD_sVE2LEV6ijvJgs+7g@mail.gmail.com>`; dedupe key `avignon-direct-owner-robert-approver-CAAtX44ZBy-N80q4mvzzs0i8WyfNrMyAD-sVE2LEV6ijvJgs-7g-mail-gmail-com`; visible Avignon route `4b92ca0c`.
-  - Recovered only the needed business packet: barrels `9513` and `9346` should be marked sold for Beatrix - Fulton Market from sample request `2678` so sticker processing can start. Read-back verified both barrels are still selected, not sold, on request `2678`; no project/task/sticker workflow was created.
-  - Normal Salesreport/Portal API write path stopped before mutation because the configured CRM API login returned a mandatory service-account password-reset gate. No auth/token/password-reset work was performed.
-  - Runtime sent a generic Robert closeout `<177733560670.16622.12956536498739412675@kovaldistillery.com>` and filed the source to `Handled`; manual correction/blocker report sent Robert-only as `<177733587160.17513.8862821466128772193@kovaldistillery.com>`. Correct state: blocked pending restored approved Codex/CRM API or browser-auth path, then Barrel Sales Manager/Salesreport should mark barrels `9513` and `9346` sold.
+  - Live read-only Salesreport verification on 2026-04-30 confirmed Beatrix - Fulton Market sample request `2678` barrels `9513` and `9346` now have `selection_status=2`, `barrel_status=1`, `sold_by=3`, latest sold-history rows modified by Sonat user `3`, and project IDs `367538` and `367554`.
+  - Read-back also found active downstream barrel tasks, including Mark bottling pull task `367805` and Sonat-owned sticker/POS/bottling follow-up tasks for both barrels. The earlier auth-gate blocker is superseded by this live sold-state verification.
+  - Runtime sent a generic Robert closeout `<177733560670.16622.12956536498739412675@kovaldistillery.com>` and filed the source to `Handled`; manual correction/blocker report sent Robert-only as `<177733587160.17513.8862821466128772193@kovaldistillery.com>` before the later sold-state verification. Do not send another note unless Robert asks for a fresh correction report.
 
 - 2026-04-27: Completed Sonat CRM activity submit deterministic slice and blocked the truncated Hornblower slice.
   - Source Message-ID `<CALbLtzwuw2LLxKSbrehi3VtoLhmBuuC=Ugs7F2t0Yzddd1SC8A@mail.gmail.com>`; dedupe key `avignon-direct-owner-sonat-CALbLtzwuw2LLxKSbrehi3VtoLhmBuuC-Ugs7F2t0Yzddd1SC8A-mail-gmail-com`; Avignon route `bfa60ead`; Portal route `0f383171`.

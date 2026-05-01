@@ -1,6 +1,14 @@
 # AI Workspace Project Hub
 Last Updated: 2026-04-27 CDT (Machine: Macmini.lan)
 
+## Completed
+
+- **2026-04-30 OPS Project Task Autosave Fix**
+  - Master ID: `AI-INC-20260430-OPS-PROJECT-TASK-AUTOSAVE-01`
+  - Detail log: `project_hub/issues/2026-04-30-ops-project-task-autosave-fix.md`
+  - Repos: `ops`, `ai_workspace`
+  - Status: completed. Fixed live task-detail autosave by moving top-field metadata saving onto `projects/task.php` itself and then fixing the browser save URL shadowing bug that posted to `/ops/projects/[object HTMLInputElement]`; committed and pushed `b89896c` and `b0f5caa`, fast-forwarded live OPS to `b0f5caa`, and verified live syntax/source plus a Codex-authenticated save response.
+
 ## Open
 
 - **2026-04-27 Whole Foods Portal to OPS Outreach Sync**
@@ -339,6 +347,7 @@ Last Updated: 2026-04-27 CDT (Machine: Macmini.lan)
 - **2026-04-11 Barrel-Sales Forge/PHPList Audience**
   - Master ID: `AI-INC-20260411-BARREL-SALES-AUDIENCE-01`
   - Detail log: `project_hub/issues/2026-04-11-barrel-sales-audience-list.md`
+  - 2026-04-30 pickup update: Salesreport barrel contact review now has a primary-contact override path, the rebuild honors those selections, Forge `barrel_contacts` reads the same override table, current Portal relationship-management links are recorded, and the six-month refresh path is documented.
   - Repos: `salesreport`, `ai_workspace`, Forge/PHPList database state, Avignon/Mac mini email route
 
 - **2026-04-10 OPS Codex Task Creation Fix**

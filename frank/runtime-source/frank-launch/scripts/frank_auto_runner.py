@@ -7,6 +7,7 @@ import html
 import json
 import os
 import re
+import subprocess
 import sys
 import time
 import urllib.error
@@ -17,6 +18,10 @@ from email.header import decode_header, make_header
 from pathlib import Path
 
 import imaplib
+
+TASK_FLOW_SCRIPT_DIR = Path("/Users/werkstatt/ai_workspace/scripts")
+if TASK_FLOW_SCRIPT_DIR.exists() and str(TASK_FLOW_SCRIPT_DIR) not in sys.path:
+    sys.path.insert(0, str(TASK_FLOW_SCRIPT_DIR))
 
 from frank_autodraft import build_receipt_draft, load_recipient_map, parse_receipt_message, write_draft_file
 from frank_inbox_monitor import load_credentials, load_sent_log, normalize_message_id
@@ -32,6 +37,11 @@ from frank_paths import (
 from send_frank_email import PROFILES as SEND_PROFILES
 from send_frank_email import append_sent_log, build_message, send_message
 
+try:
+    import shared_task_flow
+except ImportError:  # pragma: no cover - task-flow recorder is optional fail-open audit plumbing.
+    shared_task_flow = None
+
 ROBERT_EMAIL = "robert@kovaldistillery.com"
 DMYTRO_EMAIL = "dmytro.klymentiev@kovaldistillery.com"
 CLAUDE_EMAIL = "claude@koval-distillery.com"
@@ -40,6 +50,139 @@ BOARD_API = os.environ.get("WORKSPACEBOARD_API", "http://127.0.0.1:17878").rstri
 DIRECT_PRIMARY_PENDING_STATES = {"routed_pending_completion"}
 DIRECT_PRIMARY_DONE_STATES = {"completed_report_sent", "blocked_report_sent"}
 DIRECT_PRIMARY_ACK_DELAY_SECONDS = 10 * 60
+TASK_FLOW_DUE_RUNNER = Path("/Users/admin/.task-flow-launch/runtime/scripts/task_flow_due_runner.py")
+TASK_FLOW_DUE_RUNNER_STATE = Path("/Users/admin/.task-flow-launch/state/frank-due-runner-last.txt")
+TASK_FLOW_DUE_RUNNER_INTERVAL_SECONDS = 60
+
+
+def run_task_flow_due_runner(dry_run: bool = False) -> dict | None:
+    if dry_run or not TASK_FLOW_DUE_RUNNER.exists():
+        return None
+    now = time.time()
+    try:
+        if TASK_FLOW_DUE_RUNNER_STATE.exists():
+            last = float(TASK_FLOW_DUE_RUNNER_STATE.read_text(encoding="utf-8").strip() or "0")
+            if now - last < TASK_FLOW_DUE_RUNNER_INTERVAL_SECONDS:
+                return None
+    except Exception:
+        pass
+    TASK_FLOW_DUE_RUNNER_STATE.parent.mkdir(parents=True, exist_ok=True)
+    TASK_FLOW_DUE_RUNNER_STATE.write_text(str(now), encoding="utf-8")
+    TASK_FLOW_DUE_RUNNER_STATE.chmod(0o600)
+    try:
+        result = subprocess.run(
+            ["python3", str(TASK_FLOW_DUE_RUNNER), "--notify-robert"],
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            timeout=90,
+        )
+        payload = {
+            "source_message_id": "task-flow-due-runner",
+            "classification": "task-flow-reminder-check",
+            "decision": "task-flow-due-runner-ran",
+            "returncode": result.returncode,
+            "stdout": result.stdout.strip()[-4000:],
+            "stderr": result.stderr.strip()[-2000:],
+            "machine": machine_label(),
+        }
+        try:
+            parsed = json.loads(result.stdout)
+            if isinstance(parsed, dict):
+                payload["due_count"] = parsed.get("due_count")
+                payload["recorded"] = parsed.get("recorded")
+                payload["skipped_existing"] = parsed.get("skipped_existing")
+                payload["notification"] = parsed.get("notification")
+        except json.JSONDecodeError:
+            pass
+        return payload
+    except Exception as exc:
+        return {
+            "source_message_id": "task-flow-due-runner",
+            "classification": "task-flow-reminder-check",
+            "decision": "task-flow-due-runner-failed",
+            "error_type": exc.__class__.__name__,
+            "machine": machine_label(),
+        }
+
+
+def task_flow_status_from_action(action: dict) -> str:
+    current_state = str(action.get("current_state") or "")
+    decision = str(action.get("decision") or "")
+    classification = str(action.get("classification") or "")
+    if current_state in {"completed_report_sent", "blocked_report_sent"}:
+        return "reported"
+    if current_state in {"routed_pending_completion"}:
+        return "working"
+    if current_state in {"blocked_pending_security_guard", "captured_route_blocked_report_sent"}:
+        return "blocked"
+    if action.get("archived_to_handled") or decision.endswith("filed-to-handled") or "filed" in decision:
+        return "filed"
+    if action.get("sent_message_id") or action.get("completion_message_id") or action.get("ack_sent_message_id"):
+        return "reported" if "complete" in decision or "blocked" in decision else "clarification_sent"
+    if "route-still-open" in decision or "still-pending" in decision:
+        return "waiting"
+    if "routed" in decision or action.get("routed_session_id"):
+        return "working"
+    if "drafted" in decision or classification == "receipt":
+        return "working"
+    if "escalate" in decision:
+        return "clarification_needed"
+    if "blocked" in decision:
+        return "blocked"
+    return "classified"
+
+
+def task_flow_packet_from_action(action: dict) -> dict:
+    if not shared_task_flow:
+        return {}
+    source_ref = str(action.get("source_message_id") or "")
+    return shared_task_flow.build_packet(
+        source_ref=source_ref,
+        dedupe_key=action.get("dedupe_key") or "",
+        intake_channel="email:frank",
+        requester=action.get("from") or "",
+        owner_lane=action.get("owner") or "frank",
+        responsible_worker_or_persona="frank",
+        workspaceboard_session=action.get("routed_session_id") or "",
+        ops_portal_or_domain_task=action.get("ops_portal_or_domain_task") or action.get("task_id") or action.get("thread_task_id") or action.get("routed_task_id") or "",
+        status=task_flow_status_from_action(action),
+        due_or_trigger=action.get("ack_held_until") or "",
+        scheduled_action="",
+        calendar_event="",
+        clarification_email=action.get("ack_sent_message_id") or action.get("sent_message_id") or action.get("escalation_message_id") or "",
+        completion_or_blocker_email=action.get("completion_message_id") or "",
+        source_links=action.get("subject") or "",
+        approval_gates=action.get("classification") or "",
+        verification_readback=action.get("monitor_state") or action.get("decision") or "",
+        papers_projection="",
+        next_update=action.get("completion_target") or action.get("decision") or "",
+    )
+
+
+def record_task_flow_event(action: dict, event: str = "frank_action") -> None:
+    if not shared_task_flow:
+        return
+    packet = task_flow_packet_from_action(action)
+    if not packet:
+        return
+    action["task_packet"] = packet
+    try:
+        shared_task_flow.append_event(frank_automation_log().parent / "task-flow-events.jsonl", packet, event, action=action)
+    except Exception as exc:
+        action["task_flow_record_error"] = exc.__class__.__name__
+
+
+def task_flow_allows_archive(action: dict) -> bool:
+    if not shared_task_flow:
+        return True
+    candidate = {**action, "archived_to_handled": True}
+    packet = task_flow_packet_from_action(candidate)
+    allowed, missing = shared_task_flow.closeout_allowed(packet)
+    if not allowed:
+        action["task_flow_archive_blocked"] = True
+        action["task_flow_missing_fields"] = missing
+    return allowed
 
 
 def parse_args() -> argparse.Namespace:
@@ -135,7 +278,7 @@ def is_direct_primary_action(action: dict) -> bool:
     )
 
 
-def fetch_unseen_messages(user: str, app_pw: str, limit: int) -> list[dict]:
+def fetch_unseen_messages(user: str, app_pw: str, limit: int, seen_ids: set[str] | None = None) -> list[dict]:
     conn = imaplib.IMAP4_SSL("imap.gmail.com", 993)
     conn.login(user, app_pw)
     conn.select("INBOX", readonly=True)
@@ -144,19 +287,43 @@ def fetch_unseen_messages(user: str, app_pw: str, limit: int) -> list[dict]:
         conn.logout()
         raise RuntimeError(f"IMAP search failed: {status}")
 
-    ids = data[0].split()[-limit:]
+    seen_ids = seen_ids or set()
+    all_ids = data[0].split() if data and data[0] else []
+    ids = all_ids[-limit:] if limit > 0 else []
     messages = []
     for msg_id in ids:
-        status, msg_data = conn.fetch(msg_id, "(RFC822)")
+        status, header_data = conn.fetch(msg_id, "(BODY.PEEK[HEADER.FIELDS (MESSAGE-ID DATE FROM TO CC SUBJECT IN-REPLY-TO REFERENCES)])")
         if status != "OK":
             continue
-        raw = b""
-        for part in msg_data:
-            if isinstance(part, tuple):
-                raw += part[1]
-        if not raw:
+        header_raw = b"".join(part[1] for part in header_data if isinstance(part, tuple))
+        if not header_raw:
             continue
 
+        header_msg = message_from_bytes(header_raw)
+        header_record = {
+            "imap_id": msg_id.decode(),
+            "date": decode_value(header_msg.get("Date", "")),
+            "from": decode_value(header_msg.get("From", "")),
+            "to": decode_value(header_msg.get("To", "")),
+            "cc": decode_value(header_msg.get("Cc", "")),
+            "subject": decode_value(header_msg.get("Subject", "")),
+            "message_id": decode_value(header_msg.get("Message-ID", "")),
+            "in_reply_to": decode_value(header_msg.get("In-Reply-To", "")),
+            "references": decode_value(header_msg.get("References", "")),
+            "body": "",
+            "body_fetched": False,
+        }
+        source_id = normalize_message_id(header_record["message_id"])
+        if source_id and source_id in seen_ids:
+            messages.append(header_record)
+            continue
+
+        status, msg_data = conn.fetch(msg_id, "(BODY.PEEK[])")
+        if status != "OK":
+            continue
+        raw = b"".join(part[1] for part in msg_data if isinstance(part, tuple))
+        if not raw:
+            continue
         msg = message_from_bytes(raw)
         body_parts = []
         html_parts = []
@@ -178,20 +345,21 @@ def fetch_unseen_messages(user: str, app_pw: str, limit: int) -> list[dict]:
         if not body and html_parts:
             body = html_to_text("\n".join(html_parts))
 
-        messages.append(
+        header_record.update(
             {
-                "imap_id": msg_id.decode(),
-                "date": decode_value(msg.get("Date", "")),
-                "from": decode_value(msg.get("From", "")),
-                "to": decode_value(msg.get("To", "")),
-                "cc": decode_value(msg.get("Cc", "")),
-                "subject": decode_value(msg.get("Subject", "")),
-                "message_id": decode_value(msg.get("Message-ID", "")),
-                "in_reply_to": decode_value(msg.get("In-Reply-To", "")),
-                "references": decode_value(msg.get("References", "")),
+                "date": decode_value(msg.get("Date", header_record["date"])),
+                "from": decode_value(msg.get("From", header_record["from"])),
+                "to": decode_value(msg.get("To", header_record["to"])),
+                "cc": decode_value(msg.get("Cc", header_record["cc"])),
+                "subject": decode_value(msg.get("Subject", header_record["subject"])),
+                "message_id": decode_value(msg.get("Message-ID", header_record["message_id"])),
+                "in_reply_to": decode_value(msg.get("In-Reply-To", header_record["in_reply_to"])),
+                "references": decode_value(msg.get("References", header_record["references"])),
                 "body": body,
+                "body_fetched": True,
             }
         )
+        messages.append(header_record)
     conn.logout()
     return messages
 
@@ -1284,10 +1452,15 @@ def main() -> int:
             sent_log = load_sent_log(Path(args.sent_log))
             automation_log = load_automation_log(Path(args.automation_log))
             recipients = None
-            messages = fetch_unseen_messages(sender_email, app_pw, args.limit)
+            messages = fetch_unseen_messages(sender_email, app_pw, args.limit, set(automation_log.keys()))
 
             actions: list[dict] = []
             escalations: list[dict] = []
+            due_runner_action = run_task_flow_due_runner(args.dry_run)
+            if due_runner_action:
+                actions.append(due_runner_action)
+                if not args.dry_run:
+                    append_automation_log(Path(args.automation_log), due_runner_action)
             for message in messages:
                 source_message_id = normalize_message_id(message.get("message_id", ""))
                 if not source_message_id:
@@ -1310,7 +1483,21 @@ def main() -> int:
                             args.from_name,
                         )
                         if monitor_result.get("archivable_now") and not args.dry_run:
-                            archived = archive_email(sender_email, app_pw, source_message_id, "Handled")
+                            archive_candidate = {
+                                **previous,
+                                **monitor_result,
+                                "source_message_id": source_message_id,
+                                "subject": message.get("subject", ""),
+                                "from": message.get("from", ""),
+                            }
+                            if task_flow_allows_archive(archive_candidate):
+                                archived = archive_email(sender_email, app_pw, source_message_id, "Handled")
+                            else:
+                                monitor_result.update({
+                                    "archivable_now": False,
+                                    "task_flow_archive_blocked": True,
+                                    "task_flow_missing_fields": archive_candidate.get("task_flow_missing_fields", []),
+                                })
                     else:
                         if not args.dry_run:
                             archived = archive_email(sender_email, app_pw, source_message_id, "Handled")
@@ -1361,6 +1548,7 @@ def main() -> int:
                     action.update(monitor_result)
                     if not args.dry_run:
                         append_automation_log(Path(args.automation_log), action)
+                    record_task_flow_event(action, "frank_previous_message_reconciled")
                     actions.append(action)
                     continue
 
@@ -1509,6 +1697,7 @@ def main() -> int:
 
                 action["machine"] = machine_label()
                 actions.append(action)
+                record_task_flow_event(action, "frank_message_action")
                 if not args.dry_run and action.get("decision") != "escalate":
                     append_automation_log(Path(args.automation_log), action)
 
@@ -1528,6 +1717,7 @@ def main() -> int:
                     args.from_name,
                 )
                 escalation["escalation_message_id"] = escalation_message_id
+                record_task_flow_event(escalation, "frank_escalation_sent")
                 if not args.dry_run:
                     append_automation_log(Path(args.automation_log), escalation)
 

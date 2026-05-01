@@ -20,7 +20,9 @@ Avignon manages this worker by default. Avignon owns setup follow-through, direc
 - Private credentials: `.private/email-workers/venetia/credentials.txt`
 - IMAP/SMTP authentication verified on 2026-04-27.
 - Live header-only polling is enabled through `system/com.koval.venetia-auto`.
-- Sonat's Venetia directive/persona packet is incorporated in `/Users/werkstatt/ai_workspace/venetia/PERSONA.md`.
+- Canonical machine-readable persona: `/Users/werkstatt/ai_workspace/worker_roles/venetia-tempest-dunn/persona.yaml`.
+- Human-readable companion note: `/Users/werkstatt/ai_workspace/venetia/PERSONA.md`.
+- When Venetia is called for drafting, editorial routing, outreach tone, or send-from review, load the YAML persona first and use the Markdown note only as supporting context.
 - Body reads, send behavior, filing behavior, deletes, and substantive mailbox actions are not enabled.
 - Separation policy: Venetia is separate from Asher. Keep one Venetia mailbox/workspace/LaunchDaemon route and do not merge Venetia into Asher or a shared worker lane unless Robert explicitly approves a replacement or migration.
 - Duplicate policy: do not create duplicate Venetia mailboxes, workspaces, or LaunchDaemon routes.

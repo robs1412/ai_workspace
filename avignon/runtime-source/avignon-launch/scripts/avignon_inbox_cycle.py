@@ -33,8 +33,16 @@ from frank_portal_receipt import archive_email
 FRANK_SCRIPT_DIR = Path("/Users/admin/.frank-launch/runtime/scripts")
 if FRANK_SCRIPT_DIR.exists() and str(FRANK_SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(FRANK_SCRIPT_DIR))
+TASK_FLOW_SCRIPT_DIR = Path("/Users/werkstatt/ai_workspace/scripts")
+if TASK_FLOW_SCRIPT_DIR.exists() and str(TASK_FLOW_SCRIPT_DIR) not in sys.path:
+    sys.path.insert(0, str(TASK_FLOW_SCRIPT_DIR))
 
 from frank_google_calendar import calendar_request, ensure_valid_token, load_client_config
+
+try:
+    import shared_task_flow
+except ImportError:  # pragma: no cover - task-flow recorder is optional fail-open audit plumbing.
+    shared_task_flow = None
 
 CANONICAL_AI_ROOT = Path("/Users/werkstatt/ai_workspace")
 
@@ -97,6 +105,90 @@ DIRECT_OWNER_DONE_STATES = {
 DIRECT_OWNER_ACTIONS: dict[str, dict] = {}
 
 
+def task_flow_status_from_action(action: dict) -> str:
+    current_state = str(action.get("current_state") or "")
+    decision = str(action.get("decision") or "")
+    classification = str(action.get("classification") or "")
+    if current_state in {"completed_report_sent", "blocked_report_sent", "captured_route_blocked_report_sent"}:
+        return "reported" if "report_sent" in current_state else "blocked"
+    if current_state == "routed_pending_completion":
+        return "working"
+    if current_state == "blocked_pending_security_guard":
+        return "blocked"
+    if current_state == "no_action_logged":
+        return "filed" if action.get("archived") or action.get("archivable_now") else "completed"
+    if action.get("archived") or "filed" in decision:
+        return "filed"
+    if action.get("completion_message_id") or action.get("blocker_message_id"):
+        return "reported"
+    if action.get("ack_message_id"):
+        return "clarification_sent"
+    if "route-still-open" in decision or "still-pending" in decision:
+        return "waiting"
+    if "routed" in decision or action.get("routed_session_id"):
+        return "working"
+    if "calendar-directive" in decision:
+        return "completed" if "created" in decision or "existing" in decision else "clarification_needed"
+    if "decision-email" in decision or classification in {"ambiguous-email-review", "duplicate-ambiguous-email-review"}:
+        return "clarification_sent"
+    if "blocked" in decision:
+        return "blocked"
+    return "classified"
+
+
+def task_flow_packet_from_action(action: dict) -> dict:
+    if not shared_task_flow:
+        return {}
+    source_ref = str(action.get("source_message_id") or "")
+    report_target = action.get("report_target") if isinstance(action.get("report_target"), dict) else {}
+    return shared_task_flow.build_packet(
+        source_ref=source_ref,
+        dedupe_key=action.get("dedupe_key") or "",
+        intake_channel="email:avignon",
+        requester=action.get("from") or "",
+        owner_lane=action.get("owner") or "avignon",
+        responsible_worker_or_persona="avignon",
+        workspaceboard_session=action.get("routed_session_id") or "",
+        ops_portal_or_domain_task=action.get("ops_portal_or_domain_task") or action.get("task_id") or action.get("thread_task_id") or (",".join(action.get("decision_items") or []) if isinstance(action.get("decision_items"), list) else ""),
+        status=task_flow_status_from_action(action),
+        due_or_trigger="",
+        scheduled_action="",
+        calendar_event=action.get("calendar_event_id") or "",
+        clarification_email=action.get("ack_message_id") or action.get("blocker_message_id") or "",
+        completion_or_blocker_email=action.get("completion_message_id") or action.get("blocker_message_id") or "",
+        source_links=action.get("subject") or "",
+        approval_gates=action.get("classification") or "",
+        verification_readback=action.get("monitor_state") or action.get("decision") or "",
+        papers_projection="",
+        next_update=action.get("completion_target") or report_target.get("to") or action.get("decision") or "",
+    )
+
+
+def record_task_flow_event(action: dict, event: str = "avignon_action") -> None:
+    if not shared_task_flow:
+        return
+    packet = task_flow_packet_from_action(action)
+    if not packet:
+        return
+    action["task_packet"] = packet
+    try:
+        shared_task_flow.append_event(AUTO_LOG.parent / "task-flow-events.jsonl", packet, event, action=action)
+    except Exception as exc:
+        action["task_flow_record_error"] = exc.__class__.__name__
+
+
+def task_flow_allows_archive(action: dict) -> bool:
+    if not shared_task_flow:
+        return True
+    candidate = {**action, "archived": True}
+    packet = task_flow_packet_from_action(candidate)
+    allowed, missing = shared_task_flow.closeout_allowed(packet)
+    if not allowed:
+        action["task_flow_archive_blocked"] = True
+        action["task_flow_missing_fields"] = missing
+    return allowed
+
+
 def decode_value(value: str) -> str:
     try:
         return str(make_header(decode_header(value or "")))
@@ -136,6 +228,10 @@ def explicitly_requests_assistant_action(message: dict, assistant_name: str, ass
         if token and re.search(rf"\b{action_verbs}\b[^.?!]{{0,120}}\b{re.escape(token)}\b", text):
             return True
     return False
+
+
+def is_reply_or_forward_subject(subject: str) -> bool:
+    return bool(re.match(r"^\s*((re|fw|fwd)\s*:)+", subject or "", re.IGNORECASE))
 
 
 def normalized_subject(value: str) -> str:
@@ -225,15 +321,42 @@ def latest_action_for_source(records: dict[str, list[dict]], source_id: str) -> 
     return items[-1] if items else None
 
 
-def fetch_inbox(user: str, app_pw: str) -> list[dict]:
+def fetch_inbox(user: str, app_pw: str, seen_ids: set[str] | None = None) -> list[dict]:
     conn = imaplib.IMAP4_SSL("imap.gmail.com", 993)
     conn.login(user, app_pw)
     conn.select("INBOX", readonly=True)
     status, data = conn.search(None, "ALL")
+    seen_ids = seen_ids or set()
     ids = data[0].split() if status == "OK" and data else []
     messages: list[dict] = []
     for imap_id in ids:
-        status, msg_data = conn.fetch(imap_id, "(RFC822)")
+        status, header_data = conn.fetch(imap_id, "(BODY.PEEK[HEADER.FIELDS (MESSAGE-ID DATE FROM TO CC SUBJECT IN-REPLY-TO REFERENCES)])")
+        if status != "OK":
+            continue
+        header_raw = b"".join(part[1] for part in header_data if isinstance(part, tuple))
+        if not header_raw:
+            continue
+        header_msg = message_from_bytes(header_raw)
+        header_record = {
+            "imap_id": imap_id.decode(),
+            "date": decode_value(header_msg.get("Date", "")),
+            "from": decode_value(header_msg.get("From", "")),
+            "to": decode_value(header_msg.get("To", "")),
+            "cc": decode_value(header_msg.get("Cc", "")),
+            "subject": decode_value(header_msg.get("Subject", "")),
+            "message_id": decode_value(header_msg.get("Message-ID", "")),
+            "in_reply_to": decode_value(header_msg.get("In-Reply-To", "")),
+            "references": decode_value(header_msg.get("References", "")),
+            "body": "",
+            "attachments": [],
+            "body_fetched": False,
+        }
+        source_id = normalize_message_id(header_record["message_id"])
+        if source_id and source_id in seen_ids:
+            messages.append(header_record)
+            continue
+
+        status, msg_data = conn.fetch(imap_id, "(BODY.PEEK[])")
         if status != "OK":
             continue
         raw = b"".join(part[1] for part in msg_data if isinstance(part, tuple))
@@ -266,21 +389,22 @@ def fetch_inbox(user: str, app_pw: str) -> list[dict]:
         body = "\n".join(body_parts).strip()
         if not body and html_parts:
             body = html_to_text("\n".join(html_parts))
-        messages.append(
+        header_record.update(
             {
-                "imap_id": imap_id.decode(),
-                "date": decode_value(msg.get("Date", "")),
-                "from": decode_value(msg.get("From", "")),
-                "to": decode_value(msg.get("To", "")),
-                "cc": decode_value(msg.get("Cc", "")),
-                "subject": decode_value(msg.get("Subject", "")),
-                "message_id": decode_value(msg.get("Message-ID", "")),
-                "in_reply_to": decode_value(msg.get("In-Reply-To", "")),
-                "references": decode_value(msg.get("References", "")),
+                "date": decode_value(msg.get("Date", header_record["date"])),
+                "from": decode_value(msg.get("From", header_record["from"])),
+                "to": decode_value(msg.get("To", header_record["to"])),
+                "cc": decode_value(msg.get("Cc", header_record["cc"])),
+                "subject": decode_value(msg.get("Subject", header_record["subject"])),
+                "message_id": decode_value(msg.get("Message-ID", header_record["message_id"])),
+                "in_reply_to": decode_value(msg.get("In-Reply-To", header_record["in_reply_to"])),
+                "references": decode_value(msg.get("References", header_record["references"])),
                 "body": body,
                 "attachments": attachments,
+                "body_fetched": True,
             }
         )
+        messages.append(header_record)
     conn.logout()
     return messages
 
@@ -621,6 +745,18 @@ def compose_direct_owner_ack(message: dict, owner: str, route: dict) -> str:
     subject = normalized_subject(message.get("subject", "")) or "your request"
     greeting = "Hi Robert," if owner == "robert-approver" else "Hi Sonat,"
     owner_line = "I am treating this as a Robert-supervised Avignon workflow item and will report back to Robert." if owner == "robert-approver" else ""
+    if owner != "robert-approver":
+        return "\n".join(
+            [
+                greeting,
+                "",
+                f"I have this: {subject}.",
+                "",
+                "I am taking care of it and will come back with either the finished result or the one thing I need from you. No need to chase the machinery behind it.",
+                "",
+                "Best,",
+            ]
+        ).rstrip() + "\n"
     lines = [
         greeting,
         "",
@@ -778,6 +914,18 @@ def session_summary_has_active_context(summary_text: str) -> bool:
 def compose_owner_style_status(subject: str, session_id: str, session_title: str, state: str, summary_text: str, owner: str) -> str:
     normalized = normalized_subject(subject) or subject or "this request"
     greeting = "Hi Robert," if owner == "robert-approver" else "Hi Sonat,"
+    if owner != "robert-approver":
+        return "\n".join(
+            [
+                greeting,
+                "",
+                f"I am still working on {normalized}.",
+                "",
+                "No reply is needed from you unless the scope has changed. I will come back with the next useful update when it is finished or when there is one clear blocker.",
+                "",
+                "Best,",
+            ]
+        ).rstrip() + "\n"
     status_line = f"I am continuing {normalized} through the existing work lane {session_id} / {session_title}."
     if session_summary_has_active_context(summary_text):
         next_line = "No reply is needed from you unless the scope changed; I will send the next concrete update when the active task advances or reaches a real blocker."
@@ -801,6 +949,35 @@ def compose_direct_owner_closeout(action: dict, session: dict, blocked: bool, se
     session_title = str(action.get("routed_session_title") or session.get("title") or session.get("display_name") or "")
     greeting = "Hi Robert," if str(action.get("owner") or "") == "robert-approver" else "Hi Sonat,"
     summary_text = str((session_summary or {}).get("summary") or "").strip()
+    if str(action.get("owner") or "") != "robert-approver":
+        if blocked and session_summary_has_active_context(summary_text):
+            return compose_owner_style_status(subject, session_id, session_title, state, summary_text, str(action.get("owner") or "sonat"))
+        lines = [
+            greeting,
+            "",
+            (
+                f"I need one more piece before I can finish {normalized_subject(subject) or subject}."
+                if blocked
+                else f"{normalized_subject(subject) or subject} is complete."
+            ),
+            "",
+        ]
+        if blocked:
+            lines.extend(
+                [
+                    "I am not going to guess from incomplete context.",
+                    clarification_request_text(subject, summary_text),
+                ]
+            )
+        else:
+            lines.extend(
+                [
+                    "I have closed the follow-through on my side.",
+                    "No external reply, credential/auth work, or unapproved CRM/Portal/OPS change was made by the mailbox monitor.",
+                ]
+            )
+        lines.extend(["", "Best,"])
+        return "\n".join(lines).rstrip() + "\n"
     lines = [
         greeting,
         "",
@@ -951,23 +1128,47 @@ def next_weekday(base: datetime, weekday: int) -> datetime:
     return base + timedelta(days=days)
 
 
-def calendar_directive_start(message: dict) -> datetime:
+def calendar_directive_start(message: dict) -> datetime | None:
     body = str(message.get("body") or "")
     lowered = f"{message.get('subject', '')} {body}".lower()
     base = message_datetime(message)
-    target = next_weekday(base, 0) if "monday" in lowered else base + timedelta(days=1)
-    hour = 9 if "morning" in lowered else 10
+    weekday_map = {
+        "monday": 0,
+        "tuesday": 1,
+        "wednesday": 2,
+        "thursday": 3,
+        "friday": 4,
+        "saturday": 5,
+        "sunday": 6,
+    }
+    target = None
+    for name, idx in weekday_map.items():
+        if re.search(rf"\b{name}\b", lowered):
+            target = next_weekday(base, idx)
+            break
+    if target is None:
+        return None
+    hour = 10 if "morning" in lowered else 10
     return target.replace(hour=hour, minute=0, second=0, microsecond=0)
 
 
-def is_sonat_robert_calendar_directive(message: dict) -> bool:
+def is_sonat_robert_calendar_directive(message: dict, assistant_email: str) -> bool:
     if sender_email(message.get("from", "")) != "sonat@kovaldistillery.com":
         return False
+    if is_copied_only(message, assistant_email):
+        return False
     text = f"{message.get('subject', '')} {message.get('body', '')}".lower()
+    if "robert" not in text:
+        return False
+    if not re.search(r"\b(meeting|calendar|invite|schedule|create|set up|add)\b", text):
+        return False
+    if explicitly_requests_assistant_action(message, "Avignon", assistant_email):
+        return True
+    if is_reply_or_forward_subject(str(message.get("subject") or "")):
+        return False
     return bool(
-        re.search(r"\b(meeting|calendar|invite|schedule|create)\b", text)
-        and "robert" in text
-        and re.search(r"\b(invite|meeting|calendar|schedule|create)\b", text)
+        re.search(r"\b(please|can you|could you|would you|need you to)\b[^.?!]{0,120}\b(schedule|create|invite|set up|add)\b", text)
+        or re.search(r"\b(schedule|create|invite|set up|add)\b[^.?!]{0,120}\b(meeting|calendar|invite)\b", text)
     )
 
 
@@ -1019,7 +1220,7 @@ def send_calendar_confirmation(start_at: datetime, event: dict, source_message_i
         [
             "Hi Sonat,",
             "",
-            "Done. I created the Monday morning meeting with Robert.",
+            "Done. I created the meeting with Robert.",
             "",
             "- Calendar: sonat@kovaldistillery.com",
             f"- Time: {start_at.strftime('%A, %B %-d, %Y, %-I:%M')} - {(start_at + timedelta(minutes=30)).strftime('%-I:%M %p')} Central",
@@ -1067,6 +1268,8 @@ def handle_sonat_robert_calendar_directive(message: dict, sent_log: dict[str, di
     calendar_id = "sonat@kovaldistillery.com"
     source_message_id = str(message.get("message_id") or "")
     start_at = calendar_directive_start(message)
+    if start_at is None:
+        return "calendar-directive-needs-specific-date"
     existing = find_existing_calendar_event(calendar_id, source_message_id, start_at)
     if existing:
         if calendar_confirmation_already_sent(sent_log, start_at):
@@ -1112,7 +1315,7 @@ def route_message(message: dict, sent_log: dict, assistant_email: str) -> tuple[
             return "tracked-reply-info", "logged-no-action", decision_items
         return "cc-fyi-no-action", "logged-no-action", decision_items
 
-    if is_sonat_robert_calendar_directive(message):
+    if is_sonat_robert_calendar_directive(message, assistant_email):
         decision = handle_sonat_robert_calendar_directive(message, sent_log)
         return "calendar-directive", decision, decision_items
 
@@ -1193,7 +1396,7 @@ def main() -> int:
     sent_log = load_sent_log(SENT_LOG)
     seen = load_automation_ids()
     automation_actions = load_automation_actions()
-    messages = fetch_inbox(user, app_pw)
+    messages = fetch_inbox(user, app_pw, seen)
     actions: list[dict] = []
     decision_items: list[str] = []
     archived_count = 0
@@ -1206,7 +1409,21 @@ def main() -> int:
             if is_direct_owner_action(previous):
                 monitor_result = monitor_direct_owner_action(previous)
                 if monitor_result.get("archivable_now"):
-                    archived = archive_email(user, app_pw, source_id, "Handled")
+                    archive_candidate = {
+                        **previous,
+                        **monitor_result,
+                        "source_message_id": source_id,
+                        "subject": message.get("subject", ""),
+                        "from": message.get("from", ""),
+                    }
+                    if task_flow_allows_archive(archive_candidate):
+                        archived = archive_email(user, app_pw, source_id, "Handled")
+                    else:
+                        monitor_result.update({
+                            "archivable_now": False,
+                            "task_flow_archive_blocked": True,
+                            "task_flow_missing_fields": archive_candidate.get("task_flow_missing_fields", []),
+                        })
                 else:
                     archived = False
             else:
@@ -1254,6 +1471,7 @@ def main() -> int:
                 },
                 **monitor_result,
             }
+            record_task_flow_event(action, "avignon_previous_message_reconciled")
             actions.append(action)
             continue
 
@@ -1291,6 +1509,7 @@ def main() -> int:
                         "report_target": direct_owner_report_target(owner),
                     }
                 )
+        record_task_flow_event(action, "avignon_message_action")
         actions.append(action)
 
     row = {
@@ -1305,7 +1524,7 @@ def main() -> int:
         "logged_at": datetime.now(timezone.utc).isoformat(),
     }
     append_log(row)
-    final_count = len(fetch_inbox(user, app_pw))
+    final_count = len(fetch_inbox(user, app_pw, load_automation_ids()))
     print(
         json.dumps(
             {

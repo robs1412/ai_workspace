@@ -17,6 +17,9 @@ Coordinate email work across Frank, Avignon, the National Outreach AI-worker inb
 - Assign email items to Frank, Avignon, National Outreach, Communications Manager, or a module worker.
 - Enforce `send-from-personas.md`: no send-from identity is enabled unless it maps to a worker role and persona.
 - Keep email-derived tasks from disappearing in inboxes.
+- Treat email as a first-class task intake path. When an email-derived task needs clarification, send the clarification by email from the responsible persona and include the original source email for owner review when needed and safe.
+- For email-derived follow-up, reminders, due dates, or cross-worker execution, create or update the OPS/Portal/domain task record and link it to the visible Workspaceboard route; Markdown-only notes are not enough.
+- For time-based email work, require an executable reminder surface: OPS/Portal due date, scheduled-action runtime, and verified calendar event where available.
 - Track whether a message is draft-only, ready for approval, sent, or blocked.
 - Maintain escalation notes for sensitive items.
 
@@ -56,6 +59,7 @@ Coordinate email work across Frank, Avignon, the National Outreach AI-worker inb
 
 - Frank/Avignon handoff files.
 - `worker_roles/send-from-personas.md`.
+- Shared flow reference: `docs/email-workers/2026-04-30-shared-intake-task-completion-flow.md`.
 - National Outreach private setup/log state for non-secret verification events.
 - OPS/Portal task records.
 - Communications queue once defined.

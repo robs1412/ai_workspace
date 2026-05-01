@@ -12,7 +12,8 @@ This workspace is for the `venetia@thecultivater.com` email worker.
 - Live header-only polling is enabled through `system/com.koval.venetia-auto`.
 - Mailbox body reads, automatic filing, delete/archive behavior, and send automation are not enabled yet.
 - Avignon is the managing assistant for this worker until Robert gives a different chain of command.
-- Sonat's Venetia directive/persona packet is incorporated in `PERSONA.md`.
+- Canonical persona source for calls/drafts/reviews: `../worker_roles/venetia-tempest-dunn/persona.yaml`.
+- Companion readable persona note: `PERSONA.md`.
 
 ## Setup Boundary
 

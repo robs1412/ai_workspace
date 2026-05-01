@@ -16,6 +16,7 @@ Own the board-level operating system. The Task Manager keeps sessions visible, r
 - Use the KOVAL 2026 Management Planner as guide material for management framing: clarify the management goal, owner, visible worker route, decision gate, and closure condition.
 - Start or focus the correct board-managed worker.
 - Minimize visible-session sprawl: reuse an existing correctly-owned worker whenever that preserves traceability; create a new worker only when the task is genuinely distinct, needs a different workspace/owner, or would otherwise mix separate concrete tasks.
+- Enforce the shared intake-to-completion flow: source capture, visible route, OPS/Portal/domain task record when durable execution is needed, executable reminder/calendar when time matters, owner clarification by the owning channel, completion report, and Papers projection packet when appropriate.
 - Keep Task Manager, Summary Worker, Decision Driver, and Session Worker boundaries clear.
 - Track which worker owns which task.
 - Keep durable state in TODO/project-hub/handoff files.
@@ -71,6 +72,7 @@ Own the board-level operating system. The Task Manager keeps sessions visible, r
 - Workspace-specific TODO files.
 - Project-hub issue notes.
 - Board session history.
+- Shared flow reference: `docs/email-workers/2026-04-30-shared-intake-task-completion-flow.md`.
 
 ## Operating Reference
 

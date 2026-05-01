@@ -80,6 +80,15 @@ Last Updated: 2026-04-23 16:10 CDT (Machine: Macmini.lan)
 - If pulled tasks span multiple modules, ask the user to open dedicated terminals by workspace before execution.
 - Terminal pattern for multi-module execution: request 2 terminals per active workspace (`ws <module>` in each): one primary work terminal and one support/verification terminal.
 
+## AI Manager Control Lane (Required)
+
+- When Robert opens or addresses the AI Manager, treat the current chat as the AI Manager control lane, not the primary execution lane.
+- Check the organigram position in `worker_roles/operating-model.md`: AI Manager Robert sits above Task Manager / Polier, Decision Driver, monitoring roles, Frank/Codex work lanes, workspace workers, and Claude bridge/server lanes.
+- For substantive work, delegate through Task Manager. Task Manager should create or focus visible Workspaceboard workers, verify prompt delivery, monitor completion, and coordinate Decision Driver, Summary Worker, Git and Code Manager, Security Guard, Frank, Avignon, National Outreach, workspace workers, or Claude bridge/server lanes as needed.
+- Do not keep implementation, long investigation, or raw terminal-output streams in the AI Manager conversation when a visible worker route is appropriate.
+- Report back to Robert only for real input needs, approval gates, blockers, route/priority decisions, and concise management-level status/closure.
+- Use the Frank/Codex leverage model: Frank handles Robert-facing email/intake communication; Codex/Workspaceboard handles routed execution and verification; AI Manager supervises the chain and forces concrete readbacks.
+
 ## Frank / Avignon Medium-Independent Task Flow (Required)
 
 - Current default approved by Robert on 2026-04-12: Frank and Avignon should operate in a medium-independent mode for email-derived task flow.

@@ -14,11 +14,15 @@ Represent Robert's Codex-login control surface as the top AI-manager role for pr
 ## Responsibilities
 
 - Ask the Task Manager for current status and routing.
+- Treat the current Codex-login chat as the AI Manager control lane, not the work lane.
+- For substantive work, direct Task Manager to create, focus, and monitor visible Workspaceboard worker sessions; do not leave implementation, investigation, or long terminal output in the AI Manager conversation.
+- Report back to Robert only when input is needed, when a real blocker appears, or when a concise management-level status/closure is useful.
 - Approve or reject work that crosses human approval gates.
 - Set priorities across Codex, Claude, Frank, Avignon, OPS, Portal, MI/Papers, and Workspaceboard.
 - Keep AI-manager requests visible in Workspaceboard instead of hidden in ad hoc terminal work.
 - Delegate implementation to Task Manager and the appropriate worker chain.
 - Push for a small, legible management surface: AI Manager Robert should receive real blockers and priorities, not routine cleanup or stale-session noise.
+- Use Frank/Codex leverage correctly: Frank handles Robert-facing email/work-intake lanes, Codex/Workspaceboard handles routed execution and verification, and AI Manager supervises the chain rather than doing all work directly.
 
 ## Who Calls It
 
@@ -45,6 +49,7 @@ Represent Robert's Codex-login control surface as the top AI-manager role for pr
 
 - AI Manager Robert is a human/control role, not an autonomous background worker.
 - The role can direct Task Manager, but should not bypass Task Manager visibility for multi-step work.
+- The role should not stream raw worker terminal output to Robert. Ask Task Manager/Summary Worker for concise readbacks and surface only blockers, approvals, and outcomes.
 - Approval must remain explicit for external sends, finance/legal/HR, auth/security, production, destructive data, live MI/Papers writes, OAuth, `.205`, MCP exposure, or shared-write behavior.
 - Routine session cleanup, review-ready parking, inbox-zero filing, and stale-wrapper reconciliation should stay below this role unless a genuine blocker remains.
 

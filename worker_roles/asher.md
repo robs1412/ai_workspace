@@ -20,7 +20,9 @@ Avignon manages this worker by default. Avignon owns setup follow-through, direc
 - Private credentials: `.private/email-workers/asher/credentials.txt`
 - IMAP/SMTP authentication verified on 2026-04-27.
 - Live header-only polling is enabled through `system/com.koval.asher-auto`.
-- Sonat's Asher directive/persona packet is incorporated in `/Users/werkstatt/ai_workspace/asher/PERSONA.md`.
+- Canonical machine-readable persona: `/Users/werkstatt/ai_workspace/worker_roles/asher-wilde/persona.yaml`.
+- Human-readable companion note: `/Users/werkstatt/ai_workspace/asher/PERSONA.md`.
+- When Asher is called for drafting, editorial routing, outreach tone, or send-from review, load the YAML persona first and use the Markdown note only as supporting context.
 - Body reads, send behavior, filing behavior, deletes, and substantive mailbox actions are not enabled.
 - Separation policy: Asher is separate from Venetia. Keep one Asher mailbox/workspace/LaunchDaemon route and do not merge Asher into Venetia or a shared worker lane unless Robert explicitly approves a replacement or migration.
 - Duplicate policy: do not create duplicate Asher mailboxes, workspaces, or LaunchDaemon routes.

@@ -38,9 +38,13 @@ Sonat sent the editor/persona source on 2026-04-27 in `The Cultivater Editors As
 
 The attachment was retrieved from Avignon's handled mailbox source into private local storage and converted to reusable worker guidance:
 
+- Asher canonical YAML persona: `worker_roles/asher-wilde/persona.yaml`
+- Venetia canonical YAML persona: `worker_roles/venetia-tempest-dunn/persona.yaml`
 - Asher: `asher/PERSONA.md`
 - Venetia: `venetia/PERSONA.md`
 - Role registry: `worker_roles/asher.md`, `worker_roles/venetia.md`, and `worker_roles/send-from-personas.md`
+
+When Asher or Venetia is called by a worker, prompt, send-from review, or editorial drafting workflow, use the YAML persona in `worker_roles/` as the canonical persona source. The workspace `PERSONA.md` files remain readable companion notes and activation-boundary references.
 
 Do not paste the full private source attachment into chat, email, public docs, or git logs. Keep the source under `.private/email-workers/asher-venetia/`.
 

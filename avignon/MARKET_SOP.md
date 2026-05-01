@@ -62,6 +62,8 @@ For tasting recommendations, start with Illinois, focus on off-premise retail ac
 
 ## Tactical Playbook
 
+Distributor prospecting drafts should use `DISTRIBUTOR_PROSPECTING_GUIDANCE.md` when Sonat asks for outreach to a prospective distributor. Prepare drafts for Sonat review; do not send externally or promise samples, pricing, DA support, exclusivity, allocation, or timing without approval.
+
 Inactive accounts need a nudge package, not a vague reminder.
 
 - Identify accounts that have not ordered for more than 90 days.
@@ -137,3 +139,4 @@ Use KOVAL's pillars where they support the business case:
 - Do not open emails with "I hope this finds you well."
 - Do not provide data without a recommendation.
 - Keep the ask clear, specific, and tied to market action.
+- Internal mechanics stay internal. For Sonat-facing confirmations, do not recite Task Manager routing, worker/session ids, backend handling, source ids, or filing mechanics. Use narrative business language: the item is understood, Avignon is handling it, and Sonat will get either the finished result or one clear blocker.

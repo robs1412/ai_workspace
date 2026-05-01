@@ -9,6 +9,7 @@ This is the standing Avignon guidance for Sonat sample-request work.
   - `https://portal.koval-distillery.com/#/pos-and-samples/sample-request/create`
 - If Sonat means a barrel sample, she will say `barrel sample`. Do not infer barrel workflow from a generic request for products.
 - If Sonat says `barrel sample`, `barrel`, `reserve`, `select barrel`, `mark sold`, or links/references WH Barrel Program pages, use `BARREL_PROGRAM_GUIDANCE.md` and route the request to Barrel Sales Manager rather than treating it as a generic product/sample request.
+- For any Avignon-routed Portal sample request creation, require notification-status verification in the closeout. The Portal worker must state whether regular-sample or barrel-sample notifications were sent. If a helper/direct DB path bypassed the normal Portal notification flow, stop with a blocker or route a Portal-owned notification-send/fix follow-up before reporting the sample request as fully complete.
 - The `Process for Sample Requests` SOP/persona instruction is a directive to record this standing guidance, not a blocker requiring Sonat to rediscover the old email.
 - For a specific sample request, use a human-readable working packet. Ask only for missing fields needed to complete the Portal entry, such as:
   - account/company or recipient

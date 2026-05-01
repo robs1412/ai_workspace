@@ -47,7 +47,15 @@ venetia/*.jsonl
 nationaloutreach/*.jsonl
 frank/drafts/
 avignon/drafts/
+asher/drafts/
+venetia/drafts/
+nationaloutreach/drafts/
+nationaloutreach/reports/
+mail-review.jsonl
 *.send-body.txt
+
+# Sensitive local case/work-product packets
+legal/
 
 # Embedded implementation clones should live under /Users/werkstatt/<repo>
 screenbox/

@@ -1,12 +1,122 @@
 # TODO — frank
 
-Updated: 2026-04-24 CDT (Machine: Macmini.lan)
+Updated: 2026-04-30 15:54 CDT (Machine: roberts-mini-ethernet.lan)
 
 ## In Progress
 
 None currently.
 
 ## Done
+
+- 2026-05-01: Recorded Robert's Dmytro follow-up on the KOVAL Agents Drive admin lane.
+  - Source Message-ID `<CAAtX44YaqM3iBNbmr8H-DbBi_1uzXsCDDDSzFjiqWeS7-by4SQ@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44YaqM3iBNbmr8H-DbBi-1uzXsCDDDSzFjiqWeS7-by4SQ-mail-gmail-com`; local task id `frank-koval-agents-drive-dmytro-followup-noted-2026-05-01`.
+  - Classification: existing technical/project follow-up state; not a shared mechanic change, Frank customization, Avignon customization, or runtime change.
+  - Result: treated Robert's reply as confirmation that the concrete next action is to wait for Dmytro or Claude to identify the actual Google Cloud Console admin for project `koval-agents` / `872255708765`, or confirm/directly enable `sheets.googleapis.com` and `docs.googleapis.com`.
+  - What changed: `HANDOFF.md`, this TODO, and draft `drafts/koval-agents-drive-dmytro-followup-noted-robert-2026-05-01.txt` now attach this source to the existing outbound ask `frank-claude-dmytro-koval-agents-actual-gcp-admin-needed-2026-05-01`.
+  - What was not done: no captured/routed receipt, no new route, no OAuth/token/auth work, no credential lookup/output, no Google Cloud mutation, no private mailbox-body output, no Portal/CRM/OPS mutation, no external-sensitive reply, no runtime edit, no deploy, commit, push, reset, or clean.
+  - Remaining gate: the lane remains blocked until Dmytro or Claude provides the actual admin path or confirms the two APIs are enabled.
+  - Robert completion report sent to `robert@kovaldistillery.com`, subject `KOVAL Agents Drive admin path is with Dmytro/Claude`, Message-ID `<177764266863.57663.3200502496399414144@kovaldistillery.com>`; source filed to `Handled` and archive returned `true`.
+
+- 2026-04-30: Recorded Frank signature social-account link targets.
+  - Source Message-ID `<CAAtX44YKTDwxw-hgt-FMn4wXcBex64G9et5Hk+bkzL1otS0QXg@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44YKTDwxw-hgt-FMn4wXcBex64G9et5Hk-bkzL1otS0QXg-mail-gmail-com`; local task id `frank-signature-social-account-links-2026-04-30`.
+  - Classification: Frank customization plus existing shared signature mechanic; not Avignon customization and not a runtime/send-path change.
+  - Result: Frank guidance now explicitly says the signature labels link to the KOVAL accounts: X `http://www.x.com/kovaldistillery`, Instagram `https://www.instagram.com/kovaldistillery`, and Facebook `https://www.facebook.com/kovaldistillery`.
+  - What changed: `AGENTS.md`, `PERSONA.md`, and `README_AGENT.md` now carry the exact account-link targets while preserving the greeting, point-first body, concise closing, phone line, website line, and linked social-label line.
+  - What was not done: no Sonat private SOP text copied, no Avignon persona/SOP edit, no private mailbox body output, no OAuth/token/auth work, no runtime/send-helper edit, no CRM/Portal/OPS mutation, no external-sensitive reply, no deploy, commit, push, reset, or clean.
+  - Remaining gate: additional installed runtime/template enforcement remains a separate approved implementation slice.
+  - Robert completion report sent to `robert@kovaldistillery.com`, subject `Frank signature social links clarified`, Message-ID `<177758243645.78490.4896439213184505791@kovaldistillery.com>`; draft `drafts/signature-social-account-links-robert-2026-04-30.txt`; source filed to `Handled` and archive returned `true`.
+
+- 2026-04-30: Confirmed Portal sold-barrel notification for barrel `9511`.
+  - Source Message-ID `<CAAtX44b+ra_jRa8Z2QP7gvjLtn=rzi+Q1DRpj96q6nk00sR-ag@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44b-ra-jRa8Z2QP7gvjLtn-rzi-Q1DRpj96q6nk00sR-ag-mail-gmail-com`; local task id `frank-barrel-9511-notification-confirmed-2026-04-30`.
+  - Classification: Portal-owned runtime/process verification; not a shared mechanic, Frank customization, Avignon customization, or runtime change.
+  - Visible routes: Frank runtime route `c48c955a` / `Frank direct Robert: Fwd: Barrel 9511`; Portal verification route `39cfd9fe` / `Portal Barrel 9511 notification check`; prompt delivery to the Portal route returned `delivered=true`.
+  - Result: live read-only notification-log evidence confirmed `production.barrels_sold` log `70300` for barrel `9511`, user `3`, status `sent`, no error, with content matching barrel `9511`.
+  - What changed: Portal `TODO.md` and `HANDOFF.md` now record the read-back and recipient-path caveat.
+  - What was not done: no resend, OAuth/token/auth repair, deploy, commit, push, live pull, reset/clean, pricing/account commitment, mailbox-body exposure, external-sensitive reply, or unrelated Portal/CRM/OPS mutation.
+  - Remaining caveat: evidence confirms the Sonat/user-targeted Portal notification only; the active `production.barrels_sold` rule has no `additional_recipients`, so there is no separate `barrelsamples@koval-distillery.com` log row for this event.
+  - Robert completion report sent to `robert@kovaldistillery.com`, subject `Barrel 9511 notification did send`, Message-ID `<177758168927.74037.8329761823335175440@kovaldistillery.com>`; draft `drafts/barrel-9511-notification-confirmed-robert-2026-04-30.txt`; source filed to `Handled` and archive returned `true`.
+
+- 2026-04-30: Recorded shared KOVAL signature-format guidance for other email workers.
+  - Source Message-ID `<CAAtX44ZbDJrTCM2Lf3NGpQBjXdCrP2jQMtSPt+7qexp=D3aVnw@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44ZbDJrTCM2Lf3NGpQBjXdCrP2jQMtSPt-7qexp-D3aVnw-mail-gmail-com`; local task id `frank-shared-email-worker-signature-format-2026-04-30`.
+  - Classification: shared signature mechanic plus Avignon customization and worker-persona guidance for Vanessa, Naomi, and Ezra; not a runtime/send-path change.
+  - Result: shared and persona docs now say full KOVAL worker signatures keep the phone number, website, and linked `X | Instagram | Facebook` social-label set on separate lines, without raw social URLs printed next to labels.
+  - What changed: `../docs/email-workers/2026-04-30-shared-koval-signature-format.md`, shared email-worker README, National Outreach Vanessa persona/README, worker send-from registry, Avignon persona/job/email guidance, and Naomi/Ezra role/persona templates.
+  - What was not done: no Sonat private SOP text copied, no private mailbox body output, no OAuth/token/auth work, no CRM/Portal/OPS mutation, no external-sensitive reply, no runtime/send-helper edit, no deploy, commit, push, reset, or clean.
+  - Remaining gate: installed runtime/template enforcement for any worker remains a separate approved implementation slice.
+  - Robert completion report sent to `robert@kovaldistillery.com`, subject `Shared worker signature format recorded`, Message-ID `<177757903999.58305.15919753814223645163@kovaldistillery.com>`; draft `drafts/shared-email-worker-signature-format-robert-2026-04-30.txt`. Runtime also sent one generic completion note first, Message-ID `<177757898125.57411.8456297586767339023@kovaldistillery.com>`. Source filing verified after report: `INBOX=0`, `Handled=1`.
+
+- 2026-04-30: Recorded Robert's Frank signature-format correction.
+  - Source Message-ID `<CAAtX44beVRzqg8R45stpwhLCqR4tT1O2boLsYwTV4jH7uqVgeA@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44beVRzqg8R45stpwhLCqR4tT1O2boLsYwTV4jH7uqVgeA-mail-gmail-com`; local task id `frank-signature-format-guidance-2026-04-30`.
+  - Classification: Frank customization plus existing shared signature mechanic; not Avignon customization and not a runtime/send-path change.
+  - Result: Frank guidance now says complete Frank emails keep Phone, Website, and `X | Instagram | Facebook` on separate signature lines, with social platform names linked instead of showing raw URLs next to the labels.
+  - What changed: `AGENTS.md`, `PERSONA.md`, `README_AGENT.md`, and this local TODO now hold the narrowed Frank-local directive.
+  - What was not done: no private mailbox body read/output, no OAuth/token/auth work, no CRM/Portal/OPS mutation, no Avignon persona/SOP edit, no runtime/send-path change in this pass, and no deploy, commit, push, reset, or clean.
+  - Robert completion report sent to `robert@kovaldistillery.com`, subject `Frank signature-format guidance recorded`, Message-ID `<177757855137.51350.12088872844470396064@kovaldistillery.com>`; draft `drafts/frank-signature-format-guidance-robert-2026-04-30.txt`; session `019ddfed-e6a1-7081-baae-2c8619cc9651` / `Frank direct-owner signature-format correction`.
+
+- 2026-04-30: Recorded Robert's Frank greeting, closing, and inline social-link directive.
+  - Source Message-ID `<CAAtX44bwQ1ZCfOLeXzsHUz+OHWFH3CD27wYHEx_b5P2jwnbGPA@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44bwQ1ZCfOLeXzsHUz-OHWFH3CD27wYHEx-b5P2jwnbGPA-mail-gmail-com`; local task id `frank-email-greeting-closing-inline-social-links-2026-04-30`.
+  - Classification: Frank customization plus existing shared signature mechanic. Robert's follow-up signature-shape correction is now recorded separately above under `frank-signature-format-guidance-2026-04-30`; the authoritative classification for that follow-up source is Frank customization plus existing shared signature mechanic, not Avignon customization and not a runtime/send-path change.
+  - Visible route: runtime-created Frank session `dfa02698` / `Frank direct Robert: Re: Steve Beck sample notification resolved`; prompt delivery returned `delivered=true`. Auxiliary manual route `354012f7` / `Frank email greeting, closing, and inline social links directive` was closed after the runtime route/report was confirmed so it does not remain as board noise.
+  - Follow-up source Message-ID `<CAAtX44beVRzqg8R45stpwhLCqR4tT1O2boLsYwTV4jH7uqVgeA@mail.gmail.com>`; visible route `8f427edf` / `Frank direct Robert: Re: Frank email format directive recorded`; source filed to `Handled` and archive returned `true`.
+  - Result: Frank guidance now says complete Robert-facing emails include a normal greeting, the body still starts with the point in plain prose, and a concise closing appears before Frank's signature. The follow-up signature-shape rule is narrowed above: Phone, Website, and linked `X | Instagram | Facebook` labels stay on separate signature lines without raw social URLs next to the labels.
+  - What changed: `AGENTS.md`, `PERSONA.md`, and `README_AGENT.md` now hold the directive in Frank-local guidance while preserving the existing quick-answer and delayed-acknowledgement mechanics.
+  - What was not done: no Avignon persona/SOP/signature change, no OAuth/token/auth work, no CRM/Portal/OPS mutation, no external-sensitive reply, no deploy, commit, push, reset, or clean.
+  - Robert completion report sent to `robert@kovaldistillery.com`, subject `Frank email format directive recorded`, Message-ID `<177757822259.44359.6484331514574636921@kovaldistillery.com>`; sent draft `drafts/frank-email-greeting-closing-inline-social-robert-2026-04-30.txt`; source filed to `Handled` and archive returned `true`.
+  - Robert follow-up correction report sent to `robert@kovaldistillery.com`, subject `Frank signature format corrected`, Message-ID `<177757844646.48755.13680565239711536019@kovaldistillery.com>`; draft `drafts/frank-signature-format-corrected-robert-2026-04-30.txt`; auxiliary route `8f427edf` was closed after completion/report/file confirmation.
+
+- 2026-04-30: Superseded earlier Frank signature runtime-format note.
+  - Source Message-ID `<CAAtX44beVRzqg8R45stpwhLCqR4tT1O2boLsYwTV4jH7uqVgeA@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44beVRzqg8R45stpwhLCqR4tT1O2boLsYwTV4jH7uqVgeA-mail-gmail-com`; local task id `frank-signature-format-corrected-2026-04-30`.
+  - Current authoritative classification for this source is the `frank-signature-format-guidance-2026-04-30` entry above: Frank customization plus existing shared signature mechanic; not Avignon customization and not a runtime/send-path change.
+  - Historical note: a 14:47 closeout report was sent to `robert@kovaldistillery.com`, subject `Frank signature format corrected`, Message-ID `<177757844646.48755.13680565239711536019@kovaldistillery.com>`; draft `drafts/frank-signature-format-corrected-robert-2026-04-30.txt`. The corrected 14:49 closeout for the narrowed docs/state task is Message-ID `<177757855137.51350.12088872844470396064@kovaldistillery.com>`.
+
+- 2026-04-30: Recorded Robert's programming-item copy rule for Frank.
+  - Source Message-ID `<CAAtX44bKSfKppCTxzAOXUC45k08P460srb7MW+U6_GENkr8Z9w@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44bKSfKppCTxzAOXUC45k08P460srb7MW-U6-GENkr8Z9w-mail-gmail-com`; local task id `frank-programming-items-copy-dmytro-2026-04-30`.
+  - Classification: Frank customization, not a shared mechanic, Avignon customization, or runtime change.
+  - Result: Frank guidance now says internal programming and technical implementation follow-ups should copy Dmytro at `dmytro.klymentiev@kovaldistillery.com` by default, subject to explicit Robert override and normal security/privacy/approval gates.
+  - What was not done: no Avignon persona/SOP change, no runtime/send-path automation change, no OAuth/token/auth work, no CRM/Portal/OPS mutation, no external-sensitive reply, no deploy, commit, push, reset, or clean.
+  - Robert completion report sent to `robert@kovaldistillery.com`, subject `Programming items will copy Dmytro`, Message-ID `<177757795997.41040.9821252937854893717@kovaldistillery.com>`; draft `drafts/programming-items-copy-dmytro-robert-2026-04-30.txt`; source filed to `Handled` and archive returned `true`.
+
+- 2026-04-30: Closed Robert's Steve Beck retroactive sample-notification follow-up after the Portal resend-path commit.
+  - Source Message-ID `<CAAtX44aQ_XxUMgfqRR6SVMABq+NFKp1k_oH6KZ9QAuHRkgV-sQ@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44aQ-XxUMgfqRR6SVMABq-NFKp1k-oH6KZ9QAuHRkgV-sQ-mail-gmail-com`; later explicit-send source Message-ID `<CAAtX44YmaU_o1=z=Ug6XSGfLCXT9iyrdeab8YKy+J-pOyeB8oQ@mail.gmail.com>`; local task id `frank-steve-beck-sample-notification-send-blocked-2026-04-30`.
+  - Robert closeout source Message-ID `<CAAtX44YtzuNdRTBm7Oe7bHM8rg_JegMLihA7_XUqtrO7rhnOMQ@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44YtzuNdRTBm7Oe7bHM8rg-JegMLihA7-XUqtrO7rhnOMQ-mail-gmail-com`.
+  - Robert follow-up closeout confirmation source Message-ID `<CAAtX44aLdUjxiFQ9BwNE14saENVW4gcCbwvP-C39UtPzz_AFuw@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44aLdUjxiFQ9BwNE14saENVW4gcCbwvP-C39UtPzz-AFuw-mail-gmail-com`; recorded as duplicate/closed confirmation on the existing lane, not a new Portal task.
+  - Classification: Portal-owned retroactive notification send on an existing Frank direct-owner lane; not a shared mechanic change, Frank customization, Avignon customization, or runtime change.
+  - Visible routes: Portal session `7631de4a` / `Portal send Steve Beck sample request notification` returned the original blocker; Frank runtime session `c347a069` / `Frank direct Robert: Re: Steve Beck sample notification blocked` handled Robert's closeout reply and prompt delivery was verified.
+  - Result: Robert reported the missing resend path was done in the recent Portal commit. Verified local Portal `origin/dev` commit `2e33b6ca` / `Add Portal notification resend paths` adds `POST /sample-requests/{id}/creation-notification` and related notification resend fixes.
+  - Live send state: Portal handoff records that live Portal `/notifications/send` returned success for the request `2707` submitter notification and for the `barrelsamples@koval-distillery.com` team notification; a corrective Portal `/send-email` notice was also sent to Robert and the barrel samples team.
+  - What was not done: no duplicate request, sample items, quantities, shipping fields, reviewed/shipped/pickup state, pricing/account commitment, external/manual sample-mail path, OAuth/token/auth work, deploy, commit, push, live pull, reset, clean, or unrelated Portal/CRM/OPS change.
+  - Remaining gate: deploy the bounded Portal-owned retro-notification endpoint/template fixes if future existing-request resends should use the clean controller endpoint instead of the current live `/notifications/send` workaround.
+  - Robert blocker report sent to `robert@kovaldistillery.com`, subject `Steve Beck sample notification blocked`, Message-ID `<177757059756.19664.5582930930666268317@kovaldistillery.com>`; draft `drafts/steve-beck-sample-notification-blocked-robert-2026-04-30.txt`; both earlier source messages filed to `Handled`.
+  - Closeout report sent to `robert@kovaldistillery.com`, subject `Steve Beck sample notification resolved`, Message-ID `<177757801503.42141.837055905493919244@kovaldistillery.com>`; draft `drafts/steve-beck-sample-notification-resolved-robert-2026-04-30.txt`; closeout source filed to `Handled` (`INBOX=0`, `Handled=1`, `[Gmail]/All Mail=1`). Runtime also sent one superseded blocker-shaped monitor note, Message-ID `<177757800730.41782.16620916277171795813@kovaldistillery.com>`, before this manual completion report.
+  - Follow-up closeout confirmation report sent to `robert@kovaldistillery.com`, subject `Steve Beck sample notification closeout noted`, Message-ID `<177757858550.52237.15866614920729601379@kovaldistillery.com>`; draft `drafts/steve-beck-sample-notification-closeout-confirmed-robert-2026-04-30.txt`; source already filed to `Handled` (`INBOX=0`, `Handled=1`, `[Gmail]/All Mail=1`). Runtime also sent one duplicate generic completion report first, Message-ID `<177757858087.51900.4918804359961265822@kovaldistillery.com>`.
+
+- 2026-04-30: Completed Robert's sample-request notification follow-up.
+  - Source Message-ID `<CAAtX44Y7LJ3nBMe=yOgpAqzY4POdZVWBuqUhgkA_eBWOPJdnaw@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44Y7LJ3nBMe-yOgpAqzY4POdZVWBuqUhgkA-eBWOPJdnaw-mail-gmail-com`; local task id `frank-sample-request-notifications-fail-closed-2026-04-30`.
+  - Classification: shared Frank/Avignon mechanic plus Portal-owned runtime/process follow-up; not Frank customization or Avignon persona customization.
+  - Visible route: Portal session `760e44ab` / `Portal sample request notification follow-up`; prompt delivery verified and worker completed.
+  - Result: Portal identified the normal notification path as `PUT /sample-requests` through `SampleRequestsController::create()`: regular requests send `samples.new_request`, barrel requests send `samples.new_barrel_request`.
+  - What changed: shared Frank/Avignon guidance now requires notification-status verification before sample-request completion; Portal changed `SampleRequestsController.php` to return `notification_status`, route `barrel_sample` values `true`, `1`, and `"1"` to the barrel notification event, and support `_require_notifications=true` so automation can fail closed if creation alerts do not send. Portal added `docs/sample-request-notifications-runbook.md`.
+  - Verification: Portal worker reported `php -l` passed for `app/Http/Controllers/SamplesManagement/SampleRequestsController.php`, `resources/views/emails/events/samples/new_request.blade.php`, and `resources/views/emails/events/samples/new_barrel_request.blade.php`; PHPUnit was unavailable because `vendor/bin/phpunit` is absent.
+  - What was not done: no Lanterna `2707` retroactive alert sent, no live Portal/CRM/OPS data mutation for this follow-up, no OAuth/token/auth work, no external-sensitive reply, and no commit, push, deploy, live pull, reset, or clean.
+  - Remaining gates: Portal code changes are local pending commit/push/deploy approval; retroactive notification for request `2707` requires explicit approval.
+  - Robert completion report sent to `robert@kovaldistillery.com`, subject `Sample request notifications now fail closed`, Message-ID `<177757015081.9548.15094437913612832025@kovaldistillery.com>`; draft `drafts/sample-request-notifications-fail-closed-robert-2026-04-30.txt`; source filed to `Handled`.
+
+- 2026-04-30: Answered Robert's Lanterna barrel sample alert follow-up.
+  - Source Message-ID `<CAAtX44aFB9YvKtyO_Go6kxCPK0pSEwFWZyWGLg_jbqjYjv8HdQ@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44aFB9YvKtyO-Go6kxCPK0pSEwFWZyWGLg-jbqjYjv8HdQ-mail-gmail-com`; local task id `frank-portal-barrel-sample-alert-not-sent-2026-04-30`.
+  - Classification: Portal notification follow-up/read-only verification on an existing Frank direct-owner lane; not a shared Frank/Avignon mechanic, Frank customization, Avignon customization, or runtime change.
+  - Visible route: Frank session `6fcc276d` / `Frank direct Robert: Re: Lanterna barrel sample request created`; prompt delivery was verified by Frank runtime and the delayed acknowledgement was suppressed because the completion report was sent first.
+  - Result: answered Robert directly that the Portal alert emails did not go out for sample request `2707`; the prior Portal creation read-back had `new_sample_email_sent` unset and explicitly recorded no notification send.
+  - Robert completion report sent to `robert@kovaldistillery.com`, subject `Lanterna barrel sample alert did not send`, Message-ID `<177756920902.912.16264930523762289524@kovaldistillery.com>`; draft `drafts/lanterna-barrel-sample-alert-not-sent-robert-2026-04-30.txt`; source filed to `Handled`.
+  - What was not done: no new Portal alert was sent, no sample request mutation, no sample items, no reviewed/shipped/pickup state, no OAuth/token/auth work, no external-sensitive reply, no deploy, commit, push, reset, or clean.
+  - Remaining decision: if Robert wants the alert sent now, route a Portal-owned notification send for request `2707`.
+
+- 2026-04-30: Created Portal barrel sample request for Robert's Lanterna DC trade event source.
+  - Source Message-ID `<CAAtX44Zb_njmEEc+JM8WFdDycX7YtN-eBviWR_+DN01MZ6iTXQ@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44Zb-njmEEc-JM8WFdDycX7YtN-eBviWR-DN01MZ6iTXQ-mail-gmail-com`; local task id `frank-portal-barrel-sample-request-lanterna-dc-2026-04-30`.
+  - Classification: Portal routine sample-request mutation through the normal Portal-owned route; not a shared Frank/Avignon mechanic, Frank customization, Avignon customization, or runtime change.
+  - Visible route: Portal session `91a22d33` / `Portal sample request route: Lanterna DC barrel samples 5/18`; first Codex session `61c3e8da` failed at startup confirmation, then the shell-backed visible route ran Codex and completed.
+  - Result: Portal sample request `2707` created for account/distributor `309755` / Lanterna Distributors Inc. and contact `359474` / Steve Beck; barrel sample flag `1`; needed date `2026-05-18`; active, unreviewed, not shipped, not picked up; no sample items linked.
+  - Robert completion report sent to `robert@kovaldistillery.com`, subject `Lanterna barrel sample request created`, Message-ID `<177756896896.98256.1599367398689285873@kovaldistillery.com>`; draft `drafts/portal-barrel-sample-request-lanterna-dc-robert-2026-04-30.txt`; source presence after send was `INBOX=0`, `Handled=1`, `[Gmail]/All Mail=1`.
+  - What was not done: no sample items, quantities, products, shipping fields, reviewed state, shipped/picked-up state, notifications, external email, OAuth/token/auth work, pricing/account commitment, unrelated Portal/CRM/OPS mutation, deploy, commit, push, reset, or clean.
 
 - 2026-04-27: Confirmed Papers body fetch after Claude's `include_content` correction.
   - Source Message-ID `<CAAtX44ZxjuvqjyXRAML=NSxPBhsGarQT9z63ZzLb7vyG8BFRJQ@mail.gmail.com>`; dedupe key `frank-direct-primary-CAAtX44ZxjuvqjyXRAML-NSxPBhsGarQT9z63ZzLb7vyG8BFRJQ-mail-gmail-com`; local task id `frank-claude-papers-include-content-fetch-confirmed-2026-04-27`.
