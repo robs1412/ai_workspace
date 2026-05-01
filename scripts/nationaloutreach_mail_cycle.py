@@ -88,6 +88,28 @@ INTERNAL_PATTERNS = re.compile(
     re.IGNORECASE,
 )
 
+STAFFING_PATTERNS = re.compile(
+    r"\b(COT|team member|new team|staffing|open shifts?|shift switch|shift coverage|upcoming shifts?|weekend shift|availability|available|schedule)\b",
+    re.IGNORECASE,
+)
+
+ROUTE_PERSONAS = {
+    "outreach-coordinator": "vanessa.sterling@kovaldistillery.com",
+    "internal-communicator": "vanessa.sterling@kovaldistillery.com",
+    "naomi-stern": "naomi.stern@kovaldistillery.com",
+    "ezra-katz": "ezra.katz@kovaldistillery.com",
+    "marketing-manager": "marketing-manager",
+    "security-guard": "security-guard",
+    "email-coordinator": "email-coordinator",
+}
+
+TASK_FLOW_AUTO_ROUTED_ROUTES = {
+    "outreach-coordinator",
+    "internal-communicator",
+    "naomi-stern",
+    "ezra-katz",
+}
+
 ACTIVE_INBOX_LOG_INTERVAL_SECONDS = 15 * 60
 
 
@@ -397,6 +419,12 @@ def classify_message(headers: dict[str, str], body: str) -> dict[str, str]:
             "suggestion": "Route to Ezra Katz for special-project/legal-affairs coordination and a counsel-ready business brief. Keep the tone practical; do not send external legal/regulatory replies or approve regulated action.",
             "send_allowed": "approval-required",
         }
+    if STAFFING_PATTERNS.search(combined):
+        return {
+            "route": "outreach-coordinator",
+            "suggestion": "Route to Vanessa Sterling for COTeam staffing, shift, schedule, or team-member follow-up through Task Manager and OPS where needed.",
+            "send_allowed": "routine-if-clear",
+        }
     if MARKETING_PATTERNS.search(combined):
         return {
             "route": "marketing-manager",
@@ -420,6 +448,26 @@ def classify_message(headers: dict[str, str], body: str) -> dict[str, str]:
         "suggestion": "Review ownership; no strong automatic route detected.",
         "send_allowed": "approval-required",
     }
+
+
+def task_flow_persona_for_route(route: str) -> str:
+    return ROUTE_PERSONAS.get(str(route or ""), str(route or "email-coordinator"))
+
+
+def task_flow_status_for_classification(classification: dict[str, str]) -> str:
+    return "routed" if classification.get("route") in TASK_FLOW_AUTO_ROUTED_ROUTES else "classified"
+
+
+def task_flow_event_for_status(status: str) -> str:
+    return "email_routed" if status == "routed" else "email_classified"
+
+
+def task_flow_next_update(classification: dict[str, str]) -> str:
+    suggestion = classification.get("suggestion", "")
+    persona = task_flow_persona_for_route(classification.get("route", ""))
+    if task_flow_status_for_classification(classification) == "routed":
+        return f"Routed to {persona}; Task Manager should create or reuse a visible worker route and record completion or blocker. {suggestion}".strip()
+    return suggestion
 
 
 def load_seen(path: Path) -> set[str]:
@@ -566,16 +614,17 @@ def fetch_messages(creds: dict[str, str], state_dir: Path, workspace_root: Path,
                     )
             task_packet = {}
             if shared_task_flow:
+                task_flow_status = task_flow_status_for_classification(classification)
                 task_packet = shared_task_flow.build_packet(
                     source_ref=source_id,
                     intake_channel="email:nationaloutreach",
                     requester=headers.get("from", ""),
                     owner_lane=classification["route"],
-                    responsible_worker_or_persona=classification["route"],
-                    status="classified",
+                    responsible_worker_or_persona=task_flow_persona_for_route(classification["route"]),
+                    status=task_flow_status,
                     approval_gates=classification["send_allowed"],
                     source_links=headers.get("subject", ""),
-                    next_update=classification["suggestion"],
+                    next_update=task_flow_next_update(classification),
                 )
             row = {
                 "logged_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
@@ -603,7 +652,11 @@ def fetch_messages(creds: dict[str, str], state_dir: Path, workspace_root: Path,
                 if inbox_selected and already_seen:
                     active_inbox_logged += 1
             if shared_task_flow and should_append_review:
-                shared_task_flow.append_event(state_dir / "task-flow-events.jsonl", task_packet, "email_classified")
+                shared_task_flow.append_event(
+                    state_dir / "task-flow-events.jsonl",
+                    task_packet,
+                    task_flow_event_for_status(task_packet.get("status", "classified")),
+                )
             if inbox_selected:
                 active_records[source_id] = {
                     **active_record,

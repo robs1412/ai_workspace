@@ -338,3 +338,30 @@ Verification:
 Remaining issue:
 
 - The National Outreach polling runtime still creates `classified` records first. A separate Email Polling lane should make the runtime create or update visible route/session/task fields automatically for actionable worker mail instead of leaving repeated active-inbox items in `classified`.
+
+## 2026-05-01 National Outreach Task Flow Runtime Fix
+
+Robert approved fixing the remaining polling/runtime gap.
+
+Actions taken:
+
+- Patched `scripts/nationaloutreach_mail_cycle.py` so actionable National Outreach intake for Vanessa/Outreach, internal COTeam communication, Naomi finance, and Ezra special-project/legal-affairs routes now emits Task Flow packets with `status=routed` instead of passive `classified`.
+- Mapped routed worker identities to the actual personas:
+  - Vanessa/Outreach/Internal: `vanessa.sterling@kovaldistillery.com`
+  - Naomi finance: `naomi.stern@kovaldistillery.com`
+  - Ezra special projects/legal affairs: `ezra.katz@kovaldistillery.com`
+- Added a staffing/team-message classifier before generic marketing classification so shift/team messages such as the Maker's Market staffing case route to Vanessa/Outreach even if the message also contains promotion/event wording.
+- Changed the Task Flow event emitted for routed records from `email_classified` to `email_routed`.
+- Synced the patched source into the installed National Outreach runtime copy at `/Users/admin/.nationaloutreach-launch/runtime/scripts/nationaloutreach_mail_cycle.py`.
+
+Verification:
+
+- `python3 -m py_compile scripts/nationaloutreach_mail_cycle.py` passed.
+- `python3 -m py_compile /Users/admin/.nationaloutreach-launch/runtime/scripts/nationaloutreach_mail_cycle.py` passed.
+- Runtime classifier spot-check for `Fwd: Saturday 5/2 Makers Market Shift 12-6` returns `outreach-coordinator`, `routed`, `vanessa.sterling@kovaldistillery.com`, `email_routed`.
+
+Boundary:
+
+- No external email was sent.
+- No mailbox message bodies were printed.
+- No hidden Workspaceboard sessions were created from the poller. The poller now records correct Task Flow route state; Task Manager still owns creating/reusing visible worker routes and recording completion/blocker readback.

@@ -348,6 +348,14 @@
 - Robert confirmed Vanessa, Naomi Stern, and Ezra Katz as Google send-as aliases for the shared National Outreach mailbox route. The installed helper treats all three as verified send-as aliases and still fails closed for unverified future persona aliases unless an explicit visible-Sender exception is used for a controlled test.
 - Standard KOVAL persona signatures now include the KOVAL general line `312 878 7988` after `Chicago, IL 60613` and before the website. Vanessa's full signature keeps the inline X, Instagram, and Facebook line.
 
+## 2026-05-01 Task Flow Runtime Routing
+
+- Source and installed National Outreach polling runtime now emit actionable Vanessa/Outreach, internal COTeam, Naomi finance, and Ezra special-project/legal-affairs mail as Task Flow `routed` packets instead of passive `classified` packets.
+- Routed packet personas are actual worker addresses: Vanessa `vanessa.sterling@kovaldistillery.com`, Naomi `naomi.stern@kovaldistillery.com`, Ezra `ezra.katz@kovaldistillery.com`.
+- Staffing/team-message classification now runs before generic marketing classification so shift/team messages do not get parked under `marketing-manager` just because they include promotion/event wording.
+- Task Flow event name is `email_routed` for routed intake and remains `email_classified` for passive review-only intake.
+- Verification passed with `python3 -m py_compile` for source and installed runtime, plus a runtime classifier spot-check on the Maker's Market staffing subject returning Vanessa/Outreach `routed`.
+
 ## 2026-04-30 Naomi / Ezra Role Correction
 
 - Robert corrected the specialist split: Naomi Stern is now the Finance Operations Coordinator; Ezra Katz is now Special Projects & Legal Affairs. Updated role docs, canonical persona YAMLs, National Outreach README/TODO routing notes, and source plus installed National Outreach classifier routing.
