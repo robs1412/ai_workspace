@@ -109,6 +109,7 @@ For internal COTeam notes, add suggested samples when recent account sales data 
 - include products other than Bourbon that the account recently ordered;
 - include what was sold and when it was last sold;
 - phrase the note as an internal COTeam suggestion, not as an external WFM product request.
+- do not recommend `KOVAL Millet` as a KOVAL tasting-prep product. Millet has moved to Thresh & Winnow; if Millet appears in old KOVAL invoice history, exclude it from KOVAL sample guidance unless Robert explicitly approves a Thresh & Winnow tasting context.
 
 Initial reference surface for the integrated sales check: `https://www.koval-distillery.com/salesreport/salesinvoicereport.php`. Treat this as a rudimentary report reference until a routed Salesreport/OPS implementation adds a deterministic integrated check.
 

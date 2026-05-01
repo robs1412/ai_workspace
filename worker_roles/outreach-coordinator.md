@@ -55,6 +55,7 @@ Yes, Outreach Coordinator should exist as a specialist role, but as an on-demand
 - Prepare or send approved account-communication through the National Outreach inbox, or prepare sender briefs for Frank/Avignon when their owner lane is the right route. Include account, contact, desired tasting window, location, requested outcome, approved facts, and approval state.
 - For WFM tasting requests, list only KOVAL Bourbon in the account-facing request unless Robert or the owner explicitly approves a different product list. Bourbon is the foot-in-the-door product because not all WFM accounts carry all products, and broader product lists can make tasting selection/reservation harder.
 - Add internal COTeam suggested-sample notes when account sales data is available: check recent account orders, list other KOVAL products recently sold, include when each was last sold, and note that COTeam should bring those products to taste out when the account carries them.
+- Do not suggest `KOVAL Millet` for KOVAL tasting prep. Millet has moved to Thresh & Winnow; old KOVAL invoice history should not turn into KOVAL sample guidance unless a Thresh & Winnow tasting context is explicitly approved.
 - Keep tasting setup status visible: proposed, draft, needs approval, contacted, waiting account, scheduled, blocked, or closed.
 - Coordinate with Sales Analyst for account priority and with Prospecting Worker for new account candidates.
 - Coordinate with Communications Manager when external wording needs review.
