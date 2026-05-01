@@ -1,5 +1,24 @@
 # National Outreach Handoff
 
+## 2026-05-01 Vanessa Today/Weekend COT Event Detail Emails
+
+- Robert asked Vanessa to send individual staff emails with links/details for today's still-upcoming and weekend COT/Outreach events, and to add 8:00 AM day-of detail emails going forward.
+- Sent 11 Vanessa emails, copied Robert, covering 23 assigned events from 2026-05-01 through 2026-05-03. Robert/admin placeholder assignments were skipped for events `667` and `670`.
+- Sent message readback:
+  - Abbie Brenner, events `672`, Message-ID `<177767101462.20238.6304490812577050744@kovaldistillery.com>`.
+  - Benjamin Goodman, events `663`, `674`, Message-ID `<177767101572.20238.5298620310746456646@kovaldistillery.com>`.
+  - Christine Cummins, event `727`, Message-ID `<177767101670.20238.4846908931703258934@kovaldistillery.com>`.
+  - Darla Swango, event `665`, Message-ID `<177767101779.20238.14776174037820739499@kovaldistillery.com>`.
+  - Dereck Atwater, events `660`, `664`, `673`, Message-ID `<177767101908.20238.8587113469811926855@kovaldistillery.com>`.
+  - Dylan Collins, events `659`, `666`, `671`, `675`, Message-ID `<177767102000.20238.354754434935322839@kovaldistillery.com>`.
+  - Jacob Hoover, events `657`, `669`, Message-ID `<177767102087.20238.6268207095573448990@kovaldistillery.com>`.
+  - Kevin McCarthy, events `662`, `733`, `677`, Message-ID `<177767102186.20238.13923214307256564062@kovaldistillery.com>`.
+  - Nicholas Youngblood, event `735`, Message-ID `<177767102290.20238.9507744752084272180@kovaldistillery.com>`.
+  - Rachel Smolensky, events `658`, `729`, `676`, Message-ID `<177767102398.20238.373268844491110173@kovaldistillery.com>`.
+  - Zachary Johnson, events `661`, `668`, Message-ID `<177767102518.20238.15485590312287847398@kovaldistillery.com>`.
+- Added 12 pending scheduled actions in `/Users/admin/.nationaloutreach-launch/state/scheduled-actions.jsonl` for 8:00 AM Central day-of reminders on 2026-05-02 and 2026-05-03, grouped by staff/day and copied to Robert. These use the installed National Outreach scheduled-action runtime and Vanessa signature.
+- Created OPS task `367971` / `Vanessa: automate 8 AM day-of COT event detail emails` for permanent automation. Required behavior: daily 8:00 AM Central run, group by staff, include OPS event link/details/location/product guidance, dedupe sends, skip internal placeholders, log sent/skipped rows, copy Robert for now, and use the Vanessa/National Outreach send path.
+
 ## 2026-05-01 Late INBOX Cleanup / COT Detail Follow-ups
 
 - Robert directed continued National Outreach inbox cleanup with Robert copied on responses for now.
