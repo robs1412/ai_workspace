@@ -315,3 +315,26 @@ If Robert cancels this project, remove this issue file, remove the project-hub i
 - AI Manager should approve or adjust the worker lane split before Task Manager starts visible workers.
 - If Robert wants an OPS/Portal task, create it from the packet above only after explicit approval.
 - First implementation step should be read-only lane creation for calendar/auth mapping, reminder runner mapping, email polling/inbox mapping, Customer Service FAQ setup, worker-role audit, Naomi finance setup, Vanessa tasting directives, and Ezra project support.
+
+## 2026-05-01 Task Flow Routing Readback
+
+Robert asked to make sure Vanessa, Naomi, Ezra, and similar workers are properly routed to Workspaceboard Task Flow.
+
+Actions taken:
+
+- Updated current Vanessa/National Outreach inbox packets from passive `classified` state to explicit `routed` state in Task Flow.
+- Reclassified the Saturday May 2 Maker's Market staffing item from generic `marketing-manager` to `outreach-coordinator` with Vanessa as responsible persona.
+- Updated current Naomi packet to `naomi.stern@kovaldistillery.com` with the BID/finance route context.
+- Updated current Ezra packets to `ezra.katz@kovaldistillery.com` with special-project/legal-affairs route context.
+- Preserved approval gates: no external sends, legal/regulatory replies, finance mutations, or production changes are implied by Task Flow routing.
+- Fixed the Workspaceboard Task Flow page asset to fetch `api/task-flow/report.php` instead of the extensionless PHP source path, then bumped the JS asset version so the browser gets the corrected fetch path.
+
+Verification:
+
+- `php scripts/task_flow_mysql_recorder.php report 200` shows the routed records for Vanessa, Naomi, and Ezra with responsible worker/persona populated.
+- `php -l /Users/werkstatt/workspaceboard/api/task-flow/report` and `php -l /Users/werkstatt/workspaceboard/api/task-flow/report.php` pass.
+- Workspaceboard source commits pushed: `9c66587` and `911b367`.
+
+Remaining issue:
+
+- The National Outreach polling runtime still creates `classified` records first. A separate Email Polling lane should make the runtime create or update visible route/session/task fields automatically for actionable worker mail instead of leaving repeated active-inbox items in `classified`.
