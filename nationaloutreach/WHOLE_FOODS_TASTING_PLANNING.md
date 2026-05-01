@@ -106,6 +106,7 @@ For WFM account-facing tasting requests, list only KOVAL Bourbon unless Robert o
 For internal COTeam notes, add suggested samples when recent account sales data is available:
 
 - check the account's recent product orders, using Salesreport as the preferred source surface;
+- for Whole Foods specifically, always check recent account purchase history before finalizing COTeam sample prep. The demo request is usually submitted under Bourbon to keep the account-facing request simple, but many Whole Foods locations carry additional KOVAL products that tasters should consider bringing;
 - include products other than Bourbon that the account recently ordered;
 - include what was sold and when it was last sold;
 - phrase the note as an internal COTeam suggestion, not as an external WFM product request.
