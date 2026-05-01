@@ -11,6 +11,12 @@ Last Updated: 2026-04-27 CDT (Machine: Macmini.lan)
 
 ## Open
 
+- **2026-05-01 AI Workers Setup**
+  - Master ID: `AI-INC-20260501-AI-WORKERS-SETUP-01`
+  - Detail log: `project_hub/issues/2026-05-01-ai-workers-setup.md`
+  - Repos: `ai_workspace`; future approved implementation may touch `workspaceboard`, `ops`, `portal`, `bid`, `salesreport`, `lists`, worker-local runtime state, Google Calendar/Drive/Docs, and mailbox runtimes only after separate approvals
+  - Status: planning packet created. Task Manager should route scoped read-only worker lanes for calendar/auth mapping, reminder runner mapping, email polling/inbox mapping, Customer Service inbox/FAQ setup, worker-role/job-description audit, Naomi finance setup, Vanessa tasting directives, and Ezra project support. No OPS/Portal task, external send, external browse, mailbox connection/body read, auth/OAuth/credential change, runtime/LaunchAgent change, Google Doc write, or production mutation has been performed.
+
 - **2026-04-27 Whole Foods Portal to OPS Outreach Sync**
   - Master ID: `AI-INC-20260427-WHOLE-FOODS-OPS-SYNC-01`
   - Detail log: `project_hub/issues/2026-04-27-whole-foods-ops-sync.md`

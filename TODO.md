@@ -4,6 +4,11 @@ Updated: 2026-05-01 CDT (Machine: Macmini.lan)
 
 ## In Progress
 
+- AI Workers Setup project buildout is open as a planning/routing packet.
+  - Project log: `project_hub/issues/2026-05-01-ai-workers-setup.md`; Master ID `AI-INC-20260501-AI-WORKERS-SETUP-01`.
+  - Scope: calendar/auth mapping, reminder runner mapping, email polling/inbox mapping, Customer Service inbox/FAQ setup, worker-role/job-description audit, Naomi finance setup, Vanessa tasting directives, and Ezra project support.
+  - Status: durable packet and OPS/Portal task recommendation prepared; implementation lanes still need visible worker routing. No OPS/Portal task, external browse/send, mailbox connection/body read, auth/OAuth/credential work, runtime/LaunchAgent change, Google Doc write, or production mutation has been performed.
+
 - Shared task-flow stabilization is active after the 2026-04-30 implementation.
   - Implementation exists across National Outreach, Frank, Avignon, existing MySQL tables, the Frank-driven due runner, and the Workspaceboard Task Flow page.
   - 2026-05-01 reminder failure was corrected: due comparisons now use `America/Chicago`, the due runner is hooked into Frank's running 15-second worker at a five-minute throttle, and duplicate reminder sends are suppressed.
