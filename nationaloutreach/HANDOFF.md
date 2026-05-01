@@ -1,5 +1,16 @@
 # National Outreach Handoff
 
+## 2026-05-01 Late INBOX Cleanup / COT Detail Follow-ups
+
+- Robert directed continued National Outreach inbox cleanup with Robert copied on responses for now.
+- Manual INBOX cycle found 7 active messages, all Outreach Coordinator routed: Christine Cummins OPS detail/drop question, Sonat's Matt signed offer request, Zach/Robert Maker's Mart follow-up, Robert's Dereck product-detail forward, Robert's Dylan/CO OPS thread, and Dereck's thank-you reply.
+- Vanessa sent Christine Cummins a staff-facing reply, copied Robert, confirming the OPS detail access cleanup, explaining the interim drop/trade path, and noting that Christine was removed from the accidentally claimed Sunday, May 3, 2026 Outreach and Store shift. Message-ID `<177766982435.17858.18031852277571510928@kovaldistillery.com>`.
+- OPS shift assignment readback for Christine: shift `4440`, user `1309`, before `1`, after `0`.
+- Vanessa sent Dereck Atwater a follow-up, copied Robert, confirming Hops & Grapes Evanston product/sample prep: bring KOVAL Bourbon; the older latest invoice also showed KOVAL Millet, but Millet is no longer sold by KOVAL. Message-ID `<177766982524.17858.11509747866721818874@kovaldistillery.com>`.
+- Vanessa sent Sebastian Saller Matt's signed offer document with Sonat and Robert copied. Message-ID `<177766982620.17858.11482642601256647462@kovaldistillery.com>`. The signed PDF was kept in private runtime attachment storage and was not copied into git.
+- Robert/Zach Maker's Mart and Robert/Dylan CO OPS messages were already answered by Robert or covered by the sent follow-ups, so no separate Vanessa reply was needed.
+- Filed all 7 handled source messages to `Archive`. Final verification cycle: `mailbox_total=0`, `active_inbox_count=0`, `queued_sends_sent=0`, `queued_sends_failed=0`.
+
 ## 2026-05-01 AI Manager / Task Manager Handoff
 
 - Robert asked to stop using this top-level terminal as the active owner. Ongoing National Outreach follow-through should be supervised by AI Manager, routed through Task Manager, and executed only by scoped visible AI workers.
