@@ -13,6 +13,45 @@ Robert asked on 2026-05-01 to add a project/task titled `AI workers Setup` and b
 
 This slice is planning and routing only. It must not mutate external systems, send email, browse external sources, change credentials, run live OAuth/auth setup, alter LaunchAgents/runtimes, create OPS/Portal tasks, or change production data unless a later approval explicitly opens that lane.
 
+## Original Robert Text
+
+```text
+*(to be built out) - AI workers Setup>
+
+
+General
+- calendar access (Frank -> Robert, Frank -> own, Avignon -> Sonat, Avignon -> own, Nationaloutreach -> Events etc.)
+- Reminders (how set ... auto runners to send reminders)
+- Email polling (15sec and 1min)
+
+Customer Service
+connect the inbox
+- create FAQs based on questions that have come in
+- use FOH guide for answers
+- Sales in Europe (see Sebastian E-mail May 1, 2026 and https://www.weisshaus.it/)
+
+AI Worker buildout
+- add what to do by worker, what job roles they currently perform and what we are missing still
+- check with job descriptions that were created for these roles (check off by worker individually and record google doc link to job description when done) + updated new 2026 job description for AI worker if applicable
+
+Naomi
+- bid reporting and mangement
+- Financial reports in Portal (currently assigned to Oleg)
+- send out overdue invoice reminders
+- create invoices from Portal invoices
+
+Ezra
+- support on projected / need basis
+
+Vanessa
+- correspond regarding tastings
+- E-mail out reminders to team
+- E-mail out group messages about open tastings
+- book tastings (need directives for Whole Foods, Marianos, Binnys etc)
+- organize tastings in OPS (download, update, add to Google calendar)
+- send Mitch Conti at Heritage a weekly overview (only include staffed tastings!)
+```
+
 ## Current Open TODO Context
 
 Relevant active AI Workspace TODO families at intake:
