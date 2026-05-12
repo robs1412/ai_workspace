@@ -21,7 +21,7 @@
 
 ## Requested Deliverable
 
-- Install and load a 15-minute LaunchAgent poller for OPS tasks.
+- Install and load a 15-minute system LaunchDaemon poller for OPS tasks.
 - Return the plist path, launch proof, and one exact blocker if the poller cannot be loaded live.
 
 ## Finish Contract
@@ -38,14 +38,14 @@
 - Added wrapper and installer scripts:
   - [`/Users/werkstatt/ops/scripts/run_ops_ai_worker_runner_bridge.sh`](/Users/werkstatt/ops/scripts/run_ops_ai_worker_runner_bridge.sh)
   - [`/Users/werkstatt/ops/scripts/install_ops_ai_worker_runner_bridge_launchagent.sh`](/Users/werkstatt/ops/scripts/install_ops_ai_worker_runner_bridge_launchagent.sh)
-- The installer wrote the LaunchAgent plist to:
-  - `/Users/admin/Library/LaunchAgents/com.koval.ops-ai-worker-runner-bridge.plist`
+- The installer wrote the prepared system daemon plist to:
+  - `/Users/werkstatt/ops/tmp/ops-ai-worker-runner-bridge/com.koval.ops-ai-worker-runner-bridge.system.plist`
 - Local script validation passed:
   - `php -l /Users/werkstatt/ops/scripts/ops_ai_worker_runner_bridge.php`
   - `zsh -n /Users/werkstatt/ops/scripts/run_ops_ai_worker_runner_bridge.sh`
   - `zsh -n /Users/werkstatt/ops/scripts/install_ops_ai_worker_runner_bridge_launchagent.sh`
 - Exact live blocker:
-  - `launchctl bootstrap gui/501` is unavailable from this shell, so the LaunchAgent could not be loaded into the active Aqua user domain here.
+  - `launchctl bootstrap system` is unavailable from this shell, so the LaunchDaemon could not be loaded into the active system domain here.
 
 ## Notes
 

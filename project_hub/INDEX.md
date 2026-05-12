@@ -15,7 +15,7 @@ Last Updated: 2026-04-27 CDT (Machine: Macmini.lan)
   - Master ID: `AI-20260512-OPS-AI-WORKER-RUNNER-POLLER-01`
   - Detail log: `project_hub/issues/2026-05-12-ops-ai-worker-runner-poller.md`
   - Repos: `ops`, machine-local LaunchAgent state
-  - Status: blocked on Aqua launchd domain availability. Added the lock-protected wrapper and LaunchAgent installer for the existing one-shot OPS bridge, verified bridge dry-run output and script syntax, and wrote the plist to `/Users/admin/Library/LaunchAgents/com.koval.ops-ai-worker-runner-bridge.plist`. `launchctl bootstrap gui/501` is unavailable from this shell, so the agent could not be loaded here.
+  - Status: blocked on system launchd domain availability. Added the lock-protected wrapper and system daemon installer for the existing one-shot OPS bridge, verified bridge dry-run output and script syntax, and wrote the prepared daemon plist to `/Users/werkstatt/ops/tmp/ops-ai-worker-runner-bridge/com.koval.ops-ai-worker-runner-bridge.system.plist`. `launchctl bootstrap system` is unavailable from this shell, so the daemon could not be loaded here.
 
 - **2026-05-07 OPS Live Git Cleanup**
   - Master ID: `AI-INC-20260507-OPS-LIVE-GIT-CLEANUP-01`
