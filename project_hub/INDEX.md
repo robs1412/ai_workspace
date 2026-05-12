@@ -11,11 +11,35 @@ Last Updated: 2026-04-27 CDT (Machine: Macmini.lan)
 
 ## Open
 
+- **2026-05-12 OPS AI Worker Runner 15-Minute Poller**
+  - Master ID: `AI-20260512-OPS-AI-WORKER-RUNNER-POLLER-01`
+  - Detail log: `project_hub/issues/2026-05-12-ops-ai-worker-runner-poller.md`
+  - Repos: `ops`, machine-local LaunchAgent state
+  - Status: blocked on Aqua launchd domain availability. Added the lock-protected wrapper and LaunchAgent installer for the existing one-shot OPS bridge, verified bridge dry-run output and script syntax, and wrote the plist to `/Users/admin/Library/LaunchAgents/com.koval.ops-ai-worker-runner-bridge.plist`. `launchctl bootstrap gui/501` is unavailable from this shell, so the agent could not be loaded here.
+
+- **2026-05-07 OPS Live Git Cleanup**
+  - Master ID: `AI-INC-20260507-OPS-LIVE-GIT-CLEANUP-01`
+  - Detail log: `project_hub/issues/2026-05-07-ops-live-git-cleanup.md`
+  - Repos: `ops`, live OPS checkout
+  - Status: routed to Code/Git Manager. `origin/main` is at `c7be3e9` with Workflow Tasks time-column support, but live OPS at `/home/koval/public_html/ops` is dirty and `git pull --ff-only origin main` aborts rather than overwrite local live edits. Live source already contains the requested time-column markers and PHP lint passes for the affected task files. No live stash, reset, clean, commit, overwrite, or file deletion has been performed.
+
+- **2026-05-06 AI Manager Response Reliability And Repeating Tasks**
+  - Master ID: `AI-INC-20260506-AI-MANAGER-RESPONSE-RELIABILITY-01`
+  - Detail log: `project_hub/repeating-tasks.json`
+  - Repos: `ai_workspace`, National Outreach runtime state, Workspaceboard/AI Health runtime
+  - Status: implementation underway. Repeating-task registry added for Naomi bonus emails, Vanessa COTeam open-shift emails, Frank/Avignon EOD emails, and AI Health daily-input/proof audits. Task Flow response defaults now require first check within 2 minutes and result email, owner question, or exact blocker within 5 minutes for owner-visible email lanes.
+
 - **2026-05-01 AI Workers Setup**
   - Master ID: `AI-INC-20260501-AI-WORKERS-SETUP-01`
   - Detail log: `project_hub/issues/2026-05-01-ai-workers-setup.md`
   - Repos: `ai_workspace`; future approved implementation may touch `workspaceboard`, `ops`, `portal`, `bid`, `salesreport`, `lists`, worker-local runtime state, Google Calendar/Drive/Docs, and mailbox runtimes only after separate approvals
-  - Status: planning packet created. Task Manager should route scoped read-only worker lanes for calendar/auth mapping, reminder runner mapping, email polling/inbox mapping, Customer Service inbox/FAQ setup, worker-role/job-description audit, Naomi finance setup, Vanessa tasting directives, and Ezra project support. No OPS/Portal task, external send, external browse, mailbox connection/body read, auth/OAuth/credential change, runtime/LaunchAgent change, Google Doc write, or production mutation has been performed.
+  - Status: planning packet created. Task Manager should route scoped read-only worker lanes for calendar/auth mapping, reminder runner mapping, email polling/inbox mapping, Customer Service inbox/FAQ setup, worker-role/job-description audit, Naomi finance setup, Vanessa tasting directives, and Ezra project support. Internal Communicator weekly recap workflow packet completed at `project_hub/artifacts/internal-communicator/weekly-internal-recap-workflow-packet-2026-05-07.md`; first live recap remains gated on previous examples, approved image source rules/folders, and final audience/sender/approval cadence. No OPS/Portal task, external send, external browse, mailbox connection/body read, auth/OAuth/credential change, runtime/LaunchAgent change, Google Doc write, or production mutation has been performed.
+
+- **2026-05-03 Design & Media Project Manager Agent**
+  - Master ID: `AI-INC-20260503-DESIGN-MEDIA-PM-01`
+  - Detail log: `project_hub/issues/2026-05-03-design-media-project-manager-agent.md`
+  - Repos: `ai_workspace`; future approved implementation may touch `portal`, `workspaceboard`, design-file storage, mailbox source review, OPS/production planning, Forge/media/ad workflows, or worker runtime state only after separate approvals
+  - Status: read-only intake reported. Ezra sent Robert the owner-facing completion report on 2026-05-03, subject `Design & Media PM intake complete`, Message-ID `<177783573635.18682.17199363336245390427@kovaldistillery.com>`. Next step is Robert approval for the Portal project/task skeleton and source-of-truth file model. No Portal mutation, design-file change, compliance approval, ordering action, production schedule change, external stakeholder email, Google Doc write, auth/OAuth, deploy, commit, push, or live-system mutation has been performed.
 
 - **2026-04-27 Whole Foods Portal to OPS Outreach Sync**
   - Master ID: `AI-INC-20260427-WHOLE-FOODS-OPS-SYNC-01`
