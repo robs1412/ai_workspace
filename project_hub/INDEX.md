@@ -9,19 +9,13 @@ Last Updated: 2026-04-27 CDT (Machine: Macmini.lan)
   - Repos: `ops`, `ai_workspace`
   - Status: completed. Fixed live task-detail autosave by moving top-field metadata saving onto `projects/task.php` itself and then fixing the browser save URL shadowing bug that posted to `/ops/projects/[object HTMLInputElement]`; committed and pushed `b89896c` and `b0f5caa`, fast-forwarded live OPS to `b0f5caa`, and verified live syntax/source plus a Codex-authenticated save response.
 
-## Open
-
-- **2026-05-12 OPS AI Worker Runner 15-Minute Poller**
-  - Master ID: `AI-20260512-OPS-AI-WORKER-RUNNER-POLLER-01`
-  - Detail log: `project_hub/issues/2026-05-12-ops-ai-worker-runner-poller.md`
-  - Repos: `ops`, machine-local LaunchAgent state
-  - Status: blocked on system launchd domain availability. Added the lock-protected wrapper and system daemon installer for the existing one-shot OPS bridge, verified bridge dry-run output and script syntax, and wrote the prepared daemon plist to `/Users/werkstatt/ops/tmp/ops-ai-worker-runner-bridge/com.koval.ops-ai-worker-runner-bridge.system.plist`. `launchctl bootstrap system` is unavailable from this shell, so the daemon could not be loaded here.
-
 - **2026-05-07 OPS Live Git Cleanup**
   - Master ID: `AI-INC-20260507-OPS-LIVE-GIT-CLEANUP-01`
   - Detail log: `project_hub/issues/2026-05-07-ops-live-git-cleanup.md`
   - Repos: `ops`, live OPS checkout
-  - Status: routed to Code/Git Manager. `origin/main` is at `c7be3e9` with Workflow Tasks time-column support, but live OPS at `/home/koval/public_html/ops` is dirty and `git pull --ff-only origin main` aborts rather than overwrite local live edits. Live source already contains the requested time-column markers and PHP lint passes for the affected task files. No live stash, reset, clean, commit, overwrite, or file deletion has been performed.
+  - Status: completed. The live OPS checkout at `/home/koval/public_html/ops` fast-forwarded cleanly to `5d008fe77b1563e11201332946c7bf3e072c12c6`, matching `origin/main`. No live stash, reset, clean, overwrite, or file deletion was needed.
+
+## Open
 
 - **2026-05-06 AI Manager Response Reliability And Repeating Tasks**
   - Master ID: `AI-INC-20260506-AI-MANAGER-RESPONSE-RELIABILITY-01`

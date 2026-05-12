@@ -4,7 +4,7 @@
 - Date Opened: `2026-05-12`
 - Owner: `Robert`
 - Priority: `High`
-- Status: `Blocked`
+- Status: `Completed`
 
 ## Scope
 
@@ -44,8 +44,8 @@
   - `php -l /Users/werkstatt/ops/scripts/ops_ai_worker_runner_bridge.php`
   - `zsh -n /Users/werkstatt/ops/scripts/run_ops_ai_worker_runner_bridge.sh`
   - `zsh -n /Users/werkstatt/ops/scripts/install_ops_ai_worker_runner_bridge_launchagent.sh`
-- Exact live blocker:
-  - `launchctl bootstrap system` is unavailable from this shell, so the LaunchDaemon could not be loaded into the active system domain here.
+- Live proof:
+  - `sudo launchctl print system/com.koval.ops-ai-worker-runner-bridge` shows `type = LaunchDaemon`, `domain = system`, `state = running`, `run interval = 900 seconds`, `path = /Library/LaunchDaemons/com.koval.ops-ai-worker-runner-bridge.plist`.
 
 ## Notes
 
