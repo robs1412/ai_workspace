@@ -15,13 +15,13 @@ Last Updated: 2026-04-27 CDT (Machine: Macmini.lan)
   - Repos: `ops`, live OPS checkout
   - Status: completed. The live OPS checkout at `/home/koval/public_html/ops` fast-forwarded cleanly to `5d008fe77b1563e11201332946c7bf3e072c12c6`, matching `origin/main`. No live stash, reset, clean, overwrite, or file deletion was needed.
 
-## Open
-
 - **2026-05-06 AI Manager Response Reliability And Repeating Tasks**
   - Master ID: `AI-INC-20260506-AI-MANAGER-RESPONSE-RELIABILITY-01`
   - Detail log: `project_hub/repeating-tasks.json`
   - Repos: `ai_workspace`, National Outreach runtime state, Workspaceboard/AI Health runtime
-  - Status: implementation underway. Repeating-task registry added for Naomi bonus emails, Vanessa COTeam open-shift emails, Frank/Avignon EOD emails, and AI Health daily-input/proof audits. Task Flow response defaults now require first check within 2 minutes and result email, owner question, or exact blocker within 5 minutes for owner-visible email lanes.
+  - Status: completed. Structured recurrence fields now flow through the Task Flow report and the repeating-tasks / Task Flow pages. The report now emits `parent_packet_id` plus `recurrence_*` fields, and the live runtime copies were synced with the updated page assets. Task Flow response defaults remain first check within 2 minutes and result email, owner question, or exact blocker within 5 minutes for owner-visible email lanes.
+
+## Open
 
 - **2026-05-01 AI Workers Setup**
   - Master ID: `AI-INC-20260501-AI-WORKERS-SETUP-01`

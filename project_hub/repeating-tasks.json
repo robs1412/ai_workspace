@@ -1,0 +1,89 @@
+{
+  "updated_at": "2026-05-12T16:31:35-05:00",
+  "owner": "Robert Birnecker",
+  "directive": "Recurring AI-worker tasks must be durable, owner-visible, and proof-backed. A recurring task is not complete because it was scheduled; it closes only with the required email Message-ID, domain record ID/readback, explicit no-action reason, or one exact owner question.",
+  "defaults": {
+    "first_check_sla_seconds": 120,
+    "response_sla_seconds": 300,
+    "result_email_required": true,
+    "email_from_default": "codex@kovaldistillery.com",
+    "proof_required_default": "owner-visible email Message-ID plus task/domain readback or one exact blocker",
+    "escalation_path": "Task Manager repair at 5 minutes; AI Health escalation at 10 minutes; no handled/filed closeout without Message-ID or explicit no-action proof."
+  },
+  "verification": {
+    "structured_recurrence_fields": "Task Flow report now emits parent_packet_id plus recurrence_* fields, and the repeating-tasks / Task Flow pages prefer the structured fields with prose fallback for legacy packets.",
+    "report_readback": "2026-05-12 live report readback includes recurrence data on upcoming scheduled packets and owner-reply rows."
+  },
+  "tasks": [
+    {
+      "id": "repeating-naomi-sales-team-bonus-quarterly",
+      "status": "active",
+      "responsible_worker_or_persona": "naomi.stern@kovaldistillery.com",
+      "human_owner_or_recipient": "Robert Birnecker <robert@kovaldistillery.com>",
+      "cadence": "Quarterly, on the 15th of the month following each quarter, at 8:00 AM America/Chicago.",
+      "requested_deliverable": "Email Robert the sales team bonus report summary and link for the completed quarter.",
+      "source_url_template": "https://www.koval-distillery.com/salesreport/salesteam_bonus_report_admin.php?from={quarter_start}&to={quarter_end}",
+      "output_channel": "email",
+      "proof_required": "Naomi email Message-ID plus report date range and salesreport URL readback.",
+      "next_update": "Create/focus Naomi repeating task before the next quarter-close due date."
+    },
+    {
+      "id": "repeating-naomi-coteam-bonus-payroll",
+      "status": "active",
+      "responsible_worker_or_persona": "naomi.stern@kovaldistillery.com",
+      "human_owner_or_recipient": "Robert Birnecker <robert@kovaldistillery.com>",
+      "cadence": "Every payroll cycle, 5 days before the payroll run date, at 8:00 AM America/Chicago.",
+      "requested_deliverable": "Email Robert the COTeam bonus report summary and link for the payroll period.",
+      "source_url_template": "https://www.koval-distillery.com/salesreport/coteam_bonus_report_admin.php?from={period_start}&to={period_end}",
+      "calendar_source": "https://portal.koval-distillery.com/#/payroll/payroll-calendar",
+      "output_channel": "email",
+      "proof_required": "Naomi email Message-ID plus payroll date, period range, and salesreport URL readback.",
+      "next_update": "Task Manager must resolve payroll calendar dates into due reminders before the next payroll run."
+    },
+    {
+      "id": "repeating-vanessa-coteam-open-shifts-weekly",
+      "status": "active",
+      "responsible_worker_or_persona": "vanessa.sterling@kovaldistillery.com",
+      "human_owner_or_recipient": "COTeam shift recipients; Robert copied when requested",
+      "cadence": "Weekly and whenever this week's open OPS shifts change materially.",
+      "requested_deliverable": "Send clear open-shift emails for this week's unclaimed COTeam shifts with claim instructions.",
+      "source_url": "https://www.koval-distillery.com/ops/index.php?view=open_shifts",
+      "output_channel": "email",
+      "proof_required": "Vanessa email Message-ID(s), shift IDs/date/time/account readback, and OPS open-shift state after send.",
+      "next_update": "Existing Vanessa open-shifts lane must return sent proof or one exact blocker."
+    },
+    {
+      "id": "repeating-frank-eod-robert",
+      "status": "active",
+      "responsible_worker_or_persona": "frank",
+      "human_owner_or_recipient": "Robert Birnecker <robert@kovaldistillery.com>",
+      "cadence": "Weekdays at end of day unless Robert suppresses it.",
+      "requested_deliverable": "Email Robert a human-readable Frank EOD showing what was actually completed, what changed, what was not done, and remaining decisions.",
+      "output_channel": "email",
+      "proof_required": "Frank email Message-ID plus source readback from daily inputs, Task Flow, sent logs, and automation logs.",
+      "next_update": "Frank EOD content must not use stale sources or empty 'no completed TODO' language when live work exists."
+    },
+    {
+      "id": "repeating-avignon-eod-sonat",
+      "status": "active",
+      "responsible_worker_or_persona": "avignon",
+      "human_owner_or_recipient": "Sonat Birnecker <sonat@kovaldistillery.com>",
+      "cadence": "Weekdays at end of day unless Sonat or Robert suppresses it.",
+      "requested_deliverable": "Email Sonat an updated Avignon EOD in SOP voice with completed work, changes, unfinished items, and next actions.",
+      "output_channel": "email",
+      "proof_required": "Avignon email Message-ID plus source readback from daily inputs, Task Flow, sent logs, and automation logs.",
+      "next_update": "Existing Avignon updated EOD lane must return sent proof or one exact blocker."
+    },
+    {
+      "id": "repeating-ai-health-daily-input-audit",
+      "status": "active",
+      "responsible_worker_or_persona": "ai-health",
+      "human_owner_or_recipient": "Task Manager",
+      "cadence": "Every 2 hours, with fast 60-second proof repair for due/failed owner-visible responses.",
+      "requested_deliverable": "Find daily-input sections or Task Flow rows missing owner, finish contract, due time, output channel, or proof marker, then nudge Task Manager for repair.",
+      "output_channel": "Task Flow / AI Manager page",
+      "proof_required": "AI Health latest.json/latest.md audit result and Task Manager nudge event when missing capture exists.",
+      "next_update": "No Robert email for generic internal proof gaps; only real owner questions or owner-visible result emails."
+    }
+  ]
+}

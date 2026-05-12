@@ -42,6 +42,11 @@ NO_ACTION_READBACKS = {
     "no-action",
     "no_action_logged",
 }
+HANDLED_FILING_MARKERS = {
+    "email_filed_to_handled",
+    "filed-to-handled-after-durable-route",
+    "filed out of inbox to handled",
+}
 
 PACKET_FIELDS = (
     "source_ref",
@@ -63,6 +68,28 @@ PACKET_FIELDS = (
     "verification_readback",
     "papers_projection",
     "next_update",
+    "requested_deliverable",
+    "human_owner_or_recipient",
+    "output_channel",
+    "proof_required",
+    "due_or_next_update",
+    "escalation_path",
+    "first_check_sla_seconds",
+    "response_sla_seconds",
+    "result_email_required",
+    "owner_question_required",
+    "parent_packet_id",
+    "parent_packet_dedupe_key",
+    "recurrence_enabled",
+    "recurrence_kind",
+    "recurrence_cadence",
+    "recurrence_pattern",
+    "recurrence_rule",
+    "recurrence_anchor",
+    "recurrence_until",
+    "recurrence_interval",
+    "recurrence_time",
+    "recurrence_summary",
 )
 
 
@@ -86,6 +113,36 @@ def build_packet(**values: Any) -> dict[str, Any]:
         packet["source_ref"] = values.get("source_message_id") or values.get("id") or ""
     if not packet["dedupe_key"]:
         packet["dedupe_key"] = dedupe_key(str(packet["source_ref"]), str(packet["intake_channel"]))
+    packet = apply_response_sla_defaults(packet)
+    return packet
+
+
+def apply_response_sla_defaults(packet: dict[str, Any]) -> dict[str, Any]:
+    intake = str(packet.get("intake_channel") or "").lower()
+    source_ref = str(packet.get("source_ref") or "").lower()
+    lane = " ".join(
+        str(packet.get(field) or "").lower()
+        for field in ("owner_lane", "responsible_worker_or_persona")
+    )
+    is_email_or_owner_visible = any(marker in f"{intake} {source_ref} {lane}" for marker in ("email", "gmail", "nationaloutreach", "frank", "avignon", "ezra", "naomi", "vanessa"))
+    if not is_email_or_owner_visible:
+        return packet
+    packet.setdefault("first_check_sla_seconds", "")
+    packet.setdefault("response_sla_seconds", "")
+    packet.setdefault("result_email_required", "")
+    packet.setdefault("owner_question_required", "")
+    if not str(packet.get("first_check_sla_seconds") or "").strip():
+        packet["first_check_sla_seconds"] = "120"
+    if not str(packet.get("response_sla_seconds") or "").strip():
+        packet["response_sla_seconds"] = "300"
+    if not str(packet.get("result_email_required") or "").strip():
+        packet["result_email_required"] = "true"
+    if not str(packet.get("owner_question_required") or "").strip():
+        packet["owner_question_required"] = "only_if_real_decision_or_missing_fact"
+    if not str(packet.get("due_or_next_update") or "").strip():
+        packet["due_or_next_update"] = "first check within 2 minutes; result email, owner question, or exact blocker within 5 minutes"
+    if not str(packet.get("escalation_path") or "").strip():
+        packet["escalation_path"] = "Task Manager repair at 5 minutes; AI Health escalation at 10 minutes; no handled/filed closeout without Message-ID or explicit no-action proof."
     return packet
 
 
@@ -93,9 +150,9 @@ def can_file(packet: dict[str, Any], *, no_action: bool = False, duplicate: bool
     if no_action or duplicate or already_routed or is_no_action_closed(packet):
         return True
     status = str(packet.get("status") or "")
-    if status in CLOSEOUT_STATES:
+    if status in CLOSEOUT_STATES and closeout_has_proof_marker(packet):
         return True
-    if status == "reported" and packet.get("completion_or_blocker_email"):
+    if status == "reported" and packet.get("completion_or_blocker_email") and closeout_has_proof_marker(packet):
         return True
     return False
 
@@ -106,6 +163,39 @@ def is_no_action_closed(packet: dict[str, Any]) -> bool:
         for field in ("verification_readback", "next_update", "approval_gates")
     ).lower()
     return any(marker in haystack for marker in NO_ACTION_READBACKS)
+
+
+def has_handled_filing_marker(packet: dict[str, Any]) -> bool:
+    haystack = " ".join(
+        str(packet.get(field) or "")
+        for field in ("event", "verification_readback", "completion_or_blocker_email", "next_update")
+    ).lower()
+    return any(marker in haystack for marker in HANDLED_FILING_MARKERS)
+
+
+def closeout_has_proof_marker(packet: dict[str, Any]) -> bool:
+    if is_no_action_closed(packet):
+        return True
+    if has_handled_filing_marker(packet):
+        return False
+    proof_fields = (
+        "completion_or_blocker_email",
+        "message_id",
+        "artifact_path",
+        "file_path",
+        "task_id",
+        "portal_id",
+        "ops_id",
+        "sheet_range",
+        "proof",
+        "proof_marker",
+        "no_action_reason",
+    )
+    if any(str(packet.get(field) or "").strip() for field in proof_fields):
+        return True
+    readback = str(packet.get("verification_readback") or "").strip().lower()
+    task = str(packet.get("ops_portal_or_domain_task") or "").strip().lower()
+    return bool(readback and task and not has_handled_filing_marker(packet))
 
 
 def missing_fields(packet: dict[str, Any]) -> list[str]:
@@ -124,6 +214,10 @@ def missing_fields(packet: dict[str, Any]) -> list[str]:
         missing.append("verification_readback")
     if status in {"reported", "filed"} and not str(packet.get("completion_or_blocker_email") or "").strip():
         missing.append("completion_or_blocker_email")
+    if status in HARD_CLOSEOUT_STATES and not closeout_has_proof_marker(packet):
+        missing.append("closeout_proof_marker")
+    if has_handled_filing_marker(packet):
+        missing.append("owner_visible_completion_or_blocker_missing_after_handled_filing")
     return sorted(set(missing))
 
 
