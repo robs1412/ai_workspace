@@ -14,10 +14,11 @@ Build out the communications planner so the current newsletter, weekly-highlight
 ## Decision
 
 - Do not add a separate marketing persona right now.
-- Use `Marketing Manager` as the owner for weekly highlights and campaign-style sending.
-- Use `Vanessa Sterling` only when the actual send path is the National Outreach/outreach route.
+- Use `Codex` as the owner for PHPList weekly highlights.
+- Use `Claude` as the owner for social media postings.
+- Use `Mark DeSimone` as the manual owner for Square direct-send work.
 - Keep `Communications Manager` focused on copy, tone, and approval shaping.
-- Keep `Email Coordinator` focused on send-from and durable routing.
+- Keep `Email Coordinator` focused on send-from and durable routing when an item becomes a sendable artifact.
 - Google Drive / Google Docs write is an approved operational path when the workspace already has a writable API auth path; do not treat Drive/Docs as read-only just because the export helper or a scoped token is missing. Use the same live Google API route that already supports document writes in the AI Cloud / job-description workflow, and only call it blocked if the writable auth path is genuinely absent.
 - The repeating task itself belongs in OPS, but the actual planner/calendar surface should live in `forge`. `lists` remains the audience/list execution surface when mailing-list mechanics are needed, while `bid` is not the right home for this planner.
 
@@ -53,12 +54,14 @@ The role split was already present in the workspace, but the planner had not bee
 - OPS task `369888` now exists for the Forge calendar surface.
 - OPS task `369889` now exists for the Forge social-posting surface.
 - OPS task `369890` now exists for the social-posting repeating lane.
-- Forge planner row `88` now exists as `Weekly Highlights` with `Marketing Manager` ownership and a weekly cadence.
-- Forge planner row `89` now exists as `Social Posting` with `Marketing Manager` ownership and a weekly cadence.
+- Forge planner row `88` now exists as `Weekly Highlights` with `Codex` ownership, `PHPList` source, and a weekly cadence.
+- Forge planner row `89` now exists as `Social Posting` with `Claude` ownership, `Social Posting` source, and a weekly cadence.
+- Forge planner rows `26` and `27` now exist as manual `Square Direct Send` lanes owned by `Mark DeSimone`.
 - Forge planner now exposes an explicit `Channel / Source System` field for `PHPList`, `Square Direct Send`, `Social Posting`, `Forge`, and `Other`; the board still shows channel badges for legacy readability, and the calendar now keeps a rolling six-month month picker instead of stopping at the last saved month.
 - The planner calendar surface was upgraded to a week/month grid in the Forge planner UI, with title-only items in each day cell and click-to-load detail behavior.
 - The Planner Entry panel now exposes a direct clickable OPS task link next to the OPS Task ID field.
 - Forge planner rows `88` and `89` now carry explicit `ops_task_id` links to `369887` and `369890`, and the Forge schema gained the `ops_task_id` column so the repeating work is visible to OPS runners.
+- Forge planner rows `26` and `27` remain manual and do not carry OPS task links.
 - Forge live checkout `/home/koval/public_html/forge` was fast-forwarded to `f1f4b4a`.
 - Remaining follow-up is mirroring the updated planner wording into the live Google Doc once the writable Docs auth path is available in this session.
 - Robert plans to start a fresh AI Manager Robert terminal from home again; this is the next session handoff point.
