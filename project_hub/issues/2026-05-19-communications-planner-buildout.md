@@ -57,6 +57,7 @@ The role split was already present in the workspace, but the planner had not bee
 - Forge planner row `89` now exists as `Social Posting` with `Marketing Manager` ownership and a weekly cadence.
 - Forge planner now exposes an explicit `Channel / Source System` field for `PHPList`, `Square Direct Send`, `Social Posting`, `Forge`, and `Other`; the board still shows channel badges for legacy readability, and the calendar now keeps a rolling six-month month picker instead of stopping at the last saved month.
 - The planner calendar surface was upgraded to a week/month grid in the Forge planner UI, with title-only items in each day cell and click-to-load detail behavior.
+- The Planner Entry panel now exposes a direct clickable OPS task link next to the OPS Task ID field.
 - Forge planner rows `88` and `89` now carry explicit `ops_task_id` links to `369887` and `369890`, and the Forge schema gained the `ops_task_id` column so the repeating work is visible to OPS runners.
 - Forge live checkout `/home/koval/public_html/forge` was fast-forwarded to `f1f4b4a`.
 - Remaining follow-up is mirroring the updated planner wording into the live Google Doc once the writable Docs auth path is available in this session.
