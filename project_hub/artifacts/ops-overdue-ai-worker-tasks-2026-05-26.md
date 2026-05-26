@@ -70,3 +70,9 @@ Source: local OPS `workflow_load_tasks` using the same AI-worker overdue filter 
 2. Prioritize the 35 Robert-created rows first, grouped by workspace, because those match the current OPS intake rule.
 3. Treat the 21 Codex-created rows as projection hygiene: verify whether work is already done, duplicated in Task Flow, or still useful before completing/rescheduling them silently.
 4. Start with the oldest Robert-created Codex-owned rows, then active owner-specific standing rows such as Vanessa/Naomi/Frank only after checking their live worker lanes.
+
+## Started Cleanup
+
+- 2026-05-26 16:14 CDT: Closed OPS `363052` (`Forge task ... donations`) as stale completed work. Proof: live Forge `/home/koval/public_html/forge` contains `donations_approved` source workflow and README `Approved Donation Requests`; source DB readback for `koval_donations.donationrequests_approved` returned 3,692 approved rows and 3,009 distinct emails. OPS status changed from `Not Started` to `Completed` with notification suppressed.
+- 2026-05-26 16:17 CDT: Closed OPS `363053` (`forge task... barrel contact list`) as stale completed work. Proof: live Forge contains `barrel_contacts` source workflow and README `Barrel Buyers Re-Engagement`; OPS status changed from `Not Started` to `Completed` with notification suppressed.
+- Current overdue AI-worker count after those closeouts: 54. Next oldest row is OPS `334481` (`DA and incentive strategy`), which is not a stale implementation row and should be handled as a real Salesreport strategy/reporting execution pass rather than silently closed.
