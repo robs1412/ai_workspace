@@ -2469,30 +2469,55 @@ def owner_reply_has_proof_backed_primary(reply: dict) -> tuple[bool, str]:
     source_ref = normalize_message_id(reply.get("source_message_id"))
     if not source_ref:
         return False, ""
-    php = rf"""
+    wrapper_key = task_flow_owner_reply_key(reply)
+    php = r"""
 require '/Users/werkstatt/ops/bootstrap.php';
+$input = json_decode(stream_get_contents(STDIN) ?: '{}', true);
+$sourceRef = (string)($input['source_ref'] ?? '');
+$wrapperKey = (string)($input['wrapper_key'] ?? '');
+if ($sourceRef === '' || $wrapperKey === '') {
+    exit;
+}
 $pdo = get_event_pdo();
 $stmt = $pdo->prepare(
     "SELECT dedupe_key, status, clarification_email, completion_or_blocker_email
      FROM koval_crm.ai_task_flow_packets
      WHERE archived_at IS NULL
        AND source_ref = ?
-       AND dedupe_key NOT LIKE 'taskflow-owner-reply-%'
        AND (
          completion_or_blocker_email <> ''
          OR clarification_email <> ''
          OR status IN ('reported','completed','handled','filed','closed_with_proof','clarification_sent')
        )
+       AND (
+         dedupe_key NOT LIKE 'taskflow-owner-reply-%'
+         OR dedupe_key = ?
+       )
      ORDER BY updated_at DESC
      LIMIT 1"
 );
-$stmt->execute(['{source_ref}']);
+$stmt->execute([$sourceRef, $wrapperKey]);
 $row = $stmt->fetch(PDO::FETCH_ASSOC);
+if (!$row) {
+    $eventStmt = $pdo->prepare(
+        "SELECT dedupe_key, status,
+                JSON_UNQUOTE(JSON_EXTRACT(details_json, '$.message_id')) AS completion_or_blocker_email
+         FROM koval_crm.ai_task_flow_events
+         WHERE dedupe_key = ?
+           AND status IN ('reported','completed','handled','filed','closed_with_proof','clarification_sent')
+           AND COALESCE(JSON_UNQUOTE(JSON_EXTRACT(details_json, '$.message_id')), '') <> ''
+         ORDER BY id DESC
+         LIMIT 1"
+    );
+    $eventStmt->execute([$wrapperKey]);
+    $row = $eventStmt->fetch(PDO::FETCH_ASSOC);
+}
 echo $row ? json_encode($row, JSON_UNESCAPED_SLASHES) : '';
 """
     try:
         result = subprocess.run(
             ["php", "-r", php],
+            input=json.dumps({"source_ref": source_ref, "wrapper_key": wrapper_key}),
             capture_output=True,
             text=True,
             timeout=10,
