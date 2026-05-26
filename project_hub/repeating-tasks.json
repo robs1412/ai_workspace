@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-05-12T16:31:35-05:00",
+  "updated_at": "2026-05-20T10:11:58-05:00",
   "owner": "Robert Birnecker",
   "directive": "Recurring AI-worker tasks must be durable, owner-visible, and proof-backed. A recurring task is not complete because it was scheduled; it closes only with the required email Message-ID, domain record ID/readback, explicit no-action reason, or one exact owner question.",
   "defaults": {
@@ -79,11 +79,84 @@
       "status": "active",
       "responsible_worker_or_persona": "ai-health",
       "human_owner_or_recipient": "Task Manager",
-      "cadence": "Every 2 hours, with fast 60-second proof repair for due/failed owner-visible responses.",
-      "requested_deliverable": "Find daily-input sections or Task Flow rows missing owner, finish contract, due time, output channel, or proof marker, then nudge Task Manager for repair.",
+      "cadence": "Weekly, every Monday at 8:15 AM America/Chicago.",
+      "requested_deliverable": "Audit the AI Manager input writer and legacy event trail for stale or missing rows, then nudge Task Manager if the DB surfaces or daily-input replay drift apart.",
       "output_channel": "Task Flow / AI Manager page",
-      "proof_required": "AI Health latest.json/latest.md audit result and Task Manager nudge event when missing capture exists.",
-      "next_update": "No Robert email for generic internal proof gaps; only real owner questions or owner-visible result emails."
+      "proof_required": "Weekly audit readback showing current ai_manager_inputs and ai_manager_input_events tails, or one exact blocker.",
+      "next_update": "Keep the daily-input Markdown trail and legacy DB event trail aligned; no Robert email unless a real blocker or owner question appears."
+    },
+    {
+      "id": "repeating-ai-manager-input-legacy-trail-audit",
+      "status": "active",
+      "responsible_worker_or_persona": "ai-health",
+      "human_owner_or_recipient": "Task Manager",
+      "ops_task_id": 369932,
+      "cadence": "Weekly, every Monday at 8:30 AM America/Chicago.",
+      "requested_deliverable": "Compare the current daily-input Markdown files against the legacy ai_manager_input_events table and backfill any missing rows.",
+      "output_channel": "Task Flow / AI Manager page",
+      "proof_required": "Legacy event-tail readback, backfill count, or one exact blocker.",
+      "next_update": "Re-run the backfill command only if a live gap appears; otherwise report clean parity and stop."
+    },
+    {
+      "id": "repeating-weekly-highlights-marketing-manager",
+      "status": "active",
+      "responsible_worker_or_persona": "codex@kovaldistillery.com",
+      "human_owner_or_recipient": "Robert Birnecker <robert@kovaldistillery.com>",
+      "cadence": "Weekly, Monday at 9:00 AM America/Chicago.",
+      "requested_deliverable": "Draft the weekly highlights communication packet for the current week, keeping Marketing Manager as the role owner and using Vanessa only when the actual send path is National Outreach.",
+      "output_channel": "email",
+      "proof_required": "Owner-visible Message-ID plus source readback, or one exact blocker.",
+      "next_update": "Keep OPS tasks 369887 and 369888 plus Forge planner row 88 in sync as the wording evolves."
+    },
+    {
+      "id": "repeating-social-posting-marketing-manager",
+      "status": "active",
+      "responsible_worker_or_persona": "codex@kovaldistillery.com",
+      "human_owner_or_recipient": "Robert Birnecker <robert@kovaldistillery.com>",
+      "cadence": "Weekly, Monday at 10:00 AM America/Chicago.",
+      "requested_deliverable": "Draft the social posting communication packet for the current week, keeping Marketing Manager as the role owner and using Vanessa only when the actual send path is National Outreach.",
+      "output_channel": "email",
+      "proof_required": "Owner-visible Message-ID plus source readback, or one exact blocker.",
+      "next_update": "Keep OPS tasks 369889 and 369890 plus Forge planner row 89 in sync as the wording evolves."
+    },
+    {
+      "id": "repeating-ai-box-backup-daily-claude",
+      "status": "active",
+      "responsible_worker_or_persona": "codex@kovaldistillery.com",
+      "human_owner_or_recipient": "Robert Birnecker <robert@kovaldistillery.com>",
+      "ops_task_id": 369899,
+      "cadence": "Daily, every day at 7:00 AM America/Chicago.",
+      "requested_deliverable": "Run the daily AI box backup task wrapper, create the local metadata backup, push it to the approved .205 route, warn Robert by email if the remote push fails, and on success advance OPS task 369899 to the next daily due date.",
+      "output_channel": "HANDOFF / OPS",
+      "proof_required": "Local backup path, remote_push_status, warning_email_status on failure, and OPS due-date readback showing task 369899 moved to the next daily date on success.",
+      "next_update": "Keep OPS task 369899, HANDOFF, and the backup warning path aligned with the latest successful backup path, remote status, and next daily due date.",
+      "source_url": "/Users/werkstatt/ai_workspace/scripts/run_ai_box_backup_daily_task.py"
+    },
+    {
+      "id": "repeating-weekly-codex-backup-verification",
+      "status": "active",
+      "responsible_worker_or_persona": "codex@kovaldistillery.com",
+      "human_owner_or_recipient": "Robert Birnecker <robert@kovaldistillery.com>",
+      "ops_task_id": 370070,
+      "cadence": "Weekly, aligned to the live OPS due date cadence for task 370070.",
+      "requested_deliverable": "Verify the most recent Codex backup artifact and the daily backup lane readback, confirm whether OPS task 369899 remains wired correctly, and report one exact proof line or blocker.",
+      "output_channel": "HANDOFF / OPS",
+      "proof_required": "Latest local backup artifact readback, live OPS readback for task 369899 recurrence/due date, and one exact verification outcome for task 370070.",
+      "next_update": "Keep OPS task 370070, OPS task 369899, and the weekly backup verification readback aligned so overdue weekly verification does not drift from the real daily backup lane.",
+      "source_url": "/Users/werkstatt/ai_workspace/project_hub/artifacts/repeating-access-guide-2026-05-20.md"
+    },
+    {
+      "id": "repeating-weekly-skill-review-codex",
+      "status": "active",
+      "responsible_worker_or_persona": "codex@kovaldistillery.com",
+      "human_owner_or_recipient": "Robert Birnecker <robert@kovaldistillery.com>",
+      "ops_task_id": 369942,
+      "cadence": "Weekly, every Monday at 8:45 AM America/Chicago.",
+      "requested_deliverable": "Review recent inputs from Robert, Sonat, and other recurring owners for repeatable workflows, then create or update Codex skills when the same how-to keeps reappearing.",
+      "output_channel": "OPS / skill-review",
+      "proof_required": "Weekly review readback, created/updated skill references, or one exact blocker.",
+      "next_update": "Keep the OPS task, repeating-task record, and skill creation log aligned with newly derived skills.",
+      "source_url": "/Users/werkstatt/ai_workspace/AGENTS.md"
     }
   ]
 }

@@ -7,6 +7,11 @@ identity:
   motto: "To live well is to live slowly."
   optimal_send_time: Tuesday mornings
 
+role_summary: >
+  Asher is the heritage and stewardship voice for The Cultivater. He turns
+  provenance, craft, and slow living into editorial copy and outreach that feels
+  grounded, luxurious, and patient.
+
 personality:
   vibe: "Weathered luxury. He wears 20-year-old bespoke tailoring, carries a battered leather notebook, and drinks tea from a cracked Meissen cup because 'the repair is where the soul lives.'"
   voice: "Authoritative but warm. He speaks in long, rhythmic sentences. He does not look for 'trends'; he looks for 'lineage.'"
@@ -15,6 +20,24 @@ personality:
     - Arts & Crafts Movement
     - William Morris
     - Soetsu Yanagi
+
+editorial_portfolio:
+  - Organic Farming
+  - Food & Drink
+  - Arts & Travel (heritage focus)
+
+department_assignments:
+  - department: Organic Farming
+    lens: Soil Health & Rhythms
+  - department: Food & Drink
+    lens: Terroir & Provenance
+  - department: Arts & Travel
+    lens: Heritage focus
+
+primary_use:
+  - Heritage-led editorial outreach
+  - Slow-living brand framing
+  - Food, drink, farming, craft, and restoration stories
 
 must_nots:
   - Must not use corporate buzzwords (e.g., 'synergy,' 'disrupt,' 'scalable')
@@ -39,19 +62,6 @@ signature:
     - Ancestral
     - Rhythms
   ritual_opening: "I was just looking at a 19th-century almanac this morning, and it struck me..."
-
-editorial_portfolio:
-  - Organic Farming
-  - Food & Drink
-  - Arts & Travel (heritage focus)
-
-department_assignments:
-  - department: Organic Farming
-    lens: Soil Health & Rhythms
-  - department: Food & Drink
-    lens: Terroir & Provenance
-  - department: Arts & Travel
-    lens: Heritage focus
 
 pitch_template:
   subject: "The Integrity of [Company Name] / Cultivater Magazine"

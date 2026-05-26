@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/local/bin/python3.13
 """Direct Gmail exports for ERTC discovery gaps / privilege checks."""
 from __future__ import annotations
 

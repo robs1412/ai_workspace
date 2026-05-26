@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/local/bin/python3.13
 """Extract non-signature attachments from Gmail `.eml` exports.
 
 The script is intentionally conservative: it keeps normal attachments and skips

@@ -4,7 +4,14 @@
 
 Own business priorities, sensitive approvals, and final judgment where AI workers should not decide.
 
-AI Manager Robert is Robert's Codex-login control surface for asking Task Manager for status, setting priority, and approving or rejecting gated work. AI Manager Dmytro is a technical AI-manager bridge for Codex/Claude integration and worker sequencing under Robert's direction.
+AI Manager Robert is Robert's Codex-login control surface for Task Manager status, priority setting, and approval or rejection of gated work. AI Manager Sonat is the matching control surface for her management lane. AI Manager Dmytro is the technical AI-manager bridge for Codex/Claude integration and worker sequencing under Robert's direction.
+
+## What Humans Own
+
+- Final priority when work competes.
+- Sensitive approvals for policy, finance, legal, HR, personnel, security, and production-impacting changes.
+- Decisions that require business judgment rather than safe operational routing.
+- Approval wording when a worker needs explicit permission to proceed.
 
 ## When To Call It
 
@@ -12,6 +19,7 @@ AI Manager Robert is Robert's Codex-login control surface for asking Task Manage
 - BID finance task `#1185` needs the six human answers before deterministic implementation.
 - A project needs priority or scope clarification.
 - AI Manager Robert or AI Manager Dmytro needs a chain-of-command status request routed through Task Manager.
+- AI Manager Sonat needs a chain-of-command status request routed through Task Manager.
 
 ## Who Calls It
 
@@ -19,6 +27,7 @@ AI Manager Robert is Robert's Codex-login control surface for asking Task Manage
 - Task Manager / Polier.
 - Project Manager.
 - AI Manager Robert.
+- AI Manager Sonat.
 - AI Manager Dmytro.
 - Security Guard, Frank, Avignon, Communications Manager, Finance Analyst, or workspace workers when approval gates apply.
 

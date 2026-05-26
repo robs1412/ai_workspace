@@ -67,7 +67,7 @@ cat > "$tmp_plist" <<PLIST
   <string>$label</string>
   <key>ProgramArguments</key>
   <array>
-    <string>/usr/bin/python3</string>
+    <string>/usr/local/bin/python3.13</string>
     <string>$script</string>
     <string>--log-dir</string>
     <string>$log_dir</string>

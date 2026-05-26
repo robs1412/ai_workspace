@@ -1,0 +1,50 @@
+{
+  "allowed_fix_class": "truth-drift-single-item-repair",
+  "approval_required": true,
+  "created_at": "2026-05-24 13:43:50 ",
+  "decision": "superseded",
+  "decision_notes": "Superseded by later clean monitor proposal recursive-proposal-20260524-134813-monitor-recursive-lane; no execution remains.",
+  "decision_recorded_at": "2026-05-24 13:53:44 CDT",
+  "decision_source_message_id": "",
+  "decision_state": "superseded_by_clean_monitor",
+  "frank_email_body_path": "/Users/werkstatt/ai_workspace/frank/drafts/recursive-proposals/recursive-proposal-20260524-134350-repair-truth-drift.txt",
+  "frank_email_html_body_path": "/Users/werkstatt/ai_workspace/frank/drafts/recursive-proposals/recursive-proposal-20260524-134350-repair-truth-drift.html",
+  "frank_email_message_id": "<177964828163.12510.14353964488768279452@kovaldistillery.com>",
+  "frank_email_sent_at": "Sun, 24 May 2026 13:44:41 -0500",
+  "frank_email_sent_to": "robert@kovaldistillery.com",
+  "frank_email_status": "sent",
+  "frank_email_subject": "Approval needed: repair-truth-drift",
+  "frank_email_template_note": "Template upgraded after first send to include richer plain-text context and a formatted HTML body for future proposal emails.",
+  "proof_required": "`./scripts/task_flow_truth_drift_check.py --fail-on-drift` returns zero drift, or the exact blocker is recorded.",
+  "proposal_id": "recursive-proposal-20260524-134350-repair-truth-drift",
+  "recommended_action": "repair-truth-drift",
+  "risk_class": "medium",
+  "rollback_note": "If verification fails, stop and record one exact blocker; do not continue into a broader repair class.",
+  "source_snapshot": {
+    "coverage_ok": true,
+    "historical_clean_success": 1.0,
+    "proof_closeout_issues": 15,
+    "registry_ok": true,
+    "service_parity_drift": 0,
+    "service_parity_drift_items": [],
+    "service_results_checked": 91,
+    "truth_drift_count": 1,
+    "truth_drifts": [
+      {
+        "dedupe_key": "",
+        "detail": "1 scheduler route candidates in task-flow-report",
+        "kind": "scheduler_route_candidates_present",
+        "path": "",
+        "session_id": "",
+        "severity": "medium",
+        "title": "Scheduler route candidates present"
+      }
+    ],
+    "truth_managed_sessions": 194,
+    "truth_rows_scanned": 500
+  },
+  "state_updated_at": "2026-05-24 13:53:44 CDT",
+  "what_changes_if_approved": "Investigate and repair the single contradiction `Scheduler route candidates present` through the approved Task Flow / Workspaceboard path.",
+  "what_will_not_change": "No broad Task Flow closeout mutation, mailbox action, service restart, credential work, or OPS/Portal mutation.",
+  "why_now": "Task Flow truth drift reports 1 contradiction item(s)."
+}

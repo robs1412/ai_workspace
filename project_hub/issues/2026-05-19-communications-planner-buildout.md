@@ -43,6 +43,9 @@ The role split was already present in the workspace, but the planner had not bee
 
 ## Verification Notes
 
+- 2026-05-22 local durable-guide follow-through completed for the active Claude/Mark/Robert `KOVAL communications planner` thread. Added `project_hub/artifacts/communications-planner/communications-planner-durable-guide-2026-05-22.md` so the planner now has one top-level operating guide that ties together the weekly-highlights, social-posting, campaign-send, and manual Square lanes without re-deriving the split from mail history. This closes the specific local docs gap implied by the `durable guide for mass` packet while preserving the existing approval gates for live sends, Forge mutation, and Google Doc mirroring.
+- 2026-05-20 scheduler-bridge correction: the shared Task Flow due-runner now maps communications-planner / `marketing-manager` follow-through to `forge` rather than `lists`, and it will retry unresolved scheduler-bridge candidates after a cooldown instead of treating an old handoff log line as permanent proof of routing.
+- Live Workspaceboard Task Flow readback at `2026-05-20 17:03 CDT` showed `scheduler_violations=0` and `scheduler_route_candidates=0`; the two prior communications-planner residue rows were normalized onto the existing Forge/OPS lane with `OPS 369887/369888/369889/369890` and Forge planner rows `88/89` cited directly in the packet.
 - `worker_roles/marketing-manager.md` already defines organized campaign sends as Marketing Manager scope.
 - `nationaloutreach/PERSONA.md` already defines Vanessa Sterling as the Outreach Coordinator persona and routes marketing/campaign mechanics to Marketing Manager and Forge.
 - `worker_roles/internal-communicator.md` now explicitly tracks the internal newsletter / focus-topic / CRM-update / static-information lane from the 2022 internal communication planning doc.
@@ -73,7 +76,7 @@ The role split was already present in the workspace, but the planner had not bee
 
 ## Follow-Ups
 
-- Tighten the communications planner wording around `weekly highlights` and `campaign sends`.
+- Mirror the top-level guide wording into any live external planner surface only when that specific write path is requested and approved.
 - If a dedicated marketing voice becomes necessary later, add it only after a real split in audience, tone, or approval boundary exists.
 - Once a writable Docs auth path is available, mirror this decision into the live Google Doc.
 - Add a durable management note for Google Drive / Docs writes so future doc work starts from the writable API path first, not from the export/read-only helper.

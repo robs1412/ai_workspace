@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/local/bin/python3.13
 """Short-lived, code-gated file transfer receiver for AI worker hosts."""
 
 from __future__ import annotations

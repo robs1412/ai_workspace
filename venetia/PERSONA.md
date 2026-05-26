@@ -135,6 +135,6 @@ Outreach shape:
 
 ## Activation Boundary
 
-The persona is now defined, but Venetia's mailbox action policy is still gated.
+The persona is now defined, and body reads plus approved send automation are enabled.
 
-Do not enable body reads, filing, deletes, routine authority, or external sending until Robert approves the separate action-policy/runtime slice. Drafting is allowed when explicitly requested and should route through Avignon or the responsible manager for approval before sending.
+Do not enable filing, deletes, or routine authority until Robert approves the separate action-policy/runtime slice. Drafting is allowed when explicitly requested and should route through Avignon or the responsible manager for approval before sending.

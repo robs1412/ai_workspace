@@ -1,0 +1,564 @@
+# Service Parity Check
+
+- Recorded: 2026-05-24 13:48:02
+- Mode: `all`
+- Scope: source/runtime parity and installed deployment-state checks for local AI service surfaces
+
+## Totals
+
+- Surfaces checked: 91
+- ok: 91
+
+## Results
+
+- Source task-flow due runner: `ok`
+  - Group: `runtime-parity`
+  - Expectation: `#!/usr/local/bin/python3.13`
+  - Observed: `#!/usr/local/bin/python3.13`
+  - Note: Repo-local source should pin the executable interpreter.
+  - Path: `/Users/werkstatt/ai_workspace/scripts/task_flow_due_runner.py`
+- Installed task-flow due runner: `ok`
+  - Group: `runtime-parity`
+  - Expectation: `#!/usr/local/bin/python3.13`
+  - Observed: `#!/usr/local/bin/python3.13`
+  - Note: Installed runtime mirror should match the repo-local interpreter pin.
+  - Path: `/Users/admin/.task-flow-launch/runtime/scripts/task_flow_due_runner.py`
+- Source National Outreach cycle: `ok`
+  - Group: `runtime-parity`
+  - Expectation: `#!/usr/local/bin/python3.13`
+  - Observed: `#!/usr/local/bin/python3.13`
+  - Note: Repo-local source should pin the executable interpreter.
+  - Path: `/Users/werkstatt/ai_workspace/scripts/nationaloutreach_mail_cycle.py`
+- Installed National Outreach cycle: `ok`
+  - Group: `runtime-parity`
+  - Expectation: `#!/usr/local/bin/python3.13`
+  - Observed: `#!/usr/local/bin/python3.13`
+  - Note: Installed runtime mirror should match the repo-local interpreter pin.
+  - Path: `/Users/admin/.nationaloutreach-launch/runtime/scripts/nationaloutreach_mail_cycle.py`
+- Source AI Health launch template: `ok`
+  - Group: `runtime-parity`
+  - Expectation: `/usr/local/bin/python3.13`
+  - Observed: `/usr/local/bin/python3.13`
+  - Note: Launch template should emit the pinned interpreter.
+  - Path: `/Users/werkstatt/ai_workspace/scripts/install_ai_health_manager_launchagent.sh`
+- Source Workspaceboard supervisor helper: `ok`
+  - Group: `runtime-parity`
+  - Expectation: `/usr/local/bin/python3.13`
+  - Observed: `/usr/local/bin/python3.13`
+  - Note: Source supervisor should use the pinned helper interpreter.
+  - Path: `/Users/werkstatt/workspaceboard/scripts/workspaceboard_supervisor.php`
+- Installed Workspaceboard supervisor helper: `ok`
+  - Group: `runtime-parity`
+  - Expectation: `/usr/local/bin/python3.13`
+  - Observed: `/usr/local/bin/python3.13`
+  - Note: Installed supervisor should match the source helper interpreter.
+  - Path: `/Users/admin/.workspaceboard-launch/runtime/app/scripts/workspaceboard_supervisor.php`
+- Source Workspaceboard server escalation path: `ok`
+  - Group: `runtime-parity`
+  - Expectation: `spawnSync('/usr/local/bin/python3.13'`
+  - Observed: `spawnSync('/usr/local/bin/python3.13'`
+  - Note: Source server should pin the AI Manager escalation helper interpreter.
+  - Path: `/Users/werkstatt/workspaceboard/server/index.js`
+- Source Workspaceboard server AI Health path: `ok`
+  - Group: `runtime-parity`
+  - Expectation: `spawn('/usr/local/bin/python3.13'`
+  - Observed: `spawn('/usr/local/bin/python3.13'`
+  - Note: Source server should pin the AI Health sweep interpreter.
+  - Path: `/Users/werkstatt/workspaceboard/server/index.js`
+- Installed Workspaceboard server escalation path: `ok`
+  - Group: `runtime-parity`
+  - Expectation: `spawnSync('/usr/local/bin/python3.13'`
+  - Observed: `spawnSync('/usr/local/bin/python3.13'`
+  - Note: Installed server should match the escalation helper interpreter pin.
+  - Path: `/Users/admin/.workspaceboard-launch/runtime/app/server/index.js`
+- Installed Workspaceboard server AI Health path: `ok`
+  - Group: `runtime-parity`
+  - Expectation: `spawn('/usr/local/bin/python3.13'`
+  - Observed: `spawn('/usr/local/bin/python3.13'`
+  - Note: Installed server should match the AI Health interpreter pin.
+  - Path: `/Users/admin/.workspaceboard-launch/runtime/app/server/index.js`
+- AI Health system plist exists: `ok`
+  - Group: `deployment-state`
+  - Expectation: `exists`
+  - Observed: `exists`
+  - Note: AI Health is installed as a system LaunchDaemon on this machine.
+  - Path: `/Library/LaunchDaemons/com.koval.ai-health-manager.plist`
+- AI Health system plist interpreter: `ok`
+  - Group: `deployment-state`
+  - Expectation: `/usr/local/bin/python3.13`
+  - Observed: `/usr/local/bin/python3.13`
+  - Note: Installed AI Health daemon plist should preserve live policy while using Python 3.13.
+  - Path: `/Library/LaunchDaemons/com.koval.ai-health-manager.plist`
+  - Fix id: `ai-health-plist-interpreter`
+- AI Health live launchctl interpreter: `ok`
+  - Group: `deployment-state`
+  - Expectation: `program = /usr/local/bin/python3.13`
+  - Observed: `program = /usr/local/bin/python3.13`
+  - Note: Running AI Health daemon should expose the pinned interpreter in launchctl readback.
+  - Command: `launchctl print system/com.koval.ai-health-manager`
+- National Outreach daemon plist exists: `ok`
+  - Group: `deployment-state`
+  - Expectation: `exists`
+  - Observed: `exists`
+  - Note: National Outreach service should be installed as a system LaunchDaemon.
+  - Path: `/Library/LaunchDaemons/com.koval.nationaloutreach-auto.plist`
+- National Outreach wrapper target: `ok`
+  - Group: `deployment-state`
+  - Expectation: `/Library/KOVAL/bin/nationaloutreach-auto`
+  - Observed: `/Library/KOVAL/bin/nationaloutreach-auto`
+  - Note: National Outreach daemon should launch through the approved wrapper path.
+  - Path: `/Library/LaunchDaemons/com.koval.nationaloutreach-auto.plist`
+- National Outreach wrapper exists: `ok`
+  - Group: `deployment-state`
+  - Expectation: `exists`
+  - Observed: `exists`
+  - Note: The wrapper referenced by the National Outreach LaunchDaemon should exist.
+  - Path: `/Library/KOVAL/bin/nationaloutreach-auto`
+- Task Flow daemon plist exists: `ok`
+  - Group: `deployment-state`
+  - Expectation: `exists`
+  - Observed: `exists`
+  - Note: Task Flow reminders should be installed as a system LaunchDaemon.
+  - Path: `/Library/LaunchDaemons/com.koval.task-flow-reminders.plist`
+- Task Flow wrapper target: `ok`
+  - Group: `deployment-state`
+  - Expectation: `/Users/admin/.task-flow-launch/runtime/run_task_flow_due_runner.sh`
+  - Observed: `/Users/admin/.task-flow-launch/runtime/run_task_flow_due_runner.sh`
+  - Note: Task Flow daemon should point at the installed runtime wrapper.
+  - Path: `/Library/LaunchDaemons/com.koval.task-flow-reminders.plist`
+- Task Flow wrapper exists: `ok`
+  - Group: `deployment-state`
+  - Expectation: `exists`
+  - Observed: `exists`
+  - Note: The Task Flow installed runtime wrapper should exist.
+  - Path: `/Users/admin/.task-flow-launch/runtime/run_task_flow_due_runner.sh`
+- Workspaceboard user plist exists: `ok`
+  - Group: `deployment-state`
+  - Expectation: `exists`
+  - Observed: `exists`
+  - Note: Workspaceboard user LaunchAgent should exist.
+  - Path: `/Users/admin/Library/LaunchAgents/com.koval.workspaceboard.plist`
+- Workspaceboard automation user plist exists: `ok`
+  - Group: `deployment-state`
+  - Expectation: `exists`
+  - Observed: `exists`
+  - Note: Workspaceboard automation LaunchAgent should exist.
+  - Path: `/Users/admin/Library/LaunchAgents/com.koval.workspaceboard-automation.plist`
+- Workspaceboard launch wrapper exists: `ok`
+  - Group: `deployment-state`
+  - Expectation: `exists`
+  - Observed: `exists`
+  - Note: Workspaceboard installed launch wrapper should exist.
+  - Path: `/Users/admin/.workspaceboard-launch/runtime/scripts/launch_codex_dashboard_agent.sh`
+- Workspaceboard automation wrapper exists: `ok`
+  - Group: `deployment-state`
+  - Expectation: `exists`
+  - Observed: `exists`
+  - Note: Workspaceboard automation wrapper should exist.
+  - Path: `/Users/admin/.workspaceboard-launch/runtime/scripts/run_workspaceboard_automation.sh`
+- Installed Python script ai_health_check.py: `ok`
+  - Group: `installed-script-scan`
+  - Expectation: `#!/usr/local/bin/python3.13`
+  - Observed: `#!/usr/local/bin/python3.13`
+  - Note: Executable Python runtime script is pinned to Python 3.13.
+  - Path: `/Users/admin/.nationaloutreach-launch/runtime/scripts/ai_health_check.py`
+- Installed Python script backfill_nationaloutreach_sent_proof.py: `ok`
+  - Group: `installed-script-scan`
+  - Expectation: `#!/usr/local/bin/python3.13`
+  - Observed: `#!/usr/local/bin/python3.13`
+  - Note: Executable Python runtime script is pinned to Python 3.13.
+  - Path: `/Users/admin/.nationaloutreach-launch/runtime/scripts/backfill_nationaloutreach_sent_proof.py`
+- Installed Python script email_trace_recorder.py: `ok`
+  - Group: `installed-script-scan`
+  - Expectation: `#!/usr/local/bin/python3.13`
+  - Observed: `#!/usr/local/bin/python3.13`
+  - Note: Executable Python runtime script is pinned to Python 3.13.
+  - Path: `/Users/admin/.nationaloutreach-launch/runtime/scripts/email_trace_recorder.py`
+- Installed Python script email_worker_header_poll.py: `ok`
+  - Group: `installed-script-scan`
+  - Expectation: `#!/usr/local/bin/python3.13`
+  - Observed: `#!/usr/local/bin/python3.13`
+  - Note: Executable Python runtime script is pinned to Python 3.13.
+  - Path: `/Users/admin/.nationaloutreach-launch/runtime/scripts/email_worker_header_poll.py`
+- Installed Python script mailbox_imap_helpers.py: `ok`
+  - Group: `installed-script-scan`
+  - Expectation: `#!/usr/local/bin/python3.13`
+  - Observed: `#!/usr/local/bin/python3.13`
+  - Note: Executable Python runtime script is pinned to Python 3.13.
+  - Path: `/Users/admin/.nationaloutreach-launch/runtime/scripts/mailbox_imap_helpers.py`
+- Installed Python script nationaloutreach_mail_cycle.py: `ok`
+  - Group: `installed-script-scan`
+  - Expectation: `#!/usr/local/bin/python3.13`
+  - Observed: `#!/usr/local/bin/python3.13`
+  - Note: Executable Python runtime script is pinned to Python 3.13.
+  - Path: `/Users/admin/.nationaloutreach-launch/runtime/scripts/nationaloutreach_mail_cycle.py`
+- Installed shell wrapper run_nationaloutreach_auto.sh: `ok`
+  - Group: `installed-script-scan`
+  - Expectation: `/usr/local/bin/python3.13 or no direct Python call`
+  - Observed: `/usr/local/bin/python3.13`
+  - Note: Shell wrapper uses the pinned Python 3.13 path.
+  - Path: `/Users/admin/.nationaloutreach-launch/runtime/scripts/run_nationaloutreach_auto.sh`
+- Installed Python script shared_task_flow.py: `ok`
+  - Group: `installed-script-scan`
+  - Expectation: `#!/usr/local/bin/python3.13`
+  - Observed: `#!/usr/local/bin/python3.13`
+  - Note: Executable Python runtime script is pinned to Python 3.13.
+  - Path: `/Users/admin/.nationaloutreach-launch/runtime/scripts/shared_task_flow.py`
+- Installed shell wrapper run_task_flow_due_runner.sh: `ok`
+  - Group: `installed-script-scan`
+  - Expectation: `/usr/local/bin/python3.13 or no direct Python call`
+  - Observed: `/usr/local/bin/python3.13`
+  - Note: Shell wrapper uses the pinned Python 3.13 path.
+  - Path: `/Users/admin/.task-flow-launch/runtime/run_task_flow_due_runner.sh`
+- Installed Python script ai_health_check.py: `ok`
+  - Group: `installed-script-scan`
+  - Expectation: `#!/usr/local/bin/python3.13`
+  - Observed: `#!/usr/local/bin/python3.13`
+  - Note: Executable Python runtime script is pinned to Python 3.13.
+  - Path: `/Users/admin/.task-flow-launch/runtime/scripts/ai_health_check.py`
+- Installed Python script automation_health_watchdog.py: `ok`
+  - Group: `installed-script-scan`
+  - Expectation: `#!/usr/local/bin/python3.13`
+  - Observed: `#!/usr/local/bin/python3.13`
+  - Note: Executable Python runtime script is pinned to Python 3.13.
+  - Path: `/Users/admin/.task-flow-launch/runtime/scripts/automation_health_watchdog.py`
+- Installed Python script shared_task_flow.py: `ok`
+  - Group: `installed-script-scan`
+  - Expectation: `#!/usr/local/bin/python3.13`
+  - Observed: `#!/usr/local/bin/python3.13`
+  - Note: Executable Python runtime script is pinned to Python 3.13.
+  - Path: `/Users/admin/.task-flow-launch/runtime/scripts/shared_task_flow.py`
+- Installed Python script task_flow_due_runner.py: `ok`
+  - Group: `installed-script-scan`
+  - Expectation: `#!/usr/local/bin/python3.13`
+  - Observed: `#!/usr/local/bin/python3.13`
+  - Note: Executable Python runtime script is pinned to Python 3.13.
+  - Path: `/Users/admin/.task-flow-launch/runtime/scripts/task_flow_due_runner.py`
+- Installed Python script task_flow_papers_project.py: `ok`
+  - Group: `installed-script-scan`
+  - Expectation: `#!/usr/local/bin/python3.13`
+  - Observed: `#!/usr/local/bin/python3.13`
+  - Note: Executable Python runtime script is pinned to Python 3.13.
+  - Path: `/Users/admin/.task-flow-launch/runtime/scripts/task_flow_papers_project.py`
+- Installed shell wrapper launch_codex_dashboard_agent.sh: `ok`
+  - Group: `installed-script-scan`
+  - Expectation: `/usr/local/bin/python3.13 or no direct Python call`
+  - Observed: `no python call`
+  - Note: Shell wrapper does not directly call Python.
+  - Path: `/Users/admin/.workspaceboard-launch/runtime/scripts/launch_codex_dashboard_agent.sh`
+- Installed shell wrapper run_codex_dashboard.sh: `ok`
+  - Group: `installed-script-scan`
+  - Expectation: `/usr/local/bin/python3.13 or no direct Python call`
+  - Observed: `no python call`
+  - Note: Shell wrapper does not directly call Python.
+  - Path: `/Users/admin/.workspaceboard-launch/runtime/scripts/run_codex_dashboard.sh`
+- Installed shell wrapper run_workspaceboard_automation.sh: `ok`
+  - Group: `installed-script-scan`
+  - Expectation: `/usr/local/bin/python3.13 or no direct Python call`
+  - Observed: `no python call`
+  - Note: Shell wrapper does not directly call Python.
+  - Path: `/Users/admin/.workspaceboard-launch/runtime/scripts/run_workspaceboard_automation.sh`
+- Installed Python script assistant_decision_email.py: `ok`
+  - Group: `installed-script-scan`
+  - Expectation: `#!/usr/local/bin/python3.13`
+  - Observed: `#!/usr/local/bin/python3.13`
+  - Note: Executable Python runtime script is pinned to Python 3.13.
+  - Path: `/Users/admin/.frank-launch/runtime/scripts/assistant_decision_email.py`
+- Installed Python script assistant_persona.py: `ok`
+  - Group: `installed-script-scan`
+  - Expectation: `#!/usr/local/bin/python3.13`
+  - Observed: `#!/usr/local/bin/python3.13`
+  - Note: Executable Python runtime script is pinned to Python 3.13.
+  - Path: `/Users/admin/.frank-launch/runtime/scripts/assistant_persona.py`
+- Installed Python script email_routed_task_report.py: `ok`
+  - Group: `installed-script-scan`
+  - Expectation: `#!/usr/local/bin/python3.13`
+  - Observed: `#!/usr/local/bin/python3.13`
+  - Note: Executable Python runtime script is pinned to Python 3.13.
+  - Path: `/Users/admin/.frank-launch/runtime/scripts/email_routed_task_report.py`
+- Installed Python script email_worker_threads.py: `ok`
+  - Group: `installed-script-scan`
+  - Expectation: `#!/usr/local/bin/python3.13`
+  - Observed: `#!/usr/local/bin/python3.13`
+  - Note: Executable Python runtime script is pinned to Python 3.13.
+  - Path: `/Users/admin/.frank-launch/runtime/scripts/email_worker_threads.py`
+- Installed Python script frank_auto_runner.py: `ok`
+  - Group: `installed-script-scan`
+  - Expectation: `#!/usr/local/bin/python3.13`
+  - Observed: `#!/usr/local/bin/python3.13`
+  - Note: Executable Python runtime script is pinned to Python 3.13.
+  - Path: `/Users/admin/.frank-launch/runtime/scripts/frank_auto_runner.py`
+- Installed Python script frank_autodraft.py: `ok`
+  - Group: `installed-script-scan`
+  - Expectation: `#!/usr/local/bin/python3.13`
+  - Observed: `#!/usr/local/bin/python3.13`
+  - Note: Executable Python runtime script is pinned to Python 3.13.
+  - Path: `/Users/admin/.frank-launch/runtime/scripts/frank_autodraft.py`
+- Installed Python script frank_daily_report.py: `ok`
+  - Group: `installed-script-scan`
+  - Expectation: `#!/usr/local/bin/python3.13`
+  - Observed: `#!/usr/local/bin/python3.13`
+  - Note: Executable Python runtime script is pinned to Python 3.13.
+  - Path: `/Users/admin/.frank-launch/runtime/scripts/frank_daily_report.py`
+- Installed Python script frank_google_calendar.py: `ok`
+  - Group: `installed-script-scan`
+  - Expectation: `#!/usr/local/bin/python3.13`
+  - Observed: `#!/usr/local/bin/python3.13`
+  - Note: Executable Python runtime script is pinned to Python 3.13.
+  - Path: `/Users/admin/.frank-launch/runtime/scripts/frank_google_calendar.py`
+- Installed Python script frank_inbox_monitor.py: `ok`
+  - Group: `installed-script-scan`
+  - Expectation: `#!/usr/local/bin/python3.13`
+  - Observed: `#!/usr/local/bin/python3.13`
+  - Note: Executable Python runtime script is pinned to Python 3.13.
+  - Path: `/Users/admin/.frank-launch/runtime/scripts/frank_inbox_monitor.py`
+- Installed Python script frank_morning_overview.py: `ok`
+  - Group: `installed-script-scan`
+  - Expectation: `#!/usr/local/bin/python3.13`
+  - Observed: `#!/usr/local/bin/python3.13`
+  - Note: Executable Python runtime script is pinned to Python 3.13.
+  - Path: `/Users/admin/.frank-launch/runtime/scripts/frank_morning_overview.py`
+- Installed Python script frank_papers_links.py: `ok`
+  - Group: `installed-script-scan`
+  - Expectation: `#!/usr/local/bin/python3.13`
+  - Observed: `#!/usr/local/bin/python3.13`
+  - Note: Executable Python runtime script is pinned to Python 3.13.
+  - Path: `/Users/admin/.frank-launch/runtime/scripts/frank_papers_links.py`
+- Installed Python script frank_paths.py: `ok`
+  - Group: `installed-script-scan`
+  - Expectation: `#!/usr/local/bin/python3.13`
+  - Observed: `#!/usr/local/bin/python3.13`
+  - Note: Executable Python runtime script is pinned to Python 3.13.
+  - Path: `/Users/admin/.frank-launch/runtime/scripts/frank_paths.py`
+- Installed shell wrapper run_frank_auto.sh: `ok`
+  - Group: `installed-script-scan`
+  - Expectation: `/usr/local/bin/python3.13 or no direct Python call`
+  - Observed: `/usr/local/bin/python3.13`
+  - Note: Shell wrapper uses the pinned Python 3.13 path.
+  - Path: `/Users/admin/.frank-launch/runtime/scripts/run_frank_auto.sh`
+- Installed Python script send_frank_email.py: `ok`
+  - Group: `installed-script-scan`
+  - Expectation: `#!/usr/local/bin/python3.13`
+  - Observed: `#!/usr/local/bin/python3.13`
+  - Note: Executable Python runtime script is pinned to Python 3.13.
+  - Path: `/Users/admin/.frank-launch/runtime/scripts/send_frank_email.py`
+- Installed Python script shared_task_flow.py: `ok`
+  - Group: `installed-script-scan`
+  - Expectation: `#!/usr/local/bin/python3.13`
+  - Observed: `#!/usr/local/bin/python3.13`
+  - Note: Executable Python runtime script is pinned to Python 3.13.
+  - Path: `/Users/admin/.frank-launch/runtime/scripts/shared_task_flow.py`
+- Installed Python script assistant_decision_email.py: `ok`
+  - Group: `installed-script-scan`
+  - Expectation: `#!/usr/local/bin/python3.13`
+  - Observed: `#!/usr/local/bin/python3.13`
+  - Note: Executable Python runtime script is pinned to Python 3.13.
+  - Path: `/Users/admin/.avignon-launch/runtime/scripts/assistant_decision_email.py`
+- Installed Python script assistant_persona.py: `ok`
+  - Group: `installed-script-scan`
+  - Expectation: `#!/usr/local/bin/python3.13`
+  - Observed: `#!/usr/local/bin/python3.13`
+  - Note: Executable Python runtime script is pinned to Python 3.13.
+  - Path: `/Users/admin/.avignon-launch/runtime/scripts/assistant_persona.py`
+- Installed Python script avignon_inbox_cycle.py: `ok`
+  - Group: `installed-script-scan`
+  - Expectation: `#!/usr/local/bin/python3.13`
+  - Observed: `#!/usr/local/bin/python3.13`
+  - Note: Executable Python runtime script is pinned to Python 3.13.
+  - Path: `/Users/admin/.avignon-launch/runtime/scripts/avignon_inbox_cycle.py`
+- Installed Python script avignon_morning_overview.py: `ok`
+  - Group: `installed-script-scan`
+  - Expectation: `#!/usr/local/bin/python3.13`
+  - Observed: `#!/usr/local/bin/python3.13`
+  - Note: Executable Python runtime script is pinned to Python 3.13.
+  - Path: `/Users/admin/.avignon-launch/runtime/scripts/avignon_morning_overview.py`
+- Installed Python script email_routed_task_report.py: `ok`
+  - Group: `installed-script-scan`
+  - Expectation: `#!/usr/local/bin/python3.13`
+  - Observed: `#!/usr/local/bin/python3.13`
+  - Note: Executable Python runtime script is pinned to Python 3.13.
+  - Path: `/Users/admin/.avignon-launch/runtime/scripts/email_routed_task_report.py`
+- Installed Python script email_worker_threads.py: `ok`
+  - Group: `installed-script-scan`
+  - Expectation: `#!/usr/local/bin/python3.13`
+  - Observed: `#!/usr/local/bin/python3.13`
+  - Note: Executable Python runtime script is pinned to Python 3.13.
+  - Path: `/Users/admin/.avignon-launch/runtime/scripts/email_worker_threads.py`
+- Installed Python script frank_auto_runner.py: `ok`
+  - Group: `installed-script-scan`
+  - Expectation: `#!/usr/local/bin/python3.13`
+  - Observed: `#!/usr/local/bin/python3.13`
+  - Note: Executable Python runtime script is pinned to Python 3.13.
+  - Path: `/Users/admin/.avignon-launch/runtime/scripts/frank_auto_runner.py`
+- Installed Python script frank_autodraft.py: `ok`
+  - Group: `installed-script-scan`
+  - Expectation: `#!/usr/local/bin/python3.13`
+  - Observed: `#!/usr/local/bin/python3.13`
+  - Note: Executable Python runtime script is pinned to Python 3.13.
+  - Path: `/Users/admin/.avignon-launch/runtime/scripts/frank_autodraft.py`
+- Installed Python script frank_inbox_monitor.py: `ok`
+  - Group: `installed-script-scan`
+  - Expectation: `#!/usr/local/bin/python3.13`
+  - Observed: `#!/usr/local/bin/python3.13`
+  - Note: Executable Python runtime script is pinned to Python 3.13.
+  - Path: `/Users/admin/.avignon-launch/runtime/scripts/frank_inbox_monitor.py`
+- Installed Python script frank_papers_links.py: `ok`
+  - Group: `installed-script-scan`
+  - Expectation: `#!/usr/local/bin/python3.13`
+  - Observed: `#!/usr/local/bin/python3.13`
+  - Note: Executable Python runtime script is pinned to Python 3.13.
+  - Path: `/Users/admin/.avignon-launch/runtime/scripts/frank_papers_links.py`
+- Installed Python script frank_paths.py: `ok`
+  - Group: `installed-script-scan`
+  - Expectation: `#!/usr/local/bin/python3.13`
+  - Observed: `#!/usr/local/bin/python3.13`
+  - Note: Executable Python runtime script is pinned to Python 3.13.
+  - Path: `/Users/admin/.avignon-launch/runtime/scripts/frank_paths.py`
+- Installed Python script frank_portal_receipt.py: `ok`
+  - Group: `installed-script-scan`
+  - Expectation: `#!/usr/local/bin/python3.13`
+  - Observed: `#!/usr/local/bin/python3.13`
+  - Note: Executable Python runtime script is pinned to Python 3.13.
+  - Path: `/Users/admin/.avignon-launch/runtime/scripts/frank_portal_receipt.py`
+- Installed shell wrapper run_avignon_auto.sh: `ok`
+  - Group: `installed-script-scan`
+  - Expectation: `/usr/local/bin/python3.13 or no direct Python call`
+  - Observed: `/usr/local/bin/python3.13`
+  - Note: Shell wrapper uses the pinned Python 3.13 path.
+  - Path: `/Users/admin/.avignon-launch/runtime/scripts/run_avignon_auto.sh`
+- Installed Python script send_frank_email.py: `ok`
+  - Group: `installed-script-scan`
+  - Expectation: `#!/usr/local/bin/python3.13`
+  - Observed: `#!/usr/local/bin/python3.13`
+  - Note: Executable Python runtime script is pinned to Python 3.13.
+  - Path: `/Users/admin/.avignon-launch/runtime/scripts/send_frank_email.py`
+- Installed Python script shared_task_flow.py: `ok`
+  - Group: `installed-script-scan`
+  - Expectation: `#!/usr/local/bin/python3.13`
+  - Observed: `#!/usr/local/bin/python3.13`
+  - Note: Executable Python runtime script is pinned to Python 3.13.
+  - Path: `/Users/admin/.avignon-launch/runtime/scripts/shared_task_flow.py`
+- Installed Python script email_worker_header_poll.py: `ok`
+  - Group: `installed-script-scan`
+  - Expectation: `#!/usr/local/bin/python3.13`
+  - Observed: `#!/usr/local/bin/python3.13`
+  - Note: Executable Python runtime script is pinned to Python 3.13.
+  - Path: `/Users/admin/.asher-launch/runtime/scripts/email_worker_header_poll.py`
+- Installed shell wrapper run_asher_auto.sh: `ok`
+  - Group: `installed-script-scan`
+  - Expectation: `/usr/local/bin/python3.13 or no direct Python call`
+  - Observed: `/usr/local/bin/python3.13`
+  - Note: Shell wrapper uses the pinned Python 3.13 path.
+  - Path: `/Users/admin/.asher-launch/runtime/scripts/run_asher_auto.sh`
+- Installed Python script email_worker_header_poll.py: `ok`
+  - Group: `installed-script-scan`
+  - Expectation: `#!/usr/local/bin/python3.13`
+  - Observed: `#!/usr/local/bin/python3.13`
+  - Note: Executable Python runtime script is pinned to Python 3.13.
+  - Path: `/Users/admin/.venetia-launch/runtime/scripts/email_worker_header_poll.py`
+- Installed shell wrapper run_venetia_auto.sh: `ok`
+  - Group: `installed-script-scan`
+  - Expectation: `/usr/local/bin/python3.13 or no direct Python call`
+  - Observed: `/usr/local/bin/python3.13`
+  - Note: Shell wrapper uses the pinned Python 3.13 path.
+  - Path: `/Users/admin/.venetia-launch/runtime/scripts/run_venetia_auto.sh`
+- KOVAL plist com.koval.ai-health-manager.plist: `ok`
+  - Group: `installed-plist-scan`
+  - Expectation: `/usr/local/bin/python3.13 or no direct Python interpreter`
+  - Observed: `/usr/local/bin/python3.13`
+  - Note: Launchd plist uses the pinned Python 3.13 path.
+  - Path: `/Library/LaunchDaemons/com.koval.ai-health-manager.plist`
+- KOVAL plist com.koval.asher-auto.plist: `ok`
+  - Group: `installed-plist-scan`
+  - Expectation: `/usr/local/bin/python3.13 or no direct Python interpreter`
+  - Observed: `no direct python interpreter`
+  - Note: Launchd plist does not directly invoke Python.
+  - Path: `/Library/LaunchDaemons/com.koval.asher-auto.plist`
+- KOVAL plist com.koval.avignon-auto.plist: `ok`
+  - Group: `installed-plist-scan`
+  - Expectation: `/usr/local/bin/python3.13 or no direct Python interpreter`
+  - Observed: `no direct python interpreter`
+  - Note: Launchd plist does not directly invoke Python.
+  - Path: `/Library/LaunchDaemons/com.koval.avignon-auto.plist`
+- KOVAL plist com.koval.avignon-morning-overview.plist: `ok`
+  - Group: `installed-plist-scan`
+  - Expectation: `/usr/local/bin/python3.13 or no direct Python interpreter`
+  - Observed: `/usr/local/bin/python3.13`
+  - Note: Launchd plist uses the pinned Python 3.13 path.
+  - Path: `/Library/LaunchDaemons/com.koval.avignon-morning-overview.plist`
+- KOVAL plist com.koval.frank-auto.plist: `ok`
+  - Group: `installed-plist-scan`
+  - Expectation: `/usr/local/bin/python3.13 or no direct Python interpreter`
+  - Observed: `no direct python interpreter`
+  - Note: Launchd plist does not directly invoke Python.
+  - Path: `/Library/LaunchDaemons/com.koval.frank-auto.plist`
+- KOVAL plist com.koval.frank-morning-overview.plist: `ok`
+  - Group: `installed-plist-scan`
+  - Expectation: `/usr/local/bin/python3.13 or no direct Python interpreter`
+  - Observed: `/usr/local/bin/python3.13`
+  - Note: Launchd plist uses the pinned Python 3.13 path.
+  - Path: `/Library/LaunchDaemons/com.koval.frank-morning-overview.plist`
+- KOVAL plist com.koval.macmini-network-watchdog.plist: `ok`
+  - Group: `installed-plist-scan`
+  - Expectation: `/usr/local/bin/python3.13 or no direct Python interpreter`
+  - Observed: `no direct python interpreter`
+  - Note: Launchd plist does not directly invoke Python.
+  - Path: `/Library/LaunchDaemons/com.koval.macmini-network-watchdog.plist`
+- KOVAL plist com.koval.macmini-server-caffeinate.plist: `ok`
+  - Group: `installed-plist-scan`
+  - Expectation: `/usr/local/bin/python3.13 or no direct Python interpreter`
+  - Observed: `no direct python interpreter`
+  - Note: Launchd plist does not directly invoke Python.
+  - Path: `/Library/LaunchDaemons/com.koval.macmini-server-caffeinate.plist`
+- KOVAL plist com.koval.nationaloutreach-auto.plist: `ok`
+  - Group: `installed-plist-scan`
+  - Expectation: `/usr/local/bin/python3.13 or no direct Python interpreter`
+  - Observed: `no direct python interpreter`
+  - Note: Launchd plist does not directly invoke Python.
+  - Path: `/Library/LaunchDaemons/com.koval.nationaloutreach-auto.plist`
+- KOVAL plist com.koval.ops-ai-worker-runner-bridge.plist: `ok`
+  - Group: `installed-plist-scan`
+  - Expectation: `/usr/local/bin/python3.13 or no direct Python interpreter`
+  - Observed: `no direct python interpreter`
+  - Note: Launchd plist does not directly invoke Python.
+  - Path: `/Library/LaunchDaemons/com.koval.ops-ai-worker-runner-bridge.plist`
+- KOVAL plist com.koval.task-flow-reminders.plist: `ok`
+  - Group: `installed-plist-scan`
+  - Expectation: `/usr/local/bin/python3.13 or no direct Python interpreter`
+  - Observed: `no direct python interpreter`
+  - Note: Launchd plist does not directly invoke Python.
+  - Path: `/Library/LaunchDaemons/com.koval.task-flow-reminders.plist`
+- KOVAL plist com.koval.venetia-auto.plist: `ok`
+  - Group: `installed-plist-scan`
+  - Expectation: `/usr/local/bin/python3.13 or no direct Python interpreter`
+  - Observed: `no direct python interpreter`
+  - Note: Launchd plist does not directly invoke Python.
+  - Path: `/Library/LaunchDaemons/com.koval.venetia-auto.plist`
+- KOVAL plist com.koval.workspaceboard-automation.plist: `ok`
+  - Group: `installed-plist-scan`
+  - Expectation: `/usr/local/bin/python3.13 or no direct Python interpreter`
+  - Observed: `no direct python interpreter`
+  - Note: Launchd plist does not directly invoke Python.
+  - Path: `/Library/LaunchDaemons/com.koval.workspaceboard-automation.plist`
+- KOVAL plist com.koval.workspaceboard.plist: `ok`
+  - Group: `installed-plist-scan`
+  - Expectation: `/usr/local/bin/python3.13 or no direct Python interpreter`
+  - Observed: `no direct python interpreter`
+  - Note: Launchd plist does not directly invoke Python.
+  - Path: `/Library/LaunchDaemons/com.koval.workspaceboard.plist`
+- KOVAL plist com.koval.workspaceboard-automation.plist: `ok`
+  - Group: `installed-plist-scan`
+  - Expectation: `/usr/local/bin/python3.13 or no direct Python interpreter`
+  - Observed: `no direct python interpreter`
+  - Note: Launchd plist does not directly invoke Python.
+  - Path: `/Users/admin/Library/LaunchAgents/com.koval.workspaceboard-automation.plist`
+- KOVAL plist com.koval.workspaceboard.plist: `ok`
+  - Group: `installed-plist-scan`
+  - Expectation: `/usr/local/bin/python3.13 or no direct Python interpreter`
+  - Observed: `no direct python interpreter`
+  - Note: Launchd plist does not directly invoke Python.
+  - Path: `/Users/admin/Library/LaunchAgents/com.koval.workspaceboard.plist`
+
+## Recommendation
+
+- Checked service surfaces are in parity. Next recursive work should broaden coverage or add a scheduled read-only check.

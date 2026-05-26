@@ -78,7 +78,7 @@ Most useful extra takeaways:
 The real current Claude-side config surface is layered:
 
 - `/home/claude/.claude/settings.json`
-- `/home/claude/.claude.json`
+- `/home/claude/.claude/settings.local.json`
 - `/home/claude/.claude/mcp-needs-auth-cache.json`
 - plugin-local `.mcp.json` files and MCP cache/log state
 

@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/local/bin/python3.13
 
 from __future__ import annotations
 
@@ -7,15 +7,19 @@ import json
 import os
 import shutil
 import subprocess
+import sys
 import time
 import urllib.error
 import urllib.request
+import uuid
+from datetime import datetime, timedelta
 from pathlib import Path
 
 import shared_task_flow
 
 
 DEFAULT_RECORDER = Path("/Users/werkstatt/ai_workspace/scripts/task_flow_mysql_recorder.php")
+DEFAULT_WORKSPACEBOARD_RECORDER = Path("/Users/werkstatt/workspaceboard/scripts/workspaceboard_db_recorder.php")
 DEFAULT_STATE = Path("/Users/admin/.task-flow-launch/state")
 DEFAULT_SEND_HELPER = Path("/Users/admin/.frank-launch/runtime/scripts/send_frank_email.py")
 DEFAULT_WATCHDOG = Path("/Users/werkstatt/ai_workspace/scripts/automation_health_watchdog.py")
@@ -28,6 +32,8 @@ DEFAULT_PHP_CANDIDATES = (
 )
 DMYTRO_EMAIL = "dmytro.klymentiev@kovaldistillery.com"
 ROBERT_EMAIL = "robert@kovaldistillery.com"
+DAEMON_OWNED_DUE_WORKSPACES = {"nationaloutreach"}
+SCHEDULER_RETRY_COOLDOWN_SECONDS = 15 * 60
 
 
 def resolve_php() -> str:
@@ -58,6 +64,22 @@ def load_due(recorder: Path, limit: int) -> dict:
     return payload
 
 
+def load_task_flow_report(recorder: Path, limit: int, mode: str = "queue") -> dict:
+    result = subprocess.run(
+        [resolve_php(), str(recorder), "task-flow-report"],
+        input=json.dumps({"limit": limit, "mode": mode}, ensure_ascii=True),
+        check=True,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        timeout=20,
+    )
+    payload = json.loads(result.stdout)
+    if not isinstance(payload, dict) or payload.get("ok") is not True:
+        raise RuntimeError("task-flow report did not return ok=true")
+    return payload
+
+
 def packet_from_due_item(item: dict) -> dict:
     return shared_task_flow.build_packet(
         source_ref=item.get("source_ref") or item.get("dedupe_key") or "",
@@ -82,6 +104,35 @@ def reminder_key(item: dict) -> str:
         str(item.get("dedupe_key") or ""),
         str(item.get("due_or_trigger") or ""),
         str(item.get("scheduled_action") or ""),
+    ])
+
+
+def item_recurrence(item: dict) -> dict:
+    return item.get("recurrence") if isinstance(item.get("recurrence"), dict) else {}
+
+
+def is_owner_reply_daily_item(item: dict) -> bool:
+    recurrence = item_recurrence(item)
+    return str(item.get("recurrence_rule") or recurrence.get("rule") or "").strip() == "owner_reply_daily_repeat"
+
+
+def next_owner_reply_daily_due(item: dict) -> str:
+    now = datetime.now()
+    due_text = str(item.get("due_or_trigger") or "")
+    try:
+        due = datetime.strptime(due_text[:19], "%Y-%m-%d %H:%M:%S")
+        candidate = datetime.combine(now.date(), due.time())
+    except ValueError:
+        candidate = now
+    while candidate <= now:
+        candidate += timedelta(days=1)
+    return candidate.strftime("%Y-%m-%d %H:%M:%S")
+
+
+def scheduler_bridge_key(item: dict) -> str:
+    return "|".join([
+        "scheduler-bridge",
+        str(item.get("dedupe_key") or ""),
     ])
 
 
@@ -120,16 +171,90 @@ def existing_handoff_keys(path: Path) -> set[str]:
     return keys
 
 
-def workspace_for_due_item(item: dict) -> str:
+def existing_handoffs(path: Path) -> dict[str, dict]:
+    if not path.exists():
+        return {}
+    handoffs: dict[str, dict] = {}
+    for line in path.read_text(encoding="utf-8", errors="replace").splitlines():
+        if not line.strip():
+            continue
+        try:
+            row = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        key = str(row.get("handoff_key") or "").strip()
+        if key:
+            handoffs[key] = row
+    return handoffs
+
+
+def handoff_is_recent(row: dict, cooldown_seconds: int) -> bool:
+    logged_at = str(row.get("logged_at") or "").strip()
+    if not logged_at:
+        return False
+    try:
+        logged = datetime.strptime(logged_at, "%Y-%m-%dT%H:%M:%S%z")
+    except ValueError:
+        return False
+    age_seconds = time.time() - logged.timestamp()
+    return age_seconds < cooldown_seconds
+
+
+def workspace_for_task_flow_item(item: dict) -> str:
+    owner_lane = str(item.get("owner_lane") or "").strip().lower()
+    responsible = str(item.get("responsible_worker_or_persona") or "").strip().lower()
+    if responsible in {
+        "workspaceboard", "ai", "ops", "portal", "lists", "salesreport",
+        "bid", "forge", "frank", "avignon", "nationaloutreach", "asher", "venetia",
+    }:
+        return responsible
+    scheduled_action = str(item.get("scheduled_action") or "").strip().lower()
+    if scheduled_action.startswith("respond to owner reply:") and responsible in {
+        "vanessa.sterling@kovaldistillery.com",
+        "outreach-coordinator",
+        "national outreach",
+    }:
+        return "nationaloutreach"
+    if owner_lane in {
+        "workspaceboard", "ai", "ops", "portal", "lists", "salesreport",
+        "bid", "forge", "frank", "avignon", "nationaloutreach", "asher", "venetia",
+    }:
+        return owner_lane
+    if owner_lane in {"marketing-manager", "communications-manager", "email-coordinator"}:
+        return "forge"
     text = " ".join([
-        str(item.get("owner_lane") or ""),
+        owner_lane,
         str(item.get("responsible_worker_or_persona") or ""),
         str(item.get("ops_portal_or_domain_task") or ""),
         str(item.get("scheduled_action") or ""),
         str(item.get("next_update") or ""),
+        str(item.get("source_ref") or ""),
     ]).lower()
+    if any(token in text for token in [
+        "workspaceboard", "task manager", "decision driver", "summary worker",
+        "security guard", "code/git manager", "code and git manager", "ai manager",
+    ]):
+        return "workspaceboard"
+    if any(token in text for token in ["national outreach", "nationaloutreach", "vanessa", "outreach-coordinator"]):
+        return "nationaloutreach"
+    if any(token in text for token in ["frank", "robert@kovaldistillery.com"]):
+        return "frank"
+    if any(token in text for token in ["avignon", "sonat"]):
+        return "avignon"
     if any(token in text for token in ["portal", "crm", "sample request", "barrel"]):
         return "portal"
+    if any(token in text for token in [
+        "forge",
+        "communications planner",
+        "weekly highlights",
+        "social posting",
+        "marketing-manager",
+        "communications-manager",
+        "email coordinator",
+        "channel / source system",
+        "square direct send",
+    ]):
+        return "forge"
     if any(token in text for token in ["phplist", "lists", "mailgun", "campaign"]):
         return "lists"
     if any(token in text for token in ["salesreport", "sales report"]):
@@ -138,7 +263,33 @@ def workspace_for_due_item(item: dict) -> str:
         return "bid"
     if any(token in text for token in ["ops task", "ops ", "shift", "calendar"]):
         return "ops"
+    if any(token in text for token in ["forge", "campaign work"]):
+        return "forge"
     return "ai"
+
+
+def create_worker_route_session(api_base: str, workspace: str, title: str, message: str) -> tuple[str, dict]:
+    attachments = create_scheduler_bridge_attachment_group(api_base, workspace, title, message)
+    created = post_json(f"{api_base}/api/session/create", {
+        "workspace": workspace,
+        "mode": "codex",
+        "title": title,
+        "attachment_group_id": attachments.get("id") or "",
+    })
+    session = created.get("session") if isinstance(created.get("session"), dict) else {}
+    session_id = str(session.get("id") or "").strip()
+    if not session_id:
+        raise RuntimeError("Workspaceboard session create succeeded without a session id.")
+    return session_id, attachments
+
+
+def deliver_worker_route_message(api_base: str, session_id: str, attachment_group_id: str, message: str) -> dict:
+    return post_json(f"{api_base}/api/session-message", {
+        "session_id": session_id,
+        "message": message,
+        "attachment_group_id": attachment_group_id,
+        "wait_ms": 250,
+    }, timeout=30)
 
 
 def post_json(url: str, payload: dict, timeout: int = 20) -> dict:
@@ -159,6 +310,66 @@ def post_json(url: str, payload: dict, timeout: int = 20) -> dict:
     if not isinstance(parsed, dict) or parsed.get("ok") is not True:
         raise RuntimeError(f"Workspaceboard API did not return ok=true: {body[:500]}")
     return parsed
+
+
+def post_multipart(url: str, fields: dict[str, str], files: list[tuple[str, str, bytes, str]], timeout: int = 20) -> dict:
+    boundary = f"----WorkspaceboardBoundary{uuid.uuid4().hex}"
+    body = bytearray()
+
+    def add_text(value: str) -> None:
+        body.extend(value.encode("utf-8"))
+
+    for key, value in fields.items():
+        add_text(f"--{boundary}\r\n")
+        add_text(f'Content-Disposition: form-data; name="{key}"\r\n\r\n')
+        add_text(f"{value}\r\n")
+    for field_name, filename, content, content_type in files:
+        safe_filename = filename.replace('"', '%22')
+        add_text(f"--{boundary}\r\n")
+        add_text(f'Content-Disposition: form-data; name="{field_name}"; filename="{safe_filename}"\r\n')
+        add_text(f"Content-Type: {content_type}\r\n\r\n")
+        body.extend(content)
+        add_text("\r\n")
+    add_text(f"--{boundary}--\r\n")
+    request = urllib.request.Request(
+        url,
+        data=bytes(body),
+        headers={"Content-Type": f"multipart/form-data; boundary={boundary}"},
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=timeout) as response:
+            response_body = response.read().decode("utf-8", errors="replace")
+    except urllib.error.HTTPError as error:
+        response_body = error.read().decode("utf-8", errors="replace")
+        raise RuntimeError(f"Workspaceboard API returned HTTP {error.code}: {response_body[:500]}") from error
+    parsed = json.loads(response_body)
+    if not isinstance(parsed, dict) or parsed.get("ok") is not True:
+        raise RuntimeError(f"Workspaceboard API did not return ok=true: {response_body[:500]}")
+    return parsed
+
+
+def create_scheduler_bridge_attachment_group(api_base: str, workspace: str, title: str, message: str) -> dict:
+    attachment_name = f"scheduler-bridge-{workspace}-{time.strftime('%Y%m%d-%H%M%S')}.txt"
+    attachment_body = "\n".join([
+        "Task Flow scheduler-bridge handoff packet.",
+        "",
+        f"Workspace: {workspace}",
+        f"Title: {title}",
+        "",
+        message,
+        "",
+    ])
+    response = post_multipart(
+        f"{api_base}/api/attachments",
+        {"purpose": "task-flow-scheduler-bridge"},
+        [("files", attachment_name, attachment_body.encode("utf-8"), "text/plain; charset=utf-8")],
+    )
+    attachments = response.get("attachments") if isinstance(response.get("attachments"), dict) else {}
+    attachment_id = str(attachments.get("id") or "").strip()
+    if not attachment_id:
+        raise RuntimeError("Workspaceboard attachment upload succeeded without an attachment id.")
+    return attachments
 
 
 def build_worker_handoff_message(items: list[dict]) -> str:
@@ -184,26 +395,33 @@ def build_worker_handoff_message(items: list[dict]) -> str:
     return "\n".join(lines).rstrip()
 
 
-def record_routed_packet(recorder: Path, item: dict, session_id: str, due_or_trigger: str) -> dict:
-    packet = shared_task_flow.build_packet(
-        source_ref=item.get("source_ref") or item.get("dedupe_key") or "",
-        dedupe_key=item.get("dedupe_key") or "",
-        intake_channel="task-flow-due",
-        requester="task-flow-reminder",
-        owner_lane=item.get("owner_lane") or "",
-        responsible_worker_or_persona=item.get("responsible_worker_or_persona") or "",
-        workspaceboard_session=session_id,
-        ops_portal_or_domain_task=item.get("ops_portal_or_domain_task") or "",
-        status="routed",
-        due_or_trigger=due_or_trigger,
-        scheduled_action=item.get("scheduled_action") or "",
-        calendar_event=item.get("calendar_event") or "",
-        verification_readback=f"task_flow_due_runner_routed_visible_worker:{session_id}",
-        next_update=f"Visible worker {session_id} must return owner-visible proof, one exact blocker, or a future next check.",
-    )
+def build_scheduler_bridge_message(items: list[dict]) -> str:
+    lines = [
+        "Task Flow scheduler-bridge handoff.",
+        "",
+        "These Task Flow rows are actionable and unscheduled: they are waiting/classified, have no live worker session, and do not carry an exact blocker.",
+        "Create or continue the real work now. For each item: verify source state first, then either complete the action, record one exact blocker, or write waiting with a concrete next check.",
+        "Do not leave the item in generic waiting without a worker, due timestamp, or blocker.",
+        "",
+    ]
+    for index, item in enumerate(items, 1):
+        lines.extend([
+            f"{index}. key: {item.get('dedupe_key') or ''}",
+            f"   owner: {item.get('owner_lane') or ''}",
+            f"   worker/persona: {item.get('responsible_worker_or_persona') or ''}",
+            f"   source: {item.get('source_ref') or ''}",
+            f"   task/domain: {item.get('ops_portal_or_domain_task') or ''}",
+            f"   action: {item.get('scheduled_action') or ''}",
+            f"   next update: {item.get('next_update') or ''}",
+            "",
+        ])
+    return "\n".join(lines).rstrip()
+
+
+def record_task_flow_packet(recorder: Path, packet: dict, event: str) -> dict:
     result = subprocess.run(
         [resolve_php(), str(recorder), "record"],
-        input=json.dumps({"event": "task_flow_due_worker_routed", "packet": packet}, ensure_ascii=True),
+        input=json.dumps({"event": event, "packet": packet}, ensure_ascii=True),
         check=True,
         text=True,
         stdout=subprocess.PIPE,
@@ -213,6 +431,150 @@ def record_routed_packet(recorder: Path, item: dict, session_id: str, due_or_tri
     return json.loads(result.stdout)
 
 
+def record_routed_packet(recorder: Path, item: dict, session_id: str, due_or_trigger: str, *, event: str = "task_flow_due_worker_routed", intake_channel: str = "task-flow-due", verification_readback: str | None = None, next_update: str | None = None) -> dict:
+    recurrence = item.get("recurrence") if isinstance(item.get("recurrence"), dict) else {}
+    packet = shared_task_flow.build_packet(
+        source_ref=item.get("source_ref") or item.get("dedupe_key") or "",
+        dedupe_key=item.get("dedupe_key") or "",
+        intake_channel=intake_channel,
+        requester="task-flow-reminder",
+        owner_lane=item.get("owner_lane") or "",
+        responsible_worker_or_persona=item.get("responsible_worker_or_persona") or "",
+        workspaceboard_session=session_id,
+        ops_portal_or_domain_task=item.get("ops_portal_or_domain_task") or "",
+        status="working",
+        due_or_trigger=due_or_trigger,
+        scheduled_action=item.get("scheduled_action") or "",
+        calendar_event=item.get("calendar_event") or "",
+        verification_readback=verification_readback or f"task_flow_due_runner_started_visible_worker:{session_id}",
+        next_update=next_update or f"Visible worker {session_id} must return owner-visible proof, one exact blocker, or a future next check.",
+        recurrence_enabled=item.get("recurrence_enabled") or ("true" if recurrence.get("enabled") else ""),
+        recurrence_kind=item.get("recurrence_kind") or recurrence.get("kind") or "",
+        recurrence_cadence=item.get("recurrence_cadence") or recurrence.get("cadence") or "",
+        recurrence_pattern=item.get("recurrence_pattern") or recurrence.get("pattern") or "",
+        recurrence_rule=item.get("recurrence_rule") or recurrence.get("rule") or "",
+        recurrence_anchor=item.get("recurrence_anchor") or recurrence.get("anchor") or "",
+        recurrence_until=item.get("recurrence_until") or recurrence.get("until") or "",
+        recurrence_interval=item.get("recurrence_interval") or recurrence.get("interval") or "",
+        recurrence_time=item.get("recurrence_time") or recurrence.get("time") or "",
+        recurrence_summary=item.get("recurrence_summary") or recurrence.get("summary") or "",
+    )
+    return record_task_flow_packet(recorder, packet, event)
+
+
+def record_blocked_packet(recorder: Path, item: dict, blocker_text: str, owner_question: str, *, event: str = "task_flow_scheduler_route_blocked") -> dict:
+    packet = shared_task_flow.build_packet(
+        source_ref=item.get("source_ref") or item.get("dedupe_key") or "",
+        dedupe_key=item.get("dedupe_key") or "",
+        intake_channel="task-flow-scheduler-bridge",
+        requester="task-flow-reminder",
+        owner_lane=item.get("owner_lane") or "",
+        responsible_worker_or_persona=item.get("responsible_worker_or_persona") or "",
+        workspaceboard_session="",
+        ops_portal_or_domain_task=item.get("ops_portal_or_domain_task") or "",
+        status="blocked",
+        due_or_trigger="",
+        scheduled_action=item.get("scheduled_action") or "",
+        calendar_event=item.get("calendar_event") or "",
+        clarification_email=blocker_text,
+        completion_or_blocker_email=blocker_text,
+        verification_readback="task_flow_scheduler_bridge_blocked",
+        next_update=owner_question,
+    )
+    return record_task_flow_packet(recorder, packet, event)
+
+
+def is_daemon_owned_due_item(item: dict) -> bool:
+    recurrence = item.get("recurrence") if isinstance(item.get("recurrence"), dict) else {}
+    recurrence_rule = str(item.get("recurrence_rule") or recurrence.get("rule") or "").strip()
+    scheduled_action = str(item.get("scheduled_action") or "")
+    if recurrence_rule == "owner_reply_daily_repeat" or scheduled_action.lower().startswith("respond to owner reply:"):
+        return False
+    if not str(item.get("scheduled_action") or "").strip():
+        return False
+    workspace = workspace_for_task_flow_item(item)
+    if workspace not in DAEMON_OWNED_DUE_WORKSPACES:
+        return False
+    text = " ".join([
+        str(item.get("owner_lane") or ""),
+        str(item.get("responsible_worker_or_persona") or ""),
+        str(item.get("scheduled_action") or ""),
+        str(item.get("source_ref") or ""),
+        str(item.get("next_update") or ""),
+    ]).lower()
+    return any(token in text for token in [
+        "vanessa",
+        "nationaloutreach",
+        "outreach-coordinator",
+        "internal-communicator",
+        "day-of cot",
+        "cot",
+    ])
+
+
+def record_daemon_owned_packet(recorder: Path, item: dict) -> dict:
+    recurrence = item.get("recurrence") if isinstance(item.get("recurrence"), dict) else {}
+    packet = shared_task_flow.build_packet(
+        source_ref=item.get("source_ref") or item.get("dedupe_key") or "",
+        dedupe_key=item.get("dedupe_key") or "",
+        intake_channel="task-flow-due",
+        requester="task-flow-reminder",
+        owner_lane=item.get("owner_lane") or "",
+        responsible_worker_or_persona=item.get("responsible_worker_or_persona") or "",
+        workspaceboard_session=item.get("workspaceboard_session") or "",
+        ops_portal_or_domain_task=item.get("ops_portal_or_domain_task") or "",
+        status="waiting",
+        due_or_trigger=item.get("due_or_trigger") or "",
+        scheduled_action=item.get("scheduled_action") or "",
+        calendar_event=item.get("calendar_event") or "",
+        verification_readback="task_flow_due_runner_skipped_daemon_owned_scheduled_action",
+        next_update="Owning automation lane is responsible for this scheduled action; monitor daemon health and escalate only on failure or proof gap.",
+        recurrence_enabled=item.get("recurrence_enabled") or ("true" if recurrence.get("enabled") else ""),
+        recurrence_kind=item.get("recurrence_kind") or recurrence.get("kind") or "",
+        recurrence_cadence=item.get("recurrence_cadence") or recurrence.get("cadence") or "",
+        recurrence_pattern=item.get("recurrence_pattern") or recurrence.get("pattern") or "",
+        recurrence_rule=item.get("recurrence_rule") or recurrence.get("rule") or "",
+        recurrence_anchor=item.get("recurrence_anchor") or recurrence.get("anchor") or "",
+        recurrence_until=item.get("recurrence_until") or recurrence.get("until") or "",
+        recurrence_interval=item.get("recurrence_interval") or recurrence.get("interval") or "",
+        recurrence_time=item.get("recurrence_time") or recurrence.get("time") or "",
+        recurrence_summary=item.get("recurrence_summary") or recurrence.get("summary") or "",
+    )
+    return record_task_flow_packet(recorder, packet, "task_flow_due_runner_daemon_owned_skip")
+
+
+def record_owner_reply_daily_next_check(recorder: Path, item: dict) -> dict:
+    recurrence = item_recurrence(item)
+    next_due = next_owner_reply_daily_due(item)
+    packet = shared_task_flow.build_packet(
+        source_ref=item.get("source_ref") or item.get("dedupe_key") or "",
+        dedupe_key=item.get("dedupe_key") or "",
+        intake_channel="task-flow-due",
+        requester="task-flow-reminder",
+        owner_lane=item.get("owner_lane") or "",
+        responsible_worker_or_persona=item.get("responsible_worker_or_persona") or "",
+        workspaceboard_session=item.get("workspaceboard_session") or "",
+        ops_portal_or_domain_task=item.get("ops_portal_or_domain_task") or "",
+        status="waiting",
+        due_or_trigger=next_due,
+        scheduled_action=item.get("scheduled_action") or "",
+        calendar_event=item.get("calendar_event") or "",
+        verification_readback="owner_reply_daily_repeat: existing handoff preserved; next daily reminder advanced.",
+        next_update=f"Daily owner-reply reminder advanced to {next_due}; worker still needs sent proof, domain proof, or one exact blocker/question.",
+        recurrence_enabled="true",
+        recurrence_kind=item.get("recurrence_kind") or recurrence.get("kind") or "daily",
+        recurrence_cadence=item.get("recurrence_cadence") or recurrence.get("cadence") or "daily",
+        recurrence_pattern=item.get("recurrence_pattern") or recurrence.get("pattern") or "daily owner reply follow-up",
+        recurrence_rule=item.get("recurrence_rule") or recurrence.get("rule") or "owner_reply_daily_repeat",
+        recurrence_anchor=next_due,
+        recurrence_until=item.get("recurrence_until") or recurrence.get("until") or "",
+        recurrence_interval=item.get("recurrence_interval") or recurrence.get("interval") or "1",
+        recurrence_time=next_due[11:19],
+        recurrence_summary="Daily repeat reminder until assistant sent proof or an exact owner blocker/question is recorded.",
+    )
+    return record_task_flow_packet(recorder, packet, "task_flow_owner_reply_daily_next_check")
+
+
 def route_due_items_to_worker(recorder: Path, state_dir: Path, items: list[dict], dry_run: bool = False) -> dict:
     route_candidates = [item for item in items if isinstance(item, dict) and item.get("dedupe_key")]
     if not route_candidates:
@@ -220,13 +582,57 @@ def route_due_items_to_worker(recorder: Path, state_dir: Path, items: list[dict]
 
     handoff_log = state_dir / "task-flow-worker-handoffs.jsonl"
     seen_handoffs = existing_handoff_keys(handoff_log)
+    skipped_existing = [item for item in route_candidates if reminder_key(item) in seen_handoffs]
+    advanced_existing = []
+    if not dry_run:
+        for item in skipped_existing:
+            if is_owner_reply_daily_item(item):
+                advanced_existing.append(record_owner_reply_daily_next_check(recorder, item))
     pending = [item for item in route_candidates if reminder_key(item) not in seen_handoffs]
     if not pending:
-        return {"ok": True, "routed": False, "reason": "all_due_items_already_handed_off", "items": []}
+        return {"ok": True, "routed": False, "reason": "all_due_items_already_handed_off", "items": [], "advanced_existing": advanced_existing}
+
+    daemon_owned: list[dict] = []
+    worker_pending: list[dict] = []
+    for item in pending:
+        if is_daemon_owned_due_item(item):
+            daemon_owned.append(item)
+        else:
+            worker_pending.append(item)
+
+    daemon_owned_results = []
+    if daemon_owned:
+        handoff_log.parent.mkdir(parents=True, exist_ok=True)
+    for item in daemon_owned:
+        if dry_run:
+            daemon_owned_results.append({"dedupe_key": item.get("dedupe_key"), "dry_run": True, "daemon_owned": True})
+        else:
+            daemon_owned_results.append(record_daemon_owned_packet(recorder, item))
+        row = {
+            "logged_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
+            "event": "daemon_owned_due_item_skipped",
+            "handoff_key": reminder_key(item),
+            "dedupe_key": item.get("dedupe_key") or "",
+            "workspace": workspace_for_task_flow_item(item),
+            "reason": "owning automation lane executes scheduled action directly",
+        }
+        with handoff_log.open("a", encoding="utf-8") as handle:
+            handle.write(json.dumps(row, ensure_ascii=True) + "\n")
+        handoff_log.chmod(0o600)
+        seen_handoffs.add(reminder_key(item))
+
+    if not worker_pending:
+        return {
+            "ok": True,
+            "routed": False,
+            "reason": "daemon_owned_items_handled_in_runtime",
+            "items": [],
+            "daemon_owned": daemon_owned_results,
+        }
 
     grouped: dict[str, list[dict]] = {}
-    for item in pending:
-        grouped.setdefault(workspace_for_due_item(item), []).append(item)
+    for item in worker_pending:
+        grouped.setdefault(workspace_for_task_flow_item(item), []).append(item)
 
     api_base = os.environ.get("WORKSPACEBOARD_URL", DEFAULT_WORKSPACEBOARD_URL).rstrip("/")
     routed: list[dict] = []
@@ -236,22 +642,10 @@ def route_due_items_to_worker(recorder: Path, state_dir: Path, items: list[dict]
         if dry_run:
             routed.append({"workspace": workspace, "dry_run": True, "items": [item.get("dedupe_key") for item in group]})
             continue
-        created = post_json(f"{api_base}/api/session/create", {
-            "workspace": workspace,
-            "mode": "codex",
-            "title": title,
-        })
-        session = created.get("session") if isinstance(created.get("session"), dict) else {}
-        session_id = str(session.get("id") or "").strip()
-        if not session_id:
-            raise RuntimeError("Workspaceboard session create succeeded without a session id.")
-        delivery = post_json(f"{api_base}/api/session-message", {
-            "session_id": session_id,
-            "message": message,
-            "wait_ms": 1000,
-        }, timeout=30)
+        session_id, attachments = create_worker_route_session(api_base, workspace, title, message)
+        delivery = deliver_worker_route_message(api_base, session_id, str(attachments.get("id") or ""), message)
         next_check_epoch = int(time.time()) + 1800
-        next_check = time.strftime("%Y-%m-%d %H:%M:%S %Z", time.localtime(next_check_epoch))
+        next_check = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(next_check_epoch))
         recorded_packets = []
         for item in group:
             recorded_packets.append(record_routed_packet(recorder, item, session_id, next_check))
@@ -275,7 +669,132 @@ def route_due_items_to_worker(recorder: Path, state_dir: Path, items: list[dict]
             "prompt_delivery": delivery.get("prompt_delivery", {}),
             "recorded_packets": recorded_packets,
         })
-    return {"ok": True, "routed": bool(routed), "items": routed}
+    return {"ok": True, "routed": bool(routed), "items": routed, "daemon_owned": daemon_owned_results}
+
+
+def route_unscheduled_items_to_worker(recorder: Path, board_recorder: Path, state_dir: Path, limit: int, dry_run: bool = False) -> dict:
+    report = load_task_flow_report(board_recorder, limit, "queue")
+    items = report.get("items") if isinstance(report.get("items"), list) else []
+    candidates = [item for item in items if isinstance(item, dict) and item.get("scheduler_route_candidate")]
+    violations = [item for item in items if isinstance(item, dict) and item.get("scheduler_violation")]
+    if not candidates:
+        return {
+            "ok": True,
+            "routed": False,
+            "reason": "no_unscheduled_candidates",
+            "items": [],
+            "candidate_count": 0,
+            "violation_count": len(violations),
+        }
+
+    handoff_log = state_dir / "task-flow-scheduler-handoffs.jsonl"
+    seen_handoffs = existing_handoffs(handoff_log)
+    pending = []
+    skipped_recent = []
+    for item in candidates:
+        handoff = seen_handoffs.get(scheduler_bridge_key(item))
+        if handoff and handoff_is_recent(handoff, SCHEDULER_RETRY_COOLDOWN_SECONDS):
+            skipped_recent.append(item)
+            continue
+        pending.append(item)
+    if not pending:
+        return {
+            "ok": True,
+            "routed": False,
+            "reason": "all_unscheduled_candidates_in_retry_cooldown",
+            "items": [],
+            "candidate_count": len(candidates),
+            "violation_count": len(violations),
+            "cooldown_seconds": SCHEDULER_RETRY_COOLDOWN_SECONDS,
+            "skipped_recent": [item.get("dedupe_key") for item in skipped_recent],
+        }
+
+    blocked: list[dict] = []
+    grouped: dict[str, list[dict]] = {}
+    for item in pending:
+        workspace = workspace_for_task_flow_item(item)
+        if workspace == "ai" and not any(str(item.get(field) or "").strip() for field in ("owner_lane", "responsible_worker_or_persona", "ops_portal_or_domain_task", "scheduled_action")):
+            blocked.append(item)
+            continue
+        grouped.setdefault(workspace, []).append(item)
+
+    blocked_results = []
+    for item in blocked:
+        blocker_text = "Scheduler bridge could not determine a target workspace from the Task Flow row."
+        owner_question = "Set owner_lane/responsible_worker_or_persona to a concrete workspace route or create the worker manually."
+        if dry_run:
+            blocked_results.append({"dedupe_key": item.get("dedupe_key"), "dry_run": True, "blocked": True})
+            continue
+        blocked_results.append(record_blocked_packet(recorder, item, blocker_text, owner_question))
+
+    api_base = os.environ.get("WORKSPACEBOARD_URL", DEFAULT_WORKSPACEBOARD_URL).rstrip("/")
+    routed: list[dict] = []
+    for workspace, group in grouped.items():
+        title = f"Task Flow scheduler bridge {time.strftime('%Y-%m-%d %H:%M')} {workspace}"
+        message = build_scheduler_bridge_message(group)
+        if dry_run:
+            routed.append({"workspace": workspace, "dry_run": True, "items": [item.get("dedupe_key") for item in group]})
+            continue
+        try:
+            session_id, attachments = create_worker_route_session(api_base, workspace, title, message)
+        except Exception as exc:
+            blocker_text = f"Scheduler bridge could not create a visible worker session: {exc}"
+            owner_question = "Inspect Workspaceboard session-create/session-message health and reroute this Task Flow item."
+            for item in group:
+                blocked_results.append(record_blocked_packet(recorder, item, blocker_text, owner_question))
+            continue
+        handoff_log.parent.mkdir(parents=True, exist_ok=True)
+        for item in group:
+            row = {
+                "logged_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
+                "event": "scheduler_bridge_worker_handoff_routed",
+                "handoff_key": scheduler_bridge_key(item),
+                "dedupe_key": item.get("dedupe_key") or "",
+                "workspace": workspace,
+                "session_id": session_id,
+                "attachment_group_id": str(attachments.get("id") or ""),
+            }
+            with handoff_log.open("a", encoding="utf-8") as handle:
+                handle.write(json.dumps(row, ensure_ascii=True) + "\n")
+            handoff_log.chmod(0o600)
+        try:
+            delivery = deliver_worker_route_message(api_base, session_id, str(attachments.get("id") or ""), message)
+        except Exception as exc:
+            blocker_text = f"Scheduler bridge created worker session {session_id} but could not deliver the handoff message: {exc}"
+            owner_question = "Inspect Workspaceboard session-message health or open the worker session directly."
+            for item in group:
+                blocked_results.append(record_blocked_packet(recorder, item, blocker_text, owner_question))
+            continue
+        next_check_epoch = int(time.time()) + 600
+        next_check = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(next_check_epoch))
+        recorded_packets = []
+        for item in group:
+            recorded_packets.append(record_routed_packet(
+                recorder,
+                item,
+                session_id,
+                next_check,
+                event="task_flow_scheduler_worker_routed",
+                intake_channel="task-flow-scheduler-bridge",
+                verification_readback=f"task_flow_scheduler_bridge_started_visible_worker:{session_id}",
+                next_update=f"Visible worker {session_id} must return proof, one exact blocker, or a concrete next check by {next_check}.",
+            ))
+        routed.append({
+            "workspace": workspace,
+            "session_id": session_id,
+            "items": [item.get("dedupe_key") for item in group],
+            "prompt_delivery": delivery.get("prompt_delivery", {}),
+            "recorded_packets": recorded_packets,
+        })
+
+    return {
+        "ok": True,
+        "routed": bool(routed),
+        "candidate_count": len(candidates),
+        "violation_count": len(violations),
+        "items": routed,
+        "blocked": blocked_results,
+    }
 
 
 def write_notification_body(path: Path, items: list[dict]) -> None:
@@ -316,6 +835,17 @@ def item_truthy(item: dict, *keys: str) -> bool:
 def should_send_owner_due_email(item: dict) -> bool:
     if not isinstance(item, dict):
         return False
+    recurrence = item.get("recurrence") if isinstance(item.get("recurrence"), dict) else {}
+    recurrence_rule = str(
+        recurrence.get("rule")
+        or item.get("recurrence_rule")
+        or ""
+    ).strip().lower()
+    scheduled_action = str(item.get("scheduled_action") or "").strip().lower()
+    if recurrence_rule == "owner_reply_daily_repeat" or scheduled_action.startswith("respond to owner reply:"):
+        # These are worker follow-up timers. They should route to the owning
+        # mailbox/workspace, not create a generic Robert reminder digest.
+        return False
     if item_truthy(item, "notify_robert", "owner_visible_reminder", "send_owner_reminder"):
         return True
     output = str(item.get("output_channel") or item.get("completion_output_channel") or "").strip().lower()
@@ -355,7 +885,7 @@ def notify_robert(send_helper: Path, state_dir: Path, items: list[dict]) -> dict
     task_id = f"task-flow-reminder-{time.strftime('%Y-%m-%d-%H%M%S')}"
     result = subprocess.run(
         [
-            "python3",
+            sys.executable,
             str(send_helper),
             "--assistant",
             "frank",
@@ -415,7 +945,7 @@ def execute_due_action(send_helper: Path, state_dir: Path, item: dict) -> dict:
     task_id = "frank-dmytro-koval-agents-gcp-admin-reminder-2026-05-01-1000"
     result = subprocess.run(
         [
-            "python3",
+            sys.executable,
             str(send_helper),
             "--assistant",
             "frank",
@@ -477,7 +1007,7 @@ def write_runner_state(path: Path, summary: dict) -> None:
 def run_automation_watchdog(script: Path, dry_run: bool = False) -> dict:
     if not script.exists():
         return {"ok": False, "reason": "watchdog_script_missing", "path": str(script)}
-    args = ["python3", str(script)]
+    args = [sys.executable, str(script)]
     if dry_run:
         args.append("--dry-run")
     try:
@@ -514,6 +1044,7 @@ def run_automation_watchdog(script: Path, dry_run: bool = False) -> dict:
 def main() -> int:
     parser = argparse.ArgumentParser(description="Check due task-flow reminders and record wake events.")
     parser.add_argument("--recorder", default=str(DEFAULT_RECORDER))
+    parser.add_argument("--workspaceboard-recorder", default=str(DEFAULT_WORKSPACEBOARD_RECORDER))
     parser.add_argument("--state-dir", default=str(DEFAULT_STATE))
     parser.add_argument("--send-helper", default=str(DEFAULT_SEND_HELPER))
     parser.add_argument("--watchdog", default=str(DEFAULT_WATCHDOG))
@@ -523,10 +1054,12 @@ def main() -> int:
     parser.add_argument("--route-worker", action="store_true", default=True)
     parser.add_argument("--no-route-worker", action="store_false", dest="route_worker")
     parser.add_argument("--limit", type=int, default=100)
+    parser.add_argument("--scheduler-limit", type=int, default=500)
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
 
     recorder = Path(args.recorder)
+    board_recorder = Path(args.workspaceboard_recorder)
     state_dir = Path(args.state_dir)
     due = load_due(recorder, args.limit)
     items = due.get("items") if isinstance(due.get("items"), list) else []
@@ -573,8 +1106,10 @@ def main() -> int:
             new_items.append(item)
 
     worker_handoff = {"ok": True, "routed": False, "reason": "route_worker_disabled", "items": []}
+    scheduler_bridge = {"ok": True, "routed": False, "reason": "route_worker_disabled", "items": []}
     if args.route_worker:
         worker_handoff = route_due_items_to_worker(recorder, state_dir, reminder_items, dry_run=args.dry_run)
+        scheduler_bridge = route_unscheduled_items_to_worker(recorder, board_recorder, state_dir, args.scheduler_limit, dry_run=args.dry_run)
 
     notification = {"sent": False, "reason": "not_requested"}
     if args.notify_robert and not args.dry_run:
@@ -592,6 +1127,7 @@ def main() -> int:
         "skipped_existing": skipped_existing,
         "actions": action_results,
         "worker_handoff": worker_handoff,
+        "scheduler_bridge": scheduler_bridge,
         "watchdog": watchdog,
         "notification": notification,
         "dry_run": bool(args.dry_run),

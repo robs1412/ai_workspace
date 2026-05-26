@@ -1,8 +1,30 @@
 # Email-Derived Decisions — avignon
 
-Updated: 2026-04-30 CDT (Machine: Macmini.lan)
+Updated: 2026-05-26 CDT (Machine: Macmini.lan)
 
-## Open
+## Historical
+
+These rows are retained for audit context only. The live Avignon queue is now DB-backed in Task Flow / Workspaceboard, and the entries below are not active work unless they reappear there.
+
+- `avignon-direct-owner-sonat-CALbLtzwKJP87X89-LKAGGMXVQGtadoJKZrgCXSSyjbxKDDwCjw-mail-gmail-com`
+  - Needed: Sonat asked Avignon to create a new distributor account `Manhattan Beer`, add `Alex Bergson` as contact, and log two CRM activities: one for Manhattan Beer and one for `RNDC NY` / `Jonathan Cory`.
+  - Source Message-ID `<CALbLtzwKJP87X89=LKAGGMXVQGtadoJKZrgCXSSyjbxKDDwCjw@mail.gmail.com>`.
+  - Next: Closed after Robert approved using the existing `Opici NY` / Jonathan Corey record for the second activity.
+  - Decision: Source-first mailbox recovery pulled the full packet into the approved `/Users/werkstatt` lane before mutation. Live Portal duplicate checks on the approved remote backend found no active exact `Manhattan Beer` account and no active exact `Alex Bergson` contact, so Avignon created account `370221` / `ACC20508`, contact `370222` / `CON20509`, contact-account history row `5198`, and CRM activity `370223` / `Reached out to Alex Bergson` dated `2026-05-25`, all linked to `Manhattan Beer`. The second requested activity is not yet deterministic: Portal has no active exact `RNDC NY` account, and the only close `Jonathan Corey` matches are attached to `Opici NY`, not RNDC, so Avignon stopped short of creating a mismatched activity. Sonat-facing blocker/completion draft prepared at [drafts/sonat-portal-work-partial-complete-blocked-2026-05-25.txt](/Users/werkstatt/ai_workspace/avignon/drafts/sonat-portal-work-partial-complete-blocked-2026-05-25.txt), then sent on the source thread at `2026-05-25 10:21 CDT` with subject `Re: portal work` and Message-ID `<177972250621.71172.8036913866662878460@kovaldistillery.com>`.
+  - Outcome: Completed on 2026-05-26 after Robert answered the target decision. Avignon used `Opici NY` account `15452` / `ACC2113` and existing Jonathan Corey contact `354129` / `CON17968` rather than creating a duplicate contact. Created/read back CRM activity `370240` / `Jonathan Cory Check In` as an `Email` activity dated `2026-05-25`, status `Held`, linked to `Opici NY` and Jonathan Corey. Sonat-facing completion sent on the original `Re: portal work` thread with Message-ID `<177982194158.19900.13576834154419351678@kovaldistillery.com>`. Workspaceboard session `75c0fa6e` and the DB-backed Task Flow packet are now closed/completed with proof.
+
+- `avignon-direct-owner-sonat-CALbLtzzqTPRnuU8SRJC2dsoqD3Lvg45UkeKpYS-04eg0Ko8w4w-mail-gmail-com`
+  - Needed: Sonat asked Avignon to calculate Dylan Collins's conversion rate and revenue from CRM meetings only, excluding tastings, and to list the accounts converted over the past three months.
+  - Source Message-ID `<CALbLtzzqTPRnuU8SRJC2dsoqD3Lvg45UkeKpYS_04eg0Ko8w4w@mail.gmail.com>`.
+  - Next: Send the ready Sonat-facing completion once a working repo-local Avignon send path or refreshed local credential is available; do not file the source before that Message-ID exists.
+  - Decision: Same-pass source-first Salesreport / CRM review used a direct three-month meeting-based attribution cut instead of the earlier KPI dashboard window. Avignon resolved Dylan Collins to CRM user `1319`, then pulled distinct accounts with `Meeting` activity between `2026-02-23` and `2026-05-23`, excluding tastings entirely. Distinct meeting-account count was `10`. To avoid false conversion credit, invoices were counted only when they landed on or after the first Dylan meeting date for that account inside the same three-month window. Result: `1` converted account out of `10` meeting accounts (`10.0%` conversion rate), `$126.00` post-meeting revenue, and `1.00` case. The only converted account in-window is `Union Pier Market` (`348612`): Dylan meeting on `2026-04-09`, invoice `INV198507` on `2026-04-30`, with `2 x KOVAL Bourbon`, `2 x KOVAL Cranberry Gin Liqueur`, and `2 x KOVAL Four Grain`. Sonat-facing completion draft prepared at [drafts/sonat-dylan-collins-meetings-conversion-complete-2026-05-23.txt](/Users/werkstatt/ai_workspace/avignon/drafts/sonat-dylan-collins-meetings-conversion-complete-2026-05-23.txt).
+  - Outcome: No CRM/Portal/OPS mutation or external reply occurred. Repo-local send attempt through `/Users/werkstatt/ai_workspace/scripts/send_codex_ops_email.py` failed on the real SMTP gate `535 5.7.8 Username and Password not accepted`, so no owner-visible completion Message-ID exists yet. Workspaceboard session `af126354` is correctly parked as blocked on the send path rather than business analysis.
+
+- `avignon-direct-owner-sonat-CALbLtzzhMqZJWfJwE4uC9ftWKSfaxFw69bEpJVAT1EANeZPJJw-mail-gmail-com`
+  - Needed: Sonat asked for status on the Wisconsin sales analysis and whether Avignon needed anything to get started.
+  - Source Message-ID `<CALbLtzzhMqZJWfJwE4uC9ftWKSfaxFw69bEpJVAT1EANeZPJJw@mail.gmail.com>`.
+  - Next: Waiting for Sonat to resend the original Wisconsin request or paste the exact analysis scope, including date range, account/brand focus, and desired output.
+  - Decision: Same-pass source-first review confirmed the live blocker had not changed from the prior Wisconsin lane: only the subject label `Wisconsin` survived the earlier route timeout in the approved `/Users/werkstatt` workspace, with no preserved body, attachment packet, or requested deliverable text available to execute against safely. Avignon converted the follow-up into a concrete blocker report, prepared `drafts/sonat-wisconsin-data-scope-needed-2026-05-19.txt`, and sent Sonat-only subject `Re: Wisconsin data`, Message-ID `<177919872977.31497.14320926397676665972@kovaldistillery.com>`, asking Sonat to resend the original request or paste the exact scope so the analysis can begin immediately on receipt.
 
 - `avignon-direct-owner-sonat-CALbLtzxxZOpZcoqnejCQmxSNdsKwJ9do3b-kwVJJPEFCZwSGSw-mail-gmail-com`
   - Needed: Sonat asked Avignon to add Noah Freedman into Portal under the L Woods account.
@@ -11,6 +33,71 @@ Updated: 2026-04-30 CDT (Machine: Macmini.lan)
   - Decision: Runtime created visible Avignon route `76a45b5d` / `Avignon direct Sonat: Contact Addition for portal`, verified prompt delivery, and sent captured acknowledgement `<177755602431.31433.7380780188504717559@kovaldistillery.com>`. Runtime prematurely sent generic completion report `<177755609579.32181.17805060029694167661@kovaldistillery.com>` and filed the source to `Handled`; correct state is blocked pending duplicate-handling confirmation. Portal duplicate checks found exact L. Woods account `7069`, alternate L Wood account `267802`, and active Noah Freedman contacts `334634` and `348006` already linked to the alternate account. No CRM/Portal/OPS mutation occurred because duplicate/target handling is not deterministic enough to safely create, update, link, merge, or delete without confirmation. Corrective blocker note sent to Sonat, subject `L. Woods contact: duplicate check needed`, Message-ID `<177755631396.33442.14018294819869236458@kovaldistillery.com>`, draft `drafts/sonat-lwoods-noah-freedman-contact-blocked-2026-04-30.txt`.
 
 ## Closed
+
+- `avignon-direct-owner-sonat-CALbLtzxoLFwKgwdyyQtrU9AbcS0xJ7MAcQTb3dd1krk58H-FXA-mail-gmail-com`
+  - Needed: Sonat replied on the `Detailed completion: Portal activities, contacts, and Outreach entries` thread with a thank-you after the completed internal update was already delivered.
+  - Source Message-ID `<CALbLtzxoLFwKgwdyyQtrU9AbcS0xJ7MAcQTb3dd1krk58H=FXA@mail.gmail.com>`.
+  - Next: File this as handled/no-action and leave the lane closed unless Sonat sends a fresh business request on the thread.
+  - Decision: This was a same-pass quick-answer/no-action follow-up, not a new work request. Avignon rechecked the owner-visible proof before filing it: the underlying completion for `Detailed completion: Portal activities, contacts, and Outreach entries` had already been sent on `2026-05-23 16:39 CDT` with subject `Detailed completion: Portal activities, contacts, and Outreach entries` and Message-ID `<177957235451.661.3265374293109580350@kovaldistillery.com>`.
+  - Outcome: No new Portal/CRM/OPS mutation, no new owner email, and no new approval gate were needed. The correct concrete next action is simply to file the thank-you to `Handled` and keep the original completion as the final owner-visible state.
+  - Follow-through: `sent-log.jsonl` already contains the prior completion proof, so this follow-up is `no-action/filed` rather than a reopened direct-owner route.
+
+- `avignon-direct-owner-robert-approver-CAAtX44bLH-pTzJRx3dncPHkHgh9AigS-rwKZADAr-9G8CAmg3g-mail-gmail-com`
+  - Needed: Robert asked for the full live links on the already-answered `Papers links from May 23, 2026` thread.
+  - Source Message-ID `<CAAtX44bLH-pTzJRx3dncPHkHgh9AigS_rwKZADAr=9G8CAmg3g@mail.gmail.com>`.
+  - Next: Leave closed unless Robert says he needs a different live surface than the sample-request page and notification logs page.
+  - Decision: This was a same-pass quick-answer item, not substantive hidden work, so Avignon answered directly without creating a new visible worker route or a separate captured/routed receipt. Source-first recheck confirmed the same underlying proof as the prior closeout: sample request `2723` is the completed request, and notification proof remains `notifications_logs` rows `79212` and `79213`, both `sent`. Robert then received the expanded full URLs on `2026-05-23 17:00 CDT` in subject `Re: Papers links from May 23, 2026`, Message-ID `<177957359971.12017.5436288089740148172@kovaldistillery.com>`. Links sent: `https://portal.koval-distillery.com/#/pos-and-samples/sample-request/view/2723` and `https://portal.koval-distillery.com/#/settings/notifications/logs`.
+  - Outcome: No Portal/CRM/OPS mutation, no auth work, and no external reply were needed. The direct-owner ask is complete and owner-visible.
+
+- `avignon-direct-owner-robert-approver-CAAtX44aQtnbfHErsuUqK0rUni5Df4m8Nxf18ycVTCTXqJFO-KA-mail-gmail-com`
+  - Needed: Robert forwarded Sonat's sample-request thread and needed the already-resolved proof surfaced cleanly instead of leaving the forward in stale blocked/pending state.
+  - Source Message-ID `<CAAtX44aQtnbfHErsuUqK0rUni5Df4m8Nxf18ycVTCTXqJFO+KA@mail.gmail.com>`.
+  - Next: Leave closed unless Robert or Sonat reports that the prior sample-request completion proof is missing or no longer accurate.
+  - Decision: Source-first review reused the already-verified sample-request closeout from 2026-05-17. This forward was not a new open action: Sonat's underlying `Samples` lane had already completed through Portal with sample request `2723` for pickup on `2026-05-17`, notification resend proof in `notifications_logs` rows `79212` and `79213` both `sent`, and prior completion Message-ID `<177885596689.51762.12536657929911260039@kovaldistillery.com>`. Robert-facing follow-up was then sent on `2026-05-23 16:50 CDT` with subject `Papers links from May 23, 2026` and Message-ID `<177957303541.6057.9131535399906019174@kovaldistillery.com>`, with send proof in `sent-log.jsonl`.
+  - Outcome: No new sample request, Portal mutation, CRM mutation, OPS mutation, auth work, or external reply was needed. The correct state is closed_with_proof: duplicate/proof-repair completed and owner-visible.
+
+- `avignon-direct-owner-sonat-CALbLtzzkpg4hGJayKaf-wAnmsaJ57Y-M6h0gm-V-uzkOrnSEmQ-mail-gmail-com`
+  - Needed: Sonat replied on the `Contact and Account` thread with a thank-you after the completed account/contact result was delivered.
+  - Source Message-ID `<CALbLtzzkpg4hGJayKaf-wAnmsaJ57Y_M6h0gm_V-uzkOrnSEmQ@mail.gmail.com>`.
+  - Next: File this as handled/no-action and leave the lane closed unless Sonat sends a fresh business request on the thread.
+  - Decision: This was a quick-answer/no-action follow-up, not a new work request. Avignon rechecked the existing thread proof before filing it: the underlying completion for `Park Ridge Market After Dark` and `Fred Sanchez` had already been sent on `2026-05-23 15:01 CDT` with subject `Contact and Account` and Message-ID `<177956645876.60495.205793145308784817@kovaldistillery.com>`.
+  - Outcome: No new CRM/Portal mutation, no new owner email, and no new approval gate were needed. The correct concrete next action is simply to file the thank-you to `Handled` and keep the original completion as the final owner-visible state.
+  - Follow-through: `sent-log.jsonl` already contains the prior completion proof, so this follow-up can be treated as `no-action/filed` rather than reopening the contact/account route.
+- `avignon-direct-owner-sonat-CALbLtzzPHTUDxJa64p9kyB2TutAXa4tNinfOAtszDqvifFU6nw-mail-gmail-com`
+  - Needed: Sonat asked Avignon to check `/salesreport` for Dylan Collins's conversions based on his outreach and also identify the current best and worst conversion performers.
+  - Source Message-ID `<CALbLtzzPHTUDxJa64p9kyB2TutAXa4tNinfOAtszDqvifFU6nw@mail.gmail.com>`.
+  - Next: Send the ready Sonat-facing draft once a working approved Avignon send path is available, or refresh the repo-local Avignon credential and retry the same completion.
+  - Decision: Same-pass source-first Salesreport review used the existing KPI conversion definition rather than an ad hoc same-period cut. The plain May 2026 same-period readback returned zero conversions across the cohort, so Avignon rechecked against the active KPI month-view window now used in `/salesreport`: visited accounts from `2026-04-01` through `2026-05-15`, and converted accounts with invoices from `2026-04-01` through `2026-05-23`. Dylan Collins (`1319`) shows `34` visited accounts, `17` converted accounts, and a `50.0%` conversion rate. For ranking context, among reps with at least `10` visited accounts in that same window, Kevin McCarthy is currently highest at `10/17` (`58.8%`) and Jamie Stout is currently lowest at `5/101` (`5.0%`). Avignon prepared [drafts/sonat-dylan-collins-conversions-complete-2026-05-23.txt](/Users/werkstatt/ai_workspace/avignon/drafts/sonat-dylan-collins-conversions-complete-2026-05-23.txt), but the repo-local send attempt through `/Users/werkstatt/ai_workspace/scripts/send_codex_ops_email.py` failed on live SMTP auth with `535 5.7.8 Username and Password not accepted`, so no owner-visible completion Message-ID exists yet. No CRM/Portal/OPS mutation or external reply occurred; the remaining blocker is the send path, not the business analysis.
+
+- `avignon-direct-owner-robert-approver-CAAtX44Zc8Oyj5W7cqEZ-7COBM442mFEXKwTxtZ29sKq3iHjv-w-mail-gmail-com`
+  - Needed: Robert answered the contact-blocked thread with the concrete internal path to use for future contact adds and asked Avignon to record it as a skill.
+  - Source Message-ID `<CAAtX44Zc8Oyj5W7cqEZ_7COBM442mFEXKwTxtZ29sKq3iHjv=w@mail.gmail.com>`.
+  - Next: Leave closed unless Robert or Sonat wants the skill moved into a different durable surface or wants the underlying contact item executed immediately through the approved route.
+  - Decision: Same-pass Avignon handling converted Robert's reply into a reusable repo-local skill note at [docs/contact-add-skill-2026-05-23.md](/Users/werkstatt/ai_workspace/avignon/docs/contact-add-skill-2026-05-23.md) and refreshed the Robert-facing completion draft at [drafts/robert-contact-blocked-audit-2026-05-23.txt](/Users/werkstatt/ai_workspace/avignon/drafts/robert-contact-blocked-audit-2026-05-23.txt). Approved internal next action is now explicit: use the Portal contact-create surface `https://portal.koval-distillery.com/#/relationship-management/contact/create` or use `/contactreport` DB information when supporting account/contact context is needed. No CRM/Portal/OPS mutation, OAuth/token/auth work, or external reply occurred in this pass.
+
+- `avignon-direct-owner-robert-approver-CAAtX44YbVk-61PYntHyGhdQwMPHGyq1-9nFrRRG6se9zRgnLew-mail-gmail-com`
+  - Needed: Robert replied on the blocked Bottles and Cans thread and told Avignon to check the KOVAL signature block because this was something Avignon had fixed before.
+  - Source Message-ID `<CAAtX44YbVk-61PYntHyGhdQwMPHGyq1_9nFrRRG6se9zRgnLew@mail.gmail.com>`.
+  - Next: Leave closed unless Robert or Sonat asks for a narrower date range, a different account breakout, or a refreshed report window.
+  - Decision: Same-pass source-first review confirmed the approved Avignon workspace already held the exact account resolution and read-only Salesreport output for this business item, so no new blocker email was needed. Avignon reused `salesreport/doc/avignon-sonat-bottles-and-cans-sales-report-2026-05-22.md`, refreshed `drafts/robert-bottles-and-cans-sales-complete-2026-05-22.txt`, and sent Robert the completion note on the active thread with subject `Re: Avignon blocked: Re: Bottles and Cans: need original request details`, Message-ID `<177947087207.40051.10675970265126098532@kovaldistillery.com>`. Core readback sent: past three months (`2026-02-01` through `2026-04-30`) show `3` invoices, `84` bottles, `14.00` cases, and `$1,278.00`; revenue is down `31.58%` versus the same three-month window last year and down `3.28%` on a trailing-12-month basis, while case volume is up on both comparisons.
+
+- `avignon-direct-owner-robert-approver-CAAtX44YxCwGutOgmj8x51Y10N8giUs0G1gjStdCnLqvNGkjnug-mail-gmail-com`
+  - Needed: Robert replied on the Bottles and Cans thread insisting Avignon recheck the inbox and recover the actual business request rather than asking for original request details again.
+  - Source Message-ID `<CAAtX44YxCwGutOgmj8x51Y10N8giUs0G1gjStdCnLqvNGkjnug@mail.gmail.com>`.
+  - Next: Leave closed unless Robert or Sonat asks for a narrower time window, account correction, or a different product/account breakout.
+  - Decision: Same-pass source-first review confirmed the approved Avignon workspace already held the exact account resolution and read-only Salesreport output for this business item. Avignon reused the existing artifact `salesreport/doc/avignon-sonat-bottles-and-cans-sales-report-2026-05-22.md`, which resolves cleanly to active CRM account `14138` / `Bottles and Cans`, Chicago, Illinois, and prepared Robert-facing completion draft `drafts/robert-bottles-and-cans-sales-complete-2026-05-22.txt`. Core readback: past three months (`2026-02-01` through `2026-04-30`) show `3` invoices, `84` bottles, `14.00` cases, and `$1,278.00`; revenue is down `31.58%` versus the same three-month window last year and down `3.28%` on a trailing-12-month basis, while case volume is up on both comparisons. No CRM/Portal/OPS mutation, OAuth/token/auth work, or external reply occurred.
+
+- `avignon-direct-owner-sonat-CALbLtzyDM-aAuuzM7PmPbfRcQ-tPfF5eZwfnkxFmRn7SpKEh7w-mail-gmail-com`
+  - Needed: Sonat replied that she could not find the Wisconsin report and asked for either a CRM link to the report or the full report in an email immediately.
+  - Source Message-ID `<CALbLtzyDM-aAuuzM7PmPbfRcQ+tPfF5eZwfnkxFmRn7SpKEh7w@mail.gmail.com>`.
+  - Next: Leave closed unless Sonat asks for a narrower Wisconsin cut, a shorter executive summary, or a refreshed reporting window.
+  - Decision: Same-pass source-first review confirmed there was no verified CRM-hosted report link in the approved workspace for this report. Avignon reused the existing Wisconsin report artifact `salesreport/doc/avignon-sonat-wi-sales-report-2026-05-19.md`, prepared `drafts/sonat-wi-sales-report-full-report-inline-2026-05-19.txt`, and sent Sonat-only subject `Re: WI sales report complete`, Message-ID `<177922355268.43633.239495925967081504@kovaldistillery.com>`, with the full report inline. The resend stated the business result first, then included the complete Wisconsin report derived from read-only Salesreport and CRM invoice history for `2025-01-01` through `2026-04-30`, including year totals grouped by product/SKU and the top 20 Wisconsin accounts. Core readback repeated in the email: `274` buying accounts, `764` invoices, `1,034.67` cases, `$135,452.90` revenue, `31` product/SKU rows; top products by cases were KOVAL Cranberry Gin Liqueur (`292.50`), KOVAL Bourbon (`189.50`), T&W FORET Gin (`88.67`), T&W CITRINE Gin (`51.83`), and T&W 10Y Rye (`43.83`); top account by cases in-window was Otto's Wine Cask (`35.50`).
+
+- `avignon-direct-owner-sonat-CALbLtzycZ-CuVD0ZaAEsw6hxp7xmpET8ockAPkd6xF-EOXXtQQ-mail-gmail-com`
+  - Needed: Sonat asked for a Wisconsin sales report covering January 1, 2025 through April 30, 2026 for all KOVAL and Thresh and Winnow products, with emphasis on the best-performing products in market.
+  - Source Message-ID `<CALbLtzycZ_CuVD0ZaAEsw6hxp7xmpET8ockAPkd6xF+EOXXtQQ@mail.gmail.com>`.
+  - Next: Leave closed unless Sonat asks for a narrower account cut, a shorter executive summary, or a fresh window refresh after April 2026.
+  - Decision: Completed from the visible Avignon route already assigned to the intake. Salesreport and CRM invoice history were used as the source of truth with the exact Wisconsin state filter `Wisconsin` and exact date window `2025-01-01` through `2026-04-30`. Created `salesreport/scripts/generate_wi_sales_report.php`, generated `salesreport/doc/avignon-sonat-wi-sales-report-2026-05-19.md`, and staged Sonat-facing completion draft `drafts/sonat-wi-sales-report-complete-2026-05-19.txt`. Sonat should receive the completion note with the direct report link: `file:///Users/werkstatt/salesreport/doc/avignon-sonat-wi-sales-report-2026-05-19.md`. Core readback: `274` buying accounts, `764` invoices, `1,034.67` cases, `$135,452.90` revenue, `31` product/SKU rows. Top products by cases were KOVAL Cranberry Gin Liqueur (`292.50`), KOVAL Bourbon (`189.50`), T&W FORET Gin (`88.67`), T&W CITRINE Gin (`51.83`), and T&W 10Y Rye (`43.83`). The report also includes year totals grouped by product/SKU and the top 20 Wisconsin accounts; top account by cases in-window was Otto's Wine Cask (`35.50`).
 
 - `avignon-direct-owner-sonat-CALbLtzzPGrqRTV4exKprc70r3AR1QC2vFQLi-9DuqZJpBZD25w-mail-gmail-com`
   - Needed: Sonat asked Avignon to mark barrel `9511` as sold to Ema in Portal and confirm completion.
@@ -105,7 +192,9 @@ Updated: 2026-04-30 CDT (Machine: Macmini.lan)
   - Next: Closed as an Avignon-local waiting item. Do not resurface Alexis Harris or Stephen Beck unless a fresh source message creates a new explicit CRM action.
   - Decision: Deterministic work was already completed by Importer session `86dc0b04` and Portal session `44b8a370`. Sonat's later answer points Alexis Harris to the existing `Sophy Hotel - Hyde Park` context and confirms the status/closeout request as complete/yes; Robert's 2026-04-22 correction leaves Stephen Beck as-is with no new contact/link/update. This row is no longer a live Sonat or Robert decision. No CRM/Portal mutation occurred from this cleanup.
 
-## Open
+## Historical
+
+These rows are retained for audit context only. The live Avignon queue is now DB-backed in Task Flow / Workspaceboard, and the entries below are not active work unless they reappear there.
 
 - `avignon-direct-owner-sonat-CALbLtzxSa1o6Dz7WrOMDQ0vgNXN3izHiFpvtgo-XX1JC-1NkNA-mail-gmail-com`
   - Needed: Sonat asked Avignon to draft a follow-up email from meeting notes, include all next steps, and note that KOVAL has created pricing for Rainbow packs as promised.
@@ -175,9 +264,29 @@ Updated: 2026-04-30 CDT (Machine: Macmini.lan)
   - Needed: Avignon received an email that was not clearly safe to auto-handle. Subject: `Monthly sales report -- which saved reports to include?`.
   - Next: Review only in the approved mailbox/workspace context and decide whether to route, reply, or hold.
   - Decision: Confirm the owner/action for this email-derived item.
+## Waiting On Internal Send Path
+
+- `avignon-direct-owner-sonat-CALbLtzxZJfqquGD9fsrP2K4NHC39ER4RYJNUqJu23Db3MRssKQ-mail-gmail-com`
+  - Needed: Sonat followed up on Gene's Sausage Shop and clarified that she means the Lincoln location, asking for the information immediately.
+  - Source Message-ID `<CALbLtzxZJfqquGD9fsrP2K4NHC39ER4RYJNUqJu23Db3MRssKQ@mail.gmail.com>`.
+  - Next: Waiting on the approved Avignon mailbox path to send the prepared completion. No business fact is missing anymore.
+  - Decision: Same-pass source-first recheck resolved the earlier duplicate-account blocker. Read-only Salesreport / CRM invoice-history now supports the full packet: `Paulina Meat Market` last two invoices remain `INV198332` dated `2026-04-30` for `12 x KOVAL Bourbon` and `INV196170` dated `2026-01-31` for `12 x KOVAL Bourbon`, `6 x KOVAL Cranberry Gin Liqueur`, and `6 x Vodka`; `Gene's Sausage Shop Lincoln` resolves to account `629` with `INV198224` dated `2026-04-30` for `6 x KOVAL Bourbon`, `6 x Liqueur Ginger`, and `6 x Vodka`, plus `INV196230` dated `2026-01-31` for `24 x Cranberry Spritz RTD`, `6 x KOVAL Cranberry Gin Liqueur`, and `6 x Vodka`. Prepared Sonat-facing completion drafts at [drafts/sonat-genes-paulina-invoice-history-blocked-2026-05-22.txt](/Users/werkstatt/ai_workspace/avignon/drafts/sonat-genes-paulina-invoice-history-blocked-2026-05-22.txt) and [drafts/sonat-genes-paulina-lincoln-invoice-history-complete-2026-05-22.txt](/Users/werkstatt/ai_workspace/avignon/drafts/sonat-genes-paulina-lincoln-invoice-history-complete-2026-05-22.txt). The remaining blocker is operational: no approved Avignon send-capable helper exists under `/Users/werkstatt`, and `/Users/werkstatt/ai_workspace/scripts/send_codex_ops_email.py` is not a safe substitute for a Sonat-facing Avignon reply.
+
 ## Waiting On Sonat Email
 
-No current Avignon email-derived items are waiting on Sonat email approval from Avignon inbox.
+- `avignon-direct-owner-sonat-CALbLtzwU-cEa4KZSMy-iAjh3tgTfihrotOkOGaYHtY-JCxmeA-mail-gmail-com`
+  - Needed: Sonat asked for the last two invoices, invoice dates, and itemized sales details for Paulina's Meat Market and Gene's Sausage Shop.
+  - Source Message-ID `<CALbLtzwU=cEa4KZSMy_+iAjh3tgTfihrotOkOGaYHtY-JCxmeA@mail.gmail.com>`.
+  - Next: Waiting for Sonat to confirm which Gene's location she wants: `Gene's Sausage Shop Lincoln` or `Gene's Sausage Shop Belmont`. Once she confirms the exact account, send the final sales packet immediately.
+  - Decision: Same-pass Salesreport/CRM invoice-history review confirmed `Paulina Meat Market` as the clean active account match (`44998`) and found the requested recent invoice details ready: `INV198332` dated `2026-04-30` for `12 x KOVAL Bourbon`, and `INV196170` dated `2026-01-31` for `12 x KOVAL Bourbon`, `6 x KOVAL Cranberry Gin Liqueur`, and `6 x Vodka`. `Gene's Sausage Shop` is not unique in CRM because the active accounts split into `Gene's Sausage Shop Lincoln` (`629`) and `Gene's Sausage Shop Belmont` (`2732`), so Avignon stopped instead of guessing. Prepared Sonat-facing clarification draft [drafts/sonat-genes-paulina-invoice-history-blocked-2026-05-22.txt](/Users/werkstatt/ai_workspace/avignon/drafts/sonat-genes-paulina-invoice-history-blocked-2026-05-22.txt). No CRM/Portal/OPS mutation, external reply, credential/auth/OAuth work, or mailbox-body copy into durable notes occurred.
+
+## Waiting On Robert Email
+
+- `avignon-direct-owner-robert-approver-CAAtX44bdOwbLoJ3O-2WHJNHdoLrSskZwfnQxGO-t9fUkSk7Xw-mail-gmail-com`
+  - Needed: Robert told Avignon to look again on the forwarded sales-question thread instead of treating it as blocked.
+  - Source Message-ID `<CAAtX44bdOwbLoJ3O++2WHJNHdoLrSskZwfnQxGO=t9fUkSk7Xw@mail.gmail.com>`.
+  - Next: Waiting for Robert to provide the exact customer account name if this is one account, or the exact list if the forwarded question names more than one. Once the account target is explicit, Avignon can run the Salesreport/CRM invoice-history readout immediately.
+  - Decision: Same-pass recheck confirmed the business blocker did not change. The approved local packet still preserves only the instruction to use `/salesreport`; it still does not preserve the actual customer account name or names from the forwarded sales question. Robert's signature block is KOVAL contact information, not a safe customer account target, so Avignon did not guess a KOVAL account, run Salesreport, or mutate CRM/Portal/OPS. Refreshed Robert-facing blocker draft [drafts/robert-sales-question-account-names-needed-2026-05-22.txt](/Users/werkstatt/ai_workspace/avignon/drafts/robert-sales-question-account-names-needed-2026-05-22.txt).
 
 ## Routed / Handled
 
@@ -264,6 +373,11 @@ No current Avignon email-derived items are waiting on Sonat email approval from 
   - Next: Filed the 6 current inbox residue messages to `Handled` after confirming no fresh Avignon action was needed. Avignon must not activate, configure, spend, or close Google Ads work.
   - Decision: Routed/handled for Avignon; any remaining campaign approval belongs in the Claude/Sonat thread, not as an Avignon inbox blocker.
 
+- `avignon-direct-owner-sonat-CALbLtzyaNwyW7NV-U6Vo7KctkHsR9-XOjs9-3Dt-riYr0B4-g-mail-gmail-com`
+  - Needed: Sonat shared Dylan Lewis / Lipman meeting notes and asked Avignon to turn them into a concrete next action, with Salesreport and CRM invoice history as the source of truth for any sales figures.
+  - Next: Get the exact five East Tennessee account names from Sonat, then run the account-by-account Salesreport and CRM invoice-history lookup. Do not guess if the names are not explicit.
+  - Decision: Reviewed the supplied Dylan/Lipman notes and existing Avignon Lipman context, then stopped at the correct blocker because the visible task packet does not include the actual account names to match. Drafted Sonat-facing blocker note `drafts/sonat-lipman-dylan-account-names-needed-2026-05-18.txt`. No sales lookup, CRM/Portal mutation, external reply, or pricing/account-commitment statement was made.
+
 - `avignon-email-review-google-ads-1-000-credit-current-state-action-needed`
   - Needed: Google Ads credit/current-state item may involve advertising account/spend decisions.
   - Next: Routed ownership to Claude and Sonat; Avignon must not take spend, account, admin, or configuration action.
@@ -302,3 +416,39 @@ No current Avignon email-derived items are waiting on Sonat email approval from 
   - Needed: Sonat sent a new-hire sample training email/template for Avignon to keep ready for future use.
   - Next: Avignon logged the template-reference work item and acknowledged receipt to Sonat.
   - Decision: No approval needed for this internal reference capture.
+- `avignon-direct-owner-sonat-CALbLtzyaNwyW7NV-U6Vo7KctkHsR9-XOjs9-3Dt-riYr0B4-g-mail-gmail-com`
+  - Needed: The Lipman / Dylan note was first treated as requiring five East Tennessee account names before a Salesreport lookup or activity add.
+  - Next: Proceed with Lipman Brothers only; use that as the single account target for the activity add and any sales-history readout.
+  - Decision: Sonat clarified that Lipman Brothers is the only relevant account. The earlier five-name blocker is superseded and Avignon can continue without waiting for further account clarification.
+  - Follow-through: activity `369833` was created in Portal with subject `Touch Base with Lipman Brand Manager Dylan` and linked to `Lipman Brothers` (`4580`).
+  - Outcome: The Portal activity was created as CRM activity `369834` on `2026-05-18` with subject `Touch Base with Lipman Brand Manager Dylan`, linked to `Lipman Brothers` (`4580`).
+- `avignon-direct-owner-sonat-CALbLtzz54PRNPr4k9JenuJGo0-Hoiy1Oz-2jSPxxWdDNTyLZTg-mail-gmail-com`
+  - Needed: Sonat asked what the last two invoices for Gene's Sausage Shop and Paulina Meat Market included so the COT team knows which samples to bring this weekend.
+  - Next: Salesreport/CRM invoice history resolved `Paulina Meat Market` exactly and returned the last two invoice contents. `Gene's Sausage Shop` remained ambiguous because Salesreport has separate `Gene's Sausage Shop Lincoln` and `Gene's Sausage Shop Belmont` accounts, so Avignon must ask which exact Gene's location Sonat means instead of guessing.
+  - Decision: Owner clarification is required for the Gene's account name before a complete answer can be sent. Paulina's answer is ready in `drafts/sonat-genes-paulina-invoice-history-blocked-2026-05-22.txt`.
+  - Follow-through: Rechecked the local sent proof on `2026-05-22` and found no `sent-log.jsonl` entry for this thread, so earlier local `completed_report_sent` residue was not treated as real proof.
+  - Outcome: Business content is ready, but the owner question still has not been delivered because no Avignon send-capable helper exists under `/Users/werkstatt`. The remaining blocker is operational plus business-specific: use the approved Avignon mailbox path to send the prepared Sonat-facing clarification, then wait for Sonat to specify `Gene's Sausage Shop Lincoln` or `Gene's Sausage Shop Belmont`.
+- `avignon-direct-owner-sonat-CALbLtzwNt4BPWCZJq7k9OLaemcYi0KGkBYL1kU-pkQLkwnAxA-mail-gmail-com`
+  - Needed: Sonat asked what `Keg and Bottle` in Chicago ordered over the past two months.
+  - Next: Salesreport/CRM account resolution matched the Chicago account exactly as `Keg N Bottle - West Loop` (`326162`); the nearby Glenview `Keg N Bottle` account (`361999`) was checked only as a sanity check and is not the Chicago match.
+  - Decision: This was a quick-answer item and the answer was available in the same pass, so Avignon should send Sonat the result directly instead of a separate status note.
+  - Outcome: Read-only invoice history for `2026-03-22` through `2026-05-22` shows one invoice in the window: `INV197476` dated `2026-03-31`, containing `12 x KOVAL Cranberry Gin Liqueur [G 30% 6x750ML]` and `6 x T&W FORET Gin [G 45% 6x750ML]`. No additional Chicago `Keg and Bottle` orders were found after that invoice in the same window.
+  - Follow-through: Avignon sent Sonat the direct answer on `2026-05-22 12:49 CDT` with subject `Keg and Bottle`, task id `avignon-direct-owner-sonat-keg-and-bottle-complete-2026-05-22`, and Message-ID `<177947216150.47870.4481684833902210818@kovaldistillery.com>`. A same-day stale blocker send with subject `Keg and Bottle blocked` and Message-ID `<177947198659.46914.6113915784941346423@kovaldistillery.com>` exists in the sent log, but the 12:49 completion email supersedes it as the truthful final owner-visible state.
+- `avignon-direct-owner-sonat-CALbLtzxtjB-jfm-OTexi-ZbrnYBDvr1kJkFQSa7j-F5FX-hrQ-mail-gmail-com`
+  - Needed: Sonat asked Avignon to add Darren Iceton as a contact connected to Favorite Brands.
+  - Next: Treat `Favorite Brands` as the intended account from Sonat's packet and add Darren only after a live duplicate check confirms there is no existing Darren Iceton contact already linked there.
+  - Decision: The target is clear enough to proceed, but the approved Portal write path is blocked from the current Avignon workspace.
+  - Outcome: No CRM/Portal mutation was made. A live Portal-backed duplicate check and contact create could not run because the current `/Users/werkstatt` host is not allowed to connect to the CRM database. Repo-local blocker draft prepared at `drafts/sonat-contact-favorite-brands-blocked-2026-05-22.txt`.
+  - Follow-through: No approved Avignon send-capable helper exists entirely under `/Users/werkstatt` for this worker slice, so Avignon did not cross into `/Users/admin` to send the blocker. The remaining blocker is an access-path decision: route this through the approved Portal/Codex execution lane that can reach CRM, then add Darren and report back with the record summary.
+- `avignon-direct-owner-sonat-CALbLtzzNYJ4-WH-r-ttBiD-aR8qj-cPUGtALZ65hthWzFp1V2w-mail-gmail-com`
+  - Needed: Sonat asked Avignon to add Jason Boltz into Portal as a contact attached to `RNDC NE`.
+  - Next: Use the existing `RNDC NE` account if the live duplicate check confirms it is the right match and that no `Jason Boltz` contact already exists.
+  - Decision: This was routine-clear Portal contact work with a deterministic account target, so Avignon completed it and reported the result directly to Sonat.
+  - Outcome: Live Portal duplicate check confirmed exact account `RNDC NE` (`63062`) and no active `Jason Boltz` or `Jason.Boltz@RNDC-USA.com` contact match. Portal then created contact `370136` / `CON20492` for Jason Boltz, title `Division Manager`, linked it to `RNDC NE` (`63062`), and recorded contact-account history row `5189` with status `added`.
+  - Follow-through: Sonat completion report sent on `2026-05-22 16:25 CDT` with subject `Contact` and Message-ID `<177948513921.4278.3214368959968206905@kovaldistillery.com>`. The repo-local Avignon send path worked by normalizing `ai_workspace/.private/passwords/avignon-secret.txt` into a temporary sender-helper creds file and sending through `/Users/werkstatt/ai_workspace/scripts/send_codex_ops_email.py` with Avignon sender identity and `avignon/sent-log.jsonl` proof.
+- `avignon-direct-owner-sonat-CALbLtzyU-Cu-T-x-kXRBPHbqHMP1QKi5xYN4mT06OQgpVKJyA-mail-gmail-com`
+  - Needed: Sonat asked Avignon to add account `Park Ridge Market After Dark` in Park Ridge, Illinois and then add contact `Fred Sanchez` with email `fsanchez@parkridge.us` and phone `224-226-2929` associated with that account.
+  - Next: Duplicate-check the exact account and contact first, then create only the missing account/contact/link and report the result directly to Sonat.
+  - Decision: This was routine-clear Portal account/contact work with a deterministic target, so Avignon completed it and prepared a direct completion report instead of a separate captured/routed receipt.
+  - Outcome: Live Portal duplicate check confirmed there was no active exact account `Park Ridge Market After Dark` and no active `Fred Sanchez` / `fsanchez@parkridge.us` contact match. The normal live controller/model create path still failed with `Model.php line 1819: Call to a member function connection() on null`, so Avignon used the approved bootstrapped-container direct-table fallback. Portal then created account `370169` / `ACC20499` with location `Park Ridge, Illinois, United States`, created contact `370170` / `CON20500` for Fred Sanchez with the supplied email/phone, linked the contact to the new account, and recorded contact-account history row `5195` with status `added`.
+  - Follow-through: Sonat-facing completion body prepared at `drafts/sonat-add-contact-and-account-complete-2026-05-23.txt` and sent on `2026-05-23 15:01 CDT` with subject `Contact and Account` and Message-ID `<177956645876.60495.205793145308784817@kovaldistillery.com>`. `sent-log.jsonl` contains the outbound proof, so the source can be filed as handled.

@@ -26,6 +26,18 @@ Run:
 
 Backups are written to `/Users/werkstatt/ai_box_backups/<timestamp>` with `latest` pointing at the newest backup. These backups include active LaunchAgent plists, shell mapping, git heads, and launchctl status. They do not copy private runtime directories, mailbox credentials, OAuth tokens, `.private`, `.env`, or the encrypted vault contents.
 
+The helper also attempts an optional push to Claude-side `.205` backup storage by default:
+
+- remote host: `koval.lan` (`192.168.55.205`)
+- remote user: `claude`
+- remote target path: `/home/claude/backups/codex/`
+
+Override the target with `AI_BOX_BACKUP_REMOTE_USER`, `AI_BOX_BACKUP_REMOTE_HOST`, or `AI_BOX_BACKUP_REMOTE_PATH` if the approved path changes. Set `AI_BOX_BACKUP_PUSH_REMOTE=0` to skip the remote push and keep only the local snapshot.
+
+Approved SSH identity for the `.205` backup route: `claude@koval.lan`. Treat this as the default approved access-bearing route for the Codex backup push; do not substitute `admin` for this lane unless Robert explicitly changes the approval.
+
+Current working auth mode for the `.205` backup push: the local askpass helper at `/Users/werkstatt/ai_workspace/.private/scripts/ssh_askpass_claude_koval.sh` reads the approved local credential reference and allows the push to complete without interactive prompting.
+
 ## Operational Rules
 
 - Keep Google Drive off this Mac mini unless a separate non-AI need requires it.

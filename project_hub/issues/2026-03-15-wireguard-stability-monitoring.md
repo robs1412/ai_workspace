@@ -2,14 +2,18 @@
 
 - Master Incident ID: `AI-INC-20260315-WIREGUARD-STABILITY-01`
 - Date Opened: `2026-03-15 11:05:40 CDT`
-- Date Completed:
+- Date Completed: `2026-05-19`
 - Owner: `Codex`
 - Priority: `Medium`
-- Status: `Open`
+- Status: `Canceled by request; monitoring discontinued`
 
 ## Scope
 
 Track WireGuard tunnel stability on the MacBook across different physical networks and determine whether prior failures were caused by local client state, third-party VPN/security software, or the home network path.
+
+## Closeout
+
+Robert canceled this monitoring slice on `2026-05-19`. No further WireGuard stability tracking is needed from this record unless the request is reopened.
 
 ## Symptoms
 

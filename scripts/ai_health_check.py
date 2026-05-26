@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/local/bin/python3.13
 """Non-secret Workspaceboard health check for AI Health Manager."""
 
 from __future__ import annotations
@@ -15,9 +15,14 @@ import time
 import urllib.error
 import urllib.parse
 import urllib.request
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from email.utils import parsedate_to_datetime
 from pathlib import Path
+
+try:
+    import mailbox_imap_helpers
+except ImportError:  # pragma: no cover - shared mailbox proof helpers are optional.
+    mailbox_imap_helpers = None
 
 
 DEFAULT_STATUS_URL = "http://127.0.0.1:17878/api/status"
@@ -25,9 +30,12 @@ DEFAULT_LOG_DIR = Path("/Users/werkstatt/ai_workspace/tmp/ai-health-manager")
 DEFAULT_NATIONALOUTREACH_STATE_DIR = Path("/Users/admin/.nationaloutreach-launch/state")
 DEFAULT_FRANK_STATE_DIR = Path("/Users/admin/.frank-launch/state")
 DEFAULT_AVIGNON_STATE_DIR = Path("/Users/admin/.avignon-launch/state")
+DEFAULT_ASHER_STATE_DIR = Path("/Users/admin/.asher-launch/state")
+DEFAULT_VENETIA_STATE_DIR = Path("/Users/admin/.venetia-launch/state")
 DEFAULT_STALE_MINUTES = 8
 DEFAULT_SESSION_RESTART_MINUTES = 8
 DEFAULT_SESSION_RESTART_COOLDOWN_SECONDS = 6 * 60 * 60
+DEFAULT_TASK_FLOW_FINISH_RESTART_MINUTES = 60
 DEFAULT_MAX_NON_STANDING_OPEN = 8
 DEFAULT_MAX_ROBERT_BLOCKERS = 6
 DEFAULT_INPUT_LOG_DIR = Path("/Users/werkstatt/ai_workspace/daily-inputs")
@@ -39,11 +47,14 @@ DEFAULT_ESCALATION_MAX_EMAILS = 3
 DEFAULT_PROOF_REPAIR_BATCH_SIZE = 10
 DEFAULT_PROOF_REPAIR_INTERVAL_SECONDS = 60
 DEFAULT_WORKSPACEBOARD_SUPERVISOR = Path("/Users/admin/.workspaceboard-launch/runtime/app/scripts/workspaceboard_supervisor.php")
+DEFAULT_WORKSPACEBOARD_DB_RECORDER = Path("/Users/admin/.workspaceboard-launch/runtime/app/scripts/workspaceboard_db_recorder.php")
 DEFAULT_MAILBOX_CANARY_MAX_AGE_MINUTES = 10
 DEFAULT_SESSION_SPRAWL_GOVERNOR_INTERVAL_SECONDS = 60
 DEFAULT_STANDING_ATTENTION_MINUTES = 60
 DEFAULT_WORKER_SUMMARY_ESCALATION_COOLDOWN_SECONDS = 6 * 60 * 60
 DEFAULT_WORKER_SUMMARY_ESCALATION_MAX_EMAILS = 4
+DEFAULT_WAITING_OWNER_EMAIL_MINUTES = 60
+DEFAULT_STALE_TASK_CLEANUP_INTERVAL_SECONDS = 15 * 60
 DEFAULT_OWNER_REPLY_TIMEOUT_SECONDS = 2 * 60
 DEFAULT_OWNER_REPLY_COOLDOWN_SECONDS = 5 * 60
 DEFAULT_OWNER_REPLY_RECENT_HOURS = 24
@@ -54,6 +65,15 @@ DEFAULT_OWNER_REPLY_STATE_FILE = "owner-reply-thread-state.json"
 DEFAULT_OWNER_REPLY_PUBSUB_PULL_LIMIT = 10
 DEFAULT_GMAIL_PUSH_TIMEOUT_SECONDS = 6
 DEFAULT_GMAIL_PUSH_SUBSCRIPTION = "projects/gmailconnector-485021/subscriptions/koval-gmail-push-sub"
+DEFAULT_TASK_FLOW_DUE_RUNNER = Path("/Users/admin/.task-flow-launch/runtime/scripts/task_flow_due_runner.py")
+DEFAULT_STALE_TASK_CLEANUP_SCRIPT = Path("/Users/werkstatt/ai_workspace/scripts/stale_task_cleanup.php")
+DEFAULT_STALE_TASK_CLEANUP_RULES = Path("/Users/werkstatt/ai_workspace/scripts/stale_task_cleanup_rules.json")
+DEFAULT_SERVICE_PARITY_CHECK = Path("/Users/werkstatt/ai_workspace/scripts/service_parity_check.py")
+DEFAULT_TASK_FLOW_TRUTH_DRIFT_CHECK = Path("/Users/werkstatt/ai_workspace/scripts/task_flow_truth_drift_check.py")
+DEFAULT_RECURSIVE_PROPOSAL_DECISIONS = Path("/Users/werkstatt/ai_workspace/scripts/recursive_proposal_decisions.py")
+DEFAULT_RECURSIVE_PROPOSAL_EXECUTOR = Path("/Users/werkstatt/ai_workspace/scripts/recursive_proposal_executor.py")
+DEFAULT_CLAUDE_PLANNER_PROOF_CHECK = Path("/Users/werkstatt/ai_workspace/scripts/claude_planner_proof_check.py")
+DEFAULT_TASK_FLOW_FOLLOWTHROUGH_INTERVAL_SECONDS = 60
 REQUIRED_MAILBOX_MONITORS = (
     "monitor-frank-inbox",
     "monitor-avignon-inbox",
@@ -280,10 +300,13 @@ def build_run_timeout_report(args: argparse.Namespace, error: Exception) -> dict
         "daily_input_audit": {"status": "not-run", "missing_tracking_count": 0},
         "finish_contract_audit": {"status": "not-run", "missing_finish_contract_count": 0, "missing_proof_count": 0},
         "task_flow_escalation_sweep": {"status": "not-run", "checked": 0, "action": "none"},
+        "recursive_proposals": recursive_proposal_status_check(args),
+        "claude_planner_proof": claude_planner_proof_check(args),
         "gmail_push_consumer": {"status": "not-run", "pulled": 0},
         "owner_reply_followup_sweep": {"status": "not-run", "checked": 0, "due": 0, "action": "none"},
         "proof_repair_queue": {"status": "not-run", "queued": 0, "action": "none"},
         "mailbox_canaries": {"status": "not-run", "issue_count": 0, "issues": []},
+        "stale_task_cleanup": {"status": "not-run", "checked": 0, "changed": 0, "action": "none"},
         "send_path_health": {"status": "not-run", "issue_count": 0, "issues": []},
         "nudge": {"status": "not-attempted", "session_id": "", "reason": "run watchdog timeout"},
         "session_restart": {"status": "not-attempted", "session_id": "", "action": "none", "reason": "run watchdog timeout"},
@@ -354,13 +377,23 @@ def seconds_since_time(value: datetime | None, now: datetime) -> float | None:
 def fetch_json(url: str, timeout: float) -> dict:
     request = urllib.request.Request(url, headers={"Accept": "application/json"})
     request_timeout = min(float(timeout), MAX_BOARD_REQUEST_TIMEOUT_SECONDS)
-    try:
-        with urllib.request.urlopen(request, timeout=request_timeout) as response:
-            if response.status != 200:
-                raise HealthCheckError(f"status endpoint returned HTTP {response.status}")
-            payload = response.read(8 * 1024 * 1024)
-    except (TimeoutError, OSError, urllib.error.URLError) as error:
-        raise HealthCheckError(f"status endpoint failed: {error}") from error
+    payload = b""
+    last_error: Exception | None = None
+    for attempt in range(3):
+        try:
+            with urllib.request.urlopen(request, timeout=request_timeout) as response:
+                if response.status != 200:
+                    raise HealthCheckError(f"status endpoint returned HTTP {response.status}")
+                payload = response.read(8 * 1024 * 1024)
+            last_error = None
+            break
+        except (TimeoutError, OSError, urllib.error.URLError) as error:
+            last_error = error
+            if attempt == 2:
+                raise HealthCheckError(f"status endpoint failed: {error}") from error
+            time.sleep(0.75)
+    if last_error is not None:
+        raise HealthCheckError(f"status endpoint failed: {last_error}") from last_error
     try:
         parsed = json.loads(payload.decode("utf-8"))
     except json.JSONDecodeError as error:
@@ -463,12 +496,15 @@ def standing_role(session: dict) -> str | None:
     text = f"{session.get('title') or ''} {session.get('display_name') or ''}".lower()
     workspace_key = str(session.get("workspace_key") or "").lower()
     session_type = str(session.get("session_type") or "").lower()
+    status_label = str(session.get("status_label") or session.get("status") or "").lower()
     if session_type == "email_monitor" or (
         workspace_key in {"nationaloutreach", "asher", "venetia"}
         and "inbox" in text
         and "monitor" in text
     ):
         return "Email Worker"
+    if status_label != "monitoring":
+        return None
     for role, patterns in STANDING_PATTERNS.items():
         if role == "AI Health Manager" and session.get("workspace_key") != "ai":
             continue
@@ -506,6 +542,7 @@ def classify_sessions(status: dict, stale_minutes: int, standing_minutes: int) -
     stale_working: list[dict] = []
     stale_waiting: list[dict] = []
     review_ready: list[dict] = []
+    closed_history: list[dict] = []
     active_waiting: list[dict] = []
     active_working: list[dict] = []
 
@@ -526,7 +563,12 @@ def classify_sessions(status: dict, stale_minutes: int, standing_minutes: int) -
                 unhealthy.append({**summary, "reason": f"standing monitor is {status_label or runtime}"})
             continue
 
-        if status_label == "review-ready" or str(session.get("status") or "").lower() == "finished":
+        if str(session.get("status") or "").lower() == "finished":
+            if runtime == "closed":
+                closed_history.append(summary)
+            else:
+                review_ready.append(summary)
+        elif status_label == "review-ready":
             review_ready.append(summary)
         elif status_label in {"needs-input", "blocked", "launch-failed"} or str(session.get("status") or "").lower() in {"waiting", "blocked"}:
             if age is not None and age >= stale_minutes:
@@ -534,7 +576,10 @@ def classify_sessions(status: dict, stale_minutes: int, standing_minutes: int) -
             else:
                 active_waiting.append(summary)
         elif runtime != "live":
-            unhealthy.append({**summary, "reason": f"runtime is {runtime or 'unknown'}"})
+            if age is not None and age >= stale_minutes and runtime in {"db-recorded", "closed", "missing", "unknown", ""}:
+                stale_working.append({**summary, "reason": f"runtime is {runtime or 'unknown'}"})
+            else:
+                unhealthy.append({**summary, "reason": f"runtime is {runtime or 'unknown'}"})
         elif age is not None and age >= stale_minutes:
             stale_working.append({**summary, "reason": f"no activity for {round(age, 1)} minutes"})
         else:
@@ -574,6 +619,7 @@ def classify_sessions(status: dict, stale_minutes: int, standing_minutes: int) -
         "stale_working_sessions": stale_working,
         "stale_waiting_sessions": stale_waiting,
         "review_ready_sessions": review_ready,
+        "closed_history_sessions": closed_history,
         "active_waiting_sessions": active_waiting,
         "active_working_sessions": active_working,
     }
@@ -898,6 +944,170 @@ def run_task_flow_report(command: str, timeout: float) -> dict:
     return parsed
 
 
+def run_task_flow_queue_report(command: str, timeout: float, limit: int) -> dict:
+    if not command.strip():
+        return {"status": "disabled", "items": []}
+    payload = json.dumps({"mode": "queue", "limit": max(1, int(limit))})
+    try:
+        result = subprocess.run(
+            shlex.split(command),
+            input=payload,
+            capture_output=True,
+            text=True,
+            timeout=timeout,
+            check=False,
+            cwd=Path(__file__).resolve().parents[1],
+        )
+    except (OSError, subprocess.TimeoutExpired) as error:
+        return {"status": "failed", "items": [], "error": safe_text(error, 240)}
+    if result.returncode != 0:
+        return {
+            "status": "failed",
+            "items": [],
+            "error": safe_text(result.stderr or result.stdout, 240),
+        }
+    try:
+        parsed = json.loads(result.stdout)
+    except json.JSONDecodeError as error:
+        return {"status": "failed", "items": [], "error": f"invalid Task Flow queue JSON: {error}"}
+    if not isinstance(parsed, dict) or not parsed.get("ok"):
+        return {"status": "failed", "items": [], "error": "Task Flow queue report did not return ok=true"}
+    return parsed
+
+
+def run_task_flow_due_runner_followthrough(args: argparse.Namespace, state: dict) -> dict:
+    if args.dry_run:
+        return {"status": "disabled-dry-run", "checked": 0, "action": "none"}
+    if not args.enable_task_flow_followthrough:
+        return {"status": "disabled", "checked": 0, "action": "none"}
+    report = run_task_flow_queue_report(
+        args.task_flow_queue_report_cmd,
+        args.timeout,
+        max(
+            1,
+            int(
+                max(
+                    args.task_flow_followthrough_limit,
+                    args.task_flow_followthrough_scheduler_limit,
+                )
+            ),
+        ),
+    )
+    if report.get("status") in {"disabled", "failed"}:
+        return {"status": report.get("status", "failed"), "checked": 0, "action": "none", "error": report.get("error", "")}
+
+    items = [item for item in report.get("items", []) if isinstance(item, dict)]
+    candidates = [
+        item for item in items
+        if item.get("scheduler_route_candidate") or item.get("scheduler_violation")
+    ]
+    checked = len(candidates)
+    if not candidates:
+        return {"status": "checked", "checked": 0, "action": "none"}
+
+    follow_state = state.setdefault("task_flow_followthrough", {})
+    now_epoch = int(time.time())
+    if now_epoch - int(follow_state.get("last_run_epoch") or 0) < args.task_flow_followthrough_interval_seconds:
+        return {
+            "status": "cooldown",
+            "checked": checked,
+            "action": "none",
+            "next_after_seconds": max(0, args.task_flow_followthrough_interval_seconds - (now_epoch - int(follow_state.get("last_run_epoch") or 0))),
+        }
+
+    due_runner = Path(args.task_flow_due_runner).expanduser()
+    if not due_runner.is_file():
+        return {
+            "status": "blocked",
+            "checked": checked,
+            "action": "none",
+            "reason": f"task-flow due runner missing: {due_runner}",
+        }
+
+    command = [
+        sys.executable,
+        str(due_runner),
+        "--limit",
+        str(max(1, int(args.task_flow_followthrough_limit))),
+        "--scheduler-limit",
+        str(max(1, int(args.task_flow_followthrough_scheduler_limit))),
+        "--no-watchdog",
+    ]
+    try:
+        result = subprocess.run(
+            command,
+            capture_output=True,
+            text=True,
+            timeout=max(30.0, float(args.timeout)),
+            check=False,
+            cwd=Path(__file__).resolve().parents[1],
+        )
+    except (OSError, subprocess.TimeoutExpired) as error:
+        return {
+            "status": "failed",
+            "checked": checked,
+            "action": "none",
+            "error": safe_text(error, 240),
+        }
+
+    stdout = result.stdout.strip()
+    stderr = safe_text(result.stderr, 400)
+    try:
+        parsed = json.loads(stdout) if stdout else {}
+    except json.JSONDecodeError:
+        parsed = {}
+    ok = result.returncode == 0 and isinstance(parsed, dict) and bool(parsed.get("ok"))
+
+    follow_state["last_run_at"] = iso_now()
+    follow_state["last_run_epoch"] = now_epoch
+    follow_state["last_status"] = "sent" if ok else "failed"
+    follow_state["last_checked"] = checked
+    follow_state["last_candidate_keys"] = [
+        safe_text(item.get("dedupe_key"), 160)
+        for item in candidates[: max(1, int(args.task_flow_followthrough_limit))]
+    ]
+    if stderr:
+        follow_state["last_stderr"] = stderr
+    elif "last_stderr" in follow_state:
+        follow_state.pop("last_stderr", None)
+    if stdout:
+        follow_state["last_stdout"] = safe_text(stdout, 1000)
+    state["task_flow_followthrough"] = follow_state
+
+    worker_handoff = parsed.get("worker_handoff") if isinstance(parsed.get("worker_handoff"), dict) else {}
+    scheduler_bridge = parsed.get("scheduler_bridge") if isinstance(parsed.get("scheduler_bridge"), dict) else {}
+    action_parts: list[str] = []
+    if worker_handoff.get("routed"):
+        action_parts.append("due_worker_routed")
+    if scheduler_bridge.get("routed"):
+        action_parts.append("scheduler_bridge_routed")
+    if worker_handoff.get("daemon_owned"):
+        action_parts.append("daemon_owned_skipped")
+    if not action_parts:
+        action_parts.append("runner_checked")
+
+    payload = {
+        "at": iso_now(),
+        "status": "checked" if ok else "failed",
+        "checked": checked,
+        "action": "+".join(dict.fromkeys(action_parts)),
+        "returncode": result.returncode,
+        "detail": {
+            "due_count": parsed.get("due_count"),
+            "recorded": parsed.get("recorded"),
+            "skipped_existing": parsed.get("skipped_existing"),
+            "worker_handoff_reason": worker_handoff.get("reason"),
+            "scheduler_bridge_reason": scheduler_bridge.get("reason"),
+            "worker_handoff_routed": bool(worker_handoff.get("routed")),
+            "scheduler_bridge_routed": bool(scheduler_bridge.get("routed")),
+        },
+    }
+    if stderr:
+        payload["stderr"] = stderr
+    append_jsonl(Path(args.log_dir) / "task-flow-followthrough.jsonl", payload)
+    return payload
+
+
 def run_task_flow_validate(command: str, timeout: float, packet: dict) -> dict:
     if not command.strip():
         return {"status": "disabled", "ok": False, "error": "Task Flow validate command disabled"}
@@ -981,6 +1191,7 @@ def mailbox_canary_checks(args: argparse.Namespace, status: dict) -> dict:
         "human_owner_or_recipient": "AI Health",
         "output_channel": "Task Flow validate",
         "proof_required": "closeout proof marker and validation pass",
+        "closeout_proof_marker": "canary-closeout-proof-marker",
         "due_or_next_update": "next AI Health run",
         "escalation_path": "AI Health flags canary failure",
     }
@@ -1084,6 +1295,350 @@ def send_path_health_check(args: argparse.Namespace) -> dict:
         "recent_code_failure_count": recent_failure_count,
         "issue_count": len(issues),
         "issues": issues,
+    }
+
+
+def service_parity_check(args: argparse.Namespace) -> dict:
+    if not args.enable_service_parity_check:
+        return {"status": "disabled", "drift": 0, "fix_failed": 0, "surfaces_checked": 0}
+    script = Path(args.service_parity_check_script).expanduser()
+    if not script.is_file():
+        return {
+            "status": "missing",
+            "drift": 1,
+            "fix_failed": 0,
+            "surfaces_checked": 0,
+            "reason": f"service parity script missing: {script}",
+        }
+    report_path = Path(args.log_dir) / "service-parity-latest.md"
+    json_path = Path(args.log_dir) / "service-parity-latest.json"
+    command = [
+        sys.executable,
+        str(script),
+        "--mode",
+        "all",
+        "--report",
+        str(report_path),
+        "--json",
+        str(json_path),
+    ]
+    try:
+        result = subprocess.run(
+            command,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            timeout=max(5, int(args.service_parity_timeout_seconds)),
+            check=False,
+        )
+    except subprocess.TimeoutExpired:
+        return {
+            "status": "timeout",
+            "drift": 1,
+            "fix_failed": 0,
+            "surfaces_checked": 0,
+            "reason": "service parity check timed out",
+        }
+    except OSError as error:
+        return {
+            "status": "failed",
+            "drift": 1,
+            "fix_failed": 0,
+            "surfaces_checked": 0,
+            "reason": safe_text(error, 300),
+        }
+
+    parsed: dict = {}
+    if json_path.is_file():
+        try:
+            parsed = json.loads(json_path.read_text(encoding="utf-8"))
+        except Exception:
+            parsed = {}
+    results = parsed.get("results") if isinstance(parsed, dict) else []
+    drift_items = [
+        item for item in results
+        if isinstance(item, dict) and item.get("status") == "drift"
+    ] if isinstance(results, list) else []
+    fix_failed_items = [
+        item for item in parsed.get("fix_attempts", [])
+        if isinstance(item, dict) and item.get("status") == "fix-failed"
+    ] if isinstance(parsed, dict) else []
+    status = "passed"
+    if result.returncode != 0:
+        status = "failed"
+    if drift_items:
+        status = "drift"
+    if fix_failed_items:
+        status = "fix-failed"
+
+    return {
+        "status": status,
+        "returncode": result.returncode,
+        "surfaces_checked": len(results) if isinstance(results, list) else 0,
+        "drift": len(drift_items),
+        "fix_failed": len(fix_failed_items),
+        "report": str(report_path),
+        "json": str(json_path),
+        "stdout": safe_text(result.stdout or "", 500),
+        "stderr": safe_text(result.stderr or "", 500),
+        "drift_items": [
+            {
+                "label": safe_text(item.get("label"), 160),
+                "path": safe_text(item.get("path"), 220),
+                "observed": safe_text(item.get("observed"), 160),
+            }
+            for item in drift_items[:10]
+        ],
+    }
+
+
+def task_flow_truth_drift_check(args: argparse.Namespace) -> dict:
+    if not args.enable_task_flow_truth_drift_check:
+        return {"status": "disabled", "drift_count": 0, "checked": 0}
+    script = Path(args.task_flow_truth_drift_check_script).expanduser()
+    if not script.is_file():
+        return {
+            "status": "missing",
+            "drift_count": 1,
+            "checked": 0,
+            "reason": f"task-flow truth drift script missing: {script}",
+        }
+    report_path = Path(args.log_dir) / "task-flow-truth-drift-latest.md"
+    json_path = Path(args.log_dir) / "task-flow-truth-drift-latest.json"
+    command = [
+        sys.executable,
+        str(script),
+        "--report",
+        str(report_path),
+        "--json",
+        str(json_path),
+        "--fail-on-drift",
+    ]
+    try:
+        result = subprocess.run(
+            command,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            timeout=max(5, int(args.task_flow_truth_drift_timeout_seconds)),
+            check=False,
+        )
+    except subprocess.TimeoutExpired:
+        return {
+            "status": "timeout",
+            "drift_count": 1,
+            "checked": 0,
+            "reason": "task-flow truth drift check timed out",
+        }
+    except OSError as error:
+        return {
+            "status": "failed",
+            "drift_count": 1,
+            "checked": 0,
+            "reason": safe_text(error, 300),
+        }
+
+    parsed: dict = {}
+    if json_path.is_file():
+        try:
+            parsed = json.loads(json_path.read_text(encoding="utf-8"))
+        except Exception:
+            parsed = {}
+    drifts = parsed.get("drifts") if isinstance(parsed, dict) else []
+    drift_items = [item for item in drifts if isinstance(item, dict)] if isinstance(drifts, list) else []
+    drift_count = int(parsed.get("drift_count") or len(drift_items) or 0) if isinstance(parsed, dict) else len(drift_items)
+    status = "passed"
+    if result.returncode != 0:
+        status = "failed"
+    if drift_count > 0:
+        status = "drift"
+
+    return {
+        "status": status,
+        "returncode": result.returncode,
+        "checked": int(parsed.get("task_flow_rows_scanned") or 0) if isinstance(parsed, dict) else 0,
+        "drift_count": drift_count,
+        "managed_sessions": int(parsed.get("managed_sessions") or 0) if isinstance(parsed, dict) else 0,
+        "proof_rows_scanned": int(parsed.get("proof_rows_scanned") or 0) if isinstance(parsed, dict) else 0,
+        "scheduler_violations": int(parsed.get("scheduler_violations") or 0) if isinstance(parsed, dict) else 0,
+        "scheduler_route_candidates": int(parsed.get("scheduler_route_candidates") or 0) if isinstance(parsed, dict) else 0,
+        "proof_closeout_issues": int(parsed.get("proof_closeout_issues") or 0) if isinstance(parsed, dict) else 0,
+        "report": str(report_path),
+        "json": str(json_path),
+        "stdout": safe_text(result.stdout or "", 500),
+        "stderr": safe_text(result.stderr or "", 500),
+        "drift_items": [
+            {
+                "kind": safe_text(item.get("kind"), 80),
+                "title": safe_text(item.get("title"), 160),
+                "detail": safe_text(item.get("detail"), 220),
+                "dedupe_key": safe_text(item.get("dedupe_key"), 180),
+                "session_id": safe_text(item.get("session_id"), 80),
+            }
+            for item in drift_items[:10]
+        ],
+    }
+
+
+def recursive_proposal_status_check(args: argparse.Namespace) -> dict:
+    if not args.enable_recursive_proposal_status_check:
+        return {
+            "status": "disabled",
+            "pending_approval_count": 0,
+            "approved_unexecuted_count": 0,
+            "proposal_count": 0,
+        }
+    decisions_script = Path(args.recursive_proposal_decisions_script).expanduser()
+    executor_script = Path(args.recursive_proposal_executor_script).expanduser()
+    missing = [str(path) for path in (decisions_script, executor_script) if not path.is_file()]
+    if missing:
+        return {
+            "status": "missing",
+            "pending_approval_count": 1,
+            "approved_unexecuted_count": 1,
+            "proposal_count": 0,
+            "reason": f"recursive proposal script missing: {', '.join(missing)}",
+        }
+
+    timeout = max(5, int(args.recursive_proposal_status_timeout_seconds))
+    decisions_path = Path(args.log_dir) / "recursive-proposal-decisions-status-latest.json"
+    executor_path = Path(args.log_dir) / "recursive-proposal-executor-status-latest.json"
+
+    def run_status(command: list[str]) -> tuple[dict, dict]:
+        try:
+            result = subprocess.run(
+                command,
+                text=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                timeout=timeout,
+                check=False,
+                cwd=Path(__file__).resolve().parents[1],
+            )
+        except subprocess.TimeoutExpired:
+            return {}, {"returncode": 124, "stdout": "", "stderr": "recursive proposal status timed out"}
+        except OSError as error:
+            return {}, {"returncode": 1, "stdout": "", "stderr": safe_text(error, 300)}
+        try:
+            parsed = json.loads(result.stdout or "{}")
+        except json.JSONDecodeError:
+            parsed = {}
+        return parsed if isinstance(parsed, dict) else {}, {
+            "returncode": result.returncode,
+            "stdout": safe_text(result.stdout, 500),
+            "stderr": safe_text(result.stderr, 500),
+        }
+
+    decisions, decision_result = run_status([sys.executable, str(decisions_script), "status", "--json"])
+    executor, executor_result = run_status([sys.executable, str(executor_script), "status", "--json"])
+    decisions_path.write_text(json.dumps(decisions, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    executor_path.write_text(json.dumps(executor, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+    pending_approval_count = int(decisions.get("pending_approval_count") or 0)
+    approved_unexecuted_count = int(executor.get("approved_unexecuted_count") or 0)
+    proposal_count = int(decisions.get("proposal_count") or len(decisions.get("proposals") or []))
+    blocked_execution_count = sum(
+        1
+        for item in executor.get("proposals", [])
+        if isinstance(item, dict) and str(item.get("execution_state") or "") == "blocked"
+    )
+    status = "passed"
+    if decision_result["returncode"] != 0 or executor_result["returncode"] != 0:
+        status = "failed"
+    if pending_approval_count or approved_unexecuted_count or blocked_execution_count:
+        status = "attention"
+
+    return {
+        "status": status,
+        "pending_approval_count": pending_approval_count,
+        "approved_unexecuted_count": approved_unexecuted_count,
+        "blocked_execution_count": blocked_execution_count,
+        "proposal_count": proposal_count,
+        "decisions_json": str(decisions_path),
+        "executor_json": str(executor_path),
+        "latest_clean_monitor": decisions.get("latest_clean_monitor") or {},
+        "allowlisted_fix_classes": executor.get("allowlisted_fix_classes") or [],
+        "decision_returncode": decision_result["returncode"],
+        "executor_returncode": executor_result["returncode"],
+        "decision_stderr": decision_result["stderr"],
+        "executor_stderr": executor_result["stderr"],
+    }
+
+
+def claude_planner_proof_check(args: argparse.Namespace) -> dict:
+    if not args.enable_claude_planner_proof_check:
+        return {"status": "disabled", "http_status": 0, "forbidden_field_count": 0}
+    script = Path(args.claude_planner_proof_check_script).expanduser()
+    if not script.is_file():
+        return {
+            "status": "missing",
+            "http_status": 0,
+            "forbidden_field_count": 1,
+            "reason": f"Claude Planner proof checker missing: {script}",
+        }
+    json_path = Path(args.log_dir) / "claude-planner-proof-latest.json"
+    report_path = Path(args.log_dir) / "claude-planner-proof-latest.md"
+    command = [
+        sys.executable,
+        str(script),
+        "--base-url",
+        str(args.claude_planner_base_url),
+        "--task-id",
+        str(args.claude_planner_proof_task_id),
+        "--timeout-seconds",
+        str(args.claude_planner_proof_timeout_seconds),
+        "--json",
+        str(json_path),
+        "--report",
+        str(report_path),
+    ]
+    if args.claude_planner_proof_plan_guid:
+        command.extend(["--plan-guid", str(args.claude_planner_proof_plan_guid)])
+    try:
+        result = subprocess.run(
+            command,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            timeout=max(5, int(args.claude_planner_proof_timeout_seconds) + 3),
+            check=False,
+        )
+    except subprocess.TimeoutExpired:
+        return {
+            "status": "timeout",
+            "http_status": 0,
+            "forbidden_field_count": 0,
+            "reason": "Claude Planner proof check timed out",
+        }
+    except OSError as error:
+        return {
+            "status": "failed",
+            "http_status": 0,
+            "forbidden_field_count": 1,
+            "reason": safe_text(error, 300),
+        }
+
+    parsed: dict = {}
+    if json_path.is_file():
+        try:
+            parsed = json.loads(json_path.read_text(encoding="utf-8"))
+        except Exception:
+            parsed = {}
+    status = str(parsed.get("status") or ("failed" if result.returncode else "unknown"))
+    forbidden = parsed.get("forbidden_fields") if isinstance(parsed.get("forbidden_fields"), list) else []
+    return {
+        "status": status,
+        "returncode": result.returncode,
+        "http_status": int(parsed.get("http_status") or 0),
+        "proof_url": safe_text(parsed.get("proof_url"), 300),
+        "context_url": safe_text(parsed.get("context_url"), 300),
+        "reason": safe_text(parsed.get("reason") or result.stderr or "", 500),
+        "forbidden_field_count": len(forbidden),
+        "proof_comment_count": int((parsed.get("proof_summary") or {}).get("proof_comment_count") or 0),
+        "json": str(json_path),
+        "report": str(report_path),
+        "stdout": safe_text(result.stdout or "", 500),
+        "stderr": safe_text(result.stderr or "", 500),
     }
 
 
@@ -1357,6 +1912,20 @@ def task_flow_closeout_marker_text(item: dict) -> str:
     ).lower()
 
 
+def task_flow_finish_restart_due(item: dict, now: datetime, threshold_minutes: int) -> bool:
+    if str(item.get("status") or "").strip().lower() != "working":
+        return False
+    if item.get("closeout_proof_present") is True:
+        return False
+    created_at = parse_time(item.get("created_at"))
+    updated_at = parse_time(item.get("updated_at"))
+    due_at = parse_time(item.get("due_or_trigger"))
+    age_seconds = seconds_since_time(created_at or updated_at or due_at, now)
+    if age_seconds is None:
+        return False
+    return age_seconds >= max(1, int(threshold_minutes)) * 60
+
+
 def task_flow_needs_escalation(item: dict) -> bool:
     status = str(item.get("status") or "").strip()
     if status in CLOSED_STATUSES and item.get("closeout_proof_present") is True:
@@ -1371,7 +1940,12 @@ def task_flow_needs_escalation(item: dict) -> bool:
         "filed out of inbox to handled",
     )):
         return True
-    if status in {"routed", "working", "waiting"} and item.get("closeout_proof_present") is False:
+    if status == "working" and item.get("closeout_proof_present") is False:
+        now = utc_now()
+        if task_flow_finish_restart_due(item, now, DEFAULT_TASK_FLOW_FINISH_RESTART_MINUTES):
+            return True
+        return "within 2 minutes" in marker_text or "owner-visible" in marker_text
+    if status == "waiting" and item.get("closeout_proof_present") is False:
         return "within 2 minutes" in marker_text or "owner-visible" in marker_text
     return False
 
@@ -1403,6 +1977,8 @@ def email_addresses_from_text(value: object) -> set[str]:
 
 
 def normalize_message_id(value: object) -> str:
+    if mailbox_imap_helpers:
+        return mailbox_imap_helpers.normalize_message_id(value)
     return str(value or "").strip().strip("<>").lower()
 
 
@@ -1424,6 +2000,8 @@ def owner_from_email_text(value: object) -> tuple[int, str, str] | None:
 
 
 def normalize_reply_subject(subject: object) -> str:
+    if mailbox_imap_helpers:
+        return mailbox_imap_helpers.normalize_reply_subject(subject)
     text = " ".join(str(subject or "").split()).lower()
     changed = True
     while changed:
@@ -1457,6 +2035,8 @@ def recipient_text(row: dict) -> str:
 
 
 def collect_sent_entries(state_dir: Path) -> list[dict]:
+    if mailbox_imap_helpers:
+        return mailbox_imap_helpers.collect_sent_entries(state_dir)
     sent_entries: list[dict] = []
     for row in read_jsonl_tail(state_dir / "sent-log.jsonl", 6000):
         sent_at = row_time(row)
@@ -1477,6 +2057,8 @@ def collect_sent_entries(state_dir: Path) -> list[dict]:
 
 
 def owner_reply_has_later_send(reply: dict, sent_entries: list[dict]) -> bool:
+    if mailbox_imap_helpers:
+        return mailbox_imap_helpers.owner_reply_has_later_send(reply, sent_entries)
     reply_at = reply.get("received_at")
     subject_key = reply.get("subject_key", "")
     owner_email = reply.get("owner_email", "")
@@ -1498,6 +2080,49 @@ def owner_reply_has_later_send(reply: dict, sent_entries: list[dict]) -> bool:
         if source_id and source_id in str(sent.get("message_id", "")).lower():
             return True
     return False
+
+
+def mailbox_owner_identity(mailbox: str) -> tuple[int, str, str]:
+    key = str(mailbox or "").strip().lower()
+    if key == "frank":
+        return 1, OWNER_EMAIL_BY_USER_ID[1], "Robert"
+    if key == "avignon":
+        return 3, OWNER_EMAIL_BY_USER_ID[3], "Sonat"
+    if key == "nationaloutreach":
+        return 3, OWNER_EMAIL_BY_USER_ID[3], "Sonat"
+    if key == "asher":
+        return 0, "asher@thecultivater.com", "Asher"
+    if key == "venetia":
+        return 0, "venetia@thecultivater.com", "Venetia"
+    return 0, "", key.title() or "Worker"
+
+
+def collect_header_poll_owner_replies(state_dir: Path, mailbox: str) -> list[dict]:
+    replies: dict[str, dict] = {}
+    owner_user_id, owner_email, owner_label = mailbox_owner_identity(mailbox)
+    for row in read_jsonl_tail(state_dir / "header-poll-log.jsonl", 9000):
+        if row_is_acknowledgement_only(row):
+            continue
+        received_at = row_time(row)
+        subject_key = normalize_reply_subject(row.get("subject"))
+        source_id = normalize_message_id(row.get("source_message_id") or row.get("message_id"))
+        if not source_id or not subject_key or not received_at:
+            continue
+        replies[source_id] = {
+            "mailbox": mailbox,
+            "source_message_id": source_id,
+            "subject": safe_text(row.get("subject"), 180),
+            "subject_key": subject_key,
+            "from": safe_text(row.get("from"), 180),
+            "owner_user_id": owner_user_id,
+            "owner_email": owner_email,
+            "owner_label": owner_label,
+            "received_at": received_at,
+            "route": safe_text(row.get("manager") or row.get("classification") or row.get("status"), 80),
+            "session_id": safe_text(row.get("task_flow_key") or "", 80),
+            "thread_refs": thread_refs_from_row(row),
+        }
+    return list(replies.values())
 
 
 def thread_refs_from_row(row: dict) -> list[str]:
@@ -1545,6 +2170,29 @@ def row_is_acknowledgement_only(row: dict) -> bool:
 
 def collect_nationaloutreach_owner_replies(state_dir: Path) -> list[dict]:
     replies: dict[str, dict] = {}
+    if mailbox_imap_helpers:
+        for row in mailbox_imap_helpers.collect_owner_replies_from_db(
+            "nationaloutreach",
+            [OWNER_EMAIL_BY_USER_ID[1], OWNER_EMAIL_BY_USER_ID[3]],
+        ):
+            owner = owner_from_email_text(row.get("from"))
+            if owner is None:
+                continue
+            replies[row["source_message_id"]] = {
+                "mailbox": "nationaloutreach",
+                "source_message_id": row["source_message_id"],
+                "subject": safe_text(row.get("subject"), 180),
+                "subject_key": normalize_reply_subject(row.get("subject")),
+                "from": safe_text(row.get("from"), 180),
+                "owner_user_id": owner[0],
+                "owner_email": owner[1],
+                "owner_label": owner[2],
+                "received_at": row.get("received_at"),
+                "route": safe_text(row.get("route"), 80),
+                "session_id": safe_text(row.get("session_id"), 80),
+                "task_id": safe_text(row.get("task_id"), 120),
+                "thread_refs": row.get("thread_refs") or [],
+            }
     for row in read_jsonl_tail(state_dir / "mail-review.jsonl", 6000):
         if row_is_acknowledgement_only(row):
             continue
@@ -1570,8 +2218,16 @@ def collect_nationaloutreach_owner_replies(state_dir: Path) -> list[dict]:
             "session_id": "",
             "thread_refs": thread_refs_from_row(row),
         }
-    active = load_json(state_dir / "active-inbox.json")
-    active_messages = active.get("messages") if isinstance(active.get("messages"), list) else []
+    active_messages: list[dict] = []
+    if mailbox_imap_helpers:
+        active_messages = mailbox_imap_helpers.collect_active_inbox_from_db("nationaloutreach")
+    if not active_messages:
+        active = load_json(state_dir / "active-inbox.json")
+        raw_messages = active.get("messages") if isinstance(active.get("messages"), list) else []
+        if isinstance(raw_messages, dict):
+            active_messages = [value for value in raw_messages.values() if isinstance(value, dict)]
+        elif isinstance(raw_messages, list):
+            active_messages = [value for value in raw_messages if isinstance(value, dict)]
     for item in active_messages:
         if not isinstance(item, dict):
             continue
@@ -1580,7 +2236,7 @@ def collect_nationaloutreach_owner_replies(state_dir: Path) -> list[dict]:
         owner = owner_from_email_text(item.get("from"))
         if not owner:
             continue
-        received_at = row_time(item) or parse_email_time(active.get("updated_at")) or utc_now()
+        received_at = row_time(item) or utc_now()
         subject_key = normalize_reply_subject(item.get("subject"))
         source_id = normalize_message_id(item.get("source_message_id") or item.get("message_id"))
         if not source_id or not subject_key:
@@ -1638,6 +2294,27 @@ def collect_nationaloutreach_owner_replies(state_dir: Path) -> list[dict]:
 
 def collect_automation_owner_replies(state_dir: Path, mailbox: str) -> list[dict]:
     replies: dict[str, dict] = {}
+    if mailbox_imap_helpers and mailbox in {"frank", "avignon"}:
+        owner_emails = [OWNER_EMAIL_BY_USER_ID[1]] if mailbox == "frank" else [OWNER_EMAIL_BY_USER_ID[3]]
+        for row in mailbox_imap_helpers.collect_owner_replies_from_db(mailbox, owner_emails):
+            owner = owner_from_email_text(row.get("from"))
+            if owner is None:
+                continue
+            replies[row["source_message_id"]] = {
+                "mailbox": mailbox,
+                "source_message_id": row["source_message_id"],
+                "subject": safe_text(row.get("subject"), 180),
+                "subject_key": normalize_reply_subject(row.get("subject")),
+                "from": safe_text(row.get("from"), 180),
+                "owner_user_id": owner[0],
+                "owner_email": owner[1],
+                "owner_label": owner[2],
+                "received_at": row.get("received_at"),
+                "route": safe_text(row.get("route"), 80),
+                "session_id": safe_text(row.get("session_id"), 80),
+                "task_id": safe_text(row.get("task_id"), 120),
+                "thread_refs": row.get("thread_refs") or [],
+            }
     for row in read_jsonl_tail(state_dir / "automation-log.jsonl", 9000):
         if row_is_acknowledgement_only(row):
             continue
@@ -1678,12 +2355,16 @@ def collect_owner_replies(args: argparse.Namespace) -> list[dict]:
         (Path(args.nationaloutreach_state_dir).expanduser(), "nationaloutreach", collect_nationaloutreach_owner_replies),
         (Path(args.frank_state_dir).expanduser(), "frank", collect_automation_owner_replies),
         (Path(args.avignon_state_dir).expanduser(), "avignon", collect_automation_owner_replies),
+        (Path(args.asher_state_dir).expanduser(), "asher", collect_header_poll_owner_replies),
+        (Path(args.venetia_state_dir).expanduser(), "venetia", collect_header_poll_owner_replies),
     ]
     all_replies: list[dict] = []
     cutoff = utc_now().timestamp() - (args.owner_reply_recent_hours * 60 * 60)
     for state_dir, mailbox, collector in configs:
         try:
             if collector is collect_automation_owner_replies:
+                replies = collector(state_dir, mailbox)
+            elif collector is collect_header_poll_owner_replies:
                 replies = collector(state_dir, mailbox)
             else:
                 replies = collector(state_dir)
@@ -1784,8 +2465,57 @@ def task_flow_owner_reply_key(reply: dict) -> str:
     return "taskflow-owner-reply-" + hashlib.sha256(f"{mailbox}:{source}".encode("utf-8")).hexdigest()[:16]
 
 
+def owner_reply_has_proof_backed_primary(reply: dict) -> tuple[bool, str]:
+    source_ref = normalize_message_id(reply.get("source_message_id"))
+    if not source_ref:
+        return False, ""
+    php = rf"""
+require '/Users/werkstatt/ops/bootstrap.php';
+$pdo = get_event_pdo();
+$stmt = $pdo->prepare(
+    "SELECT dedupe_key, status, clarification_email, completion_or_blocker_email
+     FROM koval_crm.ai_task_flow_packets
+     WHERE archived_at IS NULL
+       AND source_ref = ?
+       AND dedupe_key NOT LIKE 'taskflow-owner-reply-%'
+       AND (
+         completion_or_blocker_email <> ''
+         OR clarification_email <> ''
+         OR status IN ('reported','completed','handled','filed','closed_with_proof','clarification_sent')
+       )
+     ORDER BY updated_at DESC
+     LIMIT 1"
+);
+$stmt->execute(['{source_ref}']);
+$row = $stmt->fetch(PDO::FETCH_ASSOC);
+echo $row ? json_encode($row, JSON_UNESCAPED_SLASHES) : '';
+"""
+    try:
+        result = subprocess.run(
+            ["php", "-r", php],
+            capture_output=True,
+            text=True,
+            timeout=10,
+            check=False,
+        )
+    except (OSError, subprocess.TimeoutExpired):
+        return False, ""
+    if result.returncode != 0 or not (result.stdout or "").strip():
+        return False, ""
+    try:
+        row = json.loads(result.stdout.strip())
+    except json.JSONDecodeError:
+        return False, ""
+    dedupe_key = safe_text(row.get("dedupe_key"), 120)
+    return bool(dedupe_key), dedupe_key
+
+
 def record_owner_reply_task_flow(args: argparse.Namespace, reply: dict, status: str = "waiting") -> tuple[bool, str]:
+    has_primary_proof, primary_key = owner_reply_has_proof_backed_primary(reply)
+    if has_primary_proof:
+        return True, f"proof-backed-primary:{primary_key}"
     key = task_flow_owner_reply_key(reply)
+    due_at = owner_reply_daily_due(reply)
     packet = {
         "dedupe_key": key,
         "source_ref": reply.get("source_message_id", ""),
@@ -1796,17 +2526,26 @@ def record_owner_reply_task_flow(args: argparse.Namespace, reply: dict, status: 
         "workspaceboard_session": reply.get("session_id", ""),
         "ops_portal_or_domain_task": key,
         "status": status,
-        "due_or_trigger": "owner_reply_pending_response",
+        "due_or_trigger": due_at,
         "scheduled_action": f"Respond to owner reply: {safe_text(reply.get('subject'), 160)}",
-        "verification_readback": "owner_reply_pending_response: newest primary-owner reply has no later assistant sent proof yet.",
-        "next_update": "AI Health should recheck within 1 minute; worker must send result, domain proof, or one exact blocker/question.",
+        "verification_readback": "owner_reply_pending_response: newest primary-owner reply has no later assistant sent proof yet; daily repeat reminder enabled.",
+        "next_update": f"Daily repeat reminder set for {due_at}; worker must send result, domain proof, or one exact blocker/question.",
         "requested_deliverable": "Privately inspect owner reply, complete the requested work if safe, and send a clear owner-visible response.",
         "human_owner_or_recipient": f"{reply.get('owner_label')} <{reply.get('owner_email')}>",
         "output_channel": "email",
         "proof_required": "later sent Message-ID plus domain proof, or one exact owner question/blocker",
-        "due_or_next_update": "first worker focus within 2 minutes; result or exact blocker within 5 minutes",
+        "due_or_next_update": f"Daily repeat reminder at {due_at}; first worker focus within 2 minutes when due; result or exact blocker within 5 minutes",
         "escalation_path": "Direct responsible-worker nudge first; Task Manager escalation at 5 minutes; owner-visible exact blocker/question at 10 minutes if still no proof.",
         "papers_projection": "not_applicable",
+        "recurrence_enabled": "true",
+        "recurrence_kind": "followup",
+        "recurrence_cadence": "daily",
+        "recurrence_pattern": "daily owner reply follow-up",
+        "recurrence_rule": "owner_reply_daily_repeat",
+        "recurrence_anchor": due_at,
+        "recurrence_interval": "1",
+        "recurrence_time": due_at[11:19],
+        "recurrence_summary": "Daily repeat reminder until assistant sent proof or an exact owner blocker/question is recorded.",
     }
     if not args.task_flow_record_cmd.strip():
         return False, "Task Flow record command disabled"
@@ -1832,6 +2571,16 @@ def direct_worker_session_for_reply(reply: dict) -> str:
     if session_id:
         return session_id
     return ""
+
+
+def owner_reply_daily_due(reply: dict) -> str:
+    received = reply.get("received_at")
+    if isinstance(received, datetime):
+        base = received.astimezone()
+    else:
+        base = datetime.now().astimezone()
+    due = base + timedelta(days=1)
+    return due.strftime("%Y-%m-%d %H:%M:%S")
 
 
 def post_owner_reply_exact_blocker_email(args: argparse.Namespace, reply: dict, signature: str) -> tuple[bool, dict | str]:
@@ -1901,6 +2650,28 @@ def owner_reply_followup_sweep(args: argparse.Namespace, classification: dict, s
         record.setdefault("first_seen_at", iso_now())
         record.setdefault("first_seen_epoch", first_seen_epoch)
         tf_ok, tf_detail = record_owner_reply_task_flow(args, reply)
+        if tf_ok and str(tf_detail).startswith("proof-backed-primary:"):
+            thread_state[signature] = {
+                "updated_at": iso_now(),
+                "mailbox": reply.get("mailbox"),
+                "owner_email": reply.get("owner_email"),
+                "subject": reply.get("subject"),
+                "source_message_id": reply.get("source_message_id"),
+                "latest_owner_received_at": reply.get("received_at").isoformat() if isinstance(reply.get("received_at"), datetime) else "",
+                "latest_assistant_sent_after_owner": bool(reply.get("has_later_send")),
+                "status": "owner_reply_already_covered_by_primary",
+                "task_flow_key": tf_detail.split(":", 1)[1],
+                "task_flow_record_status": "skipped_existing_primary",
+                "task_flow_record_detail": tf_detail,
+            }
+            actions.append({
+                "action": "skip_wrapper_existing_primary",
+                "mailbox": reply.get("mailbox"),
+                "source_message_id": safe_text(reply.get("source_message_id"), 120),
+                "subject": reply.get("subject"),
+                "task_flow_key": tf_detail.split(":", 1)[1],
+            })
+            continue
         thread_state[signature] = {
             "updated_at": iso_now(),
             "mailbox": reply.get("mailbox"),
@@ -2095,17 +2866,7 @@ def session_sprawl_governor(args: argparse.Namespace, classification: dict, mana
             session_id = safe_text(item.get("id"), 80)
             if session_id:
                 candidate_ids.append(session_id)
-    desired_batch = max(
-        1,
-        min(
-            24,
-            max(
-                int(args.session_sprawl_governor_batch_size),
-                8 if non_standing_open < 24 else non_standing_open // 3,
-            ),
-        ),
-    )
-    candidate_ids = list(dict.fromkeys(candidate_ids))[: desired_batch]
+    candidate_ids = list(dict.fromkeys(candidate_ids))
     if non_standing_open <= args.max_non_standing_open and not candidate_ids:
         return {
             "status": "checked",
@@ -2114,41 +2875,54 @@ def session_sprawl_governor(args: argparse.Namespace, classification: dict, mana
             "non_standing_open": non_standing_open,
             "candidate_count": 0,
         }
-    ok, detail = post_workspaceboard_json(
-        args,
-        "/api/session-reconcile-stale",
-        {"dry_run": bool(args.dry_run), "session_ids": candidate_ids},
-    )
+    batch_size = max(1, min(int(args.session_sprawl_governor_batch_size), 4))
     changed = 0
     actions: list[dict] = []
-    if isinstance(detail, dict):
-        changed = int(detail.get("changed") or 0)
-        actions = [item for item in detail.get("actions", []) if isinstance(item, dict)]
+    errors: list[str] = []
+    batches = 0
+    for start in range(0, len(candidate_ids), batch_size):
+        batch = candidate_ids[start:start + batch_size]
+        batches += 1
+        ok, detail = post_workspaceboard_json(
+            args,
+            "/api/session-reconcile-stale",
+            {"dry_run": bool(args.dry_run), "session_ids": batch},
+        )
+        if isinstance(detail, dict):
+            changed += int(detail.get("changed") or 0)
+            actions.extend([item for item in detail.get("actions", []) if isinstance(item, dict)])
+        if ok:
+            continue
+        errors.append(safe_text(detail, 240))
     governor_state["last_run_at"] = iso_now()
     governor_state["last_run_epoch"] = now_epoch
-    governor_state["last_status"] = "checked" if ok else "failed"
+    governor_state["last_status"] = "checked" if not errors else ("partial" if changed > 0 else "failed")
     governor_state["last_changed"] = changed
-    governor_state["last_error"] = "" if ok else safe_text(detail, 240)
+    governor_state["last_error"] = "" if not errors else errors[-1]
     payload = {
         "at": iso_now(),
-        "ok": ok,
+        "ok": not errors or changed > 0,
         "dry_run": bool(args.dry_run),
         "non_standing_open": non_standing_open,
         "candidate_ids": candidate_ids,
+        "batch_size": batch_size,
+        "batches": batches,
         "changed": changed,
         "actions": actions[:20],
-        "detail": detail if isinstance(detail, str) else "",
+        "errors": errors[:20],
     }
     append_jsonl(Path(args.log_dir) / "session-sprawl-governor.jsonl", payload)
     return {
-        "status": "checked" if ok else "failed",
-        "action": "reconcile-stale" if ok else "failed",
+        "status": "checked" if not errors else ("partial" if changed > 0 else "failed"),
+        "action": "reconcile-stale" if changed > 0 else "failed",
         "changed": changed,
         "non_standing_open": non_standing_open,
         "candidate_count": len(candidate_ids),
+        "batch_size": batch_size,
+        "batches": batches,
         "candidate_ids": candidate_ids,
         "actions": actions[:20],
-        "error": "" if ok else safe_text(detail, 240),
+        "error": "" if not errors else errors[-1],
     }
 
 
@@ -2161,15 +2935,25 @@ def canonical_status_line(report: dict) -> str:
     session_restart = report.get("session_restart", {})
     send_path = report.get("send_path_health", {})
     owner_replies = report.get("owner_reply_followup_sweep", {})
+    followthrough = report.get("task_flow_followthrough", {})
+    service_parity = report.get("service_parity", {})
+    truth_drift = report.get("task_flow_truth_drift", {})
+    recursive = report.get("recursive_proposals", {})
+    claude_proof = report.get("claude_planner_proof", {})
     parts = [
         board,
         f"{management.get('non_standing_open_count', 0)} open work sessions",
         f"{management.get('standing_attention_count', 0)} standing attention",
         f"{finish.get('missing_finish_contract_count', 0)} proof/finish gaps",
         f"{finish.get('past_due_routed_count', 0)} past-due routed",
+        f"task-flow followthrough {followthrough.get('action', 'none')} checked {followthrough.get('checked', 0)}",
+        f"task-flow truth drift {truth_drift.get('drift_count', 0)}",
+        f"recursive proposals pending {recursive.get('pending_approval_count', 0)} approved {recursive.get('approved_unexecuted_count', 0)}",
+        f"Claude Planner proof {claude_proof.get('status', 'not-recorded')}",
         f"{owner_replies.get('due', 0)} owner replies needing follow-up",
         f"{canaries.get('issue_count', 0)} mailbox canary issues",
         f"{send_path.get('issue_count', 0)} send-path issues",
+        f"service parity drift {service_parity.get('drift', 0)}",
         f"sprawl governor {sprawl.get('action', 'none')} changed {sprawl.get('changed', 0)}",
         f"session restart {session_restart.get('status', 'not-recorded')} action {session_restart.get('action', 'none')}",
     ]
@@ -2318,6 +3102,94 @@ def worker_summary_owner_for_session(session: dict, summary: str) -> tuple[int, 
     return 1, OWNER_EMAIL_BY_USER_ID[1], "Robert"
 
 
+def waiting_session_needs_owner_email(session: dict, threshold_minutes: int) -> bool:
+    status = safe_text(session.get("status"), 80).lower()
+    inactive_minutes = session.get("inactive_minutes")
+    try:
+        inactive = float(inactive_minutes)
+    except (TypeError, ValueError):
+        return False
+    if inactive < threshold_minutes:
+        return False
+    return status in {"waiting", "needs-input", "blocked", "launch-failed"}
+
+
+def extract_owner_questions_from_summary(summary: str, title: str) -> list[str]:
+    text = str(summary or "").strip()
+    if not text:
+        return [f"What detail or approval is still needed to move {title or 'this item'} forward?"]
+    questions: list[str] = []
+    for raw_line in text.splitlines():
+        line = raw_line.strip().lstrip("-").strip()
+        if not line:
+            continue
+        if "?" in line:
+            candidate = safe_text(line, 280)
+            if candidate:
+                questions.append(candidate)
+                continue
+        lowered = line.lower()
+        for prefix in ("response needed:", "question:", "needed:", "ask:"):
+            if lowered.startswith(prefix):
+                candidate = safe_text(line[len(prefix):].strip(), 280)
+                if candidate:
+                    if not candidate.endswith("?"):
+                        candidate = candidate.rstrip(".") + "?"
+                    questions.append(candidate)
+                break
+    if questions:
+        return list(dict.fromkeys(questions))[:3]
+    compact = compact_owner_summary(summary, 500)
+    if compact:
+        return [f"Can you reply with the missing detail or approval needed for {title or 'this item'}?"]
+    return [f"What detail or approval is still needed to move {title or 'this item'} forward?"]
+
+
+def post_waiting_session_owner_email(
+    args: argparse.Namespace,
+    session: dict,
+    summary: str,
+    signature: str,
+) -> tuple[bool, dict | str]:
+    user_id, recipient, owner_label = worker_summary_owner_for_session(session, summary)
+    title = safe_text(session.get("title") or session.get("display_name") or session.get("id"), 120)
+    inactive_minutes = safe_text(session.get("inactive_minutes"), 20)
+    questions = extract_owner_questions_from_summary(summary, title)
+    readable_summary = compact_owner_summary(summary, 900)
+    body_lines = [
+        f"Hi {owner_label},",
+        "",
+        f"This item has been waiting for over an hour: {title}.",
+        "",
+    ]
+    if readable_summary:
+        body_lines.extend([
+            "What the worker is waiting on:",
+            readable_summary,
+            "",
+        ])
+    body_lines.append("Questions:")
+    for question in questions:
+        body_lines.append(f"- {question}")
+    body_lines.extend([
+        "",
+        "If the answer is already in an approved source system, no reply is needed and the worker should use that source and finish the task. Otherwise, please reply with the missing detail or approval so the worker can continue.",
+        "",
+        f"Current board status: {safe_text(session.get('status'), 60) or 'waiting'}"
+        + (f"; inactive for {inactive_minutes} minutes" if inactive_minutes else ""),
+        f"Trace: {safe_text(session.get('id'), 80)}",
+    ])
+    payload = {
+        "user_id": user_id,
+        "user_label": owner_label,
+        "user_email": recipient,
+        "subject": f"Need your reply: {title}",
+        "message": "\n".join(body_lines),
+        "route_signature": signature,
+    }
+    return post_workspaceboard_json(args, "api/ai-manager/escalation-email", payload)
+
+
 def post_worker_summary_escalation_email(
     args: argparse.Namespace,
     session: dict,
@@ -2385,11 +3257,13 @@ def worker_summary_escalation_sweep(args: argparse.Namespace, classification: di
         checked += 1
         if not ok or not isinstance(detail, dict):
             actions.append({"session_id": session_id, "action": "summary_failed", "ok": False, "detail": safe_text(detail, 180)})
-            if "timed out" in safe_text(detail, 180).lower():
-                break
             continue
         summary = safe_text(detail.get("summary"), 2800)
+        waiting_email_required = waiting_session_needs_owner_email(session, args.waiting_owner_email_minutes)
         needs_email, reason = worker_summary_needs_owner_email(summary)
+        if waiting_email_required:
+            needs_email = True
+            reason = f"waiting over {args.waiting_owner_email_minutes} minutes"
         if not needs_email:
             actions.append({"session_id": session_id, "action": "no_owner_email_needed", "ok": True})
             continue
@@ -2399,7 +3273,7 @@ def worker_summary_escalation_sweep(args: argparse.Namespace, classification: di
         if now_epoch - int(record.get("email_at_epoch") or 0) < args.worker_summary_escalation_cooldown_seconds:
             actions.append({"session_id": session_id, "action": "cooldown", "ok": True, "reason": reason})
             continue
-        if not worker_summary_needs_owner_response(summary):
+        if not waiting_email_required and not worker_summary_needs_owner_response(summary):
             title = safe_text(session.get("title") or session.get("display_name") or session_id, 140)
             message = (
                 "AI Health worker-summary proof repair: this worker returned a blocker/proof gap, but it is not a real owner-response email. "
@@ -2431,7 +3305,10 @@ def worker_summary_escalation_sweep(args: argparse.Namespace, classification: di
             actions.append(action)
             append_jsonl(Path(args.log_dir) / "worker-summary-escalations.jsonl", {"at": iso_now(), **action})
             continue
-        email_ok, email_detail = post_worker_summary_escalation_email(args, session, summary, reason, signature)
+        if waiting_email_required:
+            email_ok, email_detail = post_waiting_session_owner_email(args, session, summary, signature)
+        else:
+            email_ok, email_detail = post_worker_summary_escalation_email(args, session, summary, reason, signature)
         escalation_state[signature] = {
             "email_at": iso_now(),
             "email_at_epoch": now_epoch,
@@ -2656,6 +3533,107 @@ def proof_repair_queue(args: argparse.Namespace, classification: dict, state: di
     }
 
 
+def stale_task_cleanup(args: argparse.Namespace, state: dict) -> dict:
+    if not args.enable_stale_task_cleanup:
+        return {"status": "disabled", "checked": 0, "closable": 0, "changed": 0, "action": "none"}
+    cleanup_state = state.setdefault("stale_task_cleanup", {})
+    now_epoch = int(time.time())
+    if now_epoch - int(cleanup_state.get("last_run_epoch") or 0) < args.stale_task_cleanup_interval_seconds:
+        return {
+            "status": "cooldown",
+            "checked": 0,
+            "closable": 0,
+            "changed": 0,
+            "action": "none",
+            "next_after_seconds": max(0, args.stale_task_cleanup_interval_seconds - (now_epoch - int(cleanup_state.get("last_run_epoch") or 0))),
+        }
+    command = [
+        "php",
+        str(Path(args.stale_task_cleanup_script).expanduser()),
+        f"--rules={Path(args.stale_task_cleanup_rules).expanduser()}",
+        "--json",
+    ]
+    if not args.dry_run:
+        command.append("--apply")
+    try:
+        result = subprocess.run(
+            command,
+            check=False,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            timeout=max(10, int(args.timeout)),
+        )
+    except Exception as error:
+        return {
+            "status": "failed",
+            "checked": 0,
+            "closable": 0,
+            "changed": 0,
+            "action": "none",
+            "error": safe_text(error, 500),
+        }
+    stdout = result.stdout.strip()
+    try:
+        payload = json.loads(stdout or "{}")
+    except json.JSONDecodeError as error:
+        return {
+            "status": "failed",
+            "checked": 0,
+            "closable": 0,
+            "changed": 0,
+            "action": "none",
+            "error": f"invalid cleanup JSON: {error}",
+            "stderr": safe_text(result.stderr, 400),
+        }
+    if result.returncode != 0 or not isinstance(payload, dict) or payload.get("ok") is not True:
+        return {
+            "status": "failed",
+            "checked": int(payload.get("checked") or 0) if isinstance(payload, dict) else 0,
+            "closable": int(payload.get("closable") or 0) if isinstance(payload, dict) else 0,
+            "changed": int(payload.get("changed") or 0) if isinstance(payload, dict) else 0,
+            "action": "none",
+            "error": safe_text(payload.get("error") if isinstance(payload, dict) else result.stderr, 500),
+        }
+    checked = int(payload.get("checked") or 0)
+    closable = int(payload.get("closable") or 0)
+    changed = int(payload.get("changed") or 0)
+    items = [item for item in payload.get("items", []) if isinstance(item, dict)]
+    changed_items = [
+        {
+            "task_id": int(item.get("task_id") or 0),
+            "rule_id": safe_text(item.get("rule_id"), 120),
+            "reason": safe_text(item.get("reason"), 220),
+            "status": safe_text(item.get("status"), 40),
+        }
+        for item in items
+        if str(item.get("status") or "") in {"closed", "would-close"}
+    ]
+    cleanup_state["last_run_at"] = iso_now()
+    cleanup_state["last_run_epoch"] = now_epoch
+    cleanup_state["last_checked"] = checked
+    cleanup_state["last_closable"] = closable
+    cleanup_state["last_changed"] = changed
+    cleanup_state["last_action"] = "closed" if changed else ("would-close" if closable else "none")
+    cleanup_state["last_items"] = changed_items[:10]
+    append_jsonl(Path(args.log_dir) / "stale-task-cleanup.jsonl", {
+        "at": iso_now(),
+        "dry_run": args.dry_run,
+        "checked": checked,
+        "closable": closable,
+        "changed": changed,
+        "items": changed_items[:10],
+    })
+    return {
+        "status": "checked",
+        "checked": checked,
+        "closable": closable,
+        "changed": changed,
+        "action": cleanup_state["last_action"],
+        "items": changed_items[:10],
+    }
+
+
 def write_markdown(path: Path, report: dict) -> None:
     lines = [
         "# AI Health Manager Check",
@@ -2672,13 +3650,19 @@ def write_markdown(path: Path, report: dict) -> None:
         f"- standing_attention: `{report.get('management_health', {}).get('standing_attention_count', 0)}` / minutes `{report.get('standing_attention_minutes', DEFAULT_STANDING_ATTENTION_MINUTES)}`",
         f"- missed_input_audit: `{report.get('daily_input_audit', {}).get('status', 'not-recorded')}` / missing `{report.get('daily_input_audit', {}).get('missing_tracking_count', 0)}`",
         f"- finish_contract_audit: `{report.get('finish_contract_audit', {}).get('status', 'not-recorded')}` / missing `{report.get('finish_contract_audit', {}).get('missing_finish_contract_count', 0)}` / missing_proof `{report.get('finish_contract_audit', {}).get('missing_proof_count', 0)}`",
+        f"- task_flow_followthrough: `{report.get('task_flow_followthrough', {}).get('status', 'not-recorded')}` / action `{report.get('task_flow_followthrough', {}).get('action', 'none')}` / checked `{report.get('task_flow_followthrough', {}).get('checked', 0)}`",
         f"- task_flow_escalation_sweep: `{report.get('task_flow_escalation_sweep', {}).get('status', 'not-recorded')}` / action `{report.get('task_flow_escalation_sweep', {}).get('action', 'none')}` / checked `{report.get('task_flow_escalation_sweep', {}).get('checked', 0)}`",
         f"- gmail_push_consumer: `{report.get('gmail_push_consumer', {}).get('status', 'not-recorded')}` / pulled `{report.get('gmail_push_consumer', {}).get('pulled', 0)}`",
         f"- owner_reply_followup_sweep: `{report.get('owner_reply_followup_sweep', {}).get('status', 'not-recorded')}` / due `{report.get('owner_reply_followup_sweep', {}).get('due', 0)}` / action `{report.get('owner_reply_followup_sweep', {}).get('action', 'none')}`",
         f"- worker_summary_escalation_sweep: `{report.get('worker_summary_escalation_sweep', {}).get('status', 'not-recorded')}` / emails `{report.get('worker_summary_escalation_sweep', {}).get('emails_sent', 0)}` / checked `{report.get('worker_summary_escalation_sweep', {}).get('checked', 0)}`",
         f"- proof_repair_queue: `{report.get('proof_repair_queue', {}).get('status', 'not-recorded')}` / action `{report.get('proof_repair_queue', {}).get('action', 'none')}` / queued `{report.get('proof_repair_queue', {}).get('queued', 0)}`",
+        f"- stale_task_cleanup: `{report.get('stale_task_cleanup', {}).get('status', 'not-recorded')}` / action `{report.get('stale_task_cleanup', {}).get('action', 'none')}` / changed `{report.get('stale_task_cleanup', {}).get('changed', 0)}`",
         f"- mailbox_canaries: `{report.get('mailbox_canaries', {}).get('status', 'not-recorded')}` / issues `{report.get('mailbox_canaries', {}).get('issue_count', 0)}`",
         f"- send_path_health: `{report.get('send_path_health', {}).get('status', 'not-recorded')}` / issues `{report.get('send_path_health', {}).get('issue_count', 0)}`",
+        f"- service_parity: `{report.get('service_parity', {}).get('status', 'not-recorded')}` / drift `{report.get('service_parity', {}).get('drift', 0)}` / checked `{report.get('service_parity', {}).get('surfaces_checked', 0)}`",
+        f"- task_flow_truth_drift: `{report.get('task_flow_truth_drift', {}).get('status', 'not-recorded')}` / drift `{report.get('task_flow_truth_drift', {}).get('drift_count', 0)}` / checked `{report.get('task_flow_truth_drift', {}).get('checked', 0)}`",
+        f"- recursive_proposals: `{report.get('recursive_proposals', {}).get('status', 'not-recorded')}` / pending `{report.get('recursive_proposals', {}).get('pending_approval_count', 0)}` / approved_unexecuted `{report.get('recursive_proposals', {}).get('approved_unexecuted_count', 0)}` / blocked `{report.get('recursive_proposals', {}).get('blocked_execution_count', 0)}`",
+        f"- claude_planner_proof: `{report.get('claude_planner_proof', {}).get('status', 'not-recorded')}` / http `{report.get('claude_planner_proof', {}).get('http_status', 0)}` / forbidden_fields `{report.get('claude_planner_proof', {}).get('forbidden_field_count', 0)}` / proof_comments `{report.get('claude_planner_proof', {}).get('proof_comment_count', 0)}`",
         f"- session_sprawl_governor: `{report.get('session_sprawl_governor', {}).get('status', 'not-recorded')}` / action `{report.get('session_sprawl_governor', {}).get('action', 'none')}` / changed `{report.get('session_sprawl_governor', {}).get('changed', 0)}`",
         "",
         "## Session Counts",
@@ -2998,16 +3982,65 @@ def maybe_nudge(args: argparse.Namespace, classification: dict, state: dict) -> 
     return {"status": "cooldown", "session_id": "", "reason": "all stale candidates were already nudged recently"}
 
 
-def maybe_restart_sessions(args: argparse.Namespace, classification: dict, state: dict) -> dict:
+def task_flow_finish_restart_candidates(report: dict, threshold_minutes: int) -> list[dict]:
+    now = utc_now()
+    candidates: list[dict] = []
+    items = report.get("items", []) if isinstance(report, dict) else []
+    for item in items:
+        if not isinstance(item, dict):
+            continue
+        if not task_flow_finish_restart_due(item, now, threshold_minutes):
+            continue
+        session_id = safe_text(item.get("workspaceboard_session"), 80)
+        if not session_id:
+            continue
+        created_at = parse_time(item.get("created_at"))
+        updated_at = parse_time(item.get("updated_at"))
+        due_at = parse_time(item.get("due_or_trigger"))
+        age_seconds = seconds_since_time(created_at or updated_at or due_at, now)
+        candidates.append({
+            "id": session_id,
+            "title": safe_text(item.get("ops_portal_or_domain_task") or item.get("scheduled_action") or item.get("source_ref"), 120),
+            "reason": "task-flow-finish-sla",
+            "inactive_minutes": round((age_seconds or 0) / 60.0, 1),
+            "task_key": safe_text(item.get("dedupe_key"), 160),
+        })
+    return candidates
+
+
+def maybe_restart_sessions(args: argparse.Namespace, classification: dict, state: dict, task_flow_report: dict | None = None) -> dict:
     if args.dry_run:
         return {"status": "disabled-dry-run", "session_id": "", "reason": "dry-run/no-mutation mode"}
     if not args.allow_nudge:
         return {"status": "disabled", "session_id": "", "reason": "LaunchAgent default is report-only"}
     restarts = state.setdefault("session_restarts", {})
     now_epoch = int(time.time())
-    candidates = list(classification.get("stale_working_sessions", [])) + list(classification.get("stale_waiting_sessions", []))
+    candidates_by_session: dict[str, dict] = {}
+
+    def add_candidate(candidate: dict) -> None:
+        session_id = safe_text(candidate.get("id"), 80)
+        if not session_id:
+            return
+        inactive_minutes = float(candidate.get("inactive_minutes") or 0)
+        existing = candidates_by_session.get(session_id)
+        if existing is not None and float(existing.get("inactive_minutes") or 0) >= inactive_minutes:
+            return
+        candidates_by_session[session_id] = {
+            "id": session_id,
+            "title": safe_text(candidate.get("title"), 120),
+            "reason": safe_text(candidate.get("reason"), 120),
+            "inactive_minutes": round(inactive_minutes, 1),
+            "task_key": safe_text(candidate.get("task_key"), 160),
+        }
+
+    for candidate in list(classification.get("stale_working_sessions", [])) + list(classification.get("stale_waiting_sessions", [])):
+        add_candidate(candidate)
+    if isinstance(task_flow_report, dict):
+        for candidate in task_flow_finish_restart_candidates(task_flow_report, args.task_flow_finish_restart_minutes):
+            add_candidate(candidate)
+
     candidates = sorted(
-        candidates,
+        candidates_by_session.values(),
         key=lambda item: float(item.get("inactive_minutes") or 0),
         reverse=True,
     )
@@ -3035,6 +4068,7 @@ def maybe_restart_sessions(args: argparse.Namespace, classification: dict, state
                 "reason": safe_text(candidate.get("reason", ""), 180),
                 "title": safe_text(candidate.get("title", ""), 120),
                 "inactive_minutes": round(float(inactive_minutes), 1),
+                "task_key": safe_text(candidate.get("task_key"), 160),
             }
             return {
                 "status": "sent",
@@ -3043,6 +4077,7 @@ def maybe_restart_sessions(args: argparse.Namespace, classification: dict, state
                 "reason": safe_text(candidate.get("reason", ""), 180),
                 "detail": detail if isinstance(detail, str) else "",
                 "inactive_minutes": round(float(inactive_minutes), 1),
+                "task_key": safe_text(candidate.get("task_key"), 160),
             }
         return {
             "status": "failed",
@@ -3051,6 +4086,7 @@ def maybe_restart_sessions(args: argparse.Namespace, classification: dict, state
             "reason": safe_text(candidate.get("reason", ""), 180),
             "detail": detail if isinstance(detail, str) else "",
             "inactive_minutes": round(float(inactive_minutes), 1),
+            "task_key": safe_text(candidate.get("task_key"), 160),
         }
     return {"status": "cooldown", "session_id": "", "reason": "all restart candidates were handled recently"}
 
@@ -3068,16 +4104,23 @@ def build_report(args: argparse.Namespace) -> dict:
     state = load_state(state_path)
     sprawl_governor = session_sprawl_governor(args, classification, management_health, state)
     nudge = maybe_nudge(args, classification, state)
-    session_restart = maybe_restart_sessions(args, classification, state)
     daily_input_audit = audit_daily_inputs(args, state)
     finish_contract_audit = audit_task_flow_finish_contracts(args)
-    escalation_sweep = task_flow_escalation_sweep(args, classification, state)
+    task_flow_report = run_task_flow_report(args.task_flow_report_cmd, args.timeout)
+    session_restart = maybe_restart_sessions(args, classification, state, task_flow_report)
+    task_flow_followthrough = run_task_flow_due_runner_followthrough(args, state)
+    escalation_sweep = task_flow_escalation_sweep(args, classification, state, task_flow_report)
     gmail_push = gmail_push_consumer_check(args)
     owner_reply_sweep = owner_reply_followup_sweep(args, classification, state)
     worker_summary_sweep = worker_summary_escalation_sweep(args, classification, state)
     repair_queue = proof_repair_queue(args, classification, state, finish_contract_audit)
+    stale_task_sweep = stale_task_cleanup(args, state)
     mailbox_canaries = mailbox_canary_checks(args, status)
     send_path_health = send_path_health_check(args)
+    service_parity = service_parity_check(args)
+    task_flow_truth_drift = task_flow_truth_drift_check(args)
+    recursive_proposals = recursive_proposal_status_check(args)
+    claude_planner_proof = claude_planner_proof_check(args)
     state["last_check"] = iso_now()
     state["last_nudge"] = nudge
     state["last_session_restart"] = session_restart
@@ -3102,13 +4145,19 @@ def build_report(args: argparse.Namespace) -> dict:
         "standing_attention_minutes": args.standing_attention_minutes,
         "daily_input_audit": daily_input_audit,
         "finish_contract_audit": finish_contract_audit,
+        "task_flow_followthrough": task_flow_followthrough,
         "task_flow_escalation_sweep": escalation_sweep,
         "gmail_push_consumer": gmail_push,
         "owner_reply_followup_sweep": owner_reply_sweep,
         "worker_summary_escalation_sweep": worker_summary_sweep,
         "proof_repair_queue": repair_queue,
+        "stale_task_cleanup": stale_task_sweep,
         "mailbox_canaries": mailbox_canaries,
         "send_path_health": send_path_health,
+        "service_parity": service_parity,
+        "task_flow_truth_drift": task_flow_truth_drift,
+        "recursive_proposals": recursive_proposals,
+        "claude_planner_proof": claude_planner_proof,
         "nudge": nudge,
         "not_touched": [
             "private mailbox bodies",
@@ -3186,6 +4235,11 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     parser.add_argument("--stale-minutes", type=int, default=DEFAULT_STALE_MINUTES)
     parser.add_argument("--session-restart-minutes", type=int, default=DEFAULT_SESSION_RESTART_MINUTES)
     parser.add_argument(
+        "--task-flow-finish-restart-minutes",
+        type=int,
+        default=int(os.environ.get("AI_HEALTH_TASK_FLOW_FINISH_RESTART_MINUTES", DEFAULT_TASK_FLOW_FINISH_RESTART_MINUTES)),
+    )
+    parser.add_argument(
         "--standing-attention-minutes",
         type=int,
         default=int(os.environ.get("AI_HEALTH_STANDING_ATTENTION_MINUTES", DEFAULT_STANDING_ATTENTION_MINUTES)),
@@ -3215,6 +4269,16 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
         "--avignon-state-dir",
         default=os.environ.get("AI_HEALTH_AVIGNON_STATE_DIR", str(DEFAULT_AVIGNON_STATE_DIR)),
         help="Avignon runtime state directory used for non-secret owner-reply follow-up proof checks",
+    )
+    parser.add_argument(
+        "--asher-state-dir",
+        default=os.environ.get("AI_HEALTH_ASHER_STATE_DIR", str(DEFAULT_ASHER_STATE_DIR)),
+        help="Asher runtime state directory used for non-secret owner-reply follow-up proof checks",
+    )
+    parser.add_argument(
+        "--venetia-state-dir",
+        default=os.environ.get("AI_HEALTH_VENETIA_STATE_DIR", str(DEFAULT_VENETIA_STATE_DIR)),
+        help="Venetia runtime state directory used for non-secret owner-reply follow-up proof checks",
     )
     parser.add_argument(
         "--send-path-scan-limit",
@@ -3262,6 +4326,14 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
             "php scripts/task_flow_mysql_recorder.php report 500",
         ),
         help="command used for non-secret Task Flow finish-contract audit; set empty to disable",
+    )
+    parser.add_argument(
+        "--task-flow-queue-report-cmd",
+        default=os.environ.get(
+            "AI_HEALTH_TASK_FLOW_QUEUE_REPORT_CMD",
+            f"php {DEFAULT_WORKSPACEBOARD_DB_RECORDER} task-flow-report",
+        ),
+        help="command used for Workspaceboard queue-mode Task Flow readback; JSON stdin sets mode=queue and limit",
     )
     parser.add_argument(
         "--task-flow-validate-cmd",
@@ -3399,6 +4471,12 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
         default=int(os.environ.get("AI_HEALTH_WORKER_SUMMARY_ESCALATION_SCAN_LIMIT", 12)),
     )
     parser.add_argument(
+        "--waiting-owner-email-minutes",
+        type=int,
+        default=int(os.environ.get("AI_HEALTH_WAITING_OWNER_EMAIL_MINUTES", DEFAULT_WAITING_OWNER_EMAIL_MINUTES)),
+        help="minutes a waiting session may sit before AI Health emails the human who gave the task in real human language",
+    )
+    parser.add_argument(
         "--disable-proof-repair-queue",
         dest="enable_proof_repair_queue",
         action="store_false",
@@ -3416,6 +4494,58 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
         default=int(os.environ.get("AI_HEALTH_PROOF_REPAIR_INTERVAL_SECONDS", DEFAULT_PROOF_REPAIR_INTERVAL_SECONDS)),
     )
     parser.add_argument(
+        "--disable-stale-task-cleanup",
+        dest="enable_stale_task_cleanup",
+        action="store_false",
+        default=os.environ.get("AI_HEALTH_ENABLE_STALE_TASK_CLEANUP", "1") != "0",
+        help="disable rules-driven silent cleanup of stale superseded OPS tasks",
+    )
+    parser.add_argument(
+        "--stale-task-cleanup-script",
+        default=os.environ.get("AI_HEALTH_STALE_TASK_CLEANUP_SCRIPT", str(DEFAULT_STALE_TASK_CLEANUP_SCRIPT)),
+    )
+    parser.add_argument(
+        "--stale-task-cleanup-rules",
+        default=os.environ.get("AI_HEALTH_STALE_TASK_CLEANUP_RULES", str(DEFAULT_STALE_TASK_CLEANUP_RULES)),
+    )
+    parser.add_argument(
+        "--stale-task-cleanup-interval-seconds",
+        type=int,
+        default=int(os.environ.get(
+            "AI_HEALTH_STALE_TASK_CLEANUP_INTERVAL_SECONDS",
+            DEFAULT_STALE_TASK_CLEANUP_INTERVAL_SECONDS,
+        )),
+    )
+    parser.add_argument(
+        "--disable-task-flow-followthrough",
+        dest="enable_task_flow_followthrough",
+        action="store_false",
+        default=os.environ.get("AI_HEALTH_ENABLE_TASK_FLOW_FOLLOWTHROUGH", "1") != "0",
+        help="disable direct AI Health invocation of the task-flow due runner for routable queue residue",
+    )
+    parser.add_argument(
+        "--task-flow-due-runner",
+        default=os.environ.get("AI_HEALTH_TASK_FLOW_DUE_RUNNER", str(DEFAULT_TASK_FLOW_DUE_RUNNER)),
+    )
+    parser.add_argument(
+        "--task-flow-followthrough-interval-seconds",
+        type=int,
+        default=int(os.environ.get(
+            "AI_HEALTH_TASK_FLOW_FOLLOWTHROUGH_INTERVAL_SECONDS",
+            DEFAULT_TASK_FLOW_FOLLOWTHROUGH_INTERVAL_SECONDS,
+        )),
+    )
+    parser.add_argument(
+        "--task-flow-followthrough-limit",
+        type=int,
+        default=int(os.environ.get("AI_HEALTH_TASK_FLOW_FOLLOWTHROUGH_LIMIT", 100)),
+    )
+    parser.add_argument(
+        "--task-flow-followthrough-scheduler-limit",
+        type=int,
+        default=int(os.environ.get("AI_HEALTH_TASK_FLOW_FOLLOWTHROUGH_SCHEDULER_LIMIT", 500)),
+    )
+    parser.add_argument(
         "--disable-mailbox-canaries",
         dest="enable_mailbox_canaries",
         action="store_false",
@@ -3428,10 +4558,102 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
         default=int(os.environ.get("AI_HEALTH_MAILBOX_CANARY_MAX_AGE_MINUTES", DEFAULT_MAILBOX_CANARY_MAX_AGE_MINUTES)),
     )
     parser.add_argument(
+        "--disable-service-parity-check",
+        dest="enable_service_parity_check",
+        action="store_false",
+        default=os.environ.get("AI_HEALTH_ENABLE_SERVICE_PARITY_CHECK", "1") != "0",
+        help="disable read-only service parity drift check",
+    )
+    parser.add_argument(
+        "--service-parity-check-script",
+        default=os.environ.get("AI_HEALTH_SERVICE_PARITY_CHECK_SCRIPT", str(DEFAULT_SERVICE_PARITY_CHECK)),
+    )
+    parser.add_argument(
+        "--service-parity-timeout-seconds",
+        type=int,
+        default=int(os.environ.get("AI_HEALTH_SERVICE_PARITY_TIMEOUT_SECONDS", 20)),
+    )
+    parser.add_argument(
+        "--disable-task-flow-truth-drift-check",
+        dest="enable_task_flow_truth_drift_check",
+        action="store_false",
+        default=os.environ.get("AI_HEALTH_ENABLE_TASK_FLOW_TRUTH_DRIFT_CHECK", "1") != "0",
+        help="disable read-only Task Flow and Workspaceboard truth drift check",
+    )
+    parser.add_argument(
+        "--task-flow-truth-drift-check-script",
+        default=os.environ.get(
+            "AI_HEALTH_TASK_FLOW_TRUTH_DRIFT_CHECK_SCRIPT",
+            str(DEFAULT_TASK_FLOW_TRUTH_DRIFT_CHECK),
+        ),
+    )
+    parser.add_argument(
+        "--task-flow-truth-drift-timeout-seconds",
+        type=int,
+        default=int(os.environ.get("AI_HEALTH_TASK_FLOW_TRUTH_DRIFT_TIMEOUT_SECONDS", 20)),
+    )
+    parser.add_argument(
+        "--disable-recursive-proposal-status-check",
+        dest="enable_recursive_proposal_status_check",
+        action="store_false",
+        default=os.environ.get("AI_HEALTH_ENABLE_RECURSIVE_PROPOSAL_STATUS_CHECK", "1") != "0",
+        help="disable read-only recursive proposal decision/executor status check",
+    )
+    parser.add_argument(
+        "--recursive-proposal-decisions-script",
+        default=os.environ.get(
+            "AI_HEALTH_RECURSIVE_PROPOSAL_DECISIONS_SCRIPT",
+            str(DEFAULT_RECURSIVE_PROPOSAL_DECISIONS),
+        ),
+    )
+    parser.add_argument(
+        "--recursive-proposal-executor-script",
+        default=os.environ.get(
+            "AI_HEALTH_RECURSIVE_PROPOSAL_EXECUTOR_SCRIPT",
+            str(DEFAULT_RECURSIVE_PROPOSAL_EXECUTOR),
+        ),
+    )
+    parser.add_argument(
+        "--recursive-proposal-status-timeout-seconds",
+        type=int,
+        default=int(os.environ.get("AI_HEALTH_RECURSIVE_PROPOSAL_STATUS_TIMEOUT_SECONDS", 20)),
+    )
+    parser.add_argument(
+        "--disable-claude-planner-proof-check",
+        dest="enable_claude_planner_proof_check",
+        action="store_false",
+        default=os.environ.get("AI_HEALTH_ENABLE_CLAUDE_PLANNER_PROOF_CHECK", "1") != "0",
+        help="disable read-only Claude Planner /proof export validation",
+    )
+    parser.add_argument(
+        "--claude-planner-proof-check-script",
+        default=os.environ.get(
+            "AI_HEALTH_CLAUDE_PLANNER_PROOF_CHECK_SCRIPT",
+            str(DEFAULT_CLAUDE_PLANNER_PROOF_CHECK),
+        ),
+    )
+    parser.add_argument(
+        "--claude-planner-base-url",
+        default=os.environ.get("AI_HEALTH_CLAUDE_PLANNER_BASE_URL", "https://planner.koval.lan"),
+    )
+    parser.add_argument(
+        "--claude-planner-proof-task-id",
+        default=os.environ.get("AI_HEALTH_CLAUDE_PLANNER_PROOF_TASK_ID", "1725"),
+    )
+    parser.add_argument(
+        "--claude-planner-proof-plan-guid",
+        default=os.environ.get("AI_HEALTH_CLAUDE_PLANNER_PROOF_PLAN_GUID", ""),
+    )
+    parser.add_argument(
+        "--claude-planner-proof-timeout-seconds",
+        type=int,
+        default=int(os.environ.get("AI_HEALTH_CLAUDE_PLANNER_PROOF_TIMEOUT_SECONDS", 8)),
+    )
+    parser.add_argument(
         "--disable-session-sprawl-governor",
         dest="enable_session_sprawl_governor",
         action="store_false",
-        default=os.environ.get("AI_HEALTH_ENABLE_SESSION_SPRAWL_GOVERNOR", "0") == "1",
+        default=os.environ.get("AI_HEALTH_ENABLE_SESSION_SPRAWL_GOVERNOR", "1") != "0",
         help="disable automatic Workspaceboard stale-session reconciliation when open non-standing sessions exceed the threshold",
     )
     parser.add_argument(
@@ -3522,10 +4744,14 @@ def main(argv: list[str]) -> int:
                     "standing_attention_minutes": DEFAULT_STANDING_ATTENTION_MINUTES,
                     "daily_input_audit": {"status": "not-run", "missing_tracking_count": 0},
                     "finish_contract_audit": safe_finish_contract_audit(args),
+                    "task_flow_followthrough": {"status": "not-run", "checked": 0, "action": "none"},
                     "task_flow_escalation_sweep": {"status": "not-run", "checked": 0, "action": "none"},
+                    "recursive_proposals": recursive_proposal_status_check(args),
+                    "claude_planner_proof": claude_planner_proof_check(args),
                     "gmail_push_consumer": {"status": "not-run", "pulled": 0},
                     "owner_reply_followup_sweep": {"status": "not-run", "checked": 0, "due": 0, "action": "none"},
                     "proof_repair_queue": {"status": "not-run", "queued": 0, "action": "none"},
+                    "stale_task_cleanup": {"status": "not-run", "checked": 0, "changed": 0, "action": "none"},
                     "mailbox_canaries": {"status": "not-run", "issue_count": 0, "issues": []},
                     "send_path_health": send_path_health_check(args),
                     "nudge": {"status": "not-attempted", "session_id": "", "reason": "status check failed after board repair"},
@@ -3568,10 +4794,14 @@ def main(argv: list[str]) -> int:
                 "standing_attention_minutes": DEFAULT_STANDING_ATTENTION_MINUTES,
                 "daily_input_audit": {"status": "not-run", "missing_tracking_count": 0},
                 "finish_contract_audit": safe_finish_contract_audit(args),
+                "task_flow_followthrough": {"status": "not-run", "checked": 0, "action": "none"},
                 "task_flow_escalation_sweep": {"status": "not-run", "checked": 0, "action": "none"},
+                "recursive_proposals": recursive_proposal_status_check(args),
+                "claude_planner_proof": claude_planner_proof_check(args),
                 "gmail_push_consumer": {"status": "not-run", "pulled": 0},
                 "owner_reply_followup_sweep": {"status": "not-run", "checked": 0, "due": 0, "action": "none"},
                 "proof_repair_queue": {"status": "not-run", "queued": 0, "action": "none"},
+                "stale_task_cleanup": {"status": "not-run", "checked": 0, "changed": 0, "action": "none"},
                 "mailbox_canaries": {"status": "not-run", "issue_count": 0, "issues": []},
                 "send_path_health": send_path_health_check(args),
                 "nudge": {"status": "not-attempted", "session_id": "", "reason": "status check failed"},
@@ -3619,6 +4849,8 @@ def main(argv: list[str]) -> int:
         "past_due_routed": report.get("finish_contract_audit", {}).get("past_due_routed_count", 0),
         "vague_robert_decisions": report.get("finish_contract_audit", {}).get("vague_robert_decision_count", 0),
         "finish_contract_audit": report.get("finish_contract_audit", {}).get("status", "not-recorded"),
+        "task_flow_followthrough": report.get("task_flow_followthrough", {}).get("action", "none"),
+        "task_flow_followthrough_checked": report.get("task_flow_followthrough", {}).get("checked", 0),
         "task_flow_escalation": report.get("task_flow_escalation_sweep", {}).get("action", "none"),
         "task_flow_escalation_checked": report.get("task_flow_escalation_sweep", {}).get("checked", 0),
         "gmail_push_consumer": report.get("gmail_push_consumer", {}).get("status", "not-recorded"),
@@ -3629,10 +4861,26 @@ def main(argv: list[str]) -> int:
         "owner_reply_wrapper_reconcile_changed": report.get("owner_reply_followup_sweep", {}).get("wrapper_reconcile", {}).get("changed", 0),
         "proof_repair_queue": report.get("proof_repair_queue", {}).get("action", "none"),
         "proof_repair_queued": report.get("proof_repair_queue", {}).get("queued", 0),
+        "stale_task_cleanup": report.get("stale_task_cleanup", {}).get("action", "none"),
+        "stale_task_cleanup_changed": report.get("stale_task_cleanup", {}).get("changed", 0),
         "mailbox_canaries": report.get("mailbox_canaries", {}).get("status", "not-recorded"),
         "mailbox_canary_issues": report.get("mailbox_canaries", {}).get("issue_count", 0),
         "send_path_health": report.get("send_path_health", {}).get("status", "not-recorded"),
         "send_path_issues": report.get("send_path_health", {}).get("issue_count", 0),
+        "service_parity": report.get("service_parity", {}).get("status", "not-recorded"),
+        "service_parity_drift": report.get("service_parity", {}).get("drift", 0),
+        "service_parity_checked": report.get("service_parity", {}).get("surfaces_checked", 0),
+        "task_flow_truth_drift": report.get("task_flow_truth_drift", {}).get("status", "not-recorded"),
+        "task_flow_truth_drift_count": report.get("task_flow_truth_drift", {}).get("drift_count", 0),
+        "task_flow_truth_drift_checked": report.get("task_flow_truth_drift", {}).get("checked", 0),
+        "recursive_proposals": report.get("recursive_proposals", {}).get("status", "not-recorded"),
+        "recursive_proposals_pending": report.get("recursive_proposals", {}).get("pending_approval_count", 0),
+        "recursive_proposals_approved_unexecuted": report.get("recursive_proposals", {}).get("approved_unexecuted_count", 0),
+        "recursive_proposals_blocked": report.get("recursive_proposals", {}).get("blocked_execution_count", 0),
+        "claude_planner_proof": report.get("claude_planner_proof", {}).get("status", "not-recorded"),
+        "claude_planner_proof_http_status": report.get("claude_planner_proof", {}).get("http_status", 0),
+        "claude_planner_proof_forbidden_fields": report.get("claude_planner_proof", {}).get("forbidden_field_count", 0),
+        "claude_planner_proof_comments": report.get("claude_planner_proof", {}).get("proof_comment_count", 0),
         "workspaceboard_supervisor": report.get("workspaceboard_supervisor", {}).get("status", "not-recorded"),
         "nudge": report["nudge"]["status"],
         "session_restart": report.get("session_restart", {}).get("status", "not-recorded"),

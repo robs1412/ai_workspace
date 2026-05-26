@@ -1,0 +1,60 @@
+{
+  "version": 1,
+  "board": {
+    "status_url": "http://127.0.0.1:17878/api/status",
+    "managed_sessions_key": "managed_sessions",
+    "active_runtime_statuses": [
+      "working",
+      "waiting",
+      "blocked",
+      "review-ready",
+      "needs-input",
+      "live",
+      "running"
+    ]
+  },
+  "task_flow": {
+    "workspaceboard_report_cmd": [
+      "/usr/local/bin/php",
+      "/Users/werkstatt/workspaceboard/scripts/workspaceboard_db_recorder.php",
+      "task-flow-report"
+    ],
+    "workspaceboard_report_payload": {
+      "mode": "all",
+      "limit": 800
+    },
+    "proof_report_cmd": [
+      "/usr/local/bin/php",
+      "/Users/werkstatt/ai_workspace/scripts/task_flow_mysql_recorder.php",
+      "report",
+      "120"
+    ],
+    "active_statuses": [
+      "classified",
+      "waiting",
+      "working",
+      "blocked",
+      "routed"
+    ],
+    "closed_statuses": [
+      "completed",
+      "reported",
+      "handled",
+      "filed",
+      "no_action_closed",
+      "closed_with_proof"
+    ]
+  },
+  "artifacts": {
+    "ai_health_latest_json": "/Users/werkstatt/ai_workspace/tmp/ai-health-manager/latest.json"
+  },
+  "rules": {
+    "flag_scheduler_violations": true,
+    "flag_scheduler_route_candidates": true,
+    "flag_closed_without_closeout_proof": true,
+    "flag_email_report_without_sent_proof": true,
+    "flag_active_missing_board_session": true,
+    "flag_closed_with_live_board_session": true,
+    "flag_proof_report_closeout_issues": true
+  }
+}

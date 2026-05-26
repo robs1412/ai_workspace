@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/local/bin/python3.13
 """Analyze the 2026 Re-Distill email export and write a Markdown report.
 
 The script reads exported `.json` metadata sidecars and folder direction
@@ -756,7 +756,7 @@ def build_filename_report(root: pathlib.Path) -> str:
     report.append("")
     report.append("## Status")
     report.append("")
-    report.append("This is the first completed report pass. It uses verified folder structure, `.eml`/`.json` parity, and exported filenames/subjects. A deeper metadata pass was started for exact month and day-of-week tables, but Google Drive file-provider reads stalled on the many small JSON sidecars. For exact monthly and weekday statistics, copy or hydrate the JSON sidecars locally and rerun `python3 scripts/analyze_redistill_email_export.py` without `--filenames-only`.")
+    report.append("This is the first completed report pass. It uses verified folder structure, `.eml`/`.json` parity, and exported filenames/subjects. A deeper metadata pass was started for exact month and day-of-week tables, but Google Drive file-provider reads stalled on the many small JSON sidecars. For exact monthly and weekday statistics, copy or hydrate the JSON sidecars locally and rerun `/usr/local/bin/python3.13 scripts/analyze_redistill_email_export.py` without `--filenames-only`.")
     report.append("")
     report.append("The current report is still useful for job-description and task-management review because it captures total volume, sent/received load, project families, task types, and repeated subject clusters without reading message bodies.")
     report.append("")

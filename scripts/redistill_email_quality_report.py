@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/local/bin/python3.13
 """Build a quality/complexity report for the Re-Distill email export."""
 
 from __future__ import annotations

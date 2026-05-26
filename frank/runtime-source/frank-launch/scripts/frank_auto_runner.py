@@ -42,6 +42,16 @@ try:
 except ImportError:  # pragma: no cover - task-flow recorder is optional fail-open audit plumbing.
     shared_task_flow = None
 
+try:
+    import mailbox_imap_helpers
+except ImportError:  # pragma: no cover - shared mailbox helper is optional fail-open plumbing.
+    mailbox_imap_helpers = None
+
+try:
+    import email_trace_recorder
+except ImportError:  # pragma: no cover - DB email trace is optional fail-open audit plumbing.
+    email_trace_recorder = None
+
 ROBERT_EMAIL = "robert@kovaldistillery.com"
 DMYTRO_EMAIL = "dmytro.klymentiev@kovaldistillery.com"
 CLAUDE_EMAIL = "claude@koval-distillery.com"
@@ -171,6 +181,56 @@ def record_task_flow_event(action: dict, event: str = "frank_action") -> None:
         shared_task_flow.append_event(frank_automation_log().parent / "task-flow-events.jsonl", packet, event, action=action)
     except Exception as exc:
         action["task_flow_record_error"] = exc.__class__.__name__
+
+
+def build_frank_email_trace_message(action: dict, *, event: str, direction: str = "inbound", message_id: str = "") -> dict:
+    packet = action.get("task_packet") if isinstance(action.get("task_packet"), dict) else task_flow_packet_from_action(action)
+    return email_trace_recorder.build_message_record(
+        mailbox_lane="frank",
+        worker="frank",
+        event=event,
+        message_id=message_id or action.get("sent_message_id", ""),
+        source_message_id=action.get("source_message_id", ""),
+        source_ref=action.get("source_message_id", ""),
+        subject=action.get("subject", ""),
+        from_address=sender_email_from_header(action.get("from", "")),
+        to_addresses=action.get("to", ""),
+        cc_addresses=action.get("cc", ""),
+        header_date=action.get("date", ""),
+        email_account="frank.cannoli@kovaldistillery.com",
+        direction=direction,
+        body_summary=action.get("summary", "") or action.get("classification", ""),
+        status=str(packet.get("status") or task_flow_status_from_action(action)),
+        first_seen_at=action.get("logged_at", ""),
+        event_at=action.get("logged_at", "") or time.strftime("%Y-%m-%dT%H:%M:%S%z"),
+        task_packet=packet,
+        workspaceboard_session=action.get("routed_session_id", ""),
+        ops_portal_or_domain_task=action.get("ops_portal_or_domain_task", "") or action.get("task_id", ""),
+        metadata={
+            "classification": action.get("classification", ""),
+            "decision": action.get("decision", ""),
+            "current_state": action.get("current_state", ""),
+            "archived_to_handled": bool(action.get("archived_to_handled")),
+        },
+    )
+
+
+def record_frank_email_trace_event(state_dir: Path, action: dict, *, event: str = "email_action_logged", direction: str = "inbound", message_id: str = "") -> None:
+    if email_trace_recorder is None:
+        return
+    try:
+        packet = action.get("task_packet") if isinstance(action.get("task_packet"), dict) else task_flow_packet_from_action(action)
+        if packet:
+            action["task_packet"] = packet
+        email_trace_recorder.record_event(
+            state_dir,
+            event=event,
+            message=build_frank_email_trace_message(action, event=event, direction=direction, message_id=message_id),
+            task_packet=packet if isinstance(packet, dict) else {},
+            details={"decision": action.get("decision", ""), "classification": action.get("classification", ""), "current_state": action.get("current_state", "")},
+        )
+    except Exception as exc:
+        action["email_trace_record_error"] = exc.__class__.__name__
 
 
 def task_flow_allows_archive(action: dict) -> bool:
@@ -608,11 +668,15 @@ def explicitly_requests_assistant_action(message: dict, assistant_name: str, ass
         local_part.split(".", 1)[0].strip().lower(),
     }
     text = re.sub(r"\s+", " ", f"{subject} {body}".lower())
-    action_verbs = r"(please|can you|could you|would you|need you to|route|handle|file|archive|create|update|check|fix|send|draft|reply|ask|tell|schedule|log|record|escalate)"
+    action_verbs = r"(please|can you|could you|would you|need you to|route|handle|file|archive|create|update|check|fix|send|share|provide|confirm|pull|draft|reply|ask|tell|schedule|log|record|escalate|follow up|follow-up)"
     for token in assistant_tokens:
         if token and re.search(rf"\b{re.escape(token)}\b[^.?!]{{0,120}}\b{action_verbs}\b", text):
             return True
         if token and re.search(rf"\b{action_verbs}\b[^.?!]{{0,120}}\b{re.escape(token)}\b", text):
+            return True
+        if token and re.search(rf"(?:^|[;:,\-\(\)\s]){re.escape(token)}(?:[;:,\-\)\s]|$)[^.?!]{{0,160}}\b(send|share|provide|confirm|check|pull|draft|reply|follow up|follow-up|schedule|look up)\b", text):
+            return True
+        if token and re.search(rf"\b(send|share|provide|confirm|check|pull|draft|reply|follow up|follow-up|schedule|look up)\b[^.?!]{{0,160}}(?:^|[;:,\-\(\)\s]){re.escape(token)}(?:[;:,\-\)\s]|$)", text):
             return True
     return False
 
@@ -739,11 +803,15 @@ def send_plain_email(
     from_name: str,
     cc_addr: str = "",
     log_fields: dict | None = None,
+    trace_state_dir: Path | None = None,
+    trace_source_ref: str = "",
+    trace_task_packet: dict | None = None,
+    html_body: str = "",
 ) -> str:
     subject = re.sub(r"[\r\n]+", " ", str(subject or "")).strip()
     to_addrs = [addr.strip() for addr in to_addr.split(",") if addr.strip()]
     cc_addrs = [addr.strip() for addr in cc_addr.split(",") if addr.strip()]
-    msg = build_message(sender_email, from_name, to_addrs, cc_addrs, [], subject, body)
+    msg = build_message(sender_email, from_name, to_addrs, cc_addrs, [], subject, body, html_body=html_body or None)
     if not dry_run:
         send_message(sender_email, app_pw, msg)
         sent_row = {
@@ -758,6 +826,35 @@ def send_plain_email(
         if log_fields:
             sent_row.update(log_fields)
         append_sent_log(sent_log_path, sent_row)
+        if trace_state_dir is not None and email_trace_recorder is not None:
+            try:
+                trace_message = email_trace_recorder.build_message_record(
+                    mailbox_lane="frank",
+                    worker="frank",
+                    event="email_sent",
+                    message_id=msg["Message-ID"],
+                    source_ref=trace_source_ref,
+                    subject=subject,
+                    from_address=sender_email,
+                    to_addresses=to_addrs,
+                    cc_addresses=cc_addrs,
+                    header_date=msg["Date"],
+                    email_account=sender_email,
+                    direction="outbound",
+                    status="reported",
+                    event_at=msg["Date"],
+                    task_packet=trace_task_packet or {},
+                    metadata=log_fields or {},
+                )
+                email_trace_recorder.record_event(
+                    trace_state_dir,
+                    event="email_sent",
+                    message=trace_message,
+                    task_packet=trace_task_packet or {},
+                    details={"task_id": task_id, "to": to_addr, "cc": cc_addr},
+                )
+            except Exception:
+                pass
     return str(msg["Message-ID"])
 
 
@@ -1023,6 +1120,25 @@ def direct_primary_ack_already_sent(
     )
 
 
+def direct_primary_closeout_state(sent_log: dict[str, dict], action: dict) -> str:
+    dedupe_key = str(action.get("dedupe_key") or "").strip()
+    if not dedupe_key:
+        return ""
+    blocked_task_id = f"{dedupe_key}-blocked_report_sent"
+    completed_task_id = f"{dedupe_key}-completed_report_sent"
+    for row in sent_log.values():
+        task_id = str(row.get("task_id") or "")
+        if task_id == blocked_task_id:
+            if not action.get("completion_message_id"):
+                action["completion_message_id"] = str(row.get("message_id") or "")
+            return "blocked_report_sent"
+        if task_id == completed_task_id:
+            if not action.get("completion_message_id"):
+                action["completion_message_id"] = str(row.get("message_id") or "")
+            return "completed_report_sent"
+    return ""
+
+
 def route_to_task_manager(action: dict, assistant_name: str) -> tuple[bool, str]:
     payload = {
         "message": compose_task_manager_route_message(action, assistant_name),
@@ -1084,6 +1200,7 @@ def send_direct_primary_ack(
     sent_log: dict[str, dict],
     sender_email: str,
     app_pw: str,
+    state_dir: Path,
     sent_log_path: Path,
     notify: str,
     assistant_name: str,
@@ -1109,6 +1226,9 @@ def send_direct_primary_ack(
         dry_run,
         from_name,
         log_fields=log_fields,
+        trace_state_dir=state_dir,
+        trace_source_ref=str(action.get("source_message_id") or ""),
+        trace_task_packet=task_flow_packet_from_action(action),
     )
     remember_sent_row(
         sent_log,
@@ -1196,6 +1316,16 @@ def compose_owner_style_status(subject: str, session_id: str, session_title: str
     ).rstrip() + "\n"
 
 
+def closeout_text_to_html(body: str) -> str:
+    paragraphs = []
+    for block in str(body or "").rstrip().split("\n\n"):
+        lines = [html.escape(line) for line in block.splitlines()]
+        if not lines:
+            continue
+        paragraphs.append("<p>" + "<br>\n".join(lines) + "</p>")
+    return "\n".join(paragraphs)
+
+
 def compose_known_thread_status(action: dict, session_id: str, session_title: str, state: str) -> str | None:
     subject_candidates = [
         str(action.get("subject") or ""),
@@ -1233,10 +1363,11 @@ def compose_direct_primary_closeout(action: dict, session: dict, blocked: bool, 
         return known_status
     if blocked and session_summary_has_active_context(summary_text):
         return compose_owner_style_status(subject, session_id, session_title, state, summary_text)
+    blocker_text = summary_text or "The worker stopped before preserving one exact blocker in mailbox state."
     lines = [
         "Hi Robert,",
         "",
-        point,
+        (f"I need one concrete answer before I can finish {subject}." if blocked else point),
         "",
         f"- Visible session: {session_id} / {session_title}",
         f"- Current worker state: {state}",
@@ -1245,8 +1376,9 @@ def compose_direct_primary_closeout(action: dict, session: dict, blocked: bool, 
         clarification = clarification_request_text(subject, summary_text)
         lines.extend(
             [
+                f"- Current blocker: {blocker_text}",
+                "",
                 f"I already have this linked to visible session {session_id} / {session_title}.",
-                "I am not guessing or expanding scope from incomplete context.",
                 clarification,
             ]
         )
@@ -1259,11 +1391,21 @@ def compose_direct_primary_closeout(action: dict, session: dict, blocked: bool, 
     return "\n".join(lines).rstrip() + "\n"
 
 
+def compose_direct_primary_closeout_html(action: dict, session: dict, blocked: bool, session_summary: dict | None = None) -> str:
+    body = compose_direct_primary_closeout(action, session, blocked, session_summary)
+    return (
+        "<html><body style=\"font-family:Arial,sans-serif;font-size:14px;line-height:1.5;color:#111;\">"
+        + closeout_text_to_html(body)
+        + "</body></html>"
+    )
+
+
 def monitor_direct_primary_action(
     action: dict,
     sent_log: dict[str, dict],
     sender_email: str,
     app_pw: str,
+    state_dir: Path,
     sent_log_path: Path,
     notify: str,
     assistant_name: str,
@@ -1271,8 +1413,16 @@ def monitor_direct_primary_action(
     from_name: str,
 ) -> dict:
     state = str(action.get("current_state") or "")
+    reported_state = direct_primary_closeout_state(sent_log, action)
     if state in DIRECT_PRIMARY_DONE_STATES:
         return {"monitor_state": state, "current_state": state, "archivable_now": True}
+    if reported_state or state in {"blocked_report_sent", "completed_report_sent"} or action.get("completion_message_id"):
+        return {
+            "monitor_state": "already-reported",
+            "current_state": reported_state or state or ("blocked_report_sent" if str(action.get("decision") or "").startswith("blocked") else "completed_report_sent"),
+            "session_status": "blocked" if (reported_state == "blocked_report_sent" or str(action.get("decision") or "").startswith("blocked")) else "finished",
+            "archivable_now": True,
+        }
     if state not in DIRECT_PRIMARY_PENDING_STATES:
         return {"monitor_state": "not-pending", "archivable_now": False}
     try:
@@ -1280,35 +1430,26 @@ def monitor_direct_primary_action(
     except Exception as exc:
         return {"monitor_state": "session-status-unavailable", "current_state": state, "archivable_now": False, "status_blocker": redact_sensitive_text(str(exc))[:240]}
     if not session:
-        session = {
-            "status": "blocked",
-            "status_label": "route-missing",
-            "title": str(action.get("routed_session_title") or ""),
-            "display_name": str(action.get("routed_session_title") or ""),
-        }
-        closeout_state = "blocked_report_sent"
-        message_id = send_plain_email(
-            sender_email,
-            app_pw,
-            sent_log_path,
-            ROBERT_EMAIL,
-            f"Frank blocker: {str(action.get('subject') or '')[:80]}",
-            compose_direct_primary_closeout(
-                action,
-                session,
-                True,
-                {"summary": "The visible routed worker session is no longer present in Workspaceboard. The request remains logged, but follow-through needs a new route only if the work is still needed."},
-            ),
-            f"{action.get('dedupe_key', 'frank-direct-primary')}-{closeout_state}",
-            dry_run,
-            from_name,
-        )
+        try:
+            repaired_route = create_visible_direct_primary_route(action)
+        except Exception as exc:
+            return {
+                "monitor_state": "route-missing-local-retry",
+                "current_state": state,
+                "session_status": "route-missing",
+                "archivable_now": False,
+                "status_blocker": redact_sensitive_text(str(exc))[:240],
+            }
         return {
-            "monitor_state": "session-not-found",
-            "current_state": closeout_state,
-            "session_status": "blocked",
-            "completion_message_id": message_id,
-            "archivable_now": True,
+            "monitor_state": "route-recreated",
+            "current_state": state,
+            "session_status": "working",
+            "archivable_now": False,
+            "routed_workspace": repaired_route.get("workspace") or "frank",
+            "routed_session_id": repaired_route.get("session_id") or "",
+            "routed_session_title": repaired_route.get("session_title") or "",
+            "prompt_delivery": repaired_route.get("prompt_delivery") if isinstance(repaired_route.get("prompt_delivery"), dict) else {},
+            "routed_at": time.time(),
         }
     session_state = str(session.get("status") or "").lower()
     if session_state not in {"finished", "blocked"}:
@@ -1323,6 +1464,7 @@ def monitor_direct_primary_action(
                 sent_log,
                 sender_email,
                 app_pw,
+                state_dir,
                 sent_log_path,
                 notify,
                 assistant_name,
@@ -1352,6 +1494,10 @@ def monitor_direct_primary_action(
         f"{action.get('dedupe_key', 'frank-direct-primary')}-{closeout_state}",
         dry_run,
         from_name,
+        trace_state_dir=state_dir,
+        trace_source_ref=str(action.get("source_message_id") or ""),
+        trace_task_packet=task_flow_packet_from_action(action),
+        html_body=compose_direct_primary_closeout_html(action, session, blocked, session_summary),
     )
     return {
         "monitor_state": closeout_state,
@@ -1368,6 +1514,7 @@ def route_direct_primary_message(
     sent_log: dict[str, dict],
     sender_email: str,
     app_pw: str,
+    state_dir: Path,
     sent_log_path: Path,
     notify: str,
     assistant_name: str,
@@ -1448,11 +1595,15 @@ def main() -> int:
         if args.notify.strip().lower() != args.primary_email.strip().lower():
             raise ValueError("Scheduled automation only notifies its configured primary recipient by default.")
         with cycle_lock(Path(args.cycle_lock_dir)):
+            state_dir = Path(args.automation_log).parent
             sender_email, app_pw = load_credentials(Path(args.creds_file))
             sent_log = load_sent_log(Path(args.sent_log))
             automation_log = load_automation_log(Path(args.automation_log))
             recipients = None
-            messages = fetch_unseen_messages(sender_email, app_pw, args.limit, set(automation_log.keys()))
+            seen_ids = set(automation_log.keys())
+            if mailbox_imap_helpers is not None:
+                seen_ids.update(mailbox_imap_helpers.collect_seen_source_ids_from_db("frank", 20000))
+            messages = fetch_unseen_messages(sender_email, app_pw, args.limit, seen_ids)
 
             actions: list[dict] = []
             escalations: list[dict] = []
@@ -1476,6 +1627,7 @@ def main() -> int:
                             sent_log,
                             sender_email,
                             app_pw,
+                            state_dir,
                             Path(args.sent_log),
                             args.notify,
                             args.assistant_name,
@@ -1549,6 +1701,7 @@ def main() -> int:
                     if not args.dry_run:
                         append_automation_log(Path(args.automation_log), action)
                     record_task_flow_event(action, "frank_previous_message_reconciled")
+                    record_frank_email_trace_event(state_dir, action)
                     actions.append(action)
                     continue
 
@@ -1564,6 +1717,8 @@ def main() -> int:
                     "classification": classification,
                     "subject": message.get("subject", ""),
                     "from": message.get("from", ""),
+                    "to": message.get("to", ""),
+                    "cc": message.get("cc", ""),
                     "date": message.get("date", ""),
                 }
                 action.update(metadata)
@@ -1586,6 +1741,9 @@ def main() -> int:
                             "frank-auto-receipt",
                             args.dry_run,
                             args.from_name,
+                            trace_state_dir=state_dir,
+                            trace_source_ref=source_message_id,
+                            trace_task_packet=task_flow_packet_from_action(action),
                         )
                         action["decision"] = "sent-clear"
                     else:
@@ -1599,6 +1757,7 @@ def main() -> int:
                         sent_log,
                         sender_email,
                         app_pw,
+                        state_dir,
                         Path(args.sent_log),
                         args.notify,
                         args.assistant_name,
@@ -1612,6 +1771,7 @@ def main() -> int:
                         sent_log,
                         sender_email,
                         app_pw,
+                        state_dir,
                         Path(args.sent_log),
                         args.notify,
                         args.assistant_name,
@@ -1643,6 +1803,9 @@ def main() -> int:
                             args.from_name,
                             action["cc"],
                             log_fields={"body_intent": "claude-papers-access-fixed-reply", "thread_task_id": CLAUDE_WORKSPACE_THREAD_TASK},
+                            trace_state_dir=state_dir,
+                            trace_source_ref=source_message_id,
+                            trace_task_packet=task_flow_packet_from_action(action),
                         )
                         remember_sent_row(
                             sent_log,
@@ -1672,6 +1835,7 @@ def main() -> int:
                             sent_log,
                             sender_email,
                             app_pw,
+                            state_dir,
                             Path(args.sent_log),
                             args.notify,
                             args.assistant_name,
@@ -1698,6 +1862,7 @@ def main() -> int:
                 action["machine"] = machine_label()
                 actions.append(action)
                 record_task_flow_event(action, "frank_message_action")
+                record_frank_email_trace_event(state_dir, action)
                 if not args.dry_run and action.get("decision") != "escalate":
                     append_automation_log(Path(args.automation_log), action)
 
@@ -1715,9 +1880,13 @@ def main() -> int:
                     args.auto_task_id,
                     args.dry_run,
                     args.from_name,
+                    trace_state_dir=state_dir,
+                    trace_source_ref=str(escalation.get("source_message_id") or ""),
+                    trace_task_packet=task_flow_packet_from_action(escalation),
                 )
                 escalation["escalation_message_id"] = escalation_message_id
                 record_task_flow_event(escalation, "frank_escalation_sent")
+                record_frank_email_trace_event(state_dir, escalation)
                 if not args.dry_run:
                     append_automation_log(Path(args.automation_log), escalation)
 

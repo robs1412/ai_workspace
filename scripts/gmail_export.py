@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/local/bin/python3.13
 """Read-only Gmail export CLI.
 
 Exports messages matching an explicit Gmail search query as `.eml` plus JSON

@@ -1,0 +1,129 @@
+{
+  "schema_version": "2026-05-18.claude-host-readonly.v1",
+  "snapshot_kind": "claude_host_read_only",
+  "captured_at": "2026-05-18T11:45:00-05:00",
+  "source_basis": {
+    "mode": "derived_example",
+    "local_evidence_refs": [
+      "HANDOFF.md:6707",
+      "project_hub/issues/2026-05-18-claude-host-parity-and-execution-plan.md"
+    ],
+    "notes": "Example artifact derived from repo-local non-secret durable state."
+  },
+  "host_identity": {
+    "login_user": "claude",
+    "hostname": "reatan",
+    "address": "192.168.55.205",
+    "label": "koval.lan",
+    "identity_confidence": "verified_live_readback"
+  },
+  "active_config_paths": {
+    "home_root": "/home/claude/.claude",
+    "files": [
+      {
+        "path": "/home/claude/.claude/settings.json",
+        "kind": "primary_settings",
+        "status": "observed"
+      },
+      {
+        "path": "/home/claude/.claude/settings.local.json",
+        "kind": "local_settings",
+        "status": "observed"
+      },
+      {
+        "path": "/home/claude/.claude/mcp-needs-auth-cache.json",
+        "kind": "auth_cache",
+        "status": "observed"
+      },
+      {
+        "path": "/home/claude/.claude/history.jsonl",
+        "kind": "history_log",
+        "status": "observed"
+      }
+    ],
+    "directories": [
+      {
+        "path": "/home/claude/.claude/tasks",
+        "kind": "task_history",
+        "status": "observed"
+      },
+      {
+        "path": "/home/claude/.claude/sessions",
+        "kind": "session_history",
+        "status": "observed"
+      },
+      {
+        "path": "/home/claude/.claude/session-env",
+        "kind": "session_env",
+        "status": "observed"
+      },
+      {
+        "path": "/home/claude/.claude/shell-snapshots",
+        "kind": "shell_snapshots",
+        "status": "observed"
+      },
+      {
+        "path": "/home/claude/.claude/telemetry",
+        "kind": "telemetry",
+        "status": "observed"
+      }
+    ]
+  },
+  "tool_directories": {
+    "root": "/srv/tools",
+    "entries": [
+      {
+        "name": "email",
+        "status": "observed"
+      },
+      {
+        "name": "gdrive",
+        "status": "observed"
+      },
+      {
+        "name": "mesh",
+        "status": "observed"
+      },
+      {
+        "name": "papers",
+        "status": "observed"
+      },
+      {
+        "name": "planner",
+        "status": "observed"
+      },
+      {
+        "name": "portal",
+        "status": "observed"
+      },
+      {
+        "name": "screenshot",
+        "status": "observed"
+      },
+      {
+        "name": "shopify",
+        "status": "observed"
+      },
+      {
+        "name": "timetracker",
+        "status": "observed"
+      }
+    ]
+  },
+  "auth_cache_categories": {
+    "path": "/home/claude/.claude/mcp-needs-auth-cache.json",
+    "categories": [
+      "gmail",
+      "google_calendar",
+      "google_drive"
+    ],
+    "values_exported": false,
+    "notes": "Category names only; no cache payloads or tokens."
+  },
+  "single_writer_contract": {
+    "shared_write_enabled": false,
+    "approved_use": "read_only_projection",
+    "writes_require_separate_review": true,
+    "notes": "This artifact does not authorize Codex or Claude to write shared records."
+  }
+}

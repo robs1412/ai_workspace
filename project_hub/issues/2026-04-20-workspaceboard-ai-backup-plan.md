@@ -25,7 +25,55 @@ Related local non-secret context found:
 - Current workspace/sync policy keeps `/Users/werkstatt/ai_workspace` and `/Users/werkstatt/<repo>` git-backed, while LaunchAgents, runtime copies, tmux/session state, logs, caches, secrets, `.env`, OAuth tokens, and mailbox credentials remain machine-local.
 - Existing `AI_BOX_SECURITY.md` documents `scripts/ai_box_backup.sh` as a metadata-only backup helper for LaunchAgent plists, shell mapping, git heads, and launchctl status; it does not copy private runtime directories, mailbox credentials, OAuth tokens, `.private`, `.env`, or vault contents.
 
-Local gap: no non-secret Claude reply record with concrete `.200` target path, cadence, encryption, retention, or restore-test details was found in local project/TODO/HANDOFF files during this pass. Treat Robert's current note as confirmation that Claude context exists, but require the category-level details below before implementation.
+Local gap: the backup-path blocker is now resolved by Claude's reply. The confirmed non-secret path is `/home/claude/backups/codex/`, and the reply also states that `daily.sh` was updated so Codex backups are included in the daily `.205 -> .200` push. Remaining implementation details are still the inventory/dry-run/encryption/restore-test pieces below, but the path itself is no longer missing.
+
+## Ezra Coordination Brief - 2026-05-22
+
+Plain-English issue:
+
+- The old blocker was whether there was a confirmed Claude-side `.205` destination for Codex backups.
+- Current repo-local non-secret records resolve that path question. The active Codex push route now documented in this workspace is `agent-codex@192.168.55.205:/home/agent-codex/backups/`, and successful remote push/readback proof is already recorded below.
+- The remaining open questions are approval and policy questions, not path-discovery questions.
+
+Confirmed facts from current durable local records:
+
+- Repo-local backup helper: `/Users/werkstatt/ai_workspace/scripts/ai_box_backup.sh`
+- Local backup root: `/Users/werkstatt/ai_box_backups/`
+- Current approved remote route recorded in this note: `agent-codex@192.168.55.205:/home/agent-codex/backups/`
+- Successful remote readback recorded in this note: `latest -> /home/agent-codex/backups/20260521-210115`
+- OPS recurring backup lane exists as task `369899`
+
+What this proves:
+
+- The Codex backup destination path is no longer missing from local durable records.
+- The lane has documented proof of successful push/readback through the current `agent-codex` route.
+
+What this does not prove:
+
+- It does not approve broader protected-side backup categories.
+- It does not approve retention, encryption/storage policy, restore-test scope, or any copy of secrets/private payloads.
+- It does not by itself settle whether a separate `.200` external-drive step is still required.
+
+Ezra framing:
+
+- This is now a governance/approval packet, not a technical "where does it go" blocker.
+- Ezra should not approve regulated or protected-side action here. The correct next step is an owner decision on scope and policy.
+
+Recommended owner decision packet:
+
+- Robert and Security Guard should confirm:
+  - which categories beyond the current metadata-only lane are approved for backup
+  - the retention window
+  - the encryption/storage policy
+  - the restore-test boundary
+  - whether any `.200` external-drive step remains required now that the `.205` `agent-codex` route is live
+
+Do not claim the following until approved explicitly:
+
+- that the full backup policy is complete
+- that secret-bearing runtime categories are approved for copying
+- that `.200` handling is finalized
+- that restore behavior beyond current documented proof has been authorized
 
 ## Backup Scope Inventory
 
@@ -91,7 +139,25 @@ No target is approved by this plan. Candidate targets:
 - External/offsite target: Claude-referenced `.200` external-drive path, if Robert/Claude/Dmytro approve the exact device/path, mount/access method, encryption policy, and retention.
 - Git remotes: only for safe source/planning repos, not runtime/private artifacts.
 
-The `.200` external drive is a candidate only. Do not access `.200`, mount drives, create folders, rsync, tar, copy, or test restore against it until the exact approved target and method are recorded.
+The `.200` external drive remains a candidate until Robert approves the exact device/path and method for the local backup implementation. The older Claude-home path `/home/claude/backups/codex/` is now superseded by the dedicated agent route `agent-codex@192.168.55.205:/home/agent-codex/backups/` for Codex pushes.
+
+Implementation note: `/Users/werkstatt/ai_workspace/scripts/ai_box_backup.sh` now attempts the `.205` push automatically after creating the local snapshot, using the approved `agent-codex@192.168.55.205:/home/agent-codex/backups/<timestamp>` route by default over SFTP with key `/Users/admin/.ssh/id_ed25519_github_modules`, unless the remote push is disabled or overridden by environment variables.
+
+Verification note: `bash -n` passed, and a local no-push run with `AI_BOX_BACKUP_PUSH_REMOTE=0` created `/Users/werkstatt/ai_box_backups/20260520-095112` successfully.
+
+Execution notes:
+- Historical route: a real push using the old `claude@koval.lan` askpass route succeeded and created `/Users/werkstatt/ai_box_backups/20260520-100634` with `remote_push_status=success`.
+- Current route: two end-to-end pushes through the new `agent-codex` SFTP route succeeded and created `/Users/werkstatt/ai_box_backups/20260521-210106` and `/Users/werkstatt/ai_box_backups/20260521-210115`, both with `remote_push_status=success`. Remote SFTP readback confirmed both timestamped directories under `/home/agent-codex/backups/` and `latest -> /home/agent-codex/backups/20260521-210115`.
+
+Helper hardening note: while moving to the SFTP-only route, `scripts/ai_box_backup.sh` was fixed so the remote copy receives current `MANIFEST.txt` and `SHA256SUMS.txt` after the final remote status is known, instead of carrying stale or missing proof files.
+
+OPS scheduling note: a real daily task now exists for this lane as task `369899` (`AI box backup push to Claude`), and the repeating-task registry marks it as daily at `7:00 AM America/Chicago` so Codex can pick it up as a scheduled lane instead of a one-off helper run.
+
+2026-05-21 recurrence hardening note: the repeat entry now points at `scripts/run_ai_box_backup_daily_task.py` instead of calling `ai_box_backup.sh` directly. The wrapper runs the backup, leaves the due date in place on failure, triggers the Codex warning-email path on remote-push failure, and on success advances OPS task `369899` to the next due date from the stored recurrence. The live OPS task row was also corrected from non-recurring (`recurringtype=""`) to `recurringtype="Daily"` so the DB-backed task matches the repeating-task registry.
+
+2026-05-21 proof notes:
+- live wrapper success run created `/Users/werkstatt/ai_box_backups/20260521-210952`, returned `remote_push_status=success`, and moved task `369899` from `2026-05-21` to `2026-05-22` in OPS readback.
+- safe warning-path simulation against `192.0.2.1` created `/Users/werkstatt/ai_box_backups/20260521-211003`, returned `remote_push_status=failed`, and exercised the warning branch with `warning_email_status=dry_run`.
 
 ## Retention And Versioning
 
@@ -127,6 +193,19 @@ Restore test proposal:
 4. Verify Workspaceboard session export can be parsed without starting runtime services.
 5. Verify Frank/Avignon non-secret state can be read as logs/manifests without mailbox access.
 6. Do not load LaunchAgents, start services, send mail, mutate mailbox state, or overwrite live runtime during restore tests unless separately approved.
+
+## 2026-05-19 Readback Confirmation
+
+- Confirmed local repo-owned backup helper path remains `/Users/werkstatt/ai_workspace/scripts/ai_box_backup.sh`.
+- Confirmed local backup destination root remains `/Users/werkstatt/ai_box_backups/`, with `latest` currently resolving to `/Users/werkstatt/ai_box_backups/20260415-142948`.
+- Confirmed the latest local backup is metadata-only as designed and currently contains:
+  - `MANIFEST.txt`
+  - `SHA256SUMS.txt`
+  - git head/status snapshots for `ai_workspace` and `workspaceboard`
+  - copied LaunchAgent plist metadata
+  - `launchctl` status snapshots
+- Confirmed the local non-secret docs still do not record an approved `.205` or `.200` backup destination path, retention policy, or restore-test contract. The `.205`/`.200` side remains approval-gated and documentation-incomplete rather than implementation-ready.
+- Result: the confirmed backup path in current repo-local state is the local AI box metadata backup root under `/Users/werkstatt/ai_box_backups/`; any claimed Claude-side `.205` backup path would still be unverified from approved non-secret local records.
 
 ## Ownership
 

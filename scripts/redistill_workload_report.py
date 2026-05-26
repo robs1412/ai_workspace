@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/local/bin/python3.13
 """Generate email workload planning reports from the Re-Distill export."""
 
 from __future__ import annotations

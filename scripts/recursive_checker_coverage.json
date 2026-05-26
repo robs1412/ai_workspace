@@ -1,0 +1,67 @@
+{
+  "version": 1,
+  "checkers": [
+    {
+      "name": "service_parity",
+      "script": "/Users/werkstatt/ai_workspace/scripts/service_parity_check.py",
+      "registry": "/Users/werkstatt/ai_workspace/scripts/service_parity_surfaces.json",
+      "mode": "operational-read-only",
+      "covers": [
+        "repo source vs installed runtime interpreter parity",
+        "selected deployment-state definitions for local AI service surfaces",
+        "installed runtime Python and shell wrapper interpreter drift",
+        "KOVAL launchd plist interpreter drift"
+      ],
+      "out_of_scope": [
+        "Task Flow queue truth or closeout proof contradictions",
+        "mailbox body correctness",
+        "OPS or Portal business-record correctness",
+        "runtime behavior beyond the named interpreter and wrapper surfaces"
+      ],
+      "verification_commands": [
+        "./scripts/service_parity_check.py --mode all --fail-on-drift",
+        "./scripts/recursive_registry_lint.py --json"
+      ]
+    },
+    {
+      "name": "task_flow_truth_drift",
+      "script": "/Users/werkstatt/ai_workspace/scripts/task_flow_truth_drift_check.py",
+      "registry": "/Users/werkstatt/ai_workspace/scripts/task_flow_truth_surfaces.json",
+      "mode": "operational-read-only",
+      "covers": [
+        "Workspaceboard managed-session presence for Task Flow-linked work",
+        "Task Flow row contradictions against board session state",
+        "proof-report closeout and sent-proof contradictions",
+        "scheduler violation and route-candidate presence"
+      ],
+      "out_of_scope": [
+        "direct repair of live Task Flow rows",
+        "deployment-state or interpreter parity",
+        "business correctness of inbox routing decisions",
+        "surfaces not named in the registry commands and rules"
+      ],
+      "verification_commands": [
+        "./scripts/task_flow_truth_drift_check.py --fail-on-drift || true",
+        "./scripts/recursive_registry_lint.py --json"
+      ]
+    },
+    {
+      "name": "recursive_registry_lint",
+      "script": "/Users/werkstatt/ai_workspace/scripts/recursive_registry_lint.py",
+      "registry": "multiple",
+      "mode": "non-operational-lint",
+      "covers": [
+        "structural validity of recursive checker registries",
+        "shared registry-validation seam health"
+      ],
+      "out_of_scope": [
+        "live board, Task Flow, runtime, or deployment readback",
+        "drift detection itself",
+        "operational fix behavior"
+      ],
+      "verification_commands": [
+        "./scripts/recursive_registry_lint.py --json"
+      ]
+    }
+  ]
+}

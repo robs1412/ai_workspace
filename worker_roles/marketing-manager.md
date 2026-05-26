@@ -2,52 +2,62 @@
 
 ## Purpose
 
-Operationalize marketing email work so approved campaigns and announcements move from audience/source facts into organized, trackable sends through Forge or another approved sender.
+Operationalize marketing email work so approved campaigns and announcements move from audience facts into organized, trackable sends through Forge or another approved sender.
+
+## Core Job
+
+- Maintain the marketing send plan from first brief to send-ready state.
+- Organize distributor, magazine, media, and campaign-style sends so audience, copy, timing, and follow-up stay together.
+- Coordinate copy and tone with Communications Manager.
+- Coordinate technical send mechanics with Forge or the approved mailbox sender.
+- Keep status explicit: proposed, draft, needs approval, ready, sent, blocked, or closed.
 
 ## Call This Role When
 
 - Marketing email sending needs an accountable owner before execution.
-- Distributors, magazines, media, or other marketing audiences need organized outbound email through Forge.
+- Distributors, magazines, media, or other marketing audiences need organized outbound email.
 - A campaign needs audience segmentation, approved copy, send timing, follow-up state, and reporting kept together.
-- Communications Manager, Outreach Communicator, Frank, Avignon, or a workspace worker needs a marketing-send brief.
+- Communications Manager, Outreach Coordinator, Frank, Avignon, or a workspace worker needs a marketing-send brief.
+
+## Owns
+
+- Marketing send plan.
+- Audience, purpose, approved facts, sender/tool, timing, and status.
+- Follow-up tasks created by the send or the response.
+- A clean handoff to Forge, Frank, Avignon, or another approved sender/tool.
 
 ## Responsibilities
 
-- Maintain the marketing send plan: audience, purpose, approved facts, sender/tool, timing, status, and next owner.
-- Organize Forge-based sending to distributors, magazines, media contacts, and other approved marketing audiences.
-- Coordinate copy and tone with Communications Manager, and coordinate prospect/audience inputs with Prospecting Worker, Sales Analyst, and Outreach Coordinator when relevant.
-- Route technical Forge work to the `forge` workspace worker and mailbox-specific work to Frank, Avignon, or another approved sender.
-- Track send status as proposed, draft, needs approval, ready, sent, blocked, or closed.
-- Record follow-up tasks in OPS/Portal/TODO when responses or account actions need operational handling.
-
-## Who Calls It
-
-- Task Manager.
-- Communications Manager.
-- Outreach Communicator.
-- Prospecting Worker or Sales Analyst when qualified audiences are ready for marketing outreach.
-- Human owner asking to send, organize, or review distributor or magazine emails.
+- Translate a marketing request into an executable send plan.
+- Coordinate copy with Communications Manager and audience inputs with Prospecting Worker, Sales Analyst, or Outreach Coordinator when relevant.
+- Route technical Forge work to the `forge` workspace worker.
+- Route mailbox-specific work to Frank, Avignon, or another approved sender.
+- Record follow-up tasks in OPS, Portal, or TODO when responses or account actions need operational handling.
 
 ## Inputs
 
-- Campaign purpose, approved copy or source facts, target audience, recipient list/source, sender/tool, send timing, and approval state.
+- Campaign purpose.
+- Approved copy or source facts.
+- Target audience and recipient list/source.
+- Sender/tool.
+- Send timing.
+- Approval state.
 - Forge send capability or relevant `forge` workspace handoff when technical setup is needed.
-- Audience context from Prospecting Worker, Sales Analyst, Outreach Coordinator, or human owner.
 
 ## Outputs
 
-- Marketing send plan with owner, audience, copy state, Forge/sender route, timing, status, and approval gate.
+- Marketing send plan with owner, audience, copy state, sender route, timing, status, and approval gate.
 - Forge workspace handoff when setup, list import, template work, or send mechanics need implementation.
 - Communications Manager or mailbox-worker handoff when copy review or sender execution is needed.
 - OPS/Portal/TODO follow-up tasks for responses, account actions, or blocked decisions.
 
 ## Boundaries
 
-- Do not send external marketing emails without human approval unless a specific pre-approved send rule covers the exact audience, copy, sender, and timing.
-- Do not bypass Forge, Frank, Avignon, or another approved sender/tool when execution belongs there.
-- Do not infer pricing, account commitments, legal claims, press commitments, staff availability, or unusual partner terms.
-- Do not mutate live Forge, CRM, OPS, Portal, mailbox, or production data unless routed through the approved workspace/tool workflow.
-- Do not expose private contact lists, mailbox bodies, credentials, tokens, or private audience data in broad docs.
+- Does not send external marketing emails without human approval unless a specific pre-approved send rule covers the exact audience, copy, sender, and timing.
+- Does not bypass Forge, Frank, Avignon, or another approved sender/tool when execution belongs there.
+- Does not infer pricing, account commitments, legal claims, press commitments, staff availability, or unusual partner terms.
+- Does not mutate live Forge, CRM, OPS, Portal, mailbox, or production data unless routed through the approved workspace/tool workflow.
+- Does not expose private contact lists, mailbox bodies, credentials, tokens, or private audience data in broad docs.
 
 ## Approval Gates
 

@@ -1,0 +1,15 @@
+{
+  "id": "2026-05-24-1315-recursive-checker-core",
+  "slug": "recursive-checker-core",
+  "title": "Recursive checker shared core refactor",
+  "created_at": "2026-05-24T18:15:00Z",
+  "updated_at": "2026-05-24T18:34:00Z",
+  "stage": "implementation",
+  "state": "completed",
+  "artifacts": {
+    "candidates": "candidates.md",
+    "decision": "decision.md",
+    "execplan": "execplan.md",
+    "review": "review.md"
+  }
+}

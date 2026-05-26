@@ -61,6 +61,8 @@ I routed it into visible work session [session id] / [session title]. Current st
 Next: I will follow the worker to completion or a real blocker, then send the closeout before the source message is filed to Handled.
 ```
 
+Do not send vague reassurance-only receipts such as `I have this`, `I am taking care of it`, `no need to chase the machinery`, or similar process-chasing language. If there is not yet a real business update, routed-work acknowledgement, completion, or blocker to report, send nothing.
+
 Worker-specific persona and owner routing still apply:
 
 - Frank reports to Robert by default.

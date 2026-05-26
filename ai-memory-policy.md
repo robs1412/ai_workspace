@@ -1,5 +1,5 @@
 # AI Memory Policy
-Last Updated: 2026-04-07 09:37:08 CDT (Machine: Macmini.lan)
+Last Updated: 2026-05-21 14:58 CDT (Machine: Macmini.lan)
 
 ## Recommended Use
 
@@ -42,6 +42,16 @@ Use for:
 Preferred when:
 - the goal is passive session memory, not project archive mining
 - setup speed matters more than rich taxonomy or benchmarked retrieval
+- the task is a repeated operational recipe that should point at a durable runbook instead of being rediscovered
+
+Recommended local runbook for repeated operational recipes:
+- `project_hub/artifacts/repeating-access-guide-2026-05-20.md`
+
+Use this runbook when a task repeats across:
+- Google Drive / Docs access
+- Portal entity creation or repair
+- sample-request workflows
+- SSH to the approved Claude backup lane
 
 ## Decision Rule
 
@@ -49,6 +59,21 @@ Choose:
 - `MemPalace` for project-specific local recall
 - `Mesh` for team/shared memory
 - `agent-memory` for passive solo coding memory
+
+## AI Manager Rule Set
+
+Use this when the task is about memory, durability, or repeatable agent behavior:
+
+1. Do the work directly when it is one-off, context-specific, and not something a future session needs to rediscover.
+2. Promote a repeated procedure to a skill when it has been re-instructed or run at least twice across sessions, and the steps must stay consistent.
+3. Write an assessment to Papers when it is a non-trivial conclusion, a future session would not reasonably rediscover it, and it affects multiple sessions or agents. Store the decision, rationale, confirming person, and date. Do not store the procedural steps there.
+4. Mirror AI Manager mode prompts, corrections, and confirmed decisions through the AI Manager control-lane recorder hook, not chat history alone. The approved path is the AI Manager mode hook into `scripts/ai_manager_chat_entry_adapter.php` / `ai_manager_input_recorder.php`, which keeps the DB trail and daily-input log in sync.
+
+Practical boundary:
+- use a skill for repeatable how-to behavior
+- use the recorder trail for prompt and decision durability
+- use Papers for durable cross-session assessments and policy rulings
+- keep the hook in AI Manager mode configuration, not as a global hook
 
 ## Deployment Rule
 

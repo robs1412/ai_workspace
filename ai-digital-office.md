@@ -148,7 +148,7 @@ Observed structure:
 - User: `admin`
 - Working directory: `/home/admin`
 - `/srv/CLAUDE.md` is readable and is the current Claude-side operating instruction source reviewed structurally.
-- `/home/claude/.claude/.mcp.json` was not readable by `admin` in this pass.
+- The protected-side Claude config surface was not fully captured in this pass; later verified `.205` reads established the active repo-relevant files as `/home/claude/.claude/settings.json`, `/home/claude/.claude/settings.local.json`, and `/home/claude/.claude/mcp-needs-auth-cache.json` rather than `/home/claude/.claude/.mcp.json`.
 - `/srv` contains relevant AI/service directories including `agents`, `papers`, `tools/papers`, `scripts/mesh-memory`, `mi/pages/papers.php`, and `assets/papers.css`.
 - Papers appears to be served as a PHP/Apache service; `/srv/CLAUDE.md` identifies the service as `papers (php:8.2-apache)`.
 - Claude-side instruction guardrails include using the Papers API/tools instead of direct edits under `/srv/papers/files`, using Planner instead of manual task queue edits, no unapproved email sends, and no impersonation.
@@ -199,7 +199,7 @@ Deployment/security notes from local docs:
    - Do not start services or mutate runtime state unless routed as a separate implementation task.
 
 5. Investigate papers / `.205` only after explicit approval.
-   - Approval-gated targets: `192.168.55.205`, `/srv/CLAUDE.md`, `/home/claude/.claude/.mcp.json`, `papers.koval.lan`, and any service/database configs.
+   - Approval-gated targets: `192.168.55.205`, `/srv/CLAUDE.md`, `/home/claude/.claude/settings.json`, `/home/claude/.claude/settings.local.json`, `/home/claude/.claude/mcp-needs-auth-cache.json`, `papers.koval.lan`, and any service/database configs.
    - First approved pass should be read-only and should capture structure before content: service root, storage backend type, schema/migration files, API route names, counts/sizes, and status semantics.
    - Do not print or store secrets.
 

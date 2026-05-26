@@ -132,9 +132,14 @@ function task_flow_record(PDO $pdo, array $payload): void
     if ($dedupeKey === '') {
         throw new InvalidArgumentException('packet requires dedupe_key.');
     }
+    if (in_array(task_flow_string($packet, 'status') ?: 'captured', ['completed', 'handled', 'reported', 'filed', 'closed', 'closed_with_proof', 'no_action_closed'], true)
+        && trim(task_flow_string($packet, 'verification_readback')) === ''
+        && task_flow_has_sent_proof($packet)) {
+        $packet['verification_readback'] = 'Sent proof recorded via Message-ID in sent-log.';
+    }
     $missing = task_flow_packet_missing_fields($packet);
     $requestedStatus = task_flow_string($packet, 'status') ?: 'captured';
-    if (in_array($requestedStatus, ['completed', 'handled', 'reported', 'filed'], true) && $missing !== []) {
+    if (in_array($requestedStatus, ['completed', 'handled', 'reported', 'filed', 'no_action_closed'], true) && $missing !== []) {
         $packet['status'] = 'blocked';
         $packet['verification_readback'] = task_flow_string($packet, 'verification_readback') ?: ('task_flow_closeout_guard_missing:' . implode(',', $missing));
         $packet['next_update'] = task_flow_string($packet, 'next_update') ?: 'Complete required task-flow closeout fields before filing/reporting complete.';
@@ -159,7 +164,7 @@ function task_flow_record(PDO $pdo, array $payload): void
         throw new RuntimeException('Failed to encode task-flow JSON.');
     }
 
-    $preserveExistingPacket = task_flow_should_preserve_existing_packet($pdo, $dedupeKey, $packet);
+    $preserveExistingPacket = task_flow_should_preserve_existing_packet($pdo, $dedupeKey, $packet, $event);
     if ($preserveExistingPacket) {
         $payload['task_flow_guard'] = [
             ...($payload['task_flow_guard'] ?? []),
@@ -247,17 +252,20 @@ function task_flow_record(PDO $pdo, array $payload): void
     ]);
 }
 
-function task_flow_should_preserve_existing_packet(PDO $pdo, string $dedupeKey, array $incomingPacket): bool
+function task_flow_should_preserve_existing_packet(PDO $pdo, string $dedupeKey, array $incomingPacket, string $event = ''): bool
 {
     $incomingStatus = strtolower(task_flow_string($incomingPacket, 'status') ?: 'captured');
-    if (!in_array($incomingStatus, ['captured', 'captured_backlog', 'classified', 'routed', 'working'], true)) {
+    $event = strtolower(trim($event));
+    if (!in_array($incomingStatus, ['captured', 'captured_backlog', 'classified', 'routed', 'working', 'blocked'], true)) {
         return false;
     }
     if (task_flow_string($incomingPacket, 'completion_or_blocker_email') !== '') {
         return false;
     }
+    $incomingSession = trim(task_flow_string($incomingPacket, 'workspaceboard_session'));
+    $incomingVerification = strtolower(task_flow_string($incomingPacket, 'verification_readback'));
     $stmt = $pdo->prepare(
-        'SELECT status, completion_or_blocker_email, verification_readback, next_update
+        'SELECT status, clarification_email, completion_or_blocker_email, verification_readback, next_update, workspaceboard_session
          FROM ' . TASK_FLOW_DB . '.' . TASK_FLOW_PACKETS . '
          WHERE dedupe_key = :dedupe_key
          LIMIT 1'
@@ -269,14 +277,48 @@ function task_flow_should_preserve_existing_packet(PDO $pdo, string $dedupeKey, 
     }
     $existingStatus = strtolower(trim((string) ($existing['status'] ?? '')));
     $existingProof = trim((string) ($existing['completion_or_blocker_email'] ?? ''));
+    $existingClarification = trim((string) ($existing['clarification_email'] ?? ''));
+    $existingSession = trim((string) ($existing['workspaceboard_session'] ?? ''));
     $existingText = strtolower(implode("\n", [
         (string) ($existing['verification_readback'] ?? ''),
         (string) ($existing['next_update'] ?? ''),
     ]));
+    $incomingOwnerLane = strtolower(task_flow_string($incomingPacket, 'owner_lane'));
+    $existingHasSessionRoute = $existingSession !== '';
+    $incomingDropsSessionRoute = $incomingSession === '';
+    $incomingIsDueRunnerRoute = str_contains($incomingVerification, 'task_flow_due_runner_routed_visible_worker');
+    $existingHasExactBlocker = str_contains($existingText, 'exact blocker') || str_contains($existingText, 'missing_fact');
+    $incomingLooksWeakerBlocked = $incomingStatus === 'blocked'
+        && $incomingDropsSessionRoute
+        && $incomingVerification !== ''
+        && !str_contains($incomingVerification, 'exact blocker')
+        && !str_contains($incomingVerification, 'owner-visible')
+        && !str_contains($incomingVerification, 'message-id');
+    $manualClassifierRepair = in_array($event, ['manual_classifier_repair', 'email_classifier_repair'], true)
+        && $incomingOwnerLane === 'email-coordinator'
+        && $incomingStatus === 'classified';
+
+    if ($manualClassifierRepair) {
+        return false;
+    }
+
+    if ($existingHasSessionRoute && $incomingDropsSessionRoute && in_array($incomingStatus, ['captured', 'captured_backlog', 'classified', 'routed', 'blocked'], true)) {
+        return true;
+    }
+    if ($incomingIsDueRunnerRoute && ($existingClarification !== '' || $existingProof !== '')
+        && in_array($existingStatus, ['waiting', 'clarification_sent', 'reported', 'completed', 'handled', 'filed'], true)) {
+        return true;
+    }
     if (in_array($existingStatus, ['completed', 'handled', 'reported', 'filed'], true) && ($existingProof !== '' || str_contains($existingText, 'message-id'))) {
         return true;
     }
-    if ($existingStatus === 'blocked' && ($existingProof !== '' || str_contains($existingText, 'missing_fact') || str_contains($existingText, 'exact blocker'))) {
+    if (in_array($existingStatus, ['waiting', 'clarification_sent'], true) && $existingClarification !== '') {
+        return true;
+    }
+    if ($existingStatus === 'blocked' && ($existingProof !== '' || $existingHasExactBlocker)) {
+        return true;
+    }
+    if ($incomingLooksWeakerBlocked && ($existingProof !== '' || $existingHasExactBlocker || $existingHasSessionRoute)) {
         return true;
     }
     if (str_contains($existingText, 'logged-no-action') || str_contains($existingText, 'no-action') || str_contains($existingText, 'closed with proof')) {
@@ -288,6 +330,7 @@ function task_flow_should_preserve_existing_packet(PDO $pdo, string $dedupeKey, 
 function task_flow_packet_missing_fields(array $row): array
 {
     $status = task_flow_normalized_status($row);
+    $effectiveStatus = task_flow_effective_status($row);
     $missing = task_flow_finish_contract_missing_fields($row);
     foreach (['source_ref', 'intake_channel', 'owner_lane', 'responsible_worker_or_persona'] as $field) {
         if (trim((string) ($row[$field] ?? '')) === '') {
@@ -296,6 +339,7 @@ function task_flow_packet_missing_fields(array $row): array
     }
 
     if (in_array($status, ['task_created', 'scheduled', 'working', 'waiting', 'completed', 'handled', 'reported', 'filed', 'closed', 'closed_with_proof'], true)
+        && task_flow_status_requires_ops_task($row)
         && trim((string) ($row['ops_portal_or_domain_task'] ?? '')) === '') {
         $missing[] = 'ops_portal_or_domain_task';
     }
@@ -313,12 +357,19 @@ function task_flow_packet_missing_fields(array $row): array
         $missing[] = 'clarification_or_blocker_email';
     }
     if (in_array($status, ['completed', 'handled', 'reported', 'filed', 'closed', 'closed_with_proof', 'review_ready'], true)
+        && !task_flow_has_sent_proof($row)
         && trim((string) ($row['verification_readback'] ?? '')) === '') {
         $missing[] = 'verification_readback';
     }
     if (in_array($status, ['completed', 'handled', 'reported', 'filed', 'closed', 'closed_with_proof', 'review_ready'], true)
         && !task_flow_closeout_has_proof_marker($row)) {
         $missing[] = 'closeout_proof_marker';
+    }
+    if (($status === 'no_action_closed' || $effectiveStatus === 'no_action_closed')
+        && !task_flow_has_sent_proof($row)
+        && trim((string) ($row['verification_readback'] ?? '')) === ''
+        && trim((string) ($row['next_update'] ?? '')) === '') {
+        $missing[] = 'verification_readback';
     }
     if (in_array($status, ['completed', 'handled', 'reported', 'filed', 'closed', 'closed_with_proof'], true)
         && task_flow_closeout_email_still_in_inbox($row)) {
@@ -339,6 +390,19 @@ function task_flow_packet_missing_fields(array $row): array
         $missing[] = 'owner_visible_completion_or_blocker_missing_after_handled_filing';
     }
     return array_values(array_unique($missing));
+}
+
+function task_flow_status_requires_ops_task(array $row): bool
+{
+    $packet = task_flow_packet_json($row);
+    $intake = strtolower(trim((string) ($row['intake_channel'] ?? $packet['intake_channel'] ?? '')));
+    if (str_starts_with($intake, 'approved-send:')) {
+        return false;
+    }
+    if (task_flow_has_sent_proof($row) && str_contains($intake, 'scheduled-action:')) {
+        return false;
+    }
+    return true;
 }
 
 function task_flow_finish_contract_missing_fields(array $row): array
@@ -483,6 +547,9 @@ function task_flow_normalized_status(array $row): string
 {
     $status = strtolower(trim((string) ($row['status'] ?? '')));
     $status = str_replace('-', '_', $status);
+    if ($status === 'routed') {
+        return trim((string) ($row['workspaceboard_session'] ?? '')) !== '' ? 'working' : 'classified';
+    }
     return match ($status) {
         'complete', 'done' => 'completed',
         'reviewready' => 'review_ready',
@@ -743,8 +810,13 @@ function task_flow_recurrence_data(array $row): array
 
 function task_flow_closeout_has_proof_marker(array $row): bool
 {
-    if (task_flow_is_no_action_closed($row)) {
-        return true;
+    if (task_flow_is_no_action_closed($row)
+        || task_flow_normalized_status($row) === 'no_action_closed'
+        || task_flow_effective_status($row) === 'no_action_closed') {
+        return task_flow_has_result_readback($row)
+            || task_flow_has_sent_proof($row)
+            || trim((string) ($row['verification_readback'] ?? '')) !== ''
+            || trim((string) ($row['next_update'] ?? '')) !== '';
     }
     if (task_flow_normalized_status($row) === 'review_ready') {
         return false;
@@ -756,7 +828,7 @@ function task_flow_closeout_has_proof_marker(array $row): bool
     if (task_flow_has_sent_proof($row)) {
         return true;
     }
-    foreach (['proof', 'proof_marker', 'message_id', 'no_action_reason'] as $field) {
+    foreach (['proof', 'proof_marker', 'closeout_proof_marker', 'message_id', 'no_action_reason'] as $field) {
         if (task_flow_non_pending_value((string) ($packet[$field] ?? '')) !== '') {
             return true;
         }
@@ -783,6 +855,7 @@ function task_flow_closeout_has_proof_marker(array $row): bool
 function task_flow_has_sent_proof(array $row): bool
 {
     $packet = task_flow_packet_json($row);
+    $intake = strtolower(trim((string) ($row['intake_channel'] ?? $packet['intake_channel'] ?? '')));
     $text = strtolower(implode(' ', [
         (string) ($row['completion_or_blocker_email'] ?? ''),
         (string) ($row['verification_readback'] ?? ''),
@@ -798,6 +871,9 @@ function task_flow_has_sent_proof(array $row): bool
         || str_contains($text, 'sent-log');
     if (!$hasMessageId) {
         return false;
+    }
+    if (str_starts_with($intake, 'approved-send:')) {
+        return true;
     }
     return str_contains($text, 'sent')
         || str_contains($text, 'emailed')
@@ -860,6 +936,32 @@ function task_flow_effective_status(array $row): string
     $status = task_flow_normalized_status($row);
     if (task_flow_is_no_action_closed($row)) {
         return 'no_action_closed';
+    }
+    $proofText = strtolower(trim(implode(' ', [
+        (string) ($row['completion_or_blocker_email'] ?? ''),
+        (string) ($row['verification_readback'] ?? ''),
+        (string) ($row['next_update'] ?? ''),
+    ])));
+    foreach ([
+        'logged-no-action',
+        'cc-fyi-no-action',
+        'no-action',
+        'no_action_logged',
+        'already-routed',
+        'already-handled',
+        'duplicate',
+        'filed-previously-logged-to-handled',
+        'completed_report_sent',
+        'filed-to-handled-after-durable-route',
+        'filed out of inbox to handled',
+    ] as $marker) {
+        if ($marker !== '' && str_contains($proofText, $marker)) {
+            return 'no_action_closed';
+        }
+    }
+    $hasMessageId = preg_match('/<[^<>\s]+@[^<>\s]+>/', $proofText) === 1 || str_contains($proofText, 'message-id');
+    if ($status === 'blocked' && (str_contains($proofText, 'blocked_report_sent') || ($hasMessageId && str_contains($proofText, 'waiting for')))) {
+        return 'waiting';
     }
     if ($status === 'blocked' && task_flow_has_sent_proof($row)) {
         return 'reported';
@@ -933,7 +1035,7 @@ function task_flow_closeout_email_still_in_inbox(array $row): bool
 
 function task_flow_routed_past_next_check(array $row): bool
 {
-    if (trim((string) ($row['status'] ?? '')) !== 'routed') {
+    if (task_flow_normalized_status($row) !== 'routed') {
         return false;
     }
     $packet = task_flow_packet_json($row);
@@ -1006,27 +1108,67 @@ function task_flow_vague_robert_decision(array $row): bool
         && !str_contains($decisionText, 'no');
 }
 
-function task_flow_is_no_action_closed(array $row): bool
+function task_flow_blocked_resolution_state(array $row): string
 {
-    $haystack = strtolower(
-        trim((string) ($row['verification_readback'] ?? '')) . ' ' .
-        trim((string) ($row['next_update'] ?? '')) . ' ' .
-        trim((string) ($row['approval_gates'] ?? ''))
-    );
-    foreach ([
+    if (task_flow_normalized_status($row) !== 'blocked') {
+        return '';
+    }
+
+    $packet = task_flow_packet_json($row);
+    $text = strtolower(implode(' ', array_filter([
+        (string) ($row['approval_gates'] ?? ''),
+        (string) ($row['verification_readback'] ?? ''),
+        (string) ($row['next_update'] ?? ''),
+        (string) ($row['clarification_email'] ?? ''),
+        (string) ($row['completion_or_blocker_email'] ?? ''),
+        (string) ($packet['approval_gates'] ?? ''),
+        (string) ($packet['verification_readback'] ?? ''),
+        (string) ($packet['next_update'] ?? ''),
+        (string) ($packet['clarification_email'] ?? ''),
+        (string) ($packet['completion_or_blocker_email'] ?? ''),
+        (string) ($packet['result_email_required'] ?? ''),
+        (string) ($packet['owner_question_required'] ?? ''),
+        (string) ($packet['output_channel'] ?? ''),
+        (string) ($packet['blocker_text'] ?? ''),
+        (string) ($packet['owner_question'] ?? ''),
+    ])));
+
+    $hasBlockerEmailSignal = trim((string) ($row['clarification_email'] ?? '')) !== ''
+        || trim((string) ($row['completion_or_blocker_email'] ?? '')) !== ''
+        || trim((string) ($packet['clarification_email'] ?? '')) !== ''
+        || trim((string) ($packet['completion_or_blocker_email'] ?? '')) !== ''
+        || str_contains($text, 'result_email_required true')
+        || str_contains($text, 'owner_question_required required')
+        || str_contains($text, 'output_channel email')
+        || str_contains($text, 'blocker_text')
+        || str_contains($text, 'owner_question');
+
+    if ($hasBlockerEmailSignal) {
+        return 'blocker_email_required';
+    }
+
+    $noActionMarkers = [
         'logged-no-action',
-        'filed-previously-logged-to-handled',
-        'duplicate',
-        'already-routed',
-        'already-handled',
+        'cc-fyi-no-action',
         'no-action',
         'no_action_logged',
-    ] as $marker) {
-        if ($marker !== '' && str_contains($haystack, $marker)) {
-            return true;
+        'already-routed',
+        'already-handled',
+        'duplicate',
+        'filed-previously-logged-to-handled',
+    ];
+    foreach ($noActionMarkers as $marker) {
+        if ($marker !== '' && str_contains($text, $marker)) {
+            return 'no_action_filed';
         }
     }
-    return false;
+
+    return 'routed_needs_owner_question';
+}
+
+function task_flow_is_no_action_closed(array $row): bool
+{
+    return task_flow_blocked_resolution_state($row) === 'no_action_filed';
 }
 
 function task_flow_projection_missing(array $row): bool
@@ -1039,6 +1181,10 @@ function task_flow_projection_missing(array $row): bool
 function task_flow_packet_severity(array $row, array $missing): string
 {
     $status = task_flow_normalized_status($row);
+    $effectiveStatus = task_flow_effective_status($row);
+    if ($effectiveStatus === 'no_action_closed' || $status === 'no_action_closed' || task_flow_blocked_resolution_state($row) === 'no_action_filed') {
+        return 'closed';
+    }
     if (task_flow_is_no_action_closed($row)) {
         return 'closed';
     }
@@ -1080,10 +1226,14 @@ function task_flow_report(PDO $pdo, int $limit = 100, string $mode = 'active'): 
     )->fetchColumn();
 
     $statusRows = $pdo->query(
-        'SELECT status, COUNT(*) AS count
+        'SELECT CASE
+            WHEN status = \'routed\' AND COALESCE(NULLIF(workspaceboard_session, \'\'), \'\') <> \'\' THEN \'working\'
+            WHEN status = \'routed\' THEN \'classified\'
+            ELSE status
+         END AS status, COUNT(*) AS count
          FROM ' . TASK_FLOW_DB . '.' . TASK_FLOW_PACKETS . ' p
          ' . $where . '
-         GROUP BY status
+         GROUP BY status, workspaceboard_session
          ORDER BY count DESC, status ASC'
     )->fetchAll(PDO::FETCH_ASSOC) ?: [];
 
@@ -1132,7 +1282,7 @@ function task_flow_report(PDO $pdo, int $limit = 100, string $mode = 'active'): 
             'responsible_worker_or_persona' => (string) ($row['responsible_worker_or_persona'] ?? ''),
             'workspaceboard_session' => (string) ($row['workspaceboard_session'] ?? ''),
             'ops_portal_or_domain_task' => (string) ($row['ops_portal_or_domain_task'] ?? ''),
-            'status' => (string) ($row['status'] ?? ''),
+            'status' => task_flow_normalized_status($row),
             'due_or_trigger' => (string) ($row['due_or_trigger'] ?? ''),
             'scheduled_action' => (string) ($row['scheduled_action'] ?? ''),
             'calendar_event' => (string) ($row['calendar_event'] ?? ''),
@@ -1164,6 +1314,7 @@ function task_flow_report(PDO $pdo, int $limit = 100, string $mode = 'active'): 
             'latest_event_at' => (string) ($row['latest_event_at'] ?? ''),
             'event_count' => (int) ($row['event_count'] ?? 0),
             'missing_fields' => $missing,
+            'blocked_resolution_state' => task_flow_blocked_resolution_state($row),
             'finish_contract_missing_fields' => task_flow_finish_contract_missing_fields($row),
             'closeout_proof_present' => task_flow_closeout_has_proof_marker($row),
             'sent_proof_present' => task_flow_has_sent_proof($row),
@@ -1178,6 +1329,14 @@ function task_flow_report(PDO $pdo, int $limit = 100, string $mode = 'active'): 
 
     if ($mode === 'queue') {
         $items = array_values(array_filter($items, 'task_flow_queue_visible'));
+        [$statusRows, $ownerRows, $severityCounts, $effectiveStatusCounts, $missingFieldCounts] = task_flow_count_report_items($items);
+        $visiblePackets = count($items);
+    } elseif ($mode === 'active') {
+        $items = array_values(array_filter(
+            $items,
+            static fn(array $item): bool => in_array((string) ($item['effective_status'] ?? ''), ['working', 'waiting', 'blocked', 'classified', 'routed'], true)
+                && !in_array((string) ($item['severity'] ?? ''), ['closed'], true)
+        ));
         [$statusRows, $ownerRows, $severityCounts, $effectiveStatusCounts, $missingFieldCounts] = task_flow_count_report_items($items);
         $visiblePackets = count($items);
     }
@@ -1488,7 +1647,7 @@ function task_flow_archive_reason(array $row): string
     $severity = task_flow_packet_severity($row, $missing);
     $effectiveStatus = task_flow_effective_status($row);
 
-    if ($effectiveStatus === 'no_action_closed') {
+    if ($effectiveStatus === 'no_action_closed' || task_flow_blocked_resolution_state($row) === 'no_action_filed') {
         return 'safe_archive_no_action_closed';
     }
     if (in_array($effectiveStatus, ['completed', 'reported', 'filed', 'projected'], true)

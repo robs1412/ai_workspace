@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/local/bin/python3.13
 """Export local Google Drive pointer files to readable local files.
 
 This tool reads `.gdoc`, `.gsheet`, and `.gslides` files created by Google

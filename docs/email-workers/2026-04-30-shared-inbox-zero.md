@@ -21,6 +21,8 @@ Classification must be diligent enough to catch embedded instructions. Before fi
 
 Handled, no-action, duplicate, already-routed, completed, and logged messages should be filed out of the active inbox. Open inbox residue is allowed only when it is a real unprocessed item, active blocker, pending decision, or active dependency.
 
+For any blocker or context email, send one source email at a time and include the source email in the message body so the owner has the full context. Do not let an item sit through more than one polling cycle without an action taken; each cycle must end with send, archive, route, or an explicit blocker note.
+
 For National Outreach and shared-inbox persona aliases, prefer one operational archive folder for old/resolved residue rather than multiplying worker-specific handled folders. Worker routing belongs in durable logs, TODO/HANDOFF notes, and visible worker/task state; the inbox should stay clean.
 
 For account-access, finance, legal, compliance, auth, or other sensitive operational setup, the mailbox worker should capture and route the item to Task Manager/Workspaceboard instead of completing it invisibly inside the inbox. The durable state must name the visible route or the exact blocker.

@@ -1,0 +1,35 @@
+[
+  {
+    "rule_id": "naomi-qbo-invite-superseded",
+    "task_id": 367838,
+    "expected_subject": "Invite Naomi Stern to QuickBooks Online",
+    "expected_owner_id": 1332,
+    "close_reason": "Superseded by completed invite-acceptance follow-up and newer Naomi finance workflow.",
+    "require_task_statuses": [
+      {
+        "task_id": 367841,
+        "allowed_statuses": ["Completed"]
+      },
+      {
+        "task_id": 367973,
+        "allowed_statuses": ["Completed"]
+      }
+    ]
+  },
+  {
+    "rule_id": "eataly-reminder-superseded",
+    "task_id": 367855,
+    "expected_subject": "Vanessa reminder: Eataly May tasting dates waiting on Sonat",
+    "expected_owner_id": 1332,
+    "close_reason": "Superseded by recorded Eataly confirmation-only closeout in National Outreach durable state.",
+    "require_file_contains": [
+      {
+        "path": "/Users/werkstatt/ai_workspace/nationaloutreach/HANDOFF.md",
+        "all": [
+          "Re: Open Tastings For May",
+          "Eataly confirmed the chosen slot `Friday, May 29, 4pm-7pm`"
+        ]
+      }
+    ]
+  }
+]

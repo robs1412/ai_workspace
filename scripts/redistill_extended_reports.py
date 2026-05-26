@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/local/bin/python3.13
 """Build extended reports for the 2026 Re-Distill email export.
 
 This script reads JSON sidecars in bounded subprocess chunks. If Google Drive

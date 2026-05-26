@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/local/bin/python3.13
 """Full-body March/April 2026 true-work report for Re-Distill emails."""
 
 from __future__ import annotations

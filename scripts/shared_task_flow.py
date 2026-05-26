@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/local/bin/python3.13
 
 from __future__ import annotations
 
@@ -25,13 +25,14 @@ STATES = {
     "completed",
     "reported",
     "filed",
+    "no_action_closed",
     "papers_pending",
     "projected",
 }
 
-CLOSEOUT_STATES = {"filed", "papers_pending", "projected"}
-HARD_CLOSEOUT_STATES = {"completed", "reported", "filed"}
-TASK_LINK_STATES = {"task_created", "scheduled", "working", "waiting", "completed", "reported", "filed"}
+CLOSEOUT_STATES = {"filed", "no_action_closed", "papers_pending", "projected"}
+HARD_CLOSEOUT_STATES = {"completed", "reported", "filed", "no_action_closed"}
+TASK_LINK_STATES = {"task_created", "scheduled", "working", "waiting", "completed", "reported", "filed", "no_action_closed"}
 REMINDER_STATES = {"scheduled", "waiting"}
 NO_ACTION_READBACKS = {
     "logged-no-action",
@@ -109,6 +110,9 @@ def validate_status(status: str) -> str:
 def build_packet(**values: Any) -> dict[str, Any]:
     packet = {field: values.get(field, "") for field in PACKET_FIELDS}
     packet["status"] = validate_status(str(packet.get("status") or "captured"))
+    if packet["status"] == "routed":
+        session_id = str(packet.get("workspaceboard_session") or "").strip()
+        packet["status"] = "working" if session_id else "classified"
     if not packet["source_ref"]:
         packet["source_ref"] = values.get("source_message_id") or values.get("id") or ""
     if not packet["dedupe_key"]:

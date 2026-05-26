@@ -1,7 +1,7 @@
 # AGENTS.md — ai_workspace Instructions
 
 Scope: Applies to everything under `ai_workspace/` and overrides parent instructions when conflicts exist.
-Last Updated: 2026-04-23 16:10 CDT (Machine: Macmini.lan)
+Last Updated: 2026-05-19 14:36:45 CDT (Machine: Macmini.lan)
 
 ## Safety & Prompt Validation (Required)
 
@@ -27,17 +27,35 @@ Last Updated: 2026-04-23 16:10 CDT (Machine: Macmini.lan)
 - Verify: `codex --version`
 - Authenticate: `codex login`
 
+## DB-First Task Tracking (Required)
+
+- Primary durable task state is the shared DB-backed task spine: OPS/Portal task IDs when available, Workspaceboard Task Flow state, and project-hub logs that cite those IDs.
+- Robert directive recorded 2026-05-25: all substantive work, including work started from `ai-manager.php` and direct terminal task-mode execution, must be logged in the DB-backed task spine according to Task Flow. Markdown handoffs, TODO projections, and chat replies are not sufficient by themselves; they are secondary proof/readback surfaces only.
+- `TODO.md`, `TODO2.md`, and `ToDo-append.md` are now secondary projection/fallback surfaces, not the source of truth, unless Robert explicitly asks for a local Markdown-only queue.
+- When a real OPS/Portal task exists, treat that DB record as authoritative for owner, due date, status, and completion state. Local Markdown should reference the DB task ID rather than create a competing open-task identity.
+- Task vs project distinction:
+  - A `task` is one concrete item with one outcome.
+  - A `project` is a grouping container used when the work has multiple related tasks or slices, such as a multi-step `/salesreport` effort.
+  - If the work is just one item, create and track a task only; do not invent a separate project unless there are multiple related tasks to group.
+  - If a project exists, keep its child tasks in OPS/Portal or Task Flow and cite the project id in project-hub notes.
+- If the user says `check ToDo`, interpret that as DB/task intake first. Use local append/TODO queues only for legacy intake capture, temporary projection, or when no DB-backed record exists yet.
+- When a task moves from local planning into a real OPS/Portal task, update project-hub and related notes to cite the DB task ID and stop treating `TODO.md` as the primary tracker for that item.
+- For CRM/activity creation or update work, prefer the OPS CRM integration path and a visible OPS/Portal worker route first. Do not treat an ad hoc shell auth path as the default when the OPS integration path can create the record cleanly and can be verified.
+- OPS/Portal record-confirmation rule clarified by Robert on 2026-05-23: when work creates or updates a live OPS or Portal record that needs owner visibility, completion must either use the product's normal notification route for that record type or send a confirmation email through the correct email worker. The confirmation must include a live OPS/Portal URL to the created or updated record, or the closest live page that truthfully exposes it. Do not use `/werkstatt` paths as the owner-facing record link.
+
 ## TODO-Driven Workflow (Required)
 
-- At the start of work, read `TODO.md`.
+- At the start of work, check the DB-backed task spine first: OPS/Portal task IDs and Workspaceboard Task Flow state.
+- Read `TODO.md` only as a secondary projection/fallback surface.
 - Temporary sync fallback: if `TODO.md` is missing, use `TODO2.md` in this folder.
-- Read `ToDo-append.md` (or `TODO-append.md`) when present; treat it as a live append-only queue.
+- Read `ToDo-append.md` (or `TODO-append.md`) when present as append-only legacy intake, not as the primary state source when a DB task already exists.
 - Check OPS tasks assigned to `Codex` (user id `1332`) and process only tasks created by user id `1` (`smcreatorid = 1`).
 - Codex task creation/ownership rule: use the CRM/OPS Codex user (`Codex`, user id `1332`) for Codex-owned tasks unless Robert explicitly asks for a human-owned task. Do not silently substitute Robert/admin/test users when Codex ownership is the requested intent.
 - KOVAL browser-auth rule clarified by Robert on 2026-04-22: when Codex/Frank/Avignon workers need browser authentication to internal KOVAL systems such as OPS, Portal, Contact Report, Salesreport, Login, or related tools, use the approved Codex user/browser-auth path rather than Robert/admin/test-user shortcuts. If 2FA is required, use only the approved Codex-owned login/2FA/DB-query route; do not print credential values, tokens, private 2FA codes, session cookies, mailbox bodies, or credential paths in chat, TODOs, handoffs, owner emails, or git.
 - Silent TODO-task rule: Codex tasks generated from TODOs must be created and completed silently. Do not send task creation or task completion emails/notifications for TODO-generated Codex tasks unless Robert explicitly asks for notification side effects.
 - For TODO-generated Codex task completion, use a silent completion path where available, such as OPS `complete_tasks_silent`, or an API/update payload with notification flags disabled; do not use normal notification-on completion actions for these bookkeeping tasks.
-- Trigger rule: run OPS task intake whenever the user says `check ToDo`.
+- The OPS CRM integration path is the default shared pattern for routine CRM/activity writes across agents. If the integration path is blocked, record the blocker plainly and tell Sonat or the owner immediately rather than guessing or falling back to an unapproved auth path.
+- Trigger rule: run OPS task intake whenever the user says `check ToDo`, but DB/task-flow state is the first surface to check.
 - During OPS intake, read each pulled task description/details before routing or execution.
 - Manual mode: do not auto-start OPS-pulled tasks; request explicit user approval in chat for each task before execution.
 - Route each OPS task into the correct module queue file before execution:
@@ -50,44 +68,69 @@ Last Updated: 2026-04-23 16:10 CDT (Machine: Macmini.lan)
   - `importer` -> `/Users/werkstatt/importer/ToDo-append.md`
   - `bid` -> `/Users/werkstatt/bid/ToDo-append.md`
   - unclear module -> keep in `ai_workspace/ToDo-append.md` with `module:unknown` tag and request clarification.
-- When an OPS task is pulled into any local queue here, execute it and update OPS status to `Completed` when done. If blocked, mark `Blocked` in local TODO queue and mention blocker details directly to the user in chat.
-- Move actionable items from append file into `TODO.md` and remove only moved lines from append file.
-- For OPS follow-up items that should become real Portal tasks, move them into `TODO.md` and record the resulting OPS/Portal task ID there once created instead of leaving them only in append.
+- When an OPS task is pulled into any local queue here, execute it and update the OPS record to `Completed` when done. If blocked, keep the blocker on the DB task first and mirror it locally only when useful for projection.
+- Move actionable items from append file into `TODO.md` only when no DB-backed task exists yet or when a local projection is still useful.
+- For OPS follow-up items that should become real Portal tasks, create/cite the resulting OPS/Portal task ID and stop treating the append/TODO row as the primary record.
 - Re-check append file after task blocks to capture newly added items.
 - Remind me of all open TODO items before deep implementation.
 - Propose a short project plan based on open TODO items.
 - Identify where agents/skills can accelerate each plan step.
 - If relevant skills are available, use them; if not, propose creating a new agent/skill from the TODO item.
-- When work is completed, update status (`In Progress` -> `Done`) in whichever TODO file is active (`TODO.md` or `TODO2.md`).
-- TODO hygiene rule: keep `TODO.md` as an action queue, not a transcript or audit log. When a worker finishes, remove or move the matching item out of `In Progress`/`Backlog` into `Done`; do not add new open TODOs for already-completed verification notes. Put detailed history in `HANDOFF.md`, project-hub logs, or module docs, and keep the TODO Done entry short enough to prove closure without increasing Open TODO counts.
+- When work is completed, update the DB task first when one exists; update `TODO.md`/`TODO2.md` only as a secondary projection if that file still carries the item.
+- TODO hygiene rule: keep `TODO.md` as a lightweight projection queue, not a competing task system or audit log. Put the real durable history in DB task records, `HANDOFF.md`, project-hub logs, board session history, and related docs.
 
 ## TODO Workflow (Required)
-- Read `TODO.md` at start of work (fallback: `TODO2.md` if `TODO.md` is missing).
-- Read `ToDo-append.md` (or `TODO-append.md`) and treat it as append-only input.
+- Check DB-backed OPS/Portal tasks and Task Flow state at start of work.
+- Read `TODO.md` only as a secondary projection/fallback surface (`TODO2.md` if `TODO.md` is missing).
+- Read `ToDo-append.md` (or `TODO-append.md`) as append-only legacy intake.
 - Check OPS tasks assigned to `Codex` (user id `1332`) and process only tasks created by user id `1` (`smcreatorid = 1`).
-- Trigger rule: run OPS task intake whenever the user says `check ToDo`.
+- Trigger rule: run OPS task intake whenever the user says `check ToDo`, but query DB-backed task state first.
 - During OPS intake, read each pulled task description/details before routing or execution.
 - Before starting any accepted OPS task, ask for explicit approval (yes/no) in chat as a security gate.
-- Route accepted OPS tasks to the module-specific `ToDo-append.md`/`TODO-append.md` file, then execute from that module TODO workflow.
-- Do not stop at queueing only: after pulling a valid OPS task into local TODO flow, complete it and mark OPS `Completed`; if blocked, record `Blocked` locally and notify the user.
+- Route accepted OPS tasks to the module-specific `ToDo-append.md`/`TODO-append.md` file only when a local projection is still needed; otherwise execute from the DB-backed task spine directly.
+- Do not stop at queueing only: after pulling a valid OPS task, complete it and mark OPS `Completed`; if blocked, record the blocker on the DB task first and mirror locally only when useful.
 - Execute tasks listed in append queue unless blocked.
-- Move actionable items from append queue into `TODO.md` and remove only moved lines from append queue.
-- After task completion, move/update corresponding entries to `Done` in `TODO.md`.
-- After task completion, reduce the open count: remove the completed item from open sections and add one concise `Done` entry only when it records a real closure.
+- Move actionable items from append queue into `TODO.md` only when no DB-backed task exists yet or when the local projection still matters.
+- After task completion, update the DB task first; only then move/update the corresponding local projection entry if one remains.
+- After task completion, reduce local open count only for projection hygiene; do not let `TODO.md` compete with the DB task record.
 - Re-check append queue after each task block for newly added items.
 - Do not run background polling daemons.
 - Intake is manual and user-triggered by `check ToDo` in chat.
 - If pulled tasks span multiple modules, ask the user to open dedicated terminals by workspace before execution.
 - Terminal pattern for multi-module execution: request 2 terminals per active workspace (`ws <module>` in each): one primary work terminal and one support/verification terminal.
 
+- Shared mail-worker helper rule: for National Outreach, Frank, Avignon, Asher, and Venetia, prefer a shared sent-log-based reply/archive helper instead of a per-worker IMAP reply scanner. Use Gmail push metadata where available, sent-log.jsonl as the first proof surface, and IMAP only as fallback when the local proof path is missing.
+- Owner-question rule: when an inbox item is clearly a receipt check, follow-up-about-receipt, or otherwise unclear "have you received" style email, the responsible persona should ask Robert one concrete question by email and include the original source email for review instead of stalling in inbox review notes.
+
+## Task Mode (Required)
+
+- When Robert explicitly says `task mode`, treat the current chat as the primary execution lane for the approved task scope instead of the AI Manager control lane.
+- Task mode is not no-record mode. Even when work is done directly in chat/terminal, record the work in the appropriate durable local surface for that workspace, and the DB-backed task spine is required for substantive task execution. `HANDOFF.md`, project-hub notes, or TODO projections may add context, but they do not replace the Task Flow / OPS / Portal DB record.
+- Task-mode inputs that change direction, approve a blocker, add a durable workflow rule, or start substantive work must be mirrored through `scripts/ai_manager_chat_entry_adapter.php` with `--source-channel task-mode-chat` and the related Task Flow key, so the input lands in `ai_manager_inputs` and `daily-inputs/` in addition to the Task Flow packet. Do not leave task-mode instructions in chat-only history.
+- For Markdown-based durable notes in task mode, include a timestamped completion entry under `done` for the relevant task or create a `done` section when the file is acting as the durable local record for that work. Use local date/time with enough context to show what finished, what changed, and any exact blocker or next step.
+- Final task-mode reports back to Robert should match the durable note: state what was done, what changed, and what remains, with the timestamp anchored in the recorded `done` entry.
+
 ## AI Manager Control Lane (Required)
 
 - When Robert opens or addresses the AI Manager, treat the current chat as the AI Manager control lane, not the primary execution lane.
 - Check the organigram position in `worker_roles/operating-model.md`: AI Manager Robert sits above Task Manager / Polier, Decision Driver, monitoring roles, Frank/Codex work lanes, workspace workers, and Claude bridge/server lanes.
+- For recurring AI Manager prompts or durable management decisions, use `scripts/ai_manager_chat_entry_adapter.php` to mirror the prompt into `ai_manager_inputs` and the daily-input trail. Do not rely on chat history alone when the instruction is meant to survive beyond the current turn.
 - For substantive work, delegate through Task Manager. Task Manager should create or focus visible Workspaceboard workers, verify prompt delivery, monitor completion, and coordinate Decision Driver, Summary Worker, Git and Code Manager, Security Guard, Frank, Avignon, National Outreach, workspace workers, or Claude bridge/server lanes as needed.
 - Do not keep implementation, long investigation, or raw terminal-output streams in the AI Manager conversation when a visible worker route is appropriate.
 - Report back to Robert only for real input needs, approval gates, blockers, route/priority decisions, and concise management-level status/closure.
 - Use the Frank/Codex leverage model: Frank handles Robert-facing email/intake communication; Codex/Workspaceboard handles routed execution and verification; AI Manager supervises the chain and forces concrete readbacks.
+- Recorder transport rule: mirror AI Manager mode prompts, corrections, and durable decisions into `scripts/ai_manager_input_recorder.php` / `ai_manager_inputs` the same way the AI phone manager page does, so the chat lane has a durable DB trail instead of relying on chat history alone.
+- Server-hardening directive recorded 2026-05-25: AI Manager routes and direct terminal starts should converge on the same DB-visible Task Flow contract so server-side traceability, counts, and stats do not depend on whether the work began in `ai-manager.php`, a Workspaceboard worker, or an approved direct terminal task-mode pass.
+- Startup note for the next session: if Robert returns to the AI Manager from home and resumes the Forge/comms work, read `/Users/werkstatt/forge/handoff.md` and `/Users/werkstatt/ai_workspace/project_hub/issues/2026-05-19-communications-planner-buildout.md` first, then continue from the live Forge checkout at `/home/koval/public_html/forge` and preserve the current planner state before doing the next requested slice.
+- Repeating-access note: for repeated SSH, Google Drive / Docs, Portal entity creation, or sample-request workflows, check `project_hub/artifacts/repeating-access-guide-2026-05-20.md` before reconstructing the path from scratch.
+
+## SSH Mac Mini 230 Sonat Launch Path (Required)
+
+- When Codex is started after Sonat runs `/Users/sonat/Desktop/SSH Mac Mini 230 sonat.command`, treat the resulting session as the AI Manager Sonat control lane immediately.
+- Sonat startup contract: see `worker_roles/ai-manager-sonat-startup.md` for the durable launch prompt and shared `/Users/werkstatt` workspace-root rule.
+- Open or reuse the Sonat AI Manager session first, then route any substantive work through Task Manager and visible workers.
+- Default the first task queue to Sonat-bound work: if a task does not already name a different owner, treat it as Sonat-facing until Task Manager or Sonat assigns it elsewhere.
+- Keep the launch session as a control surface only. Do not begin implementation, debugging, or long terminal work in the Sonat AI Manager conversation; route it to the correct visible worker session and return only the status, blocker, or approval need.
 
 ## Frank / Avignon Medium-Independent Task Flow (Required)
 
@@ -97,6 +140,7 @@ Last Updated: 2026-04-23 16:10 CDT (Machine: Macmini.lan)
 - Chief-of-staff authority clarified by Robert on 2026-04-18: Frank and Avignon are full-time chief-of-staff roles, not passive inbox summarizers. When an email creates a clear low-risk internal work item, the mailbox worker should identify the task, create or reuse a visible board-managed worker session in the correct workspace, inject a full task brief with source id, owner, goal, constraints, approval gates, deliverable, and completion-report target, verify the prompt actually started, monitor the worker to completion, update TODO/project notes/handled-mail state, and send the relevant human owner a clear completion report when done.
 - Direct primary-input recovery clarified by Robert on 2026-04-18: direct emails from the assistant's primary owner are actionable intake, not silent local-routing/no-email events. Frank must treat direct Robert emails, and Avignon must treat direct Sonat emails, as work intake unless the message is clearly FYI/no-action or already handled. For any direct primary-owner message that asks for work, gives approval, reports a breakage, or asks for status, the mailbox worker must create or reuse a visible Task Manager/board-managed worker route, record the source id/dedupe key and routed session/task, and send the primary owner a concise captured/routed acknowledgement unless the message explicitly suppresses email. Do not repeatedly acknowledge the same source thread after it is routed; future duplicates should attach to the existing route/log.
 - Shared Frank/Avignon direct-owner follow-through directive approved by Robert on 2026-04-20: Frank and Avignon must run the same core loop for direct primary-owner work: acknowledge, route, follow through, and send completion. Frank applies this to Robert; Avignon applies this to Sonat, and to Robert when Robert is acting as Avignon-workflow owner/approver. Direct primary-owner work requests must not be filed to `Handled` after only generic ambiguous-review logging. Before filing, the worker must either: send a concise captured/routed acknowledgement that includes the visible work session id/title or local task id once created; route/create the visible worker and verify the prompt actually started; record source Message-ID, dedupe key, owner, routed workspace/session/task id, current state, and completion-report target in durable state; monitor or re-check the worker until completed or blocked; then send a task-specific completion or blocker email to the primary owner with what was done, what changed, what was not done, relevant session/task IDs, and remaining decisions. Only FYI/no-action, already-routed, duplicate, completed, or genuinely blocked items may be filed to `Handled`, and the durable state must explain which case applies. This directive is shared mechanics; persona, recipient, and approval boundaries remain separate.
+- Owner-facing acknowledgement quality correction from Robert on 2026-05-23: do not send vague process-receipts such as `I have this`, `I am taking care of it`, `no need to chase the machinery`, or similar control-surface reassurance without a substantive business update. For all email workers, either send the proper answer/update/blocker in plain business language, or send nothing until there is a real routed-work acknowledgement, completion, or blocker worth reporting.
 - Avignon SOP/persona authority clarified by Robert on 2026-04-20: the shared Frank/Avignon direct-owner loop is mechanics only. Avignon must implement the loop through Sonat's Avignon SOP/persona direction, not by mechanically copying Frank's voice or Robert-facing assumptions. Avignon's local authority is `avignon/PERSONA.md`, `avignon/EMAIL_PERSONA.md`, `avignon/JOB_DESCRIPTION.md`, `avignon/AGENTS.md`, and the private Sonat SOP source only when needed for verification without quoting or exposing it. Avignon acknowledgements, routing notes, blocker notes, and completion reports should be point-first, concise, market-aware, and action-oriented; include a recommended next action when there is a problem; state what was done, what changed, what was not done, and what remains; avoid guessing at pricing, account commitments, sensitive policy, or unclear CRM duplicate/target handling; report to Sonat by default and copy Robert only when the approval path/context requires it.
 - Robert visibility clarification on 2026-04-20: when Robert is actively managing or correcting an Avignon workflow, Avignon should email Robert human-readable status, blocker, and correction updates directly when they help him supervise the lane. This does not change Sonat as Avignon's default owner for Sonat work; it adds Robert visibility when Robert is the current manager/approver or explicitly asks to be kept updated. Use plain business context and next actions, not Message-ID-only references.
 - Gmail push pause clarified by Robert on 2026-04-18: keep Frank/Avignon email handling on the current 15-second polling path until Monday, 2026-04-20. Monday's first action is to verify polling health. Do not attempt further Google auth, OAuth token work, Google Cloud/Pub/Sub/IAM mutation, mailbox content reads, runtime cadence changes, deploy/push/live pull, or Gmail push subscriber work before Monday unless Robert explicitly reopens the Gmail push slice. If still needed after Monday health verification, resume only from the M4 ERTC Google auth context under normal credential/token guardrails.
@@ -134,6 +178,12 @@ Last Updated: 2026-04-23 16:10 CDT (Machine: Macmini.lan)
 - `ai_workspace/project_hub/INDEX.md`
 - Keep one Master Incident ID per initiative and list per-repo commit SHAs.
 - At completion, move the item from `Open` to `Completed` in `INDEX.md` with a link to the detail log.
+
+## Skill Review Cadence
+
+- Once a week, review recent inputs from Robert, Sonat, and other recurring primary owners for repeatable workflows, recurring how-to questions, and patterns that should become new skills instead of staying as one-off instructions.
+- When a pattern repeats enough to save time or reduce drift, create or update a skill first, then record the decision in `HANDOFF.md` and the relevant project note.
+- Keep the reminder broad enough to catch Google Drive, Papers, Portal, OPS, email, and chat workflows that recur across sessions.
 
 ## Workspace Launch Shortcuts
 
@@ -213,7 +263,7 @@ Last Updated: 2026-04-23 16:10 CDT (Machine: Macmini.lan)
 - General-session rule: when the work is general coordination, planning, policy, monitoring, or cross-workspace triage rather than repo-specific implementation, open it in `ws ai` by default so the session stays portable across machines and does not inherit repo-local startup quirks unnecessarily.
 - AI-Bridge rule: use `ws ai-bridge` for work focused on bridging or integrating Codex and Claude workflows, prompts, tooling, or operating conventions. Treat that workspace as the place to design how both systems can complement each other rather than duplicating the same work.
 - AI Manager chain-of-command rule: treat Robert's active Codex login as `AI Manager Robert`, the top AI-manager control surface for priorities, approvals, and chain-of-command status. Also represent `AI Manager Dmytro` as a technical AI-manager bridge for Codex/Claude sequencing under Robert's direction. AI Managers should query the fixed Workspaceboard Task Manager first, then the Task Manager routes down to Codex Integration Manager, Security Guard, Code and Git Manager, Decision Driver, Summary Worker, Codex workspace workers, or Claude bridge/server agents. AI Manager Dmytro may recommend technical sequencing but does not replace Robert's final approval for external sends, finance/legal/HR, auth/security, production, destructive data, OAuth, `.205`, MCP exposure, MI/Papers writes, or shared-write behavior.
-- Agent task-record rule: when Codex, Claude, Frank, Avignon, or any specialist creates/routes/reports a task, prefer a shared task-record spine instead of loose Markdown only: Portal/OPS task id when available, source ref/message id, requester, assigned role/agent, priority, status, deliverable bullets, next update promise, source links, approval gates, and single-writer owner. Claude-style responses with a task number plus reference id, such as `task #1361` and `ref:2379`, are the model to converge on. Workspaceboard/project-hub/TODO should project and reference OPS/Portal task IDs rather than create competing task identities.
+- Agent task-record rule: when Codex, Claude, Frank, Avignon, or any specialist creates/routes/reports a task, prefer a shared DB-backed task spine instead of loose Markdown only: Portal/OPS task id when available, source ref/message id, requester, assigned role/agent, priority, status, deliverable bullets, next update promise, source links, approval gates, and single-writer owner. Claude-style responses with a task number plus reference id, such as `task #1361` and `ref:2379`, are the model to converge on. Workspaceboard/project-hub/TODO should project and reference OPS/Portal task IDs rather than create competing task identities.
 - AI-Bridge `.205`/Papers access gate: do not place host login recipes, private credential references, passwords, key paths, or operational access steps in `AGENTS.md`. Any future `.205`/Papers access must be routed through Security Guard with explicit Robert/Security approval, named allowed scope, secure credential channel outside chat/git/docs, audit/logging requirement, recovery path, and a separate execution gate before any SSH, Papers, MI, or MCP action.
 - Codex Integration Manager rule: use the Codex Integration Manager role for Codex/Claude/Workspaceboard/MI/Papers/OPS/Portal/Frank/Avignon integration planning, directive improvements, automation suggestions, active-agent registration design, and no-write projection planning. This role may recommend implementation slices and handoff contracts, but it must not directly mutate `.205`, MI/Papers, OAuth, Portal/CRM data, mailbox runtime, MCP exposure, production services, or shared work records without explicit approval and the required Security Guard / Code and Git Manager / workspace-worker routing.
 - Codex Integration Manager fluidity rule: when repeated friction appears in routing, task traceability, disappearing workers, waiting-state buildup, duplicate TODOs, or cross-agent handoffs, Codex Integration Manager should revise the operating directives and create a durable control-loop pattern instead of treating the incident as one-off. Its output should include the revised rule, where it was recorded, which roles must follow it, and what safe automation or Workspaceboard improvement would remove the friction next.
@@ -231,7 +281,7 @@ Last Updated: 2026-04-23 16:10 CDT (Machine: Macmini.lan)
 - Session Worker rule: per-workspace board sessions perform the actual implementation work in their target workspace (`ops`, `portal`, `lists`, `forge`, `frank`, `ai-bridge`, etc.) and keep work scoped to that workspace unless explicitly redirected.
 - Discussion-monitor rule: keep the main AI Workspace Task Manager session available as the general monitor and discussion surface. Use it to review progress, coordinate work, and decide next actions, while opening separate board-managed workspace sessions for actual implementation.
 - Manager-execution rule: when the user is managing from AI Workspace, keep execution inside the target workspace session and use the AI Workspace session only for coordination, approvals, status checks, and summaries.
-- Memory-and-traceability rule: preserve a clear record of what work was performed, when it was performed, and in which workspace/session it happened. Favor workflows that leave durable traces in `TODO.md`, project notes, board session history, and other approved memory surfaces so work can be audited, resumed, or handed off cleanly later.
+- Memory-and-traceability rule: preserve a clear record of what work was performed, when it was performed, and in which workspace/session it happened. Favor workflows that leave durable traces in DB task records, project notes, board session history, and other approved memory surfaces so work can be audited, resumed, or handed off cleanly later.
 - Agent-memory rule: treat agent memory as a first-class requirement for long-running coordination and multi-session work. When introducing new agent/workspace patterns, prefer designs that can retain context, decisions, status, and handoff notes instead of relying on ephemeral chat alone.
 - Important-change logging rule: when workflow, policy, routing, auth, or session-management behavior changes in a way that matters operationally, record it in `AGENTS.md` and also note it in `HANDOFF.md` if the change matters across sessions or machines.
 - Cross-machine sync reminder: AI Workspace coordination changes that matter operationally should be kept in sync across Mac mini and MacBook. Do not rely on memory or one machine's local runtime state alone.
@@ -769,3 +819,9 @@ alias aibridge='ws ai-bridge'
 - Login flow: open target app URL -> submit username/password -> if prompted, complete /login/twofactor.php with a fresh 6-digit code.
 - Keep the same pending 2FA session when retrying codes; do not restart primary login between attempts.
 - After success, continue to target page and validate expected UI state before closing the task.
+
+## Workspaceboard Session Clarity
+
+- The AI Manager phone page can show the Task Manager monitor session `f545298d` even when the actual Codex execution lane is `aebebe8d`.
+- If the terminal output looks stale, verify the live `/api/management/overview?live=1` and `/api/session-history` payloads before assuming the session is dead.
+- Use the live session history to distinguish the Task Manager control pane from the actual Codex worker pane.

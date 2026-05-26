@@ -21,7 +21,7 @@ Papers is the target completion/projection layer for clean work records and inst
 - Workspaceboard: Task Manager owns visible routing, worker focus, board hygiene, blocker surfacing, and closeout verification.
 - Email to Frank: Robert-facing owner intake. Frank captures, clarifies by email when needed, routes visible work, monitors to completion, and reports back to Robert.
 - Email to Avignon: Sonat-facing owner intake. Avignon uses the same mechanics through Avignon's persona/SOP boundaries, reporting to Sonat by default and copying Robert only when he is actively supervising or approval context requires it.
-- Email to National Outreach: shared worker intake for `nationaloutreach@kovaldistillery.com` and related send-from personas. Email Coordinator classifies the work, then routes Vanessa for outreach/COT/tasting/account work, Naomi for finance-operations follow-up, Ezra for special-project/legal-affairs coordination, Codex for technical/local-agent work, or a module worker when the work belongs in OPS, Portal, lists, forge, or another workspace.
+- Email to National Outreach: shared worker intake for `nationaloutreach@kovaldistillery.com` and related send-from personas. Email Coordinator classifies the work, then routes Vanessa for outreach/COT/tasting/account work, Naomi for finance-operations follow-up, Ezra for special-project/legal-affairs coordination, Codex for technical/local-agent work, or a module worker when the work belongs in OPS, Portal, lists, forge, or another workspace. The shared National Outreach mailbox itself is intake-only and must not be used as a `From` identity.
 - Portal/report-triggered intake: Portal reports, OPS reports, scheduled report reminders, and calendar due events can create work even when no new email arrives. Treat them as intake records with the same task-storage and completion rules.
 
 ## Classification
@@ -93,6 +93,7 @@ Clarifications should use the same channel that owns the intake unless a safer o
 - Terminal/chat-originated task: ask in chat only when the answer is an immediate blocker. If the work has already moved into an email-owned lane, send the clarification by email and log that email.
 - Workspaceboard-originated task: Task Manager or the owning worker asks the smallest exact blocker question, then records the answer on the session/task.
 - Portal/report-triggered task: ask by email if a human owner needs to provide missing business context; otherwise record the blocker on the operational task.
+- Existing-thread rule: when replying on an active owner thread, keep the reply on that thread by setting `In-Reply-To` to the current owner/source message and preserving `References` for the active thread chain.
 
 Do not ask humans to resolve a Message-ID, source id, session id, or internal blocker code without plain-English context. Lead with the person, account, event, requested action, missing fact, and what will happen after the answer arrives.
 
@@ -182,14 +183,24 @@ If one part of the route fails, create the next best durable record and record t
 
 A task is not complete until the execution record and owner-visible closeout are both handled when required.
 
+Owner-visible email closeouts must be self-contained. This applies to Frank, Avignon, National Outreach, Vanessa, Naomi, Ezra, Asher, Venetia, Codex-routed mail, and future approved email-worker personas. When a worker replies to, forwards, or reports on an email-derived item, include both:
+
+- the source email/context the reply relates to, summarized or quoted enough for the owner to recognize the thread without resolving Message-IDs or task IDs;
+- the actual email reply that was sent, including the body text, recipients, subject, and Message-ID when available.
+
+For Asher and Venetia specifically, any inbound reply on an active thread is itself a state change and must trigger a Sonat update immediately, even if the underlying task is not yet complete.
+
+Do not expose private mailbox content, secrets, credentials, payment data, private SOP text, or external-sensitive details beyond what the recipient is authorized to see. If safety or privacy blocks including the source body, include a sanitized source summary and say what was withheld.
+
 Required closeout steps:
 
 1. Verify the actual work result from the operational system, worker output, sent-log, mailbox state, report output, or live read-back surface.
 2. Update the OPS/Portal/domain task status to completed, blocked, or transferred.
-3. Send the responsible owner a completion or blocker email when the lane requires it. Use the responsible persona and include what was done, what changed, what was not done, relevant IDs/links, remaining approvals, and the original source email when the owner needs to review it.
-4. File/archive the source email only when it is no-action, duplicate/already-routed, completed-with-report, or blocked-with-report.
-5. Update TODO/HANDOFF/project-hub as a concise index, not as a substitute for the operational task record.
-6. Prepare the Papers projection packet when the work should become long-term institutional memory.
+3. Send the responsible owner a completion or blocker email when the lane requires it. Use the responsible persona and include what was done, what changed, what was not done, relevant IDs/links, remaining approvals, the source email/context, and the sent reply body/content.
+4. When the completion or blocker email belongs to an existing thread, anchor it to the newest owner/source message on that thread and preserve the thread headers so the closeout does not branch away from the active conversation.
+5. File/archive the source email only when it is no-action, duplicate/already-routed, completed-with-report, or blocked-with-report.
+6. Update TODO/HANDOFF/project-hub as a concise index, not as a substitute for the operational task record.
+7. Prepare the Papers projection packet when the work should become long-term institutional memory.
 
 Closeout checklist before filing:
 

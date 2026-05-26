@@ -23,7 +23,6 @@ Current enabled send-from identities:
 - `frank.cannoli@kovaldistillery.com`
 - `avignon.rose@kovaldistillery.com`
 - `codex@kovaldistillery.com`
-- `nationaloutreach@kovaldistillery.com`
 
 Provisioned but not send-enabled until final persona/action approval:
 
@@ -105,10 +104,7 @@ Initial team suggestions:
 
 Robert clarified on 2026-04-27 that National Outreach must not send as `macee.maddox@kovaldistillery.com` again because Macee has left.
 
-Allowed send-from identities on the National Outreach account are now:
-
-- `nationaloutreach@kovaldistillery.com`
-- `codex@kovaldistillery.com`
+The National Outreach mailbox is intake-only. It is not an outbound `From` identity. Outbound mail from work routed through this inbox must use a real worker/persona address such as `codex@kovaldistillery.com`, `vanessa.sterling@kovaldistillery.com`, `naomi.stern@kovaldistillery.com`, or `ezra.katz@kovaldistillery.com` when approved.
 
 `macee.maddox@kovaldistillery.com` remains only old-mail inbound-recipient context.
 

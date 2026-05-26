@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/local/bin/python3.13
 """Build ERTC discovery email exports from local table docs and EML archives.
 
 Outputs are case files, not repo artifacts. This script does not print message

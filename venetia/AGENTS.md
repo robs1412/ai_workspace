@@ -16,10 +16,10 @@ This workspace belongs to the Venetia email worker for `venetia@thecultivater.co
 
 - Credentials are installed in the private workspace credential store.
 - IMAP/SMTP login has been verified.
-- Live header-only polling is enabled through `system/com.koval.venetia-auto`.
+- Live body-read polling is enabled through `system/com.koval.venetia-auto`.
 - Canonical persona source: `../worker_roles/venetia-tempest-dunn/persona.yaml`.
 - `PERSONA.md` remains a human-readable companion note and activation-boundary reference.
-- Body reads, filing, deleting, automatic replies, routine authority, and substantive mailbox actions remain disabled until Robert approves the separate action policy.
+- Filing, deleting, automatic replies, routine authority, and substantive mailbox actions remain disabled until Robert approves the separate action policy.
 
 ## Guardrails
 

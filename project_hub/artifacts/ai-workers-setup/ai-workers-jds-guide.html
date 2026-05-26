@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Workers JDs Guide</title>
+<style>
+body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;line-height:1.55;margin:0;background:#f6f4ef;color:#1d1b18}
+header{padding:40px 24px 20px;max-width:1040px;margin:0 auto}
+main{max-width:1040px;margin:0 auto;padding:0 24px 40px}
+h1,h2,h3{line-height:1.15}
+h1{font-size:2.2rem;margin:0 0 12px}
+h2{margin-top:32px;border-top:1px solid #d9d3c7;padding-top:18px}
+.card{background:#fff;border:1px solid #ddd6c8;border-radius:14px;padding:18px 20px;margin:16px 0;box-shadow:0 1px 2px rgba(0,0,0,.03)}
+ul{margin:10px 0 0 22px}
+.muted{color:#615a52}
+.source{color:#615a52;font-size:.95rem}
+.pill{display:inline-block;padding:4px 10px;border-radius:999px;background:#ece5d8;margin-right:8px;font-size:.9rem}
+table{border-collapse:collapse;width:100%;background:#fff;border:1px solid #ddd6c8;border-radius:14px;overflow:hidden}
+th,td{border-bottom:1px solid #eee6d8;padding:12px 14px;vertical-align:top;text-align:left}
+th{background:#f0eadf}
+tr:last-child td{border-bottom:none}
+code{background:#efe9dd;padding:1px 5px;border-radius:5px}
+</style>
+</head><body>
+<header>
+<h1>AI Workers JDs Guide</h1>
+<p class="muted">Concise working guide for the active worker set. 2026 JDs are primary; 2023 JDs are legacy fallback only. Use the full FOH guide for operational detail and the worker JOB_DESCRIPTION.md files for ownership.</p>
+</header>
+<main>
+<section class="card"><h2>Purpose</h2><ul>
+<li>This guide is the working map for the current worker set.</li>
+<li>Customer Service remains blocked until the role is approved and the inbox connection is opened.</li>
+<li>Use the local job descriptions as the checked-off source unless a canonical Google Doc link is explicitly recorded.</li>
+</ul></section>
+<section class="card"><h2>Role Families</h2><table><thead><tr><th>Role</th><th>What it owns</th></tr></thead><tbody>
+<tr><td><strong>Frank</strong></td><td><ul>
+<li>Robert-facing chief-of-staff mailbox worker.</li>
+<li>Owns capture, routing, follow-through, completion reporting, and direct-owner follow-up for Robert-directed work.</li>
+<li>The Frank lane is for direct-owner work, not generic inbox summaries.</li>
+<li class="source">Source: `frank/JOB_DESCRIPTION.md`; `worker_roles/frank-cannoli.md`.</li>
+</ul></td></tr>
+<tr><td><strong>Avignon</strong></td><td><ul>
+<li>Sonat-facing chief-of-staff mailbox worker.</li>
+<li>Owns capture, routing, follow-through, CRM/distributor/market-execution follow-through, and completion reporting.</li>
+<li>The Avignon lane is for Sonat-directed work and direct-owner follow-up.</li>
+<li class="source">Source: `avignon/JOB_DESCRIPTION.md`; `worker_roles/avignon-rose.md`.</li>
+</ul></td></tr>
+<tr><td><strong>Vanessa Sterling / Outreach Coordinator</strong></td><td><ul>
+<li>The outreach role is Vanessa Sterling; National Outreach is the mailbox, not the persona.</li>
+<li>Owns outreach coordination, tasting scheduling, OPS updates, and weekly follow-through.</li>
+<li>The National Outreach mailbox is intake-only.</li>
+<li class="source">Source: `nationaloutreach/JOB_DESCRIPTION.md`; `worker_roles/outreach-coordinator.md`; `project_hub/artifacts/ai-workers-setup/vanessa-tasting-directive-index-2026-05-17.md`.</li>
+</ul></td></tr>
+<tr><td><strong>Communications Manager</strong></td><td><ul>
+<li>Owns outbound copy, tone, and send-readiness across customer, distributor, partner, media, and larger staff communication.</li>
+<li>Coordinates drafts, revisions, and approval flow, but does not own send mechanics or campaign operations.</li>
+<li class="source">Source: `worker_roles/communications-manager.md`.</li>
+</ul></td></tr>
+<tr><td><strong>Email Coordinator</strong></td><td><ul>
+<li>Owns routing and ownership across Frank, Avignon, National Outreach, and OPS/Portal follow-up.</li>
+<li>Enforces send-from/persona mapping and keeps email-derived work from disappearing in inboxes.</li>
+<li class="source">Source: `worker_roles/email-coordinator.md`.</li>
+</ul></td></tr>
+<tr><td><strong>Internal Communicator</strong></td><td><ul>
+<li>Owns internal staff-facing notes, reminders, follow-ups, and human-readable internal status updates.</li>
+<li>Keeps broad internal announcements approval-gated.</li>
+<li class="source">Source: `worker_roles/internal-communicator.md`; `project_hub/artifacts/internal-communicator/weekly-internal-recap-workflow-packet-2026-05-07.md`.</li>
+</ul></td></tr>
+<tr><td><strong>Marketing Manager</strong></td><td><ul>
+<li>Owns organized marketing sends through Forge or another approved sender.</li>
+<li>Handles distributor, magazine, media, and campaign-style send planning.</li>
+<li>Coordinates with Communications Manager for copy and with Forge for mechanics.</li>
+<li class="source">Source: `worker_roles/marketing-manager.md`.</li>
+</ul></td></tr>
+<tr><td><strong>Naomi</strong></td><td><ul>
+<li>Owns finance operations, cadence, controls, budget/reporting coordination, reminders, invoice follow-through, and finance intake routing.</li>
+<li>Not send-enabled.</li>
+<li>Built from `naomi/JOB_DESCRIPTION.md` plus `project_hub/artifacts/ai-workers-setup/naomi-finance-task-map-2026-05-17.md`.</li>
+</ul></td></tr>
+<tr><td><strong>Ezra</strong></td><td><ul>
+<li>Owns project support and legal-affairs-adjacent triage.</li>
+<li>Handles intake framing, escalation, routing, and docs-first support.</li>
+<li>Not a final legal decision-maker.</li>
+<li class="source">Source: `ezra/JOB_DESCRIPTION.md`; `project_hub/artifacts/ai-workers-setup/ezra-project-support-intake-checklist-2026-05-17.md`.</li>
+</ul></td></tr>
+<tr><td><strong>Asher</strong></td><td><ul>
+<li>Heritage, stewardship, provenance, food, farming, craft, and slow-travel storytelling.</li>
+<li>Use for warm, literary, grounded storytelling and editorial outreach.</li>
+<li class="source">Source: `asher/JOB_DESCRIPTION.md`; `worker_roles/asher.md`; `docs/email-workers/2026-04-27-asher-venetia-setup.md`.</li>
+</ul></td></tr>
+<tr><td><strong>Venetia</strong></td><td><ul>
+<li>Sustainability, material innovation, circular systems, future-facing design, and policy stories.</li>
+<li>Use for sharper, design-forward, policy-aware editorial work.</li>
+<li class="source">Source: `venetia/JOB_DESCRIPTION.md`; `worker_roles/venetia.md`; `docs/email-workers/2026-04-27-asher-venetia-setup.md`.</li>
+</ul></td></tr>
+<tr><td><strong>AI Manager Robert</strong></td><td><ul>
+<li>Top control-lane role for priorities, approvals, chain-of-command, and final business direction.</li>
+<li>This is the human management surface, not a hidden execution lane.</li>
+<li class="source">Source: `ai-manager/JOB_DESCRIPTION.md`; `worker_roles/ai-manager-robert.md`.</li>
+</ul></td></tr>
+<tr><td><strong>Task Manager / Polier</strong></td><td><ul>
+<li>Owns board routing, visibility, durable state, worker ownership, cleanup, and blocker surfacing.</li>
+<li>Starts or focuses visible workers and keeps the board from hiding implementation.</li>
+<li class="source">Source: `task-manager/JOB_DESCRIPTION.md`; `worker_roles/task-manager-polier.md`.</li>
+</ul></td></tr>
+<tr><td><strong>Decision Driver</strong></td><td><ul>
+<li>Pushes waiting work into one safe next action or one concrete human decision.</li>
+<li>Does not become a parking state.</li>
+<li class="source">Source: `decision-driver/JOB_DESCRIPTION.md`; `worker_roles/decision-driver.md`.</li>
+</ul></td></tr>
+<tr><td><strong>AI Health Manager</strong></td><td><ul>
+<li>Monitors board/session health and stale workers.</li>
+<li>Nudges safe stale workers once.</li>
+<li>Does not implement business work or alter runtimes.</li>
+<li class="source">Source: `ai-health-manager/JOB_DESCRIPTION.md`; `worker_roles/ai-health-manager.md`.</li>
+</ul></td></tr>
+<tr><td><strong>Customer Service / Guest Experience</strong></td><td><ul>
+<li>Working persona name: Guest Experience.</li>
+<li>Blocked until the role is explicitly approved and the inbox is connected.</li>
+<li>Use the FOH guide for FAQ and answer authority.</li>
+<li class="source">Source: `project_hub/artifacts/ai-workers-setup/customer-service-inbox-faq-setup-brief-2026-05-17.md`; `project_hub/artifacts/ai-workers-setup/foh-handbook-2-guide.md`.</li>
+</ul></td></tr>
+</tbody></table></section>
+<section class="card"><h2>Persona and Role Boundaries</h2><ul>
+<li>Communications Manager, Email Coordinator, Internal Communicator, Marketing Manager, and Outreach Coordinator are already separate roles; do not add new personas for them unless a future split creates a genuinely different voice or approval boundary.</li>
+<li>If the 2026 versus 2023 comparison reveals a real change in speaking authority, add a persona only for that lane.</li>
+<li>Customer Service is the main future persona candidate; Guest Experience is the current working name.</li>
+<li>Naomi does not need a separate controller doc for the current guide; her current source is the local JD plus the finance task map.</li>
+</ul></section>
+<section class="card"><h2>What Is Still Missing</h2><ul>
+<li>Customer Service activation and inbox connection.</li>
+<li>Any later 2026 JD links that someone explicitly wants recorded instead of the local JD files.</li>
+<li>Any future role split that changes voice or approval boundaries.</li>
+</ul></section>
+<section class="card"><h2>Reference Rules</h2><ul>
+<li>Use the local <code>JOB_DESCRIPTION.md</code> file as the current checked-off source unless a canonical Google Doc link is specifically recorded.</li>
+<li>Use the full FOH guide for service detail, internal FAQ policy, and front-of-house standards.</li>
+<li>Keep secret, auth, or production-sensitive details out of this guide.</li>
+</ul></section>
+</main></body></html>

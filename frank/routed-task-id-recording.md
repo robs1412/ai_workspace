@@ -45,7 +45,7 @@ Every Frank completion report for routed email-derived work should include:
 5. Remaining blocker or decision, if any.
 6. The ID block above.
 
-Style rule for Robert-facing captured/routed, status, blocker, and closeout replies: start with the point as the first sentence, but do not use the literal opener `Point first:`. The point should read as normal prose, not a label. When the reply has more than one thought, split it into short paragraphs with a blank line between them so the message scans cleanly.
+Style rule for Robert-facing captured/routed, status, blocker, and closeout replies: start with the point as the first sentence, but do not use the literal opener `Point first:`. The point should read as normal prose, not a label. When the reply has more than one thought, split it into short paragraphs with a blank line between them so the message scans cleanly. When the reply includes one exact question Robert needs to answer, put that question in its own short paragraph so it stands out on first scan.
 
 For Claude/Codex bridge work, keep Claude's `task #...` / `ref:...` separate from Frank's local task id and the board/Codex session id. If an OPS/Portal task is created later, add it without replacing historical source, local, board, or outbound Message-ID fields.
 

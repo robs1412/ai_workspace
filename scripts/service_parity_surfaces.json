@@ -1,0 +1,229 @@
+{
+  "version": 1,
+  "python_313": "/usr/local/bin/python3.13",
+  "report": {
+    "default_markdown": "/Users/werkstatt/ai_workspace/project_hub/artifacts/recursive-tools/service-parity-check-latest.md",
+    "default_json": "/Users/werkstatt/ai_workspace/project_hub/artifacts/recursive-tools/service-parity-check-latest.json"
+  },
+  "fix_targets": {
+    "ai_health_plist": "/Library/LaunchDaemons/com.koval.ai-health-manager.plist"
+  },
+  "checks": {
+    "parity": [
+      {
+        "group": "runtime-parity",
+        "label": "Source task-flow due runner",
+        "path": "/Users/werkstatt/ai_workspace/scripts/task_flow_due_runner.py",
+        "expected_template": "#!{python_313}",
+        "mode": "line1",
+        "note": "Repo-local source should pin the executable interpreter."
+      },
+      {
+        "group": "runtime-parity",
+        "label": "Installed task-flow due runner",
+        "path": "/Users/admin/.task-flow-launch/runtime/scripts/task_flow_due_runner.py",
+        "expected_template": "#!{python_313}",
+        "mode": "line1",
+        "note": "Installed runtime mirror should match the repo-local interpreter pin."
+      },
+      {
+        "group": "runtime-parity",
+        "label": "Source National Outreach cycle",
+        "path": "/Users/werkstatt/ai_workspace/scripts/nationaloutreach_mail_cycle.py",
+        "expected_template": "#!{python_313}",
+        "mode": "line1",
+        "note": "Repo-local source should pin the executable interpreter."
+      },
+      {
+        "group": "runtime-parity",
+        "label": "Installed National Outreach cycle",
+        "path": "/Users/admin/.nationaloutreach-launch/runtime/scripts/nationaloutreach_mail_cycle.py",
+        "expected_template": "#!{python_313}",
+        "mode": "line1",
+        "note": "Installed runtime mirror should match the repo-local interpreter pin."
+      },
+      {
+        "group": "runtime-parity",
+        "label": "Source AI Health launch template",
+        "path": "/Users/werkstatt/ai_workspace/scripts/install_ai_health_manager_launchagent.sh",
+        "expected_template": "{python_313}",
+        "mode": "contains",
+        "note": "Launch template should emit the pinned interpreter."
+      },
+      {
+        "group": "runtime-parity",
+        "label": "Source Workspaceboard supervisor helper",
+        "path": "/Users/werkstatt/workspaceboard/scripts/workspaceboard_supervisor.php",
+        "expected_template": "{python_313}",
+        "mode": "contains",
+        "note": "Source supervisor should use the pinned helper interpreter."
+      },
+      {
+        "group": "runtime-parity",
+        "label": "Installed Workspaceboard supervisor helper",
+        "path": "/Users/admin/.workspaceboard-launch/runtime/app/scripts/workspaceboard_supervisor.php",
+        "expected_template": "{python_313}",
+        "mode": "contains",
+        "note": "Installed supervisor should match the source helper interpreter."
+      },
+      {
+        "group": "runtime-parity",
+        "label": "Source Workspaceboard server escalation path",
+        "path": "/Users/werkstatt/workspaceboard/server/index.js",
+        "expected_template": "spawnSync('{python_313}'",
+        "mode": "contains",
+        "note": "Source server should pin the AI Manager escalation helper interpreter."
+      },
+      {
+        "group": "runtime-parity",
+        "label": "Source Workspaceboard server AI Health path",
+        "path": "/Users/werkstatt/workspaceboard/server/index.js",
+        "expected_template": "spawn('{python_313}'",
+        "mode": "contains",
+        "note": "Source server should pin the AI Health sweep interpreter."
+      },
+      {
+        "group": "runtime-parity",
+        "label": "Installed Workspaceboard server escalation path",
+        "path": "/Users/admin/.workspaceboard-launch/runtime/app/server/index.js",
+        "expected_template": "spawnSync('{python_313}'",
+        "mode": "contains",
+        "note": "Installed server should match the escalation helper interpreter pin."
+      },
+      {
+        "group": "runtime-parity",
+        "label": "Installed Workspaceboard server AI Health path",
+        "path": "/Users/admin/.workspaceboard-launch/runtime/app/server/index.js",
+        "expected_template": "spawn('{python_313}'",
+        "mode": "contains",
+        "note": "Installed server should match the AI Health interpreter pin."
+      }
+    ],
+    "deployment": [
+      {
+        "group": "deployment-state",
+        "label": "AI Health system plist exists",
+        "path": "/Library/LaunchDaemons/com.koval.ai-health-manager.plist",
+        "expected": "exists",
+        "mode": "exists",
+        "note": "AI Health is installed as a system LaunchDaemon on this machine."
+      },
+      {
+        "group": "deployment-state",
+        "label": "AI Health system plist interpreter",
+        "path": "/Library/LaunchDaemons/com.koval.ai-health-manager.plist",
+        "expected_template": "{python_313}",
+        "mode": "contains",
+        "note": "Installed AI Health daemon plist should preserve live policy while using Python 3.13.",
+        "fix_id": "ai-health-plist-interpreter"
+      },
+      {
+        "group": "deployment-state",
+        "label": "AI Health live launchctl interpreter",
+        "expected_template": "program = {python_313}",
+        "mode": "command-contains",
+        "note": "Running AI Health daemon should expose the pinned interpreter in launchctl readback.",
+        "command": [
+          "launchctl",
+          "print",
+          "system/com.koval.ai-health-manager"
+        ]
+      },
+      {
+        "group": "deployment-state",
+        "label": "National Outreach daemon plist exists",
+        "path": "/Library/LaunchDaemons/com.koval.nationaloutreach-auto.plist",
+        "expected": "exists",
+        "mode": "exists",
+        "note": "National Outreach service should be installed as a system LaunchDaemon."
+      },
+      {
+        "group": "deployment-state",
+        "label": "National Outreach wrapper target",
+        "path": "/Library/LaunchDaemons/com.koval.nationaloutreach-auto.plist",
+        "expected": "/Library/KOVAL/bin/nationaloutreach-auto",
+        "mode": "contains",
+        "note": "National Outreach daemon should launch through the approved wrapper path."
+      },
+      {
+        "group": "deployment-state",
+        "label": "National Outreach wrapper exists",
+        "path": "/Library/KOVAL/bin/nationaloutreach-auto",
+        "expected": "exists",
+        "mode": "exists",
+        "note": "The wrapper referenced by the National Outreach LaunchDaemon should exist."
+      },
+      {
+        "group": "deployment-state",
+        "label": "Task Flow daemon plist exists",
+        "path": "/Library/LaunchDaemons/com.koval.task-flow-reminders.plist",
+        "expected": "exists",
+        "mode": "exists",
+        "note": "Task Flow reminders should be installed as a system LaunchDaemon."
+      },
+      {
+        "group": "deployment-state",
+        "label": "Task Flow wrapper target",
+        "path": "/Library/LaunchDaemons/com.koval.task-flow-reminders.plist",
+        "expected": "/Users/admin/.task-flow-launch/runtime/run_task_flow_due_runner.sh",
+        "mode": "contains",
+        "note": "Task Flow daemon should point at the installed runtime wrapper."
+      },
+      {
+        "group": "deployment-state",
+        "label": "Task Flow wrapper exists",
+        "path": "/Users/admin/.task-flow-launch/runtime/run_task_flow_due_runner.sh",
+        "expected": "exists",
+        "mode": "exists",
+        "note": "The Task Flow installed runtime wrapper should exist."
+      },
+      {
+        "group": "deployment-state",
+        "label": "Workspaceboard user plist exists",
+        "path": "/Users/admin/Library/LaunchAgents/com.koval.workspaceboard.plist",
+        "expected": "exists",
+        "mode": "exists",
+        "note": "Workspaceboard user LaunchAgent should exist."
+      },
+      {
+        "group": "deployment-state",
+        "label": "Workspaceboard automation user plist exists",
+        "path": "/Users/admin/Library/LaunchAgents/com.koval.workspaceboard-automation.plist",
+        "expected": "exists",
+        "mode": "exists",
+        "note": "Workspaceboard automation LaunchAgent should exist."
+      },
+      {
+        "group": "deployment-state",
+        "label": "Workspaceboard launch wrapper exists",
+        "path": "/Users/admin/.workspaceboard-launch/runtime/scripts/launch_codex_dashboard_agent.sh",
+        "expected": "exists",
+        "mode": "exists",
+        "note": "Workspaceboard installed launch wrapper should exist."
+      },
+      {
+        "group": "deployment-state",
+        "label": "Workspaceboard automation wrapper exists",
+        "path": "/Users/admin/.workspaceboard-launch/runtime/scripts/run_workspaceboard_automation.sh",
+        "expected": "exists",
+        "mode": "exists",
+        "note": "Workspaceboard automation wrapper should exist."
+      }
+    ]
+  },
+  "scan_roots": {
+    "installed_scripts": [
+      "/Users/admin/.nationaloutreach-launch/runtime/scripts",
+      "/Users/admin/.task-flow-launch/runtime",
+      "/Users/admin/.workspaceboard-launch/runtime/scripts",
+      "/Users/admin/.frank-launch/runtime/scripts",
+      "/Users/admin/.avignon-launch/runtime/scripts",
+      "/Users/admin/.asher-launch/runtime/scripts",
+      "/Users/admin/.venetia-launch/runtime/scripts"
+    ],
+    "koval_plists": [
+      "/Library/LaunchDaemons",
+      "/Users/admin/Library/LaunchAgents"
+    ]
+  }
+}

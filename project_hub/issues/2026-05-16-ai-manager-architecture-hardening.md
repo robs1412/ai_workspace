@@ -131,3 +131,27 @@ Recommended next implementation slice:
   - A combined two-file `node --test server/test/session-status.test.js server/test/ai-manager-phone.test.js` run failed once with a cross-file flake around constant-on classification, then the isolated status suite passed cleanly. Treat combined-run stability as the next verification slice rather than proof of a remaining logic blocker.
 - Next check target:
   - Re-run the combined Workspaceboard test slice and either isolate/fix the shared-state flake or promote the current patch set to a proof-backed implementation closeout.
+
+## 2026-05-20 Event-Log Repair
+
+- The AI Manager input recorder now writes both current and legacy audit surfaces again.
+- `scripts/ai_manager_input_recorder.php` was updated so each `record` and `update` call appends a matching row to `koval_crm.ai_manager_input_events` while still upserting `koval_crm.ai_manager_inputs`.
+- Live smoke through `POST /api/ai-manager/daily-input` returned `db_ok: true`, created `ai_manager_inputs.id=1982`, and advanced the legacy event table to `ai_manager_input_events.id=1995` with `logged_at=2026-05-20 08:56:17`.
+- Result: the stale May 16 event-log surface is repaired; future AI Manager input writes should now move both DB surfaces together.
+- 2026-05-20 follow-through: backfilled 13 missing legacy rows from `koval_crm.ai_manager_inputs` into `koval_crm.ai_manager_input_events` using the new `backfill-events` command. The event tail now reaches `ai_manager_input_events.id=2008` at `2026-05-20 08:59:46`, and the current post-2026-05-17 missing-event count for inputs is 0.
+- 2026-05-20 scheduling follow-through: the input-trail repair is now tracked as a weekly recurring audit in `project_hub/repeating-tasks.json` with Monday checks for both the AI Manager input writer and the legacy event trail. The intent is to catch any future drift between `ai_manager_inputs`, the daily-input Markdown trail, and `ai_manager_input_events` before it sits stale for days again.
+- 2026-05-20 OPS follow-through: created silent Codex-owned OPS task `369932` (`Weekly AI Manager input legacy-trail audit`) due `2026-05-25`, creator `1`, owner/assignee `1332`, status `Not Started`. This keeps the weekly audit in the DB-backed task spine as well as the recurring-task JSON.
+- 2026-05-20 chat-entry bridge follow-through: added `scripts/ai_manager_chat_entry_adapter.php` as the explicit AI Manager control-lane transport hook. Future AI Manager prompts and durable decisions should go through this bridge so they land in both `koval_crm.ai_manager_inputs` and the daily-input markdown trail instead of staying only in chat history.
+- 2026-05-20 Papers write follow-through: created the `papers-write` skill and the local `papers_write_note.py` publisher, but the live Papers MCP still rejects `papers_create` for client `codex`. Sent a Codex-side permission request to Claude (`Codex Papers write permission needed for durable assessment link`, Message-ID `<177929804365.25895.6505397721653286721@kovaldistillery.com>`) and copied Robert so the approved write client/path can be confirmed before the assessment is published.
+- 2026-05-21 Papers write recovery is now source-proven complete. The original durability note publish succeeded at Papers GUID `3ee50607-df35-401c-a6c9-6f601127deb3` / path `ai-manager/durability/2026-05-21-ai-manager-durability-rules.md`, and a second live verification write from this shell succeeded at GUID `68a9266a-4563-44e5-ad01-eb6ddf234b81` / path `ai-manager/durability/2026-05-21-codex-papers-write-restored.md` using local source file `project_hub/artifacts/ai-manager-durability/codex-papers-write-restored-2026-05-21.md`. The active state is no longer `papers_create` denied; Codex can use the approved writer path for non-secret durable Papers notes.
+
+## 2026-05-25 Direct Terminal DB Logging Directive
+
+- Robert directive recorded at `2026-05-25 12:43 CDT`: all substantive work must be logged according to Task Flow in the DB-backed task spine. This includes work started from `ai-manager.php`, routed Workspaceboard workers, and approved direct terminal task-mode execution.
+- Architecture correction: markdown handoffs, TODO projections, and chat readbacks remain useful proof surfaces, but they are not sufficient as the primary durable record for substantive work. The server-hardened flow must make the work traceable through DB-visible Task Flow rows so route history, proof state, and stats survive across control surfaces.
+- Concrete enforcement target:
+  1. every substantive direct-terminal task-mode pass must mint or update a Task Flow packet,
+  2. AI Manager prompts/corrections/durable decisions must keep landing in `ai_manager_inputs`,
+  3. direct-terminal and routed-worker executions should share a common Task Flow reporting contract so stats/counts do not drift by launch surface.
+- Immediate proof from the same correction cycle: the `task-db.php` repair pass is now recorded as Task Flow key `taskflow-workspaceboard-task-db-route-repair-2026-05-25`, in addition to the repo-local proof note in `workspaceboard/HANDOFF.md`.
+- Next hardening slice: add an explicit direct-terminal recorder path or guardrail so starting work outside a visible Workspaceboard worker still creates the DB-visible Task Flow packet before the work is treated as in progress.

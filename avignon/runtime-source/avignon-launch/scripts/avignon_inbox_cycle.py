@@ -44,6 +44,16 @@ try:
 except ImportError:  # pragma: no cover - task-flow recorder is optional fail-open audit plumbing.
     shared_task_flow = None
 
+try:
+    import email_trace_recorder
+except ImportError:  # pragma: no cover - email trace recorder is optional fail-open audit plumbing.
+    email_trace_recorder = None
+
+try:
+    import mailbox_imap_helpers
+except ImportError:  # pragma: no cover - shared mailbox helper is optional fail-open plumbing.
+    mailbox_imap_helpers = None
+
 CANONICAL_AI_ROOT = Path("/Users/werkstatt/ai_workspace")
 
 
@@ -221,11 +231,15 @@ def explicitly_requests_assistant_action(message: dict, assistant_name: str, ass
         local_part.split(".", 1)[0].strip().lower(),
     }
     text = re.sub(r"\s+", " ", f"{subject} {body}".lower())
-    action_verbs = r"(please|can you|could you|would you|need you to|route|handle|file|archive|create|update|check|fix|send|draft|reply|ask|tell|schedule|log|record|escalate)"
+    action_verbs = r"(please|can you|could you|would you|need you to|route|handle|file|archive|create|update|check|fix|send|share|provide|confirm|pull|draft|reply|ask|tell|schedule|log|record|escalate|follow up|follow-up)"
     for token in assistant_tokens:
         if token and re.search(rf"\b{re.escape(token)}\b[^.?!]{{0,120}}\b{action_verbs}\b", text):
             return True
         if token and re.search(rf"\b{action_verbs}\b[^.?!]{{0,120}}\b{re.escape(token)}\b", text):
+            return True
+        if token and re.search(rf"(?:^|[;:,\-\(\)\s]){re.escape(token)}(?:[;:,\-\)\s]|$)[^.?!]{{0,160}}\b(send|share|provide|confirm|check|pull|draft|reply|follow up|follow-up|schedule|look up)\b", text):
+            return True
+        if token and re.search(rf"\b(send|share|provide|confirm|check|pull|draft|reply|follow up|follow-up|schedule|look up)\b[^.?!]{{0,160}}(?:^|[;:,\-\(\)\s]){re.escape(token)}(?:[;:,\-\)\s]|$)", text):
             return True
     return False
 
@@ -287,6 +301,14 @@ def load_automation_ids() -> set[str]:
             source_id = action.get("source_message_id")
             if source_id:
                 ids.add(normalize_message_id(str(source_id)))
+    return ids
+
+
+def load_seen_ids_db_first() -> set[str]:
+    ids: set[str] = set()
+    if mailbox_imap_helpers is not None:
+        ids.update(mailbox_imap_helpers.collect_seen_source_ids_from_db("avignon", 20000))
+    ids.update(load_automation_ids())
     return ids
 
 
@@ -409,6 +431,73 @@ def fetch_inbox(user: str, app_pw: str, seen_ids: set[str] | None = None) -> lis
     return messages
 
 
+def fetch_message_by_message_id(user: str, app_pw: str, source_message_id: str) -> dict | None:
+    normalized = normalize_message_id(source_message_id)
+    if not normalized:
+        return None
+    conn = imaplib.IMAP4_SSL("imap.gmail.com", 993)
+    conn.login(user, app_pw)
+    try:
+        for mailbox in ("INBOX", '"[Gmail]/All Mail"'):
+            status, _ = conn.select(mailbox, readonly=True)
+            if status != "OK":
+                continue
+            status, data = conn.search(None, "HEADER", "MESSAGE-ID", source_message_id)
+            ids = data[0].split() if status == "OK" and data and data[0] else []
+            for imap_id in ids:
+                status, msg_data = conn.fetch(imap_id, "(BODY.PEEK[])")
+                if status != "OK":
+                    continue
+                raw = b"".join(part[1] for part in msg_data if isinstance(part, tuple))
+                if not raw:
+                    continue
+                msg = message_from_bytes(raw)
+                body_parts: list[str] = []
+                html_parts: list[str] = []
+                attachments: list[dict] = []
+                for part in msg.walk():
+                    content_type = part.get_content_type()
+                    disposition = str(part.get("Content-Disposition", "")).lower()
+                    filename = decode_value(part.get_filename(""))
+                    payload = part.get_payload(decode=True) or b""
+                    if payload and "attachment" not in disposition:
+                        if content_type == "text/plain":
+                            body_parts.append(payload.decode(part.get_content_charset() or "utf-8", errors="replace"))
+                        elif content_type == "text/html":
+                            html_parts.append(payload.decode(part.get_content_charset() or "utf-8", errors="replace"))
+                    if filename or "attachment" in disposition:
+                        attachments.append(
+                            {
+                                "filename": filename or "[unnamed]",
+                                "content_type": content_type,
+                                "bytes": len(payload),
+                            }
+                        )
+                body = "\n".join(body_parts).strip()
+                if not body and html_parts:
+                    body = html_to_text("\n".join(html_parts))
+                message = {
+                    "imap_id": imap_id.decode(),
+                    "date": decode_value(msg.get("Date", "")),
+                    "from": decode_value(msg.get("From", "")),
+                    "to": decode_value(msg.get("To", "")),
+                    "cc": decode_value(msg.get("Cc", "")),
+                    "subject": decode_value(msg.get("Subject", "")),
+                    "message_id": decode_value(msg.get("Message-ID", "")),
+                    "in_reply_to": decode_value(msg.get("In-Reply-To", "")),
+                    "references": decode_value(msg.get("References", "")),
+                    "body": body,
+                    "attachments": attachments,
+                    "body_fetched": True,
+                    "mailbox": mailbox,
+                }
+                if normalize_message_id(str(message.get("message_id") or "")) == normalized:
+                    return message
+    finally:
+        conn.logout()
+    return None
+
+
 def decision_item_exists(item_id: str) -> bool:
     if not DECISIONS.exists():
         return False
@@ -458,6 +547,50 @@ def append_log(row: dict) -> None:
     AUTO_LOG.parent.mkdir(parents=True, exist_ok=True)
     with AUTO_LOG.open("a", encoding="utf-8") as handle:
         handle.write(json.dumps(row, ensure_ascii=True) + "\n")
+    if email_trace_recorder is None:
+        return
+    logged_at = str(row.get("logged_at") or datetime.now(timezone.utc).isoformat())
+    actions = row.get("message_actions") if isinstance(row.get("message_actions"), list) else []
+    for action in actions:
+        if not isinstance(action, dict):
+            continue
+        source_id = normalize_message_id(str(action.get("source_message_id") or ""))
+        if not source_id:
+            continue
+        task_packet = task_flow_packet_from_action(action) if shared_task_flow else {}
+        status = task_flow_status_from_action(action)
+        details = {
+            "classification": action.get("classification", ""),
+            "decision": action.get("decision", ""),
+            "archived": bool(action.get("archived")),
+            "current_state": action.get("current_state", ""),
+        }
+        message = email_trace_recorder.build_message_record(
+            mailbox_lane="avignon",
+            worker="avignon",
+            event="email_action_logged",
+            source_message_id=source_id,
+            source_ref=source_id,
+            subject=action.get("subject", ""),
+            from_address=action.get("from", ""),
+            header_date=action.get("date", ""),
+            direction="inbound",
+            status=status,
+            first_seen_at=logged_at,
+            event_at=logged_at,
+            task_packet=task_packet,
+            workspaceboard_session=action.get("routed_session_id", ""),
+            metadata=details,
+            ops_portal_or_domain_task=action.get("dedupe_key", ""),
+            body_summary=action.get("classification", ""),
+        )
+        email_trace_recorder.record_event(
+            AUTO_LOG.parent,
+            event="email_action_logged",
+            message=message,
+            task_packet=task_packet,
+            details=details,
+        )
 
 
 def redact_sensitive_text(value: str) -> str:
@@ -497,6 +630,24 @@ def direct_owner_task_title(message: dict, owner: str) -> str:
     subject = normalized_subject(message.get("subject", "")) or "direct owner work"
     title = f"Avignon direct {owner_label}: {subject}"
     return title[:96]
+
+
+def direct_owner_reply_subject(subject: str) -> str:
+    subject_text = " ".join(str(subject or "").split()).strip()
+    if not subject_text:
+        return "Re: direct request"
+    if re.match(r"(?i)^(re|fw|fwd):", subject_text):
+        return subject_text
+    return f"Re: {subject_text}"
+
+
+def source_thread_headers(message: dict) -> tuple[str, str]:
+    source_message_id = normalize_message_id(str(message.get("message_id") or ""))
+    in_reply_to = str(message.get("message_id") or source_message_id or "").strip()
+    references = str(message.get("references") or "").strip()
+    if source_message_id and source_message_id not in references:
+        references = f"{references} {source_message_id}".strip()
+    return in_reply_to, references
 
 
 def direct_owner_report_target(owner: str) -> dict:
@@ -659,16 +810,36 @@ def create_visible_direct_owner_route(message: dict, owner: str) -> dict:
         "session_id": "",
         "session_title": direct_owner_task_title(message, owner),
         "prompt_delivery": {},
+        "reused_existing": False,
     }
-    created = post_json(
-        "/api/session/create",
-        {"workspace": route["workspace"], "mode": "codex", "title": route["session_title"]},
-    )
-    session = created.get("session") if isinstance(created.get("session"), dict) else {}
-    route["session_id"] = str(session.get("id") or "")
-    route["session_title"] = str(session.get("title") or session.get("display_name") or route["session_title"])
+    existing = find_open_direct_owner_session(route["session_title"])
+    if existing:
+        route["session_id"] = str(existing.get("id") or "")
+        route["session_title"] = str(existing.get("title") or existing.get("display_name") or route["session_title"])
+        route["reused_existing"] = True
+        return route
+    try:
+        created = post_json(
+            "/api/session/create",
+            {"workspace": route["workspace"], "mode": "codex", "title": route["session_title"]},
+        )
+        session = created.get("session") if isinstance(created.get("session"), dict) else {}
+        route["session_id"] = str(session.get("id") or "")
+        route["session_title"] = str(session.get("title") or session.get("display_name") or route["session_title"])
+    except Exception as exc:
+        blocker = redact_sensitive_text(str(exc))
+        if "409" in blocker or "conflict" in blocker.casefold():
+            existing = find_open_direct_owner_session(route["session_title"])
+            if existing:
+                route["session_id"] = str(existing.get("id") or "")
+                route["session_title"] = str(existing.get("title") or existing.get("display_name") or route["session_title"])
+                route["reused_existing"] = True
+                return route
+        raise
     if not route["session_id"] or not route["session_title"]:
         raise RuntimeError("Workspaceboard did not return a visible session id/title.")
+    if route["reused_existing"]:
+        return route
     wait_for_session_prompt(route["session_id"])
     prompt = build_direct_owner_prompt(message, owner, route)
     delivered = post_json(
@@ -689,8 +860,20 @@ def write_direct_owner_body_file(kind: str, dedupe_key: str, body: str) -> Path:
     return path
 
 
-def send_avignon_owner_email(subject: str, body: str, task_id: str, to_addr: str, cc_addr: str = "") -> str:
+def send_avignon_owner_email(
+    subject: str,
+    body: str,
+    task_id: str,
+    to_addr: str,
+    cc_addr: str = "",
+    in_reply_to: str = "",
+    references: str = "",
+    html_body: str = "",
+) -> str:
     body_path = write_direct_owner_body_file("direct-owner", task_id, body)
+    html_body_path = None
+    if html_body:
+        html_body_path = write_direct_owner_body_file("direct-owner-html", task_id, html_body)
     recipients = {to_addr.strip().lower()}
     if cc_addr:
         recipients.add(cc_addr.strip().lower())
@@ -708,8 +891,14 @@ def send_avignon_owner_email(subject: str, body: str, task_id: str, to_addr: str
         "--task-id",
         task_id,
     ]
+    if html_body_path is not None:
+        cmd.extend(["--html-body-file", str(html_body_path)])
     if cc_addr:
         cmd.extend(["--cc", cc_addr])
+    if in_reply_to:
+        cmd.extend(["--in-reply-to", in_reply_to])
+    if references:
+        cmd.extend(["--references", references])
     if any(addr and addr != SONAT_EMAIL for addr in recipients):
         cmd.append("--allow-non-primary")
     result = subprocess.run(
@@ -750,9 +939,9 @@ def compose_direct_owner_ack(message: dict, owner: str, route: dict) -> str:
             [
                 greeting,
                 "",
-                f"I have this: {subject}.",
+                f"Captured: {subject}.",
                 "",
-                "I am taking care of it and will come back with either the finished result or the one thing I need from you. No need to chase the machinery behind it.",
+                f"I routed it into visible work and will come back with either the finished result or the one concrete thing I need from you.",
                 "",
                 "Best,",
             ]
@@ -799,16 +988,75 @@ def handle_direct_owner_message(message: dict, owner: str) -> dict:
         }
     try:
         route = create_visible_direct_owner_route(message, owner)
+        in_reply_to, references = source_thread_headers(message)
         ack_body = compose_direct_owner_ack(message, owner, route)
         ack_message_id = send_avignon_owner_email(
-            f"Avignon captured: {(normalized_subject(message.get('subject', '')) or 'direct request')[:80]}",
+            direct_owner_reply_subject(str(message.get("subject") or "")),
             ack_body,
             f"{dedupe_key}-ack",
             report_target["to"],
             report_target["cc"],
+            in_reply_to=in_reply_to,
+            references=references,
         )
     except Exception as exc:
         blocker = redact_sensitive_text(str(exc))
+        if "409" in blocker or "conflict" in blocker.casefold():
+            existing_open = find_open_direct_owner_session(direct_owner_task_title(message, owner))
+            if existing_open:
+                return {
+                    **base,
+                    "classification": "direct-owner-route-reused-open-session",
+                    "decision": "direct-owner-existing-open-route-reused",
+                    "current_state": "routed_pending_completion",
+                    "routed_workspace": str(existing_open.get("workspace_key") or "avignon"),
+                    "routed_session_id": str(existing_open.get("id") or ""),
+                    "routed_session_title": str(existing_open.get("title") or ""),
+                    "route_blocker": blocker,
+                    "archivable_now": False,
+                }
+            prior_session = find_closed_direct_owner_session(
+                str(message.get("subject", "")),
+                owner,
+            )
+            if prior_session:
+                prior_work_state = prior_session.get("work_state") or {}
+                return {
+                    **base,
+                    "classification": "direct-owner-route-duplicate-closed",
+                    "decision": "direct-owner-duplicate-already-closed-no-resend",
+                    "current_state": "completed_report_sent",
+                    "routed_workspace": str(prior_session.get("workspace_key") or "avignon"),
+                    "routed_session_id": str(prior_session.get("id") or ""),
+                    "routed_session_title": str(prior_session.get("title") or ""),
+                    "closeout_proof_marker": str(prior_work_state.get("proof_marker") or ""),
+                    "route_blocker": blocker,
+                    "archivable_now": True,
+                }
+        if direct_owner_closeout_already_sent(load_sent_log(SENT_LOG), base):
+            return {
+                **base,
+                "classification": "direct-owner-route-blocked-already-reported",
+                "decision": "direct-owner-route-blocked-already-reported-no-resend",
+                "current_state": "blocked_report_sent",
+                "route_blocker": blocker,
+                "archivable_now": True,
+            }
+        blocker_lower = blocker.casefold()
+        if (
+            "timed out" in blocker_lower
+            or "timeout" in blocker_lower
+            or "409" in blocker_lower
+            or "conflict" in blocker_lower
+        ):
+            return {
+                **base,
+                "classification": "direct-owner-route-local-retry",
+                "decision": "direct-owner-route-blocked-local-no-email",
+                "current_state": "captured_route_blocked_local_retry",
+                "route_blocker": blocker,
+                "archivable_now": False,
+            }
         greeting = "Hi Robert," if owner == "robert-approver" else "Hi Sonat,"
         blocker_body = "\n".join(
             [
@@ -822,12 +1070,15 @@ def handle_direct_owner_message(message: dict, owner: str) -> dict:
                 "Next: Task Manager or Security Guard should restore/approve the visible route path, then Avignon can route and follow through.",
             ]
         )
+        in_reply_to, references = source_thread_headers(message)
         blocker_message_id = send_avignon_owner_email(
-            f"Avignon blocked: {(normalized_subject(message.get('subject', '')) or 'direct request')[:80]}",
+            direct_owner_reply_subject(str(message.get("subject") or "")),
             blocker_body,
             f"{dedupe_key}-route-blocked",
             report_target["to"],
             report_target["cc"],
+            in_reply_to=in_reply_to,
+            references=references,
         )
         return {
             **base,
@@ -862,6 +1113,47 @@ def board_session_status(session_id: str) -> dict | None:
     return None
 
 
+def find_open_direct_owner_session(expected_title: str) -> dict | None:
+    expected = str(expected_title or "").strip().casefold()
+    if not expected:
+        return None
+    payload = get_json("/api/status")
+    for session in payload.get("managed_sessions", []) or []:
+        if not isinstance(session, dict):
+            continue
+        title = str(session.get("title") or "").strip().casefold()
+        if title != expected:
+            continue
+        status = str(session.get("status") or "").strip().lower()
+        if status in {"finished", "blocked", "closed"}:
+            continue
+        return session
+    return None
+
+
+def find_closed_direct_owner_session(subject: str, owner: str) -> dict | None:
+    subject_text = normalized_subject(subject).strip()
+    if not subject_text:
+        return None
+    owner_label = "Robert" if owner == "robert-approver" else "Sonat"
+    expected_title = f"Avignon direct {owner_label}: {subject_text}".casefold()
+    payload = get_json("/api/status")
+    for session in payload.get("closed_sessions", []) or []:
+        if not isinstance(session, dict):
+            continue
+        title = str(session.get("title") or "").strip().casefold()
+        if title != expected_title:
+            continue
+        work_state = session.get("work_state") or {}
+        if (
+            str(work_state.get("state") or "") == "closed_with_proof"
+            or str(work_state.get("proof_marker") or "")
+            or session.get("closed_at")
+        ):
+            return session
+    return None
+
+
 def board_session_summary(session_id: str) -> dict | None:
     if not session_id:
         return None
@@ -869,8 +1161,34 @@ def board_session_summary(session_id: str) -> dict | None:
     try:
         payload = get_json(f"/api/session-summary?{query}")
     except Exception:
+        payload = None
+    if isinstance(payload, dict) and payload:
+        return payload
+    session = board_session_status(session_id)
+    if not isinstance(session, dict):
         return None
-    return payload if isinstance(payload, dict) else None
+    work_state = session.get("work_state") if isinstance(session.get("work_state"), dict) else {}
+    summary_parts = [
+        str(session.get("blocker") or work_state.get("blocker_text") or "").strip(),
+        str(session.get("owner_question") or work_state.get("owner_question") or "").strip(),
+    ]
+    summary = " ".join(part for part in summary_parts if part).strip()
+    if not summary:
+        return None
+    return {"summary": summary}
+
+
+def session_blocker_text(session: dict, session_summary: dict | None = None) -> str:
+    summary_text = str((session_summary or {}).get("summary") or "").strip()
+    if summary_text:
+        return summary_text
+    work_state = session.get("work_state") if isinstance(session.get("work_state"), dict) else {}
+    return str(session.get("blocker") or work_state.get("blocker_text") or "").strip()
+
+
+def session_owner_question_text(session: dict) -> str:
+    work_state = session.get("work_state") if isinstance(session.get("work_state"), dict) else {}
+    return str(session.get("owner_question") or work_state.get("owner_question") or "").strip()
 
 
 def clarification_request_text(subject: str, summary_text: str) -> str:
@@ -886,6 +1204,11 @@ def clarification_request_text(subject: str, summary_text: str) -> str:
         match = re.search(pattern, cleaned_summary, flags=re.IGNORECASE)
         if match:
             return match.group(1).strip()
+    if cleaned_summary == "":
+        return (
+            f'I only have the subject "{cleaned_subject or "this request"}" preserved in the current route, '
+            "not the original request details. Please reply with the exact action you want handled."
+        )
     generic_subjects = {"project", "update", "status", "backup", "external", "avignon", "2 items", "new role"}
     if cleaned_subject.lower() in generic_subjects or len(cleaned_subject.split()) <= 2:
         return f'Please reply with the exact project/task name, the workflow to automate or improve, the desired outcome, and the next action for "{cleaned_subject or "this request"}".'
@@ -942,16 +1265,28 @@ def compose_owner_style_status(subject: str, session_id: str, session_title: str
     ).rstrip() + "\n"
 
 
+def closeout_text_to_html(body: str) -> str:
+    paragraphs = []
+    for block in str(body or "").rstrip().split("\n\n"):
+        lines = [html.escape(line) for line in block.splitlines()]
+        if not lines:
+            continue
+        paragraphs.append("<p>" + "<br>\n".join(lines) + "</p>")
+    return "\n".join(paragraphs)
+
+
 def compose_direct_owner_closeout(action: dict, session: dict, blocked: bool, session_summary: dict | None = None) -> str:
     subject = str(action.get("subject") or "direct-owner request")
     state = str(session.get("status_label") or session.get("status") or "unknown")
     session_id = str(action.get("routed_session_id") or "")
     session_title = str(action.get("routed_session_title") or session.get("title") or session.get("display_name") or "")
     greeting = "Hi Robert," if str(action.get("owner") or "") == "robert-approver" else "Hi Sonat,"
-    summary_text = str((session_summary or {}).get("summary") or "").strip()
+    summary_text = session_blocker_text(session, session_summary)
+    owner_question_text = session_owner_question_text(session)
     if str(action.get("owner") or "") != "robert-approver":
         if blocked and session_summary_has_active_context(summary_text):
             return compose_owner_style_status(subject, session_id, session_title, state, summary_text, str(action.get("owner") or "sonat"))
+        blocker_text = summary_text or "I do not yet have one preserved blocker line in mailbox state."
         lines = [
             greeting,
             "",
@@ -965,7 +1300,8 @@ def compose_direct_owner_closeout(action: dict, session: dict, blocked: bool, se
         if blocked:
             lines.extend(
                 [
-                    "I am not going to guess from incomplete context.",
+                    f"Current blocker: {blocker_text}",
+                    "",
                     clarification_request_text(subject, summary_text),
                 ]
             )
@@ -993,11 +1329,11 @@ def compose_direct_owner_closeout(action: dict, session: dict, blocked: bool, se
     if blocked and session_summary_has_active_context(summary_text):
         return compose_owner_style_status(subject, session_id, session_title, state, summary_text, str(action.get("owner") or "sonat"))
     if blocked:
-        clarification = clarification_request_text(subject, summary_text)
+        clarification = owner_question_text or clarification_request_text(subject, summary_text)
         lines.extend(
             [
                 f"I already have this linked to visible session {session_id} / {session_title}.",
-                "I am not guessing or expanding scope from incomplete context.",
+                f"Blocker: {summary_text or 'I do not yet have the concrete blocker text preserved in mailbox state.'}",
                 clarification,
             ]
         )
@@ -1012,10 +1348,27 @@ def compose_direct_owner_closeout(action: dict, session: dict, blocked: bool, se
     return "\n".join(lines).rstrip() + "\n"
 
 
-def monitor_direct_owner_action(action: dict) -> dict:
+def compose_direct_owner_closeout_html(action: dict, session: dict, blocked: bool, session_summary: dict | None = None) -> str:
+    body = compose_direct_owner_closeout(action, session, blocked, session_summary)
+    return (
+        "<html><body style=\"font-family:Arial,sans-serif;font-size:14px;line-height:1.5;color:#111;\">"
+        + closeout_text_to_html(body)
+        + "</body></html>"
+    )
+
+
+def monitor_direct_owner_action(action: dict, user: str | None = None, app_pw: str | None = None) -> dict:
     state = str(action.get("current_state") or "")
+    reported_state = direct_owner_closeout_state(load_sent_log(SENT_LOG), action)
     if state in DIRECT_OWNER_DONE_STATES:
         return {"monitor_state": state, "current_state": state, "archivable_now": True}
+    if reported_state or state in {"blocked_report_sent", "completed_report_sent"} or action.get("blocker_message_id") or action.get("completion_message_id"):
+        return {
+            "monitor_state": "already-reported",
+            "current_state": reported_state or state or ("blocked_report_sent" if action.get("blocker_message_id") else "completed_report_sent"),
+            "session_status": "blocked" if (reported_state == "blocked_report_sent" or action.get("blocker_message_id")) else "finished",
+            "archivable_now": True,
+        }
     if state not in DIRECT_OWNER_PENDING_STATES:
         return {"monitor_state": "not-pending"}
     try:
@@ -1028,47 +1381,66 @@ def monitor_direct_owner_action(action: dict) -> dict:
             "status_blocker": redact_sensitive_text(str(exc))[:240],
         }
     if not session:
-        target = direct_owner_report_target(str(action.get("owner") or "sonat"))
-        closeout_state = "blocked_report_sent"
-        task_id = f"{action.get('dedupe_key', 'avignon-direct-owner')}-{closeout_state}"
-        message_id = send_avignon_owner_email(
-            f"Avignon blocker: {str(action.get('subject') or '')[:80]}",
-            compose_direct_owner_closeout(
-                action,
-                {
-                    "status": "blocked",
-                    "status_label": "route-missing",
-                    "title": str(action.get("routed_session_title") or ""),
-                    "display_name": str(action.get("routed_session_title") or ""),
-                },
-                True,
-                {"summary": "The visible routed worker session is no longer present in Workspaceboard. The request remains logged, but follow-through needs a new route only if the work is still needed."},
-            ),
-            task_id,
-            str(target.get("to") or SONAT_EMAIL),
-            str(target.get("cc") or ""),
-        )
+        reroute_message = {
+            "message_id": str(action.get("source_message_id") or ""),
+            "subject": str(action.get("subject") or ""),
+            "from": str(action.get("from") or ""),
+            "date": str(action.get("date") or ""),
+            "body": "",
+        }
+        if user and app_pw and str(action.get("source_message_id") or ""):
+            fetched = fetch_message_by_message_id(user, app_pw, str(action.get("source_message_id") or ""))
+            if isinstance(fetched, dict):
+                reroute_message.update({
+                    "subject": str(fetched.get("subject") or reroute_message["subject"]),
+                    "from": str(fetched.get("from") or reroute_message["from"]),
+                    "date": str(fetched.get("date") or reroute_message["date"]),
+                    "body": str(fetched.get("body") or ""),
+                })
+        try:
+            repaired_route = create_visible_direct_owner_route(reroute_message, str(action.get("owner") or "sonat"))
+        except Exception as exc:
+            return {
+                "monitor_state": "route-missing-local-retry",
+                "current_state": state,
+                "session_status": "route-missing",
+                "archivable_now": False,
+                "status_blocker": redact_sensitive_text(str(exc))[:240],
+            }
         return {
-            "monitor_state": "session-not-found",
-            "current_state": closeout_state,
-            "session_status": "blocked",
-            "completion_message_id": message_id,
-            "archivable_now": True,
+            "monitor_state": "route-recreated",
+            "current_state": state,
+            "session_status": "working",
+            "archivable_now": False,
+            "routed_workspace": repaired_route.get("workspace") or "avignon",
+            "routed_session_id": repaired_route.get("session_id") or "",
+            "routed_session_title": repaired_route.get("session_title") or "",
+            "prompt_delivery": repaired_route.get("prompt_delivery") if isinstance(repaired_route.get("prompt_delivery"), dict) else {},
+            "routed_at": time.time(),
         }
     session_state = str(session.get("status") or "").lower()
     if session_state not in {"finished", "blocked"}:
         return {"monitor_state": "still-pending", "current_state": state, "session_status": session_state}
     blocked = session_state == "blocked"
     session_summary = board_session_summary(str(action.get("routed_session_id") or ""))
+    summary_text = str((session_summary or {}).get("summary") or "").strip()
+    if blocked and not summary_text and user and app_pw:
+        fetched = fetch_message_by_message_id(user, app_pw, str(action.get("source_message_id") or ""))
+        fetched_body = str((fetched or {}).get("body") or "").strip()
+        if fetched_body:
+            session_summary = {**(session_summary or {}), "summary": fetched_body}
     target = direct_owner_report_target(str(action.get("owner") or "sonat"))
     closeout_state = "blocked_report_sent" if blocked else "completed_report_sent"
     task_id = f"{action.get('dedupe_key', 'avignon-direct-owner')}-{closeout_state}"
     message_id = send_avignon_owner_email(
-        f"Avignon {'blocker' if blocked else 'complete'}: {str(action.get('subject') or '')[:80]}",
+        direct_owner_reply_subject(str(action.get("subject") or "")),
         compose_direct_owner_closeout(action, session, blocked, session_summary),
         task_id,
         str(target.get("to") or SONAT_EMAIL),
         str(target.get("cc") or ""),
+        in_reply_to=str(action.get("source_message_id") or ""),
+        references=str(action.get("source_message_id") or ""),
+        html_body=compose_direct_owner_closeout_html(action, session, blocked, session_summary),
     )
     return {
         "monitor_state": closeout_state,
@@ -1077,6 +1449,38 @@ def monitor_direct_owner_action(action: dict) -> dict:
         "completion_message_id": message_id,
         "archivable_now": True,
     }
+
+
+def direct_owner_closeout_already_sent(sent_log: dict[str, dict], action: dict) -> bool:
+    dedupe_key = str(action.get("dedupe_key") or "").strip()
+    if not dedupe_key:
+        return False
+    prefixes = (
+        f"{dedupe_key}-blocked_report_sent",
+        f"{dedupe_key}-completed_report_sent",
+        f"{dedupe_key}-captured_route_blocked_report_sent",
+    )
+    for row in sent_log.values():
+        task_id = str(row.get("task_id") or "")
+        if any(task_id.startswith(prefix) for prefix in prefixes):
+            return True
+    return False
+
+
+def direct_owner_closeout_state(sent_log: dict[str, dict], action: dict) -> str:
+    dedupe_key = str(action.get("dedupe_key") or "").strip()
+    if not dedupe_key:
+        return ""
+    blocked_task_id = f"{dedupe_key}-blocked_report_sent"
+    completed_task_id = f"{dedupe_key}-completed_report_sent"
+    captured_blocked_task_id = f"{dedupe_key}-captured_route_blocked_report_sent"
+    for row in sent_log.values():
+        task_id = str(row.get("task_id") or "")
+        if task_id == blocked_task_id or task_id == captured_blocked_task_id:
+            return "blocked_report_sent"
+        if task_id == completed_task_id:
+            return "completed_report_sent"
+    return ""
 
 
 def is_direct_owner_action(action: dict) -> bool:
@@ -1400,7 +1804,7 @@ def route_message(message: dict, sent_log: dict, assistant_email: str) -> tuple[
 def main() -> int:
     user, app_pw = load_credentials(CREDS)
     sent_log = load_sent_log(SENT_LOG)
-    seen = load_automation_ids()
+    seen = load_seen_ids_db_first()
     automation_actions = load_automation_actions()
     messages = fetch_inbox(user, app_pw, seen)
     actions: list[dict] = []
@@ -1411,9 +1815,10 @@ def main() -> int:
         source_id = normalize_message_id(message.get("message_id", ""))
         if source_id in seen:
             previous = latest_action_for_source(automation_actions, source_id) or {}
-            previous_direct_owner = is_direct_owner_action(previous)
+            inferred_owner = direct_owner_kind(message, str(previous.get("classification") or ""))
+            previous_direct_owner = is_direct_owner_action(previous) or bool(inferred_owner)
             if is_direct_owner_action(previous):
-                monitor_result = monitor_direct_owner_action(previous)
+                monitor_result = monitor_direct_owner_action(previous, user, app_pw)
                 if monitor_result.get("archivable_now"):
                     archive_candidate = {
                         **previous,
@@ -1432,6 +1837,14 @@ def main() -> int:
                         })
                 else:
                     archived = False
+            elif previous_direct_owner:
+                monitor_result = {
+                    "monitor_state": "direct-owner-preventive-hold",
+                    "current_state": "routed_pending_completion",
+                    "archivable_now": False,
+                    "status_blocker": "Previously logged Sonat/Robert instruction lacks direct-owner closeout proof; keep visible until completion or blocker report.",
+                }
+                archived = False
             else:
                 monitor_result = {}
                 archived = archive_email(user, app_pw, source_id, "Handled")

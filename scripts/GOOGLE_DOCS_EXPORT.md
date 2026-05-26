@@ -16,7 +16,7 @@ chmod 600 ~/.config/koval-google-doc-export/client_secret.json
 Authorize once:
 
 ```bash
-python3 scripts/google_docs_export.py authorize
+/usr/local/bin/python3.13 scripts/google_docs_export.py authorize
 ```
 
 The CLI opens a browser authorization URL and stores a refresh token at:
@@ -30,14 +30,14 @@ Do not paste OAuth tokens or client secrets into chat.
 ## Scan
 
 ```bash
-python3 scripts/google_docs_export.py scan \
+/usr/local/bin/python3.13 scripts/google_docs_export.py scan \
   "/Users/kovaladmin/Library/CloudStorage/GoogleDrive-robert@kovaldistillery.com/My Drive/2026 ERTC work"
 ```
 
 ## Dry Run
 
 ```bash
-python3 scripts/google_docs_export.py export \
+/usr/local/bin/python3.13 scripts/google_docs_export.py export \
   "/Users/kovaladmin/Library/CloudStorage/GoogleDrive-robert@kovaldistillery.com/My Drive/2026 ERTC work" \
   --dry-run
 ```
@@ -45,7 +45,7 @@ python3 scripts/google_docs_export.py export \
 ## Export
 
 ```bash
-python3 scripts/google_docs_export.py export \
+/usr/local/bin/python3.13 scripts/google_docs_export.py export \
   "/Users/kovaladmin/Library/CloudStorage/GoogleDrive-robert@kovaldistillery.com/My Drive/2026 ERTC work" \
   --output "/Users/kovaladmin/Library/CloudStorage/GoogleDrive-robert@kovaldistillery.com/My Drive/2026 ERTC work/00_README_AND_INDEX/google-doc-exports"
 ```

@@ -26,6 +26,7 @@ Avignon manages this worker by default. Avignon owns setup follow-through, direc
 - Body reads, send behavior, filing behavior, deletes, and substantive mailbox actions are not enabled.
 - Separation policy: Venetia is separate from Asher. Keep one Venetia mailbox/workspace/LaunchDaemon route and do not merge Venetia into Asher or a shared worker lane unless Robert explicitly approves a replacement or migration.
 - Duplicate policy: do not create duplicate Venetia mailboxes, workspaces, or LaunchDaemon routes.
+- Shared update rule: when Venetia completes a task, send Sonat a confirmation email; when new external communications arrive, send Sonat a concise update. See `docs/email-workers/2026-05-18-shared-asher-venetia-sonat-completion-and-external-update.md`.
 
 ## Editorial Ownership
 

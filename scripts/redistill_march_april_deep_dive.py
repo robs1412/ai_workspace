@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/local/bin/python3.13
 """Deep-dive March/April 2026 anomalies in the Re-Distill email export."""
 
 from __future__ import annotations

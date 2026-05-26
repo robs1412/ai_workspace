@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/local/bin/python3.13
 """Load MCP runtime secrets without printing secret values.
 
 Preferred source is an approved Infisical export command. The fallback is an

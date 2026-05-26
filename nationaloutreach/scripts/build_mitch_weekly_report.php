@@ -65,7 +65,20 @@ if (!$startDate) {
     fwrite(STDERR, "Invalid --start date. Use YYYY-MM-DD.\n");
     exit(2);
 }
-$endDate = $startDate->modify('+6 days');
+$endRaw = arg_value($argv, '--end');
+if ($endRaw !== null && trim($endRaw) !== '') {
+    $endDate = DateTimeImmutable::createFromFormat('Y-m-d', (string) $endRaw);
+    if (!$endDate) {
+        fwrite(STDERR, "Invalid --end date. Use YYYY-MM-DD.\n");
+        exit(2);
+    }
+    if ($endDate < $startDate) {
+        fwrite(STDERR, "--end date must be on or after --start date.\n");
+        exit(2);
+    }
+} else {
+    $endDate = $startDate->modify('+6 days');
+}
 
 $pdo = get_event_pdo();
 $stmt = $pdo->prepare(

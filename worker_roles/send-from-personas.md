@@ -13,7 +13,7 @@ Every email address that an AI worker is allowed to use as a `From` identity mus
 
 No worker may add a new send-from address just because Google Workspace allows an alias. Add the persona and organigram mapping first, then enable the alias or mailbox.
 
-Direct persona addresses must not be sent through a shared mailbox route when that route exposes a visible `Sender:` header. If the authenticated mailbox is `nationaloutreach@kovaldistillery.com`, outbound mail should either be sent as `nationaloutreach@kovaldistillery.com` or fail closed unless a matching direct mailbox/auth path exists for the persona address. This applies to Vanessa Sterling and to future shared-inbox personas such as Naomi Stern, Ezra Katz, or any other added worker address.
+Direct persona addresses must not be sent through a shared mailbox route when that route exposes a visible `Sender:` header. If the authenticated mailbox is `nationaloutreach@kovaldistillery.com`, outbound mail must never use `nationaloutreach@kovaldistillery.com` as a `From` identity. It should send as a real worker/persona address with a matching direct mailbox/auth path, or fail closed. This applies to Vanessa Sterling, Codex Local Agent, Naomi Stern, Ezra Katz, and any other added worker address.
 
 ## Shared Voice Rule
 
@@ -31,7 +31,7 @@ Handled, no-action, duplicate, already-routed, completed, and logged messages sh
 
 ## Shared Open-Item Owner Email Rule
 
-Recording an open, missed, blocked, or waiting email-derived item in local TODO/HANDOFF/log state is not enough. The responsible worker persona must send the owner a normal owner-facing email about the item, with plain-English context, the current blocker or dependency, the exact decision or next action needed, and the original source email quoted or forwarded in the body for review. If the original source is not an email, include the best available source link or packet reference and say that no source email exists.
+Recording an open, missed, blocked, or waiting email-derived item in local TODO/HANDOFF/log state is not enough. The responsible worker persona must send the owner an owner-question email about the item, with plain-English context, the current blocker or dependency, the exact decision or next action needed, and the original source email quoted or forwarded in the body for review. If the original source is not an email, include the best available source link or packet reference and say that no source email exists.
 
 Vanessa owns outreach/COT/tasting/account owner updates, Naomi owns finance-operations and access/QuickBooks/BID finance owner updates, Ezra owns special-project/legal-affairs/document/regulatory owner updates, and Frank/Avignon use their own owner routes for Robert/Sonat work. Existing gates still apply for suspicious mail, credentials/auth, finance/legal sensitivity, external-sensitive sends, destructive/bulk work, and production-impacting changes.
 
@@ -49,14 +49,9 @@ The full intake-to-closeout directive, including email clarification, report-tri
 | `avignon.rose@kovaldistillery.com` | Avignon Rose | `avignon-rose.md` | Avignon mailbox account | Allowed inside Avignon guardrails | Sonat |
 | `codex@kovaldistillery.com` | Codex Local Agent | `codex-local-agent.md`; coordinated by `email-coordinator.md` | Alias on the `nationaloutreach@kovaldistillery.com` worker inbox | Allowed for Codex/local-agent task reports, technical work routing, and AI Workspace execution updates; separate from Frank | Robert |
 | `vanessa.sterling@kovaldistillery.com` | Vanessa Sterling | `outreach-coordinator.md`; coordinated by `email-coordinator.md` | Send-from identity routed through the approved `nationaloutreach@kovaldistillery.com` worker inbox/runtime | Allowed for outreach-coordination sends after setup verification and approval-gated by task category | Robert / assigned outreach owner |
-| `nationaloutreach@kovaldistillery.com` | National Outreach shared inbox | `outreach-coordinator.md`; coordinated by `email-coordinator.md` | Main AI worker inbox for shared specialist workers | Allowed as mailbox/runtime route and fallback sender; outreach persona should normally use Vanessa Sterling | Robert / assigned outreach owner |
-
-## Provisioned But Not Send-Enabled
-
-| Email address | Worker / persona | Organigram role | Current status | Activation requirement |
-| --- | --- | --- | --- | --- |
-| `asher@thecultivater.com` | Asher Wilde | `asher.md`; canonical persona `asher-wilde/persona.yaml` | YAML persona installed; header-only polling active | Robert must approve the action policy before body reads, filing, sends, or deletes |
-| `venetia@thecultivater.com` | Venetia Tempest-Dunn | `venetia.md`; canonical persona `venetia-tempest-dunn/persona.yaml` | YAML persona installed; header-only polling active | Robert must approve the action policy before body reads, filing, sends, or deletes |
+| `asher@thecultivater.com` | Asher Wilde | `asher.md`; canonical persona `asher-wilde/persona.yaml` | Direct Asher worker mailbox/runtime route | Allowed for approved task-specific sends inside Cultivater guardrails; filing, deletes, and routine authority stay gated | Robert / assigned Cultivater owner |
+| `venetia@thecultivater.com` | Venetia Tempest-Dunn | `venetia.md`; canonical persona `venetia-tempest-dunn/persona.yaml` | Direct Venetia worker mailbox/runtime route | Allowed for approved task-specific sends inside Cultivater guardrails; filing, deletes, and routine authority stay gated | Robert / assigned Cultivater owner |
+| `nationaloutreach@kovaldistillery.com` | National Outreach shared inbox | `outreach-coordinator.md`; coordinated by `email-coordinator.md` | Main AI worker inbox for shared specialist workers | Inbox-only route; not allowed as a `From` identity | Robert / assigned outreach owner |
 
 ## Persona Notes
 
@@ -86,7 +81,7 @@ Vanessa should close with `Best,`, a blank line, then `Vanessa`. Her normal sign
 
 Naomi and Ezra should close with `Best,`, a blank line, then `Naomi` or `Ezra`. Shared-inbox specialist persona signatures for Naomi Stern and Ezra Katz should use the same KOVAL block: `Best,`, blank line, first name, blank line, full name, blank line, role title, `KOVAL Distillery`, `4241 N Ravenswood Ave`, `Chicago, IL 60613`, `312 878 7988`, `http://www.koval-distillery.com`, and the final linked social-label line `X | Instagram | Facebook`.
 
-The `nationaloutreach@kovaldistillery.com` mailbox is also the main AI-worker inbox. Email Coordinator owns intake/routing decisions for shared-worker mail before a specialist sends from this mailbox.
+The `nationaloutreach@kovaldistillery.com` mailbox is also the main AI-worker inbox. Email Coordinator owns intake/routing decisions for shared-worker mail before a specialist sends from a real persona address. The shared inbox address itself is never used as a `From` identity.
 
 ## Default Routing Rules
 

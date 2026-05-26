@@ -1,5 +1,716 @@
 # National Outreach Handoff
 
+## 2026-05-26 Wine on the River OPS 951 Google sync blocker reported
+
+- Workspaceboard session `d1b23aff` handled Robert-approved Wine on the River follow-through for OPS event `951`.
+- Live OPS readback: event `951`, `Wine on the River`, Outreach, `2026-09-12 14:30-19:00`, Riverfront Park Nashville; linked shift `5392` remains covered by Benjamin Green.
+- Google sync attempt result: blocked. OPS Google OAuth client settings are configured and token rows exist, but no usable non-expired refresh token resolved for the API sync path; the sync attempt returned `Google OAuth is not configured.` No Google calendar proof was claimed.
+- Owner-visible blocker update was sent on the same thread through the approved National Outreach send path: Message-ID `<177981553319.99881.18060476956246686821@kovaldistillery.com>`, logged in `/Users/admin/.nationaloutreach-launch/state/sent-log.jsonl` at `2026-05-26T12:12:14-0500`.
+- Workspaceboard closeout proof marker: `OPS_EVENT_951_GOOGLE_SYNC_BLOCKED_OAUTH_OWNER_UPDATE_SENT_MSG_<177981553319.99881.18060476956246686821@kovaldistillery.com>`.
+
+## 2026-05-26 Active inbox cleanup session `bd03052c`
+
+- Cleared the nine Robert-approved active-inbox source messages from `/Users/admin/.nationaloutreach-launch/state/active-inbox.json` and moved all nine exact Message-IDs out of INBOX to All Mail. Runtime archive proof was appended to `/Users/admin/.nationaloutreach-launch/state/archive-log.jsonl`; cleanup proof was also appended to `mail-review.jsonl` and `task-flow-events.jsonl` with session `bd03052c`.
+- Follow-up 2026-05-26 12:43 CDT: Robert approved telling Jacob Hoover that Portal is up again for the May 22 Whole Foods - Edgewater Portal activity follow-up. Vanessa replied on-thread without asking Jacob for a Portal ID or link, because internal Portal readback should verify after submission. Sent Message-ID `<177981729509.5839.15067771030624635319@kovaldistillery.com>`. DB-backed email trace now shows Jacob source `sj0pr84mb32690da6a7d32c05ac116971ef0b2@sj0pr84mb3269.namprd84.prod.outlook.com` absent from active inbox readback, Task Flow packet `taskflow-e4a7a20a26a3cb46` is `completed`, and Workspaceboard session `f234898d` is `closed_with_proof`.
+- Follow-up 2026-05-26 12:43 CDT: Updated the 48-hour and weekly missing-activity review instructions in `scripts/sync_vanessa_48h_activity_review.php`, `scripts/sync_vanessa_weekly_missing_activities_catchup.php`, and the National Outreach runtime copies so they no longer ask staff to send Portal activity IDs or links. The instruction is now to use internal Portal readback proof or a no-action reason.
+- Per-source proof markers:
+  - `taskflow-60616604d5d9329e` / Cassandra shift-cancel confirmation: `cassandra-unclaim-confirmed`.
+  - `taskflow-448975afdb14581b` / Whiskey Social original request: `sent-log:event-whiskey-social-correction:market984`.
+  - `taskflow-f684376ac52fe16f` / Zachary One Chicago Square activity: `crm-activity:370216`.
+  - `taskflow-bd33408bd1f021c3` / Sonat Re: Event follow-up: `workspaceboard:7ac9fd61:WHISKEY_SOCIAL_EVENT984_CORRECTION_AND_SONAT_THANKYOU`.
+  - `taskflow-5317ba9d78c081b7` / Cassandra original shift-cancel question: `sent-thread:cassandra-unclaim-instruction`.
+  - `taskflow-ed411aa3ac2f16fc` / Robert delete-button code-change request: `sent-log:ops-hide-outreach-shift-delete-button:<177968107766.61220.4579565771912533966@kovaldistillery.com>`.
+  - `taskflow-b6bd3695e42519f1` / Alma Padel event: `ops-event:982:shift:5423`.
+  - `taskflow-0064d31e875ab65f` / Portal overdue report `6147835`: `portal-worker:b458d755:report6147835`; National Outreach did not duplicate Portal work.
+  - `taskflow-e4a7a20a26a3cb46` / Jacob Edgewater Portal issue: `waiting-on-portal-submit:edgewater-jacob`; source filed from INBOX and should be checked by the next Portal/activity follow-up cycle rather than left as active inbox residue.
+- Verification readback after the cleanup pass: National Outreach mail cycle reported `mailbox_total=1`, `active_inbox_count=1`, with the only remaining active item being a separate Security Guard-routed Portal two-factor authentication code source `3d57c5e433561cb5717f477f5c337517@koval-distillery.com`, not one of Robert's nine listed cleanup items.
+- Exact blocker for full inbox-zero: do not expose, consume, or archive the current Portal two-factor code from this lane. Route to Security Guard / Task Manager for auth handling or expiry/no-action filing.
+
+## 2026-05-26 `Re: Event` due-worker wrapper closed as proof-backed no-action residue
+
+- Workspaceboard session `e7e778a5` reviewed due-worker wrapper `taskflow-owner-reply-f4e4a20136c06bce` and closed the wrapper itself as stale scheduler residue rather than treating it as the live business packet.
+- Source-first proof:
+  - Live Task Flow readback from `http://127.0.0.1:17878/api/task-flow/report?mode=active&refresh=1` still shows `taskflow-owner-reply-f4e4a20136c06bce` only as the active due-worker wrapper titled `Task Flow due worker 2026-05-26 10:40 nationaloutreach`, while the underlying business thread remains separately tracked as `taskflow-bd33408bd1f021c3` with subject `Re: Event`.
+  - Workspace-local `mail-review.jsonl` shows the current `Re: Event` source ref `calbltzzk5pudywfixusagyxggjqh5x8-8c3t91cd-nkm9ib=5a@mail.gmail.com` repeatedly reclassified on `2026-05-25` through `2026-05-26` under route `outreach-coordinator`, which confirms the live thread exists independently of this wrapper key.
+  - Prior same-thread closeout proof already exists in this handoff: the May 25 Whiskey Social market-event correction records Sonat's later `Thank you!` follow-up as confirmation-only, and runtime `archive-log.jsonl` logged a `Re: Event` source archived at `2026-05-25T10:45:56-0500` with reason `acknowledgement_only_owner_reply`.
+  - Runtime `active-inbox.json` still contains both the live `Re: Event` source ref and the archived acknowledgement-only source ref, so collapsing the wrapper is safe only if the underlying `taskflow-bd33408bd1f021c3` packet is left untouched for separate review.
+- Exact closeout:
+  - `no-action/filed`: the due-worker key is only a scheduler wrapper, not the live business packet.
+  - Proof marker: `RE_EVENT_DUE_WRAPPER_RESIDUE_UNDERLYING_PACKET_BD33408BD1F021C3`.
+  - Residual truth: `taskflow-bd33408bd1f021c3` remains the live `Re: Event` packet and was not modified in this wrapper-closeout pass.
+
+## 2026-05-26 Clarification-wait scheduler wrappers closed as stale no-action residue
+
+- Workspaceboard session `09825be5` reviewed due scheduler packet keys `taskflow-49f739dc81b08e16`, `taskflow-ce75aeee8cad4519`, and `taskflow-078170e756f35ac4` and closed them as proof-backed stale waiting residue instead of preserving the generic note `Waiting for Robert answer to the clarification email`.
+- Source-first proof:
+  - Live Task Flow readback from `http://127.0.0.1:17878/api/task-flow/report?refresh=1` returned no current rows for any of the three dedupe keys, so the due packet no longer matches an active Task Flow item.
+  - Runtime `task-flow-events.jsonl` shows each key reached `email_sent` on `2026-05-22` with a clarification email Message-ID already recorded:
+    - `taskflow-49f739dc81b08e16` -> `Re: Draft for approval: Mitch weekly upcoming tastings report` -> `<177945991204.60349.17110608943156024038@kovaldistillery.com>`
+    - `taskflow-ce75aeee8cad4519` -> `Tastings this Sunday` -> `<177946266934.81274.17185962477308224466@kovaldistillery.com>`
+    - `taskflow-078170e756f35ac4` -> `Reminder: Mayfestiversary, Listening Party, Craft Swap` -> `<177946563245.7358.15048788204259655477@kovaldistillery.com>`
+  - Runtime `sent-log.jsonl` preserves sent proof for those same clarification emails, while `archive-log.jsonl` shows each original source thread was archived with reason `later_reply_found`.
+  - Runtime `active-inbox.json` contains no current active entries for any of the three source refs, so there is no live open inbox item still waiting on Vanessa follow-through inside the National Outreach lane.
+- Exact closeout:
+  - `no-action/filed`: stale scheduler waiting residue after clarification emails were already sent and the underlying source threads were later superseded and archived.
+  - Proof marker: `THREE_CLARIFICATION_WAIT_WRAPPERS_ALREADY_ARCHIVED_2026-05-26`.
+  - If a fresh owner-visible reply or a new source message later reopens any of these subjects, create a new packet from that new source instead of reviving these archived wrappers.
+
+## 2026-05-25 Scheduler bridge self-sent activity review wrapper closed with proof
+
+- Workspaceboard session `2db51368` reviewed scheduler packet `taskflow-e278a797a8410f11` (`48-hour activity review for outreach tastings from Saturday, May 23`) and closed it as proof-backed residue instead of leaving it in unscheduled `classified` state.
+- Source-first proof:
+  - Workspace-local `mail-review.jsonl` logged the packet at `2026-05-25T23:01:34-0500` with the same source Message-ID `177976801767.39445.12934683071947123268@kovaldistillery.com`, sender `Vanessa Sterling <vanessa.sterling@kovaldistillery.com>`, subject `48-hour activity review for outreach tastings from Saturday, May 23`, and `active_inbox=true` at intake.
+  - Runtime sent proof already exists in `/Users/admin/.nationaloutreach-launch/state/sent-log.jsonl` at `2026-05-25T23:00:19-0500` for that exact subject and Message-ID, showing this packet points at Vanessa's own outbound activity-review send rather than a fresh inbound owner request.
+  - Workspace-local `.private/mailboxes/nationaloutreach/state/active-inbox.json` now records the same Message-ID as `resolved_not_in_inbox` with body path metadata preserved, which matches the runtime archive proof in `/Users/admin/.nationaloutreach-launch/state/archive-log.jsonl` at `2026-05-25T23:01:37-0500` with reason `self_sent_inbox_copy`.
+- Exact closeout:
+  - `closed_with_proof`: proof marker `SELF_SENT_ACTIVITY_REVIEW_ALREADY_SENT_AND_ARCHIVED_2026-05-25`.
+  - Expected business classification is `no-action/filed`: the scheduler row was residue from Vanessa's self-copy after the send and archive had already happened, so no extra OPS mutation, Vanessa follow-up, or owner-question escalation is needed unless a later source message reopens the subject.
+
+## 2026-05-25 OPS Outreach Calendar owner-reply due wrapper closed against sent proof
+
+- Workspaceboard session `b65ab52e` reviewed due packet `taskflow-owner-reply-12c99a613d6d24f7` (`Re: Updates to OPS Outreach Calendar, Store Shifts, and Day-of Reminders`) from approved local/runtime proof surfaces and closed it as stale scheduler residue instead of sending a duplicate follow-up.
+- Source-first proof:
+  - Runtime sent proof already exists in `/Users/admin/.nationaloutreach-launch/state/sent-log.jsonl` logged `2026-05-24T22:51:19-0500`, subject `Re: Updates to OPS Outreach Calendar, Store Shifts, and Day-of Reminders`, Message-ID `<177968107766.61220.4579565771912533966@kovaldistillery.com>`, tied to Robert's source ref `caatx44y-=+culrslndca3azjf2cuensdmrw8=umru_1u6fyzag@mail.gmail.com`.
+  - That sent-log row preserves the same business readback already reported to Robert: Workspaceboard session `50844382` closed with proof after the outreach shift delete-button change was implemented and verified.
+  - Live Task Flow readback from `http://127.0.0.1:17878/api/task-flow/report?refresh=1` no longer contains `taskflow-owner-reply-12c99a613d6d24f7`, the thread subject, the sent Message-ID, or the source ref, which confirms the due wrapper is no longer an active Task Flow item.
+  - The remaining hits for `taskflow-owner-reply-12c99a613d6d24f7` are only stale AI-health follow-up logs under `tmp/ai-health-manager/`, so they are reminder residue rather than open outreach work.
+- Exact closeout:
+  - `closed_with_proof`: proof marker `OPS_OUTREACH_CALENDAR_OWNER_REPLY_ALREADY_SENT_2026-05-24`.
+  - No new Vanessa reply, OPS mutation, or owner-question escalation is needed unless a later source message reopens the thread.
+
+## 2026-05-25 Whole Foods - Lakeview owner-reply due wrapper closed as stale no-action residue
+
+- Workspaceboard session `2b986fdb` repaired Task Flow due wrapper `taskflow-owner-reply-15fb58711ad9176c` from active reminder residue into durable `no_action_closed`.
+- Source-first proof:
+  - Task Flow packet `taskflow-owner-reply-15fb58711ad9176c` points at source `caatx44zsqrjfak=ls9v=7nmg2fhbc1hhnpd+c9s2_ay_afs7uq@mail.gmail.com`, the same `Re: Whole Foods - Lakeview Tasting` owner-reply thread already preserved in local mail review and earlier closeout notes.
+  - Local/runtime proof already shows Robert sent the substantive direct reply to Dereck on `2026-05-24`, with Vanessa copied for visibility only, and no later repo-local source shows a fresh unanswered owner question on that thread.
+  - Live Task Flow readback now records `manual_closeout_repair` with proof marker `WHOLE_FOODS_LAKEVIEW_OWNER_ALREADY_REPLIED_2026-05-24` and verification text `logged-no-action`.
+- Exact closeout:
+  - `no-action/filed`: stale daily owner-reply residue after Robert's direct in-thread reply; no further Vanessa reply, OPS mutation, or escalation is needed unless a later message reopens the thread.
+
+## 2026-05-25 Mariano's - Halsted activity follow-up scheduler bridge closed with send and archive proof
+
+- Workspaceboard session `e08f135c` normalized scheduler packet `taskflow-869e303a6714c50d` by completing the live Vanessa closeout path instead of leaving the packet at `classified` residue.
+- Source-first proof:
+  - The mirrored source body for `cah0m71p5aew+w3b5k-mq0kbnsb8bhglafzkgd78yazbcm7j=mq@mail.gmail.com` shows Benjamin Green's direct thread reply `Updated and saved. Id: 370224`, which resolved Vanessa's earlier request for the May 22 Mariano's - Halsted Portal activity id.
+  - Runtime sent proof logged `2026-05-25 12:07:32 CDT` in `/Users/admin/.nationaloutreach-launch/state/sent-log.jsonl` for Vanessa's same-thread closeout Message-ID `<177972885019.98592.13848185024116324853@kovaldistillery.com>`, confirming Portal activity `370224` will be used for the Friday, May 22 closeout.
+  - Runtime archive proof logged `2026-05-25 12:07:57 CDT` in `/Users/admin/.nationaloutreach-launch/state/archive-log.jsonl` for the same inbound source with reason `later_reply_found`, proving the worked inbox item was cleared after Vanessa's response landed.
+- Exact closeout:
+  - `closed_with_proof`: proof marker `MARIANOS_HALSTED_370224_CLOSEOUT_SENT_ARCHIVED`.
+
+## 2026-05-25 Open Tastings For May owner-reply due wrapper closed as stale no-action residue
+
+- Workspaceboard session `e1e37e4a` reviewed due packet `taskflow-owner-reply-dec41cb1d97ea8b4` (`Re: Open Tastings For May`) from approved repo-local proof surfaces and closed it against the already-recorded Eataly confirmation path.
+- Source-first proof:
+  - `mail-review.jsonl` preserves the thread intake for `Open Tastings For May` from Israel Del Valle and the later owner-routed follow-up `Re: Open Tastings For May`, including Robert's routing to Vanessa on `2026-05-12`.
+  - This handoff already records the same business outcome under `2026-05-18 Eataly Reminder Residue Cleanup` and `2026-05-17 Final National Outreach INBOX Sweep`: Eataly confirmed the chosen slot `Friday, May 29, 4pm-7pm`, and the later `Re: Open Tastings For May` message was confirmation-only.
+  - No newer repo-local proof shows a fresh scheduling request, missing fact, or unanswered owner question after that confirmation-only closeout.
+- Exact closeout:
+  - `no-action/filed`: the May 25 due reminder was stale scheduler residue after the Eataly slot confirmation had already been captured locally, so no new Vanessa reply, OPS mutation, or owner-question escalation is needed unless a later source message reopens the thread.
+
+## 2026-05-25 Naomi financial planning owner-reply due wrapper closed as stale residue
+
+- Workspaceboard session `399a2e69` reviewed due packet `taskflow-owner-reply-1ab95c92a517cc6b` (`For Naomi - Financial Planning document`) from approved repo-local proof surfaces and closed it against the already-recorded finance closeout.
+- Source-first proof:
+  - The mirrored source body `caatx44ahjvzq0rvcp4o_yu3h_i-ruusd1whkxbvtsasq097auw-mail.gmail.com.txt` shows Robert's direct instruction to Naomi to adjust the Financial Planning document from live data pulled that day and re-check the three listed line items.
+  - The mirrored follow-up thread body `caatx44yenbzmsfzg-mizwuncixf1enmykxmhduyhspzph9-9-g-mail.gmail.com.txt` shows Robert's later same-thread note that the document was updated that day and that only the three listed lines still needed review.
+  - Repo-local `mail-review.jsonl` already logged the follow-up source `caatx44yenbzmsfzg-mizwuncixf1enmykxmhduyhspzph9+9+g@mail.gmail.com` at `2026-05-24T12:58:23-0500` with `action=proof_backed_closeout`, `reason=finance_item_already_completed`, and proof note `The financial planning correction was already completed and source-backed; this Outreach copy does not need further action.`
+- Exact closeout:
+  - `no-action/filed`: the May 25 due reminder was stale scheduler residue after the finance correction had already been completed and locally closed with source-backed proof, so no new Naomi reminder, Vanessa send, or owner-question escalation is needed from National Outreach.
+
+## 2026-05-25 Whiskey Social market-event scheduler wrapper completed with OPS proof
+
+- Workspaceboard session `eda7df4a` normalized scheduler packet `taskflow-448975afdb14581b` by completing the underlying OPS market-event write instead of leaving it as unworked scheduler residue.
+- Source-first proof from approved `/Users/werkstatt` surfaces:
+  - The mirrored body cache for source `calbltzzrnq1f-in+sch_qmdnysbquhyeu7vngpewxo_yee9vda@mail.gmail.com` shows Sonat's direct instruction to add `Whiskey Social` to OPS market events for `Saturday, November 14, 2026`, `6:00 PM-9:00 PM`, venue `The Citadel on Kirby`, with `1000+` guests and Renata assigned.
+  - Live repo-local OPS readback now shows market event `984` with `event_name=Whiskey Social`, `event_category=Market Event`, `event_date=2026-11-14`, `start_time=18:00:00`, `end_time=21:00:00`, location `The Citadel on Kirby, 12130 Kirby Dr, Houston, TX 77045`, `estimated_guest_count=1000`, `event_host_user_id=1248`, and `created_by=1343`.
+  - Live staff-link readback for event `984` shows `event_booking_staff.user_id=1248`, which resolves to `Renata Broddon` / `renatabroddon`.
+- Live owner-facing OPS route: `https://www.koval-distillery.com/ops/index.php?view=market_edit&id=984`
+- Owner-facing reply proof:
+  - Runtime sent proof logged `2026-05-25 10:25:49 CDT` in `/Users/admin/.nationaloutreach-launch/state/sent-log.jsonl` for Vanessa's correction email Message-ID `<177972274891.72654.3592458833124265388@kovaldistillery.com>`, telling Sonat to use market event `984` and disregard the earlier unassigned note.
+  - Later thread bodies under `/Users/admin/.nationaloutreach-launch/state/bodies/` show Sonat's follow-up `Hello Vanessa, Yes, you can reactivate her for this one...` and then a final `Thank you!`, so the active `Re: Event` residue is confirmation-only and does not need another Vanessa reply.
+- Exact closeout:
+  - `closed_with_proof`: proof marker `WHISKEY_SOCIAL_MARKET984_RENATA1248_OPS_CREATED`.
+  - Residual internal note: Workspaceboard session `84b6cc52` also created duplicate market event `983` and sent an earlier blocker-style reply before the concurrent `984` proof was visible. The same thread was then corrected with the later Message-ID above. No destructive OPS cleanup was attempted in this pass; owner-facing truth is event `984`.
+
+## 2026-05-25 Whole Foods - Lakeview owner-reply due wrapper closed as stale no-action residue
+
+- Workspaceboard session `816d215b` reviewed due packet `taskflow-owner-reply-fd695c33c44d21c4` from approved `/Users/werkstatt` proof surfaces and closed it against the already-handled owner reply.
+- Source-first proof:
+  - `mail-review.jsonl` and the mirrored thread already preserve Robert's `2026-05-24` direct reply to Dereck Atwater on `Re: Whole Foods - Lakeview Tasting`, with Vanessa Sterling cc'd for visibility only.
+  - The same thread was already documented locally on `2026-05-24` as `cc-fyi-no-action` because Robert handled the business response directly in-thread and no further Vanessa follow-up was required.
+  - The recurring due wrapper `taskflow-owner-reply-fd695c33c44d21c4` points back to the same `2026-05-23` owner-reply source (`caatx44ygn_yiuvyqhguin9mkm--qgkvkspkkodk-zrxk2gb--a@mail.gmail.com`) and had only a visible-worker reminder, not newer business work.
+- Exact closeout:
+  - `no-action/filed`: this was stale scheduler residue after the owner-handled direct reply, so no new Vanessa send, OPS mutation, or owner-question escalation is needed unless a later source message reopens the thread.
+
+## 2026-05-25 Due-worker triage for Wild Onion, Wine on the River, and Optima #73
+
+- Workspaceboard session `2b608bd8` reviewed scheduler-bridge due packet keys `taskflow-owner-reply-0961489dfbca1f90`, `taskflow-owner-reply-7194cdfffde13ed8`, and `taskflow-owner-reply-d412ea53227af48b` from approved `/Users/werkstatt` proof surfaces.
+- `taskflow-owner-reply-d412ea53227af48b` (`Fwd: Koval Tasting for Wild Onion Market`) is stale no-action residue, not a live reply need:
+  - Existing local closeout proof already records Workspaceboard session `76839bf7` with `proof_backed_closeout` in `.private/mailboxes/nationaloutreach/state/task-flow-events.jsonl`, citing Vanessa's time-confirmation follow-up, Dereck's later `all set` acknowledgment, and OPS `#899` covered proof.
+  - Durable outcome remains `no-action/filed` with proof marker `WILD_ONION_OWNER_REPLY_STALE_OPS899_COVERED`.
+- `taskflow-owner-reply-7194cdfffde13ed8` (`Fwd: New Event Reservation Request #73`) already has sent proof plus live OPS/domain proof:
+  - `/Users/admin/.nationaloutreach-launch/state/task-flow-events.jsonl` logged `email_sent` on `2026-05-22 09:09:33 CDT` for packet `taskflow-2f705c3200ab7945`, with `completion_or_blocker_email` Message-ID `<177945897188.49936.5170829809818086606@kovaldistillery.com>` to Robert and `ops_portal_or_domain_task` `OPS event 901 / linked shift 5391 / Event Management request 73`.
+  - The same Task Flow record preserves the exact OPS readback: event `901` updated to `2026-06-20 14:00-17:00`, linked shift `5391` left unassigned, and Event Management request `73` updated with `ops_event_id 901` plus follow-up status `ops_calendar_added`.
+  - Later mirrored mail from May 24 is consistent with that proof set: Vanessa's reply to Christine states the current OPS hold is `2:00 PM-5:00 PM at Optima Signature, 220 E. Illinois St., Chicago`, with Somer Benson listed as contact.
+  - Durable outcome should be `closed_with_proof` with proof marker `OPTIMA_73_OPS901_SHIFT5391_MSG177945897188`.
+- `taskflow-owner-reply-0961489dfbca1f90` (`Fwd: Wine on the River 9/12/26 2:30PM-7PM Riverfront`) is not stale residue and is still blocked on one exact follow-through:
+  - Prior local proof already shows OPS event `951`, linked shift `5392`, Benjamin Green assignment, and Vanessa's completion email Message-ID `<177945908869.51489.11097361342580714112@kovaldistillery.com>`.
+  - Robert's later mirrored owner reply asks: `Please check the sync with Google. Escalate to Code and Git manager if needed.`
+  - No later approved local proof shows Google sync completion, a same-thread owner update about the unresolved sync, or a visible Code and Git manager route; the last proven state still says the live Google sync path failed with a Google OAuth configuration error.
+  - Exact blocker for this wrapper: Google calendar sync for OPS event `951` remains unresolved, so the due worker should stay blocked until there is either same-thread sent proof of sync completion or a fresh owner-visible blocker update about the Google OAuth sync failure.
+
+## 2026-05-25 2FA issue owner-reply reminder closed against existing blocker-email proof
+
+- Workspaceboard session `11066ff0` reviewed scheduler-bridge packet `taskflow-owner-reply-b175298b9eab5cb3` from approved local/runtime sources and found the reminder was stale rather than unworked.
+- Source-first proof:
+  - The source task email `New task assigned: 2FA issue` was already classified in `mail-review.jsonl` as a `security-guard` / sensitive login-flow issue that should not be treated as a routine outreach action.
+  - The underlying task body contains OPS login/2FA regression details plus transient verification-code content, so the packet requires a blocker-context owner response instead of normal outreach execution.
+  - Repo-local send proof already exists in `/Users/admin/.nationaloutreach-launch/state/sent-log.jsonl` logged `2026-05-20T22:36:46-0500`, subject `Re: New task assigned: 2FA issue [blocker context]`, Message-ID `<177933460532.43971.9278679448783714100@kovaldistillery.com>`, tied to source ref `4cc06f4720b6546bebf10d6f643ead43@koval-distillery.com`.
+- Exact closeout:
+  - `closed_with_proof`: the owner-visible blocker response was already sent on May 20, 2026, so the May 25 owner-reply reminder should close against that Message-ID instead of remaining in `owner_reply_pending_response`.
+
+## 2026-05-25 Cassandra shift-unclaim confirmation was proof-backed no-action residue
+
+- Workspaceboard session `f420aab9` reviewed Task Flow scheduler-bridge packet `taskflow-60616604d5d9329e` from approved local/runtime sources and closed it as proof-backed no-action residue instead of reopening OPS Outreach follow-up.
+- Source-first proof:
+  - Repo-local send proof already exists for Vanessa's substantive reply on `2026-05-24 17:46 CDT`: `/Users/werkstatt/ai_workspace/.private/mailboxes/nationaloutreach/state/sent-log.jsonl` logged subject `Re: Updates to OPS Outreach Calendar, Store Shifts, and Day-of Reminders`, Message-ID `<177966275940.66351.4990534389210195643@kovaldistillery.com>`, to `Cassandra Wilander <clwilander@gmail.com>`, with Robert copied.
+  - The new source body is mirrored at `/Users/werkstatt/ai_workspace/.private/mailboxes/nationaloutreach/state/bodies/caoyzwnvoryagjxxs98-ehhv5eer31i1kd3jggkuzje-tsce6hq-mail.gmail.com.txt` and says only `That worked! I unclaimed my shift for next Sunday 5/31. Thanks, Vanessa.`
+  - Repo-local `mail-review.jsonl` logged the same packet at `2026-05-25T06:34:53-0500` with `body_read=true`, `active_inbox=true`, route `outreach-coordinator`, and no later blocker, owner question, or fresh business request in the body.
+  - The thread references confirm Cassandra's reply points back to Vanessa's already-sent instruction, so the business action is complete and the scheduler wrapper was stale residue rather than a new outreach task.
+- Exact closeout:
+  - `no-action/filed`: Cassandra's reply is a thank-you confirmation that the shift was successfully unclaimed, so no further Vanessa reply, OPS mutation, or owner-question escalation is needed for `taskflow-60616604d5d9329e`.
+  - Residual note: this repair closes the business follow-up decision from approved `/Users/werkstatt` proof; it does not claim a separate live archive mutation for the inbox copy.
+
+## 2026-05-24 48-hour activity review self-send packet was stale scheduler residue
+
+- Workspaceboard session `f678b2e0` reviewed Task Flow scheduler-bridge packet `taskflow-baba6d9deb8dff95` from approved local/runtime sources and normalized it into a proof-backed no-action closeout instead of reopening outreach follow-up.
+- Source-first proof:
+  - The exact source body at `/Users/admin/.nationaloutreach-launch/state/bodies/177968229030.70690.12467111419424576431-kovaldistillery.com.txt` is Vanessa's own completion summary to herself with Robert copied after the Friday, May 22 48-hour Portal activity review; it reports Kingsbury verified, four missing-activity reminders sent, and one Lakeview East date-correction follow-up sent.
+  - Runtime mail review logged the packet at `2026-05-24T23:11:56-0500` as `from=Vanessa Sterling <vanessa.sterling@kovaldistillery.com>`, `to=vanessa.sterling@kovaldistillery.com`, `cc=robert@kovaldistillery.com`, subject `Re: 48-hour activity review for outreach tastings from Friday, May 22`, with `body_read=true` and the same body path.
+  - Runtime archive proof logged `2026-05-24T23:11:59-0500` in `/Users/admin/.nationaloutreach-launch/state/archive-log.jsonl` with `reason=self_sent_inbox_copy` and `action=archive_move_to_all_mail` for the same Message-ID, so the inbox residue was already filed after the substantive review email landed.
+  - The live Task Flow queue row had no worker session, no blocker, and no domain task despite the review already being complete; this slice repaired that row to a closed no-action state linked back to the post-tasting review task family.
+- Exact closeout:
+  - `no-action/filed`: this packet was Vanessa's self-sent completion copy, not a fresh outreach task. The durable repair should read `status=no_action_closed`, `workspaceboard_session=f678b2e0`, `ops_portal_or_domain_task=OPS task 368771 / Friday May 22 post-tasting activity review`, and verification showing `no-action` plus the self-sent archive proof.
+
+## 2026-05-24 Friday May 22 48-hour tasting activity review completed with proof-backed follow-up
+
+- Workspaceboard session `2f666752` reviewed the repo-local reminder packet `177968165530.64489.16212847789316440345@kovaldistillery.com` and completed the required 48-hour Portal activity verification pass for the staffed `2026-05-22` outreach tastings.
+- Source-first proof from approved `/Users/werkstatt` surfaces:
+  - The exact reminder body is mirrored at `/Users/werkstatt/ai_workspace/.private/mailboxes/nationaloutreach/state/bodies/177968165530.64489.16212847789316440345-kovaldistillery.com.txt` and lists six staffed tastings to verify against Portal activity state.
+  - Read-only CRM/Portal query through the existing OPS bootstrap found `vtiger_activity.activityid=370159`, subject `WFM Kingsbury, 5/22/26, 4-7pm`, `activitytype=Tasting`, `date_start=2026-05-22`, owned by Dylan Collins and linked through `vtiger_seactivityrel.crmid=1140` to the `Whole Foods - Kingsbury` account.
+  - The same read-only query found `vtiger_activity.activityid=370204`, subject `Mariano's Lakeview East, 5-8pm, 5/22`, owned by Cassandra Wilander and linked to `Mariano's - Lakeview East (8538)`, but with `date_start=2026-05-24`, so the activity exists on the correct account but still needed a date-confirmation follow-up before clean closeout.
+  - No matching Portal activity rows were found in the `2026-05-20` through `2026-05-24` verification window for the assigned staff/account pairs `Jacob Hoover -> Whole Foods - Edgewater`, `Zachary Johnson -> Whole Foods - One Chicago Square`, `Stephen De Sena -> Garfield's Beverage Warehouse - Wicker Park South`, or `Benjamin Green -> Mariano's - Halsted (8508)`.
+- Follow-up proof now exists in the repo-local send log:
+  - Summary reply to Vanessa with Robert copied: subject `Re: 48-hour activity review for outreach tastings from Friday, May 22`, Message-ID `<177968229030.70690.12467111419424576431@kovaldistillery.com>`.
+  - Staff reminder sends: Jacob `<177968228501.70690.12462658665386962514@kovaldistillery.com>`, Zachary `<177968228866.70690.10550900692262604751@kovaldistillery.com>`, Stephen `<177968228712.70690.3498329956061587604@kovaldistillery.com>`, Benjamin `<177968228347.70690.16779291222206880215@kovaldistillery.com>`, Cassandra date-confirmation `<177968228185.70690.15808168822441116099@kovaldistillery.com>`.
+- Exact closeout:
+  - `closed_with_proof`: the 48-hour review itself is complete because Portal was checked event-by-event, Kingsbury was verified with activity proof `370159`, Lakeview East was narrowed to exact activity `370204` with correction follow-up sent, and reminder emails were sent for every missing or questionable activity so the remaining residue is now staff follow-through rather than an unworked Vanessa review packet.
+
+## 2026-05-24 Alma three-hour follow-up reply was duplicate residue after completed OPS add
+
+- Workspaceboard session `e708925b` reviewed Task Flow packet `taskflow-b6bd3695e42519f1` from approved local sources and closed it against the already-completed Alma primary lane instead of reopening scheduling work.
+- Source-first proof:
+  - The mirrored source body `/Users/admin/.nationaloutreach-launch/state/bodies/calbltzxsvkkzzycev201vb2p-v-qbg8uu2syhscw3zkdjr5kwg-mail.gmail.com.txt` is Sonat's reply confirming the Alma One Year Anniversary Party should use a three-hour shift.
+  - Repo-local `mail-review.jsonl` already closed the primary Alma packet `taskflow-ae1ac3c743916041` as `already_completed_in_ops` with proof note `Alma request already completed as OPS outreach event 982 with unassigned shift 5423; Sonat completion already sent.`
+  - Direct Task Flow readback now shows `taskflow-b6bd3695e42519f1` recorded as `no_action_closed` with workspaceboard session `e708925b`, `ops_portal_or_domain_task` set to `OPS outreach event 982 / unassigned shift 5423`, and duplicate-closeout readback pointing back to primary lane `taskflow-ae1ac3c743916041`.
+- Exact closeout:
+  - `no-action/filed`: Sonat's later three-hour reply is duplicate thread residue after the Alma request was already completed and reported on the primary lane, so no further Vanessa reply or OPS mutation is needed.
+
+## 2026-05-24 Wild Onion Market owner-reply reminder was stale no-action residue
+
+- Workspaceboard session `76839bf7` reviewed due Task Flow packet `taskflow-owner-reply-e873b76c367e0d70` from approved `/Users/werkstatt` sources and closed it as proof-backed no-action residue.
+- Source-first proof from approved local surfaces:
+  - `/Users/werkstatt/ai_workspace/.private/mailboxes/nationaloutreach/state/bodies/callcp30jx8ynsftjara94uwmmmgk2t-nrmvxt3f4123f_rhmzw-mail.gmail.com.txt` preserves Dereck Atwater's `2026-05-06` reply on `Re: Koval Tasting for Wild Onion Market` confirming the tasting time proposal `12-3`.
+  - `/Users/werkstatt/ai_workspace/.private/mailboxes/nationaloutreach/state/bodies/callcp326fqtk0kfs5r-yvn-ehu7byoxbl-8_y5-umfjgzms-_w-mail.gmail.com.txt` preserves Vanessa's substantive reply asking Dereck for the exact time, followed by Dereck's acknowledgment that he would confirm it.
+  - `/Users/werkstatt/ai_workspace/.private/mailboxes/nationaloutreach/state/bodies/caatx44ag8r-u_t2qjh-80y_mfbh_j-aztrcnfbsmoidslar5w-mail.gmail.com.txt` preserves Robert's correction that OPS and the shift were already in place and that Vanessa needed only to send the proper business reply.
+  - `/Users/werkstatt/ai_workspace/.private/mailboxes/nationaloutreach/state/bodies/caatx44y-lrxcz5dkvothgtbsa7pdu9j02aqyjtbek1lzsqi8hw-mail.gmail.com.txt` preserves the later Wild Onion thread where Vanessa states she already found the confirmed `Sunday, May 24, 2026 from 12:00 PM to 3:00 PM` time and Dereck replies that he is `all set`.
+  - `/Users/werkstatt/ai_workspace/.private/mailboxes/nationaloutreach/state/bodies/caatx44zp6d98twtdsvtr18bdfz-0zreu_djwbuz30ypbmniqtg-mail.gmail.com.txt` preserves Robert's `2026-05-22` internal coverage note listing `2026-05-24 Wild Onion Market tasting 12:00pm - 3:00pm OPS #899 Covered - assigned (1/1 linked shifts)` and citing source proof Message-ID `<177827834220.47302.8622945128437751607@kovaldistillery.com>`.
+- Exact closeout:
+  - `no-action/filed`: the owner-reply reminder was stale scheduler residue after Vanessa's time-confirmation follow-up and Dereck's later `all set` acknowledgment, with the event already reflected as covered in OPS `#899`.
+
+## 2026-05-24 Owner-reply collector-error packet still needs exact source mirrored
+
+- Workspaceboard session `4d9246fa` reviewed due Task Flow packet `taskflow-owner-reply-61cde527c6f78ee7` from approved `/Users/werkstatt` sources and could not truthfully classify or answer it because the exact owner-reply source is missing from the repo-local proof set.
+- Source-first proof from approved local surfaces:
+  - The scheduler handoff packet identifies the due item as `taskflow-owner-reply-61cde527c6f78ee7`, owner `collector-error`, worker/persona `nationaloutreach`, and scheduled action `Respond to owner reply: owner reply collector error`.
+  - A repo-local search across `/Users/werkstatt/ai_workspace/.private/mailboxes/nationaloutreach/state/mail-review.jsonl`, `active-inbox.json`, `scheduled-actions.jsonl`, `task-flow-events.jsonl`, and `sent-log.jsonl` found no entry for `61cde527c6f78ee7`, `collector-error`, or `owner reply collector error`.
+  - A repo-local search across `/Users/werkstatt/ai_workspace/.private/mailboxes/nationaloutreach/state/bodies/` also found no body file containing `collector-error` or `owner reply`.
+  - Without an exact mirrored source body, inbox row, or sent proof for this packet inside `/Users/werkstatt`, Vanessa cannot determine whether the reminder points to a routine reply, no-action residue, or a fresh owner-visible question without guessing.
+- Exact blocker:
+  - `routed-needs-owner-question`: the approved repo-local proof set preserves the scheduler reminder but not the underlying owner-reply content Vanessa would need to answer or close it truthfully.
+- Exact owner question:
+  - Please mirror or reroute the raw owner-reply body or exact packet metadata for `taskflow-owner-reply-61cde527c6f78ee7` into an approved `/Users/werkstatt` source so Vanessa can review the exact reply and return either sent proof, domain proof, or a truthful no-action closeout.
+- 2026-05-25 08:19 CDT repair closeout:
+  - Packet `taskflow-owner-reply-61cde527c6f78ee7` was normalized to `no_action_closed` and worker session `4d9246fa` was closed with proof after a second source-first pass confirmed the same result: approved `/Users/werkstatt` Task Flow, HANDOFF, mailbox metadata, scheduled-actions, active inbox, sent-log, and body mirrors still contain no recoverable owner-reply source or sent proof.
+  - Treat the previous blocker email as degraded `collector-error` scheduler residue, not a current business blocker for Robert.
+  - If an approved local source later restores the exact owner-reply body or sent proof, create a fresh packet from that source instead of reopening this residue row.
+
+## 2026-05-24 Task Manager Finish Contract Tightening owner-reply reminder was stale no-action residue
+
+- Workspaceboard session `0f948920` reviewed due Task Flow packet `taskflow-owner-reply-f0b1fe919f9d20d9` from approved `/Users/werkstatt` sources and closed it as proof-backed no-action residue.
+- Source-first proof from approved local surfaces:
+  - `/Users/werkstatt/ai_workspace/.private/mailboxes/nationaloutreach/state/bodies/caatx44yfsqup-dcvmtffvhcdlnlosyrx1fcxuexfvn-iglak4q-mail.gmail.com.txt` preserves Robert's `2026-05-20` reply on `Re: New project created: 2026-05-18 Task Manager Finish Contract Tightening [blocker context]`.
+  - In that reply Robert states the message is the same as the task email, only confirms the project was created, and can be filed with no action.
+  - The quoted thread inside the same mirrored body shows Vanessa's earlier blocker-context note was about an automated Portal project-created notification for project `369836`, not an owner request that still needed an Ezra or Vanessa follow-up send.
+- Exact closeout:
+  - `no-action/filed`: the repeated owner-reply reminder was stale residue after Robert's explicit `no action` instruction, so no later assistant send, OPS mutation, or owner-question escalation was required.
+
+## 2026-05-24 Robert already replied on "Re: Whole Foods - Lakeview Tasting" so Vanessa is cc-fyi-no-action
+
+- Workspaceboard session `e2a6e00f` reviewed Task Flow packet `taskflow-6fba68f177e004ac` from approved `/Users/werkstatt` sources and closed it as proof-backed no-action residue.
+- Source-first proof from approved local surfaces:
+  - `/Users/werkstatt/ai_workspace/.private/mailboxes/nationaloutreach/state/mail-review.jsonl` logged source message `<CAAtX44ZsQrjFaK=LS9V=7nmG2FHBC1HHnPD+C9S2_AY_aFs7uQ@mail.gmail.com>` at `2026-05-24T12:07:28-0500` with sender `Robert Birnecker <robert@kovaldistillery.com>`, recipient `Dereck Atwater <dereck.atwater@kovaldistillery.com>`, cc `Vanessa Sterling <vanessa.sterling@kovaldistillery.com>`, subject `Re: Whole Foods - Lakeview Tasting`, route `outreach-coordinator`, and body mirror `.private/mailboxes/nationaloutreach/state/bodies/caatx44zsqrjfak-ls9v-7nmg2fhbc1hhnpd-c9s2_ay_afs7uq-mail.gmail.com.txt`.
+  - The mirrored body shows Robert already sent the substantive business reply directly to Dereck on Sunday, May 24, 2026, acknowledging the impound situation and saying Dereck can work directly with the Whole Foods location to make up the tasting in June.
+  - The same body quotes Dereck's prior explanation and offer to make up the missed Whole Foods - Lakeview tasting, so the thread's actionable business point was already answered in-line by the owner.
+- Exact closeout:
+  - `no-action/filed`: Vanessa was cc'd for visibility only; no additional Vanessa reply, OPS mutation, or owner-question escalation is needed for this packet.
+
+## 2026-05-24 Dereck Atwater "Re: Whole Foods - Lakeview Tasting" reply still needs exact source body
+
+- Workspaceboard session `e2c704a6` reviewed Task Flow packet `taskflow-62da3e008edc44d5` from approved `/Users/werkstatt` sources and cannot truthfully classify Dereck Atwater's latest reply without the raw body text.
+- Source-first proof from approved local surfaces:
+  - `mail-review.jsonl` logged source message `<CALLcp335BfrZX-bU0OAausOsuQ7+95yawPHFV_7YAjaG1w7Zzg@mail.gmail.com>` twice on `2026-05-24` (`10:23:12 -0500` and `10:38:48 -0500`) with sender `Dereck Atwater <dereck.atwater@kovaldistillery.com>`, subject `Re: Whole Foods - Lakeview Tasting`, `body_read=true`, `body_chars=2361`, `active_inbox=true`, route `outreach-coordinator`, and dedupe key `taskflow-62da3e008edc44d5`.
+  - The same review rows show Dereck's message is a reply to Vanessa's prior corrective send on the thread: `in_reply_to=<177955450383.58742.3366000199527492755@kovaldistillery.com>`.
+  - This handoff already records the prior thread closeout at `2026-05-23 Whole Foods - Lakeview Tasting Closeout And Draft-Handling Rule`, including the corrective Vanessa send proof on the same thread.
+  - A repo-local search across `/Users/werkstatt/ai_workspace/.private/mailboxes/nationaloutreach/state/active-inbox.json`, `seen-full-body.json`, `seen-headers.json`, `sent-log.jsonl`, and the repo-local `bodies/` mirror found no copy of Dereck's new reply body and no later Vanessa reply/archive proof for this exact `2026-05-24` source.
+- Exact blocker:
+  - `routed-needs-owner-question`: the approved repo-local proof set confirms a new Dereck reply arrived after the prior closeout, but it does not preserve the exact body Vanessa would need to determine whether this is a thank-you/no-action follow-up or a fresh scheduling problem.
+- Exact owner question:
+  - Please mirror or reroute the raw body for source message `<CALLcp335BfrZX-bU0OAausOsuQ7+95yawPHFV_7YAjaG1w7Zzg@mail.gmail.com>` into an approved `/Users/werkstatt` source so Vanessa can review Dereck's exact reply and classify the packet truthfully.
+
+## 2026-05-24 Christine Cummins "Re: Outreach questions" scheduler-bridge blocker
+
+- Workspaceboard session `d370501c` reviewed Task Flow packet `taskflow-1bbe4b35f2ebd336` from approved `/Users/werkstatt` sources and cannot produce a truthful Vanessa follow-up because the exact source body is missing from the repo-local mailbox mirror.
+  - `/Users/werkstatt/ai_workspace/nationaloutreach/mail-review.jsonl` records the live intake at `2026-05-24T10:32:28-0500` with source message `<EC7EAAA6-C364-448A-9155-F4AA07A257BB@gmail.com>`, sender `Christine Cummins <christine.cummins37@gmail.com>`, subject `Re: Outreach questions`, `body_read=true`, `body_chars=1673`, `active_inbox=true`, and `in_reply_to=<177963543964.49059.15856565224785837662@kovaldistillery.com>`.
+  - The approved repo-local mailbox projection under `/Users/werkstatt/ai_workspace/.private/mailboxes/nationaloutreach/state/` is stale for this message: `active-inbox.json` has no matching Christine entry, the `bodies/` mirror has no `2026-05-24` body file for this source, and the newest body files stop at `2026-05-23 21:36 CDT`.
+  - The same approved projection still preserves the parent send context in `scheduled-actions.jsonl`: Vanessa already sent Christine the day-of COT details email `Your COT event details for Friday, May 15`, Message-ID `<177885374687.7075.14365135291446876485@kovaldistillery.com>`, for Outreach events `750` and `752` / OPS task `367971`.
+  - Because the exact reply text Christine sent on `2026-05-24` is not mirrored anywhere inside `/Users/werkstatt`, Vanessa cannot determine whether this is a routine clarification, schedule issue, or different request without guessing. Durable Workspaceboard state for session `d370501c` was therefore recorded as `blocked` with classification `routed-needs-owner-question`, escalation persona `Vanessa Sterling`, and owner question requesting the raw source body be mirrored or rerouted into an approved `/Users/werkstatt` surface.
+
+## 2026-05-24 Christine Cummins "Outreach questions" re-check still blocked for session 92c5afee
+
+- Workspaceboard session `92c5afee` re-checked the same Task Flow packet `taskflow-48f47e0fdaede108` (`Outreach questions`) from approved `/Users/werkstatt` sources and still cannot produce a truthful Vanessa reply.
+- Source-first proof from approved local surfaces:
+  - `/Users/werkstatt/ai_workspace/nationaloutreach/mail-review.jsonl` still shows source message `<EC002BC0-6FC0-44DA-8B50-E7952326E905@gmail.com>`, sender `Christine Cummins <christine.cummins37@gmail.com>`, subject `Outreach questions`, `body_read=true`, `body_chars=630`, and `active_inbox=true`.
+  - A repeated `/Users/werkstatt` search across `active-inbox.json`, `task-flow-events.jsonl`, `email-trace-events.jsonl`, `sent-log.jsonl`, `seen-full-body.json`, and `seen-headers.json` still found no local mirror or index entry for this exact source id, sender, or subject.
+  - A repeated `/Users/werkstatt/ai_workspace/.private/mailboxes/nationaloutreach/state/bodies/` search still found no body file containing `EC002BC0-6FC0-44DA-8B50-E7952326E905@gmail.com`, `Christine Cummins`, `christine.cummins37@gmail.com`, or the subject `Outreach questions`.
+- Exact blocker:
+  - `routed-needs-owner-question`: the approved repo-local proof set confirms the packet exists and that intake saw the body, but it still does not preserve the exact Christine body text Vanessa would need to classify and answer the request truthfully.
+- Exact owner question:
+  - Please mirror or reroute the raw body for source message `<EC002BC0-6FC0-44DA-8B50-E7952326E905@gmail.com>` into an approved `/Users/werkstatt` source so Vanessa can review the exact request and respond.
+
+## 2026-05-24 Christine Cummins "Outreach questions" re-check still blocked
+
+- Workspaceboard session `238a384a` re-checked the same Task Flow packet `taskflow-48f47e0fdaede108` (`Outreach questions`) from approved `/Users/werkstatt` sources and still cannot produce a truthful Vanessa reply.
+- Source-first proof from approved local surfaces:
+  - `/Users/werkstatt/ai_workspace/nationaloutreach/mail-review.jsonl` still shows source message `<EC002BC0-6FC0-44DA-8B50-E7952326E905@gmail.com>`, sender `Christine Cummins <christine.cummins37@gmail.com>`, subject `Outreach questions`, `body_read=true`, `body_chars=630`, and `active_inbox=true`.
+  - A repeated `/Users/werkstatt` search across `active-inbox.json`, `task-flow-events.jsonl`, `email-trace-events.jsonl`, `sent-log.jsonl`, `seen-full-body.json`, and `seen-headers.json` found no local mirror or index entry for this exact source id, sender, or subject.
+  - A repeated `/Users/werkstatt/ai_workspace/.private/mailboxes/nationaloutreach/state/bodies/` search also found no body file containing `Christine Cummins`, `christine.cummins37@gmail.com`, or the subject `Outreach questions`.
+- Exact blocker:
+  - The approved repo-local proof set confirms the packet exists and that a body was read during intake, but it still does not preserve the exact Christine body text Vanessa would need to classify and answer the request truthfully.
+- Exact owner question:
+  - Please mirror or reroute the raw body for source message `<EC002BC0-6FC0-44DA-8B50-E7952326E905@gmail.com>` into an approved `/Users/werkstatt` source so Vanessa can review the exact request and respond.
+
+## 2026-05-24 Christine Cummins "Outreach questions" exact-source blocker
+
+- Workspaceboard session `38a4f2ec` for Task Flow packet `taskflow-48f47e0fdaede108` (`Outreach questions`) cannot be normalized into real Vanessa follow-through yet because the exact source body is not mirrored anywhere inside the approved `/Users/werkstatt` proof set.
+- Source-first proof from approved local surfaces:
+  - Workspaceboard session-history readback for `38a4f2ec` shows the scheduler bridge created this worker specifically for Task Flow key `taskflow-48f47e0fdaede108`, source message `<EC002BC0-6FC0-44DA-8B50-E7952326E905@gmail.com>`, sender `Christine Cummins <christine.cummins37@gmail.com>`, subject `Outreach questions`, and packet status `classified`.
+  - Workspace-local `mail-review.jsonl` logged the packet at `2026-05-24T09:05:11-0500` with `body_read=true`, `body_chars=630`, `active_inbox=true`, and `seen_before=false`, so the classifier saw a body during intake.
+  - The approved repo-local body mirror at `/Users/werkstatt/ai_workspace/.private/mailboxes/nationaloutreach/state/bodies/` does not contain any file for source `ec002bc0-6fc0-44da-8b50-e7952326e905@gmail.com` or subject `Outreach questions`.
+  - The adjacent approved repo-local state files `/Users/werkstatt/ai_workspace/.private/mailboxes/nationaloutreach/state/active-inbox.json`, `task-flow-events.jsonl`, `email-trace-events.jsonl`, and `sent-log.jsonl` also contain no entry for this exact source id or subject, so there is no second approved local surface here that reproduces the missing body text or any resulting Vanessa action.
+- Exact blocker:
+  - Without the raw body in the approved `/Users/werkstatt` mirror, Vanessa cannot truthfully determine whether Christine's message is a routine outreach scheduling request, a clarification request, or no-action residue.
+- Exact owner question:
+  - Please reroute or mirror the raw body for source message `<EC002BC0-6FC0-44DA-8B50-E7952326E905@gmail.com>` into an approved `/Users/werkstatt` source so Vanessa can classify and respond from exact source proof.
+
+## 2026-05-23 Ojai Vineyard "Our first ever Nero d'Avola" exact-source blocker
+
+- Workspaceboard session `5c3affd0` (`vanessa.sterling@kovaldistillery.com: Our first ever Nero d'Avola`) cannot be closed truthfully from the approved repo-local proof set because the exact Ojai body for this packet is not mirrored under `/Users/werkstatt`.
+- Source-first proof from approved `/Users/werkstatt` surfaces:
+  - Repo-local mailbox review logged the packet twice on `2026-05-23`: `2026-05-23T22:26:09-0500` and `2026-05-23T22:41:30-0500` in `/Users/werkstatt/ai_workspace/.private/mailboxes/nationaloutreach/state/mail-review.jsonl`.
+  - The review row identifies source message `<01KSBZBRVR8CKXXXD74DT2PZN6@klaviyomail.com>`, sender `"The Ojai Vineyard" <help@ojaivineyard.com>`, recipient `"Macee Maddox" <macee.maddox@kovaldistillery.com>`, subject `Our first ever Nero d'Avola`, route `outreach-coordinator`, `body_read=true`, `body_chars=4670`, and `active_inbox=true`.
+  - The repo-local body cache directory `/Users/werkstatt/ai_workspace/.private/mailboxes/nationaloutreach/state/bodies/` does not contain a mirrored body file for source `01ksbzbrvr8ckxxxd74dt2pzn6@klaviyomail.com`, so the approved local proof set preserves only metadata, not the exact newsletter content.
+  - The current repo-local `active-inbox.json` also does not carry this exact Ojai message, so there is no second approved local surface here that reproduces the body text for classification.
+- Exact blocker:
+  - Without the raw body in the approved `/Users/werkstatt` mirror, Vanessa cannot truthfully classify this packet as promotional no-action residue versus a real tasting/invitation request without guessing from the subject line alone.
+- Exact owner question:
+  - Please reroute or mirror the raw body for source message `<01KSBZBRVR8CKXXXD74DT2PZN6@klaviyomail.com>` into an approved `/Users/werkstatt` source so Vanessa can make a source-backed no-action or follow-up decision.
+
+## 2026-05-23 Alma Padel Outreach Calendar Add Blocked On Missing End Time
+
+- Workspaceboard session `c7559d3c` (`vanessa.sterling@kovaldistillery.com: Fwd: New Event Reservation Request #86`) cannot be completed truthfully yet because the source packet does not provide a real event end time, and the requested deliverable includes an unassigned shift.
+- Source-first proof:
+  - Source body `/Users/admin/.nationaloutreach-launch/state/bodies/calbltzzrrxm7qf1br_nxe51ozdowgwyrkjzxq_vz2wnh9hot2w-mail.gmail.com.txt` shows Sonat asked Vanessa to add the Alma Padel event to the outreach calendar with an unassigned shift.
+  - The forwarded reservation details in that body identify `Alma One Year Anniversary Party`, contact `Jennifer Havill`, email `jen@almapadel.com`, phone `7739514570`, date `2026-06-05`, start `6:00 PM`, and expected guests `200`, but no end time.
+  - The same body plus Mark's forward says only `from 6pm onward`, which is not sufficient to create a truthful shift duration.
+  - Live OPS readback before mutation found no existing `Alma` outreach event on `2026-06-05`.
+  - Public venue verification shows Alma Padel at `2300 Ridge Dr, Glenview, IL 60025`, so the blocking fact is the missing end time, not the address.
+- Exact owner question:
+  - What end time should Vanessa use for the Alma Padel 1-Year Anniversary Party on Friday, June 5, 2026 so the outreach event can be added with an unassigned shift?
+
+## 2026-05-23 Park Ridge Schedule Residue Closed From Repo-Local Mailbox State
+
+- Workspaceboard session `0c15f523` (`vanessa.sterling@kovaldistillery.com: Re: Your Schedule for Next Week - 2026-05-25`) is closed as no-action residue from approved `/Users/werkstatt` sources.
+- Source-first proof:
+  - Repo-local mailbox review logged Robert's packet `caatx44apaz1g1rs-cdhikthrg_uo+w0vush=s9gykudb=gboba@mail.gmail.com` at `2026-05-23T21:36:18-0500` in `/Users/werkstatt/ai_workspace/.private/mailboxes/nationaloutreach/state/mail-review.jsonl` and `email-trace-events.jsonl`, subject `Re: Your Schedule for Next Week - 2026-05-25`, with body cache `/Users/werkstatt/ai_workspace/.private/mailboxes/nationaloutreach/state/bodies/caatx44apaz1g1rs-cdhikthrg_uo-w0vush-s9gykudb-gboba-mail.gmail.com.txt`.
+  - The cached Robert body shows the Park Ridge question was already pushed to Sonat for the missing event contact/context, so Vanessa did not own an unanswered business question in that packet.
+  - Repo-local sent proof at `/Users/werkstatt/ai_workspace/.private/mailboxes/nationaloutreach/state/sent-log.jsonl` logged `2026-05-23T21:36:36-0500`, Message-ID `<177959019382.10357.2213313960257352598@kovaldistillery.com>`, but that artifact is only the generic Vanessa acknowledgement and its `task_packet.verification_readback` explicitly says substantive follow-up proof was still required before filing.
+  - Repo-local mailbox resolution proof then logged `event=email_resolved_not_in_inbox` for the same source packet at `2026-05-23T21:38:42-0500` in `/Users/werkstatt/ai_workspace/.private/mailboxes/nationaloutreach/state/email-trace-events.jsonl`, so the remaining inbox residue was cleared without requiring a second Vanessa business reply.
+- Closeout rule from this pass:
+  - When the repo-local send artifact is only a generic acknowledgement and the underlying business question has already been answered in-thread by the owner path, close the Vanessa residue worker against the cached owner-thread proof plus `email_resolved_not_in_inbox`, not with another overlapping outreach reply.
+
+## 2026-05-23 Post-Tasting Check-In Sent From Repo-Local State
+
+- Workspaceboard session `1430defa` (`vanessa.sterling@kovaldistillery.com: 9:30 PM post-tasting check-in for Saturday, May 23`) is now closed against repo-local National Outreach send proof.
+- Source-first proof:
+  - Live staffed Outreach readback for `2026-05-23` produced eight staffed events for the reminder body: event ids `952, 710, 767, 768, 769, 711, 770, 771` with shift ids `5393, 4922, 5137, 5138, 5139, 4923, 5140, 5141`.
+  - Repo-local sent-log proof now exists at `/Users/werkstatt/ai_workspace/.private/mailboxes/nationaloutreach/state/sent-log.jsonl` logged `2026-05-23T21:39:00-0500`, subject `9:30 PM post-tasting check-in for Saturday, May 23`, Message-ID `<177959033912.11437.8982824370739732514@kovaldistillery.com>`.
+  - Matching sent artifact exists at `/Users/werkstatt/ai_workspace/.private/mailboxes/nationaloutreach/state/sent/vanessa-post-tasting-checkin-2026-05-23-2130.sent-1779590340.json`.
+- Durable follow-through:
+  - Local scheduled-action row `vanessa-post-tasting-checkin-2026-05-23-2130` was updated to `completed` with the same Message-ID and upserted through `scripts/scheduled_actions_mysql_recorder.php`.
+  - Workspaceboard session `cff5682e` (`vanessa.sterling@kovaldistillery.com: Re: 9:30 PM post-tasting check-in for Saturday, May 23`) was a duplicate residue pass over the same internal reminder thread. Repo-local mailbox review showed no active inbox item for this subject, so no new Vanessa business reply was needed; the exact proof remains the sent Message-ID `<177959033912.11437.8982824370739732514@kovaldistillery.com>`.
+  - Task Flow packet `taskflow-49c10bd562156f41` (`Re: 9:30 PM post-tasting check-in for Saturday, May 23`, source Message-ID `<177959043335.12039.11960337315361592923@kovaldistillery.com>`) was closed as no-action mailbox residue. Source-first proof: the body is only Vanessa's generic self-acknowledgement (`Thanks, I have this and will handle the routine outreach follow-up from here.`), not a concrete staffing or outreach request; live runtime archive proof logged `2026-05-23T21:41:47-0500` in `/Users/admin/.nationaloutreach-launch/state/archive-log.jsonl` with `reason=self_sent_inbox_copy` and `action=archive_move_to_all_mail`; `email-trace-events.jsonl` then recorded both `email_archived` and `email_resolved_not_in_inbox` for the same source id, so no further Vanessa action is required on this reply-only packet.
+
+## 2026-05-23 Park Ridge Schedule Residue Rechecked Against Live Review Proof
+
+- Workspaceboard session `abb4c1e7` (`vanessa.sterling@kovaldistillery.com: Re: Your Schedule for Next Week - 2026-05-25`) re-verified the same Park Ridge thread from approved `/Users/werkstatt` sources and confirms no new Vanessa business reply is needed.
+- Source-first proof:
+  - Robert's packet at `/Users/admin/.nationaloutreach-launch/state/bodies/caatx44apaz1g1rs-cdhikthrg_uo-w0vush-s9gykudb-gboba-mail.gmail.com.txt` asked Sonat for missing Park Ridge context after Cassandra's schedule question.
+  - Sonat's later in-thread reply at `/Users/admin/.nationaloutreach-launch/state/bodies/calbltzw0gcm-u-hgn0ulca-vgktpjjlb6b-k11znpbw4z-krqa-mail.gmail.com.txt` already answered the business question directly: May 30 is the Park Ridge tasting event, Fred Sanchez (`fsanchez@parkridge.us`) is the contact, Cassandra should ask whether a tent is needed, and the goal is tasting plus light market-development follow-through.
+  - Live mailbox review still shows both packets as `active_inbox:true`: Robert at `2026-05-23T14:34:15-0500` and Sonat at `2026-05-23T14:42:08-0500`, both under subject `Re: Your Schedule for Next Week - 2026-05-25`.
+- Residue clarification:
+  - `/Users/admin/.nationaloutreach-launch/state/sent-log.jsonl` shows generic Vanessa acknowledgements for both the Robert and Sonat packets on `2026-05-23`, but those entries explicitly say substantive follow-up proof was still required before filing.
+  - The substantive proof is Sonat's in-thread answer, not the generic Vanessa acknowledgement. Close this packet as no-action residue against the owner reply proof and avoid sending an overlapping second business reply.
+  - Live mailbox mutation proof now exists for the Sonat packet itself: `/Users/admin/.nationaloutreach-launch/state/archive-log.jsonl` logged `2026-05-23T14:50:33-0500`, `source_message_id=calbltzw0gcm-u=hgn0ulca-vgktpjjlb6b+k11znpbw4z-krqa@mail.gmail.com`, `reason=later_reply_found`, `action=archive_move_to_all_mail`, and a same-pass IMAP readback confirmed the message is no longer in `INBOX`.
+
+## 2026-05-23 Park Ridge Market After Dark Schedule Thread Closed Against Sonat Reply Proof
+
+- Workspaceboard session `26c52c27` (`vanessa.sterling@kovaldistillery.com: Re: Your Schedule for Next Week - 2026-05-25`) does not need a new Vanessa reply from the approved local proof set.
+- Source-first proof chain:
+  - Robert's packet to Cassandra is stored at `/Users/admin/.nationaloutreach-launch/state/bodies/caatx44apaz1g1rs-cdhikthrg_uo-w0vush-s9gykudb-gboba-mail.gmail.com.txt` and only says there is limited history, that May 30 is tasting-only, that KOVAL should bring a table and product, and that Cassandra should contact the event organizer for more detail.
+  - Sonat's later in-thread reply is stored at `/Users/admin/.nationaloutreach-launch/state/bodies/calbltzw0gcm-u-hgn0ulca-vgktpjjlb6b-k11znpbw4z-krqa-mail.gmail.com.txt` and already answers Cassandra directly with the missing business guidance: Park Ridge Market After Dark is the May 30 tasting event, Fred Sanchez (`fsanchez@parkridge.us`) is the event contact, Cassandra should ask whether a tent is needed, and the goal is tasting plus light market-development follow-through.
+  - The same Sonat packet was logged into the live National Outreach mailbox review at `2026-05-23T14:26:27-0500` with `active_inbox:true`, `from: Sonat Birnecker <sonat@kovaldistillery.com>`, and Cassandra on cc, so the business answer already reached the thread before this worker closeout.
+- No-action closeout rule from this packet: when the substantive answer is already sent in-thread by the human owner and Vanessa only has duplicate acknowledgement residue left, close the Vanessa worker against the owner reply proof instead of sending a second overlapping reply.
+- Residual note: the local review state still shows the inbox copies as `active_inbox:true`; this slice closes the business follow-up decision, not a separate archive-mutation proof.
+- 2026-05-24 16:34 CDT re-check for Task Flow due worker `taskflow-owner-reply-0d27d0f9de8f00e5`: the approved local proof set still supports no-action closeout. The later Sonat thread packet remains logged in live runtime review at `2026-05-23T14:26:27-0500` with body path `/Users/admin/.nationaloutreach-launch/state/bodies/calbltzw0gcm-u-hgn0ulca-vgktpjjlb6b-k11znpbw4z-krqa-mail.gmail.com.txt`, `active_inbox:true`, and Cassandra already on cc, so the business answer was already present in-thread before this due reminder fired.
+
+## 2026-05-23 Whole Foods - Lakeview Tasting Closeout And Draft-Handling Rule
+
+- Workspaceboard session `d436609f` (`vanessa.sterling@kovaldistillery.com: Re: Whole Foods - Lakeview Tasting`) is complete from approved `/Users/werkstatt` sources plus live National Outreach runtime readback.
+- Source-first proof chain:
+  - Dereck Atwater's original no-show email is stored at `/Users/admin/.nationaloutreach-launch/state/bodies/f4fbb3c9-9a75-4b96-877f-6176b5b08766-kovaldistillery.com.txt`.
+  - Vanessa's first direct reply to Dereck was sent at `2026-05-22 14:31:25 -0500`, Message-ID `<177947828406.72123.15060492684011205248@kovaldistillery.com>`.
+  - The forwarded Robert packet was replied to at `2026-05-22 15:36:36 -0500`, Message-ID `<177948219523.90576.10699084543824065320@kovaldistillery.com>`.
+  - Robert's later correction email is stored at `/Users/admin/.nationaloutreach-launch/state/bodies/caatx44ygn_yiuvyqhguin9mkm--qgkvkspkkodk-zrxk2gb--a-mail.gmail.com.txt` and says the worker should use his draft text through Vanessa's persona rather than send it as Robert.
+  - The corrective in-thread Vanessa send to Dereck with Robert copied is the live closeout proof: sent artifact `/Users/admin/.nationaloutreach-launch/state/sent/lakeview-dereck-correction-20260523.sent-1779554505.json`, logged at `2026-05-23 11:41:45 -0500`, Message-ID `<177955450383.58742.3366000199527492755@kovaldistillery.com>`.
+- Mailbox mutation proof:
+  - `/Users/admin/.nationaloutreach-launch/state/archive-log.jsonl` already archived the earlier source packet `Whole Foods - Lakeview Tasting` and the forwarded Robert packet on `2026-05-22` as `later_reply_found`.
+  - No new owner question remained after the corrective send; the remaining Robert note was process guidance, not an external-facing business blocker.
+- Reusable rule from this packet: when Robert sends draft language and says to use it, Vanessa should send the substance through Vanessa's persona and signature, keeping Robert as context/cc only when requested, rather than relaying the message in Robert's voice or signature block.
+
+## 2026-05-22 Naomi Forwarded COT Review Packet Closed Against Existing Proof
+
+- Workspaceboard session `025f018d` (`naomi.stern@kovaldistillery.com: Fwd: New Report for Review: COT Activity - Weekly - Brand Ambassadors`) did not require new Portal or mailbox action from approved `/Users/werkstatt` sources.
+- The exact forwarded subject does not appear in the current local mailbox review state, but the underlying weekly COT review item is already closed by the existing live proof chain recorded below:
+  - `GET /users/reports/7960` confirmed `COT Activity - Weekly`, department `Brand Ambassadors`, period `2026-05-11` to `2026-05-17`, `submitted=1`, `submitted_at=2026-05-18 05:54:24`.
+  - `koval_reports.report_notifications.id=6147834` already links to `report_id=7960`.
+  - `GET /dashboard/reports-upcoming` had already advanced the next weekly reminder to `6147835` for `2026-05-18` through `2026-05-24`.
+- Close this forwarded-review packet against proof marker `COT_6147834_LIVE_CLOSED_REPORT_7960`; treat it as duplicate review residue, not a fresh open Naomi action.
+
+## 2026-05-22 Cultivater Review Folder Expanded And Legislative Slot Filled
+
+- Workspaceboard packet `taskflow-ac357a6932837ddc` / session `d5c608ad` (`Cultivater assignment: review folder, expand outreach list, legislative scan`) is complete from approved `/Users/werkstatt` sources.
+- Reviewed the in-workspace source folder `/Users/werkstatt/ai_workspace/avignon/.private/cultivater-pillar-sprint-2026-05-06`, extracted Sonat's attached contact sheet `Cultivater Magazine Contact Sheet (1).docx`, and cross-checked the existing launch brief at `../avignon/docs/cultivater-launch-sprint-brief-2026-05-17.html`.
+- Wrote the durable note `cultivater-outreach-expansion-2026-05-22.md`, which expands the contact-sheet targets by pillar, preserves the original first-wave priorities, and fills the prior Legislation & Systems gap with a concrete shortlist: Textile Exchange first, Ellen MacArthur Foundation backup, and U.S. Green Building Council as the built-environment alternative.
+- No external send, mailbox mutation, OPS/Portal mutation, or approval-gated business outreach occurred in this pass. The truthful proof artifact is the new local note plus this handoff entry.
+
+## Standing Owner Rule
+
+- Customer Outreach and tasting follow-ups should default to Vanessa Sterling / Outreach Coordinator unless the packet explicitly belongs to a different owner lane. Darla / WineStyles reschedules are part of that default Vanessa lane. When Vanessa confirms the Darla reschedule, keep Robert in CC on the confirmation unless Robert or Sonat explicitly overrides that packet.
+
+## Repeating Reply Pattern
+
+- For Darla / WineStyles style reschedules, use the unassigned-shift path and assign through `koval_tracktime.shift2user`; do not use `event_booking_staff`.
+- Future Vanessa replies should include a real Vanessa signature block and preserve the original request context from Robert or Darla.
+- Treat this as a reusable how-to pattern for Customer Outreach / tastings, like sample-request handling, so the next run does not rebuild the same reply shape from scratch.
+- Receipt-check or unclear follow-up rule: if a National Outreach inbound email is a "have you received" / receipt-check style message and the correct action is not already obvious, Vanessa should ask Robert one concrete question by email and include the original source email for review before any external reply or filing.
+- Runtime note: the live National Outreach cycle now auto-queues that Robert clarification question path when the pattern matches; the most recent pass found no current receipt-check item to trigger, but the rule is wired and live for the next one.
+
+## 2026-05-22 Wine on the River OPS Add / Benjamin Assignment
+
+- Source packet `taskflow-df2d09dafc957711` (`Fwd: Wine on the River 9/12/26 2:30PM-7PM Riverfront`) was actionable Vanessa lane work, not stale scheduler residue. Sonat's source body explicitly asked Vanessa to add the Nashville event to OPS and assign Benjamin Green.
+- Live OPS readback after the approved create path:
+  - event `951` / `Wine on the River`
+  - `2026-09-12 14:30-19:00`
+  - location `Riverfront Park, Nashville, TN`
+  - category `Outreach`
+  - distributor account `4580` / `Lipman Brothers`
+  - contact `Bethany Underwood <b.underwood@lipmanbrothers.com>`
+- Linked shift/readback:
+  - shift `5392`
+  - group `169` / COTeam
+  - linked through `event_booking_shift_links`
+  - assigned through `koval_tracktime.shift2user` to Benjamin Green user `1327`
+- Vanessa sent the completion note to Sonat with Robert cc'd. Sent-log proof:
+  - Message-ID `<177945908869.51489.11097361342580714112@kovaldistillery.com>`
+  - subject `Re: Fwd: Wine on the River 9/12/26 2:30PM-7PM Riverfront`
+- Not done in this pass: outreach Google calendar sync. The live OPS shell create path worked, but both the official `sync_event_to_google` action and the lower-level calendar request returned the same Google OAuth configuration blocker in this shell. The provisional `event_booking_google_links` row for event `951` was removed so OPS does not falsely claim a synced Google event without real calendar proof.
+
+## 2026-05-25 Wine on the River owner-reply due wrapper remains blocked on Google sync follow-through
+
+- 2026-05-25 08:41 CDT due-worker session `43e4eb41` re-checked the approved local proof set for scheduler wrapper `taskflow-owner-reply-7bc3fa098bdc65e7`.
+- Exact source proof:
+  - local mirrored owner reply `/Users/werkstatt/ai_workspace/.private/mailboxes/nationaloutreach/state/bodies/caatx44zu3jwvxfy6i-fb-usy_joos6i88tfnkcacyuar_f6o-q-mail.gmail.com.txt` contains Robert's follow-up: `Please check the sync with Google. Escalate to Code and Git manager if needed.`
+  - prior completed outreach action remains the same May 22 proof set already recorded above: OPS event `951`, shift `5392`, Benjamin assigned, and Vanessa's same-thread completion email with Message-ID `<177945908869.51489.11097361342580714112@kovaldistillery.com>`.
+- Current blocker truth:
+  - the last proven state in the same thread still says Google sync was not done because the live sync path hit a Google OAuth configuration error
+  - no later approved local proof shows Google sync completion, a follow-up reply about the sync, or a visible Code and Git manager route for that follow-through
+- Durable outcome for this wrapper: not stale no-action residue. It stays blocked until Vanessa or a routed Code and Git manager worker can provide one of:
+  - same-thread sent proof confirming Google sync completion for event `951`
+  - a fresh owner-visible blocker/update about the unresolved Google OAuth sync failure
+
+## 2026-05-22 Misrouted Papers Permission Packet Closeout
+
+- Task Flow packet `taskflow-13e370f9c708e0fd` (`Re: Codex Papers write permission needed for durable assessment link`) was a router misclassification, not an Outreach staffing or schedule request.
+- Source-first proof from `/Users/admin/.nationaloutreach-launch/state/bodies/caatx44z1e-_pbcd8ypmc-w8y-e6kayqljdzbipcwhpuqnbkgw-mail.gmail.com.txt`: Robert's reply body only says `Hey Claude, Can you please give codex write access?` and contains no COTeam, shift, schedule, calendar, or Outreach follow-up ask.
+- Underlying blocker is already resolved in the real owning lane. Cross-check in `/Users/werkstatt/ai_workspace/HANDOFF.md` shows the 2026-05-21 live Papers write recovery created the durable AI Manager note at Papers path `ai-manager/durability/2026-05-21-ai-manager-durability-rules.md` with GUID `3ee50607-df35-401c-a6c9-6f601127deb3`, plus a second Codex-side verification write at `ai-manager/durability/2026-05-21-codex-papers-write-restored.md` with GUID `68a9266a-4563-44e5-ad01-eb6ddf234b81`.
+- Closeout rule for similar packets: if the source body is an internal Codex / Papers / Claude permission or tooling thread with no Outreach action, treat it as misrouted no-action residue and close it against the owning lane's durable proof instead of leaving it routed in Vanessa's queue.
+
+## 2026-05-22 Kevin "Open shifts this week" Packet Closeout
+
+- Workspaceboard packet `taskflow-e9ca08bb4ca82309` (`Fwd: Open shifts this week`) was Robert forwarding Kevin McCarthy's availability note and asking Vanessa to tell Kevin there were no remaining weekend shifts while mentioning the Eataly and longer-event options.
+- Source-first proof from `/Users/admin/.nationaloutreach-launch/state/bodies/caatx44ynv2fftstprbsyo28gk-hmvouvafhzgfmnnczwn-f-pg-mail.gmail.com.txt` shows Robert's exact instruction, and the forwarded Kevin body confirms the ask was open-shift availability for the upcoming week.
+- The forwarded thread itself was later superseded by direct Kevin follow-up threads that carried the real staffing work:
+  - Vanessa confirmed Kevin's Mariano's Glenview assignment and drive-time approval path on the later `Re: Switching Outreach Tasting` thread; sent proof Message-ID `<177932314799.6001.3845658246967842225@kovaldistillery.com>`.
+  - Vanessa also sent the Beer & Bourbon Fest coverage clarification to Kevin on the longer-event path; sent proof Message-ID `<177932317516.6554.4332459757581381496@kovaldistillery.com>`.
+- The generic routine acknowledgement on `Re: Open shifts this week` was sent at Message-ID `<177933238978.15525.2272454129324108481@kovaldistillery.com>`, and both the forwarded Robert packet and Kevin's original open-shifts email were then archived with `later_reply_found` in `/Users/admin/.nationaloutreach-launch/state/archive-log.jsonl`.
+- Eataly no longer remained an open staffing option by the time of closeout: the National Outreach handoff already records the Eataly May slot as confirmed and the later confirmation-only inbox message as no-action history. This packet is therefore closed against the later Kevin-thread staffing proof, not reopened for a stale Eataly mention.
+
+## 2026-05-25 Scheduler Reminder Normalization
+
+- Task Flow due worker packet `taskflow-owner-reply-d3c2e6706d4c6fa3` (`Respond to owner reply: Fwd: Open shifts this week`) was a stale scheduler reminder, not a new open outreach action.
+- Source-first recheck on 2026-05-25 confirmed the thread was already closed: sent proof remains in `/Users/admin/.nationaloutreach-launch/state/sent-log.jsonl` at Message-ID `<177933238978.15525.2272454129324108481@kovaldistillery.com>`, and the forwarded wrapper remains archived in `/Users/admin/.nationaloutreach-launch/state/archive-log.jsonl` with reason `later_reply_found`.
+- Queue recheck against Workspaceboard showed no current live `taskflow-owner-reply-d3c2e6706d4c6fa3` or `Open shifts this week` item in the Task Flow overview, so the due worker was closed as residue against the existing proof instead of reopening a duplicate owner-reply follow-up.
+
+## 2026-05-20/21 Inbox Automation Boundary
+
+- The live National Outreach runtime already has archive/self-sent/replied cleanup enabled and the approved send path active.
+- Current projection readback from `/Users/admin/.nationaloutreach-launch/state/active-inbox.json` shows 385 total tracked messages with 25 `active_inbox`, 152 `filed_to_handled`, and 208 `resolved_not_in_inbox`.
+- The 25 active rows are real open or gated items, not leftover residue. The mix currently includes outreach-coordinator, Ezra, internal-communicator, marketing-manager, Naomi, and security-guard routing, so the mailbox is automated for safe cleanup but not fully zeroed yet.
+
+## 2026-05-22 Ojai Vineyard "New hours" blocker
+
+- Workspaceboard session `4e38fdb2` / `vanessa.sterling@kovaldistillery.com: Re: Question on Ojai Vineyard 'New hours' message` was reduced to one exact blocker after source-first re-check inside `/Users/werkstatt`.
+- Approved local proof surfaces confirm only the thread metadata: `mail-review.jsonl` shows The Ojai Vineyard source message `<01KRWGZ9AR4MEYFGXST6RZ5VYF@klaviyomail.com>`, subject `New hours — stay a little longer`, still `active_inbox:true` on the latest local readback from `2026-05-20 19:25:38 -0500`; Frank handoff already tied Robert's follow-through to that same inbox thread.
+- No approved local source inside `/Users/werkstatt` preserves the Ojai message body, a reply body, or archive proof, so Vanessa cannot safely classify it as spam/no-action or draft a response without guessing. The prior board cache note that it was "likely spam" is not enough proof to close the item.
+- Durable board outcome should remain `blocked` with classification `routed-needs-owner-question`: reroute this packet with the raw Ojai body or another approved `/Users/werkstatt` body source so Vanessa can make a source-backed no-action or reply decision.
+
+## 2026-05-20 WineStyles Reschedule Closeout
+
+- Live OPS state for event `754` was updated to `2026-06-05 19:00-21:00`, and linked tracktime shift `5124` remains assigned to Darla Swango through `koval_tracktime.shift2user` only. No `event_booking_staff` assignment was used for this packet.
+- Google Calendar sync completed for the outreach calendar with UID `ops-outreach-754@koval-distillery.com`; the live synced event readback shows `WineStyles` at `2026-06-05T19:00:00-05:00` through `2026-06-05T21:00:00-05:00`.
+- CLI sync note: the stock 60-day Google OAuth refresh-token age gate treated the stored OPS token rows as stale in shell-only runs. When syncing from this workspace shell, set `GOOGLE_OAUTH_REFRESH_TOKEN_MAX_AGE_DAYS=120` so the existing refresh token rows can be used for the live Google Calendar API call.
+- Vanessa sent the confirmation reply to Darla with Robert cc'd. Sent-log proof:
+  - Message-ID `<177929658819.12586.14784516532056600620@kovaldistillery.com>`
+  - subject `Re: Re-schedule tasting event - WineStyles (Norwood Park)`
+  - from `vanessa.sterling@kovaldistillery.com`
+- The sender reply draft now honors `In-Reply-To` and `References` headers in `scripts/nationaloutreach_mail_cycle.py`, so future confirmation replies can stay threaded instead of sending as flat mail.
+
+## 2026-05-20 Scheduler Bridge Residue Closeout
+
+- Closed the five unscheduled Task Flow scheduler-bridge rows for Workspaceboard session `f4a92bf4` after source-first review of the live body files, Task Flow history, sent-log proof, and OPS readback.
+- Closed follow-up scheduler-bridge row `taskflow-7d5b0fd50d7d4de2` for Workspaceboard session `a855b3f4` after source-first review of Kevin McCarthy's reply. Live OPS readback before reply confirmed Mariano's - Glenview event `771` remains on `2026-05-23 16:00-19:00` and linked shift `5141` remains assigned only to Kevin McCarthy. Vanessa replied to Kevin approving drive time and telling him to hold the `4:00-7:00 PM` shift unless a later approved schedule change is confirmed; sent-log proof Message-ID `<177932314799.6001.3845658246967842225@kovaldistillery.com>`.
+- `taskflow-7d9a1171b9df492c` (`Switching Outreach Tasting`): live OPS readback confirmed Mariano's - Glenview event `771` on `2026-05-23 16:00-19:00` linked to shift `5141`, and `koval_tracktime.shift2user.id=8790` now points to Kevin McCarthy user `1328` with `updated_at 2026-05-20 14:59:08`. Vanessa sent the confirmation reply to Dereck and Kevin with Robert cc'd; sent-log proof Message-ID `<177931448884.98607.16661522137230758013@kovaldistillery.com>`, subject `Re: Switching Outreach Tasting`.
+- `taskflow-3bfdc7fb91f3e21e` (`Re: KOVAL Tasting Request`): closed by `email_blocked` event with exact no-action proof. The event-level blocker says the row is stale scheduler-bridge residue from the already closed tasting-request thread, and the verification readback points to prior Vanessa proof for OPS event `704` / shift `4916` with Message-ID `<177913611334.20440.12929425138441116412@kovaldistillery.com>`.
+- `taskflow-faacc20e35a10f6f` (`Re: KOVAL Tasting Request`): closed by `email_blocked` event with exact no-action proof. The source body only says Macee found Vanessa's earlier response, and the event-level verification readback cites the same prior OPS event `704` / shift `4916` closeout and Message-ID `<177913611334.20440.12929425138441116412@kovaldistillery.com>`.
+- `taskflow-93ca00d11e28ecdc` (`Proposed backup path on reatan before .205 backup`): closed by `email_blocked` event as a misrouted non-Outreach backup-policy thread. The event-level blocker points it back to the Codex backup lane and cites prior sent-log proof Message-ID `<177923152821.5342.6914836235234438139@kovaldistillery.com>`.
+- `taskflow-e6aad80a0a645c70` (`Thank You for Helping Make Taste of JCYS So Special`): closed by `email_blocked` event with an exact no-action reason because Molly Hill's source email is thank-you-only and asks for no outreach, calendar, or staffing follow-up.
+
+## 2026-05-20 Scheduler Bridge Follow-Through - sessions af6c47a5 and 8f9d84dc
+
+- `taskflow-c803ad41ad97bb7d` (`Re: Question on Wild Onion Market tasting follow-up`): source-first readback from workspace-local `mail-review.jsonl` confirms Robert's Wild Onion follow-up packet exists on Vanessa's lane with Message-ID `<CAAtX44aG8R-U_T2qJH=+80Y_MFBh_j=AZtRcnFBSMoiDSLAR5w@mail.gmail.com>`, thread reference `<177915223205.65785.6377671546839182809@kovaldistillery.com>`, and current repo-local readback `body_read=false`. Related Wild Onion thread metadata is present in the same workspace: Dereck's earlier `Re: Koval Tasting for Wild Onion Market` reply on 2026-05-18 is Message-ID `<CALLcp31eZ9f61D-V1yAxL9CmRUmTm0BGRK=qoSFsiF2tJc6K4g@mail.gmail.com>` with `body_read=true`, and the older `Fwd: Koval Tasting for Wild Onion Market` packet is also visible. The actual latest Robert follow-up body is not available anywhere inside `/Users/werkstatt`, so Vanessa cannot answer the business question from approved local source review. Durable board outcome should stay `blocked` as `routed-needs-owner-question` until Task Manager reroutes the packet with the raw source body or another approved repo-local body source.
+
+- `taskflow-d5e85565c486eefd` (`Re: City Gate Grille Naperville + July 16th afternoon BBQ/Bourbon/Cigar Event`): Workspaceboard scheduler bridge created session `c50d83b0` on `2026-05-21 16:23 CDT`, but the bridge had already timed out before prompt delivery. Source-first readback from the workspace-local `mail-review.jsonl` proves the live packet/thread identity only: Osvaldo Moreno sent the latest reply at `2026-05-21 16:21:12 CDT` after three same-thread Vanessa replies (`<177939663693.15757.4093246579800630918@kovaldistillery.com>`, `<177939768095.46975.12433016397905223896@kovaldistillery.com>`, `<177939820270.63916.10256233281251580109@kovaldistillery.com>`), but the actual reply body and outbound bodies are not available anywhere inside `/Users/werkstatt` for approved source review. Durable board state was updated to `blocked` with `taskflow_key taskflow-d5e85565c486eefd`, blocker `routed-needs-owner-question`, and Task Manager owner question requesting a reroute with the raw source packet or another approved body source so Vanessa can answer the latest City Gate Grille follow-up.
+
+- `taskflow-55fac77c3e655662` (`Re: Switching Outreach Tasting` from Dereck Atwater): closed by `email_blocked` as thank-you-only no-action residue. Source-first proof: the body only says `Thank you, Vanessa!`, and prior live OPS/sent proof already showed Mariano's Glenview event `771` on `2026-05-23 16:00-19:00`, linked shift `5141`, and Vanessa confirmation Message-ID `<177931448884.98607.16661522137230758013@kovaldistillery.com>`.
+- `taskflow-7d5b0fd50d7d4de2` (`Re: Switching Outreach Tasting` from Kevin McCarthy): live OPS readback for Beer & Bourbon Fest showed both Hollywood Casino events `712` and `713` on `2026-05-30 11:00-17:00` with linked shifts `4924` and `4925` still unassigned. Vanessa clarification reply Message-ID `<177932317516.6554.4332459757581381496@kovaldistillery.com>` asked Kevin to confirm whether he can cover the full day or only a partial window while remaining coverage is filled. Current authoritative Task Flow state is `clarification_sent` with next check `2026-05-21 10:00:00-05:00`; final drive-time approval stays pending the locked coverage plan.
+- Duplicate-send caveat for `taskflow-7d5b0fd50d7d4de2`: before the clarification send above, another worker session `a855b3f4` had already sent Kevin a different Vanessa reply at `2026-05-20 19:25:49-05:00`, Message-ID `<177932314799.6001.3845658246967842225@kovaldistillery.com>`, approving drive time for Mariano's Glenview event `771` and telling him to hold the `4:00-7:00 PM` shift. Treat the Kevin packet as concurrent-worker overlap rather than a clean single-worker closeout.
+- `taskflow-b75d4e47090690cf` (`Re: Switching Outreach Tasting` from Kevin McCarthy): Kevin's later live source reply says he can cover only `11:00 AM-2:00 PM` for Beer & Bourbon Fest. Vanessa sent the required routine follow-up at `2026-05-20 21:59:54-05:00`, Message-ID `<177933238583.15525.9146713890978621564@kovaldistillery.com>`. The DB-backed Task Flow packet was repaired from generic scheduler-bridge routing into real `waiting` under Workspaceboard session `48c00caf` with next check `2026-05-21 10:00:00-05:00`; the exact open issue remains the `2:00 PM-5:00 PM` Hollywood Casino coverage gap for events `712`/`713` and shifts `4924`/`4925`.
+- `taskflow-563aff03336e830e` (`Re: Switching Outreach Tasting` from Kevin McCarthy): closed by `email_blocked` as thank-you-only no-action residue. Source-first proof: Kevin's body only says the Mariano's `4:00-7:00 PM` timing is fine and thanks Vanessa for the approval; it does not request any further shift, calendar, or OPS change. The prior Vanessa reply already closed the actionable part with Message-ID `<177932314799.6001.3845658246967842225@kovaldistillery.com>`, and the live OPS readback still shows Mariano's Glenview event `771` on `2026-05-23 16:00-19:00` with linked shift `5141` assigned to Kevin McCarthy.
+
+## 2026-05-19 OPS Task 368770 No-Action / Waiting Readback
+
+- Live OPS task readback for `368770`:
+  - subject `Vanessa: daily 9:30 PM taster check-in after last tasting`
+  - status `Not Started`
+  - start/due `2026-05-20`
+  - time `21:30`
+  - recurrence `Daily`
+  - creator `1`
+  - owner/assignee `1343` / Vanessa Sterling / `vanessa.sterling@kovaldistillery.com`
+  - `sendnotification=0`, `deleted=0`
+- Source-first runtime check found no existing National Outreach execution surface for this task:
+  - no `368770` row or reference in `/Users/admin/.nationaloutreach-launch/state/scheduled-actions.jsonl`
+  - no `368770` proof in `scheduled-actions-log.jsonl`
+  - no `368770` proof in `sent-log.jsonl`
+  - by contrast, adjacent recurring task `367971` is the live implemented scheduled-action path for 8:00 AM day-of event detail emails
+- Live Outreach event readback for `2026-05-20` currently shows only event bookings `550` (`Book Swap`) and `882` (`Tiana group of in Tasting Room`), both without start/end times, and `fetch_event_booking_shift_links([550, 882], false)` returned no linked staffed shifts.
+- Current no-action reason: at `2026-05-19 00:22 CDT`, task `368770` is not due until `2026-05-20 21:30 CDT`, there is no implemented 9:30 PM check-in runtime behind the recurring OPS reminder, and the live `2026-05-20` Outreach readback does not yet show a staffed timed tasting that would produce a meaningful "after last tasting" check-in.
+- Workspaceboard state for worker session `219b3d2c` should remain `waiting` until the next live check at `2026-05-20 21:30:00-05:00`, or earlier only if a real staffed/timed Outreach tasting is added for `2026-05-20`.
+
+## 2026-05-21 OPS Task 368770 Live Blocker Readback
+
+- Re-activated Workspaceboard worker session `219b3d2c` after the stale waiting handoff and re-checked the live OPS/runtime sources on `2026-05-21`.
+- Current live OPS readback for `368770`:
+  - subject `Vanessa: daily 9:30 PM taster check-in after last tasting`
+  - status `Not Started`
+  - start/due `2026-05-22`
+  - time `21:30`
+  - recurrence `Daily`
+  - creator `1`
+  - owner/assignee `1343` / Vanessa Sterling
+  - `modifiedtime=2026-05-20 22:05:41`
+- Adjacent Vanessa daily reminders show the same rollover pattern:
+  - `367971` / `Vanessa: automate 8 AM day-of COT event detail emails` now reads `2026-05-22 08:00`, `modifiedtime=2026-05-20 22:05:35`
+  - `368771` / `Vanessa: daily 11 PM post-tasting activity review` now reads `2026-05-22 23:00`, `modifiedtime=2026-05-20 22:05:43`
+  - `368772` / `Vanessa: daily noon tasting schedule change check` now reads `2026-05-22 12:00`, `modifiedtime=2026-05-20 22:20:52`
+- Live `2026-05-20` Outreach source readback now proves the prior no-action case:
+  - `event_bookings` returned no `event_category='Outreach'` rows for `2026-05-20`
+  - `fetch_event_booking_shift_links([550, 882], false)` remained empty from the earlier placeholder readback
+- Live `2026-05-21` Outreach source readback shows tonight is different:
+  - event `704` / `Warehouse Liquors` runs `17:00-19:00` with linked shift `4916` assigned to `Stephen De Sena`
+  - event `764` / `Binny's Gin & Botanicals Event` runs `18:00-20:00` with linked shift `5134` assigned to `Darla Swango`
+- Runtime proof surface remains missing for `368770`: no matching row or proof in `/Users/admin/.nationaloutreach-launch/state/scheduled-actions.jsonl`, `scheduled-actions-log.jsonl`, `sent-log.jsonl`, or `task-flow-events.jsonl`.
+- Exact blocker: tonight has real staffed tastings, but the daily OPS reminder path has already advanced `368770` to `2026-05-22`, so there is no current OPS/runtime reminder covering the `2026-05-21 21:30 CDT` post-tasting check-in. Repairing that would require an OPS task/date mutation or a new runtime/scheduled-action implementation, which is outside the approved narrow no-mutation slice for this pass.
+
+## 2026-05-18 Overdue Summary Archive Readback Hardening
+
+- Tightened the overdue-summary archive audit path in `../scripts/nationaloutreach_mail_cycle.py` and synced the installed runtime copy at `/Users/admin/.nationaloutreach-launch/runtime/scripts/nationaloutreach_mail_cycle.py`.
+- Fixes in this pass:
+  - overdue-summary archive candidates are now built only from records still marked `active_inbox`, not from the full historical `active-inbox.json` residue;
+  - the archive pass now writes a structured `overdue_summary_inbox_readback` row to `/Users/admin/.nationaloutreach-launch/state/archive-log.jsonl` when the retained/newest overdue-summary state changes, and mirrors the latest summary in `/Users/admin/.nationaloutreach-launch/state/overdue-summary-readback.json`.
+- Live verification after the runtime sync:
+  - cycle readback at `2026-05-18T09:49:29-0500`: `mailbox_total=6`, `active_inbox_count=6`, `archived_inbox_count=0`, `mailbox_mutation=false`;
+  - overdue-summary readback row at `2026-05-18T09:49:29-0500`: `overdue_summary_inbox_count_before_archive=1`, `overdue_summary_inbox_count_after_archive=1`;
+  - retained live Portal reminder: source Message-ID `046c2f129449af4a0f4caf3fb2ef4524@koval-distillery.com`, subject `Overdue Reports Summary - May 17, 2026`;
+  - no redundant overdue-summary residue remained in INBOX, so no new archive mutation was needed on the verification pass.
+- Audit note: older `archive_remove_inbox_label` rows in `archive-log.jsonl` are historical pre-`UID MOVE` residue from the May 17 repair sequence. Current authoritative archive proof uses `archive_move_to_all_mail`, and current retained-item proof uses `overdue_summary_inbox_readback`.
+
+## 2026-05-18 TODO Projection Hygiene Pass
+
+- Cleaned `TODO.md` so the `Open` section reflects only live recurring National Outreach work and active directives, not already-finished history.
+- Removed stale open-residue entries whose durable outcomes were already recorded elsewhere:
+  - Eataly May tasting thread now stays closed in handoff/history after the confirmed-slot follow-through and the stale OPS reminder cleanup.
+  - LSRCC Summer Concert Series remains no-action/filable history, not a live TODO.
+  - Naomi QuickBooks/BID first-packet history remains in BID/handoff notes, not as a National Outreach open item.
+  - Completed COT May staff mailing and Consumer Outreach schedule follow-through remain historical outcomes, not routing-needed open work.
+- Updated the recurring Portal COT next-action pointer in `TODO.md` so it now tracks the next live weekly reminder cycle rather than the already-completed `6147832`/`6147833` period; after same-pass verification, that current item is `6147835` for Portal week `2026-05-18` through `2026-05-24`.
+
+## 2026-05-18 Weekly COT Follow-Through Guidance Update
+
+- Converted the May 17/18 overdue-summary cleanup into the standing National Outreach repeating-task rule for weekly COT Activity report follow-through.
+- Durable guidance now lives in `README.md` under `Weekly COT Activity Report Follow-Through`.
+- Required repeating proof before closeout:
+  - Portal submission proof: the report row is `submitted=1`, the overdue/reminder notification row links to the submitted `report_id`, and reviewer notification proof exists through Portal runtime logs such as `reports.new_for_review` rows with `status=sent`.
+  - Inbox-clearing proof: only the newest `Overdue Reports Summary` notice stays active while the work is in progress; older redundant summary notices are archived, and the worked live notice is cleared from INBOX after submission proof exists.
+- Durable archive proof path remains `/Users/admin/.nationaloutreach-launch/state/archive-log.jsonl`.
+- This closes the earlier docs/state-only open item to stop treating overdue-summary cleanup and weekly Portal submission proof as separate ad hoc tasks.
+
+## 2026-05-18 Weekly COT Reminder 6147834 Closeout
+
+- Verified the remaining weekly reminder `6147834` was already completed in live Portal before this pass; no new submission was required.
+- Approved Codex Portal API readback:
+  - `GET /users/reports/check-existing?user_id=1332&category_id=56&period_start=2026-05-11&period_end=2026-05-17` returned existing submitted report `7960`.
+  - `GET /users/reports/7960` confirmed `COT Activity - Weekly`, department `Brand Ambassadors`, period `2026-05-11` to `2026-05-17`, `submitted=1`, and `submitted_at=2026-05-18 05:54:24`.
+  - `GET /dashboard/reports-overdue` returned `[]` for Codex at verification time.
+  - `GET /dashboard/reports-upcoming` has already advanced the weekly current item to `6147835` for `2026-05-18` through `2026-05-24`.
+- Existing report proof: report `7960` contains the weekly COT Activity content for Portal period `2026-05-11` through `2026-05-17`, with the expected Codex / Vanessa source basis and tasting-activity summary.
+- Durable correction from this pass: the older handoff note calling `6147834` the remaining open weekly reminder is superseded by the verified Portal proof above.
+
+## 2026-05-18 Weekly COT Reminder 6147834 Live Re-Verification
+
+- Same-day live read-only SSH query on `koval@ftp.koval-distillery.com` inside `koval-crm-backend` reconfirmed the current Portal state without using a write path.
+- Current live proof:
+  - `koval_reports.report_notifications.id=6147834` has `report_id=7960`, `period_start=2026-05-11`, `period_end=2026-05-17`, and `submitted_at=2026-05-18 05:54:24`.
+  - `koval_reports.report.reportid=7960` has `reportcat=56`, `reportsubmitterid=1332`, `reportperfrom=2026-05-11`, `reportperto=2026-05-17`, and `submitted=1`.
+  - The current forward weekly reminder is `6147835` for `2026-05-18` through `2026-05-24`.
+- Correction to earlier local wording:
+  - Codex's weekly queue is not fully empty. Separate older unlinked weekly reminder rows remain open in live Portal: `6147827` (`2026-03-23` to `2026-03-29`), `6147828` (`2026-03-30` to `2026-04-05`), and `6147829` (`2026-04-06` to `2026-04-12`).
+  - Those older rows do not reopen or block the closeout for `6147834`, but they do supersede any claim that the live weekly backlog is completely clear.
+
+## 2026-05-18 Eataly Reminder Residue Cleanup
+
+- Live OPS readback showed `367855` / `Vanessa reminder: Eataly May tasting dates waiting on Sonat` was still open as `Not Started`, due `2026-05-01`, owner `1332`, creator `1`, notifications off.
+- Same-pass cleanup closed `367855` silently as stale residue because the later National Outreach state already contains the real outcome:
+  - Vanessa's Eataly lane was recorded through the actual follow-up and date-selection path;
+  - the later confirmation-only inbox message `Re: Open Tastings For May` was explicitly filed as no-action after Eataly confirmed the chosen slot `Friday, May 29, 4pm-7pm`;
+  - this old waiting-on-Sonat reminder no longer represented live open work.
+- Durable rule from this cleanup: keep the confirmed Eataly history in handoff and mailbox logs, but do not leave the obsolete OPS reminder open after the slot confirmation is already recorded.
+
+## 2026-05-17/18 Portal Weekly COT Report Recovery
+
+- Completed the two overdue weekly COT Activity Portal reports tied to the remaining `Overdue Reports Summary - May 17, 2026` inbox notice.
+- Live Portal drafts/proof:
+  - existing draft `7958` for Portal week `2026-04-27` through `2026-05-03` was updated and submitted;
+  - new draft `7959` for Portal week `2026-05-04` through `2026-05-10` was created, updated, and submitted.
+- Initial submit attempts returned HTTP `500` even though the controller linked the report-notification rows, because the submit request only carried `id` and the downstream `email2Reviewers()` path expects full `category`, `department`, period, and `content` fields from the request.
+- Corrective live submit path: retried both `PUT /users/reports/{id}/submit` calls through the authenticated Codex Portal token with the full payload shape:
+  - `category` `{id: 56, label: COT Activity - Weekly}`
+  - `department` `{id: 6, label: Brand Ambassadors}`
+  - `report_date`, `from_date`, `to_date`, and `content`
+- Final readback:
+  - report `7958` -> `submitted=1`, `submitted_at=2026-05-18 05:36:56`, period `2026-04-27` to `2026-05-03`
+  - report `7959` -> `submitted=1`, `submitted_at=2026-05-18 05:36:57`, period `2026-05-04` to `2026-05-10`
+  - overdue notification row `6147832` now links to `report_id=7958`
+  - overdue notification row `6147833` now links to `report_id=7959`
+  - reviewer notification proof: `koval_crm.notifications_logs` rows `79329`-`79336` are `reports.new_for_review`, `status=sent`
+- Remaining weekly open reminder is now `6147834` for Portal week `2026-05-11` through `2026-05-17`; the two older overdue rows are no longer open.
+- Boundary preserved: no DB-only report submit shortcut, no local SMTP helper send, no mailbox body exposure, no credential output, no unrelated Portal/OPS mutation, and no code/runtime change in this pass.
+
+## 2026-05-17 National Outreach INBOX Cleanup Runtime Fix
+
+- Repaired the installed National Outreach inbox cycle so it can reduce routine inbox residue instead of only reading and logging it.
+- Local source changes: `../scripts/nationaloutreach_mail_cycle.py` and `../scripts/run_nationaloutreach_auto.sh`; installed runtime synced to `/Users/admin/.nationaloutreach-launch/runtime/scripts/`.
+- New enabled archive rules:
+  - archive older `Overdue Reports Summary` Portal notices and keep only the newest one in INBOX;
+  - archive self-sent inbox copies from National Outreach / Vanessa aliases.
+- Important implementation note: Gmail IMAP `-X-GM-LABELS \\Inbox` returned `OK` but did not actually clear the message from INBOX reliably in this mailbox. Switched the runtime to `UID MOVE` into `[Gmail]/All Mail`, which did remove the message from INBOX immediately.
+- Live readback after the repair:
+  - pre-fix INBOX count: `12`
+  - post-fix INBOX count: `4`
+  - archived on the successful pass: `7` items total
+  - reasons: `3` redundant overdue reports (`May 14`, `May 15`, `May 16`) and `4` self-sent inbox copies
+  - durable archive proof: `/Users/admin/.nationaloutreach-launch/state/archive-log.jsonl`
+- Remaining live INBOX items after the repair:
+  - `Glass Class, Pet Portraits, Beer Week` from Ravenswood Newsletter
+  - `Re: Open Tastings For May` from Israel Del Valle
+  - `Re: Fwd: Participating as a featured woman-owned company in celebrating women in innovation!` from Sonat
+  - `Overdue Reports Summary - May 17, 2026` from KOVAL Portal
+- Boundary preserved: no external send, OPS mutation, Portal mutation, OAuth/auth change, or credential change was made in this runtime-fix pass.
+
+## 2026-05-17 Final National Outreach INBOX Sweep
+
+- Cleared the remaining three no-action National Outreach INBOX items by moving them to `[Gmail]/All Mail` after source review confirmed no further follow-through was needed.
+- Filed as no-action:
+  - `Glass Class, Pet Portraits, Beer Week` from Greater Ravenswood Chamber of Commerce: newsletter/promotional content only, no KOVAL-owned follow-up required.
+  - `Re: Open Tastings For May` from Israel Del Valle: Eataly confirmed the chosen slot `Friday, May 29, 4pm-7pm`; no reply from Vanessa was needed on this confirmation-only message.
+  - `Re: Fwd: Participating as a featured woman-owned company in celebrating women in innovation!` from Sonat: thank-you reply only, no further action requested.
+- Live readback after the sweep:
+  - runtime INBOX summary: `mailbox_total=1`, `active_inbox_count=1`
+  - direct IMAP readback: `INBOX=1`
+- One active item remains in INBOX:
+  - `Overdue Reports Summary - May 17, 2026` from KOVAL Portal, covering overdue weekly COT Activity reports `6147833` and `6147832`.
+- Boundary preserved: no external send, OPS mutation, Portal mutation, OAuth/auth change, or credential change occurred during this final sweep.
+
+## 2026-05-17 Vanessa Tasting Directives Planning Output
+
+- Completed the docs-only AI Workers Setup lane for Vanessa tasting directives.
+- Durable artifact: `../project_hub/artifacts/ai-workers-setup/vanessa-tasting-directive-index-2026-05-17.md`.
+- Included outputs: directive index, account rule matrix for Whole Foods / Mariano's / Binny's / routine retail / non-routine Illinois events, Mitch weekly staffed-tastings verification checklist, and the open-tastings group-message approval path.
+- Source basis: `ILLINOIS_TASTING_COMPLIANCE_DIRECTIVE.md`, `WHOLE_FOODS_TASTING_PLANNING.md`, `TODO.md`, `PERSONA.md`, and `../worker_roles/outreach-coordinator.md`, plus existing product-carry guidance recorded on 2026-05-01.
+- Boundary preserved: no OPS mutation, calendar write, mailbox action, Portal write, external send, auth/OAuth change, or runtime change.
+
 ## 2026-05-01 Vanessa Today/Weekend COT Event Detail Emails
 
 - Robert asked Vanessa to send individual staff emails with links/details for today's still-upcoming and weekend COT/Outreach events, and to add 8:00 AM day-of detail emails going forward.
@@ -254,6 +965,7 @@
 - Full-body review verification succeeded for 300 recent INBOX messages. Bodies were stored only in owner-only private runtime state; chat/docs received metadata and route counts only.
 - Send capability is enabled through approved queued drafts: place `*.approved.json` files in `/Users/admin/.nationaloutreach-launch/state/outbox/`; the cycle sends them by SMTP and moves them to private sent/failed state. No queued sends existed during verification.
 - Robert ran the LaunchDaemon install helper. `com.koval.nationaloutreach-auto` is installed as a system LaunchDaemon.
+- Standing mailbox directive: blocker/context mail must go out one source email at a time, with the source email included in the body for context. Nothing should sit in INBOX past one polling cycle without an action taken, meaning send, archive, route, or an explicit blocker note for the owner.
 
 ## First Body-Read Review Counts
 
@@ -334,6 +1046,13 @@
   - Mitch review copy to Robert: `<177734249943.44365.17981630527134491020@kovaldistillery.com>`
 - Approval gate: do not send Mitch Conti the weekly report until Robert approves after reviewing the preview. Requested future recipient after approval is `"Conti, Mitch" <Mitch.Conti@rndc-usa.com>`, cc Robert, every Monday at 8:00am for upcoming tastings that week.
 - Until Robert gives go-ahead, remind Robert daily that Mitch weekly report approval is pending.
+
+## 2026-05-22 Mitch Weekly Approval Draft Correction
+
+- Source reply from Robert on 2026-05-18: `Please include tastings starting today until 5/30`.
+- Corrected the Robert-only approval draft to cover `2026-05-22` through `2026-05-30`; summary line now reads `29 OPS Outreach rows from 2026-05-22 through 2026-05-30; 23 fully covered; 5 open/unassigned or partially assigned; 1 need linked shifts.`
+- Sent the revised Robert-only approval copy from `vanessa.sterling@kovaldistillery.com` to `robert@kovaldistillery.com`, subject `Draft for approval: Mitch weekly upcoming tastings report`, Message-ID `<177945870875.45988.16161361573834541180@kovaldistillery.com>`, sent artifact `/Users/admin/.nationaloutreach-launch/state/sent/taskflow-1c43088cb4121616-revised-range-2026-05-22-2026-05-30.sent-1779458710.json`.
+- It was not sent to Mitch; the approval gate remains until Robert gives an explicit go-ahead for a Mitch-facing send.
 
 ## 2026-04-29 Vanessa Inbox Review
 
@@ -452,3 +1171,21 @@
   - Whiskey/Cigar licensing check: event `0g2m6g52g5ec5ivguvua3k0ekc`, 2026-05-02 18:30 Central.
   - Mitch weekly tastings draft: event `o3ptm0amgvid448k84cicjni1g`, 2026-05-04 08:00 Central.
 - PHPList readback correction: use the OPS CRM integration PDO against `koval_plst1`, not the denied `phplist` schema. Campaigns `556` and `557` were sent on 2026-04-30 around 11:17 Central. Both are `status=sent`, linked to list `73`, `processed=18`, with `18` `phplist_usermessage` rows in `sent` status and `bouncecount=0`.
+
+## 2026-05-18 Outreach Taskflow Closures
+
+- 2026-05-25 07:10 CDT normalized duplicate owner-reply scheduler residue for `Another Event for the calendar`. Source-first recheck confirmed the business reply already went out on Friday, 2026-05-23 at 11:55:53 CDT: `/Users/admin/.nationaloutreach-launch/state/sent-log.jsonl` records Vanessa's same-thread reply with Message-ID `<177955535196.62730.2537475679851822491@kovaldistillery.com>` on `taskflow-03e6053f7340c3b6`, and Task Flow `email_sent` logged it at 11:55:54 CDT. Live OPS/domain proof on that same packet confirms Outreach event `902` for the 11th annual Celebrating Women In Innovation event on `2026-06-30 17:00-20:00` at Chicago Shakespeare Theater, left unassigned per Robert with Sonat's notes preserved. What changed in durable state: due-worker wrapper `taskflow-owner-reply-54b1a9fcad446422` for Workspaceboard session `4aacc955`, plus the sibling daily reminder wrapper `taskflow-owner-reply-bd2664f079bb5def`, were closed as `no_action_closed` against the existing same-thread send proof instead of remaining `working`/`waiting`. No additional owner email was sent because the requested confirmation had already been delivered on the original thread.
+- `taskflow-c9903e8800defd4e` (`Another Event for the calendar`): live OPS readback confirmed Outreach event `902` for `2026-06-30 17:00-20:00` at Chicago Shakespeare Theater, linked to unassigned shift `5341` with `shift2user` assignment count `0`. Sonat's notes and Robert's unassigned-shift instruction are present on the event. Matching proof appended to `/Users/admin/.nationaloutreach-launch/state/task-flow-events.jsonl` as `ops_readback`.
+- `taskflow-b17deffa8f98c1f1` (`Re: KOVAL Tasting Request`): live OPS readback confirmed existing Outreach event `704` / shift `4916` for `2026-05-21 17:00-19:00`, then Vanessa sent the confirmation reply to Frank. Sent proof Message-ID: `<177913611334.20440.12929425138441116412@kovaldistillery.com>` in `/Users/admin/.nationaloutreach-launch/state/sent-log.jsonl`; matching task-flow `email_sent` proof uses dedupe key `taskflow-b17deffa8f98c1f1`.
+- `taskflow-a4ebe661998fda07` (`Re: KOVAL Tasting Request` follow-up): live Portal readback confirmed `Warehouse Liquors` account `2780` already has active contact `342492` / `Frank Charness` linked at `634 S Wabash Ave, Chicago, Illinois`, so no Portal mutation was needed. Vanessa sent Robert the completion note with Message-ID `<177931456369.99588.18394820367036291758@kovaldistillery.com>`; sent-log proof is in `/Users/admin/.nationaloutreach-launch/state/sent-log.jsonl`.
+- `taskflow-56d8081ff1a1df0c` (`Whiskey Washback`): Sonat asked Vanessa on 2026-05-18 to check whether Whiskey Washback Chicago was on the June 26 calendar and add it if missing, with two staff needed. Live OPS readback initially showed no `Whiskey Washback` Outreach event on `2026-06-26`; only Mariano's events `807` and `808` existed that day. Added Outreach event `903` / `Whiskey Washback Chicago` for `2026-06-26 18:00-21:30` at `Artifact Events - 4325 N Ravenswood Ave, Chicago, IL 60613`, sourced from `https://www.whiskeywashback.com/chicago-2026`, under Codex user `1332`. Created two linked unassigned COTeam shifts `5342` and `5343`, both `2026-06-26 18:00-21:30`, group `169`. Completion note to Sonat queued/sent through Vanessa runtime path with task-flow proof to follow from the sent Message-ID.
+- 2026-05-20 CDT National Outreach inbox cleanup pass: archived 5 obvious reply-only/no-action inbox items from the shared mailbox projection and reran the live cycle. The archived subjects were the two Frank tasting reply threads, Dereck's shift transfer thread, and the two Benjamin Distill America follow-ups. The IMAP move-to-All-Mail succeeded for all 5, but the live shared projection still shows 35 active mixed-route items afterward. That means the next step is still the shared inbox cleanup refactor, not a finished inbox-zero claim. Keep using the shared helper for reply/archive proof and extend the same cleanup behavior to Frank, Avignon, Asher, and Venetia instead of adding one-off lane fixes.
+- 2026-05-20 CDT Binny's routing clarification: ordinary Binny's / Mariano's / Whole Foods tasting-confirmation emails now strip the RNDC legal footer before classification and route to `outreach-coordinator` / Vanessa Sterling instead of Ezra. The live `Binny's Gin & Botanicals Event- Thursday May 21st!` body is an ordinary tasting confirmation for Marcey Street, so it belongs on Vanessa's scheduling/state lane, not Ezra's legal-special-project lane. The shared National Outreach classifier was updated in both source and installed runtime copies so future ordinary retail tasting emails follow the Vanessa path automatically.
+
+## 2026-05-25 Scheduler Bridge Residue Closeout
+
+- 2026-05-26 14:19 CDT handled Task Flow `taskflow-8b5c8533c0af3366` / Robert-to-Vanessa `Event Schedule Approval for Koval Inc. dba KOVAL Distillery` packet as National Outreach outreach-calendar execution, not Security Guard. Private source body readback shows WFM request `314565`; live OPS duplicate-check found all 21 listed Whole Foods/KOVAL Bourbon rows already exist as Outreach events `961`-`981` with linked shifts `5402`-`5422`. Added the current `[wfm-request:314565]` and source-ref marker to all 21 OPS event notes for future duplicate checks. Live readback after the update confirmed 21/21 event markers and 21 linked shifts. Exact blocker recorded in Task Flow and Workspaceboard session `71ed3de1`: 10 linked shifts are unassigned, but 11 already have staff assignments, so removing those assignments would change live tasting coverage and needs an owner decision. Workspaceboard routed the blocker to Task Manager session `f545298d`; outcome classification is `blocker-email-required`.
+- 2026-05-26 10:24 CDT closed due-worker wrapper `taskflow-owner-reply-7d154bf50b7bcac9` as proof-backed no-action residue. Source-first recheck found no live mail/send/task-flow body keyed to that wrapper itself, which indicates a reminder wrapper rather than a fresh source message. The underlying owner-reply thread is already complete: `/Users/admin/.nationaloutreach-launch/state/sent-log.jsonl` records Vanessa's same-thread reply on Friday, 2026-05-23 11:55:53 CDT with Message-ID `<177955535196.62730.2537475679851822491@kovaldistillery.com>` for `Re: Another Event for the calendar`, and `/Users/admin/.nationaloutreach-launch/state/task-flow-events.jsonl` logged matching `email_sent` proof at 11:55:54 CDT on dedupe key `taskflow-03e6053f7340c3b6`. The business result remains live OPS event `902` for the 11th annual Celebrating Women In Innovation event on 2026-06-30 17:00-20:00 at Chicago Shakespeare Theater, left unassigned per Robert with Sonat's notes preserved. No additional owner reply was needed; expected closeout is `no-action/filed` against the existing same-thread proof.
+- 2026-05-25 12:33 CDT closed due-worker wrapper `taskflow-owner-reply-a630fe41a38afcd7` as proof-backed no-action residue. Source-first readback from workspace-local `mail-review.jsonl`, runtime `archive-log.jsonl`, and prior handoff entries shows the Park Ridge `Re: Your Schedule for Next Week - 2026-05-25` thread was already resolved before this reminder fired: Robert's packet was logged on 2026-05-23, the same subject was later reviewed on 2026-05-24 as `proof_backed_closeout` with reason `owner_handled_directly`, and runtime archive proof logged the same source at 2026-05-24 12:57:30 CDT with status `no_action_closed`. Earlier handoff sessions `0c15f523`, `abb4c1e7`, and `26c52c27` already established that Sonat's in-thread reply answered the Park Ridge business question and no overlapping Vanessa reply was needed. Durable repair rewrote the due wrapper to `no_action_closed` with proof marker `mail-review:proof_backed_closeout:owner_handled_directly:parkridge-thread`, and the expected closeout is `no-action/filed` unless a later source message reopens the thread.
+- 2026-05-25 10:45 CDT closed due-worker wrapper `taskflow-owner-reply-4e71d9f9817ff26d` as proof-backed no-action residue. Source-first readback from `/Users/admin/.nationaloutreach-launch/state/mail-review.jsonl` shows the May 24 review already marked subject `Re: Workspaceboard blocker cleanup and remaining outreach event context` as `proof_backed_closeout` with reason `instruction_already_applied`, because Robert's 6pm-8pm Alma instruction had already been applied as OPS event `982` and shift `5423`. Durable repair rewrote the due wrapper to `no_action_closed` with proof marker `mail-review:proof_backed_closeout:instruction_already_applied:ops982-shift5423`, and live Workspaceboard Task Flow readback at `/api/task-flow/report?mode=active&refresh=1` and `mode=queue&refresh=1` then showed `0` remaining hits for that wrapper. No additional Vanessa reply or owner-question route was needed.
+- 2026-05-25 09:26:51 CDT closed due-worker wrapper `taskflow-owner-reply-a6f538aae6f5e2e1` as proof-backed no-action residue. Source-first readback from workspace-local `mail-review.jsonl` shows the latest thread item is Sonat's in-thread reply on 2026-05-24 09:24:36 CDT, dedupe key `taskflow-1d38163db72c4af8`, subject `Re: Thank You for Helping Make Taste of JCYS So Special`. The live mailbox review log then records `proof_backed_closeout` at 2026-05-24 12:51:02 CDT with reason `already_replied_by_owner`, proof note `Sonat already replied in-thread to JCYS; no further Vanessa action needed.`, and status `no_action_closed`. No additional Vanessa reply or owner-question route is needed.

@@ -1,7 +1,70 @@
 # AI Workspace Project Hub
-Last Updated: 2026-04-27 CDT (Machine: Macmini.lan)
+Last Updated: 2026-05-19 CDT (Machine: Macmini.lan)
 
 ## Completed
+
+- **2026-05-26 Login / OPS DB Host Production Fix**
+  - Master ID: `AI-INC-20260526-LOGIN-OPS-DBHOST-01`
+  - Detail log: `project_hub/issues/2026-05-26-login-ops-dbhost-production-fix.md`
+  - Repos/surfaces: live `login`, live `ops`, `ai_workspace` Task Flow
+  - Status: completed. Robert requested restoring the live DB host to `localhost`; live `/login/.env` and `/ops/.env` now read `localhost`, app-side DB identity reads `koval_crm2@localhost`, and public `/login/index.php?referrer=salesreport`, `/salesreport/`, and `/ops/start.php` all return the expected login flow with referrers preserved. Task Flow packet `taskmode-login-ops-salesreport-dbhost-2026-05-26` carries the closeout proof.
+
+- **2026-05-20 Avignon Brooklyn Account Visit Recap**
+  - Master ID: `AVIGNON-BROOKLYN-ACCOUNT-VISIT-20260520-01`
+  - Detail log: `project_hub/issues/2026-05-20-avignon-brooklyn-account-visit-recap.md`
+  - Repos: `avignon`, `portal`, `ai_workspace`
+  - Status: completed. Sonat's Brooklyn recap was readable in AI Cloud after all, so the prior access blocker was stale. Avignon created the missing Brooklyn venue accounts/leads, related contacts, and dated `2026-06-19` market-visit activities in Portal, then prepared the Sonat completion reply with Robert copied.
+
+- **2026-05-19 Avignon Wisconsin Sales Report**
+  - Master ID: `AI-INC-20260519-AVIGNON-WI-SALES-REPORT-01`
+  - Detail log: `project_hub/issues/2026-05-19-avignon-wi-sales-report.md`
+  - Repos: `salesreport`, `ai_workspace`
+  - Status: completed. Added a narrow Wisconsin Salesreport generator and produced Sonat's requested `2025-01-01` through `2026-04-30` report artifact with market totals, top products, year-by-product/SKU totals, and top 20 accounts. Durable Avignon closeout notes and a Sonat-facing completion draft were recorded off the verified readback.
+
+- **2026-05-18 Task Manager Finish Contract Tightening**
+  - Master ID: `AI-INC-20260518-TASK-MANAGER-FINISH-CONTRACT-01`
+  - Detail log: `project_hub/issues/2026-05-18-task-manager-finish-contract-tightening.md`
+  - OPS project: `369836`
+  - Repos: `workspaceboard`
+  - Status: completed. Workspaceboard Task Manager enforcement now treats live routed/working Task Flow rows without closeout proof as unfinished proof-repair work while preserving dead-session reroute priority. Added a regression test and verified the updated server file with `node --check` and `node --test`.
+
+- **2026-05-18 TODO Archive Migration**
+  - Master ID: `AI-INC-20260518-TODO-ARCHIVE-MIGRATION-01`
+  - Detail log: `project_hub/issues/2026-05-18-todo-archive-migration.md`
+  - OPS project: `369837`
+  - Repos: `ai_workspace`, `ops`, `portal`, `workspaceboard`, `lists`, `login`, `forge`, `salesreport`, `importer`, `bid`, `eventmanagement`, `donations`, `contactreport`, `ai-bridge`, `braincloud`
+  - Status: completed. Archived legacy `TODO.md`, `ToDo.md`, and `ToDo-append.md` surfaces across `/Users/werkstatt` so the DB-backed Task Flow / OPS / project-hub spine is the only live task-management source. All touched files now contain archive stubs only and no longer function as active intake or queue surfaces.
+
+- **2026-05-18 Outreach Event Fast Path Manual**
+  - Master ID: `AI-INC-20260518-OUTREACH-EVENT-FAST-PATH-01`
+  - Detail log: `project_hub/issues/2026-05-18-outreach-event-fast-path-manual.md`
+  - OPS project: `369838`
+  - Repos: `ops`, `ai_workspace`
+  - Status: completed. Added a repeatable Outreach tasting/event fast-path to the OPS Events manual, including Outreach-specific quick links, the OPS-first intake checklist, and Outreach Calendar Feed guidance so the recurring booking workflow is explicit without relying on inbox re-derivation.
+
+- **2026-05-18 OPS Login Trusted-Device IP Fix**
+  - Master ID: `AI-INC-20260518-OPS-LOGIN-TRUSTED-DEVICE-IP-01`
+  - Detail log: `project_hub/issues/2026-05-18-ops-login-trusted-device-ip-fix.md`
+  - Repos: `login`, `ops`
+  - Status: completed. Verified OPS only calls `remember_try_silent_login()` while the actual trusted-device logic lives in `login/auth_helpers.php`; patched that owner file so remember-device acceptance ignores IP churn while still storing `ip_prefix` for audit/readback. Commit `9956992` was pushed to `origin/master`, live `/home/koval/public_html/login` fast-forwarded from `8c338d8` to `9956992`, live PHP lint passed, and linked OPS task `369822` is now `Completed`.
+
+- **2026-05-18 Workspaceboard Live Session Startup Fix**
+  - Master ID: `AI-INC-20260518-WORKSPACEBOARD-SESSION-STARTUP-01`
+  - Detail log: `project_hub/issues/2026-05-18-workspaceboard-live-session-startup-fix.md`
+  - Repos: `workspaceboard`, `ai_workspace`, installed Workspaceboard runtime state
+  - Status: completed. Fixed the reusable-prompt startup misclassification that was persisting fresh live Codex workers as `finished` and feeding the fast-close path. Verified with `node --check`, `node --test` (`64/64`), a live smoke worker that first stayed `working/live`, and a controlled relaunch batch of four real workers that remained live after the verification window.
+
+- **2026-05-17 OPS TrackTime Login Route Repair**
+  - Master ID: `AI-INC-20260517-OPS-TRACKTIME-LOGIN-ROUTE-01`
+  - Detail log: `project_hub/issues/2026-05-17-ops-tracktime-login-route-repair.md`
+  - Repos: `ops`, `ai_workspace`
+  - Status: completed. Repaired hourly OPS login routing for National Outreach task `368517` by making `login_router.php` route non-exempt users to `my_clocks`, treating generic `/ops/start.php` login handoffs as TrackTime landings for hourly staff, and stopping the router from counting missing daily check-ins against hourly users. Verified on `http://localhost` with authenticated simulated hourly sessions: first portal-style login now returns `reason=missing_clock` to `/ops/index.php?view=my_clocks`, and a generic `/ops/start.php` referrer now resolves to the same TrackTime page. OPS commit `19b53ae` is pushed to `origin/main`; no live pull was performed.
+
+- **2026-05-17 Morning Automation Reliability Hardening**
+  - Master ID: `AI-INC-20260517-MORNING-AUTOMATION-RELIABILITY-01`
+  - Detail log: `project_hub/issues/2026-05-17-morning-automation-reliability-hardening.md`
+  - Repos: `ai_workspace`, `workspaceboard`, machine-local National Outreach runtime state
+  - Status: completed. National Outreach runtime install now refreshes its runtime script bundle before LaunchDaemon reload, the installed due-runner suppresses daemon-owned Vanessa scheduled actions instead of spawning visible due-worker wrappers, and the live Workspaceboard closed-session readback for the misleading May 17 rows is corrected to the real short durations (`d91e3385` 10:33:38 -> 10:33:48, `89d6ffd6` 10:34:16 -> 10:34:20). Follow-up repair restored the shared Frank/Avignon runtime helper, corrected Workspaceboard mailbox monitor heartbeat sources, fixed AI Health canary/validator proof handling, and hardened AI Health standing/stale classification plus status retries. Live direct verification now reads `board_ok = true`, `mailbox_canaries = passed`, `unhealthy = 0`, while remaining residue is stale-session cleanup rather than send-path/runtime failure.
 
 - **2026-04-30 OPS Project Task Autosave Fix**
   - Master ID: `AI-INC-20260430-OPS-PROJECT-TASK-AUTOSAVE-01`
@@ -21,19 +84,55 @@ Last Updated: 2026-04-27 CDT (Machine: Macmini.lan)
   - Repos: `ai_workspace`, National Outreach runtime state, Workspaceboard/AI Health runtime
   - Status: completed. Structured recurrence fields now flow through the Task Flow report and the repeating-tasks / Task Flow pages. The report now emits `parent_packet_id` plus `recurrence_*` fields, and the live runtime copies were synced with the updated page assets. Task Flow response defaults remain first check within 2 minutes and result email, owner question, or exact blocker within 5 minutes for owner-visible email lanes.
 
+## Completed
+
+- **2026-05-20 Login 2FA Regression Handoff**
+  - Master ID: `AI-INC-20260520-LOGIN-2FA-REGRESSION-01`
+  - Detail log: `project_hub/issues/2026-05-20-2fa-login-regression-handoff.md`
+  - Repos: `login`, `ops`, `workspaceboard`, `ai_workspace`
+  - Status: completed. OPS task `369936` was silently completed after the live Portal backend was patched, rebuilt, and deployed as `koval-crm-backend:authfix-20260520`. Workspaceboard session `285827f3` remains the blocker proof trail, but the task itself is now closed against the same incident record.
+
 ## Open
+
+- **2026-05-24 Recursive Tools Stack Plan**
+  - Master ID: `AI-INC-20260524-RECURSIVE-TOOLS-01`
+  - Detail log: `project_hub/issues/2026-05-24-recursive-tools-stack-plan.md`
+  - Repos: `ai_workspace`; follow-up execution may touch local sandbox tooling, Frank owner reporting, and silent Codex-owned OPS tasks
+	  - Status: in progress. Durable assessment, Papers publish, Frank link email, silent Codex OPS follow-up tasks, and the first repo-local `recursive-improve` pilot are complete. The bounded Python 3.13 entrypoint migration lane is finished for `ai_workspace/scripts` plus `workspaceboard/scripts`: the refreshed inventory reads `env-python3=0` / `pinned-python3.13=37`. The recursive pattern has now graduated into `scripts/service_parity_check.py`, which checks source/runtime parity, deployment-state plists/wrappers, installed runtime scripts, and KOVAL plists, then writes `project_hub/artifacts/recursive-tools/service-parity-check-latest.*`. Guarded installed-runtime fixing patched writable National Outreach, Task Flow, Frank, Avignon, Asher, and Venetia runtime script drift; Robert then applied the two root-owned Frank/Avignon morning-overview plist interpreter fixes without kickstarting the scheduled jobs. Current broadened readback is `surfaces_checked=91`, `drift=0`, `fix_failed=0`. Service parity is now wired into AI Health as a recurring read-only check and dry-run verification returned `service_parity=passed`, `service_parity_checked=91`, `service_parity_drift=0`. The recursive recommendation lane now has synthetic, live, and historical baselines: synthetic eval `7596f83f91ec` / benchmark `b3d095e7b2e4` at `5/5`, live eval `cde619b65fda` / benchmark `bc145700f885` at `1/1`, and historical eval `305f1b72f49c` / benchmark `3b31329dcd91` at `6/6`. Frank owns the Robert-facing yes/no approval loop; Codex generates proposals and executes only approved low-risk fixes. Papers ownership note: `https://papers.koval.lan/89b2ac72-7476-4962-ad27-2b409a89554e`. Frank emailed Claude for comparison at the corrected address `claude@kovaldistillery.com`, copied Robert, under Message-ID `<177964800446.11583.9902601401452484732@kovaldistillery.com>`. Proposal queue generator `scripts/recursive_proposal_queue.py` is now live. First proposal `recursive-proposal-20260524-134350-repair-truth-drift` was generated and Frank sent the approval request to Robert under Message-ID `<177964828163.12510.14353964488768279452@kovaldistillery.com>`. After Robert corrected the email quality, the generator was upgraded to emit richer plain text plus a formatted HTML body. Fresh queue readback now shows `recursive-proposal-20260524-134813-monitor-recursive-lane` with `approval_required=false`, `service_parity_drift=0`, and `truth_drift_count=0`.
+	  - 2026-05-24 13:54 CDT update: proposal decision/state recording is now live in `scripts/recursive_proposal_decisions.py`, with immutable events in `project_hub/artifacts/recursive-tools/recursive-proposal-decisions.jsonl` and Papers addendum `https://papers.koval.lan/99336886-09d1-4a6d-b09d-f43093344bcd`. The old `repair-truth-drift` approval request is now `superseded_by_clean_monitor` because the later monitor proposal proved clean, and `./scripts/recursive_proposal_decisions.py status --json` reports `pending_approval_count=0`.
+	  - 2026-05-24 14:01 CDT update: changed stack Papers version published at `https://papers.koval.lan/346f243c-b610-489c-8323-627df9ca9f8d` and Frank sent it to Claude on the existing comparison thread under Message-ID `<177964923221.16079.8878460685095716018@kovaldistillery.com>`.
+	  - 2026-05-24 14:05 CDT update: approved proposal executor added at `scripts/recursive_proposal_executor.py`. It enforces fix-class allowlists, blocks live mutation without `--allow-live-mutation`, runs post-execution verifiers, and reports `approved_unexecuted_count=0` on the current clean queue. Papers v3: `https://papers.koval.lan/89f95776-d0d4-47e2-94fc-c48064355ec2`.
+	  - 2026-05-24 14:06 CDT update: Frank sent Claude the executor update on the existing comparison thread under Message-ID `<177964957514.17815.13480250926490834788@kovaldistillery.com>`.
+
+- **2026-05-19 Communications Planner Buildout**
+  - Master ID: `AI-INC-20260519-COMMS-PLANNER-BUILDOUT-01`
+  - Detail log: `project_hub/issues/2026-05-19-communications-planner-buildout.md`
+  - Repos: `ai_workspace`
+  - Status: in progress. Communications planner role split is now explicit: `Marketing Manager` owns weekly highlights and campaign-style sends, `Vanessa Sterling` stays on the National Outreach/outreach route, `Communications Manager` handles copy/tone/approval shaping, and `Email Coordinator` handles send-from and durable routing. Live Google Doc write still needs a writable Docs-scope auth path in this session before the final live edit can be mirrored.
+
+- **2026-05-19 Task Flow Blocked Resolution Split**
+  - Master ID: `AI-INC-20260519-TASK-FLOW-BLOCKED-RESOLUTION-SPLIT-01`
+  - Detail log: `project_hub/issues/2026-05-19-task-flow-blocked-resolution-split.md`
+  - Repos: `ai_workspace`, `workspaceboard`
+  - Status: in progress. Added explicit blocked-resolution classification to the Task Flow recorder and Workspaceboard worker prompts so `blocked` packets now split into `no-action/filed`, `blocker-email-required`, or `routed-needs-owner-question`. Ran the existing no-action repair and converted 38 silent blocked rows to durable `no_action_closed` records. Remaining live blocked packets still need a follow-up pass to decide whether they are true blockers or owner-question routes.
+
+- **2026-05-18 Claude Host Parity And Execution Plan**
+  - Master ID: `AI-INC-20260518-CLAUDE-HOST-PARITY-01`
+  - Detail log: `project_hub/issues/2026-05-18-claude-host-parity-and-execution-plan.md`
+  - Repos: `ai_workspace`, `ai-bridge`, `workspaceboard`, protected-side `.205` readback only
+  - Status: implementation planning and worker routing started. DB-backed proof for the Claude host metadata/docs alignment slice now points to OPS project `369808` / task `369809`, with repo-local contract artifact `project_hub/artifacts/claude-host-metadata-readback-contract-2026-05-18.md` and proof marker `CLAUDE_HOST_DOCS_ALIGNED project_hub/artifacts/claude-host-metadata-readback-contract-2026-05-18.md:1`. The read-only bridge-contract slice now points to task `369810`, and the separate migration-map artifact remains anchored to task `369813`. Live `.205` inspection confirmed the real Claude-side config surfaces are `/home/claude/.claude/settings.json`, `settings.local.json`, and `mcp-needs-auth-cache.json`, not the old `.mcp.json` path. The bridge-contract proof marker is `AI_BRIDGE_CONTRACT_READY ai-bridge/contracts/claude-host-read-only-snapshot-contract.md:1 ai-bridge/artifacts/claude-host-read-only-snapshot.example.json:1 jq-ok`. A concrete local migration-map artifact now exists at `project_hub/artifacts/claude-host-tool-layout-migration-map-2026-05-18.md`, classifying what stays in `ai_workspace` versus what should graduate into named tool surfaces. Current repo-local next steps are local auth-dependency surfacing, worker-durability/readback improvements, and the first extraction slice for task-flow/runtime helpers. System-path changes such as `~/.ssh/config` edits or `.205` key authorization remain separate approval-gated work.
 
 - **2026-05-01 AI Workers Setup**
   - Master ID: `AI-INC-20260501-AI-WORKERS-SETUP-01`
   - Detail log: `project_hub/issues/2026-05-01-ai-workers-setup.md`
   - Repos: `ai_workspace`; future approved implementation may touch `workspaceboard`, `ops`, `portal`, `bid`, `salesreport`, `lists`, worker-local runtime state, Google Calendar/Drive/Docs, and mailbox runtimes only after separate approvals
-  - Status: planning packet created. Task Manager should route scoped read-only worker lanes for calendar/auth mapping, reminder runner mapping, email polling/inbox mapping, Customer Service inbox/FAQ setup, worker-role/job-description audit, Naomi finance setup, Vanessa tasting directives, and Ezra project support. Internal Communicator weekly recap workflow packet completed at `project_hub/artifacts/internal-communicator/weekly-internal-recap-workflow-packet-2026-05-07.md`; first live recap remains gated on previous examples, approved image source rules/folders, and final audience/sender/approval cadence. No OPS/Portal task, external send, external browse, mailbox connection/body read, auth/OAuth/credential change, runtime/LaunchAgent change, Google Doc write, or production mutation has been performed.
+  - Status: local setup bundle completed. Calendar/auth, reminder-runner, polling/inbox, Customer Service setup brief, worker-role/JD audit, Naomi finance, Vanessa tasting directives, Ezra project support, and Internal Communicator recap packets now exist on disk. Frank now has a local `frank/JOB_DESCRIPTION.md` source, National Outreach / Vanessa now has `nationaloutreach/JOB_DESCRIPTION.md`, Asher and Venetia now have local JD sources too, and Naomi, Ezra, AI Manager Robert, Task Manager, Decision Driver, and AI Health Manager now have local JD sources as well. A shared Google Doc source link was supplied on 2026-05-19 and recorded at `project_hub/artifacts/ai-workers-setup/shared-google-doc-source-2026-05-19.md`; a local synthesis note now captures the usable worker/persona guidance at `project_hub/artifacts/ai-workers-setup/shared-worker-persona-guidance-2026-05-19.md`. The remaining work is now content reconciliation for FOH/JD follow-up plus approval-gated auth/runtime/send/finance activation lanes. On 2026-05-18 Robert deferred the two remaining open owner-input OPS tasks by one week, so `369793` and `369794` now read back due `2026-05-27` while completed task `369792` remains closed. No OPS/Portal task, external send, external browse, mailbox connection/body read, auth/OAuth/credential change, runtime/LaunchAgent change, Google Doc write, or production mutation has been performed.
 
 - **2026-05-03 Design & Media Project Manager Agent**
   - Master ID: `AI-INC-20260503-DESIGN-MEDIA-PM-01`
   - Detail log: `project_hub/issues/2026-05-03-design-media-project-manager-agent.md`
   - Repos: `ai_workspace`; future approved implementation may touch `portal`, `workspaceboard`, design-file storage, mailbox source review, OPS/production planning, Forge/media/ad workflows, or worker runtime state only after separate approvals
-  - Status: read-only intake reported. Ezra sent Robert the owner-facing completion report on 2026-05-03, subject `Design & Media PM intake complete`, Message-ID `<177783573635.18682.17199363336245390427@kovaldistillery.com>`. Next step is Robert approval for the Portal project/task skeleton and source-of-truth file model. No Portal mutation, design-file change, compliance approval, ordering action, production schedule change, external stakeholder email, Google Doc write, auth/OAuth, deploy, commit, push, or live-system mutation has been performed.
+  - Status: read-only intake reported. Ezra sent Robert the owner-facing completion report on 2026-05-03, subject `Design & Media PM intake complete`, Message-ID `<177783573635.18682.17199363336245390427@kovaldistillery.com>`. On 2026-05-16, the stranded `Fwd: NEW LABELS` intake was converted into a durable internal brief at `project_hub/artifacts/design-media-pm/ezra-new-labels-special-project-brief-2026-05-16.md` using Task Flow event history plus local Drive exports. Next step remains Robert approval for the Portal project/task skeleton and source-of-truth file model. No Portal mutation, design-file change, compliance approval, ordering action, production schedule change, external stakeholder email, Google Doc write, auth/OAuth, deploy, commit, push, or live-system mutation has been performed.
 
 - **2026-04-27 Whole Foods Portal to OPS Outreach Sync**
   - Master ID: `AI-INC-20260427-WHOLE-FOODS-OPS-SYNC-01`
@@ -41,11 +140,11 @@ Last Updated: 2026-04-27 CDT (Machine: Macmini.lan)
   - Repos: `ai_workspace`; future approved implementation may touch `ops` and authenticated WFM demo portal state
   - Status: first approved import complete. Import rule is approved-only: buyer-pending or otherwise not-approved Whole Foods events must be noted but not imported as confirmed OPS Outreach events. Credential blocker resolved and private portal crawl covered April-June. Robert supplied buyer-approval evidence for Request `312022`; six OPS Outreach events `857`-`862` and linked shifts `5184`-`5189` were created, with deterministic account/product links. Confirmation was sent from National Outreach to Sonat and Robert. Remaining sync work: requests `310465`, `310468`, `310470`, and `310472` remain pending/not approved and must not be imported until buyer approval evidence exists.
 
-- **2026-04-21 AI Health Manager LaunchAgent Activation**
+- **2026-04-21 AI Health Manager System LaunchDaemon Activation**
   - Master ID: `AI-INC-20260421-AI-HEALTH-MANAGER-LAUNCHAGENT-01`
   - Detail log: `project_hub/issues/2026-04-21-ai-health-manager-launchagent-activation.md`
   - Repos: `ai_workspace`, machine-local LaunchAgent state
-  - Status: source-backed report-only health check and plist are prepared. Robert clarified server mode only. Health Manager now has an analogous prepared system LaunchDaemon plist at `/Users/werkstatt/ai_workspace/tmp/ai-health-manager/com.koval.ai-health-manager.system.plist`, label `com.koval.ai-health-manager`, `UserName=admin`, cadence `900` seconds, report-only. It is not loaded because `/Library/LaunchDaemons` is root-owned and noninteractive sudo is unavailable. Next step is local admin install/bootstrap/kickstart for this Health-Manager-only plist; do not handle the password in chat.
+  - Status: source-backed report-only health check and system LaunchDaemon plist are prepared. Robert clarified server mode only, and the LaunchAgent path is superseded. Health Manager now has an analogous prepared system LaunchDaemon plist at `/Users/werkstatt/ai_workspace/tmp/ai-health-manager/com.koval.ai-health-manager.system.plist`, label `com.koval.ai-health-manager`, `UserName=admin`, cadence `900` seconds, report-only. It is not loaded because `/Library/LaunchDaemons` is root-owned and noninteractive sudo is unavailable. Next step is local admin install/bootstrap/kickstart for this Health-Manager-only system daemon; do not handle the password in chat.
 
 - **2026-04-20 Workspaceboard / AI Work Product Backup Plan**
   - Master ID: `AI-INC-20260420-WORKSPACEBOARD-AI-BACKUP-01`
@@ -65,7 +164,7 @@ Last Updated: 2026-04-27 CDT (Machine: Macmini.lan)
   - Master ID: `AI-INC-20260419-CODEX-CLAUDE-PAPERS-01`
   - Detail log: `project_hub/issues/2026-04-19-codex-claude-papers-integration-plan.md`
   - Repos: `ai_workspace`, `workspaceboard`, `ai-bridge`; future approved implementation may touch MI/Papers and `.205`
-  - Status: read-only bridge/task-record planning remains active. On 2026-04-24 the local `ws ai` private reference surface corrected the `.205` auth metadata, and a later live read succeeded: SSH access to `192.168.55.205` works as shell user `claude` when using the approved shared password note fetched from the MacBook transfer gate. Live top-level and high-value Claude-side docs are now partly absorbed: `/srv/CLAUDE.md`, Planner, Papers, Email, Agents, plus summary reads of `secretary`, `pm`, `developer`, `tester`, `marketer`, and `webmaster`. Real current config surfaces are now recorded as layered (`/home/claude/.claude/settings.json`, `/home/claude/.claude.json`, auth-needed cache, and plugin-local MCP/cache state), so the older `.mcp.json` expectation is stale. The bridge plan now explicitly recommends a side-by-side model with narrow shared contracts: stronger task-record packets, explicit send-confirmation behavior, API-only structured mutation, Infisical-first default for new shared-secret workflows, and single-writer/read-only bridge rules before any shared writable path. The first organigram expansion is already recorded with Claude as a parallel department. No secret value was printed or stored in these records.
+  - Status: read-only bridge/task-record planning remains active. On 2026-04-24 the local `ws ai` private reference surface corrected the `.205` auth metadata, and a later live read succeeded: SSH access to `192.168.55.205` works as shell user `claude` when using the approved shared password note fetched from the MacBook transfer gate. Live top-level and high-value Claude-side docs are now partly absorbed: `/srv/CLAUDE.md`, Planner, Papers, Email, Agents, plus summary reads of `secretary`, `pm`, `developer`, `tester`, `marketer`, and `webmaster`. Real current config surfaces are now recorded as layered (`/home/claude/.claude/settings.json`, `/home/claude/.claude/settings.local.json`, `mcp-needs-auth-cache.json`, and plugin-local MCP/cache state), so the older `.mcp.json` expectation is stale. The bridge plan now explicitly recommends a side-by-side model with narrow shared contracts: stronger task-record packets, explicit send-confirmation behavior, API-only structured mutation, Infisical-first default for new shared-secret workflows, and single-writer/read-only bridge rules before any shared writable path. The first organigram expansion is already recorded with Claude as a parallel department. No secret value was printed or stored in these records.
 
 - **2026-04-19 Salesreport Audit Gaps Project**
   - Master ID: `AI-INC-20260419-SALESREPORT-AUDIT-GAPS-PROJECT-01`
@@ -133,11 +232,6 @@ Last Updated: 2026-04-27 CDT (Machine: Macmini.lan)
   - Repos: `ai_workspace`, `ai-bridge`, `/Users/werkstatt` workspace roots, Workspaceboard host state
   - Status: planning approved; 2026-04-14 audit completed and legacy synced `ai_workspace/codex_dashboard` deleted after dependency checks; `/Users/werkstatt/workspaceboard` remains the source of truth and active Workspaceboard v0.69 stayed healthy
 
-- **2026-03-15 WireGuard Stability Monitoring**
-  - Master ID: `AI-INC-20260315-WIREGUARD-STABILITY-01`
-  - Detail log: `project_hub/issues/2026-03-15-wireguard-stability-monitoring.md`
-  - Repos: `ai_workspace`, workstation network stack, Linksys/OpenWrt WireGuard config
-
 - **2026-03-12 OPS Portal Session Rehydration**
   - Master ID: `AI-INC-20260312-OPS-SESSION-REHYDRATE-01`
   - Detail log: `project_hub/issues/2026-03-12-ops-portal-session-rehydration.md`
@@ -159,6 +253,12 @@ Last Updated: 2026-04-27 CDT (Machine: Macmini.lan)
   - Repos: `koval-crm` (portal notifications backend)
 
 ## Completed
+
+- **2026-03-15 WireGuard Stability Monitoring**
+  - Master ID: `AI-INC-20260315-WIREGUARD-STABILITY-01`
+  - Detail log: `project_hub/issues/2026-03-15-wireguard-stability-monitoring.md`
+  - Repos: `ai_workspace`, workstation network stack, Linksys/OpenWrt WireGuard config
+  - Status: canceled by request on 2026-05-19; no further stability monitoring is needed from this record unless it is reopened.
 
 - **2026-04-27 Barrel Sales API Path Fix**
   - Master ID: `AI-INC-20260427-BARREL-SALES-API-PATH-01`
@@ -563,3 +663,15 @@ Last Updated: 2026-04-27 CDT (Machine: Macmini.lan)
   - Master ID: AI-INC-20260306-CODEX-LOGIN-PROCESS-01
   - Detail log: project_hub/issues/2026-03-06-codex-login-process-standardization.md
   - Repos: ai_workspace, ops, salesreport, contactreport, lists, importer, login, donations, eventmanagement, bid
+
+- **2026-05-24 Recursive Truth-Drift Checker + AI Health Integration**
+  - Master ID: `AI-INC-20260524-RECURSIVE-TRUTH-DRIFT-01`
+  - Detail log: `project_hub/artifacts/recursive-tools/recursive-improve-pilot-setup-2026-05-24.md`
+  - Repos: `ai_workspace`, `workspaceboard`
+
+- **2026-05-24 Recursive Tools Stack Update + Local Codex Skills Pull-In**
+  - Master ID: `AI-INC-20260524-RECURSIVE-TOOLS-UPDATE-01`
+  - Detail log: `project_hub/artifacts/recursive-tools/recursive-tools-stack-update-2026-05-24.md`
+  - Repos: `ai_workspace`, `workspaceboard`
+  - Latest: AI Health now records recursive proposal status on its existing cadence, including board-down reports. No separate recursive LaunchDaemon was added. Papers update: `https://papers.koval.lan/f95e7f60-fda6-495c-a485-b2c66ff29110`.
+  - Claude bridge: Planner schema mapping recorded at `project_hub/artifacts/recursive-tools/claude-planner-recursive-schema-2026-05-24.md`; Papers `https://papers.koval.lan/1e7119d3-e2cc-4ff0-900f-d1251eaa5f0a`. The Codex-side `/proof` verifier is now wired at `scripts/claude_planner_proof_check.py` and AI Health reports `claude_planner_proof=not-ready` until `https://planner.koval.lan/api/tasks/1725/proof` is reachable and clean. Local note: `project_hub/artifacts/recursive-tools/claude-planner-proof-verifier-wired-2026-05-24.md`; Papers `https://papers.koval.lan/542f8733-3aef-4cde-ad65-0da61d6b9781`.

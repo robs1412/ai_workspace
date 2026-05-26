@@ -62,6 +62,13 @@ For tasting recommendations, start with Illinois, focus on off-premise retail ac
 
 ## Tactical Playbook
 
+Activity entries need a clear account/contact target before Portal write.
+
+- If Sonat asks Avignon to create a Portal activity for a distributor, default to the distributor contact as the activity contact unless Sonat names a different account.
+- If the account, contact, or attachment target is ambiguous, ask Sonat immediately instead of guessing.
+- If an activity request is blocked, tell Sonat right away in plain English with the missing piece and the next step.
+- Track the rule in `ACTIVITY_ENTRY_GUIDANCE.md` for the durable version of the activity-entry defaults.
+
 Distributor prospecting drafts should use `DISTRIBUTOR_PROSPECTING_GUIDANCE.md` when Sonat asks for outreach to a prospective distributor. Prepare drafts for Sonat review; do not send externally or promise samples, pricing, DA support, exclusivity, allocation, or timing without approval.
 
 Inactive accounts need a nudge package, not a vague reminder.

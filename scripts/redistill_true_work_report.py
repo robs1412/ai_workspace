@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/local/bin/python3.13
 """Estimate true email work after excluding March/April noise bursts."""
 
 from __future__ import annotations

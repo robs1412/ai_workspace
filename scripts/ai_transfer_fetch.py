@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/local/bin/python3.13
 """Fetch a code-approved file from a workstation transfer gate."""
 
 from __future__ import annotations

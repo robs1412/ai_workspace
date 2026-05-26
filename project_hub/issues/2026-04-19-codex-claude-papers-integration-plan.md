@@ -10,6 +10,37 @@
 
 ## 2026-04-26 Protected-Side Packet Follow-Up Status
 
+## 2026-05-23 Secretary / PM Task Assessment Published
+
+Robert asked Frank to publish the non-secret `KOVAL AI Secretary & PM Agent: Task Assessment Manual` findings to Papers so the live AI Manager session could reuse them directly.
+
+Result:
+
+- classification for this publication: `shared mechanic`;
+- local source note created at `project_hub/artifacts/claude-task-assessment-manual-2026-05-23.md`;
+- Papers path: `ai-manager/assessments/2026-05-23-claude-task-assessment-manual.md`;
+- Papers GUID / URL: `59b3b16f-9618-414f-bd62-4da593b32d87` / `https://papers.koval.lan/59b3b16f-9618-414f-bd62-4da593b32d87`;
+- intended outcome: preserve the role split that AI Manager approves, Task Manager routes/follows through, Project Manager scopes larger work, Frank handles chief-of-staff intake, Codex workers execute, and verification closes.
+
+Practical rule set preserved in the note:
+
+- Secretary is not a hidden execution lane.
+- PM / project-manager is not the quiet implementer.
+- worker packets must name owner, goal, constraints, approval boundary, deliverable, and verification expectation.
+- testing / verification remains an explicit step before completion is reported.
+- mail and protected-system work keeps explicit send confirmation and single-writer boundaries.
+
+2026-05-23 direct-owner follow-up adjustment:
+
+- Robert asked for the pickup boundaries between Avignon, Ezra, Vanessa, Naomi, and Codex to be made explicit so Naomi does not absorb Vanessa work by default.
+- The shared note was updated to publish the functional split directly: Frank = Robert-facing intake/follow-through; Avignon = Sonat-facing market/CRM/distributor/calendar execution; Vanessa = Outreach/tastings/calendar coordination; Naomi = finance operations; Ezra = special projects/legal-affairs routing; Codex = implementation inside the routed workspace.
+- Standing pickup rule added: do not reassign work by idle capacity alone; keep the packet with the correct owner and split cross-role work through Task Manager when a thread spans more than one lane.
+- Additional pickup-order clarification added for the same thread: classify the business lane first, then name the worker. Avignon is not the generic backup for Robert-facing intake, Naomi is not the generic backup for Vanessa's Outreach work, and unresolved owner questions should stay with Task Manager for explicit split/routing instead of drifting by availability.
+- Later same-thread correction from Robert added at 2026-05-23 12:53 CDT: this assessment is for Codex workflow analysis, not Naomi operations. The durable note now says workflow-assessment requests about Claude/Codex execution should route to a visible Codex worker, while Frank stays on Robert-facing intake and completion reporting.
+- Robert also flagged that the prior owner reply and Papers note did not reflect his newest email. The durable note was therefore revised to preserve the newest correction explicitly, rather than only the earlier owner-split summary.
+- Robert then flagged one remaining thread-context gap at 2026-05-23 18:14 UTC: the note still needed the original Claude ask carried into the durable record. The shared note now also preserves the original ask summary plus the first assessment answer, so the Papers note shows the full thread arc instead of only the later Robert corrections.
+- Robert's later reply on Saturday, May 23, 2026 at 18:28:16 UTC widened the repair from this one lane to all email workers: same-thread completion/blocker replies should anchor to the newest owner/source message with preserved `In-Reply-To` and `References`, and the reusable shared mechanic now lives in `docs/email-workers/2026-05-23-shared-same-thread-reply-behavior.md`.
+
 Local status check performed without crossing the protected/auth boundary:
 
 - read the required local notes: `AGENTS.md`, `TODO.md`, `HANDOFF.md`, `frank/HANDOFF.md`, and this project note;

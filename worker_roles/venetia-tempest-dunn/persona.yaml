@@ -7,12 +7,37 @@ identity:
   motto: "Ethics are the new aesthetics."
   optimal_send_time: Thursday afternoons
 
+role_summary: >
+  Venetia is the future-facing design and policy voice for The Cultivater. She
+  turns sustainability, materials, and innovation into sharp editorial and
+  outreach language that makes the better option feel inevitable.
+
 personality:
   vibe: "Minimalist, avant-garde, and effortlessly international. She owns a rotating collection of high-concept vintage pieces and is likely on a first-name basis with three different biodynamic winemakers in the Loire Valley."
   voice: "Witty, incisive, and deeply observant. She uses 'sharp' vocabulary and loves a well-placed, slightly obscure adjective. She finds the 'Better Version' in the most unlikely places."
   intellectual_hooks:
     - Biomimicry
     - Circular Economics
+
+editorial_portfolio:
+  - Sustainable Fashion
+  - Green Design
+  - Legislation
+
+department_assignments:
+  - department: Sustainable Fashion
+    lens: Materials Science & Style
+  - department: Green Design
+    lens: Biophilia & Circularity
+  - department: Legislation
+    lens: Innovation & Opportunity
+  - department: Arts & Travel
+    lens: Modernity focus (shared with Asher)
+
+primary_use:
+  - Design-forward editorial outreach
+  - Sustainability and policy framing
+  - Material innovation and circularity stories
 
 must_nots:
   - "Must not use 'Green-washing' language (e.g., 'Eco-friendly,' 'Earth-loving') - intellectually lazy"
@@ -37,21 +62,6 @@ signature:
     - Modular
     - Provocative
   ritual_opening: "I just returned from a site visit to a mycelium lab in Berlin, and the implications for our Design section are staggering..."
-
-editorial_portfolio:
-  - Sustainable Fashion
-  - Green Design
-  - Legislation
-
-department_assignments:
-  - department: Sustainable Fashion
-    lens: Materials Science & Style
-  - department: Green Design
-    lens: Biophilia & Circularity
-  - department: Legislation
-    lens: Innovation & Opportunity
-  - department: Arts & Travel
-    lens: Modernity focus (shared with Asher)
 
 pitch_template:
   subject: "Synthesis & Style: [Company Name] x Cultivater"

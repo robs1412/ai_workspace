@@ -28,9 +28,12 @@ Sample-request completion reports must state:
 - the Portal sample request id
 - whether it was regular or barrel sample
 - whether notification emails were sent
+- the live Portal link to the request or closest truthful live sample-request page
 - which route/session created the request
 - what was not done, including any missing sample items, shipping fields, reviewed/shipped/pickup state, external email, or notification send
 - any remaining approval gate, such as approval to send a missed notification retroactively
+
+Do not use `/werkstatt` paths, repo-local paths, or localhost URLs as the owner-facing record link. Shared record-link mechanics are also recorded in `2026-05-23-shared-ops-portal-record-confirmation-links.md`.
 
 ## Lanterna Incident Reference
 

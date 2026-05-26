@@ -5,13 +5,90 @@
 - Date Completed:
 - Owner: AI Manager control lane / Task Manager routing
 - Priority: High
-- Status: Open; planning packet created, implementation lanes not started
+- Status: Open; local setup bundle completed, live activation still blocked on named business inputs and approval-gated auth/runtime/send lanes
 
 ## Scope
 
 Robert asked on 2026-05-01 to add a project/task titled `AI workers Setup` and build it out as a durable AI Workspace packet and actionable task structure.
 
 This slice is planning and routing only. It must not mutate external systems, send email, browse external sources, change credentials, run live OAuth/auth setup, alter LaunchAgents/runtimes, create OPS/Portal tasks, or change production data unless a later approval explicitly opens that lane.
+
+## Current Owner Follow-Up
+
+Assigned to Robert for 2026-05-27 after Robert deferred the remaining open owner-input follow-up by one week on 2026-05-18:
+
+1. Authoritative FOH guide source.
+2. Google Doc or other authoritative 2026 JD links for workers that should be checked off.
+
+OPS task records for the remaining owner-input follow-up:
+
+- `369792` — `AI Workers Setup: Provide Customer Service inbox address` — completed silently on 2026-05-17 after source-first verification of the local OPS event-support inbox candidate `customerservice@kovaldistillery.com`
+- `369793` — `AI Workers Setup: Provide authoritative FOH guide source` — due date moved from 2026-05-20 to 2026-05-27 on 2026-05-18
+- `369794` — `AI Workers Setup: Provide worker 2026 JD links` — due date moved from 2026-05-20 to 2026-05-27 on 2026-05-18
+
+Shared Google Doc source link supplied on 2026-05-19 and available via Frank, Avignon, and National Outreach:
+
+`https://docs.google.com/document/d/1d1jZ2kYZQKHjDJQeK5KP7RetT-D76gspeNGsVa113cQ/edit?tab=t.9kpfoptryfb4`
+
+Google Docs API body-read result on 2026-05-19:
+
+- Title: `FOH Handbook 2`
+- The extractable body text is only the cover/title page and contact block.
+- The body text does not include worker names, role guidance, or persona guidance.
+- The first paragraph includes one inline object, likely the cover image/logo.
+
+Working synthesis note created on 2026-05-19:
+
+`project_hub/artifacts/ai-workers-setup/shared-worker-persona-guidance-2026-05-19.md`
+
+Local progress note on 2026-05-19: Frank now has a concrete local JD source at `frank/JOB_DESCRIPTION.md`, National Outreach / Vanessa now has `nationaloutreach/JOB_DESCRIPTION.md`, Asher and Venetia now have local JD sources too, and Naomi, Ezra, Task Manager, Decision Driver, AI Manager Robert, and AI Health Manager have been given local JD sources as well. The shared Google Doc source link above is the durable canonical FOH source reference, but its body read did not contain the missing worker-role guidance.
+
+FOH Handbook 2 general guide source supplied on 2026-05-19 and exported locally:
+
+`https://docs.google.com/document/d/1TYYcUs0aywlVpGRTgItzGrP5Lt_pCPkeOZ1sEYHq0b0/edit?tab=t.0#heading=h.8l2kjwu7nqdf`
+
+Local markdown guide:
+
+`project_hub/artifacts/ai-workers-setup/foh-handbook-2-guide.md`
+
+Source note:
+
+`project_hub/artifacts/ai-workers-setup/foh-handbook-2-guide-source-2026-05-19.md`
+
+Guide summary:
+
+`project_hub/artifacts/ai-workers-setup/foh-handbook-2-guide-summary-2026-05-19.md`
+
+This second doc is the actual full FOH guide. It now serves as the general KOVAL reference for brand language, service standards, internal communications, email FAQ, Portal reporting, and back-bar/service setup.
+
+## Reconciled Audit Pass
+
+- All named workers now have a current local `JOB_DESCRIPTION.md` source on disk.
+- The FOH guide is now sourced and exported locally, so the general-reference gap is closed.
+- The remaining audit work is bookkeeping only: normalize any final Google Doc link references if you want them recorded, and keep Customer Service blocked until the role itself is named or approved.
+- The supporting communications stack was normalized in the source docs too: `communications-manager.md`, `email-coordinator.md`, `internal-communicator.md`, `marketing-manager.md`, `frank/PERSONA.md`, and `nationaloutreach/PERSONA.md` were expanded to match the current guide-level detail.
+- The remaining persona files now match that same level of detail too: `worker_roles/asher-wilde/persona.yaml`, `worker_roles/venetia-tempest-dunn/persona.yaml`, `worker_roles/naomi-stern/persona.yaml`, `worker_roles/ezra-katz/persona.yaml`, and `worker_roles/outreach-coordinator.md` were tightened to the same operating-spec style.
+- The mixed-format Asher and Venetia worker docs were also normalized: `worker_roles/asher.md` and `worker_roles/venetia.md` now use the same scaffold style as the other mailbox worker docs.
+- The directory-level reference docs were tightened as well: `worker_roles/README.md` and `worker_roles/human-owners.md` now read as concise operating references instead of mixed note formats.
+
+## Current JDs Guide
+
+Created in the JDs folder on 2026-05-19:
+
+Google Doc:
+`https://docs.google.com/document/d/1YWnwhGK491GCPqR3MYzkshThLVWO5UOlaLYpi-EScEc/edit?usp=drivesdk`
+
+HTML mirror:
+`project_hub/artifacts/ai-workers-setup/ai-workers-jds-guide.html`
+
+This is the current working guide for the active worker set. It now includes the expanded role families, the outreach-role correction for Vanessa Sterling, and the same rule that the full FOH guide plus local `JOB_DESCRIPTION.md` files are the source of record instead of the long source material being duplicated here.
+
+## Persona Gap Check
+
+- No additional personas are clearly required for the currently named worker set.
+- Customer Service remains the only obvious future persona candidate, but only if the role is approved and the inbox connection is opened. Working name in the guide: `Guest Experience`.
+- Communications Manager, Email Coordinator, Internal Communicator, Marketing Manager, and Outreach Coordinator are already distinct roles, so they do not need new personas unless a later role split creates a genuinely different voice or approval boundary.
+- If the later 2026 vs 2023 comparison shows a truly distinct voice or approval boundary, add a persona only for that distinct lane rather than expanding the current set by default.
 
 ## Original Robert Text
 
@@ -339,6 +416,30 @@ Remaining issue:
 
 - The National Outreach polling runtime still creates `classified` records first. A separate Email Polling lane should make the runtime create or update visible route/session/task fields automatically for actionable worker mail instead of leaving repeated active-inbox items in `classified`.
 
+## 2026-05-17 Naomi Finance Setup Lane Readback
+
+Due-worker item `taskflow-ai-workers-setup-naomi-finance-2026-05-12` was completed as a docs-only planning slice.
+
+Artifacts created:
+
+- `project_hub/artifacts/ai-workers-setup/naomi-finance-task-map-2026-05-17.md`
+
+What this lane now records:
+
+- Naomi finance task map for BID reporting/management, Portal financial reports, overdue invoice reminders, Portal invoice creation, and related QuickBooks/AP/AR context.
+- Recommended workspace split: `ws bid` for BID finance evidence/cadence, `ws portal` for approved Portal finance writes, and `ws ai` / Task Manager for owner decisions and routing.
+- Explicit approval gates for live finance mutation, Portal writes, external finance reminders, invoice creation, accounting/tax decisions, and credentials/OAuth/private finance sources.
+- First safe read-only deliverable for each Naomi task area so later implementation lanes have a bounded starting point.
+
+Source basis used:
+
+- `worker_roles/naomi-stern.md` and `worker_roles/naomi-stern/persona.yaml`
+- BID handoff notes for 2026-05-14 live QBO/workbook/report work and 2026-04-30 onboarding/QBO setup state
+- `bid/data-management/finance-action-reports/NAOMI-FINANCE-CADENCE-REQUIREMENTS-2026-05-01.md`
+- `bid/data-management/finance-action-reports/NAOMI-CREDIT-CARD-TAX-RECORDING-AUTOMATION-PROPOSAL-2026-05-15.md`
+
+No external sends, Portal/BID/QuickBooks mutation, credential handling, or auth/runtime changes were performed in this lane.
+
 ## 2026-05-01 National Outreach Task Flow Runtime Fix
 
 Robert approved fixing the remaining polling/runtime gap.
@@ -365,3 +466,219 @@ Boundary:
 - No external email was sent.
 - No mailbox message bodies were printed.
 - No hidden Workspaceboard sessions were created from the poller. The poller now records correct Task Flow route state; Task Manager still owns creating/reusing visible worker routes and recording completion/blocker readback.
+
+## 2026-05-16 Task Flow Scheduler-Bridge Readback
+
+Workspaceboard session `2443a392` took over the unscheduled AI Workers Setup Task Flow rows and verified the source packet before rewriting the next action for each lane.
+
+Per-lane readback:
+
+- `taskflow-ai-workers-setup-calendar-auth-mapping-2026-05-12`: source packet already defines the calendar/auth inventory scope and existing non-secret context; keep this as a read-only planning lane with next check `2026-05-17 09:50 CDT`.
+- `taskflow-ai-workers-setup-email-polling-inbox-2026-05-12`: source packet plus AI Workspace handoff/TODO already confirm Frank/Avignon 15-second polling, National Outreach active inbox runtime, and Asher/Venetia header-only references; keep this as a read-only polling-map lane with next check `2026-05-17 09:40 CDT`.
+- `taskflow-ai-workers-setup-customer-service-inbox-faq-2026-05-12`: exact blocker confirmed from source review: the planning packet still does not name the Customer Service inbox to connect or the authoritative FOH guide source, so the lane cannot move past setup planning until those two source facts are supplied.
+- `taskflow-ai-workers-setup-ezra-project-support-2026-05-12`: Ezra role doc exists and the planning packet defines a docs-only intake/escalation lane; keep this as an `Ezra Katz` planning lane with next check `2026-05-17 10:20 CDT`.
+- `taskflow-ai-workers-setup-reminder-runner-mapping-2026-05-12`: Task Flow/due-runner and reminder verification surfaces already exist; keep this as a read-only reminder-map lane with next check `2026-05-17 09:30 CDT`.
+- `taskflow-ai-workers-setup-worker-role-audit-2026-05-12`: worker role docs/personas already exist for the named roles; keep this as the role-audit lane with next check `2026-05-17 10:30 CDT`.
+- `taskflow-ai-workers-setup-naomi-finance-2026-05-12`: Naomi role docs plus BID/Portal/National Outreach finance readbacks already exist; keep this as a `Naomi Stern` planning lane with next check `2026-05-17 10:10 CDT`.
+- `taskflow-ai-workers-setup-vanessa-tasting-directives-2026-05-12`: National Outreach directive sources already exist, including the Illinois tasting compliance directive and OPS/tasting route context; keep this as a `Vanessa Sterling` planning lane with next check `2026-05-17 10:00 CDT`.
+- `taskflow-ai-workers-setup-internal-communicator-weekly-recap-2026-05-12`: the Internal Communicator role doc exists, but the weekly-recap lane depends on the Vanessa directive index plus reminder-runner mapping for its source packet; keep this waiting on those internal planning dependencies with next check `2026-05-17 10:45 CDT`.
+
+## 2026-05-17 Vanessa Tasting Directives Lane Output
+
+Completed docs-only lane output:
+
+- Artifact: `project_hub/artifacts/ai-workers-setup/vanessa-tasting-directive-index-2026-05-17.md`
+- Scope covered: directive index, account rule matrix, Mitch weekly overview verification checklist, and open-tastings group-message approval path.
+- Source basis: `nationaloutreach/ILLINOIS_TASTING_COMPLIANCE_DIRECTIVE.md`, `nationaloutreach/WHOLE_FOODS_TASTING_PLANNING.md`, `nationaloutreach/TODO.md`, `nationaloutreach/HANDOFF.md`, `nationaloutreach/PERSONA.md`, `worker_roles/outreach-coordinator.md`, and the 2026-05-01 Salesreport chain-store product-carry note.
+- Readback: this lane stayed within the approved planning boundary. No OPS mutation, calendar write, mailbox action, Portal write, external send, auth/OAuth work, or runtime change was performed.
+- Dependency impact: the Internal Communicator weekly-recap lane no longer needs to wait on the Vanessa directive index portion of its packet; any remaining dependency is now only the reminder-runner mapping lane.
+
+Verification:
+
+- Reviewed `worker_roles/internal-communicator.md`, `worker_roles/naomi-stern.md`, `worker_roles/ezra-katz.md`, and `worker_roles/operating-model.md`.
+- Reviewed AI Workspace handoff/TODO references for polling, Naomi finance, Vanessa tasting/compliance, and Ezra project-support context.
+- Live Task Flow queue readback on `2026-05-16 21:27 CDT` showed all nine AI Workers Setup keys tied to Workspaceboard session `2443a392`; the scheduler-bridge pass replaced the generic routed placeholder with lane-specific waiting/blocker follow-up.
+
+Boundary:
+
+- This pass stayed inside docs/routing/state only.
+- No OPS/Portal task was created.
+- No mailbox body reads, sends, auth changes, runtime changes, Google Doc writes, or production mutations were performed.
+
+## 2026-05-17 Calendar/Auth Mapping Readback
+
+Workspaceboard due-worker session `ab21fe4c` verified the current non-secret calendar/auth sources before closing `taskflow-ai-workers-setup-calendar-auth-mapping-2026-05-12`.
+
+Calendar/auth matrix:
+
+| Worker / lane | Calendar target | Current source-backed status | Intended status | Source docs | Auth / storage boundary | Next approved action |
+| --- | --- | --- | --- | --- | --- | --- |
+| Frank | Robert calendar | Verified. Frank's approved helper/config path documents Robert sharing his calendar to `frank.cannoli@kovaldistillery.com`, and later read-only verification showed Robert's calendar visible through the Frank helper path. | Frank can use the shared Robert calendar for approved lookups, reminders, and follow-ups. | `frank/GOOGLE_CALENDAR_SETUP.md`; `frank/TODO.md`; `frank/HANDOFF.md` | Frank desktop OAuth client plus machine-local Frank token. Keep token local to the Frank host; do not move token storage into synced workspace docs. | No auth change is needed for this planning lane. Route a separate runtime/code slice only if Robert wants broader default multi-calendar reporting or new mutation behavior. |
+| Frank | Frank's own calendar | Partially sourced. The auth model clearly uses the Frank Google account as the consent identity, so Frank's primary calendar is the intended base path, but this pass did not find a separate readback line proving a Frank-primary event workflow. | Frank individual calendar path for Frank-owned reminders and follow-ups when the workflow calls for Frank's own calendar instead of Robert's. | `frank/GOOGLE_CALENDAR_SETUP.md`; `frank/AGENTS.md`; `docs/email-workers/2026-04-30-shared-intake-task-completion-flow.md` | Same Frank desktop OAuth client and machine-local Frank token path as above. | Before any Frank-own-calendar workflow is relied on, do one narrow helper readback against the Frank primary calendar and record it in Frank handoff/TODO state. |
+| Avignon | Sonat calendar | Verified only through Frank's helper path. Read-only Frank-side verification showed Sonat's calendar visible, and shared docs say Avignon may use an individual calendar path when available, but no separate Avignon helper is currently sourced. | Avignon should have Sonat/Avignon reminder and follow-up support, either through a verified Avignon individual path or the already-approved Frank helper path. | `frank/TODO.md`; `frank/HANDOFF.md`; `docs/email-workers/2026-04-30-shared-open-item-owner-email.md`; `docs/email-workers/2026-04-30-shared-intake-task-completion-flow.md` | Current verified visibility depends on the Frank machine-local client/token path. A separate Avignon helper/runtime would be a new auth/runtime slice. | Keep using the verified Frank-helper route for planning/readback. If Robert wants a separate Avignon runtime/helper, route Security Guard and Code/Git Manager review before implementation. |
+| Avignon | Avignon's own calendar | Not source-verified. Shared docs allow an Avignon individual path when available, but this pass found no non-secret source that names or verifies a distinct Avignon-primary calendar/helper. | Avignon individual calendar path for Sonat/Avignon reminders if a separate Avignon calendar identity is later approved and implemented. | `docs/email-workers/2026-04-30-shared-open-item-owner-email.md`; `docs/email-workers/2026-04-30-shared-intake-task-completion-flow.md` | No verified separate Avignon auth client/token path is documented in current non-secret sources. | Exact current gap: missing verified Avignon-specific helper/identity mapping for an Avignon-primary calendar. Do not guess the calendar identity; keep reminder execution on scheduled-action or Frank-helper paths until a separate Avignon path is explicitly sourced. |
+| National Outreach / Vanessa | `KOVAL Outreach Events` | Verified. OPS-linked calendar inventory and shared email-worker docs both point to `KOVAL Outreach Events` as the current shared Outreach calendar. | Shared National Outreach calendar for Vanessa reminders, tastings, and outreach follow-up when calendar execution is appropriate. | `frank/TODO.md`; `frank/HANDOFF.md`; `docs/email-workers/2026-04-30-shared-intake-task-completion-flow.md` | Shared National Outreach calendar path supplements the durable task/scheduled-action record; it does not replace OPS/task state. | No auth change is needed in this planning lane. Use the shared Outreach path for future verified reminder/event workflows. |
+| Naomi | Shared National Outreach calendar lane | Policy-defined, not separately verified in this pass. Shared docs explicitly route Naomi and other shared-inbox personas to the National Outreach calendar path when available. | Shared reminder/calendar support through the Outreach lane when Naomi-owned reminders need calendar backing. | `docs/email-workers/2026-04-30-shared-open-item-owner-email.md`; `docs/email-workers/2026-04-30-shared-intake-task-completion-flow.md` | Shared National Outreach helper path, not a Naomi-specific auth client. | Keep this as shared-lane planning until a Naomi-specific reminder workflow needs a concrete calendar readback. |
+| Ezra | Shared National Outreach calendar lane | Policy-defined, not separately verified in this pass. Shared docs explicitly route Ezra and other shared-inbox personas to the National Outreach calendar path when available. | Shared reminder/calendar support through the Outreach lane when Ezra-owned reminders need calendar backing. | `docs/email-workers/2026-04-30-shared-open-item-owner-email.md`; `docs/email-workers/2026-04-30-shared-intake-task-completion-flow.md` | Shared National Outreach helper path, not an Ezra-specific auth client. | Keep this as shared-lane planning until an Ezra-specific reminder workflow needs a concrete calendar readback. |
+
+Auth/setup work that still needs reviewed implementation before execution:
+
+- A separate Avignon helper/runtime remains unsourced in current non-secret docs. If Robert wants Avignon to stop depending on the Frank helper path for Sonat calendar visibility, that implementation should be routed as a new auth/runtime slice with Security Guard and Code/Git Manager review first.
+- Frank-own-calendar workflows should get one narrow readback proof before they are used as a claimed verified path in later packets.
+- Calendar-backed reminders should continue following the shared rule: durable task or scheduled-action record first, calendar second. If the calendar route is not verified for that identity, record the blocker and use the scheduled-action path instead.
+
+Current gaps / boundaries:
+
+- This pass did not read calendar event bodies, create/edit/delete events, change OAuth scopes, move token storage, or perform any Google auth/runtime mutation.
+- Customer Service, Asher, and Venetia do not add new calendar/auth facts in the currently sourced planning docs, so they remain outside this lane's verified matrix for now.
+
+## 2026-05-17 Reminder Runner Mapping Readback
+
+Workspaceboard due-worker session `7dc067f2` verified the current reminder-runner sources before closing the `taskflow-ai-workers-setup-reminder-runner-mapping-2026-05-12` next check.
+
+## 2026-05-17 Ezra Project Support Lane Readback
+
+Due-worker item `taskflow-ai-workers-setup-ezra-project-support-2026-05-12` was completed as a docs-only planning slice.
+
+Artifact created:
+
+- `project_hub/artifacts/ai-workers-setup/ezra-project-support-intake-checklist-2026-05-17.md`
+
+What this lane now records:
+
+- Ezra intake checklist for project-support and legal-affairs-adjacent work: project name, parties, requested action, source of truth, deadline, sensitivity, approval boundary, and deliverable.
+- Escalation matrix covering cross-functional project routing, contract/regulatory/policy questions, privacy/security issues, finance overlap, implementation handoff, and protected-material stop conditions.
+- Recommended Task Manager -> Ezra handoff template so future packets include the exact fields Ezra needs before triage begins.
+- Safe-default rule that Ezra stays on docs-only triage, business briefing, and escalation framing unless a separate implementation or secure-access lane is explicitly approved.
+
+Source basis used:
+
+- `worker_roles/ezra-katz.md`
+- Existing AI Workers Setup planning packet in this project log
+- Current AI Workspace TODO context for the project boundaries and active implementation gates
+
+Boundary:
+
+- No mailbox-body review, external send, legal advice, auth/runtime change, credential handling, or live-system mutation was performed in this lane.
+
+Reminder-runner map:
+
+- Shared Task Flow scheduled reminders are stored in the shared MySQL Task Flow tables and read back through `scripts/task_flow_mysql_recorder.php report` / `due`. The report exposes runner state, due-now preview, and upcoming reminder rows.
+- The active due-runner execution path is Frank's auto runner: `frank/runtime-source/frank-launch/scripts/frank_auto_runner.py` calls `/Users/admin/.task-flow-launch/runtime/scripts/task_flow_due_runner.py` no more than once every `60` seconds and uses `/Users/admin/.task-flow-launch/state/frank-due-runner-last.txt` as the throttle marker.
+- The due runner writes durable runner state to `/Users/admin/.task-flow-launch/state/task-flow-due-runner-last.json` with `checked_at`, `due_count`, `recorded`, `skipped_existing`, `actions`, and notification outcome, and it can route due items into a visible Workspaceboard worker session instead of leaving them as silent due rows.
+- Workspaceboard's Task Flow page reads the same runner-state and due/upcoming preview surfaces and displays `Last Runner`, `Notification`, `Actions`, and the next due records so reminder verification is visible without opening raw logs.
+
+Verification/readback checklist:
+
+- Task Flow row: verify the packet key, current status, `scheduled_action`, and next update in `scripts/task_flow_mysql_recorder.php report`.
+- Due-runner state: verify `/Users/admin/.task-flow-launch/state/task-flow-due-runner-last.json` for the last `checked_at`, due count, newly recorded items, skipped duplicates, and notification result.
+- Visible-worker handoff proof: when a due item is routed instead of externally emailed, verify the routed Workspaceboard session id in the runner summary and the packet `verification_readback`.
+- UI/operator surface: verify `workspaceboard/task-flow.html` via `assets/task-flow.js` rendering of reminder-runner stats and due/upcoming rows.
+
+Current live readback on `2026-05-17 09:32 CDT`:
+
+- Due runner state showed `checked_at=2026-05-17T09:32:47-0500`, `due_count=1`, `recorded=1`, `skipped_existing=0`, `notification.reason=no_owner_visible_due_items`.
+- The due item was this exact planning lane, and the due runner routed it into visible Workspaceboard session `7dc067f2` with prompt delivery confirmed instead of sending external email.
+- Immediate follow-up `due` readback returned `due_count=0`; the next scheduled AI Workers Setup reminder lane is the polling/inbox map at `2026-05-17 09:40 CDT`.
+
+Current gaps / boundaries:
+
+- Internal planning reminders like this one are auditable through Task Flow state and visible-worker routing, but they intentionally suppress owner-visible email when `notification.reason=no_owner_visible_due_items`.
+- Calendar-native reminder creation and calendar event ID verification are still separate work under the calendar/auth lane; this reminder-runner mapping only covers the current Task Flow and worker-driven reminder surfaces.
+- The due-runner summary currently reports `watchdog_script_missing` for `/Users/werkstatt/ai_workspace/scripts/automation_health_watchdog.py`; that does not block reminder routing, but it means watchdog readback is not part of the active reminder verification path today.
+
+Boundary:
+
+- This pass stayed inside docs/routing/state only.
+- No external email was sent.
+- No runtime, LaunchAgent, auth, mailbox, OPS, Portal, Google Doc, or production data mutation was performed.
+
+## 2026-05-17 Internal Communicator Weekly Recap Readback
+
+Due-worker item `taskflow-ai-workers-setup-internal-communicator-weekly-recap-2026-05-12` was completed as a docs-only planning slice after verifying that its two named dependencies were now present.
+
+Artifact created:
+
+- `project_hub/artifacts/internal-communicator/weekly-internal-recap-workflow-packet-2026-05-07.md`
+
+What this lane now records:
+
+- A reusable source packet for Internal Communicator weekly recap drafting on AI Workers Setup.
+- The dependency clear for the Vanessa directive artifact and the reminder-runner mapping readback.
+- A verified list of safe recap talking points: completed planning packets, the exact Customer Service blocker, and the remaining live-send approval gates.
+- A short internal recap structure so future recap work can be drafted without re-deriving the source packet.
+
+Current readback:
+
+- The earlier project index pointed to a weekly recap packet path that was not present on disk at the start of this pass; this pass wrote that missing packet at the referenced path so the source-of-truth pointer is now real.
+- The lane is no longer blocked on the Vanessa directive index or the reminder-runner mapping. Both dependencies now exist in the project packet.
+- The first live weekly recap remains approval-gated on previous examples, approved image source rules/folders when applicable, and final audience/sender/approval cadence. This pass did not send or queue any internal email.
+
+Boundary:
+
+- This pass stayed inside docs/routing/state only.
+- No mailbox-body review, send, auth/runtime change, Google Doc write, or production mutation was performed.
+
+## 2026-05-17 Worker Role / Job Description Audit Lane Readback
+
+Due-worker item `taskflow-ai-workers-setup-worker-role-audit-2026-05-12` was completed as a docs-only audit slice.
+
+Artifact created:
+
+- `project_hub/artifacts/ai-workers-setup/worker-role-job-description-audit-checklist-2026-05-17.md`
+
+What this lane now records:
+
+- A per-worker audit for Frank, Avignon, National Outreach / Vanessa, Naomi, Ezra, Customer Service, Asher, Venetia, AI Manager, Task Manager / Polier, Decision Driver, and AI Health Manager.
+- For each worker: current duties, checked local role/persona/job-description sources, whether a Google Doc link is already recorded, whether a 2026 JD source is currently visible, and the next docs-only gap.
+- A clear split between workers that already have substantial local role material but still lack a recorded JD source link, and Customer Service, which is still blocked at the role-definition layer.
+
+Current readback:
+
+- Avignon is the strongest current lane for job-description coverage because it already has a local `JOB_DESCRIPTION.md` plus role/persona sources.
+- Frank, Vanessa/National Outreach, Naomi, Ezra, Asher, Venetia, AI Manager, Task Manager, Decision Driver, and AI Health Manager all have enough local role/persona material to audit current duties, but this pass did not find a recorded Google Doc link or clearly named 2026 JD check-off source for them.
+- Customer Service remains an exact source blocker for this audit family: no worker role doc, persona file, or job-description source was found in the checked local sources, so the lane cannot advance beyond "define the worker and source of authority first."
+
+Boundary:
+
+- This pass stayed inside docs/routing/state only.
+- No Google Doc writes, mailbox actions, auth/runtime changes, or external sends were performed.
+
+## 2026-05-17 Email Polling And Inbox Readback
+
+Workspaceboard due-worker session `3cfe18b1` verified the current polling/inbox sources before closing `taskflow-ai-workers-setup-email-polling-inbox-2026-05-12`.
+
+Polling and inbox map:
+
+- Frank: current practical mailbox path remains 15-second polling, not Gmail push. AI Workspace TODO/HANDOFF records the current `15` second mail-polling path, while `frank/runtime-source/frank-launch/scripts/frank_auto_runner.py` also shows the shared Task Flow due-runner check riding inside Frank's auto runner on its own `60` second throttle. Authority today is full Frank email-worker behavior, including body review, routed follow-through, approved send/report paths, and handled filing under Frank guidance; Gmail API push/OAuth remains a separate approval-gated lane.
+- Avignon: current mailbox path remains 15-second polling. AI Workspace TODO/HANDOFF records the current `15` second Avignon polling path, and `avignon/runtime-source/avignon-launch/scripts/avignon_inbox_cycle.py` is the active full-body inbox cycle/source mirror. Authority today includes Avignon direct-owner/body review, approved completion/blocker reporting, and handled filing under Avignon SOP guidance; Gmail push/OAuth remains separate and approval-gated.
+- National Outreach: shared inbox is `nationaloutreach@kovaldistillery.com`, with Email Coordinator owning intake/routing and worker personas routed from that shared inbox. `docs/email-workers/2026-04-27-nationaloutreach-ai-worker-inbox.md` plus the staged plist `tmp/nationaloutreach-launch/com.koval.nationaloutreach-auto.plist` show a `StartInterval` `60` second LaunchDaemon path using `scripts/nationaloutreach_mail_cycle.py`. That runtime has full-body review, private-state capture, route suggestion/classification, and approved queued-send capability, but it still does not move, delete, or file mailbox messages automatically.
+- Asher: current state remains one separate Asher mailbox on a 60-second header-only polling route. `docs/email-workers/2026-04-27-asher-venetia-setup.md` records a live `60` second LaunchDaemon with header metadata only. Body reads, filing, deletes, routine action authority, and send behavior remain explicitly blocked pending final policy approval.
+- Venetia: current state mirrors Asher as a separate Venetia mailbox on a 60-second header-only polling route. The same setup doc records live `60` second header-only polling only, with body reads, filing, deletes, routine action authority, and send behavior still approval-gated.
+- Customer Service inbox: no mailbox is connected yet in this planning slice. The inbox identity to connect is still unnamed, and the authoritative FOH guide source is still unspecified. Until those two source facts exist, this lane can document prerequisites but cannot move into mailbox auth, body review, FAQ extraction, or customer-response authority.
+
+Authority and approval-gate summary:
+
+- Frank and Avignon are the only current KOVAL inbox workers in this lane with documented 15-second practical polling and end-to-end worker authority for review/routing/reporting under existing guidance.
+- National Outreach has broader shared-inbox/body-read capability than Asher/Venetia and can send only through approved queued-send paths and allowed send-from identities; auto filing/moves remain out of scope.
+- Asher and Venetia are intentionally limited to header-only polling and source tracking until Robert/Sonat/Avignon provide the final persona/action policy for body reads, filing, deletes, replies, and routine send authority.
+- Customer Service remains planning-only until the inbox, FOH answer source, and browsing/reply boundaries are named and approved.
+
+Verification/readback checklist:
+
+- Frank/Avignon cadence and current-practical-path proof: `TODO.md`, `HANDOFF.md`, and worker handoff records showing the 15-second mail-polling path plus the separate 60-second Task Flow due-runner throttle inside Frank's auto runner.
+- National Outreach cadence and scope proof: `docs/email-workers/2026-04-27-nationaloutreach-ai-worker-inbox.md`, `tmp/nationaloutreach-launch/com.koval.nationaloutreach-auto.plist`, and `scripts/nationaloutreach_mail_cycle.py`.
+- Asher/Venetia cadence and scope proof: `docs/email-workers/2026-04-27-asher-venetia-setup.md`.
+- Shared closeout/task-flow surfaces: `scripts/task_flow_mysql_recorder.php report`, the Task Flow page, and the packet `verification_readback`.
+
+Current result:
+
+- The polling/inbox map is now written from current source/docs state with cadence, read scope, send/follow-through authority, and approval gates separated by worker.
+- No new source blocker remains for this lane. The remaining Customer Service inbox facts are already captured as a separate planning blocker under `taskflow-ai-workers-setup-customer-service-inbox-faq-2026-05-12`, not as a blocker for closing this polling-map lane.
+
+Boundary:
+
+- This pass stayed inside docs/routing/state only.
+- No external email was sent.
+- No mailbox bodies were printed.
+- No runtime, LaunchAgent, auth, OAuth, Google Doc, OPS, Portal, or production data mutation was performed.

@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/local/bin/python3.13
 """Private source-info intake helper.
 
 Moves files from the approved private inbox into archive/processed storage and

@@ -36,13 +36,13 @@ https://console.developers.google.com/apis/api/gmail.googleapis.com/overview?pro
 
 ```bash
 cd /Users/werkstatt/ai_workspace
-python3 scripts/gmail_export.py authorize
+/usr/local/bin/python3.13 scripts/gmail_export.py authorize
 ```
 
 ## Search
 
 ```bash
-python3 scripts/gmail_export.py search \
+/usr/local/bin/python3.13 scripts/gmail_export.py search \
   --query 'ERTC OR ERC OR Leyton OR "Levin Levy" OR "Levin&Levy"' \
   --limit 20
 ```
@@ -52,7 +52,7 @@ Search output uses hashed message IDs only.
 ## Export
 
 ```bash
-python3 scripts/gmail_export.py export \
+/usr/local/bin/python3.13 scripts/gmail_export.py export \
   --query 'ERTC OR ERC OR Leyton OR "Levin Levy" OR "Levin&Levy"' \
   --output "/Users/kovaladmin/Library/CloudStorage/GoogleDrive-robert@kovaldistillery.com/My Drive/2026 ERTC work/02_Communications/gmail-export"
 ```
@@ -62,7 +62,7 @@ Use `--dry-run` before exporting broad queries. Add `--limit N` only for a delib
 ## Extract Attachments
 
 ```bash
-python3 scripts/gmail_extract_attachments.py \
+/usr/local/bin/python3.13 scripts/gmail_extract_attachments.py \
   --input "/Users/kovaladmin/Library/CloudStorage/GoogleDrive-robert@kovaldistillery.com/My Drive/2026 ERTC work/02_Communications/gmail-export-oleg" \
   --output "/Users/kovaladmin/Library/CloudStorage/GoogleDrive-robert@kovaldistillery.com/My Drive/2026 ERTC work/02_Communications/gmail-export-oleg-attachments"
 ```

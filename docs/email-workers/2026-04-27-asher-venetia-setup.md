@@ -1,6 +1,6 @@
 # Asher and Venetia Email Worker Setup
 
-Status: live header-only polling active; substantive mailbox action still gated
+Status: live body-read polling active; approved send automation active; filing/deletes still gated
 Created: 2026-04-27 CDT
 
 Robert provided credentials through the approved private file path. The credential values were split into per-worker owner-only files under `.private/email-workers/` and were not printed.
@@ -19,7 +19,7 @@ Verification:
 - No mailbox contents were listed, read, moved, filed, or sent during verification.
 - System LaunchDaemons `com.koval.asher-auto` and `com.koval.venetia-auto` are installed under `/Library/LaunchDaemons/`, run as `admin`, and are configured for 60-second intervals.
 - Read-only launchd check on 2026-04-27 showed both labels registered with repeated runs and last exit code `0`.
-- Runtime logs showed header-only polling for both workers. Header metadata was recorded for the initial cPanel configuration message in each mailbox; body reads, filing, deletes, and automatic replies remained disabled.
+- Runtime logs show body-read polling for both workers. Approved send automation is active through the worker runtime; filing, deletes, and routine authority remain gated.
 
 Management rule:
 
@@ -29,8 +29,8 @@ Management rule:
 
 Remaining activation blocker:
 
-- Need explicit policy approval before body reads, filing mail, deleting mail, external replies, routine action authority, or any send behavior.
-- The current live runtime is limited to header-only polling and source tracking.
+- Need explicit policy approval before filing mail, deleting mail, or routine action authority beyond approved task-specific sends.
+- The current live runtime includes body reads and approved send behavior, while filing and delete/archive actions remain gated.
 
 ## Persona Packet
 
@@ -52,8 +52,8 @@ Do not paste the full private source attachment into chat, email, public docs, o
 
 Robert clarified on 2026-04-27 that Asher and Venetia should remain separate workers, not a combined worker lane. Treat the current intended state as two distinct worker identities:
 
-- Asher has one Asher mailbox, one Asher local workspace, and one Asher header-only polling route.
-- Venetia has one Venetia mailbox, one Venetia local workspace, and one Venetia header-only polling route.
+- Asher has one Asher mailbox, one Asher local workspace, and one Asher body-read polling route.
+- Venetia has one Venetia mailbox, one Venetia local workspace, and one Venetia body-read polling route.
 
 Do not create duplicate worker accounts, duplicate local workspaces, or duplicate LaunchDaemon routes for either worker unless Robert explicitly approves a replacement or migration. Do not merge Asher and Venetia into one shared persona, inbox, workspace, or route.
 
