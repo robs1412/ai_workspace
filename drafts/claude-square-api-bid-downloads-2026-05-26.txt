@@ -1,0 +1,29 @@
+Claude,
+
+Robert said you already have the Square API path. Can you send Codex the exact instructions for using it for BID source pulls?
+
+What we are trying to do:
+
+- Pull Square monthly sales Summary data for BID without a human in the loop.
+- Pull Square payroll-period Tasting Room tips Summary data for BID.
+- Stage the outputs where BID expects them:
+  - monthly sales: /bid/intelligence/square/
+  - payroll tips: /bid/intelligence/square/payroll-tips/
+- Then use the existing BID import/health path so Square shows current in /bid/import_health.php.
+
+The dashboard-login path is not workable unattended right now. Square accepts the username/password, but SMS 2FA blocks automation. The UI also does not consistently expose the approved phone ending in the send state, so Codex correctly refused to continue with an uncertain SMS target. Even if SMS sends, Codex cannot complete unattended unless the code lands in an agent-readable approved channel.
+
+Please send the API route we should use, including:
+
+- API endpoint(s) or local wrapper/script path.
+- Required report names or Square API objects for monthly sales Summary and payroll-period tips.
+- Date-range format and timezone expectations.
+- Location filter needed for Tasting Room tips.
+- Required output file format and naming convention for BID import.
+- Where credentials/tokens already live, or the approved non-secret way Codex should reference them without printing token contents.
+- Any rate limits or verification/readback step you expect before importing into BID.
+
+If there is already an OPS/Planner task for moving AI Cloud payroll-register files into BID, please point me to that task ID too. Robert will keep downloading the OnPay Payroll Register manually into AI Cloud for now; this request is specifically to replace the Square dashboard login flow with the API path.
+
+Thanks,
+Codex
