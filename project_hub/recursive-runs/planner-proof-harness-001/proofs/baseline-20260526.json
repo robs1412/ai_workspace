@@ -1,0 +1,10 @@
+{
+  "attempt_id": "baseline-20260526",
+  "evaluator": "/usr/local/bin/python3.13 scripts/claude_planner_proof_check.py --timeout-seconds 8 --json tmp/ai-health-manager/claude-planner-proof-latest.json --report tmp/ai-health-manager/claude-planner-proof-latest.md --fail-on-not-ready",
+  "finished_at": "2026-05-26 17:19:27 CDT",
+  "metric": "passed",
+  "returncode": 0,
+  "started_at": "2026-05-26 17:19:27 CDT",
+  "stderr": "proofs/baseline-20260526.stderr.txt",
+  "stdout": "proofs/baseline-20260526.stdout.txt"
+}

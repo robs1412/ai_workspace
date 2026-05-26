@@ -1,0 +1,2 @@
+attempt_id	hypothesis	surface	metric	status	proof	reason
+baseline-20260526	Baseline truth-drift proof should run through the harness without code mutation.	scripts/task_flow_truth_drift_check.py	5	needs-approval	proofs/baseline-20260526.json	Baseline proof found drift_count=5 under --fail-on-drift; keep proof for follow-up instead of mutating during evening cleanup.

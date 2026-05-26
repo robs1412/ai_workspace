@@ -1,0 +1,2 @@
+attempt_id	hypothesis	surface	metric	status	proof	reason
+baseline-20260526	Baseline Planner proof route should pass without changing the verifier.	scripts/claude_planner_proof_check.py	passed	keep	proofs/baseline-20260526.json	Baseline proof passed; keep as initial harness proof without implementation mutation.

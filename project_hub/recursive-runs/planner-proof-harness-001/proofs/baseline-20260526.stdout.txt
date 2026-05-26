@@ -1,0 +1,20 @@
+{
+  "base_url": "https://planner.koval.lan",
+  "checked_at": "2026-05-26 17:19:27 CDT",
+  "context_url": "https://planner.koval.lan/api/tasks/1725",
+  "forbidden_fields": [],
+  "http_status": 200,
+  "plan_guid": "",
+  "proof_summary": {
+    "has_plan_guid": true,
+    "has_worklog_guid": true,
+    "proof_comment_count": 1,
+    "status_value": "done",
+    "tag_count": 0,
+    "task_id": 1725
+  },
+  "proof_url": "https://planner.koval.lan/api/tasks/1725/proof",
+  "reason": "",
+  "status": "passed",
+  "task_id": "1725"
+}

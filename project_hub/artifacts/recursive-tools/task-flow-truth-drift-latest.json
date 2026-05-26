@@ -1,11 +1,57 @@
 {
   "board_ok": true,
   "config": "/Users/werkstatt/ai_workspace/scripts/task_flow_truth_surfaces.json",
-  "drift_count": 0,
-  "drifts": [],
-  "managed_sessions": 194,
-  "proof_closeout_issues": 15,
-  "proof_rows_scanned": 52,
+  "drift_count": 5,
+  "drifts": [
+    {
+      "dedupe_key": "daily-codex-repo-cleanup-2200",
+      "detail": "active Task Flow row references missing board session start_or_reuse_visible_repo_cleanup_worker_at_2200",
+      "kind": "active_missing_board_session",
+      "path": "",
+      "session_id": "start_or_reuse_visible_repo_cleanup_worker_at_2200",
+      "severity": "high",
+      "title": "Daily 10 PM repo cleanup: inspect /Users/werkstatt git repos, commit/push intentional changes, report exact blockers."
+    },
+    {
+      "dedupe_key": "daily-frank-workspaceboard-task-db-waiting-blocked-0715",
+      "detail": "active Task Flow row references missing board session start_or_reuse_visible_cleanup_worker_at_0715_when_rows_exist",
+      "kind": "active_missing_board_session",
+      "path": "",
+      "session_id": "start_or_reuse_visible_cleanup_worker_at_0715_when_rows_exist",
+      "severity": "high",
+      "title": "At 7:15, start/reuse visible Workspaceboard cleanup worker if waiting/blocked rows exist; Frank emails Robert after readback."
+    },
+    {
+      "dedupe_key": "ops-overdue-ai-worker-363191",
+      "detail": "active Task Flow row references missing board session task-mode-chat",
+      "kind": "active_missing_board_session",
+      "path": "",
+      "session_id": "task-mode-chat",
+      "severity": "high",
+      "title": "Square list email-send workflow, not list creation"
+    },
+    {
+      "dedupe_key": "ops-overdue-ai-worker-334481",
+      "detail": "active Task Flow row references missing board session task-mode-chat",
+      "kind": "active_missing_board_session",
+      "path": "",
+      "session_id": "task-mode-chat",
+      "severity": "high",
+      "title": "Follow up on DA and incentive strategy first-plan email and continue Salesreport data pull after scope confirmation"
+    },
+    {
+      "dedupe_key": "taskmode-ops-overdue-ai-worker-tasks-2026-05-26",
+      "detail": "active Task Flow row references missing board session task-mode-chat",
+      "kind": "active_missing_board_session",
+      "path": "",
+      "session_id": "task-mode-chat",
+      "severity": "high",
+      "title": "Continue overdue OPS AI-worker cleanup/execution"
+    }
+  ],
+  "managed_sessions": 18,
+  "proof_closeout_issues": 1,
+  "proof_rows_scanned": 26,
   "scheduler_route_candidates": 0,
   "scheduler_violations": 0,
   "task_flow_rows_scanned": 500

@@ -1,0 +1,10 @@
+{
+  "attempt_id": "baseline-20260526",
+  "evaluator": "/usr/local/bin/python3.13 scripts/task_flow_truth_drift_check.py --fail-on-drift",
+  "finished_at": "2026-05-26 17:20:11 CDT",
+  "metric": "5",
+  "returncode": 1,
+  "started_at": "2026-05-26 17:20:03 CDT",
+  "stderr": "proofs/baseline-20260526.stderr.txt",
+  "stdout": "proofs/baseline-20260526.stdout.txt"
+}
