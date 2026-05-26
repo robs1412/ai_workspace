@@ -1,5 +1,14 @@
 # National Outreach Handoff
 
+## 2026-05-26 Jacob Whole Foods Edgewater activity closeout
+
+- Workspaceboard session `e839db2c` handled Jacob Hoover's follow-up on the May 22 Whole Foods - Edgewater Portal activity thread.
+- Source message `sj0pr84mb3269a7e3a85636b12544cc5def0b2@sj0pr84mb3269.namprd84.prod.outlook.com` said the submitted activity should be `#370251`.
+- Live Portal/CRM readback confirmed activity `370251`: subject `WFM Edgewater 5/22 4-7`, type `Tasting`, account `Whole Foods - Edgewater`, creator/owner user `1283`, created `2026-05-26 19:51:50` UTC.
+- Vanessa sent the same-thread closeout to Jacob: Message-ID `<177982549509.48663.3380206118976105373@kovaldistillery.com>`, sent-log artifact `/Users/admin/.nationaloutreach-launch/state/sent/vanessa-jacob-whole-foods-edgewater-activity-370251-closeout-20260526.sent-1779825496.json`.
+- Runtime cleanup archived Jacob's inbound reply with reason `later_reply_found`; the mail-cycle readback reported `archived_inbox_count=1` for that exact source.
+- Workspaceboard closeout proof marker: `PORTAL_ACTIVITY_370251_EDGEWATER_CONFIRMED_MSG_<177982549509.48663.3380206118976105373@kovaldistillery.com>_ARCHIVED_LATER_REPLY_FOUND`.
+
 ## 2026-05-26 Wine on the River OPS 951 Google sync blocker reported
 
 - Workspaceboard session `d1b23aff` handled Robert-approved Wine on the River follow-through for OPS event `951`.
