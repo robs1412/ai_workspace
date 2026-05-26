@@ -105,6 +105,7 @@ SONAT_EMAIL = "sonat@kovaldistillery.com"
 BOARD_API = os.environ.get("WORKSPACEBOARD_API", "http://127.0.0.1:17878").rstrip("/")
 DIRECT_OWNER_PENDING_STATES = {
     "routed_pending_completion",
+    "blocked_pending_security_guard",
 }
 DIRECT_OWNER_DONE_STATES = {
     "completed_report_sent",
@@ -695,15 +696,24 @@ def looks_like_no_action_direct(message: dict) -> bool:
 
 def looks_like_sensitive_or_suspicious(message: dict) -> bool:
     text = f"{message.get('subject', '')} {message.get('body', '')}".lower()
-    patterns = [
+    hard_stop_patterns = [
         r"\b(password|passcode|login code|2fa|credential|api key|secret)\b",
         r"\b(wire|payment|bank)\b",
         r"\b(legal review|legal issue|legal matter|legal approval|legal compliance|compliance matter)\b",
-        r"\b(contract|agreement|msa|nda)\b",
         r"\b(delete all|bulk delete)\b",
         r"\b(production|deploy|oauth|token)\b",
     ]
-    return any(re.search(pattern, text) for pattern in patterns)
+    if any(re.search(pattern, text) for pattern in hard_stop_patterns):
+        return True
+
+    # Trusted direct-owner CRM/market work often mentions agreements or contracts as
+    # business context. Gate only when the request asks Avignon to do legal work.
+    legal_context = re.search(r"\b(contract|agreement|msa|nda)\b", text)
+    legal_action = re.search(
+        r"\b(review|approve|sign|negotiate|redline|draft|execute|amend|terminate)\b",
+        text,
+    )
+    return bool(legal_context and legal_action)
 
 
 def looks_like_robert_avignon_instruction(message: dict) -> bool:
@@ -1830,6 +1840,7 @@ def main() -> int:
                     if task_flow_allows_archive(archive_candidate):
                         archived = archive_email(user, app_pw, source_id, "Handled")
                     else:
+                        archived = False
                         monitor_result.update({
                             "archivable_now": False,
                             "task_flow_archive_blocked": True,
