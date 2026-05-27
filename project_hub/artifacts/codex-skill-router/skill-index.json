@@ -1,0 +1,675 @@
+{
+  "body_loaded": false,
+  "generated_at": "2026-05-27T23:26:13.424058+00:00",
+  "schema_version": 1,
+  "skill_count": 39,
+  "skills": [
+    {
+      "description": "Use when working in AI Manager mode or AI phone manager mode and the user expects prompts and outcomes to be mirrored into ai_manager_inputs and the daily-input trail.",
+      "name": "ai-manager-recorder",
+      "path": "/Users/admin/.codex/skills/ai-manager-recorder/SKILL.md",
+      "tags": [
+        "ai",
+        "manager",
+        "recorder",
+        "mode",
+        "working",
+        "phone",
+        "user",
+        "expects",
+        "prompts",
+        "outcomes"
+      ]
+    },
+    {
+      "description": "Use for any email-worker lane when a source packet asks to add or update outreach calendar entries, OPS events, Portal accounts, contacts, or CRM activities; treat these as execution work with exact duplicate checks, live write/readback, and owner notification only after proof or one exact blocker.",
+      "name": "email-worker-crm-calendar-execution",
+      "path": "/Users/admin/.codex/skills/email-worker-crm-calendar-execution/SKILL.md",
+      "tags": [
+        "email",
+        "worker",
+        "crm",
+        "calendar",
+        "execution",
+        "exact",
+        "any",
+        "lane",
+        "source",
+        "packet"
+      ]
+    },
+    {
+      "description": "Use when managing, clearing, or draining inboxes for National Outreach, Frank, Avignon, Asher, Venetia, or other email-worker lanes; classify live messages, archive safe no-action residue, preserve real open work, and record exact blockers or restart points for auth-gated or sensitive items.",
+      "name": "email-worker-inbox-management",
+      "path": "/Users/admin/.codex/skills/email-worker-inbox-management/SKILL.md",
+      "tags": [
+        "email",
+        "worker",
+        "inbox",
+        "management",
+        "managing",
+        "clearing",
+        "draining",
+        "inboxes",
+        "national",
+        "outreach"
+      ]
+    },
+    {
+      "description": "Read an existing execution plan, inspect every referenced file and code path, and rewrite the plan with concrete code-grounded improvements. Use when the user wants a stronger plan before implementation or wants the current plan pressure-tested against repo reality.",
+      "name": "execplan-audit",
+      "path": "/Users/admin/.codex/skills/execplan-audit/SKILL.md",
+      "tags": [
+        "execplan",
+        "audit",
+        "plan",
+        "code",
+        "wants",
+        "read",
+        "existing",
+        "execution",
+        "inspect",
+        "every"
+      ]
+    },
+    {
+      "description": "Create an execution plan from a locked refactor decision, PRD, RFC, or detailed problem statement, following the repo's planning conventions. Use when the user asks for an execution plan, ExecPlan, or a decided improvement turned into a step-by-step plan.",
+      "name": "execplan-author",
+      "path": "/Users/admin/.codex/skills/execplan-author/SKILL.md",
+      "tags": [
+        "execplan",
+        "author",
+        "plan",
+        "execution",
+        "step",
+        "create",
+        "locked",
+        "refactor",
+        "decision",
+        "prd"
+      ]
+    },
+    {
+      "description": "Execute an existing execution plan from a local work item or explicit plan path while tracking implementation state explicitly. Use when the user asks to implement a plan, execute the pending plan, or resume blocked implementation work.",
+      "name": "execplan-implement",
+      "path": "/Users/admin/.codex/skills/execplan-implement/SKILL.md",
+      "tags": [
+        "implement",
+        "execplan",
+        "plan",
+        "execute",
+        "work",
+        "implementation",
+        "existing",
+        "execution",
+        "local",
+        "item"
+      ]
+    },
+    {
+      "description": "Use when Robert asks for an internal rollout, update, or process-change email to a team list such as Management Team, CoTeam, or another Forge/lists audience; draft the email in the lists workspace with clear what-changed, what-to-do, and reply-path sections, and record the live system changes being announced.",
+      "name": "forge-internal-change-announcement",
+      "path": "/Users/admin/.codex/skills/forge-internal-change-announcement/SKILL.md",
+      "tags": [
+        "forge",
+        "internal",
+        "change",
+        "announcement",
+        "email",
+        "team",
+        "lists",
+        "what",
+        "robert",
+        "asks"
+      ]
+    },
+    {
+      "description": "Address actionable GitHub pull request review feedback. Use when the user wants to inspect unresolved review threads, requested changes, or inline review comments on a PR, then implement selected fixes. Use the GitHub app for PR metadata and flat comment reads, and use the bundled GraphQL script via `gh` whenever thread-level state, resolution status, or inline review context matters.",
+      "name": "gh-address-comments",
+      "path": "/Users/admin/.codex/plugins/cache/openai-curated/github/ed8ce2ea/skills/gh-address-comments/SKILL.md",
+      "tags": [
+        "gh",
+        "address",
+        "comments",
+        "review",
+        "github",
+        "inline",
+        "pr",
+        "actionable",
+        "pull",
+        "request"
+      ]
+    },
+    {
+      "description": "Use when a user asks to debug or fix failing GitHub PR checks that run in GitHub Actions. Use the GitHub app from this plugin for PR metadata and patch context, and use `gh` for Actions check and log inspection before implementing any approved fix.",
+      "name": "gh-fix-ci",
+      "path": "/Users/admin/.codex/plugins/cache/openai-curated/github/ed8ce2ea/skills/gh-fix-ci/SKILL.md",
+      "tags": [
+        "fix",
+        "gh",
+        "ci",
+        "github",
+        "pr",
+        "actions",
+        "user",
+        "asks",
+        "debug",
+        "failing"
+      ]
+    },
+    {
+      "description": "Use git and repository search without flooding context. Use when Codex needs to inspect git history, diffs, changed files, grep/ripgrep matches, session files, or logs and should avoid broad output, runaway recursive search, full diffs, or unnecessary token usage.",
+      "name": "git-search-token-discipline",
+      "path": "/Users/admin/.codex/skills/git-search-token-discipline/SKILL.md",
+      "tags": [
+        "git",
+        "search",
+        "token",
+        "discipline",
+        "diffs",
+        "files",
+        "repository",
+        "without",
+        "flooding",
+        "context"
+      ]
+    },
+    {
+      "description": "Triage and orient GitHub repository, pull request, and issue work through the connected GitHub app. Use when the user asks for general GitHub help, wants PR or issue summaries, or needs repository context before choosing a more specific GitHub workflow.",
+      "name": "github",
+      "path": "/Users/admin/.codex/plugins/cache/openai-curated/github/ed8ce2ea/skills/github/SKILL.md",
+      "tags": [
+        "github",
+        "repository",
+        "issue",
+        "triage",
+        "orient",
+        "pull",
+        "request",
+        "work",
+        "through",
+        "connected"
+      ]
+    },
+    {
+      "description": "Use when an OPS or Outreach Google Calendar sync fails, especially when OAuth appears configured but the sync reports Google OAuth is not configured, no usable refresh token, calendar sync blocker, or OPS event sync residue. Verify non-secret OAuth metadata, distinguish configured OAuth from usable-token resolution, and close duplicate blocker wrappers with source-backed proof.",
+      "name": "google-calendar-sync-oauth",
+      "path": "/Users/admin/.codex/skills/google-calendar-sync-oauth/SKILL.md",
+      "tags": [
+        "sync",
+        "oauth",
+        "google",
+        "calendar",
+        "configured",
+        "ops",
+        "usable",
+        "token",
+        "blocker",
+        "outreach"
+      ]
+    },
+    {
+      "description": "Use for AI Cloud Google Drive and Docs work, especially when a folder or doc link needs live verification, export, or read/write through the Google Drive SDK.",
+      "name": "google-drive-ai-cloud",
+      "path": "/Users/admin/.codex/skills/google-drive-ai-cloud/SKILL.md",
+      "tags": [
+        "google",
+        "drive",
+        "ai",
+        "cloud",
+        "docs",
+        "work",
+        "especially",
+        "folder",
+        "doc",
+        "link"
+      ]
+    },
+    {
+      "description": "Generate or edit raster images when the task benefits from AI-created bitmap visuals such as photos, illustrations, textures, sprites, mockups, or transparent-background cutouts. Use when Codex should create a brand-new image, transform an existing image, or derive visual variants from references, and the output should be a bitmap asset rather than repo-native code or vector. Do not use when the task is better handled by editing existing SVG/vector/code-native assets, extending an established icon or logo system, or building the visual directly in HTML/CSS/canvas.",
+      "name": "imagegen",
+      "path": "/Users/admin/.codex/skills/.system/imagegen/SKILL.md",
+      "tags": [
+        "imagegen",
+        "task",
+        "bitmap",
+        "should",
+        "image",
+        "existing",
+        "visual",
+        "native",
+        "code",
+        "vector"
+      ]
+    },
+    {
+      "description": "Review recently implemented work against its decision rationale, execution plan, and code reality, then report what matches, what drifted, and what still needs repair. Use when the user wants a post-implementation audit, a closeout review, or a code-grounded check that a completed plan really landed as intended.",
+      "name": "implementation-review",
+      "path": "/Users/admin/.codex/skills/implementation-review/SKILL.md",
+      "tags": [
+        "review",
+        "implementation",
+        "what",
+        "plan",
+        "code",
+        "recently",
+        "implemented",
+        "work",
+        "against",
+        "its"
+      ]
+    },
+    {
+      "description": "Use for the repeat Naomi finance lane after QBO access is available: check the latest Oleg/Robert finance comments first, refresh the May/weekly QBO package, import BID, submit Naomi reports through Portal, update the Financial Planning workbook, run the QBO-vs-Portal comparison, and keep BH/Kothe follow-up tasks current.",
+      "name": "naomi-finance-recurring",
+      "path": "/Users/admin/.codex/skills/naomi-finance-recurring/SKILL.md",
+      "tags": [
+        "naomi",
+        "finance",
+        "recurring",
+        "qbo",
+        "portal",
+        "repeat",
+        "lane",
+        "after",
+        "access",
+        "available"
+      ]
+    },
+    {
+      "description": "Use when the user asks how to build with OpenAI products or APIs and needs up-to-date official documentation with citations, help choosing the latest model for a use case, or model upgrade and prompt-upgrade guidance; prioritize OpenAI docs MCP tools, use bundled references only as helper context, and restrict any fallback browsing to official OpenAI domains.",
+      "name": "openai-docs",
+      "path": "/Users/admin/.codex/skills/.system/openai-docs/SKILL.md",
+      "tags": [
+        "openai",
+        "docs",
+        "official",
+        "model",
+        "upgrade",
+        "user",
+        "asks",
+        "how",
+        "build",
+        "products"
+      ]
+    },
+    {
+      "description": "Use when a user asks to pull OPS live after a push, verify the current live OPS commit, or check the standard SSH live route for OPS. Applies to the git-backed live checkout at ftp.koval-distillery.com:/home/koval/public_html/ops and should be used instead of re-deriving the host/path each time.",
+      "name": "ops-live-pull",
+      "path": "/Users/admin/.codex/skills/ops-live-pull/SKILL.md",
+      "tags": [
+        "ops",
+        "live",
+        "pull",
+        "koval",
+        "user",
+        "asks",
+        "after",
+        "push",
+        "verify",
+        "current"
+      ]
+    },
+    {
+      "description": "Use when Robert asks to create a regular notified OPS task, especially a shared Robert + Codex task, non-silent task, or task where normal OPS notification/readback matters more than default Codex-owned silent bookkeeping. Use the regular OPS helper with --notify=1 and verify creator/owner/assignee readback.",
+      "name": "ops-notified-shared-task",
+      "path": "/Users/admin/.codex/skills/ops-notified-shared-task/SKILL.md",
+      "tags": [
+        "task",
+        "ops",
+        "notified",
+        "shared",
+        "robert",
+        "regular",
+        "silent",
+        "readback",
+        "asks",
+        "create"
+      ]
+    },
+    {
+      "description": "Use for OPS outreach event scheduling, direct owner requests to add items to the outreach calendar, tasting reschedules, Darla/WineStyles follow-ups, and shift assignment flows that must use shift2user and live readback.",
+      "name": "ops-outreach-events",
+      "path": "/Users/admin/.codex/skills/ops-outreach-events/SKILL.md",
+      "tags": [
+        "outreach",
+        "ops",
+        "events",
+        "event",
+        "scheduling",
+        "direct",
+        "owner",
+        "requests",
+        "add",
+        "items"
+      ]
+    },
+    {
+      "description": "Use when the user wants to publish a non-secret assessment, policy note, durable decision, or long-lived memory to Papers through the approved MCP write path.",
+      "name": "papers-write",
+      "path": "/Users/admin/.codex/skills/papers-write/SKILL.md",
+      "tags": [
+        "papers",
+        "write",
+        "user",
+        "wants",
+        "publish",
+        "non",
+        "secret",
+        "assessment",
+        "policy",
+        "note"
+      ]
+    },
+    {
+      "description": "Create and scaffold plugin directories for Codex with a required `.codex-plugin/plugin.json`, optional plugin folders/files, valid manifest defaults, and personal-marketplace entries by default. Use when Codex needs to create a new personal plugin, add optional plugin structure, generate or update marketplace entries for plugin ordering and availability metadata, or update an existing local plugin during development with the CLI-driven cachebuster and reinstall flow.",
+      "name": "plugin-creator",
+      "path": "/Users/admin/.codex/skills/.system/plugin-creator/SKILL.md",
+      "tags": [
+        "plugin",
+        "creator",
+        "create",
+        "optional",
+        "personal",
+        "marketplace",
+        "entries",
+        "update",
+        "scaffold",
+        "directories"
+      ]
+    },
+    {
+      "description": "Use for Portal account, contact, project, and activity maintenance when a source packet needs exact-match CRM updates and live readback.",
+      "name": "portal-crm-entities",
+      "path": "/Users/admin/.codex/skills/portal-crm-entities/SKILL.md",
+      "tags": [
+        "portal",
+        "crm",
+        "entities",
+        "account",
+        "contact",
+        "project",
+        "activity",
+        "maintenance",
+        "source",
+        "packet"
+      ]
+    },
+    {
+      "description": "Use when an internal worker needs to submit, verify, or document recurring KOVAL Portal reports through /portal, especially when turning a one-off report filing into a durable workflow for Naomi, Vanessa, Frank, Avignon, or another lane.",
+      "name": "portal-report-submission",
+      "path": "/Users/admin/.codex/skills/portal-report-submission/SKILL.md",
+      "tags": [
+        "portal",
+        "report",
+        "submission",
+        "internal",
+        "worker",
+        "needs",
+        "submit",
+        "verify",
+        "document",
+        "recurring"
+      ]
+    },
+    {
+      "description": "Use for Portal sample requests and barrel sample requests, including duplicate checks, controller-path updates, and notification proof.",
+      "name": "portal-sample-requests",
+      "path": "/Users/admin/.codex/skills/portal-sample-requests/SKILL.md",
+      "tags": [
+        "sample",
+        "requests",
+        "portal",
+        "barrel",
+        "including",
+        "duplicate",
+        "checks",
+        "controller",
+        "path",
+        "updates"
+      ]
+    },
+    {
+      "description": "Use when Naomi QuickBooks Online access is needed for BID finance work, especially when the normal login path starts failing with Intuit robot checks, account-tile flows, MFA prompts, or stale saved-session behavior. Prefer the saved-state recovery script first, then continue to QBO report/export or Financial Planning work only after a real QBO readback succeeds.",
+      "name": "qbo-naomi-recovery",
+      "path": "/Users/admin/.codex/skills/qbo-naomi-recovery/SKILL.md",
+      "tags": [
+        "qbo",
+        "naomi",
+        "recovery",
+        "work",
+        "saved",
+        "quickbooks",
+        "online",
+        "access",
+        "needed",
+        "bid"
+      ]
+    },
+    {
+      "description": "Search a repo for 3-5 materially different refactor or architecture-improvement candidates, record the evidence, and leave behind a work item for later decision and planning. Use when the user wants the best refactor, highest-leverage cleanup, boundary simplification, or a shortlist of strong improvement options before choosing one.",
+      "name": "refactor-candidate-search",
+      "path": "/Users/admin/.codex/skills/refactor-candidate-search/SKILL.md",
+      "tags": [
+        "refactor",
+        "search",
+        "candidate",
+        "improvement",
+        "repo",
+        "materially",
+        "different",
+        "architecture",
+        "candidates",
+        "record"
+      ]
+    },
+    {
+      "description": "Read a refactor candidate shortlist, pressure-test the leading options with cheap repo evidence, and lock the final refactor or architecture decision before planning. Use when the user wants the current favorite challenged or wants a final decision before creating an execution plan.",
+      "name": "refactor-decision-lock",
+      "path": "/Users/admin/.codex/skills/refactor-decision-lock/SKILL.md",
+      "tags": [
+        "refactor",
+        "decision",
+        "lock",
+        "final",
+        "before",
+        "wants",
+        "read",
+        "candidate",
+        "shortlist",
+        "pressure"
+      ]
+    },
+    {
+      "description": "Use when Task Flow scheduler-bridge rows or Workspaceboard scheduler wrappers look stale, orphaned, duplicated, or misclassified; verify the DB-backed Task Flow record, handoff packet, and live route state, then convert residue into a real routed lane, a truthful wait, or one exact blocker.",
+      "name": "scheduler-bridge-residue-normalization",
+      "path": "/Users/admin/.codex/skills/scheduler-bridge-residue-normalization/SKILL.md",
+      "tags": [
+        "scheduler",
+        "bridge",
+        "residue",
+        "normalization",
+        "task",
+        "flow",
+        "rows",
+        "workspaceboard",
+        "wrappers",
+        "look"
+      ]
+    },
+    {
+      "description": "Perform language and framework specific security best-practice reviews and suggest improvements. Trigger only when the user explicitly requests security best practices guidance, a security review/report, or secure-by-default coding help. Trigger only for supported languages (python, javascript/typescript, go). Do not trigger for general code review, debugging, or non-security tasks.",
+      "name": "security-best-practices",
+      "path": "/Users/admin/.codex/skills/security-best-practices/SKILL.md",
+      "tags": [
+        "security",
+        "best",
+        "practices",
+        "trigger",
+        "only",
+        "review",
+        "perform",
+        "language",
+        "framework",
+        "specific"
+      ]
+    },
+    {
+      "description": "Analyze git repositories to build a security ownership topology (people-to-file), compute bus factor and sensitive-code ownership, and export CSV/JSON for graph databases and visualization. Trigger only when the user explicitly wants a security-oriented ownership or bus-factor analysis grounded in git history (for example: orphaned sensitive code, security maintainers, CODEOWNERS reality checks for risk, sensitive hotspots, or ownership clusters). Do not trigger for general maintainer lists or non-security ownership questions.",
+      "name": "security-ownership-map",
+      "path": "/Users/admin/.codex/skills/security-ownership-map/SKILL.md",
+      "tags": [
+        "ownership",
+        "security",
+        "map",
+        "sensitive",
+        "git",
+        "bus",
+        "factor",
+        "code",
+        "trigger",
+        "analyze"
+      ]
+    },
+    {
+      "description": "Repository-grounded threat modeling that enumerates trust boundaries, assets, attacker capabilities, abuse paths, and mitigations, and writes a concise Markdown threat model. Trigger only when the user explicitly asks to threat model a codebase or path, enumerate threats/abuse paths, or perform AppSec threat modeling. Do not trigger for general architecture summaries, code review, or non-security design work.",
+      "name": "security-threat-model",
+      "path": "/Users/admin/.codex/skills/security-threat-model/SKILL.md",
+      "tags": [
+        "threat",
+        "model",
+        "security",
+        "modeling",
+        "abuse",
+        "paths",
+        "trigger",
+        "repository",
+        "grounded",
+        "that"
+      ]
+    },
+    {
+      "description": "Guide for creating effective skills. This skill should be used when users want to create a new skill (or update an existing skill) that extends Codex's capabilities with specialized knowledge, workflows, or tool integrations.",
+      "name": "skill-creator",
+      "path": "/Users/admin/.codex/skills/.system/skill-creator/SKILL.md",
+      "tags": [
+        "skill",
+        "creator",
+        "skills",
+        "users",
+        "guide",
+        "creating",
+        "effective",
+        "this",
+        "should",
+        "used"
+      ]
+    },
+    {
+      "description": "Install Codex skills into $CODEX_HOME/skills from a curated list or a GitHub repo path. Use when a user asks to list installable skills, install a curated skill, or install a skill from another repo (including private repos).",
+      "name": "skill-installer",
+      "path": "/Users/admin/.codex/skills/.system/skill-installer/SKILL.md",
+      "tags": [
+        "skill",
+        "installer",
+        "skills",
+        "install",
+        "curated",
+        "list",
+        "repo",
+        "home",
+        "github",
+        "path"
+      ]
+    },
+    {
+      "description": "Use when downloading Square Dashboard monthly sales summaries, Square payroll-period tips summaries, or matching OnPay payroll-register files for BID finance/import workflows. Follow the BID manual at https://bid.koval.lan/bid/views/manual.php or /Users/werkstatt/bid/views/manual.php, preserve credential/MFA guardrails, stage files in the documented BID intelligence folders, and verify source health without exposing secrets.",
+      "name": "square-bid-downloads",
+      "path": "/Users/admin/.codex/skills/square-bid-downloads/SKILL.md",
+      "tags": [
+        "bid",
+        "square",
+        "downloads",
+        "manual",
+        "summaries",
+        "payroll",
+        "files",
+        "views",
+        "php",
+        "users"
+      ]
+    },
+    {
+      "description": "Diagnose and reduce token-heavy Codex work. Use when the user asks why usage/tokens were high, what consumed usage over a time window, how to avoid token burn, or asks to inspect session/log/transcript usage without spending many more tokens.",
+      "name": "token-budget-diagnostics",
+      "path": "/Users/admin/.codex/skills/token-budget-diagnostics/SKILL.md",
+      "tags": [
+        "token",
+        "budget",
+        "diagnostics",
+        "usage",
+        "asks",
+        "tokens",
+        "diagnose",
+        "reduce",
+        "heavy",
+        "work"
+      ]
+    },
+    {
+      "description": "Use when Workspaceboard shows stale blocked, waiting, or working sessions that may be residue rather than real live work; verify the live board, session history, and proof surfaces, then close, downgrade, or refresh only with source-backed evidence.",
+      "name": "workspaceboard-stale-session-cleanup",
+      "path": "/Users/admin/.codex/skills/workspaceboard-stale-session-cleanup/SKILL.md",
+      "tags": [
+        "workspaceboard",
+        "stale",
+        "session",
+        "cleanup",
+        "live",
+        "shows",
+        "blocked",
+        "waiting",
+        "working",
+        "sessions"
+      ]
+    },
+    {
+      "description": "Use when Workspaceboard counts, stat cards, top-level API fields, or read-model summaries look inconsistent, null, or misleading; verify the live `/api/stats` and `/api/status` payloads against the DB-backed read model, then patch the mapping or counting logic so the UI reflects the real queue state.",
+      "name": "workspaceboard-stats-read-model",
+      "path": "/Users/admin/.codex/skills/workspaceboard-stats-read-model/SKILL.md",
+      "tags": [
+        "read",
+        "model",
+        "workspaceboard",
+        "stats",
+        "api",
+        "counts",
+        "stat",
+        "cards",
+        "top",
+        "level"
+      ]
+    },
+    {
+      "description": "Publish local changes to GitHub by confirming scope, committing intentionally, pushing the branch, and opening a draft PR through the GitHub app from this plugin, with `gh` used only as a fallback where connector coverage is insufficient.",
+      "name": "yeet",
+      "path": "/Users/admin/.codex/plugins/cache/openai-curated/github/ed8ce2ea/skills/yeet/SKILL.md",
+      "tags": [
+        "yeet",
+        "github",
+        "publish",
+        "local",
+        "changes",
+        "confirming",
+        "scope",
+        "committing",
+        "intentionally",
+        "pushing"
+      ]
+    }
+  ],
+  "source_roots": [
+    "/Users/admin/.codex/skills",
+    "/Users/admin/.codex/plugins/cache"
+  ]
+}

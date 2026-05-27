@@ -99,3 +99,7 @@ Additional re-date pass:
 - 33 Codex/Frank-scoped overdue rows were moved into a staggered June `2026-06-01` through `2026-06-09` review schedule with notification suppressed and a note on each task saying this was backlog triage, not completion.
 - 14 Naomi/Ezra/Vanessa persona-worker overdue rows were moved into a staggered June `2026-06-10` through `2026-06-14` review schedule with notification suppressed and a note on each task saying this was backlog triage, not completion.
 - Final readback after the re-date pass: `remaining_overdue_ai_worker_scope=0` for user ids `1332` Codex, `1343` Vanessa, `1344` Ezra, `1345` Naomi, and `1346` Frank.
+
+## 2026-05-27 c0053058 readback
+
+- 2026-05-27 18:23 CDT: Rechecked the live local OPS task filter using `workflow_load_tasks` with `filter=overdue-oldest`, AI-worker `all`, completed excluded, and limit 500. Readback returned `count=0`, so the overdue AI-worker backlog cleanup packet is proof-backed complete for the current OPS source. Workspaceboard session `c0053058` can close with proof marker `ops-overdue-ai-worker-count-0-2026-05-27-1823`.

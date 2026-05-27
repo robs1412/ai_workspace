@@ -38,3 +38,26 @@ Retry succeeded after the OPS helper path recovered:
 
 1. Wait for Claude's reply on `Skill semantic router question`.
 2. Build the first Codex skill index/router from Claude's readback under OPS task `370302`, keeping diagnostics metadata-first and avoiding full catalog prompt injection.
+
+## 2026-05-27 18:23 CDT Implementation
+
+Claude's reply was found in Frank runtime proof:
+
+- Source Message-ID: `<3e097d60f906a33671a657b2623fff0a.claude@kovaldistillery.com>`
+- Subject: `Re: Skill semantic router question`
+- Runtime summary: no vector database; two-tier lazy loading; the LLM acts as router.
+- Frank proof: `/Users/admin/.frank-launch/state/email-trace-events.jsonl` logged the reply at `2026-05-27T10:25:37-0500`; `/Users/admin/.frank-launch/state/automation-log.jsonl` recorded the source filed to `Handled` at `2026-05-27T10:26:03-0500`.
+
+Built the first repo-local Codex skill router:
+
+- Script: `scripts/codex_skill_router.py`
+- Index: `project_hub/artifacts/codex-skill-router/skill-index.json`
+- Notes: `project_hub/artifacts/codex-skill-router/README.md`
+
+Verification:
+
+- `/usr/local/bin/python3.13 scripts/codex_skill_router.py build` returned `skill_count=39` and `body_loaded=false`.
+- Query `Workspaceboard stats read model mismatch top-level api fields` returned `workspaceboard-stats-read-model` as the top candidate.
+- Query `create or update a Codex skill for a reusable workflow` returned `skill-creator` as the top candidate.
+
+The implementation keeps retrieval metadata-only and reads the selected `SKILL.md` body only through the explicit `show` command.
