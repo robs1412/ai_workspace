@@ -1,11 +1,11 @@
 # Task Flow Truth Drift Check
 
-- Recorded: 2026-05-26 19:15:20
+- Recorded: 2026-05-26 19:17:12
 - Config: `/Users/werkstatt/ai_workspace/scripts/task_flow_truth_surfaces.json`
 - Board ok: `True`
 - Managed sessions: `18`
 - Task Flow rows scanned: `500`
-- Proof rows scanned: `32`
+- Proof rows scanned: `31`
 - Drift count: `0`
 
 ## Summary

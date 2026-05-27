@@ -5,7 +5,7 @@
   "drifts": [],
   "managed_sessions": 18,
   "proof_closeout_issues": 2,
-  "proof_rows_scanned": 32,
+  "proof_rows_scanned": 31,
   "scheduler_route_candidates": 0,
   "scheduler_violations": 0,
   "task_flow_rows_scanned": 500
