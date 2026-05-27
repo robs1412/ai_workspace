@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import subprocess
 import sys
 import urllib.request
@@ -41,6 +42,16 @@ class Drift:
 def safe_text(value: object, limit: int = 220) -> str:
     text = " ".join(str(value or "").split())
     return text[:limit]
+
+
+NON_SESSION_REF = re.compile(
+    r"^(none|n/a|not_applicable|ai|task|manager|direct|runtime|queued|start_or_reuse)",
+    re.IGNORECASE,
+)
+
+
+def is_session_ref(value: str) -> bool:
+    return value != "" and NON_SESSION_REF.search(value) is None
 
 
 def load_json_path(path: Path) -> dict:
@@ -85,16 +96,19 @@ def load_board_sessions(config: dict, timeout: float) -> tuple[dict, dict[str, d
 
 
 def normalize_session_refs(item: dict) -> list[str]:
-    refs = []
-    direct = safe_text(item.get("workspaceboard_session") or item.get("session_id"), 80)
-    if direct:
-        refs.append(direct)
     raw_refs = item.get("workspaceboard_session_refs")
     if isinstance(raw_refs, list):
+        refs = []
         for ref in raw_refs:
             text = safe_text(ref, 80)
-            if text:
+            if is_session_ref(text):
                 refs.append(text)
+    else:
+        refs = []
+        direct = safe_text(item.get("workspaceboard_session") or item.get("session_id"), 80)
+        if is_session_ref(direct):
+            refs.append(direct)
+
     seen = set()
     ordered = []
     for ref in refs:

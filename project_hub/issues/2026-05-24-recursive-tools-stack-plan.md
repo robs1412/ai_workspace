@@ -160,6 +160,12 @@ Assess whether recursive tooling belongs in the Codex stack, publish a durable r
   - planned routes: `GET /api/tasks/{id}/proof` and `GET /api/proof?plan_guid={guid}`.
   - Papers update: `https://papers.koval.lan/9b30d986-1191-4629-9d17-0c84e0ae1bea`
   - local blocker: Codex curl probes to `https://planner.koval.lan/api/tasks/1725` and `/chain` timed out from this workstation.
+- 2026-05-26 truth-drift harness follow-up is complete:
+  - source: `project_hub/recursive-runs/truth-drift-harness-001/run-report.md`
+  - issue found: five `active_missing_board_session` findings were false positives caused by source-channel/planned-action labels being treated as real Workspaceboard session ids.
+  - fix: `scripts/task_flow_truth_drift_check.py` now trusts normalized `workspaceboard_session_refs` when present; `workspaceboard/scripts/workspaceboard_db_recorder.php` source and installed runtime copy now suppress `start_or_reuse...` planned-action labels from session refs.
+  - verification: `/usr/local/bin/python3.13 scripts/task_flow_truth_drift_check.py --fail-on-drift` returned `drift_count=0`; `py_compile` and `php -l` passed.
+  - Task Flow packet: `taskflow-truth-drift-false-positive-repair-2026-05-26`.
 
 ## Rollback Plan
 
