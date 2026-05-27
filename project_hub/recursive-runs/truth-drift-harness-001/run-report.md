@@ -1,9 +1,11 @@
 # Recursive Run truth-drift-harness-001
 
-- updated_at: `2026-05-26 17:20:11 CDT`
+- updated_at: `2026-05-26 20:10:56 CDT`
 - surface: `scripts/task_flow_truth_drift_check.py`
 - metric: `drift_count`
 - evaluator: `/usr/local/bin/python3.13 scripts/task_flow_truth_drift_check.py --fail-on-drift`
+- worktree: `worktree`
+- worktree_state: `owned_git_worktree`
 
 ## Attempts
 

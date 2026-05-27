@@ -75,6 +75,10 @@ def report_path(run_id: str) -> Path:
     return run_dir(run_id) / "run-report.md"
 
 
+def worktree_path(run_id: str) -> Path:
+    return run_dir(run_id) / "worktree"
+
+
 def normalize_surface(surface: str) -> str:
     raw = Path(surface)
     if raw.is_absolute():
@@ -142,9 +146,62 @@ def find_attempt(rows: list[dict[str, str]], attempt_id: str) -> dict[str, str]:
     raise ValueError(f"attempt not found: {attempt_id}")
 
 
+def git_output(args: list[str], cwd: Path = WORKSPACE_ROOT) -> str:
+    completed = subprocess.run(
+        ["git", *args],
+        cwd=str(cwd),
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        check=False,
+    )
+    if completed.returncode != 0:
+        raise RuntimeError((completed.stderr or completed.stdout).strip() or f"git {' '.join(args)} failed")
+    return completed.stdout.strip()
+
+
+def is_empty_dir(path: Path) -> bool:
+    return path.is_dir() and not any(path.iterdir())
+
+
+def owned_worktree_ok(path: Path) -> bool:
+    if not path.exists():
+        return False
+    try:
+        top = Path(git_output(["rev-parse", "--show-toplevel"], cwd=path)).resolve()
+    except RuntimeError:
+        return False
+    return top == path.resolve() and (path / ".git").exists()
+
+
+def ensure_owned_worktree(run_id: str) -> Path:
+    path = worktree_path(run_id)
+    if owned_worktree_ok(path):
+        return path
+    if path.exists():
+        if is_empty_dir(path):
+            path.rmdir()
+        else:
+            raise ValueError(f"worktree path exists but is not an owned Git worktree: {path}")
+    path.parent.mkdir(parents=True, exist_ok=True)
+    branch = f"recursive/{run_id}"
+    existing_branches = git_output(["branch", "--format=%(refname:short)"]).splitlines()
+    command = ["worktree", "add"]
+    if branch in existing_branches:
+        command.extend([str(path), branch])
+    else:
+        command.extend(["-b", branch, str(path), "HEAD"])
+    git_output(command)
+    if not owned_worktree_ok(path):
+        raise RuntimeError(f"failed to create owned Git worktree at {path}")
+    return path
+
+
 def update_run_report(run_id: str) -> None:
     evaluator = load_evaluator(run_id)
     rows = read_attempts(run_id)
+    worktree = worktree_path(run_id)
+    worktree_state = "owned_git_worktree" if owned_worktree_ok(worktree) else "missing_or_unowned"
     lines = [
         f"# Recursive Run {run_id}",
         "",
@@ -152,6 +209,8 @@ def update_run_report(run_id: str) -> None:
         f"- surface: `{evaluator.surface}`",
         f"- metric: `{evaluator.metric}`",
         f"- evaluator: `{evaluator.evaluator}`",
+        f"- worktree: `{worktree.relative_to(run_dir(run_id))}`",
+        f"- worktree_state: `{worktree_state}`",
         "",
         "## Attempts",
         "",
@@ -188,7 +247,6 @@ def cmd_init(args: argparse.Namespace) -> int:
     directory = run_dir(run_id)
     directory.mkdir(parents=True, exist_ok=True)
     (directory / "proofs").mkdir(exist_ok=True)
-    (directory / "worktree").mkdir(exist_ok=True)
 
     existing_path = evaluator_path(run_id)
     if existing_path.exists():
@@ -223,8 +281,9 @@ def cmd_init(args: argparse.Namespace) -> int:
             encoding="utf-8",
         )
     ensure_attempts_file(attempts_path(run_id))
+    owned_worktree = ensure_owned_worktree(run_id)
     update_run_report(run_id)
-    print(json.dumps({"ok": True, "run_dir": str(directory), "surface": surface}, indent=2))
+    print(json.dumps({"ok": True, "run_dir": str(directory), "surface": surface, "worktree": str(owned_worktree)}, indent=2))
     return 0
 
 
@@ -374,7 +433,7 @@ def main(argv: list[str]) -> int:
     try:
         args = parse_args(argv)
         return int(args.func(args))
-    except (FileNotFoundError, ValueError, subprocess.TimeoutExpired) as exc:
+    except (FileNotFoundError, RuntimeError, ValueError, subprocess.TimeoutExpired) as exc:
         print(json.dumps({"ok": False, "error": str(exc)}, indent=2), file=sys.stderr)
         return 2
 

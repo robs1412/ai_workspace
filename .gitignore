@@ -39,6 +39,7 @@ recordings/
 LOG_imapsync/
 sync_backups/
 sandboxes/
+project_hub/recursive-runs/*/worktree/
 
 # Frank dry-run completion-confirmation artifacts
 frank/completion-confirmation-log.jsonl
