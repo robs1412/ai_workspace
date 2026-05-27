@@ -1,0 +1,2 @@
+attempt_id	hypothesis	surface	metric	status	proof	reason
+add-status-command-20260526	Adding a read-only status command will make recursive application cycles easier to inspect without changing evaluator or shared state.	scripts/recursive_experiment_harness.py	0	keep	proofs/add-status-command-20260526.json	Kept: evaluator passed in owned worktree and status output gives useful run/worktree/attempt readback for future recursive cycles.
