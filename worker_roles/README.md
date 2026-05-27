@@ -1,7 +1,7 @@
 # Worker Roles Directory
 
 Status: source-of-truth role reference
-Updated: 2026-05-19 CDT
+Updated: 2026-05-27 CDT
 
 This folder is the durable role reference for the Codex / Claude worker system. Keep role definitions, personas, call patterns, and boundaries here so the organigram and Workspaceboard can point back to a single source of truth.
 
@@ -51,6 +51,7 @@ These sources improve context and consistency. They do not authorize workers to 
 - Task Manager Center
 - Task Manager Direct Support
 - Monitoring / Coordination
+- Quality / Judgment
 - Codex / Local
 - Execution / Workspace Workers
 - Email / Communications
@@ -63,3 +64,9 @@ These sources improve context and consistency. They do not authorize workers to 
 ## Usage Rule
 
 When a role changes, update the role doc, the persona file if one exists, the routing references, and the organigram/README summary together. Avoid partial updates that leave the directory inconsistent.
+
+## Recent Role Additions
+
+- `tester-agent.md`: independent verification role that Codex or Claude can invoke before closeout.
+- `sanity-reality-checker.md`: practical senior-professional challenge role for questionable plans.
+- `consigliere.md`: Robert-facing advisory escalation role when a direction seems off or should be rerouted.
