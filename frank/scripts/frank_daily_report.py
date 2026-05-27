@@ -19,6 +19,7 @@ from typing import Any
 
 DEFAULT_TO = "robert@kovaldistillery.com"
 REPORT_PREFIX = "Frank"
+DEFAULT_HEALTH_JSON = Path("/Users/werkstatt/ai_workspace/tmp/ai-health-manager/latest.json")
 ACTIVE_SECTIONS = {"In Progress", "Waiting for Next Step", "Backlog"}
 DONE_SECTION = "Done"
 STALE_DONE_RE = re.compile(
@@ -190,11 +191,40 @@ def load_papers_links(path: Path | None) -> list[tuple[str, str]]:
     return links
 
 
+def load_token_usage_section(path: Path | None) -> list[str]:
+    if not path:
+        return []
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except (FileNotFoundError, json.JSONDecodeError, OSError):
+        return []
+    token_usage = data.get("token_usage_check") if isinstance(data, dict) else None
+    if not isinstance(token_usage, dict):
+        return []
+    window = token_usage.get("window_hours") or 24
+    lines = [
+        f"- Window: past {window} hours.",
+        f"- Codex prompt entries: {token_usage.get('prompt_count', 0)}.",
+        f"- Codex session files: {token_usage.get('session_file_count', 0)} totaling about {token_usage.get('session_mb', 0)} MB.",
+        f"- Sampled sessions with AGENTS.md startup context: {token_usage.get('agents_context_files_sampled', 0)}.",
+        f"- Status: {token_usage.get('status', 'not-recorded')}.",
+    ]
+    keyword_counts = token_usage.get("keyword_counts") if isinstance(token_usage.get("keyword_counts"), dict) else {}
+    if keyword_counts:
+        top = ", ".join(f"{key}: {value}" for key, value in list(keyword_counts.items())[:5])
+        lines.append(f"- Repeated prompt markers: {top}.")
+    reasons = token_usage.get("reasons") if isinstance(token_usage.get("reasons"), list) else []
+    if reasons:
+        lines.append(f"- Health note: {'; '.join(str(reason) for reason in reasons[:3])}.")
+    lines.append("- Measurement is metadata-derived from local Codex history/session files; exact billing token counters are not available locally.")
+    return lines
+
+
 def format_ref(item: TodoItem | DoneItem) -> str:
     return f"Frank TODO line {item.line}"
 
 
-def render_morning(items: list[TodoItem], target: date) -> str:
+def render_morning(items: list[TodoItem], target: date, token_usage_lines: list[str]) -> str:
     lines = [
         f"To: {DEFAULT_TO}",
         f"Subject: {REPORT_PREFIX} morning priorities: {target.isoformat()}",
@@ -208,6 +238,9 @@ def render_morning(items: list[TodoItem], target: date) -> str:
         lines.append("- No active Frank TODO item passed the pending-work selector.")
     for item in items:
         lines.append(f"- {item.text} ({item.section}; {format_ref(item)})")
+    if token_usage_lines:
+        lines.extend(["", "Token usage, past 24 hours:", ""])
+        lines.extend(token_usage_lines)
     lines.extend(
         [
             "",
@@ -275,6 +308,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--todo", default=str(workspace_root() / "TODO.md"))
     parser.add_argument("--limit", type=int, default=8)
     parser.add_argument("--papers-metadata-file", default="", help="Optional approved JSON metadata.")
+    parser.add_argument("--health-json", default=str(DEFAULT_HEALTH_JSON), help="Optional AI Health latest.json for token usage section.")
     parser.add_argument("--output", default="", help="Optional output draft path.")
     parser.add_argument("--preview-only", action="store_true", help="Print without writing a draft.")
     parser.add_argument("--json", action="store_true", help="Print JSON summary.")
@@ -297,12 +331,14 @@ def main(argv: list[str] | None = None) -> int:
 
     output_path = Path(args.output).expanduser() if args.output else None
     papers_path = Path(args.papers_metadata_file).expanduser() if args.papers_metadata_file else None
+    health_path = Path(args.health_json).expanduser() if args.health_json else None
     report_type = args.type
     selected: list[dict[str, Any]]
 
     if report_type == "morning":
         items = collect_active_items(todo_text, target, args.limit)
-        body = render_morning(items, target)
+        token_usage_lines = load_token_usage_section(health_path)
+        body = render_morning(items, target, token_usage_lines)
         selected = [
             {"line": item.line, "section": item.section, "score": item.score, "text": item.text}
             for item in items

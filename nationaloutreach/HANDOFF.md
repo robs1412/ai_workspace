@@ -1,5 +1,61 @@
 # National Outreach Handoff
 
+## 2026-05-27 CFF Corks & Kegs confirmation reply closed
+
+- Workspaceboard session `38ff174f` handled Task Flow scheduler bridge packet `taskflow-c653dc07e8dc4449` from Emily Hanna's same-thread confirmation on `Re: CFF Corks & Kegs 2026`.
+- Source-first readback: Emily confirmed the vendor timing Vanessa found was correct and said Averey will follow up with more logistics closer to the event.
+- Live OPS readback still shows event `987`, `CFF Corks & Kegs 2026`, Outreach, `2026-11-20 18:00-23:00`, Artifact Events, with linked unassigned shift `5541` from `16:30-23:00` and `assigned_count=0`.
+- Vanessa sent a normal same-thread acknowledgement to Emily, cc Robert, Sonat, and Averey. Sent Message-ID: `<177989112992.74991.12813333683653031788@kovaldistillery.com>`.
+- Runtime archive proof moved Emily's inbound reply out of INBOX with reason `later_reply_found`.
+- Task Flow closeout: `closed_with_proof`; proof marker `CFF_CORKS_KEGS_2026_EMILY_ACK_MSG_<177989112992.74991.12813333683653031788@kovaldistillery.com>_OPS987_SHIFT5541_ARCHIVED`. No new OPS mutation or owner question was needed. The prior Google Calendar sync blocker remains only for the OPS usable-refresh-token path.
+
+## 2026-05-27 overdue COT weekly report draft created; Portal submit blocked
+
+- Workspaceboard session `b096524c` handled Task Flow packet `taskflow-876d63c991014cfb` from the Portal overdue report notice `Overdue Reports Summary - May 27, 2026`, source Message-ID `<d366365c6da3e0ed7486ef728aaecd2e@koval-distillery.com>`.
+- Source-first readback:
+  - Portal notification `6147835` is for `COT Activity - Weekly`, user `Agent Codex`, period `2026-05-18` through `2026-05-24`; live notification readback showed it still open with `submitted_at=null`.
+  - Portal source data for the period returned `100` activity rows, `16` tasting rows, `337` visitors, `44` products sold, and `0` invoice rows.
+  - Portal report draft `7989` was created for category `56`, department `6`, period `2026-05-18` through `2026-05-24`; after repair readback confirmed the draft content contains `COT Activity - Weekly Report`, does not contain the temporary probe text, and remains `submitted=0`.
+- Exact blocker:
+  - `blocker-email-required`: Portal submit for report `7989` could not be completed. The Portal submit endpoint returned HTTP 500 with `Error occurred while submitting report!`, and the fallback service login is gated by the mandatory Portal password reset path. Reviewer notifications and notification-row closure did not occur.
+  - Owner question: restore or refresh the approved Codex Portal submit path, or clear the service-account password reset/session gate, so report `7989` can be submitted through Portal and reviewer notifications can be sent.
+
+## 2026-05-26 scheduler bridge self-sent activity review reply closed as no-action
+
+- Workspaceboard session `728ea74f` reviewed Task Flow scheduler bridge packet `taskflow-676ff477fce3ce36`, source Message-ID `<177985489821.83620.11882135761091219684@kovaldistillery.com>`, subject `Re: 48-hour activity review for outreach tastings from Sunday, May 24`.
+- Source-first proof:
+  - The source is Vanessa's self-sent reply/copy on the already-handled 48-hour Sunday May 24 activity review thread, not a fresh owner request.
+  - The underlying activity-review lane `taskflow-14bf6fddeb127caf` already verified Portal activities `370212`, `370203`, `370206`, and `370211` for OPS events `953`, `899`, `772`, and `954`.
+  - Runtime archive proof logged the reply copy at `2026-05-26T23:08:33-0500` with reason `self_sent_inbox_copy`, and email trace later showed it resolved out of INBOX.
+- Exact closeout: `no-action/filed`; proof marker `OUTREACH_48H_20260524_REPLY_COPY_ARCHIVED_ACTIVITIES_370212_370203_370206_370211`. No owner question, staff reminder, OPS mutation, or extra email was needed.
+
+## 2026-05-26 48-hour Sunday May 24 activity review completed
+
+- Workspaceboard session `1e9b7c5c` handled Task Flow scheduler bridge packet `taskflow-14bf6fddeb127caf` from Vanessa's self-sent `48-hour activity review for outreach tastings from Sunday, May 24`.
+- Source-first readback:
+  - Runtime scheduled action `vanessa-post-tasting-activity-review-2026-05-26-2300` sent the reminder at `2026-05-26 23:00 CDT`, Message-ID `<177985443661.80164.5532515638581984949@kovaldistillery.com>`, for OPS task `368771` and OPS events `953`, `899`, `772`, and `954`.
+  - Runtime archive proof moved the self-sent inbox copy out of INBOX at `2026-05-26T23:02:20-0500` with reason `self_sent_inbox_copy`.
+  - Dry-run helper initially found OPS account links missing for events `953`, `772`, and `954`; manual exact account/location Portal readback found the right accounts and existing activities.
+- Portal activity proof:
+  - OPS event `953` / Paulina Meat Market -> Portal activity `370212`, account `44998`, creator `1342`.
+  - OPS event `899` / Wild Onion Market -> Portal activity `370203`, account `305888`, creator `1331`.
+  - OPS event `772` / Mariano's - Lombard (543) -> Portal activity `370206`, account `89925`, creator `1338`.
+  - OPS event `954` / Gene's Sausage Shop Lincoln -> Portal activity `370211`, account `629`, creator `1342`.
+- Exact closeout: `completed_with_proof`; no staff reminder, owner question, or external send needed. Task Flow rows `taskflow-14bf6fddeb127caf` and `taskflow-605479595e5b6721` were recorded complete with proof marker `OUTREACH_48H_20260524_ACTIVITIES_370212_370203_370206_370211_SELF_COPY_ARCHIVED`.
+- Follow-up session `51d4fadf` normalized the remaining scheduler bridge wrapper by sending the required same-thread proof reply from Vanessa to Vanessa with Robert copied. Sent Message-ID: `<177985489821.83620.11882135761091219684@kovaldistillery.com>`.
+- Runtime archive proof then filed both self-sent inbox copies: original reminder `<177985443661.80164.5532515638581984949@kovaldistillery.com>` at `2026-05-26T23:02:20-0500` and completion copy `<177985489821.83620.11882135761091219684@kovaldistillery.com>` at `2026-05-26T23:08:33-0500`, both with reason `self_sent_inbox_copy`.
+- Task Flow packet `taskflow-14bf6fddeb127caf` now reads `closed_with_proof` with proof marker `ACTIVITY_REVIEW_2026_05_24_PORTAL_IDS_370212_370203_370206_370211_MSG_177985489821_ARCHIVED_SELF_COPIES`.
+
+## 2026-05-26 CFF Corks & Kegs 2026 OPS event and shift completed
+
+- Workspaceboard session `1b268b22` handled Task Flow scheduler bridge packet `taskflow-7f7aa92cb40bf03a` from Robert's `Fwd: CFF Corks & Kegs 2026`.
+- Source readback showed Robert asked Vanessa to confirm KOVAL participation, add the event in OPS, and add an unassigned shift.
+- Live OPS event readback: event `987`, `CFF Corks & Kegs 2026`, Outreach, `2026-11-20 18:00-23:00`, `Artifact Events, 4325 N Ravenswood Ave, Chicago, IL 60613`, contact `Emily Hanna <ehanna@cff.org>`, estimated guest count `350`, created by Codex user `1332`.
+- Linked shift readback: shift `5541`, linked by `event_booking_shift_links.id=309`, `2026-11-20 16:30-23:00`, notes `Outreach: CFF Corks & Kegs 2026 - unassigned setup/event coverage`, `assigned_count=0`, created by Codex user `1332`.
+- Vanessa sent Emily a normal business reply confirming KOVAL will participate, with Robert and Sonat cc'd. Sent Message-ID: `<177984567772.28395.5851350575543583499@kovaldistillery.com>`. A follow-up reply then used the located vendor timing and confirmed the details; sent Message-ID `<177984587351.29992.849761412299018116@kovaldistillery.com>`.
+- Google sync was attempted and blocked by OPS with exact error `Google OAuth has no usable refresh token.` Vanessa sent Robert and Sonat the completion/blocker closeout with the live OPS URL. Sent Message-ID: `<177984595426.30847.15272538384831913537@kovaldistillery.com>`.
+- The original Robert forward was moved out of INBOX to All Mail with archive reason `completed_ops_event_shift_owner_closeout`. Task Flow was updated to `completed`, and Workspaceboard session `1b268b22` was closed with proof marker `OPS_EVENT_987_SHIFT_5541_UNASSIGNED_CONFIRMED_MSG_<177984567772.28395.5851350575543583499@kovaldistillery.com>_OWNER_CLOSEOUT_MSG_<177984595426.30847.15272538384831913537@kovaldistillery.com>_GOOGLE_SYNC_BLOCKED_NO_USABLE_REFRESH_TOKEN_ARCHIVED`.
+
 ## 2026-05-26 Chi Town Food & Liquor OPS 986 Google sync blocker reported
 
 - Workspaceboard session `c869a1ed` handled Robert's follow-up on `Re: Koval Tasting for ChiTown Liquors` / Task Flow packet `taskflow-3d0fa6fd6504d3da`.

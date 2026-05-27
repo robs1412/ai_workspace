@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+from collections import Counter
 import json
 import os
 import re
@@ -11,6 +12,7 @@ import signal
 import shlex
 import subprocess
 import sys
+import tempfile
 import time
 import urllib.error
 import urllib.parse
@@ -55,6 +57,14 @@ DEFAULT_WORKER_SUMMARY_ESCALATION_COOLDOWN_SECONDS = 6 * 60 * 60
 DEFAULT_WORKER_SUMMARY_ESCALATION_MAX_EMAILS = 4
 DEFAULT_WAITING_OWNER_EMAIL_MINUTES = 60
 DEFAULT_STALE_TASK_CLEANUP_INTERVAL_SECONDS = 15 * 60
+DEFAULT_HOST_TMUX_ORPHAN_THRESHOLD = 5
+DEFAULT_HOST_TMUX_ORPHAN_CLEANUP_BATCH_SIZE = 12
+DEFAULT_TMUX_SOCKET = Path(tempfile.gettempdir()) / f"cdxdash-{os.getuid()}" / "tmux.sock"
+DEFAULT_CODEX_HOME = Path("/Users/admin/.codex")
+DEFAULT_TOKEN_USAGE_WINDOW_HOURS = 24
+DEFAULT_TOKEN_USAGE_INTERVAL_SECONDS = 15 * 60
+DEFAULT_TOKEN_USAGE_SESSION_COUNT_THRESHOLD = 120
+DEFAULT_TOKEN_USAGE_SESSION_BYTES_THRESHOLD = 50 * 1024 * 1024
 DEFAULT_OWNER_REPLY_TIMEOUT_SECONDS = 2 * 60
 DEFAULT_OWNER_REPLY_COOLDOWN_SECONDS = 5 * 60
 DEFAULT_OWNER_REPLY_RECENT_HOURS = 24
@@ -295,6 +305,8 @@ def build_run_timeout_report(args: argparse.Namespace, error: Exception) -> dict
         },
         "workspace_summary": {"active_workspace_count": 0, "open_item_count": 0, "workspaces": []},
         "canonical_status_line": f"ai health watchdog timeout; last run stopped before exceeding cadence: {reason}",
+        "host_tmux_orphan_check": {"status": "not-run", "action": "none", "orphan_count": 0},
+        "token_usage_check": {"status": "not-run", "action": "none", "session_file_count": 0, "session_mb": 0},
         "session_sprawl_governor": {"status": "not-run", "action": "none", "changed": 0},
         "standing_attention_minutes": DEFAULT_STANDING_ATTENTION_MINUTES,
         "daily_input_audit": {"status": "not-run", "missing_tracking_count": 0},
@@ -2951,6 +2963,267 @@ def session_sprawl_governor(args: argparse.Namespace, classification: dict, mana
     }
 
 
+def list_host_tmux_sessions(tmux_socket: Path, timeout: float) -> tuple[bool, list[dict], str]:
+    if not tmux_socket.exists():
+        return False, [], f"tmux socket not found: {tmux_socket}"
+    try:
+        result = subprocess.run(
+            ["tmux", "-S", str(tmux_socket), "list-sessions", "-F", "#{session_name}|#{session_created}|#{session_path}"],
+            capture_output=True,
+            text=True,
+            timeout=min(float(timeout), 5.0),
+            check=False,
+        )
+    except (OSError, subprocess.TimeoutExpired) as error:
+        return False, [], safe_text(error, 240)
+    if result.returncode != 0:
+        return False, [], safe_text(result.stderr or result.stdout, 240)
+    sessions: list[dict] = []
+    for line in result.stdout.splitlines():
+        name, created, path = (line.split("|", 2) + ["", ""])[:3]
+        if not name:
+            continue
+        sessions.append({
+            "name": safe_text(name, 120),
+            "created": safe_text(created, 40),
+            "path": safe_text(path, 240),
+        })
+    return True, sessions, ""
+
+
+def managed_tmux_names(status: dict) -> set[str]:
+    names: set[str] = set()
+    for session in status.get("managed_sessions", []):
+        if not isinstance(session, dict):
+            continue
+        tmux_session = str(session.get("tmux_session") or "").strip()
+        session_id = str(session.get("id") or "").strip()
+        if tmux_session:
+            names.add(tmux_session)
+        if session_id:
+            names.add(f"codex-board-{session_id}")
+    return names
+
+
+def host_tmux_orphan_check(args: argparse.Namespace, status: dict, state: dict) -> dict:
+    tmux_socket = Path(args.tmux_socket).expanduser()
+    ok, sessions, error = list_host_tmux_sessions(tmux_socket, args.timeout)
+    if not ok:
+        return {
+            "status": "failed",
+            "action": "none",
+            "socket": str(tmux_socket),
+            "session_count": 0,
+            "managed_count": len(managed_tmux_names(status)),
+            "orphan_count": 0,
+            "threshold": int(args.host_tmux_orphan_threshold),
+            "error": error,
+        }
+    managed = managed_tmux_names(status)
+    board_sessions = [item for item in sessions if str(item.get("name") or "").startswith("codex-board-")]
+    orphans = [item for item in board_sessions if item.get("name") not in managed]
+    threshold = max(0, int(args.host_tmux_orphan_threshold))
+    status_label = "passed" if len(orphans) <= threshold else "attention"
+    action = "record_only"
+    killed: list[str] = []
+    kill_errors: list[dict] = []
+    if args.enable_host_tmux_orphan_cleanup and orphans and not args.dry_run:
+        for item in orphans[: max(1, int(args.host_tmux_orphan_cleanup_batch_size))]:
+            name = str(item.get("name") or "")
+            result = subprocess.run(
+                ["tmux", "-S", str(tmux_socket), "kill-session", "-t", name],
+                capture_output=True,
+                text=True,
+                timeout=min(float(args.timeout), 5.0),
+                check=False,
+            )
+            if result.returncode == 0:
+                killed.append(name)
+            else:
+                kill_errors.append({"name": name, "error": safe_text(result.stderr or result.stdout, 180)})
+        action = "killed" if killed else "cleanup_failed"
+        status_label = "checked" if not kill_errors else "partial"
+    elif args.enable_host_tmux_orphan_cleanup and args.dry_run:
+        action = "would_kill"
+
+    check_state = state.setdefault("host_tmux_orphan_check", {})
+    check_state["last_run_at"] = iso_now()
+    check_state["last_status"] = status_label
+    check_state["last_orphan_count"] = len(orphans)
+    check_state["last_action"] = action
+    payload = {
+        "at": iso_now(),
+        "status": status_label,
+        "action": action,
+        "socket": str(tmux_socket),
+        "session_count": len(sessions),
+        "board_session_count": len(board_sessions),
+        "managed_count": len(managed),
+        "orphan_count": len(orphans),
+        "threshold": threshold,
+        "orphans": orphans[:50],
+        "killed": killed,
+        "errors": kill_errors,
+    }
+    append_jsonl(Path(args.log_dir) / "host-tmux-orphans.jsonl", payload)
+    return payload
+
+
+def codex_history_prompt_counts(history_path: Path, cutoff_epoch: float, max_lines: int = 20000) -> dict:
+    prompt_count = 0
+    prompt_chars = 0
+    keywords = Counter()
+    samples: list[str] = []
+    try:
+        with history_path.open("r", encoding="utf-8", errors="replace") as handle:
+            lines = handle.readlines()[-max_lines:]
+    except (FileNotFoundError, OSError):
+        return {
+            "prompt_count": 0,
+            "prompt_chars": 0,
+            "keyword_counts": {},
+            "sample_prompts": [],
+            "history_path": str(history_path),
+        }
+    for line in lines:
+        try:
+            row = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        if not isinstance(row, dict):
+            continue
+        ts = row.get("ts")
+        try:
+            if float(ts) < cutoff_epoch:
+                continue
+        except (TypeError, ValueError):
+            continue
+        text = str(row.get("text") or "")
+        prompt_count += 1
+        prompt_chars += len(text)
+        lowered = text.lower()
+        for marker in (
+            "avignon direct-owner intake task",
+            "workspaceboard worker lifecycle contract",
+            "activities",
+            "agents.md",
+            "task flow",
+        ):
+            if marker in lowered:
+                keywords[marker] += 1
+        if len(samples) < 5 and text:
+            samples.append(safe_text(text, 160))
+    return {
+        "prompt_count": prompt_count,
+        "prompt_chars": prompt_chars,
+        "keyword_counts": dict(keywords.most_common(10)),
+        "sample_prompts": samples,
+        "history_path": str(history_path),
+    }
+
+
+def codex_session_file_counts(sessions_dir: Path, cutoff_epoch: float, max_files: int) -> dict:
+    files: list[Path] = []
+    if sessions_dir.is_dir():
+        try:
+            for path in sessions_dir.rglob("*.jsonl"):
+                try:
+                    if path.stat().st_mtime >= cutoff_epoch:
+                        files.append(path)
+                except OSError:
+                    continue
+        except OSError:
+            files = []
+    files.sort(key=lambda path: path.stat().st_mtime if path.exists() else 0, reverse=True)
+    counted = files[:max_files]
+    total_bytes = 0
+    agents_context_files = 0
+    largest: list[dict] = []
+    for path in counted:
+        try:
+            size = path.stat().st_size
+        except OSError:
+            continue
+        total_bytes += size
+        largest.append({"path": str(path), "bytes": size})
+        try:
+            with path.open("r", encoding="utf-8", errors="replace") as handle:
+                head = handle.read(192 * 1024)
+        except OSError:
+            head = ""
+        if "AGENTS.md" in head or "AGENTS.md instructions" in head:
+            agents_context_files += 1
+    largest.sort(key=lambda item: int(item.get("bytes") or 0), reverse=True)
+    return {
+        "session_file_count": len(files),
+        "session_files_scanned": len(counted),
+        "session_bytes": total_bytes,
+        "session_mb": round(total_bytes / (1024 * 1024), 2),
+        "agents_context_files_sampled": agents_context_files,
+        "scan_truncated": len(files) > len(counted),
+        "largest_files": largest[:5],
+        "sessions_dir": str(sessions_dir),
+    }
+
+
+def token_usage_check(args: argparse.Namespace, state: dict) -> dict:
+    if not args.enable_token_usage_check:
+        return {"status": "disabled", "action": "none"}
+    token_state = state.setdefault("token_usage_check", {})
+    now_epoch = int(time.time())
+    if (
+        not args.dry_run
+        and now_epoch - int(token_state.get("last_run_epoch") or 0) < args.token_usage_interval_seconds
+        and isinstance(token_state.get("last_result"), dict)
+    ):
+        cached = dict(token_state["last_result"])
+        cached["status"] = "cooldown"
+        cached["cached"] = True
+        return cached
+    codex_home = Path(args.codex_home).expanduser()
+    cutoff_epoch = now_epoch - max(1, int(args.token_usage_window_hours)) * 60 * 60
+    sessions = codex_session_file_counts(
+        codex_home / "sessions",
+        cutoff_epoch,
+        max(1, int(args.token_usage_max_session_files)),
+    )
+    history = codex_history_prompt_counts(codex_home / "history.jsonl", cutoff_epoch)
+    session_count = int(sessions.get("session_file_count") or 0)
+    session_bytes = int(sessions.get("session_bytes") or 0)
+    status_label = "passed"
+    reasons = []
+    if session_count > args.token_usage_session_count_threshold:
+        status_label = "attention"
+        reasons.append(f"session files {session_count} > threshold {args.token_usage_session_count_threshold}")
+    if session_bytes > args.token_usage_session_bytes_threshold:
+        status_label = "attention"
+        mb = round(session_bytes / (1024 * 1024), 1)
+        threshold_mb = round(args.token_usage_session_bytes_threshold / (1024 * 1024), 1)
+        reasons.append(f"session transcript volume {mb} MB > threshold {threshold_mb} MB")
+    result = {
+        "status": status_label,
+        "action": "record_only",
+        "window_hours": int(args.token_usage_window_hours),
+        "codex_home": str(codex_home),
+        "prompt_count": int(history.get("prompt_count") or 0),
+        "prompt_chars": int(history.get("prompt_chars") or 0),
+        "session_file_count": session_count,
+        "session_files_scanned": int(sessions.get("session_files_scanned") or 0),
+        "session_mb": sessions.get("session_mb", 0),
+        "agents_context_files_sampled": int(sessions.get("agents_context_files_sampled") or 0),
+        "scan_truncated": bool(sessions.get("scan_truncated")),
+        "keyword_counts": history.get("keyword_counts", {}),
+        "largest_files": sessions.get("largest_files", []),
+        "reasons": reasons,
+        "note": "metadata-derived estimate; exact billing token counters are not available locally",
+    }
+    token_state["last_run_at"] = iso_now()
+    token_state["last_run_epoch"] = now_epoch
+    token_state["last_result"] = result
+    append_jsonl(Path(args.log_dir) / "token-usage-checks.jsonl", {"at": iso_now(), **result})
+    return result
+
+
 def canonical_status_line(report: dict) -> str:
     board = "board ok" if report.get("board", {}).get("ok") else "board down"
     management = report.get("management_health", {})
@@ -2965,9 +3238,13 @@ def canonical_status_line(report: dict) -> str:
     truth_drift = report.get("task_flow_truth_drift", {})
     recursive = report.get("recursive_proposals", {})
     claude_proof = report.get("claude_planner_proof", {})
+    tmux_orphans = report.get("host_tmux_orphan_check", {})
+    token_usage = report.get("token_usage_check", {})
     parts = [
         board,
         f"{management.get('non_standing_open_count', 0)} open work sessions",
+        f"{tmux_orphans.get('orphan_count', 0)} host tmux orphans",
+        f"{token_usage.get('session_file_count', 0)} Codex session files/{token_usage.get('session_mb', 0)} MB in {token_usage.get('window_hours', 0)}h",
         f"{management.get('standing_attention_count', 0)} standing attention",
         f"{finish.get('missing_finish_contract_count', 0)} proof/finish gaps",
         f"{finish.get('past_due_routed_count', 0)} past-due routed",
@@ -3688,6 +3965,8 @@ def write_markdown(path: Path, report: dict) -> None:
         f"- task_flow_truth_drift: `{report.get('task_flow_truth_drift', {}).get('status', 'not-recorded')}` / drift `{report.get('task_flow_truth_drift', {}).get('drift_count', 0)}` / checked `{report.get('task_flow_truth_drift', {}).get('checked', 0)}`",
         f"- recursive_proposals: `{report.get('recursive_proposals', {}).get('status', 'not-recorded')}` / pending `{report.get('recursive_proposals', {}).get('pending_approval_count', 0)}` / approved_unexecuted `{report.get('recursive_proposals', {}).get('approved_unexecuted_count', 0)}` / blocked `{report.get('recursive_proposals', {}).get('blocked_execution_count', 0)}`",
         f"- claude_planner_proof: `{report.get('claude_planner_proof', {}).get('status', 'not-recorded')}` / http `{report.get('claude_planner_proof', {}).get('http_status', 0)}` / forbidden_fields `{report.get('claude_planner_proof', {}).get('forbidden_field_count', 0)}` / proof_comments `{report.get('claude_planner_proof', {}).get('proof_comment_count', 0)}`",
+        f"- host_tmux_orphans: `{report.get('host_tmux_orphan_check', {}).get('status', 'not-recorded')}` / action `{report.get('host_tmux_orphan_check', {}).get('action', 'none')}` / orphans `{report.get('host_tmux_orphan_check', {}).get('orphan_count', 0)}`",
+        f"- token_usage: `{report.get('token_usage_check', {}).get('status', 'not-recorded')}` / prompts `{report.get('token_usage_check', {}).get('prompt_count', 0)}` / session_files `{report.get('token_usage_check', {}).get('session_file_count', 0)}` / MB `{report.get('token_usage_check', {}).get('session_mb', 0)}`",
         f"- session_sprawl_governor: `{report.get('session_sprawl_governor', {}).get('status', 'not-recorded')}` / action `{report.get('session_sprawl_governor', {}).get('action', 'none')}` / changed `{report.get('session_sprawl_governor', {}).get('changed', 0)}`",
         "",
         "## Session Counts",
@@ -3721,6 +4000,38 @@ def write_markdown(path: Path, report: dict) -> None:
             f"- `{item.get('id', '')}` {item.get('title', '')} [{item.get('status', '')}/{item.get('runtime', '')}] {item.get('reason', '')}"
         )
     sprawl = report.get("session_sprawl_governor", {})
+    tmux_orphans = report.get("host_tmux_orphan_check", {})
+    token_usage = report.get("token_usage_check", {})
+    lines.extend([
+        "",
+        "## Host Tmux Orphans",
+        f"- status: `{tmux_orphans.get('status', 'not-recorded')}`",
+        f"- action: `{tmux_orphans.get('action', 'none')}`",
+        f"- socket: `{tmux_orphans.get('socket', '')}`",
+        f"- sessions: `{tmux_orphans.get('session_count', 0)}`",
+        f"- managed: `{tmux_orphans.get('managed_count', 0)}`",
+        f"- orphans: `{tmux_orphans.get('orphan_count', 0)}`",
+        f"- threshold: `{tmux_orphans.get('threshold', 0)}`",
+    ])
+    for item in tmux_orphans.get("orphans", [])[:15]:
+        lines.append(f"- `{item.get('name', '')}` path `{item.get('path', '')}`")
+    lines.extend([
+        "",
+        "## Token Usage",
+        f"- status: `{token_usage.get('status', 'not-recorded')}`",
+        f"- action: `{token_usage.get('action', 'none')}`",
+        f"- window_hours: `{token_usage.get('window_hours', '')}`",
+        f"- prompt_count: `{token_usage.get('prompt_count', 0)}`",
+        f"- prompt_chars: `{token_usage.get('prompt_chars', 0)}`",
+        f"- session_files: `{token_usage.get('session_file_count', 0)}`",
+        f"- session_mb: `{token_usage.get('session_mb', 0)}`",
+        f"- agents_context_files_sampled: `{token_usage.get('agents_context_files_sampled', 0)}`",
+        f"- note: {token_usage.get('note', '')}",
+    ])
+    for key, count in list((token_usage.get("keyword_counts") or {}).items())[:10]:
+        lines.append(f"- keyword `{key}`: `{count}`")
+    for reason in token_usage.get("reasons", [])[:5]:
+        lines.append(f"- reason: {reason}")
     lines.extend([
         "",
         "## Session Sprawl Governor",
@@ -4127,6 +4438,33 @@ def build_report(args: argparse.Namespace) -> dict:
     workspace_summary = summarize_workspaces(status)
     state_path = Path(args.log_dir) / "state.json"
     state = load_state(state_path)
+    host_tmux_orphans = host_tmux_orphan_check(args, status, state)
+    token_usage = token_usage_check(args, state)
+    if int(host_tmux_orphans.get("orphan_count") or 0) > int(host_tmux_orphans.get("threshold") or 0):
+        management_health.setdefault("issues", []).append({
+            "id": "host-tmux-orphans",
+            "severity": "warning",
+            "title": "Workspaceboard has unmanaged tmux sessions",
+            "reason": (
+                f"host tmux orphan sessions = {host_tmux_orphans.get('orphan_count', 0)} "
+                f"(threshold {host_tmux_orphans.get('threshold', 0)})"
+            ),
+            "task_manager_action": (
+                "Stop launching duplicate workers for the same source, reconcile DB-backed wrappers first, "
+                "and run explicit orphan cleanup only after preserving managed standing sessions."
+            ),
+        })
+    if str(token_usage.get("status") or "") == "attention":
+        management_health.setdefault("issues", []).append({
+            "id": "codex-token-usage",
+            "severity": "warning",
+            "title": "Codex token-use risk is elevated",
+            "reason": "; ".join(token_usage.get("reasons") or []) or "recent Codex session volume is elevated",
+            "task_manager_action": (
+                "Stop worker fan-out, reuse existing sessions by source/dedupe key, keep diagnostics metadata-first, "
+                "and avoid launching duplicate workers that rehydrate full startup instructions."
+            ),
+        })
     sprawl_governor = session_sprawl_governor(args, classification, management_health, state)
     nudge = maybe_nudge(args, classification, state)
     daily_input_audit = audit_daily_inputs(args, state)
@@ -4165,6 +4503,8 @@ def build_report(args: argparse.Namespace) -> dict:
         "workspace_summary": workspace_summary,
         "classification": classification,
         "management_health": management_health,
+        "host_tmux_orphan_check": host_tmux_orphans,
+        "token_usage_check": token_usage,
         "session_sprawl_governor": sprawl_governor,
         "session_restart": session_restart,
         "standing_attention_minutes": args.standing_attention_minutes,
@@ -4695,6 +5035,74 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
         default=int(os.environ.get("AI_HEALTH_SESSION_SPRAWL_GOVERNOR_BATCH_SIZE", 4)),
     )
     parser.add_argument(
+        "--tmux-socket",
+        default=os.environ.get("AI_HEALTH_TMUX_SOCKET", str(DEFAULT_TMUX_SOCKET)),
+        help="Workspaceboard tmux socket used for host-level orphan checks",
+    )
+    parser.add_argument(
+        "--host-tmux-orphan-threshold",
+        type=int,
+        default=int(os.environ.get("AI_HEALTH_HOST_TMUX_ORPHAN_THRESHOLD", DEFAULT_HOST_TMUX_ORPHAN_THRESHOLD)),
+        help="warn when unmanaged codex-board tmux sessions exceed this count",
+    )
+    parser.add_argument(
+        "--enable-host-tmux-orphan-cleanup",
+        action="store_true",
+        default=os.environ.get("AI_HEALTH_ENABLE_HOST_TMUX_ORPHAN_CLEANUP", "0") == "1",
+        help="kill unmanaged codex-board tmux sessions in bounded batches; off by default",
+    )
+    parser.add_argument(
+        "--host-tmux-orphan-cleanup-batch-size",
+        type=int,
+        default=int(os.environ.get(
+            "AI_HEALTH_HOST_TMUX_ORPHAN_CLEANUP_BATCH_SIZE",
+            DEFAULT_HOST_TMUX_ORPHAN_CLEANUP_BATCH_SIZE,
+        )),
+    )
+    parser.add_argument(
+        "--disable-token-usage-check",
+        dest="enable_token_usage_check",
+        action="store_false",
+        default=os.environ.get("AI_HEALTH_ENABLE_TOKEN_USAGE_CHECK", "1") != "0",
+        help="disable metadata-only Codex token/session volume monitoring",
+    )
+    parser.add_argument(
+        "--codex-home",
+        default=os.environ.get("AI_HEALTH_CODEX_HOME", str(DEFAULT_CODEX_HOME)),
+        help="Codex state directory used for metadata-only token/session volume checks",
+    )
+    parser.add_argument(
+        "--token-usage-window-hours",
+        type=int,
+        default=int(os.environ.get("AI_HEALTH_TOKEN_USAGE_WINDOW_HOURS", DEFAULT_TOKEN_USAGE_WINDOW_HOURS)),
+    )
+    parser.add_argument(
+        "--token-usage-interval-seconds",
+        type=int,
+        default=int(os.environ.get("AI_HEALTH_TOKEN_USAGE_INTERVAL_SECONDS", DEFAULT_TOKEN_USAGE_INTERVAL_SECONDS)),
+    )
+    parser.add_argument(
+        "--token-usage-max-session-files",
+        type=int,
+        default=int(os.environ.get("AI_HEALTH_TOKEN_USAGE_MAX_SESSION_FILES", 500)),
+    )
+    parser.add_argument(
+        "--token-usage-session-count-threshold",
+        type=int,
+        default=int(os.environ.get(
+            "AI_HEALTH_TOKEN_USAGE_SESSION_COUNT_THRESHOLD",
+            DEFAULT_TOKEN_USAGE_SESSION_COUNT_THRESHOLD,
+        )),
+    )
+    parser.add_argument(
+        "--token-usage-session-bytes-threshold",
+        type=int,
+        default=int(os.environ.get(
+            "AI_HEALTH_TOKEN_USAGE_SESSION_BYTES_THRESHOLD",
+            DEFAULT_TOKEN_USAGE_SESSION_BYTES_THRESHOLD,
+        )),
+    )
+    parser.add_argument(
         "--no-board-repair",
         dest="allow_board_repair",
         action="store_false",
@@ -4765,6 +5173,8 @@ def main(argv: list[str]) -> int:
                     },
                     "workspace_summary": {"active_workspace_count": 0, "open_item_count": 0, "workspaces": []},
                     "canonical_status_line": f"board down; status check failed after repair: {safe_text(second_error, 180)}",
+                    "host_tmux_orphan_check": {"status": "not-run", "action": "none", "orphan_count": 0},
+                    "token_usage_check": {"status": "not-run", "action": "none", "session_file_count": 0, "session_mb": 0},
                     "session_sprawl_governor": {"status": "not-run", "action": "none", "changed": 0},
                     "standing_attention_minutes": DEFAULT_STANDING_ATTENTION_MINUTES,
                     "daily_input_audit": {"status": "not-run", "missing_tracking_count": 0},
@@ -4815,6 +5225,8 @@ def main(argv: list[str]) -> int:
                 },
                 "workspace_summary": {"active_workspace_count": 0, "open_item_count": 0, "workspaces": []},
                 "canonical_status_line": f"board down; status check failed: {safe_text(error, 180)}",
+                "host_tmux_orphan_check": {"status": "not-run", "action": "none", "orphan_count": 0},
+                "token_usage_check": {"status": "not-run", "action": "none", "session_file_count": 0, "session_mb": 0},
                 "session_sprawl_governor": {"status": "not-run", "action": "none", "changed": 0},
                 "standing_attention_minutes": DEFAULT_STANDING_ATTENTION_MINUTES,
                 "daily_input_audit": {"status": "not-run", "missing_tracking_count": 0},
@@ -4862,6 +5274,12 @@ def main(argv: list[str]) -> int:
         "non_standing_open": report["management_health"]["non_standing_open_count"],
         "robert_blockers": report["management_health"]["robert_blocker_count"],
         "management_issues": len(report["management_health"]["issues"]),
+        "host_tmux_orphans": report.get("host_tmux_orphan_check", {}).get("orphan_count", 0),
+        "host_tmux_orphan_action": report.get("host_tmux_orphan_check", {}).get("action", "none"),
+        "token_usage_status": report.get("token_usage_check", {}).get("status", "not-recorded"),
+        "token_usage_prompt_count": report.get("token_usage_check", {}).get("prompt_count", 0),
+        "token_usage_session_files": report.get("token_usage_check", {}).get("session_file_count", 0),
+        "token_usage_session_mb": report.get("token_usage_check", {}).get("session_mb", 0),
         "session_sprawl_governor": report.get("session_sprawl_governor", {}).get("action", "none"),
         "session_sprawl_changed": report.get("session_sprawl_governor", {}).get("changed", 0),
         "session_restart": report.get("session_restart", {}).get("status", "not-recorded"),
