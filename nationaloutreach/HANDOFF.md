@@ -1,5 +1,12 @@
 # National Outreach Handoff
 
+## 2026-05-27 Mitch weekly upcoming tastings reminder sent
+
+- Robert flagged that the Monday, 2026-05-25 upcoming tasting reminder likely had not gone to Mitch Conti and the team. Live runtime proof confirmed the Monday artifact was only the Robert approval draft, subject `Draft for approval: Mitch weekly upcoming tastings report`, and was not sent to Mitch.
+- Vanessa sent the Mitch-facing reminder on 2026-05-27 at 12:55 CDT, subject `Upcoming KOVAL tastings this week`, to Mitch Conti, cc Robert, with the current COTeam list-73 roster on BCC (`14` recipients). Sent Message-ID: `<177990455638.36100.3876102727296994688@kovaldistillery.com>`.
+- Report scope/readback: `17` OPS Outreach rows for 2026-05-25 through 2026-05-31; `12` fully covered; `4` open/unassigned or partially assigned; `1` needs a linked shift. The email included the product/sample-prep column and highlighted open/partial rows in the HTML table.
+- Durable proof: sent artifact `/Users/admin/.nationaloutreach-launch/state/sent/vanessa-mitch-weekly-upcoming-tastings-2026-05-25-approved-send.sent-1779904558.json`; sent-log line records `to_count=1`, `cc_count=1`, `bcc_count=14`; Task Flow packet `taskflow-mitch-weekly-upcoming-tastings-2026-05-25-approved-send` now validates as `reported` with no missing closeout fields.
+
 ## 2026-05-27 Vanessa overdue COT weekly report 6147835 submitted
 
 - Workspaceboard session `8e7aacb1` handled Frank-routed Robert request from source Message-ID `<CAAtX44b+o3C4ET+R+n420+6KMVCLeVDXx9WBg0j4CiMZ=FbUCA@mail.gmail.com>` / dedupe key `frank-direct-primary-CAAtX44b-o3C4ET-R-n420-6KMVCLeVDXx9WBg0j4CiMZ-FbUCA-mail-gmail-com`.
