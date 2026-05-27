@@ -1,5 +1,14 @@
 # National Outreach Handoff
 
+## 2026-05-26 Chi Town Food & Liquor OPS 986 Google sync blocker reported
+
+- Workspaceboard session `c869a1ed` handled Robert's follow-up on `Re: Koval Tasting for ChiTown Liquors` / Task Flow packet `taskflow-3d0fa6fd6504d3da`.
+- Live OPS readback confirmed outreach event `986`: `Chi Town Food & Liquor Tasting`, Outreach, `2026-06-14 13:00-15:00`, created by Codex user `1332`; no `event_booking_google_links` row exists yet for event `986`.
+- Google sync metadata check: OPS Google OAuth client settings are configured, the Outreach calendar ID is present, and token rows exist for users `3`, `21`, `144`, and `1`, but every usable refresh-token resolver returned length `0`; `google_oauth_fetch_access_token(null)` returned `Google OAuth has no usable refresh token.` No Google Calendar sync proof was claimed.
+- Owner-visible blocker update was sent on the same thread through the approved National Outreach send path: Message-ID `<177984415439.17850.896310829742511101@kovaldistillery.com>`, logged in `/Users/admin/.nationaloutreach-launch/state/sent-log.jsonl` at `2026-05-26T20:09:15-0500`.
+- Durable rule captured from Robert's source reply for this lane: OPS-created outreach events also need Google Calendar sync; if sync cannot be completed, report the exact usable-token/OAuth blocker instead of closing as fully synced.
+- Workspaceboard closeout proof marker: `OPS_EVENT_986_GOOGLE_SYNC_BLOCKED_OAUTH_OWNER_UPDATE_SENT_MSG_<177984415439.17850.896310829742511101@kovaldistillery.com>`.
+
 ## 2026-05-26 Jacob Whole Foods Edgewater activity closeout
 
 - Workspaceboard session `e839db2c` handled Jacob Hoover's follow-up on the May 22 Whole Foods - Edgewater Portal activity thread.
