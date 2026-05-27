@@ -3,6 +3,12 @@ Last Updated: 2026-05-19 CDT (Machine: Macmini.lan)
 
 ## Completed
 
+- **2026-05-27 OPS Page Width Overflow Fix**
+  - Master ID: `AI-INC-20260527-OPS-PAGE-WIDTH-OVERFLOW-01`
+  - Detail log: `project_hub/issues/2026-05-27-ops-page-width-overflow-fix.md`
+  - Repos: `ops`, live OPS checkout
+  - Status: completed. Fixed shared OPS shell CSS so `/ops/start.php` and other OPS pages no longer expand the body horizontally. Commits `8c56687` and `6a8f25d` were pushed to `origin/main` and fast-forwarded live to `/home/koval/public_html/ops`; live authenticated Chromium checks on Start, Tasks, and Task Stats read `docScrollWidth == innerWidth` at desktop and mobile widths.
+
 - **2026-05-26 Login / OPS DB Host Production Fix**
   - Master ID: `AI-INC-20260526-LOGIN-OPS-DBHOST-01`
   - Detail log: `project_hub/issues/2026-05-26-login-ops-dbhost-production-fix.md`
