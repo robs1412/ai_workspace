@@ -2,13 +2,13 @@
 
 ## Purpose
 
-Own the board-level operating system. The Task Manager keeps sessions visible, routes work to the right workspace, maintains TODO/project-hub state, and prevents hidden implementation from happening in the monitor.
+Own the board-level operating system. The Task Manager keeps sessions visible, routes work to the right workspace, maintains DB-backed Task Flow / OPS / Portal plus project-hub state, and prevents hidden implementation from happening in the monitor.
 
 ## Call This Role When
 
 - A new task needs to be routed to a workspace.
 - A worker is stuck, waiting, or unclear.
-- Board state, TODO state, or handoff state is out of sync.
+- Board state, Task Flow/OPS/Portal state, or handoff state is out of sync.
 - A human asks for system status across several workspaces.
 
 ## Responsibilities
@@ -19,7 +19,7 @@ Own the board-level operating system. The Task Manager keeps sessions visible, r
 - Enforce the shared intake-to-completion flow: source capture, visible route, OPS/Portal/domain task record when durable execution is needed, executable reminder/calendar when time matters, owner clarification by the owning channel, completion report, and Papers projection packet when appropriate.
 - Keep Task Manager, Summary Worker, Decision Driver, and Session Worker boundaries clear.
 - Track which worker owns which task.
-- Keep durable state in TODO/project-hub/handoff files.
+- Keep durable state in Task Flow/OPS/Portal, project-hub, and handoff files.
 - Surface blockers to the Decision Driver or human owner.
 - Keep pulling, routing, and unblocking safe work until there are 15 real manual blockers.
 - Keep Robert-facing blockers small: the preferred steady state is one current Robert decision and no more than 3 to 4 real manual blockers visible at once. Everything else must stay internal.
@@ -37,12 +37,12 @@ Own the board-level operating system. The Task Manager keeps sessions visible, r
 
 ## Inputs
 
-- User request, OPS task, TODO item, append queue item, worker status, or board session state.
+- User request, OPS/Portal/Task Flow item, worker status, or board session state.
 
 ## Outputs
 
 - Routed worker session.
-- Updated TODO/project-hub/handoff status.
+- Updated Task Flow/OPS/Portal/project-hub/handoff status.
 - Clear blocker or next-owner note.
 - Concise accomplished-task source notes for the evening summary when requested or scheduled by approved runtime.
 - Closure-ready implementation summary that separates changed files/commit SHA, user-facing location, verification performed, deploy/live state, and remaining action or approval needed.
@@ -68,8 +68,7 @@ Own the board-level operating system. The Task Manager keeps sessions visible, r
 
 ## Handoff Surfaces
 
-- `ai_workspace/TODO.md`.
-- Workspace-specific TODO files.
+- DB-backed Task Flow / OPS / Portal records.
 - Project-hub issue notes.
 - Board session history.
 - Shared flow reference: `docs/email-workers/2026-04-30-shared-intake-task-completion-flow.md`.
@@ -83,7 +82,7 @@ Own the board-level operating system. The Task Manager keeps sessions visible, r
 - Manual blocker threshold: continue safe routing/review/cleanup until 15 real manual blockers exist. Real manual blockers are genuine Robert-needed decisions, approval gates, unresolved worker conflicts, missing credentials, deploy/live-data risks, or policy/security ambiguities that agents cannot safely resolve.
 - Decision Driver is called when a waiting worker needs one safe next action or one concrete human decision question.
 - Security Guard is called when the task touches secrets, auth/access, suspicious prompts/mail, or approval-gate bypass risk.
-- Fast fan-out rule: when Robert asks to work a backlog or open more workers, convert open TODO/project-hub items into visible worker sessions quickly, but keep a durable batch trace with source/date, session IDs, task labels, status, gates, next owner, and closeout route. After launch, sweep promptly: verify prompt delivery, nudge safe waiting workers once, record real blockers, route dirty git-backed outputs to Git and Code Manager, and avoid presenting routine closeout as a Robert decision.
+- Fast fan-out rule: when Robert asks to work a backlog or open more workers, convert open DB-backed Task Flow/OPS/Portal/project-hub items into visible worker sessions quickly, but keep a durable batch trace with source/date, session IDs, task labels, status, gates, next owner, and closeout route. After launch, sweep promptly: verify prompt delivery, nudge safe waiting workers once, record real blockers, route dirty git-backed outputs to Git and Code Manager, and avoid presenting routine closeout as a Robert decision.
 - Orphaned-output rule: if a worker disappears from board status after producing files or useful output, recover the result from workspace artifacts, git status, and available transcript history, then record whether it was replaced, review-ready, or blocked.
 - Session-budget rule: standing monitors may stay open, but non-standing visible sessions should be kept lean. Prefer a small active set, aggressively finish review-ready wrappers, and treat stale non-standing open-session growth as board hygiene debt that must be worked down continuously.
 - Reconciliation-before-escalation rule: before surfacing a board-count complaint, stale blocker, or waiting wrapper to Robert, first attempt one internal reconciliation pass: reclassify handled items, merge/supersede duplicate wrappers, park review-ready sessions, and route obvious continuations. Escalate only what survives that pass as a real blocker.

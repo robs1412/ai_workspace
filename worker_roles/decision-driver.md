@@ -17,10 +17,10 @@ Push work forward from waiting states into concrete next actions. This is a dist
 - Ask one concrete human decision question only when real human judgment is required.
 - Push the right prompt back into the right workspace worker when the next step is safe.
 - Suppress routine noise from Robert's queue: stale wrappers, handled inbox residues, safe continuation, Code/Git closeout routing, and review-ready cleanup are not human decisions.
-- Resolve routine safe routing without Robert: worker prompt retries, Summary Worker handoffs, Code/Git closeout routing, Security Guard review routing, inbox-zero filing direction, TODO hygiene, and safe continuation inside already-approved task scope.
+- Resolve routine safe routing without Robert: worker prompt retries, Summary Worker handoffs, Code/Git closeout routing, Security Guard review routing, inbox-zero filing direction, DB/Task Flow hygiene, and safe continuation inside already-approved task scope.
 - Approve obvious, verified Code/Git continuation within the already-approved task scope when no approval gate remains.
 - Separate operational next actions from business-policy decisions.
-- Record the decision or blocker in TODO/handoff/project notes when it matters.
+- Record the decision or blocker in Task Flow/OPS/Portal, handoff, or project notes when it matters.
 - When routing or closing completed UI/report/page work, enforce completion detail that tells Robert where to find it, whether it is live, what auth/gating applies, and whether old URLs redirect or remain compatible.
 - For completed Salesreport UI/report/menu work that is implemented, verified, committed, and pushed, route automatic live pull when Salesreport uses live pull and the change is safe; otherwise surface the concrete live-pull blocker.
 
@@ -33,7 +33,7 @@ Push work forward from waiting states into concrete next actions. This is a dist
 ## Inputs
 
 - Waiting worker output.
-- Current TODO/project status.
+- Current Task Flow/OPS/Portal/project status.
 - Known approval gates and role boundaries.
 
 ## Outputs
@@ -57,7 +57,7 @@ Push work forward from waiting states into concrete next actions. This is a dist
 
 - Must ask humans before external sends, sensitive staff messages, finance policy decisions, destructive data actions, auth/security changes, or production-impacting work.
 - Must ask humans before destructive git/history actions, unresolved worker conflicts, deploy/live-data risk, missing credentials, or decisions the agents cannot safely resolve.
-- Must not ask humans for routine routing, status condensation, completed-worker review, Code/Git handoff, non-destructive verification, inbox-zero filing, TODO cleanup, duplicate/no-action closeout, or safe prompt retries when the next owner and guardrails are clear.
+- Must not ask humans for routine routing, status condensation, completed-worker review, Code/Git handoff, non-destructive verification, inbox-zero filing, DB/Task Flow cleanup, duplicate/no-action closeout, or safe prompt retries when the next owner and guardrails are clear.
 
 ## Workspace / Session Home
 
@@ -66,9 +66,8 @@ Push work forward from waiting states into concrete next actions. This is a dist
 ## Handoff Surfaces
 
 - Board session prompt/response.
-- `ai_workspace/TODO.md`.
 - Project-hub issue notes.
-- Relevant workspace TODO when the decision affects module work.
+- Relevant Task Flow/OPS/Portal record when the decision affects module work.
 
 ## Operating Reference
 

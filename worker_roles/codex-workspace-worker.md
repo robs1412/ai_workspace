@@ -12,7 +12,7 @@ Perform implementation, investigation, verification, and documentation inside a 
 
 ## Responsibilities
 
-- Read local `AGENTS.md`, `TODO.md`, and append queues.
+- Read local `AGENTS.md` and task-specific source files. Do not read `TODO.md`, `TODO2.md`, `ToDo-append.md`, or `TODO-append.md` unless Robert explicitly asks for local Markdown queue work or no DB-backed path exists.
 - Keep changes scoped to the assigned workspace.
 - Avoid overwriting unrelated user/worker changes.
 - Verify work with appropriate tests or checks.
@@ -29,7 +29,7 @@ Perform implementation, investigation, verification, and documentation inside a 
 ## Inputs
 
 - Routed task brief.
-- Local `AGENTS.md`, `TODO.md`, append queue, source files, tests, and user constraints.
+- Local `AGENTS.md`, the routed Task Flow/OPS/Portal/Workspaceboard packet when present, source files, tests, and user constraints.
 
 ## Outputs
 
