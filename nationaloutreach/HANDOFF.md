@@ -1,5 +1,20 @@
 # National Outreach Handoff
 
+## 2026-05-27 Market Event owner-reply due wrapper closed
+
+- 2026-05-27 15:48 CDT: Workspaceboard session `6c799a44` handled due-worker wrapper `taskflow-owner-reply-0db00a2f80d94609` for Sonat's original `Market Event` source.
+- Source-first readback: the underlying source was already completed as OPS Outreach event `988` (`GSM Nashville for Lipman Bros`, 2026-09-11 10:30, Nashville, TN) with Vanessa same-thread completion Message-ID `<177990621230.43947.2571893121331273785@kovaldistillery.com>`.
+- Runtime proof: `sent-log.jsonl` contains proof marker `GSM_NASHVILLE_LIPMAN_OPS988_CREATED_ACCOUNT4580_HOST3`; `archive-log.jsonl` filed the source Message-ID `calbltzxo1z9mcpg9fmyxsfhnjpmhaxtkodgkgrcenhaiab3hxa@mail.gmail.com` at `2026-05-27T13:24:17-0500` with reason `later_reply_found`.
+- Exact closeout: Task Flow key `taskflow-owner-reply-0db00a2f80d94609` recorded as `no_action_closed`; Workspaceboard session `6c799a44` recorded `closed_with_proof` with proof marker `GSM_NASHVILLE_LIPMAN_OPS988_MSG_177990621230_ARCHIVED`. No new OPS mutation, email send, or owner question was needed.
+
+## 2026-05-27 Mitch weekly sales-team forward confirmation closed
+
+- Workspaceboard session `ff4bfee4` handled Task Flow scheduler bridge packet `taskflow-8f9fcce80a594e8c` from Mitch Conti's same-thread reply on `Re: Upcoming KOVAL tastings this week`.
+- Source-first result: Mitch confirmed he forwarded Vanessa's weekly upcoming KOVAL tasting schedule to the RNDC sales team. No OPS schedule mutation, owner question, legal review, or new tasting record was needed.
+- Vanessa sent a short same-thread acknowledgement to Mitch with Robert copied. Message-ID: `<177991157905.72252.10199502866282714655@kovaldistillery.com>`.
+- Runtime proof: `sent-log.jsonl` records action `vanessa-mitch-weekly-sales-forward-confirmed-20260527`; `archive-log.jsonl` filed the inbound source at `2026-05-27T14:53:10-0500` with reason `later_reply_found`; the next inbox cycle showed active National Outreach inbox count `2`, both security-guard route items.
+- Task Flow proof marker: `MITCH_WEEKLY_FORWARD_CONFIRMED_MSG_177991157905_ARCHIVED`.
+
 ## 2026-05-27 RNDC NJ market events moved to Market Calendar
 
 - Workspaceboard session `9b08bb52` handled Task Flow scheduler bridge packet `taskflow-ab84646e6dc3a188` from Robert's same-thread source Message-ID `<CAAtX44YHHwfm_nz+jfA8hgTPuP6bWUjRKMacXwQdftssN2X7aA@mail.gmail.com>`, subject `Re: Market Event`.

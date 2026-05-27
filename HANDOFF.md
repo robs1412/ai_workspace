@@ -6,6 +6,7 @@ Use this file for cross-machine/session handoffs.
 
 ## Current Workflow Handoff
 
+- 2026-05-27 17:31 CDT task-mode startup token reduction completed as repo-local docs/startup policy. Root `AGENTS.md` was reduced from 791 lines to a 60-line compact startup contract, the full pre-split rule file was preserved as `docs/ai-workspace-full-startup-rules-2026-05-27.md`, and `docs/task-mode-startup.md` was added as the thin WS AI / Workspaceboard task-mode bootstrap. New rule: generic `ai_workspace` task-mode terminals should load only root `AGENTS.md`, `docs/task-mode-startup.md`, the current task packet, and any narrow local workspace `AGENTS.md` required by the task; they should not preload `HANDOFF.md`, project-hub indexes, mailbox SOPs, full role maps, old transcripts, or TODO archives. AI Manager input recorder proof: `ai_manager_inputs` row `2369`, UUID `ai-manager-chat-20260527222905-b2884f8c8bd1`.
 - 2026-05-27 12:45 CDT emergency disconnect handoff for Task DB `Missing Worker` investigation and server/token guard work.
   - User request in progress: Task DB showed `Missing Worker 8 / open rows without session id`; investigate and fix.
   - Current finding: the Task DB card counted any open row with empty `workspaceboard_session`, which mixed real missing workers with future owner-reply timers and OPS-backed tasks. Live `/api/task-flow/report?mode=all&limit=500` initially exposed 8 in the current loaded slice; applying stricter logic showed only 3 in the latest 100-row slice, and 12 true `needs worker` rows across the full 500-row view.
