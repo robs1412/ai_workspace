@@ -307,6 +307,7 @@ def build_run_timeout_report(args: argparse.Namespace, error: Exception) -> dict
         "canonical_status_line": f"ai health watchdog timeout; last run stopped before exceeding cadence: {reason}",
         "host_tmux_orphan_check": {"status": "not-run", "action": "none", "orphan_count": 0},
         "token_usage_check": {"status": "not-run", "action": "none", "session_file_count": 0, "session_mb": 0},
+        "task_flow_fanout_guard": {"status": "not-run", "action": "none", "blocked": 0, "created": 0},
         "session_sprawl_governor": {"status": "not-run", "action": "none", "changed": 0},
         "standing_attention_minutes": DEFAULT_STANDING_ATTENTION_MINUTES,
         "daily_input_audit": {"status": "not-run", "missing_tracking_count": 0},
@@ -3224,6 +3225,45 @@ def token_usage_check(args: argparse.Namespace, state: dict) -> dict:
     return result
 
 
+def task_flow_fanout_guard_check(args: argparse.Namespace) -> dict:
+    path = Path(args.task_flow_fanout_guard_log).expanduser()
+    if not path.exists():
+        return {"status": "not-recorded", "action": "none", "blocked": 0, "created": 0, "path": str(path)}
+    rows: list[dict] = []
+    try:
+        lines = path.read_text(encoding="utf-8", errors="replace").splitlines()[-200:]
+    except OSError as error:
+        return {"status": "failed", "action": "none", "blocked": 0, "created": 0, "error": safe_text(error, 240), "path": str(path)}
+    for line in lines:
+        try:
+            row = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        if isinstance(row, dict):
+            rows.append(row)
+    blocked = [row for row in rows if row.get("event") == "worker_session_blocked"]
+    created = [row for row in rows if row.get("event") == "worker_session_created"]
+    latest = rows[-1] if rows else {}
+    status = "attention" if blocked else ("checked" if rows else "not-recorded")
+    action = "fanout_paused" if blocked else ("record_only" if rows else "none")
+    return {
+        "status": status,
+        "action": action,
+        "blocked": len(blocked),
+        "created": len(created),
+        "latest_event": {
+            "event": safe_text(latest.get("event"), 80),
+            "logged_at": safe_text(latest.get("logged_at"), 60),
+            "route_kind": safe_text(latest.get("route_kind"), 80),
+            "workspace": safe_text(latest.get("workspace"), 80),
+            "reason": safe_text(latest.get("reason"), 260),
+            "source_key": safe_text(latest.get("source_key"), 180),
+            "session_id": safe_text(latest.get("session_id"), 80),
+        },
+        "path": str(path),
+    }
+
+
 def canonical_status_line(report: dict) -> str:
     board = "board ok" if report.get("board", {}).get("ok") else "board down"
     management = report.get("management_health", {})
@@ -3240,11 +3280,13 @@ def canonical_status_line(report: dict) -> str:
     claude_proof = report.get("claude_planner_proof", {})
     tmux_orphans = report.get("host_tmux_orphan_check", {})
     token_usage = report.get("token_usage_check", {})
+    fanout_guard = report.get("task_flow_fanout_guard", {})
     parts = [
         board,
         f"{management.get('non_standing_open_count', 0)} open work sessions",
         f"{tmux_orphans.get('orphan_count', 0)} host tmux orphans",
         f"{token_usage.get('session_file_count', 0)} Codex session files/{token_usage.get('session_mb', 0)} MB in {token_usage.get('window_hours', 0)}h",
+        f"fanout guard {fanout_guard.get('action', 'none')} blocked {fanout_guard.get('blocked', 0)}",
         f"{management.get('standing_attention_count', 0)} standing attention",
         f"{finish.get('missing_finish_contract_count', 0)} proof/finish gaps",
         f"{finish.get('past_due_routed_count', 0)} past-due routed",
@@ -3967,6 +4009,7 @@ def write_markdown(path: Path, report: dict) -> None:
         f"- claude_planner_proof: `{report.get('claude_planner_proof', {}).get('status', 'not-recorded')}` / http `{report.get('claude_planner_proof', {}).get('http_status', 0)}` / forbidden_fields `{report.get('claude_planner_proof', {}).get('forbidden_field_count', 0)}` / proof_comments `{report.get('claude_planner_proof', {}).get('proof_comment_count', 0)}`",
         f"- host_tmux_orphans: `{report.get('host_tmux_orphan_check', {}).get('status', 'not-recorded')}` / action `{report.get('host_tmux_orphan_check', {}).get('action', 'none')}` / orphans `{report.get('host_tmux_orphan_check', {}).get('orphan_count', 0)}`",
         f"- token_usage: `{report.get('token_usage_check', {}).get('status', 'not-recorded')}` / prompts `{report.get('token_usage_check', {}).get('prompt_count', 0)}` / session_files `{report.get('token_usage_check', {}).get('session_file_count', 0)}` / MB `{report.get('token_usage_check', {}).get('session_mb', 0)}`",
+        f"- task_flow_fanout_guard: `{report.get('task_flow_fanout_guard', {}).get('status', 'not-recorded')}` / action `{report.get('task_flow_fanout_guard', {}).get('action', 'none')}` / blocked `{report.get('task_flow_fanout_guard', {}).get('blocked', 0)}`",
         f"- session_sprawl_governor: `{report.get('session_sprawl_governor', {}).get('status', 'not-recorded')}` / action `{report.get('session_sprawl_governor', {}).get('action', 'none')}` / changed `{report.get('session_sprawl_governor', {}).get('changed', 0)}`",
         "",
         "## Session Counts",
@@ -3984,7 +4027,10 @@ def write_markdown(path: Path, report: dict) -> None:
     ]
     for issue in report["management_health"]["issues"]:
         lines.append(
-            f"- `{issue['id']}` {issue['title']}: {issue['reason']}. Task Manager: {issue['task_manager_action']}"
+            f"- `{issue.get('id') or issue.get('type') or 'issue'}` "
+            f"{issue.get('title') or issue.get('message') or 'Management issue'}: "
+            f"{issue.get('reason') or issue.get('message') or ''}. "
+            f"Task Manager: {issue.get('task_manager_action') or 'inspect and record proof or one exact blocker'}"
         )
     if not report["management_health"]["issues"]:
         lines.append("- no session-sprawl management issue detected")
@@ -4032,6 +4078,19 @@ def write_markdown(path: Path, report: dict) -> None:
         lines.append(f"- keyword `{key}`: `{count}`")
     for reason in token_usage.get("reasons", [])[:5]:
         lines.append(f"- reason: {reason}")
+    fanout_guard = report.get("task_flow_fanout_guard", {})
+    latest_fanout = fanout_guard.get("latest_event") if isinstance(fanout_guard.get("latest_event"), dict) else {}
+    lines.extend([
+        "",
+        "## Task Flow Fan-Out Guard",
+        f"- status: `{fanout_guard.get('status', 'not-recorded')}`",
+        f"- action: `{fanout_guard.get('action', 'none')}`",
+        f"- blocked: `{fanout_guard.get('blocked', 0)}`",
+        f"- created: `{fanout_guard.get('created', 0)}`",
+        f"- latest_event: `{latest_fanout.get('event', '')}`",
+        f"- latest_reason: `{latest_fanout.get('reason', '')}`",
+        f"- latest_source: `{latest_fanout.get('source_key', '')}`",
+    ])
     lines.extend([
         "",
         "## Session Sprawl Governor",
@@ -4440,6 +4499,7 @@ def build_report(args: argparse.Namespace) -> dict:
     state = load_state(state_path)
     host_tmux_orphans = host_tmux_orphan_check(args, status, state)
     token_usage = token_usage_check(args, state)
+    fanout_guard = task_flow_fanout_guard_check(args)
     if int(host_tmux_orphans.get("orphan_count") or 0) > int(host_tmux_orphans.get("threshold") or 0):
         management_health.setdefault("issues", []).append({
             "id": "host-tmux-orphans",
@@ -4463,6 +4523,20 @@ def build_report(args: argparse.Namespace) -> dict:
             "task_manager_action": (
                 "Stop worker fan-out, reuse existing sessions by source/dedupe key, keep diagnostics metadata-first, "
                 "and avoid launching duplicate workers that rehydrate full startup instructions."
+            ),
+        })
+    if str(fanout_guard.get("status") or "") == "attention":
+        management_health.setdefault("issues", []).append({
+            "id": "task-flow-fanout-guard",
+            "severity": "warning",
+            "title": "Task Flow worker fan-out guard blocked launches",
+            "reason": (
+                f"blocked worker launches = {fanout_guard.get('blocked', 0)}; "
+                f"latest reason = {fanout_guard.get('latest_event', {}).get('reason', '')}"
+            ),
+            "task_manager_action": (
+                "Keep mailbox fan-out paused for duplicate or overload residue, reuse the existing workspaceboard_session, "
+                "and close the source Task Flow row with proof or one exact blocker."
             ),
         })
     sprawl_governor = session_sprawl_governor(args, classification, management_health, state)
@@ -4505,6 +4579,7 @@ def build_report(args: argparse.Namespace) -> dict:
         "management_health": management_health,
         "host_tmux_orphan_check": host_tmux_orphans,
         "token_usage_check": token_usage,
+        "task_flow_fanout_guard": fanout_guard,
         "session_sprawl_governor": sprawl_governor,
         "session_restart": session_restart,
         "standing_attention_minutes": args.standing_attention_minutes,
@@ -5103,6 +5178,14 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
         )),
     )
     parser.add_argument(
+        "--task-flow-fanout-guard-log",
+        default=os.environ.get(
+            "AI_HEALTH_TASK_FLOW_FANOUT_GUARD_LOG",
+            "/Users/admin/.task-flow-launch/state/automation-circuit-breakers.jsonl",
+        ),
+        help="Task Flow due-runner fan-out guard event log.",
+    )
+    parser.add_argument(
         "--no-board-repair",
         dest="allow_board_repair",
         action="store_false",
@@ -5175,6 +5258,7 @@ def main(argv: list[str]) -> int:
                     "canonical_status_line": f"board down; status check failed after repair: {safe_text(second_error, 180)}",
                     "host_tmux_orphan_check": {"status": "not-run", "action": "none", "orphan_count": 0},
                     "token_usage_check": {"status": "not-run", "action": "none", "session_file_count": 0, "session_mb": 0},
+                    "task_flow_fanout_guard": {"status": "not-run", "action": "none", "blocked": 0, "created": 0},
                     "session_sprawl_governor": {"status": "not-run", "action": "none", "changed": 0},
                     "standing_attention_minutes": DEFAULT_STANDING_ATTENTION_MINUTES,
                     "daily_input_audit": {"status": "not-run", "missing_tracking_count": 0},
@@ -5227,6 +5311,7 @@ def main(argv: list[str]) -> int:
                 "canonical_status_line": f"board down; status check failed: {safe_text(error, 180)}",
                 "host_tmux_orphan_check": {"status": "not-run", "action": "none", "orphan_count": 0},
                 "token_usage_check": {"status": "not-run", "action": "none", "session_file_count": 0, "session_mb": 0},
+                "task_flow_fanout_guard": {"status": "not-run", "action": "none", "blocked": 0, "created": 0},
                 "session_sprawl_governor": {"status": "not-run", "action": "none", "changed": 0},
                 "standing_attention_minutes": DEFAULT_STANDING_ATTENTION_MINUTES,
                 "daily_input_audit": {"status": "not-run", "missing_tracking_count": 0},
@@ -5280,6 +5365,8 @@ def main(argv: list[str]) -> int:
         "token_usage_prompt_count": report.get("token_usage_check", {}).get("prompt_count", 0),
         "token_usage_session_files": report.get("token_usage_check", {}).get("session_file_count", 0),
         "token_usage_session_mb": report.get("token_usage_check", {}).get("session_mb", 0),
+        "task_flow_fanout_guard": report.get("task_flow_fanout_guard", {}).get("status", "not-recorded"),
+        "task_flow_fanout_guard_blocked": report.get("task_flow_fanout_guard", {}).get("blocked", 0),
         "session_sprawl_governor": report.get("session_sprawl_governor", {}).get("action", "none"),
         "session_sprawl_changed": report.get("session_sprawl_governor", {}).get("changed", 0),
         "session_restart": report.get("session_restart", {}).get("status", "not-recorded"),

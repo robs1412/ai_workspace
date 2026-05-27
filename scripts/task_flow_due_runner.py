@@ -8,6 +8,7 @@ import os
 import shutil
 import subprocess
 import sys
+import tempfile
 import time
 import urllib.error
 import urllib.request
@@ -34,6 +35,126 @@ DMYTRO_EMAIL = "dmytro.klymentiev@kovaldistillery.com"
 ROBERT_EMAIL = "robert@kovaldistillery.com"
 DAEMON_OWNED_DUE_WORKSPACES = {"nationaloutreach"}
 SCHEDULER_RETRY_COOLDOWN_SECONDS = 15 * 60
+DEFAULT_TMUX_SOCKET = Path(tempfile.gettempdir()) / f"cdxdash-{os.getuid()}" / "tmux.sock"
+
+
+class FanoutGuard:
+    def __init__(
+        self,
+        state_dir: Path,
+        *,
+        max_sessions_per_run: int,
+        max_sessions_per_source: int,
+        max_live_tmux_sessions: int,
+        max_load_1m: float,
+        tmux_socket: Path,
+    ) -> None:
+        self.state_dir = state_dir
+        self.max_sessions_per_run = max(0, max_sessions_per_run)
+        self.max_sessions_per_source = max(1, max_sessions_per_source)
+        self.max_live_tmux_sessions = max(0, max_live_tmux_sessions)
+        self.max_load_1m = max(0.0, max_load_1m)
+        self.tmux_socket = tmux_socket
+        self.created_sessions = 0
+        self.created_by_source: dict[str, int] = {}
+        self.events: list[dict] = []
+        self.overload = self._detect_overload()
+
+    def _detect_overload(self) -> dict:
+        load_1m = 0.0
+        try:
+            load_1m = float(os.getloadavg()[0])
+        except (AttributeError, OSError, ValueError):
+            pass
+        live_tmux = count_tmux_sessions(self.tmux_socket)
+        reasons: list[str] = []
+        if self.max_load_1m and load_1m >= self.max_load_1m:
+            reasons.append(f"load_1m {load_1m:.2f} >= {self.max_load_1m:.2f}")
+        if self.max_live_tmux_sessions and live_tmux >= self.max_live_tmux_sessions:
+            reasons.append(f"live_tmux_sessions {live_tmux} >= {self.max_live_tmux_sessions}")
+        return {
+            "active": bool(reasons),
+            "load_1m": round(load_1m, 2),
+            "live_tmux_sessions": live_tmux,
+            "max_load_1m": self.max_load_1m,
+            "max_live_tmux_sessions": self.max_live_tmux_sessions,
+            "reasons": reasons,
+        }
+
+    def source_key(self, items: list[dict]) -> str:
+        for item in items:
+            for field in ("source_ref", "dedupe_key"):
+                value = str(item.get(field) or "").strip()
+                if value:
+                    return value[:180]
+        return "unknown-source"
+
+    def can_create(self, items: list[dict], workspace: str, route_kind: str) -> tuple[bool, str]:
+        source_key = self.source_key(items)
+        active_sessions = sorted({
+            str(item.get("workspaceboard_session") or "").strip()
+            for item in items
+            if str(item.get("workspaceboard_session") or "").strip()
+        })
+        if active_sessions:
+            return False, f"active_workspaceboard_session_exists:{','.join(active_sessions[:3])}"
+        if self.overload["active"]:
+            return False, "overload_mode:" + "; ".join(self.overload["reasons"])
+        if self.max_sessions_per_run and self.created_sessions >= self.max_sessions_per_run:
+            return False, f"max_sessions_per_run_reached:{self.max_sessions_per_run}"
+        if self.created_by_source.get(source_key, 0) >= self.max_sessions_per_source:
+            return False, f"max_sessions_per_source_reached:{self.max_sessions_per_source}:{source_key}"
+        return True, "ok"
+
+    def record_created(self, items: list[dict], workspace: str, route_kind: str, session_id: str) -> None:
+        source_key = self.source_key(items)
+        self.created_sessions += 1
+        self.created_by_source[source_key] = self.created_by_source.get(source_key, 0) + 1
+        self.events.append({
+            "logged_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
+            "event": "worker_session_created",
+            "route_kind": route_kind,
+            "workspace": workspace,
+            "source_key": source_key,
+            "session_id": session_id,
+            "items": [item.get("dedupe_key") for item in items],
+        })
+
+    def record_blocked(self, items: list[dict], workspace: str, route_kind: str, reason: str) -> None:
+        self.events.append({
+            "logged_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
+            "event": "worker_session_blocked",
+            "route_kind": route_kind,
+            "workspace": workspace,
+            "source_key": self.source_key(items),
+            "reason": reason,
+            "items": [item.get("dedupe_key") for item in items],
+            "overload": self.overload,
+        })
+
+    def flush(self) -> None:
+        if not self.events:
+            return
+        path = self.state_dir / "automation-circuit-breakers.jsonl"
+        path.parent.mkdir(parents=True, exist_ok=True)
+        with path.open("a", encoding="utf-8") as handle:
+            for event in self.events:
+                handle.write(json.dumps(event, ensure_ascii=True) + "\n")
+        path.chmod(0o600)
+
+
+def count_tmux_sessions(socket: Path) -> int:
+    command = ["tmux"]
+    if socket:
+        command.extend(["-S", str(socket)])
+    command.extend(["list-sessions", "-F", "#{session_name}"])
+    try:
+        result = subprocess.run(command, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=5)
+    except Exception:
+        return 0
+    if result.returncode != 0:
+        return 0
+    return len([line for line in result.stdout.splitlines() if line.strip()])
 
 
 def resolve_php() -> str:
@@ -575,7 +696,7 @@ def record_owner_reply_daily_next_check(recorder: Path, item: dict) -> dict:
     return record_task_flow_packet(recorder, packet, "task_flow_owner_reply_daily_next_check")
 
 
-def route_due_items_to_worker(recorder: Path, state_dir: Path, items: list[dict], dry_run: bool = False) -> dict:
+def route_due_items_to_worker(recorder: Path, state_dir: Path, items: list[dict], guard: FanoutGuard, dry_run: bool = False) -> dict:
     route_candidates = [item for item in items if isinstance(item, dict) and item.get("dedupe_key")]
     if not route_candidates:
         return {"ok": True, "routed": False, "reason": "no_due_items", "items": []}
@@ -639,10 +760,22 @@ def route_due_items_to_worker(recorder: Path, state_dir: Path, items: list[dict]
     for workspace, group in grouped.items():
         title = f"Task Flow due worker {time.strftime('%Y-%m-%d %H:%M')} {workspace}"
         message = build_worker_handoff_message(group)
+        allowed, reason = guard.can_create(group, workspace, "due-worker")
+        if not allowed:
+            guard.record_blocked(group, workspace, "due-worker", reason)
+            routed.append({
+                "workspace": workspace,
+                "routed": False,
+                "blocked_by_guard": True,
+                "reason": reason,
+                "items": [item.get("dedupe_key") for item in group],
+            })
+            continue
         if dry_run:
             routed.append({"workspace": workspace, "dry_run": True, "items": [item.get("dedupe_key") for item in group]})
             continue
         session_id, attachments = create_worker_route_session(api_base, workspace, title, message)
+        guard.record_created(group, workspace, "due-worker", session_id)
         delivery = deliver_worker_route_message(api_base, session_id, str(attachments.get("id") or ""), message)
         next_check_epoch = int(time.time()) + 1800
         next_check = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(next_check_epoch))
@@ -669,10 +802,15 @@ def route_due_items_to_worker(recorder: Path, state_dir: Path, items: list[dict]
             "prompt_delivery": delivery.get("prompt_delivery", {}),
             "recorded_packets": recorded_packets,
         })
-    return {"ok": True, "routed": bool(routed), "items": routed, "daemon_owned": daemon_owned_results}
+    return {
+        "ok": True,
+        "routed": any(bool(item.get("session_id")) for item in routed),
+        "items": routed,
+        "daemon_owned": daemon_owned_results,
+    }
 
 
-def route_unscheduled_items_to_worker(recorder: Path, board_recorder: Path, state_dir: Path, limit: int, dry_run: bool = False) -> dict:
+def route_unscheduled_items_to_worker(recorder: Path, board_recorder: Path, state_dir: Path, limit: int, guard: FanoutGuard, dry_run: bool = False) -> dict:
     report = load_task_flow_report(board_recorder, limit, "queue")
     items = report.get("items") if isinstance(report.get("items"), list) else []
     candidates = [item for item in items if isinstance(item, dict) and item.get("scheduler_route_candidate")]
@@ -732,11 +870,23 @@ def route_unscheduled_items_to_worker(recorder: Path, board_recorder: Path, stat
     for workspace, group in grouped.items():
         title = f"Task Flow scheduler bridge {time.strftime('%Y-%m-%d %H:%M')} {workspace}"
         message = build_scheduler_bridge_message(group)
+        allowed, reason = guard.can_create(group, workspace, "scheduler-bridge")
+        if not allowed:
+            guard.record_blocked(group, workspace, "scheduler-bridge", reason)
+            routed.append({
+                "workspace": workspace,
+                "routed": False,
+                "blocked_by_guard": True,
+                "reason": reason,
+                "items": [item.get("dedupe_key") for item in group],
+            })
+            continue
         if dry_run:
             routed.append({"workspace": workspace, "dry_run": True, "items": [item.get("dedupe_key") for item in group]})
             continue
         try:
             session_id, attachments = create_worker_route_session(api_base, workspace, title, message)
+            guard.record_created(group, workspace, "scheduler-bridge", session_id)
         except Exception as exc:
             blocker_text = f"Scheduler bridge could not create a visible worker session: {exc}"
             owner_question = "Inspect Workspaceboard session-create/session-message health and reroute this Task Flow item."
@@ -789,7 +939,7 @@ def route_unscheduled_items_to_worker(recorder: Path, board_recorder: Path, stat
 
     return {
         "ok": True,
-        "routed": bool(routed),
+        "routed": any(bool(item.get("session_id")) for item in routed),
         "candidate_count": len(candidates),
         "violation_count": len(violations),
         "items": routed,
@@ -1055,12 +1205,49 @@ def main() -> int:
     parser.add_argument("--no-route-worker", action="store_false", dest="route_worker")
     parser.add_argument("--limit", type=int, default=100)
     parser.add_argument("--scheduler-limit", type=int, default=500)
+    parser.add_argument(
+        "--max-new-worker-sessions",
+        type=int,
+        default=int(os.environ.get("TASK_FLOW_MAX_NEW_WORKER_SESSIONS_PER_RUN", "4")),
+        help="Circuit breaker: max new Workspaceboard worker sessions per due-runner cycle.",
+    )
+    parser.add_argument(
+        "--max-new-worker-sessions-per-source",
+        type=int,
+        default=int(os.environ.get("TASK_FLOW_MAX_NEW_WORKER_SESSIONS_PER_SOURCE", "1")),
+        help="Circuit breaker: max new Workspaceboard worker sessions per source_ref/dedupe_key in one cycle.",
+    )
+    parser.add_argument(
+        "--max-live-tmux-sessions",
+        type=int,
+        default=int(os.environ.get("TASK_FLOW_MAX_LIVE_TMUX_SESSIONS", "25")),
+        help="Overload mode: pause worker fan-out when live tmux sessions meet or exceed this count. Set 0 to disable.",
+    )
+    parser.add_argument(
+        "--max-load-1m",
+        type=float,
+        default=float(os.environ.get("TASK_FLOW_MAX_LOAD_1M", "12.0")),
+        help="Overload mode: pause worker fan-out when 1-minute load average meets or exceeds this value. Set 0 to disable.",
+    )
+    parser.add_argument(
+        "--tmux-socket",
+        default=os.environ.get("TASK_FLOW_TMUX_SOCKET", str(DEFAULT_TMUX_SOCKET)),
+        help="Workspaceboard tmux socket for overload checks.",
+    )
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
 
     recorder = Path(args.recorder)
     board_recorder = Path(args.workspaceboard_recorder)
     state_dir = Path(args.state_dir)
+    guard = FanoutGuard(
+        state_dir,
+        max_sessions_per_run=args.max_new_worker_sessions,
+        max_sessions_per_source=args.max_new_worker_sessions_per_source,
+        max_live_tmux_sessions=args.max_live_tmux_sessions,
+        max_load_1m=args.max_load_1m,
+        tmux_socket=Path(args.tmux_socket),
+    )
     due = load_due(recorder, args.limit)
     items = due.get("items") if isinstance(due.get("items"), list) else []
     state_dir.mkdir(parents=True, exist_ok=True)
@@ -1108,8 +1295,9 @@ def main() -> int:
     worker_handoff = {"ok": True, "routed": False, "reason": "route_worker_disabled", "items": []}
     scheduler_bridge = {"ok": True, "routed": False, "reason": "route_worker_disabled", "items": []}
     if args.route_worker:
-        worker_handoff = route_due_items_to_worker(recorder, state_dir, reminder_items, dry_run=args.dry_run)
-        scheduler_bridge = route_unscheduled_items_to_worker(recorder, board_recorder, state_dir, args.scheduler_limit, dry_run=args.dry_run)
+        worker_handoff = route_due_items_to_worker(recorder, state_dir, reminder_items, guard, dry_run=args.dry_run)
+        scheduler_bridge = route_unscheduled_items_to_worker(recorder, board_recorder, state_dir, args.scheduler_limit, guard, dry_run=args.dry_run)
+    guard.flush()
 
     notification = {"sent": False, "reason": "not_requested"}
     if args.notify_robert and not args.dry_run:
@@ -1128,6 +1316,13 @@ def main() -> int:
         "actions": action_results,
         "worker_handoff": worker_handoff,
         "scheduler_bridge": scheduler_bridge,
+        "fanout_guard": {
+            "created_sessions": guard.created_sessions,
+            "max_new_worker_sessions": guard.max_sessions_per_run,
+            "max_new_worker_sessions_per_source": guard.max_sessions_per_source,
+            "overload": guard.overload,
+            "events": guard.events,
+        },
         "watchdog": watchdog,
         "notification": notification,
         "dry_run": bool(args.dry_run),

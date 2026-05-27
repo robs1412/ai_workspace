@@ -1,5 +1,14 @@
 # National Outreach Handoff
 
+## 2026-05-27 Vanessa overdue COT weekly report 6147835 submitted
+
+- Workspaceboard session `8e7aacb1` handled Frank-routed Robert request from source Message-ID `<CAAtX44b+o3C4ET+R+n420+6KMVCLeVDXx9WBg0j4CiMZ=FbUCA@mail.gmail.com>` / dedupe key `frank-direct-primary-CAAtX44b-o3C4ET-R-n420-6KMVCLeVDXx9WBg0j4CiMZ-FbUCA-mail-gmail-com`.
+- Live Portal readback from the production `koval-crm-backend` container confirmed notification `6147835` for `COT Activity - Weekly`, responsible `Agent Codex`, period `2026-05-18` through `2026-05-24`, links to report `7989`.
+- Report `7989` is now submitted: category `56`, department `6` / `Brand Ambassadors`, submitter `1332` / `Agent Codex`, report date `2026-05-24`, period `2026-05-18` through `2026-05-24`, `submitted=1`, `submitted_at=2026-05-27 17:46:03`, `reviewed=0`.
+- Reviewer notification proof from Portal runtime logs: `notifications_logs` rows `83021`, `83022`, `83023`, and `83024` are `reports.new_for_review`, channel `email`, status `sent`, timestamp `2026-05-27 17:46:03`.
+- Follow-up OPS readback after Frank/session `659b2b88` ran the report-task sync showed new OPS task `370305`, `Portal report: COT Activity - Weekly`, owned/assigned to Codex `1332`, status `Not Started`, weekly recurrence, notification off, with marker `portal-report-task-sync category=56 responsible=1332`; it currently points at the oldest remaining open Codex COT weekly notification period `2026-03-23` through `2026-03-29`. Existing Vanessa COT tasks `369779`, `368774`, and older `368516` were not mutated by this National Outreach closeout.
+- Completion marker: `PORTAL_REPORT_7989_SUBMITTED_NOTIFICATION_6147835_LOGS_83021_83024_OPS370305_SYNCED`.
+
 ## 2026-05-27 Veterans Path to Hope newsletter filed no-action
 
 - Workspaceboard session `79523664` handled Task Flow scheduler bridge packet `taskflow-974697c7523b2f19` from source Message-ID `<20260527171549.98f14408f0e32565@mg2.lglcrm.net>`, subject `Upcoming Events You Don’t Want to Miss!`.
