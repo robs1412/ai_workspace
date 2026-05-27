@@ -340,13 +340,14 @@ def cmd_verify(args: argparse.Namespace) -> int:
     run_id = safe_slug(args.run_id)
     attempt_id = safe_slug(args.attempt_id)
     evaluator = load_evaluator(run_id)
+    evaluator_cwd = ensure_owned_worktree(run_id)
     rows = read_attempts(run_id)
     row = find_attempt(rows, attempt_id)
 
     started_at = now_local()
     completed = subprocess.run(
         shlex.split(evaluator.evaluator),
-        cwd=str(WORKSPACE_ROOT),
+        cwd=str(evaluator_cwd),
         text=True,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
@@ -367,6 +368,7 @@ def cmd_verify(args: argparse.Namespace) -> int:
         "finished_at": finished_at,
         "returncode": completed.returncode,
         "evaluator": evaluator.evaluator,
+        "evaluator_cwd": str(evaluator_cwd),
         "stdout": str(stdout_path.relative_to(run_dir(run_id))),
         "stderr": str(stderr_path.relative_to(run_dir(run_id))),
     }

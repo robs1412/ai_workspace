@@ -1,0 +1,11 @@
+{
+  "attempt_id": "verify-from-worktree-20260526",
+  "evaluator": "/usr/local/bin/python3.13 scripts/claude_planner_proof_check.py --timeout-seconds 8 --json tmp/ai-health-manager/claude-planner-proof-latest.json --report tmp/ai-health-manager/claude-planner-proof-latest.md --fail-on-not-ready",
+  "evaluator_cwd": "/Users/werkstatt/ai_workspace/project_hub/recursive-runs/planner-proof-harness-001/worktree",
+  "finished_at": "2026-05-26 20:16:34 CDT",
+  "metric": "passed",
+  "returncode": 0,
+  "started_at": "2026-05-26 20:16:33 CDT",
+  "stderr": "proofs/verify-from-worktree-20260526.stderr.txt",
+  "stdout": "proofs/verify-from-worktree-20260526.stdout.txt"
+}

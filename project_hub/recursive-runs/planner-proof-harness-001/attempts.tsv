@@ -1,3 +1,4 @@
 attempt_id	hypothesis	surface	metric	status	proof	reason
 baseline-20260526	Baseline Planner proof route should pass without changing the verifier.	scripts/claude_planner_proof_check.py	passed	keep	proofs/baseline-20260526.json	Baseline proof passed; keep as initial harness proof without implementation mutation.
 worktree-boundary-20260526	Worktree-aware harness still runs the immutable Planner proof without mutating verifier code.	scripts/claude_planner_proof_check.py	passed	keep	proofs/worktree-boundary-20260526.json	Planner proof passed after owned worktree enforcement; keep as worktree-boundary proof.
+verify-from-worktree-20260526	Evaluator should execute from the run owned worktree, not the main ai_workspace checkout.	scripts/claude_planner_proof_check.py	passed	keep	proofs/verify-from-worktree-20260526.json	Planner proof passed with evaluator_cwd set to the owned run worktree.
