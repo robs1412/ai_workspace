@@ -13,6 +13,7 @@ import shutil
 import smtplib
 import ssl
 import subprocess
+import tempfile
 import time
 from datetime import datetime, timezone
 from email import message_from_bytes
@@ -197,6 +198,21 @@ def shared_sent_log_state_dirs(state_dir: Path) -> list[Path]:
         seen.add(normalized)
         result.append(candidate)
     return result
+
+
+def write_jsonl_rows_atomic(path: Path, rows: list[dict]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    payload = "\n".join(json.dumps(r, ensure_ascii=True) for r in rows) + ("\n" if rows else "")
+    fd, tmp_name = tempfile.mkstemp(prefix=f".{path.name}.", suffix=".tmp", dir=str(path.parent))
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8") as handle:
+            handle.write(payload)
+        os.chmod(tmp_name, 0o600)
+        os.replace(tmp_name, path)
+        path.chmod(0o600)
+    finally:
+        with contextlib.suppress(FileNotFoundError):
+            os.unlink(tmp_name)
 
 
 def parse_args() -> argparse.Namespace:
@@ -521,11 +537,7 @@ def process_scheduled_actions(creds: dict[str, str], state_dir: Path, now_ts: Op
                 queued_packet = {**task_packet, "status": "working", "scheduled_action": row.get("id") or "", "next_update": "queued approved draft for send cycle"}
                 shared_task_flow.append_event(state_dir / "task-flow-events.jsonl", queued_packet, "scheduled_action_queued", draft=str(draft_path))
             queued += 1
-        tmp = schedule_path.with_suffix(".jsonl.tmp")
-        tmp.write_text("\n".join(json.dumps(r, ensure_ascii=True) for r in updated_rows) + ("\n" if updated_rows else ""), encoding="utf-8")
-        tmp.chmod(0o600)
-        shutil.move(str(tmp), str(schedule_path))
-        schedule_path.chmod(0o600)
+        write_jsonl_rows_atomic(schedule_path, updated_rows)
         scheduled_actions_db_upsert("nationaloutreach", updated_rows)
         return {"due": due, "queued": queued, "skipped_resolved": skipped_resolved, "failed": failed, "skipped_locked": False}
     finally:
@@ -1794,11 +1806,7 @@ def mark_scheduled_action_sent(
         updated_rows.append(row)
     if not changed:
         return False
-    tmp = schedule_path.with_suffix(".jsonl.tmp")
-    tmp.write_text("\n".join(json.dumps(r, ensure_ascii=True) for r in updated_rows) + ("\n" if updated_rows else ""), encoding="utf-8")
-    tmp.chmod(0o600)
-    shutil.move(str(tmp), str(schedule_path))
-    schedule_path.chmod(0o600)
+    write_jsonl_rows_atomic(schedule_path, updated_rows)
     scheduled_actions_db_upsert(mailbox_lane, updated_rows)
     append_jsonl(
         state_dir / "scheduled-actions-log.jsonl",

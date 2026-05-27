@@ -1,5 +1,21 @@
 # National Outreach Handoff
 
+## 2026-05-27 COTeam 48-hour open-shift reminders and roster repaired
+
+- Robert clarified the missing reminder rule: Vanessa must send COTeam open/unassigned or partially assigned Outreach shifts 48 hours ahead at 8:00 AM, with Robert copied (`Wednesday 8:00 AM -> Friday shifts`, `Thursday 8:00 AM -> Saturday shifts`, etc.). Added source/runtime generator `nationaloutreach/scripts/sync_vanessa_open_shift_reminder.php` and wired it into `scripts/run_nationaloutreach_auto.sh`; installed runtime copies are under `/Users/admin/.nationaloutreach-launch/runtime/scripts/`.
+- Created live OPS task `370309`, `Vanessa: daily 8 AM 48-hour open COT shift reminders`, owner/assignee Vanessa `1343`, creator Robert `1`, `recurringtype=Daily`, due/start `2026-05-28`, `time_start=08:00`. Updated OPS task `367856` to `Vanessa: Monday 8 AM Mitch weekly upcoming tastings report`, owner/assignee Vanessa `1343`, `recurringtype=Weekly`, due/start `2026-06-01`, `time_start=08:00`.
+- COTeam roster repair: Portal/OPS group `169` now includes the missing active users Darla Swango `1274`, Kyle Combs `1224`, Matt Andrews `147`, Sonat Birnecker Hart `3`, and Gabriele Thormann `1333`; Nicholas Youngblood `1324` was removed from group `169` per Robert's instruction to ignore him. phpList list `73` (`COTeam`) now has `22` confirmed/unblacklisted sendable recipients, including the newly supplied addresses, and Youngblood is unlinked from that list.
+- Sent the missed Wednesday 8:00 AM reminder for Friday, 2026-05-29 after the repair. It covered one open item, OPS `898` / Eataly Chicago tasting (`Needs linked shift`), to Vanessa, cc Robert, bcc `22` COTeam recipients. Sent Message-ID: `<177990523380.39251.14101264029757128564@kovaldistillery.com>`. Scheduled action `vanessa-open-cot-shifts-48h-2026-05-29-0800` is marked completed in DB/local state; Task Flow packet `taskflow-vanessa-open-cot-shifts-48h-2026-05-29-0800` validates with no missing closeout fields.
+- Next generated reminders: `vanessa-open-cot-shifts-48h-2026-05-30-0800` is pending for 2026-05-28 08:00 with three Saturday open events (`713`, `776`, `716`) and `22` BCC recipients; `vanessa-mitch-weekly-direct-2026-06-01-0800` is pending for 2026-06-01 08:00 with Mitch as To, Robert as Cc, and the same `22` COTeam BCC recipients. Patched `scripts/nationaloutreach_mail_cycle.py` to use unique atomic temp files for scheduled-action JSONL rewrites after the send-completion marker hit a temp-file race; post-patch dry cycle returned `scheduled_actions_due=0`, `queued_sends_sent=0`, and no crash.
+
+## 2026-05-27 COT weekly report reviewed notice filed no-action
+
+- Workspaceboard session `2114e6f6` handled Task Flow scheduler bridge packet `taskflow-1c8624409756e7fd` from source Message-ID `<906e623c482a10b512ee25be47e0b29a@koval-distillery.com>`, subject `Report reviewed: COT Activity - Weekly Report`.
+- Source-first proof: the approved body mirror is an automated KOVAL Portal review notice, not a staffing, shift, schedule, calendar, or owner-question request. It says the `COT Activity - Weekly` report for `2026-05-18 to 2026-05-24` was reviewed and approved by Robert on `2026-05-27`.
+- Classification: `no-action/filed`. No Vanessa follow-up, OPS mutation, owner question, external send, or new worker route was needed.
+- Runtime filing proof: `/Users/admin/.nationaloutreach-launch/state/archive-log.jsonl` records the exact source moved to All Mail at `2026-05-27T13:02:53-0500` with reason `portal_report_reviewed_no_action`; runtime and workspace active-inbox projections now mark it `resolved_not_in_inbox`.
+- Task Flow closeout proof marker: `NO_ACTION_PORTAL_REPORT_REVIEWED_COT_WEEKLY_20260518_20260524_ARCHIVED_906e623c482a10b512ee25be47e0b29a`.
+
 ## 2026-05-27 Mitch weekly upcoming tastings reminder sent
 
 - Robert flagged that the Monday, 2026-05-25 upcoming tasting reminder likely had not gone to Mitch Conti and the team. Live runtime proof confirmed the Monday artifact was only the Robert approval draft, subject `Draft for approval: Mitch weekly upcoming tastings report`, and was not sent to Mitch.

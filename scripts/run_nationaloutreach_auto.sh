@@ -60,12 +60,20 @@ count=1
 last_status=0
 generator_script="$script_dir/sync_day_of_cot_event_details.php"
 post_tasting_generator_script="$script_dir/sync_vanessa_post_tasting_checkin.php"
+open_shift_generator_script="$script_dir/sync_vanessa_open_shift_reminder.php"
+mitch_weekly_generator_script="$script_dir/sync_vanessa_mitch_weekly_report.php"
 mail_cycle_script="$script_dir/nationaloutreach_mail_cycle.py"
 if [ ! -f "$generator_script" ] && [ -f "/Users/admin/.nationaloutreach-launch/runtime/scripts/sync_day_of_cot_event_details.php" ]; then
   generator_script="/Users/admin/.nationaloutreach-launch/runtime/scripts/sync_day_of_cot_event_details.php"
 fi
 if [ ! -f "$post_tasting_generator_script" ] && [ -f "/Users/admin/.nationaloutreach-launch/runtime/scripts/sync_vanessa_post_tasting_checkin.php" ]; then
   post_tasting_generator_script="/Users/admin/.nationaloutreach-launch/runtime/scripts/sync_vanessa_post_tasting_checkin.php"
+fi
+if [ ! -f "$open_shift_generator_script" ] && [ -f "/Users/admin/.nationaloutreach-launch/runtime/scripts/sync_vanessa_open_shift_reminder.php" ]; then
+  open_shift_generator_script="/Users/admin/.nationaloutreach-launch/runtime/scripts/sync_vanessa_open_shift_reminder.php"
+fi
+if [ ! -f "$mitch_weekly_generator_script" ] && [ -f "/Users/admin/.nationaloutreach-launch/runtime/scripts/sync_vanessa_mitch_weekly_report.php" ]; then
+  mitch_weekly_generator_script="/Users/admin/.nationaloutreach-launch/runtime/scripts/sync_vanessa_mitch_weekly_report.php"
 fi
 if [ ! -f "$mail_cycle_script" ] && [ -f "/Users/admin/.nationaloutreach-launch/runtime/scripts/nationaloutreach_mail_cycle.py" ]; then
   mail_cycle_script="/Users/admin/.nationaloutreach-launch/runtime/scripts/nationaloutreach_mail_cycle.py"
@@ -79,6 +87,12 @@ while [ "$count" -le "$cycles" ]; do
       --date "$(date +%F)" \
       --state-dir "$state_dir" || generator_status=$?
     "$php_bin" "$post_tasting_generator_script" \
+      --date "$(date +%F)" \
+      --state-dir "$state_dir" || generator_status=$?
+    "$php_bin" "$open_shift_generator_script" \
+      --date "$(date +%F)" \
+      --state-dir "$state_dir" || generator_status=$?
+    "$php_bin" "$mitch_weekly_generator_script" \
       --date "$(date +%F)" \
       --state-dir "$state_dir" || generator_status=$?
   else
