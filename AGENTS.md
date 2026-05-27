@@ -30,7 +30,8 @@ Last Updated: 2026-05-27 10:02:00 CDT (Machine: Macmini.lan)
 ## Local Tooling (Required)
 
 - Prefer `rg` (`/usr/local/bin/rg`) for repo searches and bounded text lookup. Avoid broad recursive `grep` unless `rg` is unavailable.
-- `PyYAML` is installed for the default `python3` used here, so official skill/frontmatter validators that import `yaml` should be used instead of manual-only checks when validating skills.
+- Use `/usr/local/bin/python3.13` for Python commands and script shebangs. Do not pipe or invoke tooling through unversioned `python3`; the unversioned interpreter on this host may be older.
+- `PyYAML` is installed for `/usr/local/bin/python3.13`, so official skill/frontmatter validators that import `yaml` should be used instead of manual-only checks when validating skills.
 - Keep token-heavy diagnostics metadata-first: use counts, `--stat`, `head`, `jq`, and line ranges before reading full logs, transcripts, or instruction files.
 
 ## DB-First Task Tracking (Required)

@@ -1,5 +1,20 @@
 # National Outreach Handoff
 
+## 2026-05-27 Veterans Path to Hope newsletter filed no-action
+
+- Workspaceboard session `79523664` handled Task Flow scheduler bridge packet `taskflow-974697c7523b2f19` from source Message-ID `<20260527171549.98f14408f0e32565@mg2.lglcrm.net>`, subject `Upcoming Events You Don’t Want to Miss!`.
+- Source-first readback: the mirrored body is a broad Veterans Path to Hope upcoming community-events/newsletter message. It does not ask KOVAL to staff, schedule, approve, change OPS/calendar state, answer an owner question, or send a Vanessa reply.
+- Classification: `no-action/filed`. No OPS/Portal/CRM mutation, owner escalation, external send, or Vanessa follow-up was needed.
+- Runtime archive proof moved the exact National Outreach INBOX copy to All Mail at `2026-05-27 12:20:37 CDT` with reason `newsletter_no_action_promotional_residue`.
+- Task Flow readback now shows `taskflow-974697c7523b2f19` closed/completed with proof marker `NEWSLETTER_NO_ACTION_SOURCE_20260527171549_ARCHIVED_TASKFLOW_NO_ACTION_CLOSED`, and an exact INBOX search for the Message-ID returns `mailbox_total=0`.
+
+## 2026-05-27 Claude recursive loop housekeeping reply filed no-action
+
+- Workspaceboard session `4e9013e7` handled Task Flow packet `taskflow-05906fed13d78fae` from Claude's `Re: Recursive improvement loop comparison`, source Message-ID `<0d1e1613ea05968dfbaa038c817f7103.claude@kovaldistillery.com>`.
+- Source-first readback: the body confirms no new commitments from Claude for this iteration, keeps Planner `/proof` as the read-only bridge, and raises only a routing/whitelist housekeeping note that `codex@` is the clean reply path unless Robert or Dmytro want National Outreach added to Claude's outbound whitelist.
+- Classification: `no-action/filed`. No owner question, legal/regulatory action, external send, Papers update, OPS/Portal mutation, or new recursive-tool implementation was needed.
+- Task Flow was updated to `no_action_closed` with proof marker `no-action/filed; source Message-ID <0d1e1613ea05968dfbaa038c817f7103.claude@kovaldistillery.com>`. Runtime archive proof moved the single National Outreach INBOX copy to All Mail with reason `logged_no_action_internal_housekeeping`.
+
 ## 2026-05-27 CFF Corks & Kegs confirmation reply closed
 
 - Workspaceboard session `38ff174f` handled Task Flow scheduler bridge packet `taskflow-c653dc07e8dc4449` from Emily Hanna's same-thread confirmation on `Re: CFF Corks & Kegs 2026`.

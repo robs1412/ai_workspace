@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/local/bin/python3.13
 
 from __future__ import annotations
 
@@ -81,7 +81,7 @@ def run_task_flow_due_runner(dry_run: bool = False) -> dict | None:
     TASK_FLOW_DUE_RUNNER_STATE.chmod(0o600)
     try:
         result = subprocess.run(
-            ["python3", str(TASK_FLOW_DUE_RUNNER), "--notify-robert"],
+            ["/usr/local/bin/python3.13", str(TASK_FLOW_DUE_RUNNER), "--notify-robert"],
             text=True,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,

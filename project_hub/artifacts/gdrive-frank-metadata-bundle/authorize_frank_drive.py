@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/local/bin/python3.13
 """
 One-time OAuth consent helper for Frank's metadata-only Google Drive slice.
 """

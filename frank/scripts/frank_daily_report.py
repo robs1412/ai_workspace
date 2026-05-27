@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/local/bin/python3.13
 """Render dry-run Frank morning and end-of-day report drafts.
 
 This helper reads approved local Frank notes only. It does not send email,

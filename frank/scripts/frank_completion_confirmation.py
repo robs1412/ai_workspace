@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/local/bin/python3.13
 """Build a dry-run Frank completion-confirmation draft with duplicate checks.
 
 This helper intentionally does not send email, connect to mailboxes, move mail,
