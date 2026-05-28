@@ -1,5 +1,12 @@
 # National Outreach Handoff
 
+## 2026-05-27 CFF Corks & Kegs owner-reply due wrapper closed
+
+- 2026-05-27 20:28 CDT done entry for Workspaceboard session `4e58bd92` / Task Flow due key `taskflow-owner-reply-0e91c1f85fa3919b`: source-first recheck confirmed this owner-reply reminder is proof-backed duplicate/no-action residue, not a new send need.
+- Live OPS readback still shows event `987`, `CFF Corks & Kegs 2026`, Outreach, `2026-11-20 18:00-23:00`, `Artifact Events, 4325 N Ravenswood Ave, Chicago, IL 60613`, with linked unassigned shift `5541` from `16:30-23:00` and `assigned_count=0`.
+- Prior proof remains: Vanessa owner closeout Message-ID `<177984595426.30847.15272538384831913537@kovaldistillery.com>`, Emily acknowledgement Message-ID `<177989112992.74991.12813333683653031788@kovaldistillery.com>`, and the original source archive proof for `completed_ops_event_shift_owner_closeout`.
+- Exact closeout: Task Flow key `taskflow-owner-reply-0e91c1f85fa3919b` recorded as `no_action_closed` with proof marker `CFF_CORKS_KEGS_OWNER_REPLY_WRAPPER_NO_ACTION_OPS987_SHIFT5541_MSG_177984595426_ARCHIVED`. No new external mail, OPS mutation, or owner question was needed.
+
 ## 2026-05-27 Market Event owner-reply due wrapper closed
 
 - 2026-05-27 15:48 CDT: Workspaceboard session `6c799a44` handled due-worker wrapper `taskflow-owner-reply-0db00a2f80d94609` for Sonat's original `Market Event` source.
@@ -142,6 +149,8 @@
 - Owner-visible blocker update was sent on the same thread through the approved National Outreach send path: Message-ID `<177984415439.17850.896310829742511101@kovaldistillery.com>`, logged in `/Users/admin/.nationaloutreach-launch/state/sent-log.jsonl` at `2026-05-26T20:09:15-0500`.
 - Durable rule captured from Robert's source reply for this lane: OPS-created outreach events also need Google Calendar sync; if sync cannot be completed, report the exact usable-token/OAuth blocker instead of closing as fully synced.
 - Workspaceboard closeout proof marker: `OPS_EVENT_986_GOOGLE_SYNC_BLOCKED_OAUTH_OWNER_UPDATE_SENT_MSG_<177984415439.17850.896310829742511101@kovaldistillery.com>`.
+- 2026-05-27 20:08 CDT done entry for Workspaceboard session `812ef3e0` / Task Flow due key `taskflow-owner-reply-52219f0c77b5e542`: source-first recheck confirmed this owner-reply reminder is proof-backed duplicate/no-action residue, not a new send need. Live OPS readback still shows event `986` as `Chi Town Food & Liquor Tasting`, Outreach, `2026-06-14 13:00-15:00`, `created_by=1332`, and `fetch_event_booking_google_links([986], "outreach")` still returns no links. The already-sent owner-visible blocker update remains Message-ID `<177984415439.17850.896310829742511101@kovaldistillery.com>`. Task Flow was updated to `closed_with_proof` with that Message-ID and the OPS/event readback; no new external mail was sent from session `812ef3e0`.
+- 2026-05-27 20:16 CDT done entry for Workspaceboard session `c62f9273` / Task Flow due key `taskflow-owner-reply-bb2efb0d3e215cd1`: source-first recheck confirmed this wrapper points to the later Robert reply source `caatx44bafdrhq=71eyo_attnwetphsjg2d7bfdvvm32usbtx+w@mail.gmail.com`, which live National Outreach mail-review and active-inbox state classify as `security-guard` with `send_allowed=no`. The prior OPS event `986` blocker update still exists as Message-ID `<177984415439.17850.896310829742511101@kovaldistillery.com>`, but this later owner reply cannot be answered or filed by National Outreach without security-guard review. Task Flow and Workspaceboard were recorded `blocked` as `routed-needs-owner-question`; Workspaceboard routed the blocker to Task Manager session `f545298d`. No external mail, OPS mutation, or archive action was performed.
 
 ## 2026-05-26 Jacob Whole Foods Edgewater activity closeout
 
