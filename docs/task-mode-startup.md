@@ -12,6 +12,13 @@ Use this file as the thin bootstrap for new WS AI / Workspaceboard task-mode ter
   - the local `AGENTS.md` for the target workspace if the task is inside a subfolder such as `frank/` or `avignon/`
 - Do not preload `HANDOFF.md`, project-hub indexes, TODO archives, mailbox SOPs, full role maps, old transcripts, or large logs.
 
+## Proof And Output Budget
+
+- Gather proof metadata-first: exact Task Flow key, session id, Message-ID, OPS/Portal id, body filename, or source ref before broader search.
+- Use bounded commands first: `rg --max-count`, `head`, `tail`, targeted line ranges, `wc`, `jq` projections, and exact DB recorder readbacks.
+- Do not dump full `/api/status`, full session-history JSON, recursive launch-state searches, full `HANDOFF.md`, project-hub indexes, old transcripts, or mailbox logs unless the exact-id checks miss and the larger read is necessary.
+- For Workspaceboard proof, prefer exact `/api/session-history?session_id=...`, projected `/api/management/overview`, Task Flow recorder reads, or session work-state history. Return one proof marker, one exact blocker, or one owner question.
+
 ## Minimal Launch Prompt Shape
 
 New automated task-mode terminals should receive a compact prompt with:

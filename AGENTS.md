@@ -15,6 +15,7 @@ This root file is intentionally compact. Do not preload long lane histories, han
 - For credential setup, report only non-secret metadata such as username, user id, role/group, and status.
 - Use `/usr/local/bin/rg` for searches when available and `/usr/local/bin/python3.13` for Python commands and shebangs.
 - Keep diagnostics metadata-first: use counts, stats, `head`, `jq`, and targeted line ranges before reading full logs, transcripts, or instruction files.
+- Keep proof gathering bounded: start from exact Task Flow keys, session ids, Message-IDs, OPS/Portal ids, or source refs; use `rg --max-count`, `head`/`tail`, `jq`, `wc`, and targeted line ranges before full recursive searches or full API/log dumps.
 
 ## Task Tracking
 

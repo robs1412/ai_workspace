@@ -1,5 +1,13 @@
 # National Outreach Handoff
 
+## 2026-05-28 Saturday open COT shift RNDC coverage closeout
+
+- Workspaceboard session `c8c3008f` handled Sonat's same-thread reply to `Open COT shifts for Saturday, May 30`: Sonat said RNDC will cover the Bourbon/Beer & Bourbon event.
+- Live OPS readback: Outreach event `713`, `Beer & Bourbon Fest @ Hollywood Casino`, now has the RNDC coverage note in `important_information` and event notes; linked shift `4925` also carries the same RNDC coverage note. I did not invent a COTeam assignee for external coverage.
+- Vanessa acknowledged Sonat on the same thread with Robert copied. Message-ID: `<177997382568.34826.5496385087236979854@kovaldistillery.com>`.
+- Runtime proof: `sent-log.jsonl` records action `vanessa-sonat-rndc-coverage-ops713-20260528`; `archive-log.jsonl` filed Sonat's source Message-ID `calbltzyn7zozpkmemwj6acuy=5j3s9urqaajrg_z_0v6qr8y=q@mail.gmail.com` with reason `rndc_coverage_recorded_and_acknowledged`; live INBOX readback returned count `6` and `target_in_inbox=false`.
+- Task Flow/Workspaceboard proof marker: `OPS713_RNDC_COVERAGE_NOTE_SHIFT4925_SENT_177997382568_ARCHIVED_CALBLTZYN7ZOZ`.
+
 ## 2026-05-27 CFF Corks & Kegs owner-reply due wrapper closed
 
 - 2026-05-27 20:28 CDT done entry for Workspaceboard session `4e58bd92` / Task Flow due key `taskflow-owner-reply-0e91c1f85fa3919b`: source-first recheck confirmed this owner-reply reminder is proof-backed duplicate/no-action residue, not a new send need.
