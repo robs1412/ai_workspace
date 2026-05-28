@@ -1,5 +1,20 @@
 # National Outreach Handoff
 
+## 2026-05-28 RNDC NJ Market Event owner-reply wrapper closed again
+
+- 2026-05-28 13:45 CDT done entry for Workspaceboard session `fed9d4cc` / Task Flow due key `taskflow-owner-reply-9d9a4cebb3559520`: source-first recheck confirmed this owner-reply reminder is proof-backed duplicate/no-action residue, not a new send need.
+- Live OPS readback confirmed rows `989`, `990`, `991`, `992`, and `993` are currently `event_category=Market Event`. Existing owner-visible completion proof remains Vanessa's same-thread correction Message-ID `<177990766501.51946.3447341695169812629@kovaldistillery.com>`.
+- Runtime filing proof remains in `archive-log.jsonl`: Sonat's source Message-ID `calbltzwr_-o4rzasx_nuczmymymzlf5dfejks_h97ul7mtxrba@mail.gmail.com` was archived with reason `completed_report_sent`, and Robert's correction Message-ID `caatx44yhhwfm_nz+jfa8hgtpup6bwujrkmacxwqdftssn2x7aa@mail.gmail.com` was archived with proof marker `OPS_MARKET_EVENTS_989_993_MOVED_SENT_177990766501_MEMORY_NOTE`.
+- Exact closeout: Task Flow key `taskflow-owner-reply-9d9a4cebb3559520` recorded as `no_action_closed` with proof marker `NO_ACTION_OWNER_REPLY_9D9A_RNDC_NJ_MARKET_EVENTS_989_993_MARKET_SENT_177990766501_ARCHIVED`. No new OPS mutation, email send, or owner question was needed.
+
+## 2026-05-28 RNDC NJ Market Event owner-reply wrapper closed
+
+- 2026-05-28 13:37 CDT done entry for Workspaceboard session `7dd752c3` / Task Flow due key `taskflow-owner-reply-2dd3c9df4b798fcf`: source-first recheck confirmed this owner-reply reminder is proof-backed duplicate/no-action residue, not a new send need.
+- The underlying Sonat `Re: Market Event` source was already completed under Task Flow `taskflow-1ef8945d756da4ba`, and Robert's correction was completed under `taskflow-ab84646e6dc3a188`.
+- Live OPS readback confirmed rows `989`, `990`, `991`, `992`, and `993` are currently `event_category=Market Event`. Existing owner-visible completion proof remains Vanessa's same-thread confirmation Message-ID `<177990766501.51946.3447341695169812629@kovaldistillery.com>`.
+- Runtime filing proof remains in `archive-log.jsonl`: Sonat's source Message-ID `calbltzwr_-o4rzasx_nuczmymymzlf5dfejks_h97ul7mtxrba@mail.gmail.com` was archived with reason `completed_report_sent`, and Robert's correction Message-ID `caatx44yhhwfm_nz+jfa8hgtpup6bwujrkmacxwqdftssn2x7aa@mail.gmail.com` was archived with proof marker `OPS_MARKET_EVENTS_989_993_MOVED_SENT_177990766501_MEMORY_NOTE`.
+- Exact closeout: Task Flow key `taskflow-owner-reply-2dd3c9df4b798fcf` recorded as `no_action_closed` with proof marker `NO_ACTION_OWNER_REPLY_2DD3_RNDC_NJ_MARKET_EVENTS_989_993_MARKET_SENT_177990766501_ARCHIVED`. No new OPS mutation, email send, or owner question was needed.
+
 ## 2026-05-28 Saturday open COT shift RNDC coverage closeout
 
 - Workspaceboard session `c8c3008f` handled Sonat's same-thread reply to `Open COT shifts for Saturday, May 30`: Sonat said RNDC will cover the Bourbon/Beer & Bourbon event.
