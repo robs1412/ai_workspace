@@ -1,5 +1,44 @@
 # National Outreach Handoff
 
+## 2026-05-29 Columbus Ave Spirits tasting completed
+
+- 2026-05-29 11:56 CDT done entry for Workspaceboard session `726de8b8` / Task Flow `taskflow-c6e72954d8afd219` / Benjamin Goodman `Tasting Confirmed at Columbus Ave. Wine & Spirits 7/10`: created the OPS Outreach event and replied on-thread.
+- OPS readback: Outreach event `994`, `Columbus Ave Spirits Tasting`, is dated `2026-07-10` from `16:00-19:00`, linked to account `39226`, with linked shift `5554` assigned to user `1286` / Benjamin Goodman.
+- Outreach calendar readback: `event_booking_google_links` stores UID `ops-outreach-994@koval-distillery.com` with `calendar_type=outreach`.
+- Sent proof: runtime `sent-log.jsonl` records Vanessa's reply from `vanessa.sterling@kovaldistillery.com` to Benjamin, subject `Re: Tasting Confirmed at Columbus Ave. Wine & Spirits 7/10`, Message-ID `<178007374547.43302.2360591307334340052@kovaldistillery.com>`.
+- Runtime filing proof: `active-inbox.json` no longer contains Benjamin's source Message-ID `df9db7e8667fc7f4217c19b81ca2c652@koval-distillery.com`; `email-trace-events.jsonl` recorded `email_resolved_not_in_inbox` at `2026-05-29T16:56:54.356921+00:00`.
+- Workspaceboard closeout proof marker: `OPS994_COLUMBUS_AVE_TASTING_SHIFT5554_BENJAMIN_GOODMAN_MSG_178007374547_GOOGLE_ops-outreach-994`.
+
+## 2026-05-29 Park Ridge serving follow-up completed
+
+- 2026-05-29 09:40 CDT done entry for Workspaceboard session `661b7786` / Task Flow `taskflow-28d4cfd8eabeb673` / Cassandra `Re: Your Schedule for Next Week - 2026-05-25`: Vanessa answered Cassandra's Park Ridge serving setup question after Frank confirmed the tent.
+- Sent proof: runtime `sent-log.jsonl` records Vanessa's reply from `vanessa.sterling@kovaldistillery.com`, to Cassandra with Sonat and Robert copied, subject `Re: Your Schedule for Next Week - 2026-05-25`, Message-ID `<178006553386.8739.11782149028190644274@kovaldistillery.com>`.
+- Business content: confirmed lemonade/club soda should be offered as an optional small splash, allowed self-serve mixers if the event gets busy, and reminded Cassandra to keep KOVAL bottle/sample-size control on her side of the table while bringing the tent, table, product, sampling glasses, mixers, cups, tour passes, and water/snacks.
+- Runtime filing proof: `archive-log.jsonl` moved Cassandra's source Message-ID `caoyzwnvzvn21wq6hv5nw+hzxzzawhcgvfh4hqu36ymtsjxzmag@mail.gmail.com` out of INBOX at `2026-05-29T09:39:42-0500` with reason `later_reply_found`; `email-trace-events.jsonl` recorded the matching `email_archived` event.
+- Workspaceboard closeout proof marker: `sent Message-ID <178006553386.8739.11782149028190644274@kovaldistillery.com>; archive-log later_reply_found 2026-05-29T09:39:42-0500`.
+
+## 2026-05-29 Codex / Claude role setup owner-reply wrapper closed
+
+- 2026-05-29 09:22 CDT done entry for Workspaceboard session `1fe92f29` / Task Flow due key `taskflow-owner-reply-c5f01bd3ec172998`: source-first recheck confirmed this owner-reply reminder is no-action residue, not a new National Outreach send task.
+- Source proof: Robert's source Message-ID `caatx44yubato8=zsv2j+gmmu1agfxlxufkfomrgmhomskbcvvw@mail.gmail.com` was classified as an internal `email-coordinator` instruction with approval-required handling, and Claude's same-thread reply Message-ID `<c25cdab43fbb74206084345a660e9638.claude@kovaldistillery.com>` confirmed the routing instruction had been recorded.
+- Task Flow queue readback at `/api/task-flow/report?mode=queue` showed no current row for `taskflow-owner-reply-c5f01bd3ec172998`; the live queue contained only unrelated outreach send-cycle tasks.
+- Exact closeout: Task Flow key `taskflow-owner-reply-c5f01bd3ec172998` recorded as `no_action_closed` with proof marker `NO_ACTION_OWNER_REPLY_C5F01_CODEX_CLAUDE_ROLE_SETUP_CLAUDE_MSG_C25CDAB43_QUEUE_CLEAR`. No National Outreach email send, OPS/Portal mutation, or owner question was needed.
+
+## 2026-05-29 Open COT shifts owner-reply wrapper closed
+
+- 2026-05-29 08:07 CDT done entry for Workspaceboard session `15120270` / Task Flow due key `taskflow-owner-reply-ff8c07198f7c74bb`: source-first recheck confirmed this owner-reply reminder is no-action residue, not a new send need.
+- Existing completion proof remains Workspaceboard session `c8c3008f`: OPS event `713` and linked shift `4925` carry Sonat's RNDC coverage note, and Vanessa acknowledged Sonat with Message-ID `<177997382568.34826.5496385087236979854@kovaldistillery.com>`.
+- Runtime filing proof remains in `archive-log.jsonl`: Sonat's RNDC coverage source was archived with reason `rndc_coverage_recorded_and_acknowledged`; Sonat's later thank-you source `calbltzzomx=oxnu23mlojoq9y19kajcl91x2_xxiduxfwaej6a@mail.gmail.com` was archived at `2026-05-28T08:24:25-0500` with reason `thank_you_no_action_after_vanessa_ops713_reply`.
+- Exact closeout: Task Flow key `taskflow-owner-reply-ff8c07198f7c74bb` recorded as `no_action_closed`; Workspaceboard session `15120270` recorded `closed_with_proof` with proof marker `OPS713_RNDC_COVERAGE_NOTE_SHIFT4925_SENT_177997382568_ARCHIVED_CALBLTZYN7ZOZ`. No new OPS mutation, email send, or owner question was needed.
+
+## 2026-05-29 Park Ridge prep reply completed
+
+- 2026-05-29 07:36 CDT done entry for Task Flow `taskflow-23508404c63ec60c` / Cassandra `Re: Your Schedule for Next Week - 2026-05-25`: Vanessa answered Cassandra's Park Ridge prep questions on-thread.
+- Sent proof: runtime `sent-log.jsonl` records Vanessa's reply from `vanessa.sterling@kovaldistillery.com`, to Cassandra with Sonat and Robert copied, subject `Re: Your Schedule for Next Week - 2026-05-25`, Message-ID `<178005813857.76240.16430056988055624449@kovaldistillery.com>`.
+- Business content: confirmed Bourbon and Cranberry Gin with Lemonade and Club Soda, recommended a backup Bourbon bottle because the shift is five hours and Cassandra only had about half a bottle, and routed the physical tent set-out request to Robert/Sonat on the same thread.
+- Runtime filing proof: `archive-log.jsonl` moved Cassandra's source Message-ID `caoyzwntbom10ciev82xcss9dvuu700okd6f5bgb3azowo9aseg@mail.gmail.com` out of INBOX at `2026-05-29T07:35:49-0500` with reason `later_reply_found`; email trace then recorded `email_resolved_not_in_inbox`.
+- Workspaceboard work-state proof: session/task key `taskflow-23508404c63ec60c` recorded `closed_with_proof` with proof marker `sent Message-ID <178005813857.76240.16430056988055624449@kovaldistillery.com>; archive-log later_reply_found 2026-05-29T07:35:49-0500`.
+
 ## 2026-05-28 RNDC NJ Market Event owner-reply wrapper closed again
 
 - 2026-05-28 13:45 CDT done entry for Workspaceboard session `fed9d4cc` / Task Flow due key `taskflow-owner-reply-9d9a4cebb3559520`: source-first recheck confirmed this owner-reply reminder is proof-backed duplicate/no-action residue, not a new send need.
@@ -174,6 +213,7 @@
 - Workspaceboard closeout proof marker: `OPS_EVENT_986_GOOGLE_SYNC_BLOCKED_OAUTH_OWNER_UPDATE_SENT_MSG_<177984415439.17850.896310829742511101@kovaldistillery.com>`.
 - 2026-05-27 20:08 CDT done entry for Workspaceboard session `812ef3e0` / Task Flow due key `taskflow-owner-reply-52219f0c77b5e542`: source-first recheck confirmed this owner-reply reminder is proof-backed duplicate/no-action residue, not a new send need. Live OPS readback still shows event `986` as `Chi Town Food & Liquor Tasting`, Outreach, `2026-06-14 13:00-15:00`, `created_by=1332`, and `fetch_event_booking_google_links([986], "outreach")` still returns no links. The already-sent owner-visible blocker update remains Message-ID `<177984415439.17850.896310829742511101@kovaldistillery.com>`. Task Flow was updated to `closed_with_proof` with that Message-ID and the OPS/event readback; no new external mail was sent from session `812ef3e0`.
 - 2026-05-27 20:16 CDT done entry for Workspaceboard session `c62f9273` / Task Flow due key `taskflow-owner-reply-bb2efb0d3e215cd1`: source-first recheck confirmed this wrapper points to the later Robert reply source `caatx44bafdrhq=71eyo_attnwetphsjg2d7bfdvvm32usbtx+w@mail.gmail.com`, which live National Outreach mail-review and active-inbox state classify as `security-guard` with `send_allowed=no`. The prior OPS event `986` blocker update still exists as Message-ID `<177984415439.17850.896310829742511101@kovaldistillery.com>`, but this later owner reply cannot be answered or filed by National Outreach without security-guard review. Task Flow and Workspaceboard were recorded `blocked` as `routed-needs-owner-question`; Workspaceboard routed the blocker to Task Manager session `f545298d`. No external mail, OPS mutation, or archive action was performed.
+- 2026-05-29 09:28 CDT done entry for Workspaceboard session `164508a9` / Task Flow due key `taskflow-owner-reply-9d1cd58edd0f8311`: source-first recheck confirmed the wrapper points to Robert's source reply `caatx44yt29s4dmdckrh66wli8srxemu986uyp4uqxz49vmatbw@mail.gmail.com`. Live National Outreach `active-inbox.json` still classifies the thread as `route=security-guard`, `send_allowed=no`, status `active_inbox`, with suggestion to review as sensitive/security-gated before any reply or filing. National Outreach did not send external mail, mutate OPS, or archive the source. Task Flow and Workspaceboard were recorded `blocked` as `routed-needs-owner-question`; owner question: Security Guard/Task Manager must review this Robert reply and either approve a National Outreach same-thread response or provide the exact response/blocker.
 
 ## 2026-05-26 Jacob Whole Foods Edgewater activity closeout
 
