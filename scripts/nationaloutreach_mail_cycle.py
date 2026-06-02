@@ -7,6 +7,7 @@ import html
 import imaplib
 import json
 import contextlib
+import mimetypes
 import os
 import re
 import shutil
@@ -1671,6 +1672,37 @@ def send_one(creds: dict[str, str], draft_path: Path, sent_dir: Path, failed_dir
     if html_body:
         html_body = ensure_signature_links_in_html(html_body)
         msg.add_alternative(html_body, subtype="html")
+    attachment_specs = payload.get("attachments") or payload.get("attachment_paths") or []
+    if isinstance(attachment_specs, (str, Path)):
+        attachment_specs = [attachment_specs]
+    if not isinstance(attachment_specs, list):
+        raise ValueError("attachments must be a list of file paths or attachment objects.")
+    attachment_names: list[str] = []
+    for spec in attachment_specs:
+        if isinstance(spec, dict):
+            attachment_path = Path(str(spec.get("path") or "")).expanduser()
+            filename = str(spec.get("filename") or attachment_path.name).strip()
+            content_type = str(spec.get("content_type") or "").strip()
+        else:
+            attachment_path = Path(str(spec)).expanduser()
+            filename = attachment_path.name
+            content_type = ""
+        if not attachment_path.is_file():
+            raise ValueError(f"Attachment file is missing: {attachment_path}")
+        if not filename:
+            raise ValueError(f"Attachment filename is empty for: {attachment_path}")
+        if not content_type:
+            content_type = mimetypes.guess_type(filename)[0] or "application/octet-stream"
+        maintype, _, subtype = content_type.partition("/")
+        if not maintype or not subtype:
+            maintype, subtype = "application", "octet-stream"
+        msg.add_attachment(
+            attachment_path.read_bytes(),
+            maintype=maintype,
+            subtype=subtype,
+            filename=filename,
+        )
+        attachment_names.append(filename)
     recipients = to_addrs + cc_addrs + bcc_addrs
     context = ssl.create_default_context()
     with smtplib.SMTP_SSL(creds["smtp_server"], int(creds["smtp_port"]), timeout=25, context=context) as conn:
@@ -1733,6 +1765,8 @@ def send_one(creds: dict[str, str], draft_path: Path, sent_dir: Path, failed_dir
             "to_count": len(to_addrs),
             "cc_count": len(cc_addrs),
             "bcc_count": len(bcc_addrs),
+            "attachment_count": len(attachment_names),
+            "attachment_names": attachment_names,
         },
         "task_packet": task_packet,
     }
@@ -1747,6 +1781,8 @@ def send_one(creds: dict[str, str], draft_path: Path, sent_dir: Path, failed_dir
         "to_count": len(to_addrs),
         "cc_count": len(cc_addrs),
         "bcc_count": len(bcc_addrs),
+        "attachment_count": len(attachment_names),
+        "attachment_names": attachment_names,
         "subject": subject,
         "message_id": msg["Message-ID"],
         "task_packet": task_packet,

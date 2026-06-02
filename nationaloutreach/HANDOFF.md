@@ -1,5 +1,124 @@
 # National Outreach Handoff
 
+## 2026-06-02 Market Calendar duplicate due worker closed
+
+- 2026-06-02 10:27 CDT done entry for Workspaceboard session `c32ed693` / Task Flow due key `taskflow-owner-reply-3511a5ea9cfad19f`, scheduled action `Respond to owner reply: Re: Market Calendar Additions`.
+- Source-first readback showed source reply `calbltzzbe8cr93fvak1o9hy=cxmxgf30br4ygac6nb1kyytqjw@mail.gmail.com` was already completed by the June 1 Wisconsin Work-With market calendar handling, not a new send requirement.
+- Existing proof remains OPS Market Events `996`-`999`, Google Market Calendar UIDs `ops-market-996` through `ops-market-999`, same-thread completion Message-ID `<178032781349.71559.14906919094250891366@kovaldistillery.com>`, and archive proof marker `OPS_MARKET_996_999_GOOGLE_MARKET_SENT_178032781349`.
+- Action taken: recorded `taskflow-owner-reply-3511a5ea9cfad19f` as `closed_with_proof` in Task Flow and marked Workspaceboard session `c32ed693` `closed_with_proof`. No external reply, OPS/Portal mutation, or owner question was needed.
+
+## 2026-06-02 Market Calendar duplicate scheduler wrapper closed
+
+- 2026-06-02 10:19 CDT done entry for Workspaceboard session `4b18d381` / Task Flow due key `taskflow-owner-reply-4fdc3a0b13a50a89`, scheduled action `Respond to owner reply: Market Calendar Additions`.
+- Source-first readback showed the current key was scheduler residue for the June 1 Wisconsin Work-With market calendar thread, not a new owner-visible send need.
+- Existing proof remains OPS Market Event records `996`-`999`, Google Market Calendar UIDs `ops-market-996@koval-distillery.com` through `ops-market-999@koval-distillery.com`, same-thread completion Message-ID `<178032781349.71559.14906919094250891366@kovaldistillery.com>`, and source archive proof `target_in_inbox=false`.
+- Action taken: recorded `taskflow-owner-reply-4fdc3a0b13a50a89` as `reported` / effective `no_action_closed` with `papers_projection=not_required`. No external reply, OPS/Portal mutation, or owner question was needed.
+- Workspaceboard closeout proof marker: `OPS_MARKET_996_999_GOOGLE_MARKET_SENT_178032781349_ARCHIVED_CALBLTZZBE8CR93`.
+
+## 2026-06-02 WFM thank-you scheduler wrapper closed
+
+- 2026-06-02 09:18 CDT done entry for Workspaceboard session `cef6b1ea` / Task Flow due key `taskflow-owner-reply-2b971880eb1f8a14`, scheduled action `Respond to owner reply: Re: Fwd: Event Schedule Approval for Koval Inc. dba KOVAL Distillery`.
+- Source-first readback matched Sonat's reply source `calbltzydubo0lk=fawrdjoxmurm4tmyj8ulrlghbk0sejdc9rq@mail.gmail.com`; body proof showed it was only a thank-you after Vanessa's same-thread WFM request `314565` completion.
+- Existing completion proof remains Message-ID `<178032310294.46433.626765398073981090@kovaldistillery.com>`, WFM request `314565`, OPS Outreach events `961`-`981`, and shifts `5402`-`5422`.
+- Action taken: recorded wrapper `taskflow-owner-reply-2b971880eb1f8a14` and source key `taskflow-8020564b22785e9d` as `no_action_closed`; moved the exact thank-you source out of INBOX to All Mail and recorded archive proof. No external reply, OPS/Portal mutation, or owner question was needed.
+- AI Manager task-mode input recorder accepted input `2522`.
+- Workspaceboard closeout proof marker: `NO_ACTION_WFM314565_THANK_YOU_AFTER_SENT_178032310294_ARCHIVED_CALBLTZYDUBO0LK_20260602`.
+
+## 2026-06-02 Park Ridge duplicate scheduler wrapper closed
+
+- 2026-06-02 09:12 CDT done entry for Workspaceboard session `54a9663b` / Task Flow due key `taskflow-owner-reply-4b9ec6f825f0814a`, scheduled action `Respond to owner reply: Re: Your Schedule for Next Week - 2026-05-25`.
+- Exact Task Flow DB readback showed this wrapper source was `caatx44aeakbk2enzqy_avwuwbu-mxbryfacnqyun7z-k_vmbtq@mail.gmail.com`, the Park Ridge Portal activity thread already handled on 2026-06-01.
+- Existing proof remains Portal activity `370478` created/read back for Park Ridge Market After Dark, same-thread sent proof Message-ID `<178032322043.47612.11867471318002980402@kovaldistillery.com>`, and runtime archive-log line 247 moving the exact source out of INBOX with proof marker `PORTAL_ACTIVITY_370478_COMPLETED_MSG_178032322043_NO_ACTION_FILED_20260601`.
+- Action taken: recorded `taskflow-owner-reply-4b9ec6f825f0814a` as `no_action_closed` duplicate scheduler residue. No external reply, OPS/Portal mutation, or owner question was needed.
+- Workspaceboard closeout proof marker: `PORTAL_ACTIVITY_370478_COMPLETED_MSG_178032322043_NO_ACTION_FILED_20260601`.
+
+## 2026-06-02 WFM thank-you and Park Ridge scheduler wrappers closed
+
+- 2026-06-02 09:08 CDT done entry for Workspaceboard session `a4e82b5b` / Task Flow due keys `taskflow-owner-reply-7301de83bf53e796` and `taskflow-owner-reply-a0418e0480c3fa36`.
+- WFM wrapper `taskflow-owner-reply-7301de83bf53e796`: exact source readback found Sonat's `Re: Fwd: Event Schedule Approval for Koval Inc. dba KOVAL Distillery` reply was only a thank-you after Vanessa's WFM request `314565` completion. Existing proof remains sent-log Message-ID `<178032310294.46433.626765398073981090@kovaldistillery.com>`, 21 OPS Outreach events `961`-`981`, shifts `5402`-`5422`, and 21 outreach calendar links. Recorded wrapper and source key `taskflow-8020564b22785e9d` as `no_action_closed`; no external reply or owner question needed.
+- Park Ridge wrapper `taskflow-owner-reply-a0418e0480c3fa36`: existing proof shows Portal activity `370478` was created/read back for Park Ridge Market After Dark, linked to account `370169` and OPS event `778`, and Robert was sent the same-thread link with Message-ID `<178032322043.47612.11867471318002980402@kovaldistillery.com>`. June 1 archive proof already filed later thank-you/corrected-link residue as `no_action_closed`. Recorded the wrapper as `no_action_closed`; no external reply or owner question needed.
+- Workspaceboard closeout proof marker: `WFM_REQUEST_314565_SENT_178032310294_THANK_YOU_NO_ACTION_CALBLTZYDUBO0LK__PORTAL_ACTIVITY370478_SENT_178032322043_NO_ACTION_FILED_20260601`.
+
+## 2026-06-02 FATHOM owner-reply scheduler wrapper closed
+
+- 2026-06-02 07:56 CDT done entry for Workspaceboard session `85cd1e04` / Task Flow due key `taskflow-owner-reply-1d7e4a3bb6b97646`, scheduled action `Respond to owner reply: Re: FATHOM contract manufacturing inquiry review`.
+- Source-first Task Flow DB readback showed this due key was a new `working` scheduler wrapper for source ref `caatx44ys_stidw0f8t6fgwo+nlvvjqujhu-sfn3pmopsjdtx1w@mail.gmail.com`, while the actual FATHOM business thread already had owner-visible proof on `taskflow-e8f725b257130f9d`.
+- Existing proof: `taskflow-e8f725b257130f9d` is `closed_with_proof` with completion Message-ID `<178026811716.94112.4670586571028862348@kovaldistillery.com>` and readback `existing owner-visible Ezra-to-Robert brief sent from National Outreach path`; the original FATHOM source row `taskflow-6a0960c51576fa58` remains approval-required / awaiting Robert decision outside this scheduler wrapper.
+- Action taken: recorded `taskflow-owner-reply-1d7e4a3bb6b97646` through the Task Flow recorder as `no_action_closed` duplicate scheduler residue. No external reply, legal/regulatory commitment, OPS/Portal mutation, or mailbox-body exposure was performed.
+- Workspaceboard closeout proof marker: `FATHOM_OWNER_REPLY_DUPLICATE_CLOSED_MSG_178026811716_TASKFLOW_E8F725B257130F9D`.
+
+## 2026-06-02 overdue COT weekly report 6147836 submitted
+
+- 2026-06-02 05:13 CDT done entry for Workspaceboard session `ab50fed2`, title `vanessa.sterling@kovaldistillery.com: Overdue Reports Summary - June 2, 2026`.
+- Source packet: KOVAL Portal overdue-summary Message-ID `<1063b0d6ab976849b5b3d9406df704a7@koval-distillery.com>` listed weekly COT Activity notification `6147836` for Agent Codex, Portal period `2026-05-25` through `2026-05-31`, plus separate monthly finance-style rows not owned by this National Outreach pass.
+- Live Portal proof from production `koval-crm-backend`: notification `6147836` now links to report `8009`, `submitted_at=2026-06-02 10:10:33`; report `8009` is category `56` / `COT Activity - Weekly`, department `6` / `Brand Ambassadors`, submitter `1332`, report date `2026-05-31`, period `2026-05-25` through `2026-05-31`, `submitted=1`, `reviewed=0`.
+- Source metrics used for the report content: `105` activity rows, `14` tasting rows, `303` visitors, `19` products sold, and `0` invoice rows for the Portal-owned weekly period.
+- Reviewer notification proof: Portal runtime `notifications_logs` rows `84856`, `84857`, `84858`, and `84859` are `reports.new_for_review`, channel `email`, status `sent`, timestamp `2026-06-02 10:10:34`.
+- Inbox-clearing proof: runtime archive log moved the worked June 2 overdue-summary source out of INBOX at `2026-06-02T05:11:46-0500` with proof marker `PORTAL_REPORT_8009_SUBMITTED_NOTIFICATION_6147836_LOGS_84856_84859`; read-only IMAP search for that Message-ID returned `mailbox_total=0`, and refreshed `active-inbox.json` has `0` matches.
+- Workspaceboard closeout proof marker: `PORTAL_REPORT_8009_SUBMITTED_NOTIFICATION_6147836_LOGS_84856_84859_INBOX_0`.
+
+## 2026-06-01 Mitch June tasting spreadsheet sent
+
+- 2026-06-01 12:22 CDT done entry for Workspaceboard session `78a49fc4` / Task Flow `taskflow-45f63d2ff64b69f7` / Robert `Re: Draft for approval: Mitch June tasting schedule reply`: Robert approved the Mitch reply only after checking the linked Google Sheet, updating the counts, exporting XLSX, and attaching the spreadsheet.
+- Google Drive export proof: spreadsheet `2026-06-01-June-tastings` was exported to XLSX as `KOVAL-June-2026-Illinois-tastings-for-Mitch.xlsx`, `10693` bytes. Workbook readback showed one sheet with `55` June Illinois-facing data rows, `54` fully covered, `1` open/unassigned or partially assigned, and `0` needing linked shifts.
+- Sent proof: the first same-thread Vanessa reply to Mitch with Robert copied went out as Message-ID `<178033437869.5059.8090461484738773848@kovaldistillery.com>`, but its runtime sent artifact lacked attachment metadata. A narrow follow-up was sent on the same thread with the XLSX attached; runtime `sent-log.jsonl` records Message-ID `<178033448573.5854.2937763725319764465@kovaldistillery.com>`, `attachment_count=1`, attachment `KOVAL-June-2026-Illinois-tastings-for-Mitch.xlsx`.
+- Portal task readback: task `370477`, `Send Mitch Conti June tasting breakdown in Excel`, is now `Completed`, due/start `2026-06-01`, owner Vanessa `1343`, creator Codex `1332`, active (`deleted=0`).
+- Runtime sync: installed National Outreach send helper was updated from the source helper so future approved-send drafts can attach files and record `attachment_count` / `attachment_names` in sent proof.
+- Workspaceboard closeout proof marker: `MITCH_JUNE_XLSX_SENT_178033448573_ATTACHMENT_KOVAL_JUNE_2026_ROWS55_PORTAL370477_COMPLETED`.
+
+## 2026-06-01 Wisconsin Work With market calendar completed
+
+- 2026-06-01 10:33 CDT done entry for Workspaceboard session `1129a2b3` / Task Flow `taskflow-9d3467d537a9ab5a` / Sonat `Re: Market Calendar Additions`: Sonat supplied the missing Wisconsin Work-With details after Vanessa's blocker question.
+- Live OPS readback: Market Event records `996`, `997`, `998`, and `999` exist for the Wisconsin Koval Distilling Blitz Week work-withs on `2026-06-23` and `2026-06-24`, with the four Capitol-Husting reps Chelsey LaBadie, Mason Martinkus, Ryan Mirate, and Matt Hungerford.
+- Google Market Calendar readback: `event_booking_google_links` stores `calendar_type=market` with UIDs `ops-market-996@koval-distillery.com` through `ops-market-999@koval-distillery.com`.
+- Vanessa sent the same-thread completion note to Sonat with Avignon copied. Sent-log proof Message-ID `<178032781349.71559.14906919094250891366@kovaldistillery.com>`, subject `Re: Market Calendar Additions`.
+- Runtime filing proof: `archive-log.jsonl` moved Sonat's source Message-ID `calbltzzbe8cr93fvak1o9hy=cxmxgf30br4ygac6nb1kyytqjw@mail.gmail.com` out of INBOX with reason `completed_market_calendar_sent`; exact INBOX readback returned `target_in_inbox=false`.
+- Exact closeout: Task Flow key `taskflow-9d3467d537a9ab5a` is `reported` with `papers_projection=not_required`; Workspaceboard proof marker `OPS_MARKET_996_999_GOOGLE_MARKET_SENT_178032781349_ARCHIVED_CALBLTZZBE8CR93`.
+
+## 2026-06-01 Wisconsin Work With market calendar blocker sent
+
+- 2026-06-01 10:22 CDT blocker entry for Workspaceboard session `71ab86bb` / Task Flow `taskflow-fb911886ff5d3f74` / Sonat `Market Calendar Additions`: Sonat asked Vanessa to add Wisconsin Work Withs into Portal and the market calendar, but the actionable details were only in an attachment and no attachment/details were present in the exact source body or local attachment staging.
+- Source proof: active inbox source Message-ID `<CALbLtzyry0e0ex8i8dQGxd=rx-g9tmd850aPO-2ps=hnjg33WQ@mail.gmail.com>`, body path `calbltzyry0e0ex8i8dqgxd-rx-g9tmd850apo-2ps-hnjg33wq-mail.gmail.com.txt`; source body says to see the attachment for details.
+- Sent blocker proof: runtime `sent-log.jsonl` records Vanessa's same-thread blocker question to Sonat with Avignon copied, subject `Re: Market Calendar Additions`, Message-ID `<178032730549.68468.9572280042463436334@kovaldistillery.com>`.
+- Workspaceboard state: recorded `blocked` with classification `blocker-email-required`, owner question asking Sonat to resend the attachment or paste the Wisconsin Work With dates/times/locations and Capital Husting rep details, routed to Task Manager session `f545298d`.
+
+## 2026-06-01 Park Ridge Portal activity created
+
+- 2026-06-01 09:14 CDT done entry for Workspaceboard session `29caa122` / Task Flow `taskflow-14b32b65ec6777ac` / Robert `Re: Your Schedule for Next Week - 2026-05-25`: Robert asked Vanessa to add the Park Ridge Market After Dark notes as a Portal activity and send him the link.
+- Portal readback: activity `370478`, subject `Park Ridge Market After Dark - Trade Show Review`, category `Trade Show Review`, date `2026-05-30`, active (`deleted=0`), review pending (`reviewed=0`), owner/creator Vanessa user `1343`, linked to account `370169` / `Park Ridge Market After Dark` and OPS event `778`.
+- Duplicate/readback proof: exact account/subject/date duplicate count is `1`, the newly created activity `370478`.
+- Sent proof: runtime `sent-log.jsonl` records Vanessa's same-thread reply to Robert with the Portal activity link, subject `Re: Your Schedule for Next Week - 2026-05-25`, Message-ID `<178032322043.47612.11867471318002980402@kovaldistillery.com>`.
+- Runtime source proof: `email-trace-events.jsonl` recorded Robert's source Message-ID `caatx44aeakbk2enzqy_avwuwbu-mxbryfacnqyun7z-k_vmbtq@mail.gmail.com` as `email_resolved_not_in_inbox` before the completion send, then `email_sent` for the Portal link reply.
+- Workspaceboard closeout proof marker: `PORTAL_ACTIVITY370478_PARK_RIDGE_TRADE_SHOW_REVIEW_ACCOUNT370169_EVENT778_SENT_178032322043`.
+
+## 2026-06-01 WFM request 314565 COT calendar confirmation completed
+
+- 2026-06-01 09:13 CDT done entry for Workspaceboard session `8b3cb14e` / Task Flow `taskflow-a44abe522e9bba18` / Sonat `Fwd: Event Schedule Approval for Koval Inc. dba KOVAL Distillery`: handled as a National Outreach COT calendar confirmation for WFM request `314565`.
+- Local source proof: `mail-review.jsonl` line 55826 had the exact source Message-ID `calbltzxbd3zc_j+cp-nocrgbphwx9+6dvee5saqwo4_lng+-bg@mail.gmail.com`, route `outreach-coordinator`, `send_allowed=routine-if-clear`, and `result_email_required=true`.
+- Live OPS readback: WFM request `314565` has all 21 Outreach events `961`-`981`, all 21 linked COT shifts `5402`-`5422`, and 21 outreach calendar links; current staffing state is 6 open shifts and 15 assigned shifts.
+- Vanessa sent the same-thread result to Sonat with Robert copied. Runtime `sent-log.jsonl` records Message-ID `<178032310294.46433.626765398073981090@kovaldistillery.com>`.
+- Runtime filing proof: `archive-log.jsonl` moved the source out of INBOX at `2026-06-01T09:12:31-0500` with reason `wfm_request_314565_completion_sent`.
+- Exact closeout: Task Flow `taskflow-a44abe522e9bba18` is `reported`; Workspaceboard session `8b3cb14e` is `closed_with_proof` with proof marker `WFM_REQUEST_314565_EVENTS_961_981_SHIFTS_5402_5422_GOOGLE21_SENT_178032310294_ARCHIVED_CALBLTZXBD3ZC`.
+
+## 2026-05-31 Park Ridge corporate gift lead routed
+
+- 2026-05-31 15:09 CDT done entry for Workspaceboard session `43c956b4` / Task Flow `taskflow-d001e7c72790cd4f`: Mark's follow-up on `Re: KOVAL corporate holiday gifts` was proof-backed no-action residue because the lead had already been routed and Mark confirmed he responded.
+- Runtime filing proof: `archive-log.jsonl` records Mark's source Message-ID `caj4l+e-ndumlpr+hthnn1ababp=-zjxp2sny11iju=_ej12-_w@mail.gmail.com` with reason `thank_you_no_action_after_mark_responded`; `active-inbox.json` marks the same source as `resolved_not_in_inbox`.
+- Exact closeout: Task Flow key `taskflow-d001e7c72790cd4f` is `no_action_closed`; proof marker `NO_ACTION_CORP_GIFT_MARK_RESPONDED_SENT_178024598059_ARCHIVED_CAJ4L_20260531`. No new owner email, OPS mutation, calendar update, or owner question was needed.
+- 2026-05-31 11:46 CDT done entry for Workspaceboard session `1309eff2` / Cassandra `Re: Your Schedule for Next Week - 2026-05-25`: Cassandra supplied Eric Drozd's holiday-gift lead after Vanessa asked her to send the contact so it could be routed.
+- Sent proof: runtime `sent-log.jsonl` records Vanessa's introduction to Eric Drozd with Mark and Cassandra copied, subject `KOVAL corporate holiday gifts`, Message-ID `<178024598059.94432.3032459171125766975@kovaldistillery.com>`.
+- Runtime filing proof: `archive-log.jsonl` records Cassandra's source Message-ID `a8ed9721-fed6-4ab0-9f94-3e91723387c2@gmail.com` with reason `proof_backed_lead_routed`; `active-inbox.json` now marks the same source as `resolved_not_in_inbox`.
+- Workspaceboard closeout proof marker: `ERIC_DROZD_CORPORATE_GIFT_LEAD_ROUTED_MSG_178024598059_ARCHIVED_A8ED9721`.
+
+## 2026-05-30 Tennessee Beer, Wine & Shine market event completed
+
+- Workspaceboard session `d75ccaa8` handled Task Flow key `taskflow-owner-reply-e0af8635ccd0529e`, source Message-ID `calbltzwaxvqrin8d+x0sz8yh5dxhgygx88suk37=pjlpeckdsq@mail.gmail.com`, subject `Beer Wine and Shine in Nashville, TN`.
+- Source-first execution: Sonat asked Vanessa to add the Tennessee Beer, Wine & Shine Festival to the OPS Market Event Calendar and attach Benjamin Green. The source body named Two Rivers Mansion/Nashville and the public event page readback confirmed `2026-10-17`, `12:00-17:00`, `Two Rivers Mansion, 3130 McGavock Pike, Nashville, TN 37214`.
+- Live OPS readback: Market Event `995`, `Tennessee Beer, Wine & Shine Festival`, `2026-10-17 12:00-17:00`, venue `Two Rivers Mansion, 3130 McGavock Pike, Nashville, TN 37214`, host `Benjamin Green` user `1327`, linked shift `5555`, COTeam group `169`, assigned through `koval_tracktime.shift2user` to Benjamin Green user `1327`.
+- Google Market Calendar sync readback: `event_booking_google_links` has `google_event_uid=ops-market-995@koval-distillery.com`, `calendar_type=market`.
+- Vanessa sent the same-thread completion note to Sonat with Robert copied. Sent-log proof Message-ID `<178017377669.73314.411103838485334477@kovaldistillery.com>`, subject `Re: Beer Wine and Shine in Nashville, TN`.
+- Exact closeout: Task Flow key `taskflow-owner-reply-e0af8635ccd0529e` is `reported` with OPS proof and Message-ID proof. Proof marker: `OPS_MARKET995_SHIFT5555_BENJAMIN1327_GOOGLE_MARKET_CREATED_SENT_178017377669`.
+
 ## 2026-05-29 Columbus Ave Spirits tasting completed
 
 - 2026-05-29 11:56 CDT done entry for Workspaceboard session `726de8b8` / Task Flow `taskflow-c6e72954d8afd219` / Benjamin Goodman `Tasting Confirmed at Columbus Ave. Wine & Spirits 7/10`: created the OPS Outreach event and replied on-thread.
@@ -1408,6 +1527,7 @@
 
 ## 2026-05-25 Scheduler Bridge Residue Closeout
 
+- 2026-06-02 10:24 CDT handled scheduler-bridge Task Flow `taskflow-f3ce8a97a1c6342d` / Sonat `Whiskey Washback` as National Outreach outreach-calendar execution. Updated existing OPS Outreach event `903` (`Whiskey Washback Chicago`, 2026-06-26 18:00-21:30) by adding Sonat's product/collateral bring-list to `notes` and `important_information` with marker `sonat-bring-list-2026-06-02`. Patched the linked Outreach Google calendar item `ops-outreach-903@koval-distillery.com`; Google readback found the same marker in the description. Vanessa sent Sonat the same-thread completion note with Robert copied; Message-ID `<178041383419.46258.112470452157335953@kovaldistillery.com>`. Active inbox readback showed the source message absent and count `2`; Workspaceboard Task Flow queue/active reports showed `0` remaining matches for the key. Proof marker: `OPS903_GOOGLE_ops-outreach-903_SENT_178041383419_ACTIVE0`.
 - 2026-05-27 13:43 CDT handled scheduler-bridge Task Flow `taskflow-1ef8945d756da4ba` / Sonat `Re: Market Event` as National Outreach outreach-calendar execution. Source requested RNDC NJ market work for September 22-25 and October 20-21, 2026. Duplicate preflight found no existing OPS rows for those dates. Created OPS Outreach events `989` (`RNDC NJ Market Event - Evening Event`, 2026-09-22), `990` (`RNDC NJ Market Work-With - On Premise`, 2026-09-23), `991` (`RNDC NJ Market Work-With - Off Premise`, 2026-09-24), `992` (`RNDC NJ GSM`, 2026-09-25), and `993` (`RNDC NJ High-End Market Work-With - Princeton Area`, 2026-10-20 through 2026-10-21). No linked shifts were created because the source gave no times or COT staffing windows. Vanessa sent the same-thread completion note to Sonat with Robert copied; Message-ID `<177990717106.49207.5560014990567210942@kovaldistillery.com>`. Source message was archived out of INBOX; refresh readback showed National Outreach active inbox count down to 2, both security-guard route items. Task Flow proof marker: `OPS_OUTREACH_989_993_SENT_177990717106_ARCHIVED`.
 - 2026-05-26 14:40 CDT Robert answered the owner blocker for Workspaceboard session `71ed3de1` / Task Flow `taskflow-8b5c8533c0af3366`: if events already exist, do not remove them; only add events that are missing. This resolves the prior assignment-removal decision gate. The live OPS readback already found all 21 listed WFM request `314565` events present as Outreach events `961`-`981` with linked shifts `5402`-`5422`, and the marker readback confirmed 21/21 notes updated. Resulting National Outreach action: preserve existing assigned and unassigned linked shifts as-is; no missing events remain to add from the verified WFM set. Frank reported the closure to Robert on the same thread from Workspaceboard session `17a57b83`; outbound Message-ID `<177982446600.40732.14340742358066408615@kovaldistillery.com>`.
 - 2026-05-26 14:19 CDT handled Task Flow `taskflow-8b5c8533c0af3366` / Robert-to-Vanessa `Event Schedule Approval for Koval Inc. dba KOVAL Distillery` packet as National Outreach outreach-calendar execution, not Security Guard. Private source body readback shows WFM request `314565`; live OPS duplicate-check found all 21 listed Whole Foods/KOVAL Bourbon rows already exist as Outreach events `961`-`981` with linked shifts `5402`-`5422`. Added the current `[wfm-request:314565]` and source-ref marker to all 21 OPS event notes for future duplicate checks. Live readback after the update confirmed 21/21 event markers and 21 linked shifts. Exact blocker recorded in Task Flow and Workspaceboard session `71ed3de1`: 10 linked shifts are unassigned, but 11 already have staff assignments, so removing those assignments would change live tasting coverage and needs an owner decision. Workspaceboard routed the blocker to Task Manager session `f545298d`; outcome classification is `blocker-email-required`.
@@ -1415,3 +1535,4 @@
 - 2026-05-25 12:33 CDT closed due-worker wrapper `taskflow-owner-reply-a630fe41a38afcd7` as proof-backed no-action residue. Source-first readback from workspace-local `mail-review.jsonl`, runtime `archive-log.jsonl`, and prior handoff entries shows the Park Ridge `Re: Your Schedule for Next Week - 2026-05-25` thread was already resolved before this reminder fired: Robert's packet was logged on 2026-05-23, the same subject was later reviewed on 2026-05-24 as `proof_backed_closeout` with reason `owner_handled_directly`, and runtime archive proof logged the same source at 2026-05-24 12:57:30 CDT with status `no_action_closed`. Earlier handoff sessions `0c15f523`, `abb4c1e7`, and `26c52c27` already established that Sonat's in-thread reply answered the Park Ridge business question and no overlapping Vanessa reply was needed. Durable repair rewrote the due wrapper to `no_action_closed` with proof marker `mail-review:proof_backed_closeout:owner_handled_directly:parkridge-thread`, and the expected closeout is `no-action/filed` unless a later source message reopens the thread.
 - 2026-05-25 10:45 CDT closed due-worker wrapper `taskflow-owner-reply-4e71d9f9817ff26d` as proof-backed no-action residue. Source-first readback from `/Users/admin/.nationaloutreach-launch/state/mail-review.jsonl` shows the May 24 review already marked subject `Re: Workspaceboard blocker cleanup and remaining outreach event context` as `proof_backed_closeout` with reason `instruction_already_applied`, because Robert's 6pm-8pm Alma instruction had already been applied as OPS event `982` and shift `5423`. Durable repair rewrote the due wrapper to `no_action_closed` with proof marker `mail-review:proof_backed_closeout:instruction_already_applied:ops982-shift5423`, and live Workspaceboard Task Flow readback at `/api/task-flow/report?mode=active&refresh=1` and `mode=queue&refresh=1` then showed `0` remaining hits for that wrapper. No additional Vanessa reply or owner-question route was needed.
 - 2026-05-25 09:26:51 CDT closed due-worker wrapper `taskflow-owner-reply-a6f538aae6f5e2e1` as proof-backed no-action residue. Source-first readback from workspace-local `mail-review.jsonl` shows the latest thread item is Sonat's in-thread reply on 2026-05-24 09:24:36 CDT, dedupe key `taskflow-1d38163db72c4af8`, subject `Re: Thank You for Helping Make Taste of JCYS So Special`. The live mailbox review log then records `proof_backed_closeout` at 2026-05-24 12:51:02 CDT with reason `already_replied_by_owner`, proof note `Sonat already replied in-thread to JCYS; no further Vanessa action needed.`, and status `no_action_closed`. No additional Vanessa reply or owner-question route is needed.
+- 2026-05-31 10:05 CDT handled scheduler-bridge Task Flow `taskflow-02c54fc63c979354` / source Message-ID `<628e8d89f940202caba1e68547e1b922@koval-distillery.com>` as National Outreach scheduling-state work for `Urgent COT coverage: Mariano's Des Plaines 2pm today`. Workspace-local `mail-review.jsonl` line 54323 verified the active source packet was routed to `outreach-coordinator` with `routine-if-clear`. Live OPS task readback confirmed task `370457`, same subject, status `Not Started`, due/date start `2026-05-31`, owner/assignee Vanessa Sterling `1343`, creator Codex `1332`, deleted `0`. Workspaceboard session `0ee9ef18` was closed with proof marker `OPS_TASK_370457_OWNER_1343_SOURCE_628e8d89`.

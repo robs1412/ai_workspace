@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
 import json
 import shlex
 import subprocess
@@ -158,6 +159,20 @@ def git_output(args: list[str], cwd: Path = WORKSPACE_ROOT) -> str:
     if completed.returncode != 0:
         raise RuntimeError((completed.stderr or completed.stdout).strip() or f"git {' '.join(args)} failed")
     return completed.stdout.strip()
+
+
+def git_output_bytes(args: list[str], cwd: Path = WORKSPACE_ROOT) -> bytes:
+    completed = subprocess.run(
+        ["git", *args],
+        cwd=str(cwd),
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        check=False,
+    )
+    if completed.returncode != 0:
+        detail = (completed.stderr or completed.stdout).decode("utf-8", errors="replace").strip()
+        raise RuntimeError(detail or f"git {' '.join(args)} failed")
+    return completed.stdout
 
 
 def is_empty_dir(path: Path) -> bool:
@@ -449,6 +464,133 @@ def cmd_decide(args: argparse.Namespace) -> int:
     return 0
 
 
+def run_evaluator(run_id: str, evaluator: Evaluator, timeout_seconds: int) -> dict[str, Any]:
+    evaluator_cwd = ensure_owned_worktree(run_id)
+    started_at = now_local()
+    completed = subprocess.run(
+        shlex.split(evaluator.evaluator),
+        cwd=str(evaluator_cwd),
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        timeout=max(1, int(timeout_seconds)),
+        check=False,
+    )
+    finished_at = now_local()
+    result = {
+        "started_at": started_at,
+        "finished_at": finished_at,
+        "returncode": completed.returncode,
+        "evaluator": evaluator.evaluator,
+        "evaluator_cwd": str(evaluator_cwd),
+        "metric": parse_metric(evaluator.metric, completed.stdout, {"returncode": completed.returncode}),
+        "stdout_text": completed.stdout,
+        "stderr_text": completed.stderr,
+    }
+    return result
+
+
+def write_promotion_proof(
+    run_id: str,
+    attempt_id: str,
+    evaluator_result: dict[str, Any],
+    patch_bytes: bytes,
+    dry_run: bool,
+) -> dict[str, str]:
+    proof_base = proof_dir(run_id) / f"{attempt_id}-promote"
+    patch_path = proof_base.with_suffix(".patch")
+    stdout_path = proof_base.with_suffix(".stdout.txt")
+    stderr_path = proof_base.with_suffix(".stderr.txt")
+    result_path = proof_base.with_suffix(".json")
+    patch_path.write_bytes(patch_bytes)
+    stdout_path.write_text(str(evaluator_result.pop("stdout_text")), encoding="utf-8")
+    stderr_path.write_text(str(evaluator_result.pop("stderr_text")), encoding="utf-8")
+    patch_hash = hashlib.sha256(patch_bytes).hexdigest()
+    write_json(
+        result_path,
+        {
+            **evaluator_result,
+            "attempt_id": attempt_id,
+            "patch": str(patch_path.relative_to(run_dir(run_id))),
+            "patch_sha256": patch_hash,
+            "dry_run": dry_run,
+            "stdout": str(stdout_path.relative_to(run_dir(run_id))),
+            "stderr": str(stderr_path.relative_to(run_dir(run_id))),
+        },
+    )
+    return {
+        "patch": str(patch_path.relative_to(run_dir(run_id))),
+        "patch_sha256": patch_hash,
+        "proof": str(result_path.relative_to(run_dir(run_id))),
+    }
+
+
+def cmd_promote(args: argparse.Namespace) -> int:
+    run_id = safe_slug(args.run_id)
+    attempt_id = safe_slug(args.attempt_id)
+    evaluator = load_evaluator(run_id)
+    rows = read_attempts(run_id)
+    row = find_attempt(rows, attempt_id)
+    if row.get("status") != "keep":
+        raise ValueError("only attempts already decided as keep can be promoted")
+    if row.get("surface") != evaluator.surface:
+        raise ValueError(f"attempt surface must match run surface: {evaluator.surface}")
+
+    worktree = ensure_owned_worktree(run_id)
+    surface = evaluator.surface
+    main_dirty = git_output(["status", "--porcelain", "--", surface], cwd=WORKSPACE_ROOT)
+    if main_dirty:
+        raise ValueError(f"main checkout has uncommitted changes on surface {surface}; refusing promotion")
+
+    evaluator_result = run_evaluator(run_id, evaluator, args.timeout_seconds)
+    if evaluator_result["returncode"] != 0:
+        raise RuntimeError("immutable evaluator failed before promotion")
+
+    patch_bytes = git_output_bytes(["diff", "--binary", "--", surface], cwd=worktree)
+    if not patch_bytes.strip():
+        raise ValueError(f"no worktree patch found for surface {surface}")
+
+    proof = write_promotion_proof(run_id, attempt_id, evaluator_result, patch_bytes, args.dry_run)
+    check = subprocess.run(
+        ["git", "apply", "--check", str((proof_dir(run_id) / f"{attempt_id}-promote.patch").resolve())],
+        cwd=str(WORKSPACE_ROOT),
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        check=False,
+    )
+    if check.returncode != 0:
+        raise RuntimeError((check.stderr or check.stdout).strip() or "git apply --check failed")
+    if not args.dry_run:
+        apply_result = subprocess.run(
+            ["git", "apply", str((proof_dir(run_id) / f"{attempt_id}-promote.patch").resolve())],
+            cwd=str(WORKSPACE_ROOT),
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=False,
+        )
+        if apply_result.returncode != 0:
+            raise RuntimeError((apply_result.stderr or apply_result.stdout).strip() or "git apply failed")
+
+    update_run_report(run_id)
+    print(
+        json.dumps(
+            {
+                "ok": True,
+                "run_id": run_id,
+                "attempt_id": attempt_id,
+                "surface": surface,
+                "dry_run": args.dry_run,
+                **proof,
+            },
+            indent=2,
+            sort_keys=True,
+        )
+    )
+    return 0
+
+
 def parse_args(argv: list[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest="command", required=True)
@@ -484,6 +626,13 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     decide.add_argument("--status", choices=["keep", "discard", "crash", "needs-approval"], required=True)
     decide.add_argument("--reason", required=True)
     decide.set_defaults(func=cmd_decide)
+
+    promote = sub.add_parser("promote", help="Apply a kept worktree patch to the main checkout after evaluator proof.")
+    promote.add_argument("--run-id", required=True)
+    promote.add_argument("--attempt-id", required=True)
+    promote.add_argument("--timeout-seconds", type=int, default=30)
+    promote.add_argument("--dry-run", action="store_true")
+    promote.set_defaults(func=cmd_promote)
     return parser.parse_args(argv)
 
 

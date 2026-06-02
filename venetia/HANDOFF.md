@@ -1,5 +1,15 @@
 # HANDOFF - venetia
 
+# 2026-06-01 Replies Forwarded to Sonat
+
+Venetia forwarded the current outbound response set to Sonat after confirming live replies from the outreach.
+
+- Sent-to: `sonat@kovaldistillery.com`
+- Subject: `Re: The Cultivater Feature Inquiry`
+- Send proof: `/Users/admin/.venetia-launch/state/sent-log.jsonl` line `10`
+- Message-ID: `<178034597599.63869.9075232936529155927@thecultivater.com>`
+- Result: Sonat now has a concise update covering the Kotn acknowledgment, the Nagnata receipt notice, and the Slow Art Collective response with Q&A interest.
+
 ## 2026-05-27 Task Flow Owner-Reply Reminders Closed With Cultivater Send Proof
 
 At 2026-05-27 12:07:37 CDT, Task Flow due-worker session `585a4352` checked the two Venetia owner-reply reminders for the Cultivater inquiry and closed them with domain proof rather than sending a new external message.
