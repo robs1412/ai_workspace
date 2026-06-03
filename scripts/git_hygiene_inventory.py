@@ -145,12 +145,95 @@ def render_markdown(rows: list[dict[str, Any]], dirty_only: bool) -> str:
     return "\n".join(lines) + "\n"
 
 
+def plan_bucket(row: dict[str, Any]) -> str:
+    if row["tracked_dirty"] == 0 and row["untracked"] == 0:
+        return "clean"
+    if row["repo"].endswith("/ai_workspace"):
+        return "active-lane-work"
+    if row["repo"].endswith("/bid"):
+        return "finance-lane-review"
+    if row["tracked_dirty"] == 0 and row["untracked"] > 0:
+        return "untracked-review"
+    if "/recursive-runs/" in row["repo"]:
+        return "recursive-worktree-review"
+    return "dirty-review"
+
+
+def plan_next_step(bucket: str) -> str:
+    steps = {
+        "active-lane-work": "Review by lane and commit only coherent completed groups.",
+        "finance-lane-review": "Review BID import/source artifacts before any commit or cleanup.",
+        "untracked-review": "Identify whether untracked files are generated residue or real work.",
+        "recursive-worktree-review": "Use recursive harness worktree-diff and retire-worktree proof gates.",
+        "dirty-review": "Inspect tracked diff before deciding commit, split, or leave active.",
+        "clean": "No action.",
+    }
+    return steps[bucket]
+
+
+def build_plan(rows: list[dict[str, Any]]) -> dict[str, Any]:
+    buckets: dict[str, list[dict[str, Any]]] = {}
+    for row in rows:
+        bucket = plan_bucket(row)
+        if bucket == "clean":
+            continue
+        buckets.setdefault(bucket, []).append(
+            {
+                "repo": row["repo"],
+                "tracked_dirty": row["tracked_dirty"],
+                "untracked": row["untracked"],
+                "sample_tracked": row["sample_tracked"],
+                "sample_untracked": row["sample_untracked"],
+                "next_step": plan_next_step(bucket),
+            }
+        )
+    return {
+        "mode": "read-only-plan",
+        "mutations": [],
+        "repo_count": len(rows),
+        "dirty_repo_count": sum(1 for row in rows if row["tracked_dirty"] or row["untracked"]),
+        "buckets": buckets,
+    }
+
+
+def render_plan_markdown(plan: dict[str, Any]) -> str:
+    lines = [
+        "# Git Hygiene Plan",
+        "",
+        "- mode: read-only-plan",
+        "- mutations: none; no fetch, clean, reset, stash, commit, push, or delete",
+        f"- repos_scanned: `{plan['repo_count']}`",
+        f"- dirty_repos: `{plan['dirty_repo_count']}`",
+        "",
+    ]
+    for bucket, items in plan["buckets"].items():
+        lines.extend([f"## {bucket}", "", "| repo | dirty | untracked | next_step |", "| --- | ---: | ---: | --- |"])
+        for item in items:
+            lines.append(
+                "| "
+                + " | ".join(
+                    [
+                        item["repo"],
+                        str(item["tracked_dirty"]),
+                        str(item["untracked"]),
+                        item["next_step"],
+                    ]
+                )
+                + " |"
+            )
+        lines.append("")
+    if not plan["buckets"]:
+        lines.append("No dirty repositories found.\n")
+    return "\n".join(lines)
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", default=str(DEFAULT_ROOT), help="Root directory to scan.")
     parser.add_argument("--json", action="store_true", help="Emit JSON instead of Markdown.")
     parser.add_argument("--dirty-only", action="store_true", help="Only show repos with tracked or untracked changes.")
     parser.add_argument("--include-worktrees", action="store_true", help="Include nested Git worktrees in recursive run folders.")
+    parser.add_argument("--plan", action="store_true", help="Group dirty repositories into read-only next-action buckets.")
     parser.add_argument("--sample-limit", type=int, default=8, help="Maximum sample paths per dirty category.")
     return parser.parse_args()
 
@@ -160,7 +243,13 @@ def main() -> int:
     root = Path(args.root).resolve()
     repos = discover_repos(root, args.include_worktrees)
     rows = [inventory_repo(repo, max(0, args.sample_limit)) for repo in repos]
-    if args.json:
+    if args.plan:
+        plan = build_plan(rows)
+        if args.json:
+            print(json.dumps(plan, indent=2, sort_keys=True))
+        else:
+            print(render_plan_markdown(plan), end="")
+    elif args.json:
         print(json.dumps(rows, indent=2, sort_keys=True))
     else:
         print(render_markdown(rows, args.dirty_only), end="")

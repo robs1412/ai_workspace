@@ -1,0 +1,2 @@
+attempt_id	hypothesis	surface	metric	status	proof	reason
+add-git-hygiene-plan-mode-20260603	A read-only planner mode can turn repo hygiene inventory into concrete action buckets without mutating any repository.	scripts/git_hygiene_inventory.py	0	keep	proofs/add-git-hygiene-plan-mode-20260603.json	Kept: evaluator passed and planner mode groups dirty repos into read-only next-action buckets.
