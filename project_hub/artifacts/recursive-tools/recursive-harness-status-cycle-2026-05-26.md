@@ -116,3 +116,15 @@ Commit or otherwise settle the in-progress `scripts/recursive_experiment_harness
 - dry_run: `retire-worktree --run-id recursive-harness-status-001 --superseded-patch-sha256 9f8174e25bb9ebd1a63bd442b108b7b1b4494a2add55ca9c2a2d0a428aa86bf8` returned `can_retire=true`, `dirty_is_superseded=true`, `blockers=[]`
 - apply: `retire-worktree --run-id recursive-harness-status-001 --superseded-patch-sha256 9f8174e25bb9ebd1a63bd442b108b7b1b4494a2add55ca9c2a2d0a428aa86bf8 --apply` returned `retired=true`
 - readback: `project_hub/recursive-runs/recursive-harness-status-001/worktree` is removed; subsequent `retire-worktree --run-id recursive-harness-status-001` reports `worktree_missing_or_unowned`
+
+## 2026-06-03 Git Hygiene Inventory Script
+
+- recorded_input: `ai_manager_inputs` row `2587`
+- script: `scripts/git_hygiene_inventory.py`
+- mode: read-only; no fetch, clean, reset, stash, commit, push, or delete
+- default_readback: `/usr/local/bin/python3.13 scripts/git_hygiene_inventory.py --root /Users/werkstatt --dirty-only`
+- default_result: `repos_scanned=30`, `dirty_repos=3`
+- dirty_repos: `/Users/werkstatt/ai_workspace`, `/Users/werkstatt/bid`, `/Users/werkstatt/salesreport`
+- worktree_mode: `--include-worktrees` intentionally includes recursive run worktrees
+- worktree_mode_result: `repos_scanned=36`, `dirty_repos=7`, including four dirty recursive worktrees from prior promoted runs
+- next: add proof-backed retirement for promoted recursive worktrees, then use this inventory script as the regular "clean all repos?" starting point
