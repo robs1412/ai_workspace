@@ -3,6 +3,12 @@ Last Updated: 2026-05-19 CDT (Machine: Macmini.lan)
 
 ## Completed
 
+- **2026-04-19 IKEv2 VPN DNS For koval.lan**
+  - Master ID: `AI-INC-20260419-IKEV2-VPN-DNS-01`
+  - Detail log: `project_hub/issues/2026-04-19-ikev2-vpn-dns-koval-lan.md`
+  - Repos: `ai_workspace`; runtime config on OpenWrt `192.168.55.1`
+  - Status: completed. Router DNS now answers VPN clients and future IKEv2 clients should receive `192.168.55.1` as DNS; active tunnels were not restarted.
+
 - **2026-05-27 OPS Page Width Overflow Fix**
   - Master ID: `AI-INC-20260527-OPS-PAGE-WIDTH-OVERFLOW-01`
   - Detail log: `project_hub/issues/2026-05-27-ops-page-width-overflow-fix.md`

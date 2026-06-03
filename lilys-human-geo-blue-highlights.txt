@@ -1,0 +1,260 @@
+p1: ● Regions are categorized into three groups: formal, functional, and vernacular
+p1: ● Formal regions are areas of bounded space that possess some homogeneous
+p1: characteristic or uniformity
+p2: ● Functional regions or nodal regions, are areas that have a central place, or
+p2: node, that is a focus or point of origin that expresses some practical purpose
+p2: ● Market areas are a type of functional region
+p2: ● Since outlet malls are often placed far apart,
+p2: precedence over an attraction that is farther away.
+p2: Vernacular regions are based upon the perception or collective mental map of
+p2: the region’s residents
+p2: * Tobler’s law states that all places are interrelated, but closer places are
+p2: more related than farther ones.
+p3: node
+p3: ● A cluster is when things are grouped together on the Earth’s surface
+p3: ● Agglomeration is when clustering occurs purposefully around a central point or
+p3: a economic growth pole
+p4: land, meaning land that either is actively farmed or has the potential to be
+p4: ● Agricultural density refers only to the number of farmers per square unit of
+p4: arable land
+p4: ● Topographic maps show the contour lines of elevation, as well as the urban and
+p4: vegetation surface with road, building, river, and other natural landscape features
+p4: Thematic maps express a particular subject and does not show land forms for
+p4: other features.
+p4: * Isoline maps calculate data values between points across a variable surface.
+p4: geographic feature.
+p4: * Flow-line maps use lines of varying thickness to show the direction and
+p5: volume of a particular geographic movement pattern.
+p5: * Equal-area projections attempt to maintain the relative spatial science and
+p5: the areas on the map.
+p5: * Conformal projections attempt to maintain the shape of polygons on the
+p5: map.
+p6: ● Robinson projection and the Goode’s homolosine projection balance area
+p6: and form, sacrificing a bit of both to create a more visually practical
+p6: representation of the Earth’s surface.
+p6: ● Geographic Information Systems (GIS) became practical with the onset of the
+p6: desktop computer in the 1970s.
+p6: * incorporate one or more data layers in a computer program capable of spatial
+p6: analysis and mapping.
+p7: Birth rate, also known as natality,
+p7: disease, and a lack of medical care.
+p7: * Green Revolution: (increased food and nutrition) and access to sanitation,
+p7: education, and health care
+p7: Reduced fecundity: when the majority of women are heavily engaged in
+p7: business, they are far less likely to have children
+p8: * Double-income no-kid (DINK)
+p8: Net Migration Rate (NMR): the number of immigrants minus the number of
+p8: emigrants for every thousand members of the population; can be negative
+p8: The epidemiological transition model (ETM) specifically accounts for
+p8: development due to the increasing population growth rates caused by medical
+p8: advances
+p11: ● Males are always on the left of the pyramid and females are on the right
+p13: symbolize cultural influences
+p13: Cultural synthesis (syncretism): the blending together of two or more cultural
+p13: influences
+p15: everyday situations
+p15: ● Pidgin languages are simplified forms of the language that use key vocabulary
+p15: words and limited grammar
+p15: ● French Creole is spoken, which incorporates continental French with African
+p15: dialectal sounds and vocabulary
+p15: different national
+p15: lingua franca
+p17: Continental cuisine:
+p18: divine origin
+p18: ● Formal doctrines: govern religious practice, worship, and ethical behavior in
+p18: society.
+p18: ● Compromising religions: have the ability to reform or integrate other beliefs into
+p18: their doctrinal practices
+p18: ● Fundamentalists: have little interest in compromising their beliefs or doctrines
+p18: and strictly adhere to scriptural dictates
+p18: ● Syncretic religions: synthesize the core beliefs from two or more other religions
+p18: * (EX: Sikhs incorporate principles from both Islam and Hinduism)
+p20: Theocracies: religious leaders hold the senior positions of governance
+p20: * (EX: Iran
+p21: Folklore: collected stories, spoken-word histories and writings that are specific to
+p21: a culture
+p22: ● Long-lot patterns: a narrow frontage along a road or waterway with a very long
+p22: lot shape behind
+p22: ● Nation: a population represented by a singular culture or a culture group
+p22: * Not all nations have a representative state
+p22: Ethnicity: a complex mix of genetic heritage and political allegiance
+p22: Race: the physical characteristics of a common genetic heritage.
+p23: Environmental determinism: the former scientific ideology that states that a
+p23: culture’s traits are defined by the physical geography of its native hearth or
+p23: culture region
+p23: 1900s
+p23: ● Possibilism: the revised concept proposed by Sauer and other like-minded
+p23: geographers that stated cultures were to a partial degree shaped by their
+p24: environment and the material resources available to them
+p24: * Culture groups have the ability to adjust and modify the environment
+p24: Ethnocentrism: the belief in the superiority of one’s nation or ethnic group, and
+p24: in the inferiority of other nations or ethnic groups
+p24: of an area
+p24: ● Cultural relativism: the idea that an individual’s beliefs and activities can only be
+p24: understood in the context of that person’s culture
+p24: ● Internal identity: used by individuals to express their cultural heritage, ethnicity,
+p24: or place of origin to people who share their heritage or place of origin
+p24: External identity: used by individuals to express their cultural heritage, ethnicity,
+p24: or place of origin to people who do not share a common cultural or geographic
+p24: background
+p24: Fuzzy borders: cultural regions tend to have this because it’s hard to tell where
+p24: one cultural region ends and another begins
+p25: Sequent occupance: for a single place or region, different dominant cultures
+p25: replace each other over time
+p25: layers of sequent occupance at a much smaller scale
+p25: Acculturation: the process of adapting to a new culture while still keeping some
+p25: of one’s original culture
+p25: Assimilation: a complete change in the identity of a minority culture group as it
+p25: becomes part of the majority culture group
+p26: Ethnic cleansing: where people of one ethnic group are eliminated by another,
+p26: often under threat of violence or death
+p27: ● Country: an identifiable land area
+p27: ● Nation: a population with a single
+p27: which the population originates
+p27: Sovereignty: means that a state is fully independent from outside control,
+p27: Federal states & confederations: provides military protection, administers
+p27: foreign diplomacy, and regulates trade as well as a number of internal
+p28: administrative (executive branch), legislative, and judicial services across the
+p28: country
+p28: rules about the sale of goods within each state)
+p28: ● Unitary system: a single centralized government
+p28: * Ultimate authority lies with the central government
+p28: * (EX: People’s Republic of China)
+p28: Autonomous regions: certain parts of certain nations have been granted
+p28: freedom from central authority, usually for historical, geographical, religious, or
+p28: linguistic reasons
+p28: ● Supranationalism: the concept of two or more sovereign states aligned together
+p28: for a common purpose
+p28: Supranational organizations:
+p29: ● Open borders have made it difficult to control crime and terrorism
+p29: ● Fortress Europe: describes the concept of sealing EU borders
+p29: ● Expatriate populations: citizens living outside of their borders
+p30: ● Territorial sea: Sovereign territory that includes the area of sea from shore out to
+p30: the 12-nautical-mile limit. Within 12 nautical miles, all the laws of a country apply.
+p30: ● Exclusive Economic Zone (EEZ): Exclusive economic rights from shore out to
+p30: the 200-nautical-mile limit. Within 200 nautical miles of its shores, a state controls
+p30: all aspects of natural resource exploration and extraction. This includes fisheries,
+p30: oil and gas production, salvage operations, and permits for such activity.
+p31: ● Antecedent: Boundary lines that exist from prehistoric times
+p31: * (EX: French-Spanish border along the Pyrenees Relic: Scotland-England
+p31: border after The Act of Union in 1652)
+p31: ● Relic: Former state boundaries that still have political or cultural meaning
+p31: ● Subsequent: Lines resulting from conflict or cultural changes, such as war and
+p31: migration
+p31: * (EX: German-Polish border after 1945; Kaliningrad to the USSR in 1946)
+p31: ● Superimposed: Lines laid down for political reasons over existing cultural
+p31: boundaries
+p31: * (EX: Sub-Saharan Africa after the Berlin Conference of 1884; Yugoslavia and
+p31: Iraq after the 1919 Treaty of Versailles)
+p31: ● Delimitation process: when borders are put on the map
+p31: ● Demarcation process: when markers are placed on the ground to show where
+p31: borders lie
+p35: Commonwealth of Nations: independent former parts of the British Empire that
+p35: retain the British monarch as their head of state
+p38: ● Balkanization: a situation in which the political landscape goes from a larger
+p38: state to several smaller states
+p38: ● Irredentism has two definitions:
+p38: * When a minority ethnic group desires to break away from a multiethnic state
+p38: and form its own nation-state
+p38: * Or when break away and align itself with a culturally similar state.
+p39: ● Buffer states: lands that would protect hostile countries by creating a
+p39: surrounding buffer of sympathetic countries
+p40: ● Primary economy: timber, fisheries, and mineral and energy resources
+p40: Agricultural activity can be classified by how concentrated the labor and area of
+p40: activity is for a particular type of farming:
+p40: * Intensive agriculture: requires lots of labor input, or is focused on a small
+p40: plot of land, or both
+p40: * Extensive agriculture: requires limited labor input, or is spread across large
+p40: areas of land, or both
+p40: ● Hunting and gathering societies are the earliest forms of agriculture
+p40: ● Transhumance: where groups move seasonally not only to avoid harsh climates,
+p40: climates, but also to follow animal herds and walk to areas where native plants
+p40: were in fruit
+p40: ● Pastoralism: agriculture based on the seasonal movement of animals from
+p40: winter to summer pastures and back again
+p41: small plots of land
+p41: ● Physiologic density: the number of people per unit of arable land
+p41: * Very high in third world countries compared to first world countries
+p41: * Many rural communities much more susceptible to famine from drought or
+p41: armed conflicts
+p42: ● Human ecology: human interactions with nature
+p43: the spring to be harvested by the start of summer.)
+p43: Irrigation: opens up more land to cultivation than would normally be possible in
+p43: arid climates and is responsible for close to three-quarters of world freshwater
+p43: use and up to 90 percent of freshwater use in the most poverty-stricken countries
+p43: of the world
+p43: ● No-tillage: involves not plowing the soil so that soil erosion is greatly reduced
+p43: and soil fertility is increased by retaining natural vegetation
+p45: First Agricultural Revolution:
+p46: Second Agricultural Revolution:
+p46: Green Revolution: occurred in the 1950s and 1960s when tropical plant and
+p46: animal hybrids and chemical fertilizers and pesticides began to be used in
+p46: Third-World agriculture
+p53: ● Von Thünen’s Model: land use (the type of farming) is determined by how labor
+p53: intensive the type of farming is
+p54: Cost-to-distance relationship: an inverse relationship between the value of
+p54: labor and the distance from the center of the model; the higher the total labor
+p54: costs, the closer it is to the center, and the lower the labor costs, the farther it is
+p54: from the center
+p54: Central place theory: all market areas are focused on a central settlement that
+p54: is a place of exchange and service provision
+p55: Agglomeration
+p57: ● Concentric Zone Model: a model that represents the Anglo-American city of the
+p57: United States and Canada during the height of industrialization
+p57: * First published in 1923 by theorist Ernest Burgess
+p57: Central business district (CBD)
+p57: Industrial zone
+p57: Inner city housing
+p57: Suburbs
+p58: Sector Model:
+p58: Multiple-nuclei Model of urban structure: attempts to practically represent the
+p58: urban landscape with neighborhoods and commercial corridors
+p59: periphery, core, semiperiphery
+p59: Galactic City Model or Peripheral Model
+p59: Latin American City Model
+p60: Zones of Disamenity
+p61: Southeast Asian City Model
+p61: The Sub-Saharan African City Model
+p63: Edge Cities
+p64: Megalopolis
+p64: * Megalopolis: the merging of the urbanized areas of two or more cities,
+p64: generally through suburban growth and expansion
+p65: * World city designation signifies a metropolitan area as a global center for
+p65: finance, trade, and commerce
+p65: Primate Cities
+p65: * Primate city: when the largest city in a country has at least twice the
+p65: population of the country’s next largest city
+p65: ● De facto segregation: where no law requiring no ethnic or racial segregation
+p65: exists, yet they nonetheless remain zones of separation.
+p66: Gentrification:
+p69: Sectors: different categories the economy can be divided into
+p69: ● Primary production includes agriculture, mining, energy, forestry, and fisheries
+p69: ● Secondary production includes the processing of the raw materials drawn from
+p69: the primary sector
+p69: * Reflects all forms of manufacturing
+p69: ● Tertiary production includes the transportation, wholesaling, and retailing of
+p69: finished goods to consumers
+p69: * Can include other types of services that could be categorized as quaternary,
+p69: such as finance, or quinary, such as government
+p69: ● Quaternary production includes wholesaling, finance, banking, insurance, real
+p69: estate, advertising, and marketing (business services)
+p69: ● Quinary production includes retailing, tourism, entertainment, and
+p69: communications, government, or semi-public services such as health, education,
+p69: and utilities (consumer services)
+p70: ● Commodity chain: exist from the small-scale, family-based producers selling
+p70: directly from the farm or through local farmers’ markets to transnational supply
+p70: networks selling to an international customer base
+p77: Gross national income (GNI): the dollar value of all goods and services
+p77: produced in a country, plus the dollar value of exports minus imports in the same
+p77: year
+p77: Human Development Index (HDI): designed by the United Nations to measure
+p77: the level of development of states based on a number of social indicators in
+p77: addition to economic production
+p78: potential in Third-World countries
+p78: ● Gini coefficient: measures the level of income disparity between the country’s
+p78: richest and poorest population groups on a scale of 0 to 100
+p78: ● Gender-Related Development Index (GDI): takes the same indicators used to
+p78: calculate HDI but replaces GDP per capita with income
+p78: Rostow’s Stages of Growth
+p81: Wallerstein’s World Systems Theory
+p83: Agglomeration
