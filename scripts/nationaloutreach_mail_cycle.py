@@ -53,6 +53,12 @@ ALLOWED_FROM = {
     "ezra.katz@kovaldistillery.com",
 }
 
+FORBIDDEN_FROM = {
+    "nationaloutreach@kovaldistillery.com",
+    "nationoutreach@kovaldistillery.com",
+    "tastingroom@kovaldistillery.com",
+}
+
 VERIFIED_SEND_AS_ALIASES = {
     "codex@kovaldistillery.com",
     "vanessa.sterling@kovaldistillery.com",
@@ -226,7 +232,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--search", default="ALL")
     parser.add_argument("--send-approved", action="store_true", help="Send queued *.approved.json files from outbox.")
     parser.add_argument("--review-old", action="store_true", help="Include already seen messages in review output.")
-    parser.add_argument("--from-address", default="vanessa.sterling@kovaldistillery.com")
+    parser.add_argument("--from-address", default="codex@kovaldistillery.com")
     parser.add_argument(
         "--archive-redundant-overdue-reports",
         action="store_true",
@@ -1065,7 +1071,7 @@ def archive_inbox_messages(
     if not live_active_records:
         return {"archived": 0, "skipped": 0, "subjects": [], "reasons": {}}
 
-    allowed_aliases = sorted({sender_email(creds["user"]), *[addr.lower() for addr in ALLOWED_FROM]})
+    allowed_aliases = sorted(addr.lower() for addr in ALLOWED_FROM)
     sent_entries = (
         mailbox_helpers.collect_sent_entries_from_state_dirs(shared_sent_log_state_dirs(state_dir))
         if mailbox_helpers is not None
@@ -1618,6 +1624,8 @@ def ensure_signature_links_in_html(html_body: str) -> str:
 def send_one(creds: dict[str, str], draft_path: Path, sent_dir: Path, failed_dir: Path, default_from: str) -> dict:
     payload = read_json(draft_path, {})
     from_addr = str(payload.get("from") or default_from).strip().lower()
+    if from_addr in FORBIDDEN_FROM:
+        raise ValueError(f"From address is explicitly forbidden for National Outreach sends: {from_addr}")
     if from_addr not in ALLOWED_FROM:
         raise ValueError(f"From address is not allowed by National Outreach registry: {from_addr}")
     auth_user = str(creds.get("user") or "").strip().lower()

@@ -14,6 +14,11 @@ from pathlib import Path
 
 DEFAULT_FROM = "codex@kovaldistillery.com"
 DEFAULT_FROM_NAME = "Codex Local Agent"
+FORBIDDEN_FROM = {
+    "nationaloutreach@kovaldistillery.com",
+    "nationoutreach@kovaldistillery.com",
+    "tastingroom@kovaldistillery.com",
+}
 
 
 def parse_args() -> argparse.Namespace:
@@ -84,6 +89,10 @@ def append_jsonl(path: Path, row: dict[str, object]) -> None:
 
 def build_message(args: argparse.Namespace, to_addrs: list[str], cc_addrs: list[str], bcc_addrs: list[str], body: str) -> EmailMessage:
     from_addr = str(args.from_address).strip().lower()
+    if from_addr != DEFAULT_FROM:
+        if from_addr in FORBIDDEN_FROM:
+            raise ValueError(f"Codex sender must not send from forbidden address: {from_addr}")
+        raise ValueError(f"Codex sender may only send from {DEFAULT_FROM}; requested {from_addr}")
     from_name = str(args.from_name).strip()
     msg = EmailMessage()
     msg["From"] = formataddr((from_name, from_addr)) if from_name else from_addr
