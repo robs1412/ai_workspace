@@ -1,0 +1,2 @@
+attempt_id	hypothesis	surface	metric	status	proof	reason
+add-superseded-retire-gate-20260603	A hash-keyed superseded-patch gate can retire stale dirty recursive worktrees only when the dirty patch hash matches recorded proof.	scripts/recursive_experiment_harness.py	0	keep	proofs/add-superseded-retire-gate-20260603.json	Kept: evaluator passed and dry-run only retires dirty stale worktrees when supplied superseded patch hash matches.

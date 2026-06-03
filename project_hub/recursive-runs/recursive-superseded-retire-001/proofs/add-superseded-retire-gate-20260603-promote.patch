@@ -1,0 +1,63 @@
+diff --git a/scripts/recursive_experiment_harness.py b/scripts/recursive_experiment_harness.py
+index 4c283e8..37999ec 100755
+--- a/scripts/recursive_experiment_harness.py
++++ b/scripts/recursive_experiment_harness.py
+@@ -265,14 +265,17 @@ def latest_promotion_proof(run_id: str) -> dict[str, Any] | None:
+     return summaries[-1] if summaries else None
+ 
+ 
+-def retire_worktree_decision(run_id: str) -> dict[str, Any]:
++def retire_worktree_decision(run_id: str, superseded_patch_sha256: str = "") -> dict[str, Any]:
+     worktree = worktree_path(run_id)
+     summary = worktree_summary(worktree)
+     latest_proof = latest_promotion_proof(run_id)
++    diff_summary = worktree_diff_summary(run_id, 0) if summary["state"] == "owned_git_worktree" else None
++    dirty_patch_sha256 = diff_summary.get("patch_sha256", "") if diff_summary else ""
++    dirty_is_superseded = bool(superseded_patch_sha256) and dirty_patch_sha256 == superseded_patch_sha256
+     blockers: list[str] = []
+     if summary["state"] != "owned_git_worktree":
+         blockers.append("worktree_missing_or_unowned")
+-    if summary["dirty_files"]:
++    if summary["dirty_files"] and not dirty_is_superseded:
+         blockers.append("worktree_dirty")
+     if not latest_proof:
+         blockers.append("missing_promotion_proof")
+@@ -282,6 +285,9 @@ def retire_worktree_decision(run_id: str) -> dict[str, Any]:
+         "run_id": run_id,
+         "worktree": summary,
+         "latest_promotion_proof": latest_proof,
++        "dirty_patch_sha256": dirty_patch_sha256,
++        "superseded_patch_sha256": superseded_patch_sha256,
++        "dirty_is_superseded": dirty_is_superseded,
+         "can_retire": not blockers,
+         "blockers": blockers,
+     }
+@@ -374,14 +380,18 @@ def cmd_status(args: argparse.Namespace) -> int:
+ 
+ def cmd_retire_worktree(args: argparse.Namespace) -> int:
+     run_id = safe_slug(args.run_id)
+-    decision = retire_worktree_decision(run_id)
++    decision = retire_worktree_decision(run_id, args.superseded_patch_sha256)
+     decision["dry_run"] = not args.apply
+     decision["retired"] = False
+     if args.apply:
+         if not decision["can_retire"]:
+             raise ValueError("worktree is not retireable: " + ", ".join(decision["blockers"]))
++        command = ["git", "worktree", "remove"]
++        if decision["dirty_is_superseded"]:
++            command.append("--force")
++        command.append(str(worktree_path(run_id)))
+         completed = subprocess.run(
+-            ["git", "worktree", "remove", str(worktree_path(run_id))],
++            command,
+             cwd=str(WORKSPACE_ROOT),
+             text=True,
+             stdout=subprocess.PIPE,
+@@ -786,6 +796,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
+     retire = sub.add_parser("retire-worktree", help="Report or remove an owned recursive worktree after promotion proof.")
+     retire.add_argument("--run-id", required=True)
+     retire.add_argument("--apply", action="store_true")
++    retire.add_argument("--superseded-patch-sha256", default="")
+     retire.set_defaults(func=cmd_retire_worktree)
+ 
+     diff = sub.add_parser("worktree-diff", help="Summarize dirty state and patch hash for an owned recursive worktree.")

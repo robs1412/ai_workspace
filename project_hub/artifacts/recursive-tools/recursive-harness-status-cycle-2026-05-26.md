@@ -102,3 +102,17 @@ Commit or otherwise settle the in-progress `scripts/recursive_experiment_harness
 - dirty_patch_bytes: `3729`
 - dirty_files: `["M scripts/recursive_experiment_harness.py"]`
 - interpretation: the dirty May worktree patch hash matches the stale promotion proof hash, so the next step can safely add a superseded-patch retirement gate keyed to that hash.
+
+## 2026-06-03 Superseded Patch Retirement
+
+- recorded_input: `ai_manager_inputs` row `2572`
+- run_id: `recursive-superseded-retire-001`
+- attempt_id: `add-superseded-retire-gate-20260603`
+- hypothesis: a hash-keyed superseded-patch gate can retire stale dirty recursive worktrees only when the dirty patch hash matches recorded proof
+- evaluator: `/usr/local/bin/python3.13 -m py_compile scripts/recursive_experiment_harness.py`
+- verification_metric: `0`
+- promotion: `applied`
+- promotion_patch_sha256: `23e4ef40a87df5e67d64a80053fd5220e9734e13d29d3028413dd2473628e9fc`
+- dry_run: `retire-worktree --run-id recursive-harness-status-001 --superseded-patch-sha256 9f8174e25bb9ebd1a63bd442b108b7b1b4494a2add55ca9c2a2d0a428aa86bf8` returned `can_retire=true`, `dirty_is_superseded=true`, `blockers=[]`
+- apply: `retire-worktree --run-id recursive-harness-status-001 --superseded-patch-sha256 9f8174e25bb9ebd1a63bd442b108b7b1b4494a2add55ca9c2a2d0a428aa86bf8 --apply` returned `retired=true`
+- readback: `project_hub/recursive-runs/recursive-harness-status-001/worktree` is removed; subsequent `retire-worktree --run-id recursive-harness-status-001` reports `worktree_missing_or_unowned`
