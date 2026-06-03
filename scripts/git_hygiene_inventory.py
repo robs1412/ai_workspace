@@ -81,6 +81,34 @@ def recommended_action(repo: Path, tracked_dirty: int, untracked: int, remote: s
     return "review-dirty-worktree"
 
 
+def status_path(status_line: str) -> str:
+    if status_line.startswith("?? "):
+        return status_line[3:]
+    value = status_line[2:] if len(status_line) > 2 else status_line
+    if " -> " in value:
+        value = value.split(" -> ", 1)[1]
+    return value.strip()
+
+
+def top_level_group(path: str) -> str:
+    cleaned = path.strip().lstrip("/")
+    if not cleaned:
+        return "."
+    return cleaned.split("/", 1)[0]
+
+
+def group_status_lines(lines: list[str], sample_limit: int) -> list[dict[str, Any]]:
+    groups: dict[str, dict[str, Any]] = {}
+    for line in lines:
+        path = status_path(line)
+        group = top_level_group(path)
+        item = groups.setdefault(group, {"group": group, "count": 0, "samples": []})
+        item["count"] += 1
+        if len(item["samples"]) < sample_limit:
+            item["samples"].append(line)
+    return sorted(groups.values(), key=lambda item: (-item["count"], item["group"]))
+
+
 def inventory_repo(repo: Path, sample_limit: int) -> dict[str, Any]:
     branch = run_git(repo, ["branch", "--show-current"]).stdout
     head = run_git(repo, ["rev-parse", "--short", "HEAD"]).stdout
@@ -107,6 +135,8 @@ def inventory_repo(repo: Path, sample_limit: int) -> dict[str, Any]:
         "untracked": len(untracked),
         "sample_tracked": tracked[:sample_limit],
         "sample_untracked": untracked[:sample_limit],
+        "tracked_groups": group_status_lines(tracked, sample_limit),
+        "untracked_groups": group_status_lines(untracked, sample_limit),
         "worktrees": worktree_count,
         "status_line": first_status_line,
         "recommended_action": recommended_action(repo, len(tracked), len(untracked), remote),
@@ -184,6 +214,8 @@ def build_plan(rows: list[dict[str, Any]]) -> dict[str, Any]:
                 "untracked": row["untracked"],
                 "sample_tracked": row["sample_tracked"],
                 "sample_untracked": row["sample_untracked"],
+                "tracked_groups": row["tracked_groups"],
+                "untracked_groups": row["untracked_groups"],
                 "next_step": plan_next_step(bucket),
             }
         )
@@ -213,6 +245,8 @@ def build_repo_packet(row: dict[str, Any]) -> dict[str, Any]:
         "next_step": plan_next_step(bucket),
         "sample_tracked": row["sample_tracked"],
         "sample_untracked": row["sample_untracked"],
+        "tracked_groups": row["tracked_groups"],
+        "untracked_groups": row["untracked_groups"],
     }
 
 

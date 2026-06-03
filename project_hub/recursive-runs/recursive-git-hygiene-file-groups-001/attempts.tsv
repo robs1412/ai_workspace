@@ -1,0 +1,2 @@
+attempt_id	hypothesis	surface	metric	status	proof	reason
+add-dirty-file-groups-20260603	Grouping dirty files by top-level path in read-only repo packets makes active lane work reviewable without broad diffs or cleanup.	scripts/git_hygiene_inventory.py	0	keep	proofs/add-dirty-file-groups-20260603.json	Kept: evaluator passed and repo packets now group dirty tracked/untracked files by top-level path for safer lane review.
