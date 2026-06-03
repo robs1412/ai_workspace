@@ -1,0 +1,11 @@
+{
+  "attempt_id": "add-worktree-retire-status-20260603",
+  "evaluator": "/usr/local/bin/python3.13 -m py_compile scripts/recursive_experiment_harness.py",
+  "evaluator_cwd": "/Users/werkstatt/ai_workspace/project_hub/recursive-runs/recursive-worktree-retire-status-001/worktree",
+  "finished_at": "2026-06-03 14:40:52 CDT",
+  "metric": "0",
+  "returncode": 0,
+  "started_at": "2026-06-03 14:40:52 CDT",
+  "stderr": "proofs/add-worktree-retire-status-20260603.stderr.txt",
+  "stdout": "proofs/add-worktree-retire-status-20260603.stdout.txt"
+}

@@ -1,0 +1,2 @@
+attempt_id	hypothesis	surface	metric	status	proof	reason
+add-worktree-retire-status-20260603	A bounded retire-worktree command can report stale owned worktrees and blockers without manual filesystem inspection or accidental deletion.	scripts/recursive_experiment_harness.py	0	keep	proofs/add-worktree-retire-status-20260603.json	Kept: evaluator passed and retire-worktree dry-run reports stale worktree blockers without deleting anything.

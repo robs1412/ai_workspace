@@ -1,0 +1,85 @@
+diff --git a/scripts/recursive_experiment_harness.py b/scripts/recursive_experiment_harness.py
+index ceb3d93..02a5145 100755
+--- a/scripts/recursive_experiment_harness.py
++++ b/scripts/recursive_experiment_harness.py
+@@ -260,6 +260,33 @@ def promotion_proof_summaries(run_id: str, limit: int) -> list[dict[str, Any]]:
+     return summaries[-max(0, limit) :]
+ 
+ 
++def latest_promotion_proof(run_id: str) -> dict[str, Any] | None:
++    summaries = promotion_proof_summaries(run_id, 1)
++    return summaries[-1] if summaries else None
++
++
++def retire_worktree_decision(run_id: str) -> dict[str, Any]:
++    worktree = worktree_path(run_id)
++    summary = worktree_summary(worktree)
++    latest_proof = latest_promotion_proof(run_id)
++    blockers: list[str] = []
++    if summary["state"] != "owned_git_worktree":
++        blockers.append("worktree_missing_or_unowned")
++    if summary["dirty_files"]:
++        blockers.append("worktree_dirty")
++    if not latest_proof:
++        blockers.append("missing_promotion_proof")
++    elif latest_proof.get("promotion_status") not in {"applied", "apply_check_failed"}:
++        blockers.append(f"unsupported_promotion_status:{latest_proof.get('promotion_status')}")
++    return {
++        "run_id": run_id,
++        "worktree": summary,
++        "latest_promotion_proof": latest_proof,
++        "can_retire": not blockers,
++        "blockers": blockers,
++    }
++
++
+ def update_run_report(run_id: str) -> None:
+     evaluator = load_evaluator(run_id)
+     rows = read_attempts(run_id)
+@@ -323,6 +350,34 @@ def cmd_status(args: argparse.Namespace) -> int:
+     return 0
+ 
+ 
++def cmd_retire_worktree(args: argparse.Namespace) -> int:
++    run_id = safe_slug(args.run_id)
++    decision = retire_worktree_decision(run_id)
++    decision["dry_run"] = not args.apply
++    decision["retired"] = False
++    if args.apply:
++        if not decision["can_retire"]:
++            raise ValueError("worktree is not retireable: " + ", ".join(decision["blockers"]))
++        completed = subprocess.run(
++            ["git", "worktree", "remove", str(worktree_path(run_id))],
++            cwd=str(WORKSPACE_ROOT),
++            text=True,
++            stdout=subprocess.PIPE,
++            stderr=subprocess.PIPE,
++            check=False,
++        )
++        decision["remove"] = {
++            "returncode": completed.returncode,
++            "stdout": completed.stdout,
++            "stderr": completed.stderr,
++        }
++        if completed.returncode != 0:
++            raise RuntimeError((completed.stderr or completed.stdout).strip() or "git worktree remove failed")
++        decision["retired"] = True
++    print(json.dumps({"ok": decision["can_retire"] or not args.apply, **decision}, indent=2, sort_keys=True))
++    return 0
++
++
+ def cmd_init(args: argparse.Namespace) -> int:
+     run_id = safe_slug(args.run_id)
+     surface = normalize_surface(args.surface)
+@@ -698,6 +753,11 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
+     promote.add_argument("--timeout-seconds", type=int, default=30)
+     promote.add_argument("--dry-run", action="store_true")
+     promote.set_defaults(func=cmd_promote)
++
++    retire = sub.add_parser("retire-worktree", help="Report or remove an owned recursive worktree after promotion proof.")
++    retire.add_argument("--run-id", required=True)
++    retire.add_argument("--apply", action="store_true")
++    retire.set_defaults(func=cmd_retire_worktree)
+     return parser.parse_args(argv)
+ 
+ 

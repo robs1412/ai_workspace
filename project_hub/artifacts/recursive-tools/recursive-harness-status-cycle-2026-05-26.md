@@ -73,3 +73,16 @@ Commit or otherwise settle the in-progress `scripts/recursive_experiment_harness
 - promotion: `applied`
 - promotion_patch_sha256: `c00c1aaf22ab330df1bc0bfbd453631ae8c53265cbbee540d3cdd2da11abc80e`
 - readback: `/usr/local/bin/python3.13 scripts/recursive_experiment_harness.py status --run-id recursive-harness-status-001 --limit 2` now includes `promotion_proofs[0].promotion_status=apply_check_failed`
+
+## 2026-06-03 Worktree Retirement Readback
+
+- recorded_input: `ai_manager_inputs` row `2569`
+- run_id: `recursive-worktree-retire-status-001`
+- attempt_id: `add-worktree-retire-status-20260603`
+- hypothesis: a bounded `retire-worktree` command can report stale owned worktrees and blockers without manual filesystem inspection or accidental deletion
+- evaluator: `/usr/local/bin/python3.13 -m py_compile scripts/recursive_experiment_harness.py`
+- verification_metric: `0`
+- promotion: `applied`
+- promotion_patch_sha256: `7f29124f17e6153db8c495321798917a6dc851fadff618643ec29582cf7c4d46`
+- readback: `/usr/local/bin/python3.13 scripts/recursive_experiment_harness.py retire-worktree --run-id recursive-harness-status-001` returns `can_retire=false`, `blockers=["worktree_dirty"]`, `latest_promotion_proof.promotion_status=apply_check_failed`
+- apply_gate: `retire-worktree --apply` refuses with `worktree is not retireable: worktree_dirty`
