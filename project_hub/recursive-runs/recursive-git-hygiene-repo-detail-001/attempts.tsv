@@ -1,0 +1,2 @@
+attempt_id	hypothesis	surface	metric	status	proof	reason
+add-git-hygiene-repo-detail-20260603	A read-only per-repo detail mode can produce one focused action packet for a dirty repo before cleanup or commit decisions.	scripts/git_hygiene_inventory.py	0	keep	proofs/add-git-hygiene-repo-detail-20260603.json	Kept: evaluator passed and --repo emits a fast read-only action packet for one dirty repository.

@@ -196,6 +196,37 @@ def build_plan(rows: list[dict[str, Any]]) -> dict[str, Any]:
     }
 
 
+def build_repo_packet(row: dict[str, Any]) -> dict[str, Any]:
+    bucket = plan_bucket(row)
+    return {
+        "mode": "read-only-repo-detail",
+        "mutations": [],
+        "repo": row["repo"],
+        "branch": row["branch"],
+        "head": row["head"],
+        "remote": row["remote"],
+        "ahead_behind": row["ahead_behind"],
+        "tracked_dirty": row["tracked_dirty"],
+        "untracked": row["untracked"],
+        "worktrees": row["worktrees"],
+        "bucket": bucket,
+        "next_step": plan_next_step(bucket),
+        "sample_tracked": row["sample_tracked"],
+        "sample_untracked": row["sample_untracked"],
+    }
+
+
+def repo_packet_for_arg(repo_arg: str, root: Path, sample_limit: int) -> dict[str, Any]:
+    requested = Path(repo_arg)
+    if not requested.is_absolute():
+        requested = root / requested
+    requested = requested.resolve()
+    git_marker = requested / ".git"
+    if not git_marker.exists():
+        raise ValueError(f"repo is not a git checkout: {requested}")
+    return build_repo_packet(inventory_repo(requested, sample_limit))
+
+
 def render_plan_markdown(plan: dict[str, Any]) -> str:
     lines = [
         "# Git Hygiene Plan",
@@ -234,6 +265,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--dirty-only", action="store_true", help="Only show repos with tracked or untracked changes.")
     parser.add_argument("--include-worktrees", action="store_true", help="Include nested Git worktrees in recursive run folders.")
     parser.add_argument("--plan", action="store_true", help="Group dirty repositories into read-only next-action buckets.")
+    parser.add_argument("--repo", default="", help="Emit one read-only action packet for a single repository.")
     parser.add_argument("--sample-limit", type=int, default=8, help="Maximum sample paths per dirty category.")
     return parser.parse_args()
 
@@ -241,6 +273,11 @@ def parse_args() -> argparse.Namespace:
 def main() -> int:
     args = parse_args()
     root = Path(args.root).resolve()
+    if args.repo:
+        packet = repo_packet_for_arg(args.repo, root, max(0, args.sample_limit))
+        print(json.dumps(packet, indent=2, sort_keys=True))
+        return 0
+
     repos = discover_repos(root, args.include_worktrees)
     rows = [inventory_repo(repo, max(0, args.sample_limit)) for repo in repos]
     if args.plan:
