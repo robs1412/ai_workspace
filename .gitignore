@@ -51,6 +51,7 @@ avignon/*.jsonl
 asher/*.jsonl
 venetia/*.jsonl
 nationaloutreach/*.jsonl
+nationaloutreach/active-inbox.json
 frank/drafts/
 avignon/drafts/
 asher/drafts/
