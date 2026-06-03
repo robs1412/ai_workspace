@@ -1,5 +1,44 @@
 # HANDOFF - venetia
 
+# 2026-06-03 Slow Art Follow-Up Sent
+
+Done at 2026-06-03 16:39 CDT for Task Flow key `taskflow-owner-reply-237ceae35173ffbb` / Workspaceboard session `4be6d3d8`.
+
+- Source owner reply: Sonat's 2026-06-02 16:34 CDT approval on `Re: The Cultivater Feature Inquiry`.
+- Action: sent the approved Slow Art Collective follow-up through the Venetia approved sender path.
+- Send proof: `/Users/admin/.venetia-launch/state/sent-log.jsonl` row for draft `venetia-slow-art-follow-up-2026-06-03.approved.json`; mirrored to local `sent-log.jsonl`.
+- Message-ID: `<178052271914.48234.8532309914521889188@thecultivater.com>`.
+- Task Flow readback: key `taskflow-owner-reply-237ceae35173ffbb` is `closed_with_proof`.
+- Workspaceboard readback: session `4be6d3d8` is `closed_with_proof`.
+- No mailbox filing/delete, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, or raw mailbox-body publication occurred in this pass.
+
+# 2026-06-02 Later Cultivater Owner Instruction Blocked On Action Policy
+
+Done at 2026-06-02 16:07 CDT for Task Flow key `taskflow-owner-reply-31283710782cd26b` / Workspaceboard session `9f2283b4`.
+
+- Source owner reply: Sonat's 2026-06-01 16:04 CDT reply on `Re: The Cultivater Feature Inquiry`.
+- Source-state verification: this is separate from prior key `taskflow-owner-reply-39f27ae8e3e2216b`, which already sent Sonat the Slow Art questions and draft response for approval with Message-ID `<178043384998.66242.3773517255003135669@thecultivater.com>`.
+- Classification: `blocker-email-required`.
+- Exact blocker: Venetia cannot complete Sonat's requested forwarding, CRM contact creation, and immediate reporting loop under current Venetia action-policy guardrails without Avignon/Robert authorization or reassignment to an authorized CRM/email worker.
+- Owner question routed through Workspaceboard/Task Manager: should Avignon/Robert approve Venetia for this specific Cultivater CRM/contact-write and forwarding/reporting policy, or reassign the CRM/mail-forwarding execution to an authorized Avignon/Portal worker?
+- Task Flow readback: key `taskflow-owner-reply-31283710782cd26b` is `blocked` with `completion_or_blocker_email=blocker-email-required:avignon-task-manager`.
+- Workspaceboard readback: session `9f2283b4` is `blocked`; blocker route returned Task Manager session `f545298d`.
+- Duplicate due-worker readback: session `b2dc8449` rechecked the same key at 2026-06-02 16:08 CDT, confirmed Task Flow still preserves the exact blocker, and recorded `blocked` with the same Avignon Task Manager owner question.
+- AI Manager durable input mirror: `ai_manager_inputs` row `2551` / UUID `ai-manager-chat-20260602210611-dbc8c3f1598b`.
+- No external reply, CRM/Portal mutation, mailbox filing/delete, auth/OAuth/token work, credential exposure, or raw mailbox-body publication occurred in this due-worker pass.
+
+# 2026-06-02 Slow Art Draft Sent to Sonat for Approval
+
+Done at 2026-06-02 15:58 CDT for Task Flow key `taskflow-owner-reply-39f27ae8e3e2216b` / Workspaceboard session `d571c6a3`.
+
+- Source owner reply: Sonat's 2026-06-01 15:54 CDT reply on `Re: The Cultivater Feature Inquiry`.
+- Action: sent Sonat the Slow Art Collective follow-up questions and a proposed response draft for approval.
+- Send proof: `/Users/admin/.venetia-launch/state/sent-log.jsonl` line `11`.
+- Message-ID: `<178043384998.66242.3773517255003135669@thecultivater.com>`.
+- Task Flow readback: key `taskflow-owner-reply-39f27ae8e3e2216b` is `closed_with_proof`.
+- Workspaceboard readback: session `d571c6a3` is `closed_with_proof`.
+- Note: no external reply to Slow Art Collective was sent. Separate newer owner instruction key `taskflow-owner-reply-31283710782cd26b` remains a separate waiting item unless another worker handles it.
+
 # 2026-06-01 Replies Forwarded to Sonat
 
 Venetia forwarded the current outbound response set to Sonat after confirming live replies from the outreach.
