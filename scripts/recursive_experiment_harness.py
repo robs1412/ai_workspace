@@ -287,6 +287,28 @@ def retire_worktree_decision(run_id: str) -> dict[str, Any]:
     }
 
 
+def worktree_diff_summary(run_id: str, preview_lines: int) -> dict[str, Any]:
+    worktree = worktree_path(run_id)
+    summary = worktree_summary(worktree)
+    if summary["state"] != "owned_git_worktree":
+        return {
+            "run_id": run_id,
+            "worktree": summary,
+            "patch_sha256": "",
+            "patch_bytes": 0,
+            "patch_preview": [],
+        }
+    patch_bytes = git_output_bytes(["diff", "--binary"], cwd=worktree)
+    patch_text = patch_bytes.decode("utf-8", errors="replace")
+    return {
+        "run_id": run_id,
+        "worktree": summary,
+        "patch_sha256": hashlib.sha256(patch_bytes).hexdigest() if patch_bytes else "",
+        "patch_bytes": len(patch_bytes),
+        "patch_preview": patch_text.splitlines()[: max(0, preview_lines)],
+    }
+
+
 def update_run_report(run_id: str) -> None:
     evaluator = load_evaluator(run_id)
     rows = read_attempts(run_id)
@@ -376,6 +398,13 @@ def cmd_retire_worktree(args: argparse.Namespace) -> int:
         decision["retired"] = True
     print(json.dumps({"ok": decision["can_retire"] or not args.apply, **decision}, indent=2, sort_keys=True))
     return 0
+
+
+def cmd_worktree_diff(args: argparse.Namespace) -> int:
+    run_id = safe_slug(args.run_id)
+    summary = worktree_diff_summary(run_id, args.preview_lines)
+    print(json.dumps({"ok": summary["worktree"]["state"] == "owned_git_worktree", **summary}, indent=2, sort_keys=True))
+    return 0 if summary["worktree"]["state"] == "owned_git_worktree" else 2
 
 
 def cmd_init(args: argparse.Namespace) -> int:
@@ -758,6 +787,11 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     retire.add_argument("--run-id", required=True)
     retire.add_argument("--apply", action="store_true")
     retire.set_defaults(func=cmd_retire_worktree)
+
+    diff = sub.add_parser("worktree-diff", help="Summarize dirty state and patch hash for an owned recursive worktree.")
+    diff.add_argument("--run-id", required=True)
+    diff.add_argument("--preview-lines", type=int, default=20)
+    diff.set_defaults(func=cmd_worktree_diff)
     return parser.parse_args(argv)
 
 

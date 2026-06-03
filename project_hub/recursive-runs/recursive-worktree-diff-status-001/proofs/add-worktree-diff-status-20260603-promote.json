@@ -1,0 +1,26 @@
+{
+  "apply": {
+    "returncode": 0,
+    "stderr": "",
+    "stdout": ""
+  },
+  "apply_check": {
+    "returncode": 0,
+    "stderr": "",
+    "stdout": ""
+  },
+  "attempt_id": "add-worktree-diff-status-20260603",
+  "dry_run": false,
+  "evaluator": "/usr/local/bin/python3.13 -m py_compile scripts/recursive_experiment_harness.py",
+  "evaluator_cwd": "/Users/werkstatt/ai_workspace/project_hub/recursive-runs/recursive-worktree-diff-status-001/worktree",
+  "finished_at": "2026-06-03 14:48:55 CDT",
+  "metric": "0",
+  "ok": true,
+  "patch": "proofs/add-worktree-diff-status-20260603-promote.patch",
+  "patch_sha256": "696391547e53f86ea612b0db8fd29e3988f970ffe82a3b2051ad2c0139570c2c",
+  "promotion_status": "applied",
+  "returncode": 0,
+  "started_at": "2026-06-03 14:48:55 CDT",
+  "stderr": "proofs/add-worktree-diff-status-20260603-promote.stderr.txt",
+  "stdout": "proofs/add-worktree-diff-status-20260603-promote.stdout.txt"
+}

@@ -1,0 +1,2 @@
+attempt_id	hypothesis	surface	metric	status	proof	reason
+add-worktree-diff-status-20260603	A read-only worktree-diff command can summarize dirty recursive worktrees with file list and patch hash before any retirement decision.	scripts/recursive_experiment_harness.py	0	keep	proofs/add-worktree-diff-status-20260603.json	Kept: evaluator passed and worktree-diff reports dirty file list, patch bytes, preview, and patch hash for stale recursive worktrees.

@@ -86,3 +86,19 @@ Commit or otherwise settle the in-progress `scripts/recursive_experiment_harness
 - promotion_patch_sha256: `7f29124f17e6153db8c495321798917a6dc851fadff618643ec29582cf7c4d46`
 - readback: `/usr/local/bin/python3.13 scripts/recursive_experiment_harness.py retire-worktree --run-id recursive-harness-status-001` returns `can_retire=false`, `blockers=["worktree_dirty"]`, `latest_promotion_proof.promotion_status=apply_check_failed`
 - apply_gate: `retire-worktree --apply` refuses with `worktree is not retireable: worktree_dirty`
+
+## 2026-06-03 Dirty Worktree Diff Readback
+
+- recorded_input: `ai_manager_inputs` row `2571`
+- run_id: `recursive-worktree-diff-status-001`
+- attempt_id: `add-worktree-diff-status-20260603`
+- hypothesis: a read-only `worktree-diff` command can summarize dirty recursive worktrees with file list, patch bytes, preview, and patch hash before any retirement decision
+- evaluator: `/usr/local/bin/python3.13 -m py_compile scripts/recursive_experiment_harness.py`
+- verification_metric: `0`
+- promotion: `applied`
+- promotion_patch_sha256: `696391547e53f86ea612b0db8fd29e3988f970ffe82a3b2051ad2c0139570c2c`
+- readback: `/usr/local/bin/python3.13 scripts/recursive_experiment_harness.py worktree-diff --run-id recursive-harness-status-001 --preview-lines 8`
+- dirty_patch_sha256: `9f8174e25bb9ebd1a63bd442b108b7b1b4494a2add55ca9c2a2d0a428aa86bf8`
+- dirty_patch_bytes: `3729`
+- dirty_files: `["M scripts/recursive_experiment_harness.py"]`
+- interpretation: the dirty May worktree patch hash matches the stale promotion proof hash, so the next step can safely add a superseded-patch retirement gate keyed to that hash.
