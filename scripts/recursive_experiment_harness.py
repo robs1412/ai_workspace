@@ -525,6 +525,32 @@ def write_promotion_proof(
     }
 
 
+def update_promotion_proof(
+    run_id: str,
+    proof: dict[str, str],
+    *,
+    apply_check: subprocess.CompletedProcess[str],
+    promotion_status: str,
+    apply_result: subprocess.CompletedProcess[str] | None = None,
+) -> None:
+    result_path = run_dir(run_id) / proof["proof"]
+    data = json.loads(result_path.read_text(encoding="utf-8"))
+    data["ok"] = promotion_status in {"dry_run_ok", "applied"}
+    data["promotion_status"] = promotion_status
+    data["apply_check"] = {
+        "returncode": apply_check.returncode,
+        "stdout": apply_check.stdout,
+        "stderr": apply_check.stderr,
+    }
+    if apply_result is not None:
+        data["apply"] = {
+            "returncode": apply_result.returncode,
+            "stdout": apply_result.stdout,
+            "stderr": apply_result.stderr,
+        }
+    write_json(result_path, data)
+
+
 def cmd_promote(args: argparse.Namespace) -> int:
     run_id = safe_slug(args.run_id)
     attempt_id = safe_slug(args.attempt_id)
@@ -560,7 +586,9 @@ def cmd_promote(args: argparse.Namespace) -> int:
         check=False,
     )
     if check.returncode != 0:
+        update_promotion_proof(run_id, proof, apply_check=check, promotion_status="apply_check_failed")
         raise RuntimeError((check.stderr or check.stdout).strip() or "git apply --check failed")
+    apply_result = None
     if not args.dry_run:
         apply_result = subprocess.run(
             ["git", "apply", str((proof_dir(run_id) / f"{attempt_id}-promote.patch").resolve())],
@@ -571,7 +599,21 @@ def cmd_promote(args: argparse.Namespace) -> int:
             check=False,
         )
         if apply_result.returncode != 0:
+            update_promotion_proof(
+                run_id,
+                proof,
+                apply_check=check,
+                promotion_status="apply_failed",
+                apply_result=apply_result,
+            )
             raise RuntimeError((apply_result.stderr or apply_result.stdout).strip() or "git apply failed")
+    update_promotion_proof(
+        run_id,
+        proof,
+        apply_check=check,
+        promotion_status="dry_run_ok" if args.dry_run else "applied",
+        apply_result=apply_result,
+    )
 
     update_run_report(run_id)
     print(
