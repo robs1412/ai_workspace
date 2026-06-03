@@ -62,3 +62,14 @@ Commit or otherwise settle the in-progress `scripts/recursive_experiment_harness
 - patch_sha256: `9f8174e25bb9ebd1a63bd442b108b7b1b4494a2add55ca9c2a2d0a428aa86bf8`
 - apply_check_error: `scripts/recursive_experiment_harness.py: patch does not apply`
 - interpretation: the old May kept patch is stale against current `main`; do not promote it. Start the next recursive improvement as a fresh run against current `main`.
+
+## 2026-06-03 Fresh Recursive Improvement
+
+- run_id: `recursive-promotion-status-001`
+- attempt_id: `add-promotion-proof-status-20260603`
+- hypothesis: status output should include latest promotion proof summaries so stale recursive patches are visible without opening proof JSON
+- evaluator: `/usr/local/bin/python3.13 -m py_compile scripts/recursive_experiment_harness.py`
+- verification_metric: `0`
+- promotion: `applied`
+- promotion_patch_sha256: `c00c1aaf22ab330df1bc0bfbd453631ae8c53265cbbee540d3cdd2da11abc80e`
+- readback: `/usr/local/bin/python3.13 scripts/recursive_experiment_harness.py status --run-id recursive-harness-status-001 --limit 2` now includes `promotion_proofs[0].promotion_status=apply_check_failed`

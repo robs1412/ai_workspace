@@ -1,0 +1,7 @@
+{
+  "created_at": "2026-06-03 14:37:00 CDT",
+  "evaluator": "/usr/local/bin/python3.13 -m py_compile scripts/recursive_experiment_harness.py",
+  "metric": "returncode",
+  "run_id": "recursive-promotion-status-001",
+  "surface": "scripts/recursive_experiment_harness.py"
+}

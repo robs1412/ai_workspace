@@ -238,6 +238,28 @@ def worktree_summary(path: Path) -> dict[str, Any]:
     }
 
 
+def promotion_proof_summaries(run_id: str, limit: int) -> list[dict[str, Any]]:
+    summaries: list[dict[str, Any]] = []
+    for path in sorted(proof_dir(run_id).glob("*-promote.json"), key=lambda item: item.stat().st_mtime):
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        apply_check = data.get("apply_check")
+        summaries.append(
+            {
+                "proof": str(path.relative_to(run_dir(run_id))),
+                "attempt_id": data.get("attempt_id", ""),
+                "ok": data.get("ok"),
+                "promotion_status": data.get("promotion_status", ""),
+                "patch_sha256": data.get("patch_sha256", ""),
+                "dry_run": data.get("dry_run"),
+                "apply_check_returncode": apply_check.get("returncode") if isinstance(apply_check, dict) else None,
+            }
+        )
+    return summaries[-max(0, limit) :]
+
+
 def update_run_report(run_id: str) -> None:
     evaluator = load_evaluator(run_id)
     rows = read_attempts(run_id)
@@ -294,6 +316,7 @@ def cmd_status(args: argparse.Namespace) -> int:
         "worktree": worktree_summary(worktree),
         "attempt_count": len(attempts),
         "attempts": attempts[-max(0, int(args.limit)) :],
+        "promotion_proofs": promotion_proof_summaries(run_id, int(args.limit)),
         "report": str(report_path(run_id)),
     }
     print(json.dumps(summary, indent=2, sort_keys=True))

@@ -1,0 +1,2 @@
+attempt_id	hypothesis	surface	metric	status	proof	reason
+add-promotion-proof-status-20260603	Including the latest promotion proof summary in status output makes stale recursive patches visible without opening proof files.	scripts/recursive_experiment_harness.py	0	keep	proofs/add-promotion-proof-status-20260603.json	Kept: evaluator passed and status output will now include latest promotion proof summaries for stale-patch readback.
