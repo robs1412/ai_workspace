@@ -28,6 +28,7 @@ except ImportError:  # pragma: no cover - shared mailbox proof helpers are optio
 
 
 DEFAULT_STATUS_URL = "http://127.0.0.1:17878/api/status"
+DEFAULT_MANAGEMENT_OVERVIEW_URL = "http://127.0.0.1:17878/api/management/overview?live=1"
 DEFAULT_LOG_DIR = Path("/Users/werkstatt/ai_workspace/tmp/ai-health-manager")
 DEFAULT_NATIONALOUTREACH_STATE_DIR = Path("/Users/admin/.nationaloutreach-launch/state")
 DEFAULT_FRANK_STATE_DIR = Path("/Users/admin/.frank-launch/state")
@@ -83,6 +84,7 @@ DEFAULT_TASK_FLOW_TRUTH_DRIFT_CHECK = Path("/Users/werkstatt/ai_workspace/script
 DEFAULT_RECURSIVE_PROPOSAL_DECISIONS = Path("/Users/werkstatt/ai_workspace/scripts/recursive_proposal_decisions.py")
 DEFAULT_RECURSIVE_PROPOSAL_EXECUTOR = Path("/Users/werkstatt/ai_workspace/scripts/recursive_proposal_executor.py")
 DEFAULT_CLAUDE_PLANNER_PROOF_CHECK = Path("/Users/werkstatt/ai_workspace/scripts/claude_planner_proof_check.py")
+DEFAULT_OPS_AI_WORKER_BRIDGE_STATE = Path("/Users/werkstatt/ops/tmp/ops_ai_worker_runner_bridge_state.json")
 DEFAULT_TASK_FLOW_FOLLOWTHROUGH_INTERVAL_SECONDS = 60
 REQUIRED_MAILBOX_MONITORS = (
     "monitor-frank-inbox",
@@ -700,6 +702,132 @@ def assess_management_health(classification: dict, max_non_standing_open: int, m
         "active_waiting_count": active_waiting_count,
         "non_standing_open_count": non_standing_open_count,
         "robert_blocker_count": robert_blocker_count,
+        "issues": issues,
+    }
+
+
+def read_model_drift_check(args: argparse.Namespace, status: dict) -> dict:
+    """Detect a board page/read-model split where /api/status sees work but overview hides it."""
+    status_sessions = [item for item in status.get("managed_sessions", []) if isinstance(item, dict)]
+    status_live = [item for item in status_sessions if str(item.get("runtime_status") or "").lower() == "live"]
+    try:
+        overview = fetch_json(args.management_overview_url, args.timeout)
+    except HealthCheckError as error:
+        return {
+            "status": "attention",
+            "reason": f"management overview fetch failed: {safe_text(error, 180)}",
+            "status_managed_sessions": len(status_sessions),
+            "status_live_sessions": len(status_live),
+            "overview_managed_sessions": 0,
+            "overview_actionable_sessions": 0,
+            "issues": [{
+                "id": "management-overview-unavailable",
+                "severity": "warning",
+                "title": "Workspaceboard management overview is unavailable",
+                "reason": safe_text(error, 180),
+            }],
+        }
+
+    overview_sessions = [item for item in overview.get("managed_sessions", []) if isinstance(item, dict)]
+    overview_actionable = [item for item in overview.get("actionable_sessions", []) if isinstance(item, dict)]
+    overview_live = [item for item in overview_sessions if str(item.get("runtime_status") or "").lower() == "live"]
+    issues = []
+    if len(status_live) >= 1 and not overview_sessions:
+        issues.append({
+            "id": "management-overview-zero-sessions",
+            "severity": "critical",
+            "title": "Server page read model is hiding live sessions",
+            "reason": f"/api/status has {len(status_live)} live sessions but management overview returned zero managed_sessions.",
+        })
+    elif len(status_live) >= 3 and len(overview_live) == 0:
+        issues.append({
+            "id": "management-overview-zero-live",
+            "severity": "critical",
+            "title": "Server page read model has no live sessions",
+            "reason": f"/api/status has {len(status_live)} live sessions but management overview has no live managed_sessions.",
+        })
+
+    return {
+        "status": "attention" if issues else "ok",
+        "status_managed_sessions": len(status_sessions),
+        "status_live_sessions": len(status_live),
+        "overview_managed_sessions": len(overview_sessions),
+        "overview_live_sessions": len(overview_live),
+        "overview_actionable_sessions": len(overview_actionable),
+        "issues": issues,
+    }
+
+
+def ops_bridge_pickup_staleness_check(args: argparse.Namespace, status: dict) -> dict:
+    """Detect OPS pickup state that suppresses routing while pointing at dead or missing sessions."""
+    state_path = Path(args.ops_bridge_state_file)
+    if not state_path.is_file():
+        return {"status": "not-found", "state_file": str(state_path), "checked": 0, "stale": 0, "issues": []}
+    try:
+        state = json.loads(state_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as error:
+        return {
+            "status": "attention",
+            "state_file": str(state_path),
+            "checked": 0,
+            "stale": 0,
+            "issues": [{
+                "id": "ops-bridge-state-unreadable",
+                "severity": "warning",
+                "title": "OPS bridge pickup state is unreadable",
+                "reason": safe_text(error, 180),
+            }],
+        }
+
+    picked = state.get("picked_up") if isinstance(state, dict) else {}
+    if not isinstance(picked, dict):
+        return {"status": "ok", "state_file": str(state_path), "checked": 0, "stale": 0, "issues": []}
+
+    sessions_by_id = {
+        str(item.get("id") or item.get("session_id") or ""): item
+        for item in status.get("managed_sessions", [])
+        if isinstance(item, dict)
+    }
+    stale = []
+    for pickup_key, record in picked.items():
+        if not isinstance(record, dict):
+            continue
+        session_id = str(record.get("task_manager_session_id") or "").strip()
+        if not session_id:
+            stale.append({
+                "pickup_key": safe_text(pickup_key, 80),
+                "task_id": safe_text(record.get("task_id"), 40),
+                "session_id": "",
+                "reason": "pickup has no session id",
+            })
+            continue
+        session = sessions_by_id.get(session_id)
+        runtime = str(session.get("runtime_status") or "").lower() if session else ""
+        if not session or runtime != "live":
+            stale.append({
+                "pickup_key": safe_text(pickup_key, 80),
+                "task_id": safe_text(record.get("task_id"), 40),
+                "session_id": safe_text(session_id, 32),
+                "reason": "pickup session missing from /api/status" if not session else f"pickup session runtime is {runtime or 'unknown'}",
+            })
+        if len(stale) >= args.ops_bridge_stale_sample_limit:
+            break
+
+    issues = []
+    if stale:
+        issues.append({
+            "id": "ops-bridge-stale-pickups",
+            "severity": "critical",
+            "title": "OPS AI-worker bridge has stale pickup state",
+            "reason": f"{len(stale)} sampled pickup records point at missing/non-live sessions and may suppress rerouting.",
+        })
+
+    return {
+        "status": "attention" if issues else "ok",
+        "state_file": str(state_path),
+        "checked": len(picked),
+        "stale": len(stale),
+        "sample": stale,
         "issues": issues,
     }
 
@@ -4494,6 +4622,8 @@ def build_report(args: argparse.Namespace) -> dict:
         args.max_non_standing_open,
         args.max_robert_blockers,
     )
+    read_model_drift = read_model_drift_check(args, status)
+    ops_bridge_pickup_staleness = ops_bridge_pickup_staleness_check(args, status)
     workspace_summary = summarize_workspaces(status)
     state_path = Path(args.log_dir) / "state.json"
     state = load_state(state_path)
@@ -4539,6 +4669,11 @@ def build_report(args: argparse.Namespace) -> dict:
                 "and close the source Task Flow row with proof or one exact blocker."
             ),
         })
+    for guard in (read_model_drift, ops_bridge_pickup_staleness):
+        if str(guard.get("status") or "") == "attention":
+            for issue in guard.get("issues") or []:
+                if isinstance(issue, dict):
+                    management_health.setdefault("issues", []).append(issue)
     sprawl_governor = session_sprawl_governor(args, classification, management_health, state)
     nudge = maybe_nudge(args, classification, state)
     daily_input_audit = audit_daily_inputs(args, state)
@@ -4580,6 +4715,8 @@ def build_report(args: argparse.Namespace) -> dict:
         "host_tmux_orphan_check": host_tmux_orphans,
         "token_usage_check": token_usage,
         "task_flow_fanout_guard": fanout_guard,
+        "read_model_drift": read_model_drift,
+        "ops_bridge_pickup_staleness": ops_bridge_pickup_staleness,
         "session_sprawl_governor": sprawl_governor,
         "session_restart": session_restart,
         "standing_attention_minutes": args.standing_attention_minutes,
@@ -4663,6 +4800,11 @@ def release_run_lock(lock_dir: Path | None) -> None:
 def parse_args(argv: list[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--status-url", default=os.environ.get("AI_HEALTH_STATUS_URL", DEFAULT_STATUS_URL))
+    parser.add_argument(
+        "--management-overview-url",
+        default=os.environ.get("AI_HEALTH_MANAGEMENT_OVERVIEW_URL", DEFAULT_MANAGEMENT_OVERVIEW_URL),
+        help="Workspaceboard management overview endpoint used to detect status/read-model drift",
+    )
     parser.add_argument("--message-url", default=os.environ.get("AI_HEALTH_MESSAGE_URL", "http://127.0.0.1:17878/api/session-message"))
     parser.add_argument("--log-dir", default=os.environ.get("AI_HEALTH_LOG_DIR", str(DEFAULT_LOG_DIR)))
     parser.add_argument("--timeout", type=float, default=20.0)
@@ -4737,6 +4879,17 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
         type=int,
         default=int(os.environ.get("AI_HEALTH_SEND_PATH_MAX_ISSUES", 8)),
         help="maximum send-path proof issues to include in the health report",
+    )
+    parser.add_argument(
+        "--ops-bridge-state-file",
+        default=os.environ.get("AI_HEALTH_OPS_BRIDGE_STATE_FILE", str(DEFAULT_OPS_AI_WORKER_BRIDGE_STATE)),
+        help="OPS AI-worker bridge pickup state file used to detect stale pickup suppression",
+    )
+    parser.add_argument(
+        "--ops-bridge-stale-sample-limit",
+        type=int,
+        default=int(os.environ.get("AI_HEALTH_OPS_BRIDGE_STALE_SAMPLE_LIMIT", 20)),
+        help="maximum stale OPS bridge pickup records to sample in one health report",
     )
     parser.add_argument("--input-audit-interval-seconds", type=int, default=DEFAULT_INPUT_AUDIT_INTERVAL_SECONDS)
     parser.add_argument(
@@ -5367,6 +5520,11 @@ def main(argv: list[str]) -> int:
         "token_usage_session_mb": report.get("token_usage_check", {}).get("session_mb", 0),
         "task_flow_fanout_guard": report.get("task_flow_fanout_guard", {}).get("status", "not-recorded"),
         "task_flow_fanout_guard_blocked": report.get("task_flow_fanout_guard", {}).get("blocked", 0),
+        "read_model_drift": report.get("read_model_drift", {}).get("status", "not-recorded"),
+        "read_model_overview_sessions": report.get("read_model_drift", {}).get("overview_managed_sessions", 0),
+        "read_model_status_live_sessions": report.get("read_model_drift", {}).get("status_live_sessions", 0),
+        "ops_bridge_pickup_staleness": report.get("ops_bridge_pickup_staleness", {}).get("status", "not-recorded"),
+        "ops_bridge_stale_pickups": report.get("ops_bridge_pickup_staleness", {}).get("stale", 0),
         "session_sprawl_governor": report.get("session_sprawl_governor", {}).get("action", "none"),
         "session_sprawl_changed": report.get("session_sprawl_governor", {}).get("changed", 0),
         "session_restart": report.get("session_restart", {}).get("status", "not-recorded"),
