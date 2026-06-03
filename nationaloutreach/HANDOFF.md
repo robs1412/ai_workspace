@@ -1,5 +1,14 @@
 # National Outreach Handoff
 
+## 2026-06-03 monthly COT Activity report submitted
+
+- 2026-06-03 17:05 CDT done entry for Workspaceboard session `86607ffa` / Task Flow `taskflow-ops-ai-worker-pickup-368775` / OPS task `368775`, `Vanessa: monthly COT Report send`.
+- Live Portal proof: COT Activity - Monthly report `8015` was submitted for period `2026-05-01` through `2026-05-31`, category `57`, department `6`, submitter `1332`, `submitted=1`, `submitted_at=2026-06-03 22:01:27`, `reviewed=0`.
+- Notification proof: report notification `6147842` now links to report `8015` with the same `submitted_at`; the Portal-owned `POST /users/reports/8015/review-notifications` path returned `sent=4`, `failed=0` for reviewers Robert, Sonat, Mark, and Sebastian.
+- Source metrics used in the report content: `505` non-task activity rows, `84` tasting rows, `2,137` visitors, `222` tasting product counts, and `0` Codex/Vanessa-assigned invoice rows for May 2026.
+- OPS closeout proof: the Portal task API returned HTTP 500 for the task status update, so the established OPS fallback was used narrowly for task `368775`; direct readback now shows status `Completed`, recurring type `Monthly`, and `sendnotification=0`.
+- Workspaceboard closeout proof marker: `COT_MONTHLY_REPORT_8015_NOTIFICATION_6147842_REVIEWERS_SENT4_FAILED0_OPS368775_COMPLETED`.
+
 ## 2026-06-03 WFM monthly tasting request wrapper closed
 
 - 2026-06-03 16:57 CDT done entry for Workspaceboard session `9e569d72` / Task Flow `taskflow-ops-ai-worker-pickup-368776` / OPS task `368776`, `Vanessa: monthly Whole Foods tasting request`.
