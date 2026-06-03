@@ -53,6 +53,8 @@ The full intake-to-closeout directive, including email clarification, report-tri
 | `venetia@thecultivater.com` | Venetia Tempest-Dunn | `venetia.md`; canonical persona `venetia-tempest-dunn/persona.yaml` | Direct Venetia worker mailbox/runtime route | Allowed for approved task-specific sends inside Cultivater guardrails; filing, deletes, and routine authority stay gated | Robert / assigned Cultivater owner |
 | `nationaloutreach@kovaldistillery.com` | National Outreach shared inbox | `outreach-coordinator.md`; coordinated by `email-coordinator.md` | Main AI worker inbox for shared specialist workers | Inbox-only route; not allowed as a `From` identity | Robert / assigned outreach owner |
 
+Hard send-from rule: Codex-owned sends may use only `codex@kovaldistillery.com`, and only when that alias works through the National Outreach mailbox/runtime. Frank sends remain separate and allowed inside Frank's guardrails. Never send from `tastingroom@kovaldistillery.com`, `nationoutreach@kovaldistillery.com`, or `nationaloutreach@kovaldistillery.com`; the National Outreach mailbox address is intake-only.
+
 ## Persona Notes
 
 ### Frank Cannoli
