@@ -23,10 +23,12 @@ Do not store credentials, private mailbox bodies, OAuth tokens, app passwords, p
 ## Current Send-From Identities
 
 - Outreach Coordinator persona: Vanessa Sterling `<vanessa.sterling@kovaldistillery.com>`, sent through the approved National Outreach mailbox/runtime route.
-- Shared inbox route: `nationaloutreach@kovaldistillery.com`
-- Codex route: `codex@kovaldistillery.com`
+- Shared inbox route: `nationaloutreach@kovaldistillery.com` for intake only; never use it as the visible `From` identity.
+- Codex route: `codex@kovaldistillery.com`. Codex-owned sends may use this address only when the National Outreach mailbox/runtime can send the alias successfully.
 
 Do not send as `macee.maddox@kovaldistillery.com`. Macee has left; treat that address only as inbound legacy-recipient context when reviewing old mail.
+
+Never send as `tastingroom@kovaldistillery.com`, `nationoutreach@kovaldistillery.com`, or `nationaloutreach@kovaldistillery.com`. Frank mailbox sends remain separate and allowed inside Frank's guardrails.
 
 The authoritative send-from registry is `../worker_roles/send-from-personas.md`.
 

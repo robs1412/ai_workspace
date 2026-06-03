@@ -1,5 +1,43 @@
 # National Outreach Handoff
 
+## 2026-06-03 WFM monthly tasting request wrapper closed
+
+- 2026-06-03 16:57 CDT done entry for Workspaceboard session `9e569d72` / Task Flow `taskflow-ops-ai-worker-pickup-368776` / OPS task `368776`, `Vanessa: monthly Whole Foods tasting request`.
+- Source-first proof showed the June WFM request work was already completed as request `314565`: live OPS readback has 21 Outreach events `961`-`981`, 21 linked shifts, first event date `2026-06-19`, and last event date `2026-07-05`.
+- Owner-visible proof remains Vanessa's same-thread completion to Sonat with Robert copied, runtime sent-log Message-ID `<178032310294.46433.626765398073981090@kovaldistillery.com>`.
+- Action taken for this recurring OPS wrapper: advanced OPS task `368776` from the completed June occurrence to next monthly due/start `2026-07-01`; no new WFM portal submission, external send, OPS event creation, or owner question was needed.
+- Workspaceboard closeout proof marker: `WFM314565_EVENTS_961_981_SHIFTS_21_SENT_178032310294_OPS368776_NEXT_20260701`.
+
+## 2026-06-03 Codex send-from hardening
+
+- Robert explicitly clarified: Codex-owned sends may use `codex@kovaldistillery.com` only if that alias works through the National Outreach mailbox/runtime. Frank sends remain allowed inside Frank's separate guardrails.
+- Never send from `tastingroom@kovaldistillery.com`, `nationoutreach@kovaldistillery.com`, or `nationaloutreach@kovaldistillery.com`; the National Outreach mailbox address is intake-only.
+- Runtime hardening:
+  - `scripts/nationaloutreach_mail_cycle.py` now defaults `--from-address` to `codex@kovaldistillery.com`, has an explicit forbidden-from set, and no longer treats the login mailbox account as an allowed send alias for self-sent archiving decisions.
+  - `scripts/send_codex_ops_email.py` now rejects any Codex send-from address other than `codex@kovaldistillery.com`, with explicit rejection for the forbidden National Outreach/Tasting Room addresses.
+- Documentation updated: `nationaloutreach/README.md`, `nationaloutreach/PERSONA.md`, and `worker_roles/send-from-personas.md`.
+- Durable input mirrored through AI Manager row `2563`.
+
+## 2026-06-03 Whiskey Washback thank-you scheduler wrapper closed
+
+- 2026-06-03 10:22 CDT done entry for Workspaceboard session `e68896a4` / Task Flow due key `taskflow-owner-reply-f011aac8040f0ff6`, scheduled action `Respond to owner reply: Whiskey Washback`.
+- Source-first readback showed the underlying June 2 Whiskey Washback calendar request was already completed under source key `taskflow-f3ce8a97a1c6342d`: OPS Outreach event `903` and Google Outreach UID `ops-outreach-903@koval-distillery.com` were updated with marker `sonat-bring-list-2026-06-02`, and Vanessa sent Sonat the completion note with Message-ID `<178041383419.46258.112470452157335953@kovaldistillery.com>`.
+- The later Sonat reply source `calbltzzvdyai9a77obkyr-g0+y1c_gpr-srcogmtc4nmf8x3ea@mail.gmail.com` was only a thank-you after that completion, so no new external reply, OPS/Portal mutation, or owner question was needed.
+- Action taken: recorded `taskflow-owner-reply-f011aac8040f0ff6` as `no_action_closed` through the Task Flow recorder and marked Workspaceboard session `e68896a4` as `closed_with_proof`.
+- Workspaceboard closeout proof marker: `OPS903_GOOGLE_ops-outreach-903_SENT_178041383419_THANKYOU_NO_ACTION_TASKFLOW_F011AAC`.
+- 2026-06-03 10:32 CDT done entry for the duplicate daily due worker `taskflow-owner-reply-2dabebab929dd590` / Workspaceboard session `6c2c7e3d`, scheduled action `Respond to owner reply: Re: Whiskey Washback`.
+- Source-first readback reused the same underlying proof: OPS Outreach event `903`, Google Outreach UID `ops-outreach-903@koval-distillery.com`, prior sent Message-ID `<178041383419.46258.112470452157335953@kovaldistillery.com>`, and metadata-only body classification for Sonat's later reply as `logged-no-action-thank-you` with no new request signal.
+- Action taken: mirrored the task-mode input into AI Manager recorder input `2555`, recorded `taskflow-owner-reply-2dabebab929dd590` as `no_action_closed` through the Task Flow recorder, and marked Workspaceboard session `6c2c7e3d` as `closed_with_proof`.
+- Workspaceboard closeout proof marker: `OPS903_GOOGLE_ops-outreach-903_SENT_178041383419_THANKYOU_NO_ACTION_TASKFLOW_2DABEB`.
+
+## 2026-06-02 Park Ridge owner-handled scheduler wrapper closed
+
+- 2026-06-02 12:01 CDT done entry for Workspaceboard session `ef4ca3da` / Task Flow due key `taskflow-owner-reply-eb652e0cddaf12db`, scheduled action `Respond to owner reply: Re: Your Schedule for Next Week - 2026-05-25`.
+- Exact Task Flow DB readback showed this wrapper was `working` for source ref `caatx44ymbpuzqbmu5bnxt1gzqer8cxsfadhf7wml-k0utadxqq@mail.gmail.com`.
+- Source-first bounded runtime readback found the underlying Park Ridge thread already proof-closed: runtime archive-log line 166 records source `caatx44apaz1g1rs-cdhikthrg_uo+w0vush=s9gykudb=gboba@mail.gmail.com` as `proof_backed_closeout`, reason `owner_handled_directly`, status `no_action_closed`, with proof note that Robert already answered Cassandra directly and no further Vanessa action was required.
+- Action taken: recorded `taskflow-owner-reply-eb652e0cddaf12db` as `no_action_closed` / `closed_with_proof` in Task Flow. AI Manager task-mode input recorder accepted input `2534`. No external reply, OPS/Portal mutation, or owner question was needed.
+- Workspaceboard closeout proof marker: `archive-log:166:proof_backed_closeout:owner_handled_directly:caatx44apaz1g1rs`.
+
 ## 2026-06-02 Market Calendar duplicate due worker closed
 
 - 2026-06-02 10:27 CDT done entry for Workspaceboard session `c32ed693` / Task Flow due key `taskflow-owner-reply-3511a5ea9cfad19f`, scheduled action `Respond to owner reply: Re: Market Calendar Additions`.
@@ -1324,13 +1362,13 @@
 - Robert clarified not to send as `macee.maddox@kovaldistillery.com` again because Macee has left.
 - `macee.maddox@kovaldistillery.com` was removed from the National Outreach runtime send allow-list.
 - Keep Macee only as old-mail inbound-recipient context while reviewing inherited threads.
-- Allowed National Outreach account send-from identities are now `vanessa.sterling@kovaldistillery.com`, `nationaloutreach@kovaldistillery.com`, and `codex@kovaldistillery.com`.
+- Superseded 2026-06-03: this older 2026-04-27 note said allowed National Outreach account send-from identities included `nationaloutreach@kovaldistillery.com`; current policy makes `nationaloutreach@kovaldistillery.com` intake-only and never a `From` identity.
 
 ## 2026-04-27 Vanessa Sterling Outreach Persona
 
 - Robert named the Outreach Coordinator persona Vanessa Sterling and provided `vanessa.sterling@kovaldistillery.com`.
 - Updated the send-from registry, Outreach Coordinator role, National Outreach persona/README, reusable coverage-report templates, operating-model prompt, and installed National Outreach send helper.
-- Current approved Outreach send path: send as Vanessa Sterling `<vanessa.sterling@kovaldistillery.com>` through the National Outreach mailbox/runtime. `nationaloutreach@kovaldistillery.com` remains the shared inbox/runtime route and fallback sender.
+- Current approved Outreach send path at the time: send as Vanessa Sterling `<vanessa.sterling@kovaldistillery.com>` through the National Outreach mailbox/runtime. Superseded 2026-06-03: `nationaloutreach@kovaldistillery.com` remains the shared inbox/runtime route for intake only and is not a fallback sender.
 - `codex@kovaldistillery.com` remains the separate Codex Local Agent route. `macee.maddox@kovaldistillery.com` remains disallowed for outbound sends.
 
 ## 2026-04-27 Codex / National Outreach Drive API Prep

@@ -21,6 +21,8 @@ The `nationaloutreach@kovaldistillery.com` mailbox remains the shared outreach a
 
 The same mailbox account may also send as `codex@kovaldistillery.com`. That alias is a separate Codex Local Agent route, not an Outreach persona and not Frank.
 
+Codex-owned sends must use `codex@kovaldistillery.com` only when that alias works through the National Outreach mailbox/runtime. Never send Codex mail from `tastingroom@kovaldistillery.com`, `nationoutreach@kovaldistillery.com`, or `nationaloutreach@kovaldistillery.com`; the shared National Outreach address is intake-only. Frank sends remain separate and allowed inside Frank's guardrails.
+
 It corresponds to these organigram roles:
 
 - Email Coordinator for shared-worker mailbox intake and routing.
@@ -54,6 +56,7 @@ For outreach coordination replies like event-detail checks, use the Maker's Mart
 - Ask staff for availability only through an approved routine or human-approved message.
 - Send approved outreach coordination messages as Vanessa Sterling from `vanessa.sterling@kovaldistillery.com`, through the approved National Outreach mailbox route.
 - Send Codex-owned technical/task updates from `codex@kovaldistillery.com` when the work belongs to Codex Local Agent rather than Frank.
+- Do not send Codex-owned technical/task updates from the shared National Outreach inbox address, the misspelled `nationoutreach@kovaldistillery.com`, or `tastingroom@kovaldistillery.com`.
 - Do not send as `macee.maddox@kovaldistillery.com`. Macee has left; keep that address only as inbound legacy-recipient context when reviewing old mail.
 - Route marketing/campaign mechanics to Marketing Manager and Forge when the work is a campaign send rather than one-off outreach coordination.
 - Route broad staff/audience mailings, including requests like "email everyone for May," through `/Users/werkstatt/lists` and PHPList. Vanessa may ask Robert clarifying questions and supply the mailing brief, but the audience/campaign send mechanics belong in Lists.
