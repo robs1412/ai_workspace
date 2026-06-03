@@ -6,6 +6,13 @@ Use this file for cross-machine/session handoffs.
 
 ## Current Workflow Handoff
 
+- 2026-06-03 14:53 CDT Binny's scraper and repo hygiene closeout.
+  - Corrected current Mac mini address to `192.168.55.230`; local MacBook SSH aliases `admin-macmini` and `workspaceboard-macmini` now point there and verified as `admin` on `roberts-mini-ethernet.lan`.
+  - Binny's primary scraper rerun fixed the missing Cranberry Gin capture; live BID `/srv/development/bid/intelligence/reports/2026-06-03-binnys.csv` now has `Koval Cranberry Gin Liqueur ($29.99)`, zero unknown product labels, and 47 stores.
+  - `playwright-scraper` pushed commits `0d33d0c` and `03f6654`; M4 and Mac mini `/Users/werkstatt/playwright-scraper` are both at `03f6654a39b47a17a0463ba0a75487f648549215`.
+  - Installed `binnys-scraper` Codex skill on MacBook, M4, Mac mini, and `.205` Claude account. Skill source is tracked in `playwright-scraper/codex-skills/binnys-scraper/`.
+  - `ai_workspace` merge pass preserved the newer compact startup policy from origin and added only this current `.230` target note plus local ERTC/PDF/legal/Mac mini server-mode artifacts from the dirty worktree.
+
 - 2026-05-27 17:31 CDT task-mode startup token reduction completed as repo-local docs/startup policy. Root `AGENTS.md` was reduced from 791 lines to a 60-line compact startup contract, the full pre-split rule file was preserved as `docs/ai-workspace-full-startup-rules-2026-05-27.md`, and `docs/task-mode-startup.md` was added as the thin WS AI / Workspaceboard task-mode bootstrap. New rule: generic `ai_workspace` task-mode terminals should load only root `AGENTS.md`, `docs/task-mode-startup.md`, the current task packet, and any narrow local workspace `AGENTS.md` required by the task; they should not preload `HANDOFF.md`, project-hub indexes, mailbox SOPs, full role maps, old transcripts, or TODO archives. AI Manager input recorder proof: `ai_manager_inputs` row `2369`, UUID `ai-manager-chat-20260527222905-b2884f8c8bd1`.
 - 2026-05-27 12:45 CDT emergency disconnect handoff for Task DB `Missing Worker` investigation and server/token guard work.
   - User request in progress: Task DB showed `Missing Worker 8 / open rows without session id`; investigate and fix.

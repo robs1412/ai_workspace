@@ -53,6 +53,7 @@ This root file is intentionally compact. Do not preload long lane histories, han
 - Frank lane: `frank/AGENTS.md`.
 - Avignon lane: `avignon/AGENTS.md`.
 - Workspaceboard status truth: `http://127.0.0.1:17878/api/status` and related live Workspaceboard APIs.
+- Current Mac mini SSH target: `admin-macmini` and `workspaceboard-macmini` should resolve to `admin@192.168.55.230` (`roberts-mini-ethernet.lan` / `Roberts-Mac-mini`), not stale `.17` or `.16` addresses.
 - Full historical policy archive: `docs/ai-workspace-full-startup-rules-2026-05-27.md`.
 
 ## Completion Notes
