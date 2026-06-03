@@ -1,0 +1,26 @@
+{
+  "apply": {
+    "returncode": 0,
+    "stderr": "",
+    "stdout": ""
+  },
+  "apply_check": {
+    "returncode": 0,
+    "stderr": "",
+    "stdout": ""
+  },
+  "attempt_id": "add-git-hygiene-group-detail-20260603",
+  "dry_run": false,
+  "evaluator": "/usr/local/bin/python3.13 -m py_compile scripts/git_hygiene_inventory.py",
+  "evaluator_cwd": "/Users/werkstatt/ai_workspace/project_hub/recursive-runs/recursive-git-hygiene-group-detail-001/worktree",
+  "finished_at": "2026-06-03 16:40:13 CDT",
+  "metric": "0",
+  "ok": true,
+  "patch": "proofs/add-git-hygiene-group-detail-20260603-promote.patch",
+  "patch_sha256": "caf27bfdbec74acd0d894d28960a7819cde39bfd87022781a5cf3ea081f20910",
+  "promotion_status": "applied",
+  "returncode": 0,
+  "started_at": "2026-06-03 16:40:13 CDT",
+  "stderr": "proofs/add-git-hygiene-group-detail-20260603-promote.stderr.txt",
+  "stdout": "proofs/add-git-hygiene-group-detail-20260603-promote.stdout.txt"
+}

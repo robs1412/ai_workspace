@@ -1,0 +1,2 @@
+attempt_id	hypothesis	surface	metric	status	proof	reason
+add-git-hygiene-group-detail-20260603	A read-only --group detail mode can show one top-level dirty lane group without broad diffs or mutation.	scripts/git_hygiene_inventory.py	0	keep	proofs/add-git-hygiene-group-detail-20260603.json	Adds read-only top-level dirty group packets with bounded JSON error handling for invalid groups.

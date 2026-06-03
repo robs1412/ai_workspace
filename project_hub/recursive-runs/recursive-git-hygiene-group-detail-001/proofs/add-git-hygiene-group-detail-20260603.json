@@ -1,0 +1,11 @@
+{
+  "attempt_id": "add-git-hygiene-group-detail-20260603",
+  "evaluator": "/usr/local/bin/python3.13 -m py_compile scripts/git_hygiene_inventory.py",
+  "evaluator_cwd": "/Users/werkstatt/ai_workspace/project_hub/recursive-runs/recursive-git-hygiene-group-detail-001/worktree",
+  "finished_at": "2026-06-03 16:40:02 CDT",
+  "metric": "0",
+  "returncode": 0,
+  "started_at": "2026-06-03 16:40:02 CDT",
+  "stderr": "proofs/add-git-hygiene-group-detail-20260603.stderr.txt",
+  "stdout": "proofs/add-git-hygiene-group-detail-20260603.stdout.txt"
+}

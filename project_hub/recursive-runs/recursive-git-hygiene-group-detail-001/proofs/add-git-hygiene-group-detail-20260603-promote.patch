@@ -1,0 +1,101 @@
+diff --git a/scripts/git_hygiene_inventory.py b/scripts/git_hygiene_inventory.py
+index 5e92ccc..4059e12 100755
+--- a/scripts/git_hygiene_inventory.py
++++ b/scripts/git_hygiene_inventory.py
+@@ -10,6 +10,7 @@ from __future__ import annotations
+ import argparse
+ import json
+ import subprocess
++import sys
+ from dataclasses import dataclass
+ from pathlib import Path
+ from typing import Any
+@@ -250,6 +251,24 @@ def build_repo_packet(row: dict[str, Any]) -> dict[str, Any]:
+     }
+ 
+ 
++def group_detail_packet(row: dict[str, Any], group: str, tracked_lines: list[str], untracked_lines: list[str]) -> dict[str, Any]:
++    tracked = [line for line in tracked_lines if top_level_group(status_path(line)) == group]
++    untracked = [line for line in untracked_lines if top_level_group(status_path(line)) == group]
++    tracked_count = next((item["count"] for item in row["tracked_groups"] if item["group"] == group), 0)
++    untracked_count = next((item["count"] for item in row["untracked_groups"] if item["group"] == group), 0)
++    return {
++        "mode": "read-only-group-detail",
++        "mutations": [],
++        "repo": row["repo"],
++        "group": group,
++        "tracked_count": tracked_count,
++        "untracked_count": untracked_count,
++        "tracked": tracked,
++        "untracked": untracked,
++        "next_step": "Review this group as one coherent lane before commit, cleanup, or leave-active decisions.",
++    }
++
++
+ def repo_packet_for_arg(repo_arg: str, root: Path, sample_limit: int) -> dict[str, Any]:
+     requested = Path(repo_arg)
+     if not requested.is_absolute():
+@@ -261,6 +280,25 @@ def repo_packet_for_arg(repo_arg: str, root: Path, sample_limit: int) -> dict[st
+     return build_repo_packet(inventory_repo(requested, sample_limit))
+ 
+ 
++def group_packet_for_arg(repo_arg: str, group: str, root: Path, sample_limit: int) -> dict[str, Any]:
++    requested = Path(repo_arg)
++    if not requested.is_absolute():
++        requested = root / requested
++    requested = requested.resolve()
++    git_marker = requested / ".git"
++    if not git_marker.exists():
++        raise ValueError(f"repo is not a git checkout: {requested}")
++    row = inventory_repo(requested, sample_limit)
++    status = run_git(requested, ["status", "--porcelain=v1"]).stdout
++    status_lines = [line for line in status.splitlines() if line]
++    tracked = [line for line in status_lines if not line.startswith("??")]
++    untracked = [line for line in status_lines if line.startswith("??")]
++    packet = group_detail_packet(row, group, tracked, untracked)
++    if packet["tracked_count"] == 0 and packet["untracked_count"] == 0:
++        raise ValueError(f"group not dirty in repo: {group}")
++    return packet
++
++
+ def render_plan_markdown(plan: dict[str, Any]) -> str:
+     lines = [
+         "# Git Hygiene Plan",
+@@ -300,6 +338,7 @@ def parse_args() -> argparse.Namespace:
+     parser.add_argument("--include-worktrees", action="store_true", help="Include nested Git worktrees in recursive run folders.")
+     parser.add_argument("--plan", action="store_true", help="Group dirty repositories into read-only next-action buckets.")
+     parser.add_argument("--repo", default="", help="Emit one read-only action packet for a single repository.")
++    parser.add_argument("--group", default="", help="With --repo, emit one top-level dirty group packet.")
+     parser.add_argument("--sample-limit", type=int, default=8, help="Maximum sample paths per dirty category.")
+     return parser.parse_args()
+ 
+@@ -307,8 +346,13 @@ def parse_args() -> argparse.Namespace:
+ def main() -> int:
+     args = parse_args()
+     root = Path(args.root).resolve()
++    if args.group and not args.repo:
++        raise ValueError("--group requires --repo")
+     if args.repo:
+-        packet = repo_packet_for_arg(args.repo, root, max(0, args.sample_limit))
++        if args.group:
++            packet = group_packet_for_arg(args.repo, args.group, root, max(0, args.sample_limit))
++        else:
++            packet = repo_packet_for_arg(args.repo, root, max(0, args.sample_limit))
+         print(json.dumps(packet, indent=2, sort_keys=True))
+         return 0
+ 
+@@ -327,5 +371,13 @@ def main() -> int:
+     return 0
+ 
+ 
++def cli() -> int:
++    try:
++        return main()
++    except (ValueError, subprocess.TimeoutExpired) as error:
++        print(json.dumps({"ok": False, "error": str(error)}, sort_keys=True), file=sys.stderr)
++        return 2
++
++
+ if __name__ == "__main__":
+-    raise SystemExit(main())
++    raise SystemExit(cli())

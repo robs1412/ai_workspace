@@ -1,0 +1,7 @@
+{
+  "created_at": "2026-06-03 16:37:39 CDT",
+  "evaluator": "/usr/local/bin/python3.13 -m py_compile scripts/git_hygiene_inventory.py",
+  "metric": "returncode",
+  "run_id": "recursive-git-hygiene-group-detail-001",
+  "surface": "scripts/git_hygiene_inventory.py"
+}
