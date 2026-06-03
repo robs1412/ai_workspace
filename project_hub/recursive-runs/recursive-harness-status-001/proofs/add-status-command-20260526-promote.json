@@ -1,0 +1,21 @@
+{
+  "apply_check": {
+    "returncode": 1,
+    "stderr": "error: patch failed: scripts/recursive_experiment_harness.py:197\nerror: scripts/recursive_experiment_harness.py: patch does not apply\n",
+    "stdout": ""
+  },
+  "attempt_id": "add-status-command-20260526",
+  "dry_run": true,
+  "evaluator": "/usr/local/bin/python3.13 -m py_compile scripts/recursive_experiment_harness.py",
+  "evaluator_cwd": "/Users/werkstatt/ai_workspace/project_hub/recursive-runs/recursive-harness-status-001/worktree",
+  "finished_at": "2026-06-03 14:36:02 CDT",
+  "metric": "0",
+  "ok": false,
+  "patch": "proofs/add-status-command-20260526-promote.patch",
+  "patch_sha256": "9f8174e25bb9ebd1a63bd442b108b7b1b4494a2add55ca9c2a2d0a428aa86bf8",
+  "promotion_status": "apply_check_failed",
+  "returncode": 0,
+  "started_at": "2026-06-03 14:36:02 CDT",
+  "stderr": "proofs/add-status-command-20260526-promote.stderr.txt",
+  "stdout": "proofs/add-status-command-20260526-promote.stdout.txt"
+}

@@ -51,3 +51,14 @@ Use a 4k-token soft cap per recursive attempt, with a 6k hard stop unless Robert
 ## Next 2026-06-03
 
 Commit or otherwise settle the in-progress `scripts/recursive_experiment_harness.py` promotion-proof change, then rerun `promote --dry-run` from a clean main checkout. Expected proof outcome for the old May worktree is `promotion_status=apply_check_failed`, which cleanly documents that the May patch is stale rather than promotable.
+
+## 2026-06-03 Promotion Dry-Run Proof
+
+- recorded_input: `ai_manager_inputs` row `2567`
+- committed_harness_update: `1dc565a`
+- command: `/usr/local/bin/python3.13 scripts/recursive_experiment_harness.py promote --run-id recursive-harness-status-001 --attempt-id add-status-command-20260526 --dry-run`
+- result: `ok=false`, `promotion_status=apply_check_failed`
+- proof: `project_hub/recursive-runs/recursive-harness-status-001/proofs/add-status-command-20260526-promote.json`
+- patch_sha256: `9f8174e25bb9ebd1a63bd442b108b7b1b4494a2add55ca9c2a2d0a428aa86bf8`
+- apply_check_error: `scripts/recursive_experiment_harness.py: patch does not apply`
+- interpretation: the old May kept patch is stale against current `main`; do not promote it. Start the next recursive improvement as a fresh run against current `main`.
