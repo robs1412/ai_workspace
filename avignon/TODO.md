@@ -5,6 +5,128 @@ Archived: 2026-05-18 CDT (Machine: Macmini.lan)
 This file is archived and contains no active queue items.
 Active work now lives in DB-backed Task Flow / Workspaceboard / OPS records.
 
+## 2026-06-03 - Done - Reused RNDC NE contacts route, blocker remains
+
+- Source Message-ID: `<CALbLtzxuO9moT12F7rqQrd9HiRsm820MFGjYb2SM-jNHUnSUfg@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzxuO9moT12F7rqQrd9HiRsm820MFGjYb2SM-jNHUnSUfg-mail-gmail-com`
+- Workspaceboard session: `f4ba304b` / `Avignon direct Sonat: Contacts to add`
+- Classification: `blocker-email-required`; reused existing route/proof, no duplicate CRM mutation.
+- Proof checked: `HANDOFF.md`, `EMAIL_DERIVED_DECISIONS.md`, `sent-log.jsonl`, and `task-flow-events.jsonl` all record prior partial completion under session `633d880c`: RNDC NE account `63062`; Eric Malone contact `370359` / `CON20529`; Nick Barksdale contact `370360` / `CON20530`; Sonat blocker/completion email Message-ID `<177999753812.35865.15239797640546126559@kovaldistillery.com>`.
+- Exact blocker: Lindsay Stratman's full email and phone are still needed before that contact can be added under RNDC NE.
+- Result: no new Sonat email, no Robert copy, no external reply, no CRM/Portal/OPS mutation, no auth/OAuth/token work, and no credential exposure in this reused-session pass.
+
+## 2026-06-02 - Done - Duplicate Sonat CRM contacts/accounts added list intake
+
+- Source Message-ID: `<CALbLtzzjueKpsEzJ_8=GrgvEusHW7XT8OF55U5HLpHha9O2cxw@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzzjueKpsEzJ-8-GrgvEusHW7XT8OF55U5HLpHha9O2cxw-mail-gmail-com`
+- Workspaceboard session: `9b74d338` / `Avignon direct Sonat: Contact and Accounts added in May and June`
+- Classification: `closed_with_proof` / `no-action/filed` duplicate; no resend.
+- Proof checked: `sent-log.jsonl` line 45 confirms the prior Sonat answer Message-ID `<178042192655.96155.6732747243816995106@kovaldistillery.com>`; `drafts/sonat-crm-contacts-accounts-added-may-june-2026-06-02.txt` lines 3-59 contain the answer content with 4 new accounts, 42 new contacts, exclusions, and pending not-added items; a prior `HANDOFF.md` entry records the original completed report and source-not-found-for-filing readback.
+- Durable input mirror: AI Manager recorder input id `2548`, UUID `ai-manager-chat-20260602180955-fcff0a3433f4`.
+- Result: no new Sonat email, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, or private mailbox-body publication.
+
+## 2026-06-02 - Done - Duplicate Sonat CRM contacts/accounts added list intake
+
+- Source Message-ID: `<CALbLtzzjueKpsEzJ_8=GrgvEusHW7XT8OF55U5HLpHha9O2cxw@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzzjueKpsEzJ-8-GrgvEusHW7XT8OF55U5HLpHha9O2cxw-mail-gmail-com`
+- Workspaceboard session: `d52e3a65` / `Avignon direct Sonat: Contact and Accounts added in May and June`
+- Classification: `closed_with_proof` / `no-action/filed` duplicate; no resend.
+- Proof checked: `sent-log.jsonl` line 45 confirms the prior Sonat answer Message-ID `<178042192655.96155.6732747243816995106@kovaldistillery.com>`; `drafts/sonat-crm-contacts-accounts-added-may-june-2026-06-02.txt` lines 3-59 contain the answer content with 4 new accounts, 42 new contacts, exclusions, and pending not-added items; a prior `HANDOFF.md` entry records the original completed report and source-not-found-for-filing readback.
+- Durable input mirror: AI Manager recorder input id `2547`, UUID `ai-manager-chat-20260602180721-cb58d73cfe74`.
+- Result: no new Sonat email, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, or private mailbox-body publication.
+
+## 2026-06-02 - Done - Duplicate Sonat CRM contacts/accounts added list intake
+
+- Source Message-ID: `<CALbLtzzjueKpsEzJ_8=GrgvEusHW7XT8OF55U5HLpHha9O2cxw@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzzjueKpsEzJ-8-GrgvEusHW7XT8OF55U5HLpHha9O2cxw-mail-gmail-com`
+- Workspaceboard session: `93ff8ecc` / `Avignon direct Sonat: Contact and Accounts added in May and June`
+- Classification: `closed_with_proof` / `no-action/filed` duplicate; no resend.
+- Proof checked: `sent-log.jsonl` line 45 confirms the prior Sonat answer Message-ID `<178042192655.96155.6732747243816995106@kovaldistillery.com>`; `drafts/sonat-crm-contacts-accounts-added-may-june-2026-06-02.txt` lines 3-59 contain the answer content with 4 new accounts, 42 new contacts, exclusions, and pending not-added items; `task-flow-events.jsonl` line 306 records the original completed report.
+- Durable input mirror: AI Manager recorder input id `2546`, UUID `ai-manager-chat-20260602180408-5f32d1c2f5b2`.
+- Result: no new Sonat email, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, or private mailbox-body publication.
+
+## 2026-06-02 - Done - Duplicate Sonat CRM contacts/accounts added list intake
+
+- Source Message-ID: `<CALbLtzzjueKpsEzJ_8=GrgvEusHW7XT8OF55U5HLpHha9O2cxw@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzzjueKpsEzJ-8-GrgvEusHW7XT8OF55U5HLpHha9O2cxw-mail-gmail-com`
+- Workspaceboard session: `ceb5dd56` / `Avignon direct Sonat: Contact and Accounts added in May and June`
+- Classification: `closed_with_proof` / `no-action/filed` duplicate; no resend.
+- Proof checked: `sent-log.jsonl` line 45 confirms the prior Sonat answer Message-ID `<178042192655.96155.6732747243816995106@kovaldistillery.com>`; `HANDOFF.md` line 19 records the original completed report; `drafts/sonat-crm-contacts-accounts-added-may-june-2026-06-02.txt` lines 3-59 contain the answer content with 4 new accounts, 42 new contacts, exclusions, and pending not-added items.
+- Durable input mirror: AI Manager recorder input id `2544`, UUID `ai-manager-chat-20260602175809-b1709f5eb376`.
+- Result: no new Sonat email, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, or private mailbox-body publication.
+
+## 2026-06-02 - Done - Duplicate Sonat CRM contacts/accounts added list intake
+
+- Source Message-ID: `<CALbLtzzjueKpsEzJ_8=GrgvEusHW7XT8OF55U5HLpHha9O2cxw@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzzjueKpsEzJ-8-GrgvEusHW7XT8OF55U5HLpHha9O2cxw-mail-gmail-com`
+- Workspaceboard session: `a101f027` / `Avignon direct Sonat: Contact and Accounts added in May and June`
+- Classification: `closed_with_proof` / `no-action/filed` duplicate; no resend.
+- Proof checked: `sent-log.jsonl` line 45 confirms the prior Sonat answer Message-ID `<178042192655.96155.6732747243816995106@kovaldistillery.com>`; `HANDOFF.md` line 17 records the original completed report; `drafts/sonat-crm-contacts-accounts-added-may-june-2026-06-02.txt` lines 3-59 contain the answer content with 4 new accounts, 42 new contacts, exclusions, and pending not-added items.
+- Durable input mirror: AI Manager recorder input id `2543`, UUID `ai-manager-chat-20260602175603-df9c180cb787`.
+- Result: no new Sonat email, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, or private mailbox-body publication.
+
+## 2026-06-02 - Done - Duplicate Sonat CRM contacts/accounts added list intake
+
+- Source Message-ID: `<CALbLtzzjueKpsEzJ_8=GrgvEusHW7XT8OF55U5HLpHha9O2cxw@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzzjueKpsEzJ-8-GrgvEusHW7XT8OF55U5HLpHha9O2cxw-mail-gmail-com`
+- Workspaceboard session: `93e0c896` / `Avignon direct Sonat: Contact and Accounts added in May and June`
+- Classification: `closed_with_proof` / `no-action/filed` duplicate; no resend.
+- Proof checked: `sent-log.jsonl` line 45 confirms the prior Sonat answer Message-ID `<178042192655.96155.6732747243816995106@kovaldistillery.com>`; `task-flow-events.jsonl` line 306 records the prior completed report with 4 new accounts and 42 new contacts; `drafts/sonat-crm-contacts-accounts-added-may-june-2026-06-02.txt` lines 3-59 contain the answer content and exclusions.
+- Durable input mirror: AI Manager recorder input id `2541`, UUID `ai-manager-chat-20260602175339-2ee47c07b88a`.
+- Result: no new Sonat email, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, or private mailbox-body publication.
+
+## 2026-06-02 - Done - Duplicate Sonat CRM contacts/accounts added list intake
+
+- Source Message-ID: `<CALbLtzzjueKpsEzJ_8=GrgvEusHW7XT8OF55U5HLpHha9O2cxw@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzzjueKpsEzJ-8-GrgvEusHW7XT8OF55U5HLpHha9O2cxw-mail-gmail-com`
+- Workspaceboard session: `85381a89` / `Avignon direct Sonat: Contact and Accounts added in May and June`
+- Classification: `closed_with_proof` / `no-action/filed` duplicate; no resend.
+- Proof checked: `sent-log.jsonl` line 45 confirms the prior Sonat answer Message-ID `<178042192655.96155.6732747243816995106@kovaldistillery.com>`; `task-flow-events.jsonl` line 306 records the prior completed report with 4 new accounts and 42 new contacts; `drafts/sonat-crm-contacts-accounts-added-may-june-2026-06-02.txt` lines 3-59 contain the answer content and exclusions.
+- Durable input mirror: AI Manager recorder input id `2540`, UUID `ai-manager-chat-20260602175041-de183e8cea58`.
+- Result: no new Sonat email, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, or private mailbox-body publication.
+
+## 2026-06-02 - Done - Duplicate Sonat CRM contacts/accounts added list intake
+
+- Source Message-ID: `<CALbLtzzjueKpsEzJ_8=GrgvEusHW7XT8OF55U5HLpHha9O2cxw@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzzjueKpsEzJ-8-GrgvEusHW7XT8OF55U5HLpHha9O2cxw-mail-gmail-com`
+- Workspaceboard session: `2bd79a2f` / `Avignon direct Sonat: Contact and Accounts added in May and June`
+- Classification: `closed_with_proof` / `no-action/filed` duplicate; no resend.
+- Proof checked: `sent-log.jsonl` line 45 confirms the prior Sonat answer Message-ID `<178042192655.96155.6732747243816995106@kovaldistillery.com>`; `task-flow-events.jsonl` line 306 records the prior completed report with 4 new accounts and 42 new contacts; `drafts/sonat-crm-contacts-accounts-added-may-june-2026-06-02.txt` lines 3-59 contain the answer content and exclusions.
+- Durable input mirror: AI Manager recorder input id `2539`, UUID `ai-manager-chat-20260602174816-fd21ded6cab6`.
+- Result: no new Sonat email, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, or private mailbox-body publication.
+
+## 2026-06-02 - Done - Duplicate Sonat CRM contacts/accounts added list intake
+
+- Source Message-ID: `<CALbLtzzjueKpsEzJ_8=GrgvEusHW7XT8OF55U5HLpHha9O2cxw@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzzjueKpsEzJ-8-GrgvEusHW7XT8OF55U5HLpHha9O2cxw-mail-gmail-com`
+- Workspaceboard session: `dd9e95c5` / `Avignon direct Sonat: Contact and Accounts added in May and June`
+- Classification: `closed_with_proof` / `no-action/filed` duplicate; no resend.
+- Proof checked: `sent-log.jsonl` line 45 confirms the prior Sonat answer Message-ID `<178042192655.96155.6732747243816995106@kovaldistillery.com>`; `TODO.md` lines 19-28 record the completed original answer with 4 new accounts, 42 new contacts, pending not-added items, and source-not-found-for-filing readback.
+- Durable input mirror: AI Manager recorder input id `2538`, UUID `ai-manager-chat-20260602174447-855ab5d603d7`.
+- Result: no new Sonat email, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, or private mailbox-body publication.
+
+## 2026-06-02 - Done - Duplicate Sonat CRM contacts/accounts added list intake
+
+- Source Message-ID: `<CALbLtzzjueKpsEzJ_8=GrgvEusHW7XT8OF55U5HLpHha9O2cxw@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzzjueKpsEzJ-8-GrgvEusHW7XT8OF55U5HLpHha9O2cxw-mail-gmail-com`
+- Workspaceboard session: `3363e4a0` / `Avignon direct Sonat: Contact and Accounts added in May and June`
+- Classification: `closed_with_proof` / `no-action/filed` duplicate; no resend.
+- Proof checked: `sent-log.jsonl` line 45 confirms the prior Sonat answer Message-ID `<178042192655.96155.6732747243816995106@kovaldistillery.com>`; `task-flow-events.jsonl` line 306 confirms the prior completed report with 4 new accounts and 42 new contacts; `TODO.md` records source-not-found-for-filing readback from the completed worker.
+- Workspaceboard: direct `/api/session-work-state` accepted `closed_with_proof` for `3363e4a0`; initial helper `working` call returned HTTP 400 before the direct closeout succeeded.
+- Durable input mirror: AI Manager recorder input id `2537`, UUID `ai-manager-chat-20260602174250-4a0923174b88`; Papers publish failed with HTTP 401 on the first durable attempt, so this pass is DB plus daily-input trail only.
+- Result: no new Sonat email, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, or mailbox-body publication.
+
+## 2026-06-02 - Done - Sonat CRM contacts/accounts added list
+
+- Source Message-ID: `<CALbLtzzjueKpsEzJ_8=GrgvEusHW7XT8OF55U5HLpHha9O2cxw@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzzjueKpsEzJ-8-GrgvEusHW7XT8OF55U5HLpHha9O2cxw-mail-gmail-com`
+- Workspaceboard session: `85877f2f` / `Avignon direct Sonat: Contact and Accounts added in May and June`
+- Result: sent Sonat the same-thread May/June CRM additions list from `drafts/sonat-crm-contacts-accounts-added-may-june-2026-06-02.txt`; outbound Message-ID `<178042192655.96155.6732747243816995106@kovaldistillery.com>`.
+- Answer content: counted 4 new account records and 42 new contact records, separated new records from updates/relinks/activity-only work, and named the remaining not-added/pending items: Lindsay Stratman, Darren Iceton, and the Lipman Bros warehouse contacts needing missing address details.
+- Durable input mirror: AI Manager recorder input id `2535`, UUID `ai-manager-chat-20260602173449-583c3f455b78`.
+- Filing readback: direct IMAP lookup found 0 hits for the source Message-ID in `INBOX`, `Handled`, and `[Gmail]/All Mail`, so no live source message was available to move; completion proof is the sent-log Message-ID above plus the draft/readback records.
+- Boundaries: no Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, or private mailbox-body publication.
+
 ## 2026-06-02 - Done - Sonat Asher Cultivater send-status answer sent
 
 - Source Message-ID: `<CALbLtzwTwQc-v3J3crR1=E1V34LpES6A5jvQWLp-LD+-zSum5w@mail.gmail.com>`
@@ -14,6 +136,26 @@ Active work now lives in DB-backed Task Flow / Workspaceboard / OPS records.
 - Answer content: Asher's external Cultivater outreach is not yet proven sent; Venetia's comparable external outreach is recorded; concrete next action is for Asher to run the approved-send follow-up and verify outbound Message-IDs.
 - Durable input mirror: AI Manager recorder input id `2510`, UUID `ai-manager-chat-20260602060909-e6fde98f7af3`.
 - Boundaries: no Robert copy, external outreach send, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, or private mailbox-body publication.
+
+## 2026-06-02 - Done - Duplicate Sonat CRM additions list intake
+
+- Source Message-ID: `<CALbLtzzjueKpsEzJ_8=GrgvEusHW7XT8OF55U5HLpHha9O2cxw@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzzjueKpsEzJ-8-GrgvEusHW7XT8OF55U5HLpHha9O2cxw-mail-gmail-com`
+- Workspaceboard session: `79f5170c` / `Avignon direct Sonat: Contact and Accounts added in May and June`
+- Classification: `closed_with_proof` / `no-action/filed` duplicate; no resend.
+- Proof checked: `sent-log.jsonl` line 45 confirms prior Sonat answer Message-ID `<178042192655.96155.6732747243816995106@kovaldistillery.com>`; `drafts/sonat-crm-contacts-accounts-added-may-june-2026-06-02.txt` lines 3-59 contain the answer content, 4 new accounts, 42 new contacts, exclusions, and pending not-added items; `HANDOFF.md` records the original completion and source-not-found-for-filing readback.
+- Durable input mirror: `ai_manager_inputs` row `2545` / UUID `ai-manager-chat-20260602180113-a096c72a507a`.
+- Result: no new Sonat email, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, or private mailbox-body publication.
+
+## 2026-06-03 - Done - Duplicate Sonat Asher Cultivater send-status intake
+
+- Source Message-ID: `<CALbLtzwTwQc-v3J3crR1=E1V34LpES6A5jvQWLp-LD+-zSum5w@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzwTwQc-v3J3crR1-E1V34LpES6A5jvQWLp-LD-zSum5w-mail-gmail-com`
+- Workspaceboard session: `ff7fab7d` / `Avignon direct Sonat: Asher`
+- Classification: `closed_with_proof` / `no-action/filed` duplicate; no resend.
+- Proof checked: `sent-log.jsonl` line 41 confirms prior Sonat answer Message-ID `<178037381797.13199.9761850747045023194@kovaldistillery.com>`; `archive-log.jsonl` line 16 confirms the source was archived to `Handled`; `EMAIL_DERIVED_DECISIONS.md` lines 15-17 record the current Asher verification result and correction/follow-through Message-ID `<178038052991.65706.15031237561766821657@kovaldistillery.com>`.
+- Durable input mirror: `ai_manager_inputs` row `2594` / UUID `ai-manager-chat-20260603211925-640ba6e93d27`; first Papers publish attempt hit HTTP 401, then the adapter succeeded with Papers dry-run only.
+- Result: no new Sonat email, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, or mailbox-body publication. Verified answer content remains that Asher's external Cultivater outreach is not yet proven sent, Venetia's comparable outreach is recorded, and the concrete remaining gate is for Asher to send the approved outreach emails or produce the missing outbound Message-IDs.
 
 ## 2026-06-02 - Done - Duplicate Sonat Asher Cultivater send-status intake
 
@@ -436,6 +578,18 @@ Active work now lives in DB-backed Task Flow / Workspaceboard / OPS records.
 - Proof checked: `sent-log.jsonl` line 41 confirms prior Sonat answer Message-ID `<178037381797.13199.9761850747045023194@kovaldistillery.com>`; `email-trace-events.jsonl` line 26 confirms `completed_report_sent/filed` with `archived: true`; `archive-log.jsonl` line 16 confirms the source was archived to `Handled`; `EMAIL_DERIVED_DECISIONS.md` lines 12-13 record the existing Asher verification result.
 - Durable input mirror: `ai_manager_inputs` row `2508` / UUID `ai-manager-chat-20260602060221-3e4eb3eb210e`.
 - Result: no new Sonat email, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, or mailbox-body publication. Verified answer content remains that Asher's external Cultivater outreach is not yet proven sent, Venetia's comparable outreach is recorded, and the concrete remaining gate is for Asher to send the approved outreach emails or produce the missing outbound Message-IDs.
+
+## 2026-06-02 - Done - Sonat May/June CRM additions list correction
+
+- Source Message-ID: `<CALbLtzzjueKpsEzJ_8=GrgvEusHW7XT8OF55U5HLpHha9O2cxw@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzzjueKpsEzJ-8-GrgvEusHW7XT8OF55U5HLpHha9O2cxw-mail-gmail-com`
+- Workspaceboard session: `642aa3b8` / `Avignon direct Sonat: Contact and Accounts added in May and June`
+- Classification: `closed_with_proof`; same-thread correction sent after an overly narrow creator-field-only readback.
+- Proof checked: prior full answer Message-ID `<178042192655.96155.6732747243816995106@kovaldistillery.com>` and draft `drafts/sonat-crm-contacts-accounts-added-may-june-2026-06-02.txt` lines 3-59 show the correct full answer: 4 new accounts and 42 new contacts, with activity-only/update-only/relink work excluded and pending not-added items named.
+- Narrow follow-up sent in this pass: Message-ID `<178042413338.13320.17070102721488856638@kovaldistillery.com>`.
+- Corrective same-thread email sent in this pass: Message-ID `<178042419710.13703.5271180002966454188@kovaldistillery.com>`.
+- Durable input mirror: `ai_manager_inputs` row `2549` / UUID `ai-manager-chat-20260602181202-2997171c80c3`.
+- Original worker already checked direct source filing and found 0 source hits in `INBOX`, `Handled`, and `[Gmail]/All Mail`; no extra source move was possible here. No CRM/Portal/OPS mutation, Robert copy, external reply, auth/OAuth/token work, credential exposure, or private mailbox-body publication occurred.
 ## 2026-06-02 - Blocked - Sonat Lipman Bros Warehouses CRM contacts
 
 - Source Message-ID: `<CALbLtzx=R-NeO7jF-0MM9daKEgD8ZxayOzgnLSyuBjhB0cao1w@mail.gmail.com>`
@@ -446,3 +600,4 @@ Active work now lives in DB-backed Task Flow / Workspaceboard / OPS records.
 - Blocker: working packet summary is truncated before the Nashville, Chattanooga, and Knoxville warehouse addresses; exact Gmail export lacks a local token; Portal DB precheck from this host failed with MariaDB host-not-allowed.
 - Owner question: Sonat should resend or confirm the three warehouse addresses. After that, route to a live Portal CRM worker for exact duplicate checks, contact creation under Lipman Bros, and readback.
 - Durable input mirror: `ai_manager_inputs` row `2524` / UUID `ai-manager-chat-20260602145401-0a852a8de0c1`.
+- done 2026-06-02 13:03 CDT: Completed Avignon direct Sonat CRM task `Lipman Contacts for the CRM` for source Message-ID `<CALbLtzwcGzdFRAAXszyUa4RQ9-JbMzQq9mcpY85Mnn0FUkWKUA@mail.gmail.com>` / dedupe `avignon-direct-owner-sonat-CALbLtzwcGzdFRAAXszyUa4RQ9-JbMzQq9mcpY85Mnn0FUkWKUA-mail-gmail-com`. Added Lipman Contacts sheet data to Lipman Brothers account `4580`: created 34 contacts (`370564`-`370597`) and updated 7 existing contacts (`13948`, `335745`, `49964`, `218684`, `9505`, `367725`, `202391`). Live CRM readback confirmed 41/41 touched contacts linked to account 4580 with sheet notes. Not added: placeholder `Your BUDs Email` rows, open placeholder rows, and Chris Woods/Shane Bashlor rows where `c.woods@lipmanbrothers.com` was assigned to multiple people. Sonat completion sent Message-ID `<178042336395.7453.8661179684445087494@kovaldistillery.com>`; source archived to `Handled` with exact helper readback `archived_to_handled=true`; Workspaceboard session `2cd04028` to close with this proof.
