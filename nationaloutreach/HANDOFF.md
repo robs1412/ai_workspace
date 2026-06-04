@@ -1,5 +1,24 @@
 # National Outreach Handoff
 
+## 2026-06-03 Binny's Downers Grove scheduler bridge duplicate closed
+
+- 2026-06-03 23:33 CDT done entry for Workspaceboard session `dec26e6f` / Task Flow `taskflow-4360f14c60b4fb2a`, source Message-ID `<CALbLtzw-GD4qZDMSu=CD0TWDB120T90-6DUa8eAsEpmmvALjtA@mail.gmail.com>`, `Re: Binny's Downers Grove - Midwest Whiskey Event - 7/18/26`.
+- Source-first proof: Sonat's follow-up accepted the 2026-07-18 1:00-3:00 PM Binny's Downers Grove walkaround whiskey event and cc'd Vanessa to get it on the calendar.
+- Duplicate completion proof: Vanessa had already replied on-thread with Message-ID `<178051720535.5814.8487609108557765846@kovaldistillery.com>` and included live OPS event link `https://www.koval-distillery.com/ops/index.php?view=outreach_detail&id=1028`.
+- Live OPS readback confirmed event `1028`: `Binny's Downers Grove Midwest Whiskey Event`, date `2026-07-18`, time `13:00:00`-`15:00:00`, category `Outreach`, location `Binny's Downers Grove, 2010 Butterfield Rd., Downers Grove, IL 60515`, Vanessa host user `1343`, linked shift `5556`.
+- 2026-06-04 11:56 CDT current calendar readback: OPS event `1028` still exists with linked shift `5556`; `event_booking_google_links` stores UID `ops-outreach-1028@koval-distillery.com` with `calendar_type=outreach`; `load_outreach_calendar_events()` found the matching Google Outreach calendar event for 2026-07-18 13:00-15:00 at the Downers Grove location. Outreach readiness still marks event `1028` as `needs_review` only because the linked COTeam shift is open/unassigned and no activity link exists; it is not missing OPS or Google calendar coverage.
+- Current inbox proof: exact source key `calbltzw-gd4qzdmsu=cd0twdb120t90-6dua8easepmmvaljta@mail.gmail.com` is no longer present in `active-inbox.json`.
+- Action taken: recorded Task Flow `taskflow-4360f14c60b4fb2a` as `closed_with_proof` through `task_flow_mysql_recorder.php`. No external resend, new OPS mutation, or owner question was needed.
+- Workspaceboard closeout proof marker: `BINNYS_DG_EVENT_1028_SHIFT_5556_SENT_178051720535_SOURCE_NOT_ACTIVE_TASKFLOW_4360F14C60B4FB2A`.
+
+## 2026-06-03 Ojai Vineyard newsletter wrapper filed no-action
+
+- 2026-06-03 22:34 CDT done entry for Workspaceboard session `2bf43dd8` / Task Flow `taskflow-8ca4fb0368b64faa`, source Message-ID `<01KT89NZPZYFR4Y64S9TDQSTV9@klaviyomail.com>`, `The Summer 6-Pack (new wines we are very excited about.)`.
+- Source-first readback showed a promotional/newsletter body with no owner question, no direct forward instruction, no retail tasting signal, no staffing signal, and no thread. No OPS Outreach/calendar/team availability follow-up was needed.
+- Runtime archive proof: `archive-log.jsonl` line `270` records the exact source moved to All Mail with `mailbox_mutation=true`, reason `newsletter_promotional_no_action`.
+- Task Flow/readback proof: `task-flow-events.jsonl` line `64459` records `email_no_action_closed`; `email-trace-events.jsonl` line `18705` records `email_archived` with packet status `no_action_closed`; `active-inbox.json` now shows this source as `no_action_closed`.
+- Workspaceboard closeout proof marker: `NO_ACTION_OJAI_SUMMER_6_PACK_NEWSLETTER_ARCHIVED_01KT89NZPZYFR4Y64S9TDQSTV9_20260603`.
+
 ## 2026-06-03 Thank-you wrapper no-action filed
 
 - 2026-06-03 17:10 CDT done entry for Workspaceboard session `160a5fd7`, `vanessa.sterling@kovaldistillery.com: THANK YOU!`.
