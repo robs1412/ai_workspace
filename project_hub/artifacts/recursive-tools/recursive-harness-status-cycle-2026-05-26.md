@@ -128,3 +128,13 @@ Commit or otherwise settle the in-progress `scripts/recursive_experiment_harness
 - worktree_mode: `--include-worktrees` intentionally includes recursive run worktrees
 - worktree_mode_result: `repos_scanned=36`, `dirty_repos=7`, including four dirty recursive worktrees from prior promoted runs
 - next: add proof-backed retirement for promoted recursive worktrees, then use this inventory script as the regular "clean all repos?" starting point
+
+## 2026-06-04 Promoted Recursive Worktree Retirement
+
+- recorded_input: `ai_manager_inputs` row `2657`
+- scope: proof-backed retirement only for owned recursive worktrees whose dirty patch hash exactly matched an applied promotion proof
+- retired_run_ids: `recursive-git-hygiene-file-groups-001`, `recursive-git-hygiene-group-detail-001`, `recursive-git-hygiene-plan-001`, `recursive-git-hygiene-repo-detail-001`, `recursive-promotion-status-001`, `recursive-superseded-retire-001`, `recursive-worktree-diff-status-001`, `recursive-worktree-retire-status-001`
+- proof_gate: for each run, `worktree-diff --preview-lines 0` patch hash matched `status` latest `promotion_proofs[0].patch_sha256`; each `retire-worktree --superseded-patch-sha256 <hash>` dry-run returned `can_retire=true` and `blockers=[]`
+- apply_readback: each `retire-worktree --apply` returned `retired=true`; follow-up `git worktree list --porcelain` shows only the main checkout plus `planner-proof-harness-001` and `truth-drift-harness-001`; follow-up `retire-worktree --run-id recursive-git-hygiene-file-groups-001` reports `worktree_missing_or_unowned`
+- inventory_readback: `/usr/local/bin/python3.13 scripts/git_hygiene_inventory.py --root /Users/werkstatt --dirty-only --include-worktrees` now returns `repos_scanned=32`, `dirty_repos=5`, matching the normal dirty-repo set; no dirty recursive worktrees remain in inventory
+- remaining_git_hygiene: read-only plan still shows dirty normal repos `/Users/werkstatt/ai_workspace`, `/Users/werkstatt/bid`, `/Users/werkstatt/ops`, `/Users/werkstatt/salesreport`, and `/Users/werkstatt/workspaceboard`; no fetch, reset, stash, commit, push, or cleanup was run on those repos
