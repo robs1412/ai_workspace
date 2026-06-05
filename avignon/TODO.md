@@ -5,6 +5,18 @@ Archived: 2026-05-18 CDT (Machine: Macmini.lan)
 This file is archived and contains no active queue items.
 Active work now lives in DB-backed Task Flow / Workspaceboard / OPS records.
 
+## 2026-06-05 - Done - Sonat Cultivater Asher/Venetia progress update
+
+- Source Message-ID: `<CALbLtzzRpEpinL650DvV3750Qz-6YhMfaoexC=2LZ8Nw9xU8PA@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzzRpEpinL650DvV3750Qz-6YhMfaoexC-2LZ8Nw9xU8PA-mail-gmail-com`
+- Workspaceboard session: `d32415f0` / `Avignon direct Sonat: The Cultivater`
+- Proof checked: Asher `HANDOFF.md`/`sent-log.jsonl` still prove only the May 17 Sonat approval/full-text review sends and no verified external outreach Message-IDs; Venetia `HANDOFF.md` proves the May 26 nine external sends, June 1 reply-forwarding to Sonat, June 2 Slow Art draft to Sonat, and June 3 approved Slow Art follow-up send.
+- Result: Sonat completion answer sent on the source thread with Message-ID `<178068106495.98804.827543479972421947@kovaldistillery.com>` from `drafts/sonat-cultivater-asher-venetia-progress-2026-06-05.txt`. Live Avignon runtime sent log also recorded immediate same-thread acknowledgement Message-ID `<178068106503.98806.1651749167074559772@kovaldistillery.com>`; no further email was sent.
+- Remaining gate: Asher still needs the approved external-send follow-up or missing outbound Message-IDs; Venetia's comparable send-and-follow-up path is recorded.
+- Not done: no Robert copy, external reply by Avignon, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, or raw mailbox-body publication.
+- Filing proof: exact source was archived to `Handled` with helper readback `archived_to_handled=true` and `archive-log.jsonl` proof.
+- Durable input mirror: `ai_manager_inputs` row `2682` / UUID `ai-manager-chat-20260605173710-104079514fed`.
+
 ## 2026-06-03 - Done - Reused RNDC NE contacts route, blocker remains
 
 - Source Message-ID: `<CALbLtzxuO9moT12F7rqQrd9HiRsm820MFGjYb2SM-jNHUnSUfg@mail.gmail.com>`
@@ -156,6 +168,8 @@ Active work now lives in DB-backed Task Flow / Workspaceboard / OPS records.
 - Proof checked: `sent-log.jsonl` line 41 confirms prior Sonat answer Message-ID `<178037381797.13199.9761850747045023194@kovaldistillery.com>`; `archive-log.jsonl` line 16 confirms the source was archived to `Handled`; `EMAIL_DERIVED_DECISIONS.md` lines 15-17 record the current Asher verification result and correction/follow-through Message-ID `<178038052991.65706.15031237561766821657@kovaldistillery.com>`.
 - Durable input mirror: `ai_manager_inputs` row `2594` / UUID `ai-manager-chat-20260603211925-640ba6e93d27`; first Papers publish attempt hit HTTP 401, then the adapter succeeded with Papers dry-run only.
 - Result: no new Sonat email, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, or mailbox-body publication. Verified answer content remains that Asher's external Cultivater outreach is not yet proven sent, Venetia's comparable outreach is recorded, and the concrete remaining gate is for Asher to send the approved outreach emails or produce the missing outbound Message-IDs.
+
+- done 2026-06-05 12:37 CDT: Completed Avignon direct Sonat `Asher` send-status intake for source Message-ID `<CALbLtzzPWjqFnRDoekZG1e8bXzH3xeXrx_ReXrB_OcbO=kag1w@mail.gmail.com>` / dedupe `avignon-direct-owner-sonat-CALbLtzzPWjqFnRDoekZG1e8bXzH3xeXrx-ReXrB-OcbO-kag1w-mail-gmail-com`. Workspaceboard session `502672ea`. Fresh proof check of `../asher/sent-log.jsonl` found only Asher's Sonat-facing Cultivater approval/review sends through Message-ID `<177906158668.61070.415055155373296713@thecultivater.com>` and no Asher external outreach send row. Runtime had already sent an acknowledgement Message-ID `<178068088735.97076.8029715816632976562@kovaldistillery.com>`; substantive same-thread answer sent to Sonat with Message-ID `<178068099976.98220.4052773481652465660@kovaldistillery.com>`. Source archived to `Handled` with exact IMAP helper readback `archived=true`. Durable input mirror: `ai_manager_inputs` row `2681` / UUID `ai-manager-chat-20260605173639-e1d26ea540c0`. No Robert copy, external reply/outreach send, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, or private mailbox-body publication occurred. Remaining gate: Asher approved-send follow-up and outbound Message-ID verification.
 
 ## 2026-06-02 - Done - Duplicate Sonat Asher Cultivater send-status intake
 
@@ -601,3 +615,15 @@ Active work now lives in DB-backed Task Flow / Workspaceboard / OPS records.
 - Owner question: Sonat should resend or confirm the three warehouse addresses. After that, route to a live Portal CRM worker for exact duplicate checks, contact creation under Lipman Bros, and readback.
 - Durable input mirror: `ai_manager_inputs` row `2524` / UUID `ai-manager-chat-20260602145401-0a852a8de0c1`.
 - done 2026-06-02 13:03 CDT: Completed Avignon direct Sonat CRM task `Lipman Contacts for the CRM` for source Message-ID `<CALbLtzwcGzdFRAAXszyUa4RQ9-JbMzQq9mcpY85Mnn0FUkWKUA@mail.gmail.com>` / dedupe `avignon-direct-owner-sonat-CALbLtzwcGzdFRAAXszyUa4RQ9-JbMzQq9mcpY85Mnn0FUkWKUA-mail-gmail-com`. Added Lipman Contacts sheet data to Lipman Brothers account `4580`: created 34 contacts (`370564`-`370597`) and updated 7 existing contacts (`13948`, `335745`, `49964`, `218684`, `9505`, `367725`, `202391`). Live CRM readback confirmed 41/41 touched contacts linked to account 4580 with sheet notes. Not added: placeholder `Your BUDs Email` rows, open placeholder rows, and Chris Woods/Shane Bashlor rows where `c.woods@lipmanbrothers.com` was assigned to multiple people. Sonat completion sent Message-ID `<178042336395.7453.8661179684445087494@kovaldistillery.com>`; source archived to `Handled` with exact helper readback `archived_to_handled=true`; Workspaceboard session `2cd04028` to close with this proof.
+
+## 2026-06-05 - Blocked - Sonat Accounts, contacts and activities
+
+- Source Message-ID: `<CALbLtzzyk6o6O7oL2Ew0W30HEm4EcmCAUXrYVZ0Yjb6O2OyZYg@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzzyk6o6O7oL2Ew0W30HEm4EcmCAUXrYVZ0Yjb6O2OyZYg-mail-gmail-com`
+- Workspaceboard session: `be60e1bc` / `Avignon direct Sonat: Accounts, contacts and activities`
+- Classification: `blocker-email-required`; no CRM/Portal/OPS mutation completed.
+- Blocker: the working packet and targeted Workspaceboard session history contain only the redacted/truncated beginning of Sonat's request, not the actual visited-location list, people mentioned, or activity notes needed for deterministic account/contact/activity entry.
+- Proof checked: exact Message-ID/dedupe searches in Avignon local logs and source-body cache found no source body; recent private source-body files did not include this message; `.private/header-poll-state/header-poll-log.jsonl` showed stale credential-format failure only; targeted `/api/session-history?session_id=be60e1bc` showed the same redacted packet, not the full list.
+- Owner question sent to Sonat on the original thread asking her to resend or forward the full list. Blocker email Message-ID: `<178068121534.200.17100178872796775034@kovaldistillery.com>`.
+- Durable input mirror: `ai_manager_inputs` row `2684` / UUID `ai-manager-chat-20260605174029-818e594278e6`.
+- No Robert copy, external reply, OAuth/token/auth work, credential exposure, pricing/account commitment, duplicate-guessing, source filing, or Portal/CRM/OPS mutation occurred.

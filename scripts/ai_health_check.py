@@ -51,6 +51,8 @@ DEFAULT_PROOF_REPAIR_BATCH_SIZE = 10
 DEFAULT_PROOF_REPAIR_INTERVAL_SECONDS = 60
 DEFAULT_WORKSPACEBOARD_SUPERVISOR = Path("/Users/admin/.workspaceboard-launch/runtime/app/scripts/workspaceboard_supervisor.php")
 DEFAULT_WORKSPACEBOARD_DB_RECORDER = Path("/Users/admin/.workspaceboard-launch/runtime/app/scripts/workspaceboard_db_recorder.php")
+DEFAULT_WORKSPACEBOARD_AUTOMATION_LOCK = Path("/Users/admin/.workspaceboard-launch/state/workspaceboard-automation.lock")
+DEFAULT_WORKSPACEBOARD_SUPERVISOR_TIMEOUT_SECONDS = 30
 DEFAULT_MAILBOX_CANARY_MAX_AGE_MINUTES = 10
 DEFAULT_SESSION_SPRAWL_GOVERNOR_INTERVAL_SECONDS = 60
 DEFAULT_STANDING_ATTENTION_MINUTES = 60
@@ -74,7 +76,7 @@ DEFAULT_OWNER_REPLY_ESCALATION_SECONDS = 5 * 60
 DEFAULT_OWNER_REPLY_EMAIL_SECONDS = 10 * 60
 DEFAULT_OWNER_REPLY_STATE_FILE = "owner-reply-thread-state.json"
 DEFAULT_OWNER_REPLY_PUBSUB_PULL_LIMIT = 10
-DEFAULT_GMAIL_PUSH_TIMEOUT_SECONDS = 6
+DEFAULT_GMAIL_PUSH_TIMEOUT_SECONDS = 25
 DEFAULT_GMAIL_PUSH_SUBSCRIPTION = "projects/gmailconnector-485021/subscriptions/koval-gmail-push-sub"
 DEFAULT_TASK_FLOW_DUE_RUNNER = Path("/Users/admin/.task-flow-launch/runtime/scripts/task_flow_due_runner.py")
 DEFAULT_STALE_TASK_CLEANUP_SCRIPT = Path("/Users/werkstatt/ai_workspace/scripts/stale_task_cleanup.php")
@@ -455,6 +457,24 @@ def process_command(pid: int) -> str:
         check=False,
     )
     return result.stdout.strip() if result.returncode == 0 else ""
+
+
+def read_pid_file(path: Path) -> int:
+    try:
+        raw = path.read_text(encoding="utf-8", errors="replace").strip()
+    except (FileNotFoundError, OSError):
+        return 0
+    return int(raw) if raw.isdigit() else 0
+
+
+def process_is_running(pid: int) -> bool:
+    if pid <= 0:
+        return False
+    try:
+        os.kill(pid, 0)
+    except OSError:
+        return False
+    return True
 
 
 def repair_workspaceboard(args: argparse.Namespace, state: dict, failure_reason: str) -> dict:
@@ -912,12 +932,21 @@ def append_jsonl(path: Path, payload: dict) -> None:
 def run_workspaceboard_supervisor() -> dict:
     if not DEFAULT_WORKSPACEBOARD_SUPERVISOR.is_file():
         return {"status": "missing", "path": str(DEFAULT_WORKSPACEBOARD_SUPERVISOR)}
+    lock_pid = read_pid_file(DEFAULT_WORKSPACEBOARD_AUTOMATION_LOCK)
+    if lock_pid and process_is_running(lock_pid):
+        return {
+            "status": "skipped_busy",
+            "reason": "workspaceboard automation already running",
+            "pid": lock_pid,
+            "lock_file": str(DEFAULT_WORKSPACEBOARD_AUTOMATION_LOCK),
+        }
     try:
+        timeout_seconds = int(os.environ.get("AI_HEALTH_WORKSPACEBOARD_SUPERVISOR_TIMEOUT_SECONDS", str(DEFAULT_WORKSPACEBOARD_SUPERVISOR_TIMEOUT_SECONDS)) or DEFAULT_WORKSPACEBOARD_SUPERVISOR_TIMEOUT_SECONDS)
         result = subprocess.run(
             ["php", str(DEFAULT_WORKSPACEBOARD_SUPERVISOR), "--record-only", "--no-sync-sessions", "--batch-size", "4"],
             capture_output=True,
             text=True,
-            timeout=10,
+            timeout=timeout_seconds,
             check=False,
         )
     except (OSError, subprocess.TimeoutExpired) as error:
@@ -2565,7 +2594,7 @@ def gmail_push_consumer_check(args: argparse.Namespace) -> dict:
             command,
             capture_output=True,
             text=True,
-            timeout=min(float(args.timeout), float(args.gmail_push_timeout_seconds)),
+            timeout=float(args.gmail_push_timeout_seconds),
             check=False,
             env=env,
         )
@@ -5495,6 +5524,8 @@ def main(argv: list[str]) -> int:
       log_dir.mkdir(parents=True, exist_ok=True)
       append_jsonl(log_dir / "health-checks.jsonl", report)
       atomic_write_json(log_dir / "latest.json", report)
+      if args.max_run_seconds > 0 and hasattr(signal, "SIGALRM"):
+        signal.alarm(0)
       report["workspaceboard_supervisor"] = run_workspaceboard_supervisor()
       atomic_write_json(log_dir / "latest.json", report)
       write_markdown(log_dir / "latest.md", report)

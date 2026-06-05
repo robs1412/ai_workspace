@@ -329,6 +329,22 @@ def parse_header_timestamp(value: str) -> Optional[float]:
     return parsed.timestamp()
 
 
+def read_jsonl_tail(path: Path, max_lines: int = 5000) -> list[dict]:
+    try:
+        lines = path.read_text(encoding="utf-8", errors="replace").splitlines()[-max_lines:]
+    except (FileNotFoundError, OSError):
+        return []
+    rows: list[dict] = []
+    for line in lines:
+        try:
+            row = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        if isinstance(row, dict):
+            rows.append(row)
+    return rows
+
+
 def append_jsonl(path: Path, row: dict) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.parent.chmod(0o700)
@@ -451,6 +467,82 @@ def scheduled_actions_db_upsert(mailbox_lane: str, rows: list[dict]) -> bool:
         return False
 
 
+def acquire_scheduled_actions_lock(state_dir: Path, now_ts: Optional[float] = None) -> tuple[bool, bool]:
+    lock_dir = state_dir / "scheduled-actions.lock"
+    try:
+        lock_dir.mkdir()
+        return True, False
+    except FileExistsError:
+        pass
+
+    max_age = int(os.environ.get("NATIONALOUTREACH_SCHEDULED_ACTION_LOCK_MAX_AGE_SECONDS", "900") or "900")
+    now = time.time() if now_ts is None else now_ts
+    try:
+        lock_age = now - lock_dir.stat().st_mtime
+    except OSError:
+        lock_age = 0
+    if lock_age < max_age:
+        return False, False
+
+    with contextlib.suppress(OSError):
+        lock_dir.rmdir()
+    try:
+        lock_dir.mkdir()
+        append_jsonl(
+            state_dir / "scheduled-actions-log.jsonl",
+            {
+                "logged_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
+                "status": "stale_lock_recovered",
+                "lock_age_seconds": int(lock_age),
+                "max_age_seconds": max_age,
+            },
+        )
+        return True, True
+    except FileExistsError:
+        return False, False
+
+
+def scheduled_actions_lock_health(state_dir: Path, skipped_locked: bool, now_ts: Optional[float] = None) -> dict:
+    if not skipped_locked:
+        return {
+            "skip_streak": 0,
+            "lock_age_seconds": 0,
+            "actionable": False,
+        }
+
+    lock_dir = state_dir / "scheduled-actions.lock"
+    now = time.time() if now_ts is None else now_ts
+    max_age = int(os.environ.get("NATIONALOUTREACH_SCHEDULED_ACTION_LOCK_MAX_AGE_SECONDS", "900") or "900")
+    try:
+        lock_age = max(0, int(now - lock_dir.stat().st_mtime))
+    except OSError:
+        lock_age = 0
+
+    streak = 1
+    for row in reversed(read_jsonl_tail(state_dir / "cycle-log.jsonl", 25)):
+        if row.get("scheduled_actions_skipped_locked"):
+            streak += 1
+            continue
+        break
+    actionable = streak >= 3 or lock_age >= max_age
+    if actionable:
+        append_jsonl(
+            state_dir / "scheduled-actions-log.jsonl",
+            {
+                "logged_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
+                "status": "scheduled_lock_actionable",
+                "skip_streak": streak,
+                "lock_age_seconds": lock_age,
+                "max_age_seconds": max_age,
+            },
+        )
+    return {
+        "skip_streak": streak,
+        "lock_age_seconds": lock_age,
+        "actionable": actionable,
+    }
+
+
 def process_scheduled_actions(creds: dict[str, str], state_dir: Path, now_ts: Optional[float] = None) -> dict:
     schedule_path = state_dir / "scheduled-actions.jsonl"
     rows = scheduled_actions_db_rows("nationaloutreach")
@@ -460,10 +552,8 @@ def process_scheduled_actions(creds: dict[str, str], state_dir: Path, now_ts: Op
         return {"due": 0, "queued": 0, "skipped_resolved": 0, "failed": 0}
     now = time.time() if now_ts is None else now_ts
     lock_dir = state_dir / "scheduled-actions.lock"
-    try:
-        lock_dir.mkdir()
-        lock_acquired = True
-    except FileExistsError:
+    lock_acquired, stale_lock_recovered = acquire_scheduled_actions_lock(state_dir, now)
+    if not lock_acquired:
         return {"due": 0, "queued": 0, "skipped_resolved": 0, "failed": 0, "skipped_locked": True}
     updated_rows = []
     due = queued = skipped_resolved = failed = 0
@@ -546,7 +636,7 @@ def process_scheduled_actions(creds: dict[str, str], state_dir: Path, now_ts: Op
             queued += 1
         write_jsonl_rows_atomic(schedule_path, updated_rows)
         scheduled_actions_db_upsert("nationaloutreach", updated_rows)
-        return {"due": due, "queued": queued, "skipped_resolved": skipped_resolved, "failed": failed, "skipped_locked": False}
+        return {"due": due, "queued": queued, "skipped_resolved": skipped_resolved, "failed": failed, "skipped_locked": False, "stale_lock_recovered": stale_lock_recovered}
     finally:
         if lock_acquired:
             with contextlib.suppress(OSError):
@@ -1990,6 +2080,7 @@ def main() -> int:
     )
     scheduled_result = process_scheduled_actions(creds, state_dir) if args.send_approved else {"due": 0, "queued": 0, "skipped_resolved": 0, "failed": 0, "skipped_locked": False}
     send_result = send_approved(creds, state_dir, args.from_address) if args.send_approved else {"sent": 0, "failed": 0, "skipped_locked": False}
+    scheduled_lock_health = scheduled_actions_lock_health(state_dir, bool(scheduled_result.get("skipped_locked"))) if args.send_approved else {"skip_streak": 0, "lock_age_seconds": 0, "actionable": False}
     summary = {
         "ok": True,
         "worker": "nationaloutreach",
@@ -2013,6 +2104,10 @@ def main() -> int:
         "scheduled_actions_skipped_resolved": scheduled_result["skipped_resolved"],
         "scheduled_actions_failed": scheduled_result["failed"],
         "scheduled_actions_skipped_locked": bool(scheduled_result.get("skipped_locked")),
+        "scheduled_actions_stale_lock_recovered": bool(scheduled_result.get("stale_lock_recovered")),
+        "scheduled_actions_lock_skip_streak": scheduled_lock_health["skip_streak"],
+        "scheduled_actions_lock_age_seconds": scheduled_lock_health["lock_age_seconds"],
+        "scheduled_actions_lock_actionable": scheduled_lock_health["actionable"],
         "archived_inbox_count": archive_result["archived"],
         "archived_inbox_skipped": archive_result["skipped"],
         "archived_inbox_reasons": archive_result["reasons"],

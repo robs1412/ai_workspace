@@ -1,6 +1,6 @@
 # Service Parity Check
 
-- Recorded: 2026-05-24 13:48:02
+- Recorded: 2026-06-05 12:11:56
 - Mode: `all`
 - Scope: source/runtime parity and installed deployment-state checks for local AI service surfaces
 
