@@ -1,7 +1,12 @@
 {
   "version": 1,
   "board": {
-    "status_url": "http://127.0.0.1:17878/api/status",
+    "status_url": "http://127.0.0.1:17878/api/management/overview?live=1",
+    "overview_cmd": [
+      "/usr/local/bin/php",
+      "/Users/werkstatt/workspaceboard/scripts/workspaceboard_db_recorder.php",
+      "overview"
+    ],
     "managed_sessions_key": "managed_sessions",
     "active_runtime_statuses": [
       "working",

@@ -1,0 +1,11 @@
+{
+  "attempt_id": "live-overview-readback-20260607",
+  "evaluator": "/usr/local/bin/python3.13 scripts/task_flow_truth_drift_check.py --fail-on-drift",
+  "evaluator_cwd": "/Users/werkstatt/ai_workspace/project_hub/recursive-runs/truth-drift-harness-001/worktree",
+  "finished_at": "2026-06-07 11:44:45 CDT",
+  "metric": "0",
+  "returncode": 0,
+  "started_at": "2026-06-07 11:44:33 CDT",
+  "stderr": "proofs/live-overview-readback-20260607.stderr.txt",
+  "stdout": "proofs/live-overview-readback-20260607.stdout.txt"
+}

@@ -265,6 +265,12 @@ def approved_state(proposal: dict[str, Any]) -> bool:
     return proposal.get("decision_state") == "approved"
 
 
+def execution_authorized(proposal: dict[str, Any], fix_class: str) -> bool:
+    if approved_state(proposal):
+        return True
+    return not proposal.get("approval_required") and fix_class == "no-op-monitoring"
+
+
 def execution_statuses() -> dict[str, Any]:
     proposals = []
     for row in queue_rows():
@@ -286,6 +292,8 @@ def execution_statuses() -> dict[str, Any]:
                 "execution_state": proposal.get("execution_state") or "",
                 "ratchet_result": proposal.get("ratchet_result") or "",
                 "approved_unexecuted": approved_state(proposal)
+                and not proposal.get("execution_state"),
+                "execution_authorized": execution_authorized(proposal, fix_class)
                 and not proposal.get("execution_state"),
                 "executor_allowlisted": bool(policy),
                 "mutates_live_state": bool(policy.mutates_live_state) if policy else False,
@@ -320,12 +328,12 @@ def execute(args: argparse.Namespace) -> int:
     fix_class = str(proposal.get("allowed_fix_class") or "")
     policy = FIX_POLICIES.get(fix_class)
 
-    if not approved_state(proposal):
+    if not execution_authorized(proposal, fix_class):
         event = fail_event(
             proposal_id,
             proposal,
             "blocked_not_approved",
-            f"decision_state is {proposal.get('decision_state') or 'unset'}, not approved",
+            f"decision_state is {proposal.get('decision_state') or 'unset'}, not approved and proposal requires approval",
         )
         append_jsonl(EXECUTION_LOG, event)
         if args.json:

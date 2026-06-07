@@ -18,9 +18,12 @@ ROOT = Path("/Users/werkstatt/ai_workspace")
 PROPOSAL_DIR = ROOT / "project_hub/artifacts/recursive-tools/proposals"
 QUEUE_LOG = ROOT / "project_hub/artifacts/recursive-tools/recursive-proposal-queue.jsonl"
 FRANK_DRAFT_DIR = ROOT / "frank/drafts/recursive-proposals"
+HISTORICAL_BENCHMARK_DIR = ROOT / "sandboxes/recursive-improve-pilot-target-313"
+RECURSIVE_IMPROVE_PYTHON = ROOT / "sandboxes/recursive-improve/.venv313/bin/python"
+RECURSIVE_IMPROVE_BIN = ROOT / "sandboxes/recursive-improve/.venv313/bin/recursive-improve"
+HISTORICAL_BENCHMARK_RUNNER = HISTORICAL_BENCHMARK_DIR / "run_historical_recommendation_benchmark.py"
 HISTORICAL_EVAL = (
-    ROOT
-    / "sandboxes/recursive-improve-pilot-target-313/eval/historical-recommendation-benchmark/eval_results.json"
+    HISTORICAL_BENCHMARK_DIR / "eval/historical-recommendation-benchmark/eval_results.json"
 )
 LIVE_SNAPSHOT_REPORT = (
     ROOT / "project_hub/artifacts/recursive-tools/recursive-live-recommendation-snapshot-2026-05-24.md"
@@ -61,6 +64,11 @@ def parse_args() -> argparse.Namespace:
         default=FRANK_DRAFT_DIR,
         help="Directory for rendered Frank approval email bodies.",
     )
+    parser.add_argument(
+        "--skip-historical-benchmark-refresh",
+        action="store_true",
+        help="Use existing historical benchmark results instead of refreshing traces and eval.",
+    )
     return parser.parse_args()
 
 
@@ -71,7 +79,43 @@ def run_json_command(command: list[str], *, cwd: Path = ROOT) -> dict[str, Any]:
     return json.loads(proc.stdout)
 
 
-def load_checker_snapshot() -> dict[str, Any]:
+def run_command(command: list[str], *, cwd: Path = ROOT, timeout: int = 180) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(command, cwd=cwd, check=False, capture_output=True, text=True, timeout=timeout)
+
+
+def refresh_historical_benchmark() -> dict[str, Any]:
+    trace_run = run_command(
+        [str(RECURSIVE_IMPROVE_PYTHON), str(HISTORICAL_BENCHMARK_RUNNER.name)],
+        cwd=HISTORICAL_BENCHMARK_DIR,
+    )
+    if trace_run.returncode != 0:
+        raise RuntimeError(
+            f"historical trace generation failed: {(trace_run.stderr or trace_run.stdout).strip()}"
+        )
+    eval_run = run_command(
+        [
+            str(RECURSIVE_IMPROVE_BIN),
+            "eval",
+            "eval/historical-recommendation-traces",
+            "--output-dir",
+            "eval/historical-recommendation-benchmark",
+        ],
+        cwd=HISTORICAL_BENCHMARK_DIR,
+    )
+    if eval_run.returncode != 0:
+        raise RuntimeError(f"historical benchmark eval failed: {(eval_run.stderr or eval_run.stdout).strip()}")
+    return {
+        "historical_benchmark_refreshed": True,
+        "historical_trace_stdout_tail": trace_run.stdout[-500:],
+        "historical_eval_stdout_tail": eval_run.stdout[-500:],
+    }
+
+
+def load_checker_snapshot(*, refresh_historical: bool = False) -> dict[str, Any]:
+    refresh_proof: dict[str, Any] = {"historical_benchmark_refreshed": False}
+    if refresh_historical:
+        refresh_proof = refresh_historical_benchmark()
+
     with tempfile.TemporaryDirectory(prefix="recursive-proposal-") as temp_dir:
         temp_root = Path(temp_dir)
         service_json = temp_root / "service.json"
@@ -111,6 +155,9 @@ def load_checker_snapshot() -> dict[str, Any]:
         .get("value")
     )
 
+    historical_run_id = historical_eval.get("run_id") or ""
+    historical_trace_count = int(historical_eval.get("trace_count") or 0)
+
     return {
         "service_parity_drift": len(service_drift_items),
         "service_parity_drift_items": service_drift_items[:10],
@@ -122,10 +169,14 @@ def load_checker_snapshot() -> dict[str, Any]:
             for item in registry.get("results", [])
         ),
         "historical_clean_success": historical_clean_success,
+        "historical_benchmark_refreshed": bool(refresh_proof.get("historical_benchmark_refreshed")),
+        "historical_benchmark_run_id": historical_run_id,
+        "historical_benchmark_trace_count": historical_trace_count,
         "service_results_checked": len(service.get("results", [])),
         "truth_rows_scanned": int(truth.get("task_flow_rows_scanned") or 0),
         "truth_managed_sessions": int(truth.get("managed_sessions") or 0),
         "proof_closeout_issues": int(truth.get("proof_closeout_issues") or 0),
+        **refresh_proof,
     }
 
 
@@ -396,7 +447,7 @@ def write_outputs(proposal: Proposal, proposal_dir: Path, frank_draft_dir: Path)
 
 def main() -> int:
     args = parse_args()
-    snapshot = load_checker_snapshot()
+    snapshot = load_checker_snapshot(refresh_historical=not args.skip_historical_benchmark_refresh)
     proposal = build_proposal(snapshot, args.proposal_dir, args.frank_draft_dir)
     write_outputs(proposal, args.proposal_dir, args.frank_draft_dir)
     if args.json:

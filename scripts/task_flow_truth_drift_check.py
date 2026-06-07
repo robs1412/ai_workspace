@@ -6,8 +6,10 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import socket
 import subprocess
 import sys
+import urllib.error
 import urllib.request
 from dataclasses import asdict, dataclass
 from datetime import datetime
@@ -78,13 +80,32 @@ def run_json_command(command: list[str], payload: dict | None = None, timeout: i
 
 
 def fetch_json(url: str, timeout: float) -> dict:
-    with urllib.request.urlopen(url, timeout=timeout) as response:
-        return json.loads(response.read())
+    try:
+        with urllib.request.urlopen(url, timeout=timeout) as response:
+            return json.loads(response.read())
+    except TimeoutError as exc:
+        raise RuntimeError(f"timed out fetching {url} after {timeout:g}s") from exc
+    except socket.timeout as exc:
+        raise RuntimeError(f"timed out fetching {url} after {timeout:g}s") from exc
+    except urllib.error.URLError as exc:
+        reason = safe_text(getattr(exc, "reason", exc), 300)
+        raise RuntimeError(f"failed fetching {url}: {reason}") from exc
+    except json.JSONDecodeError as exc:
+        raise RuntimeError(f"invalid JSON from {url}: {safe_text(exc, 300)}") from exc
 
 
 def load_board_sessions(config: dict, timeout: float) -> tuple[dict, dict[str, dict]]:
-    board = fetch_json(config["board"]["status_url"], timeout)
-    sessions = board.get(config["board"]["managed_sessions_key"], [])
+    board_config = config["board"]
+    command = board_config.get("overview_cmd")
+    if isinstance(command, list) and command:
+        board = run_json_command(command, None, timeout=max(1, int(timeout)))
+        source = " ".join(str(part) for part in command)
+    else:
+        source = board_config["status_url"]
+        board = fetch_json(source, timeout)
+    sessions = board.get(board_config["managed_sessions_key"], [])
+    if not isinstance(sessions, list):
+        raise RuntimeError(f"{source} did not return list field {board_config['managed_sessions_key']}")
     session_map: dict[str, dict] = {}
     for item in sessions:
         if not isinstance(item, dict):

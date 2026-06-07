@@ -1,0 +1,26 @@
+{
+  "apply": {
+    "returncode": 0,
+    "stderr": "",
+    "stdout": ""
+  },
+  "apply_check": {
+    "returncode": 0,
+    "stderr": "",
+    "stdout": ""
+  },
+  "attempt_id": "live-overview-readback-20260607",
+  "dry_run": false,
+  "evaluator": "/usr/local/bin/python3.13 scripts/task_flow_truth_drift_check.py --fail-on-drift",
+  "evaluator_cwd": "/Users/werkstatt/ai_workspace/project_hub/recursive-runs/truth-drift-harness-001/worktree",
+  "finished_at": "2026-06-07 11:45:23 CDT",
+  "metric": "0",
+  "ok": true,
+  "patch": "proofs/live-overview-readback-20260607-promote.patch",
+  "patch_sha256": "fadfa3f64f8f4f76546502d970dc4a31eca0bd0ccc9cba602c6ef3b8c15c4384",
+  "promotion_status": "applied",
+  "returncode": 0,
+  "started_at": "2026-06-07 11:45:10 CDT",
+  "stderr": "proofs/live-overview-readback-20260607-promote.stderr.txt",
+  "stdout": "proofs/live-overview-readback-20260607-promote.stdout.txt"
+}

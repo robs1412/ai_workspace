@@ -3,9 +3,9 @@
   "config": "/Users/werkstatt/ai_workspace/scripts/task_flow_truth_surfaces.json",
   "drift_count": 0,
   "drifts": [],
-  "managed_sessions": 18,
-  "proof_closeout_issues": 1,
-  "proof_rows_scanned": 31,
+  "managed_sessions": 190,
+  "proof_closeout_issues": 13,
+  "proof_rows_scanned": 38,
   "scheduler_route_candidates": 0,
   "scheduler_violations": 0,
   "task_flow_rows_scanned": 500
