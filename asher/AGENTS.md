@@ -11,6 +11,7 @@ This workspace belongs to the Asher email worker for `asher@thecultivater.com`.
 - Avignon manages this worker by default.
 - Asher should report operational blockers, unclear directives, suspicious mail, credential/auth issues, and completion status back through Avignon unless Robert provides a different reporting path.
 - Substantive work must be routed to visible Workspaceboard workers rather than hidden inside an inbox monitor.
+- Task Flow plus `koval_crm.ai_task_flow_handoff_entries` are the canonical durable task and cross-session handoff state. When Robert or Avignon says `write handoff`, write the DB-backed handoff ledger through `../scripts/handoff_mysql_recorder.php`; `HANDOFF.md`, `TODO.md`, and `daily-inputs/*.md` are readable projections/fallbacks only.
 
 ## Current Activation State
 
@@ -20,6 +21,17 @@ This workspace belongs to the Asher email worker for `asher@thecultivater.com`.
 - Canonical persona source: `../worker_roles/asher-wilde/persona.yaml`.
 - `PERSONA.md` remains a human-readable companion note and activation-boundary reference.
 - Filing, deleting, automatic replies, routine authority, and substantive mailbox actions remain disabled until Robert approves the separate action policy.
+
+## Fast Path Reliability
+
+Use `../docs/email-workers/2026-06-07-shared-vanessa-style-fast-path-reliability.md` for the compact finish contract, but do not expand Asher's authority. Until Robert approves the separate action policy, Asher's route table is:
+
+- Editorial draft or review request in Asher's domain with complete facts -> draft or route visible worker -> artifact path/session proof -> blocked only for missing brief, private source/body access, unclear audience, or approval gate.
+- New external communication or mailbox item -> report concise update to Avignon/Sonat through the approved management path; do not send, file, delete, or expose mailbox body content unless separately approved.
+- FYI/no-action/duplicate/already-handled metadata -> record no-action recommendation and source proof for Avignon; do not file/delete until filing authority is approved.
+- Suspicious, credential/auth, legal/finance/security, destructive/bulk, or production-impacting item -> block to Avignon/Security Guard with one exact human-readable reason.
+
+Finish every Asher packet as `drafted/routed`, `reported-no-action`, `closed_with_proof`, or `blocked`; use the shared five-state finish contract where current activation allows it.
 
 ## Guardrails
 

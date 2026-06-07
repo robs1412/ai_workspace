@@ -23,6 +23,10 @@ Handled, no-action, duplicate, already-routed, completed, and logged messages sh
 
 For any blocker or context email, send one source email at a time and include the source email in the message body so the owner has the full context. Do not let an item sit through more than one polling cycle without an action taken; each cycle must end with send, archive, route, or an explicit blocker note.
 
+Every successful outbound email from any email worker or approved send-from persona must be present in that account's IMAP Sent folder. Local `sent-log.jsonl`, Task Flow proof, or runtime archive files are audit supplements, not substitutes for the mailbox Sent folder. Send helpers must append the exact sent RFC822 message to IMAP Sent before reporting normal success; if the Sent append fails, record an explicit send-path blocker instead of treating the send as complete.
+
+Asher and Venetia outbound emails must keep Sonat copied by default. For those two workers, every approved outbound send must include Sonat Birnecker Hart at `sonat@kovaldistillery.com` as a Bcc recipient unless Sonat is already an explicit To/Cc/Bcc recipient on that exact message.
+
 For National Outreach and shared-inbox persona aliases, prefer one operational archive folder for old/resolved residue rather than multiplying worker-specific handled folders. Worker routing belongs in durable logs, TODO/HANDOFF notes, and visible worker/task state; the inbox should stay clean.
 
 For account-access, finance, legal, compliance, auth, or other sensitive operational setup, the mailbox worker should capture and route the item to Task Manager/Workspaceboard instead of completing it invisibly inside the inbox. The durable state must name the visible route or the exact blocker.

@@ -9,7 +9,6 @@ Approved shape:
 Loader:
 
 ```bash
-cd /Users/werkstatt/ai_workspace
 scripts/mcp_runtime_env.py status
 ```
 
@@ -27,9 +26,8 @@ scripts/mcp_runtime_env.py init-local
 
 This creates:
 
-`/Users/werkstatt/ai_workspace/.private/mcp-runtime/mcp.env`
-
-The file is chmod `600`, ignored by git, and should contain only:
+An owner-only local fallback file under the workspace `.private` tree. The file
+is chmod `600`, ignored by git, and should contain only:
 
 ```dotenv
 KOVAL_TOKEN=
@@ -42,4 +40,21 @@ Run a command with loaded env:
 scripts/mcp_runtime_env.py exec -- env
 ```
 
-The status command reports only source/key presence and whether `KOVAL_TOKEN` looks JWT-shaped. It does not print secret values.
+Refresh:
+
+```bash
+scripts/mcp_runtime_token_refresh.py
+```
+
+The status command reports only source/key presence plus non-secret JWT expiry
+metadata for `KOVAL_TOKEN`. It does not print secret values or credential
+locations. `exec` refuses expired, unparseable, or near-expiry JWTs before
+starting the child command. If the owner-only refresh config exists, `exec`
+first attempts an automatic metadata-only refresh through the approved packet
+before reporting a blocker. Papers failures therefore stop at the loader with a
+clear metadata-only blocker instead of a downstream 401.
+
+Automatic refresh is through Infisical mode. The local fallback is not a
+self-renewing secret source; if Infisical is not configured, the fallback must
+be paired with the owner-only refresh config or updated out-of-band with a
+fresh owner-approved value before `exec` will run.

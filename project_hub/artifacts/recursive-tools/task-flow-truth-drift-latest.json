@@ -3,14 +3,53 @@
   "config": "/Users/werkstatt/ai_workspace/scripts/task_flow_truth_surfaces.json",
   "drift_count": 0,
   "drifts": [],
-  "managed_sessions": 194,
-  "proof_closeout_issues": 11,
+  "managed_sessions": 199,
+  "proof_closeout_issues": 10,
   "proof_issue_class_counts": {
-    "active_worker_missing_domain_task": 3,
-    "blocked_needs_owner_question_proof": 4
+    "active_worker_missing_domain_task": 2,
+    "blocked_needs_owner_question_proof": 5
   },
   "proof_issue_count": 7,
   "proof_issue_samples": [
+    {
+      "dedupe_key": "taskflow-fe3920e9e9ebb56b",
+      "detail": "blocked row is routed-needs-owner-question and needs owner-question/blocker proof",
+      "kind": "blocked_needs_owner_question_proof",
+      "missing_fields": [
+        "owner_lane",
+        "clarification_or_blocker_email"
+      ],
+      "owner_lane": "",
+      "session_id": "",
+      "severity": "blocked",
+      "title": "taskflow-fe3920e9e9ebb56b"
+    },
+    {
+      "dedupe_key": "taskflow-b4e191619e3f6349",
+      "detail": "blocked row is routed-needs-owner-question and needs owner-question/blocker proof",
+      "kind": "blocked_needs_owner_question_proof",
+      "missing_fields": [
+        "owner_lane",
+        "clarification_or_blocker_email"
+      ],
+      "owner_lane": "",
+      "session_id": "",
+      "severity": "blocked",
+      "title": "taskflow-b4e191619e3f6349"
+    },
+    {
+      "dedupe_key": "taskflow-9b2842a7eb885dc2",
+      "detail": "blocked row is routed-needs-owner-question and needs owner-question/blocker proof",
+      "kind": "blocked_needs_owner_question_proof",
+      "missing_fields": [
+        "owner_lane",
+        "clarification_or_blocker_email"
+      ],
+      "owner_lane": "",
+      "session_id": "",
+      "severity": "blocked",
+      "title": "taskflow-9b2842a7eb885dc2"
+    },
     {
       "dedupe_key": "avignon-direct-owner-sonat-CALbLtzybRf2Q7-v9Rk8DhHOVGUQXJ3ZzaQphge-pOiA07o9tg-mail-gmail-com",
       "detail": "blocked row is routed-needs-owner-question and needs owner-question/blocker proof",
@@ -36,30 +75,6 @@
       "title": "taskflow-59994f5a1b3030bd"
     },
     {
-      "dedupe_key": "avignon-direct-owner-sonat-CALbLtzxzaiPHiDfb5nyrEFdRdtZAmm0iWC5rC0z4g0YUeSZUrg-mail-gmail-com",
-      "detail": "working row has visible session f8b455e5 but lacks ops_portal_or_domain_task",
-      "kind": "active_worker_missing_domain_task",
-      "missing_fields": [
-        "ops_portal_or_domain_task"
-      ],
-      "owner_lane": "sonat",
-      "session_id": "f8b455e5",
-      "severity": "attention",
-      "title": "Re: Contacts to add"
-    },
-    {
-      "dedupe_key": "avignon-direct-owner-sonat-CALbLtzyBP2fzO-on-WRtBg5c-UrRObKV-xRTMJ99hoJ-BVCg-mail-gmail-com",
-      "detail": "blocked row is routed-needs-owner-question and needs owner-question/blocker proof",
-      "kind": "blocked_needs_owner_question_proof",
-      "missing_fields": [
-        "clarification_or_blocker_email"
-      ],
-      "owner_lane": "sonat",
-      "session_id": "",
-      "severity": "blocked",
-      "title": "Tasks"
-    },
-    {
       "dedupe_key": "taskflow-82e27c83e26920f1",
       "detail": "working row has visible session abbb9e24 but lacks ops_portal_or_domain_task",
       "kind": "active_worker_missing_domain_task",
@@ -82,21 +97,9 @@
       "session_id": "",
       "severity": "blocked",
       "title": "Fwd: KOVAL and Thresh and Winnow In Market Recap for 6/4"
-    },
-    {
-      "dedupe_key": "avignon-direct-owner-sonat-CALbLtzzULHVdGbQa2wjAX-R4psjUwJp97eM7a2YQMA9tvhBswg-mail-gmail-com",
-      "detail": "blocked row is routed-needs-owner-question and needs owner-question/blocker proof",
-      "kind": "blocked_needs_owner_question_proof",
-      "missing_fields": [
-        "clarification_or_blocker_email"
-      ],
-      "owner_lane": "sonat",
-      "session_id": "",
-      "severity": "blocked",
-      "title": "Mariano's Cancelation Process"
     }
   ],
-  "proof_rows_scanned": 38,
+  "proof_rows_scanned": 35,
   "scheduler_route_candidates": 0,
   "scheduler_violations": 0,
   "task_flow_rows_scanned": 500

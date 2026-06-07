@@ -279,6 +279,46 @@ def load_credentials(path: Path) -> dict[str, str]:
     }
 
 
+def append_message_to_sent_folder(creds: dict[str, str], msg: EmailMessage) -> str:
+    raw_message = msg.as_bytes()
+    last_error = ""
+    conn = imaplib.IMAP4_SSL(creds["imap_server"], int(creds["imap_port"]), timeout=30)
+    try:
+        conn.login(creds["user"], creds["password"])
+        candidates: list[str] = []
+        try:
+            status, folders = conn.list()
+        except Exception:
+            status, folders = "NO", []
+        if status == "OK":
+            for raw_folder in folders or []:
+                text = raw_folder.decode("utf-8", errors="replace") if isinstance(raw_folder, bytes) else str(raw_folder)
+                match = re.search(r'(?:"([^"]+)"| ([^ ]+))$', text)
+                folder = (match.group(1) or match.group(2)) if match else ""
+                if folder and ("\\Sent" in text or "sent" in folder.lower()):
+                    candidates.append(folder)
+        candidates.extend(["INBOX.Sent", "Sent", "Sent Mail", "[Gmail]/Sent Mail"])
+        ordered_candidates: list[str] = []
+        seen_candidates: set[str] = set()
+        for folder in candidates:
+            key = folder.lower()
+            if key in seen_candidates:
+                continue
+            seen_candidates.add(key)
+            ordered_candidates.append(folder)
+        for folder in ordered_candidates:
+            try:
+                status, _ = conn.append(folder, "\\Seen", imaplib.Time2Internaldate(time.time()), raw_message)
+                if status == "OK":
+                    return folder
+            except Exception as exc:
+                last_error = f"{folder}: {exc}"
+    finally:
+        with contextlib.suppress(Exception):
+            conn.logout()
+    raise RuntimeError(f"sent folder append failed for {msg.get('Message-ID', '')}: {last_error or 'no sent folder accepted APPEND'}")
+
+
 def normalize_message_id(value: str) -> str:
     return str(value or "").strip().strip("<>").lower()
 
@@ -1806,6 +1846,7 @@ def send_one(creds: dict[str, str], draft_path: Path, sent_dir: Path, failed_dir
     with smtplib.SMTP_SSL(creds["smtp_server"], int(creds["smtp_port"]), timeout=25, context=context) as conn:
         conn.login(creds["user"], creds["password"])
         conn.send_message(msg, from_addr=from_addr, to_addrs=recipients)
+    sent_folder = append_message_to_sent_folder(creds, msg)
     sent_dir.mkdir(parents=True, exist_ok=True)
     sent_dir.chmod(0o700)
     target = sent_dir / draft_path.name.replace(".approved.json", f".sent-{int(time.time())}.json")
@@ -1865,8 +1906,12 @@ def send_one(creds: dict[str, str], draft_path: Path, sent_dir: Path, failed_dir
             "bcc_count": len(bcc_addrs),
             "attachment_count": len(attachment_names),
             "attachment_names": attachment_names,
+            "sent_folder_appended": True,
+            "sent_folder": sent_folder,
         },
         "task_packet": task_packet,
+        "sent_folder_appended": True,
+        "sent_folder": sent_folder,
     }
     target.write_text(json.dumps(sent_payload, ensure_ascii=True, indent=2) + "\n", encoding="utf-8")
     target.chmod(0o600)
@@ -1883,6 +1928,8 @@ def send_one(creds: dict[str, str], draft_path: Path, sent_dir: Path, failed_dir
         "attachment_names": attachment_names,
         "subject": subject,
         "message_id": msg["Message-ID"],
+        "sent_folder_appended": True,
+        "sent_folder": sent_folder,
         "task_packet": task_packet,
     }
 

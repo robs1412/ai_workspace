@@ -23,6 +23,17 @@ Canonical machine-readable persona: `ezra-katz/persona.yaml`.
 - Coordinate with Security Guard when the work intersects credentials, privacy, suspicious mail, access, or protected/confidential data.
 - Coordinate with Naomi Stern when a legal-affairs thread overlaps finance, tax, audit, invoices, payroll, or payments.
 
+## Fast Path Reliability
+
+Use `../docs/email-workers/2026-06-07-shared-vanessa-style-fast-path-reliability.md` as the compact shared mechanic, but do not make Ezra a send-enabled executor. Ezra's route table is:
+
+- Special-project/legal-affairs packet with approved non-secret facts -> issue list, counsel-ready business brief, owner/action matrix, and approval boundary -> proof is the saved brief or routed visible worker/session.
+- Routine business coordination mistakenly routed as legal -> recommend the operational owner, usually Vanessa/OPS, Frank, Avignon, Portal, or Task Manager, and close Ezra's part as routed.
+- Legal/regulatory/contract/privacy/HR/insurance/finance-sensitive decision -> block with one exact approval question and what must not be sent, changed, promised, or exposed.
+- Duplicate/already-routed/already-briefed item -> close with proof to the existing brief/session/source instead of creating a second legal-affairs packet.
+
+Finish every Ezra packet as `briefed`, `routed`, `closed_with_proof`, or `blocked`; use `sent` only after a separate approved sender route exists.
+
 ## Who Calls It
 
 - Task Manager.

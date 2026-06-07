@@ -8,6 +8,8 @@ owner-only local dotenv file under .private for bridge validation runs.
 from __future__ import annotations
 
 import argparse
+import base64
+import datetime as dt
 import json
 import os
 import re
@@ -20,7 +22,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_LOCAL_ENV = ROOT / ".private" / "mcp-runtime" / "mcp.env"
+DEFAULT_REFRESH_ENV = ROOT / ".private" / "mcp-runtime" / "refresh.env"
 REQUIRED_KEYS = ("KOVAL_TOKEN", "SCREENBOX_API_KEY")
+MIN_TOKEN_TTL_SECONDS = 300
 
 
 def parse_dotenv(text: str) -> dict[str, str]:
@@ -53,7 +57,6 @@ def local_file_mode(path: Path) -> str:
 def read_local_env(path: Path) -> tuple[dict[str, str], dict[str, object]]:
     meta = {
         "source": "local",
-        "path": str(path),
         "exists": path.exists(),
         "mode": local_file_mode(path),
     }
@@ -125,17 +128,66 @@ def merged_env(local_path: Path) -> tuple[dict[str, str], list[dict[str, object]
     return values, sources
 
 
+def decode_jwt_payload(value: str) -> dict[str, object] | None:
+    parts = value.split(".")
+    if len(parts) < 2:
+        return None
+    payload = parts[1]
+    padding = "=" * (-len(payload) % 4)
+    try:
+        decoded = base64.urlsafe_b64decode((payload + padding).encode("ascii"))
+        parsed = json.loads(decoded.decode("utf-8"))
+    except (ValueError, UnicodeDecodeError):
+        return None
+    return parsed if isinstance(parsed, dict) else None
+
+
+def jwt_status(value: str) -> dict[str, object]:
+    shaped = bool(re.match(r"^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.", value or ""))
+    status: dict[str, object] = {"jwt_shaped": shaped}
+    if not shaped:
+        return status
+
+    payload = decode_jwt_payload(value)
+    if payload is None:
+        status["parseable"] = False
+        return status
+
+    status["parseable"] = True
+    exp = payload.get("exp")
+    if not isinstance(exp, int):
+        status["has_exp"] = False
+        return status
+
+    now = int(dt.datetime.now(dt.UTC).timestamp())
+    seconds_until_exp = exp - now
+    status.update(
+        {
+            "has_exp": True,
+            "exp_iso": dt.datetime.fromtimestamp(exp, dt.UTC).isoformat(),
+            "seconds_until_exp": seconds_until_exp,
+            "expired": seconds_until_exp <= 0,
+            "usable": seconds_until_exp > MIN_TOKEN_TTL_SECONDS,
+            "minimum_ttl_seconds": MIN_TOKEN_TTL_SECONDS,
+        }
+    )
+    return status
+
+
 def safe_status(values: dict[str, str], sources: list[dict[str, object]]) -> dict[str, object]:
+    keys: dict[str, dict[str, object]] = {}
+    for key in REQUIRED_KEYS:
+        key_status: dict[str, object] = {"present": bool(values.get(key))}
+        if key == "KOVAL_TOKEN":
+            key_status.update(jwt_status(values.get(key, "")))
+        keys[key] = key_status
+
+    token = keys.get("KOVAL_TOKEN", {})
+    token_usable = not values.get("KOVAL_TOKEN") or bool(token.get("usable"))
     return {
-        "ok": all(values.get(key) for key in REQUIRED_KEYS),
+        "ok": all(values.get(key) for key in REQUIRED_KEYS) and token_usable,
         "sources": sources,
-        "keys": {
-            key: {
-                "present": bool(values.get(key)),
-                "jwt_shaped": bool(key == "KOVAL_TOKEN" and re.match(r"^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.", values.get(key, ""))),
-            }
-            for key in REQUIRED_KEYS
-        },
+        "keys": keys,
     }
 
 
@@ -152,6 +204,55 @@ def init_local(path: Path) -> None:
     path.chmod(0o600)
 
 
+def runtime_blockers(values: dict[str, str]) -> list[str]:
+    blockers = [f"{key} is missing" for key in REQUIRED_KEYS if not values.get(key)]
+    if not values.get("KOVAL_TOKEN"):
+        return blockers
+
+    token = jwt_status(values["KOVAL_TOKEN"])
+    if not token.get("jwt_shaped"):
+        blockers.append("KOVAL_TOKEN is not JWT-shaped")
+    elif token.get("parseable") is False:
+        blockers.append("KOVAL_TOKEN JWT payload is not parseable")
+    elif token.get("has_exp") is False:
+        blockers.append("KOVAL_TOKEN JWT has no exp claim")
+    elif token.get("usable") is False:
+        exp_iso = token.get("exp_iso", "unknown")
+        blockers.append(f"KOVAL_TOKEN is expired or under minimum TTL; exp={exp_iso}")
+    return blockers
+
+
+def token_needs_refresh(values: dict[str, str]) -> bool:
+    if not values.get("KOVAL_TOKEN"):
+        return False
+    token = jwt_status(values["KOVAL_TOKEN"])
+    return bool(token.get("jwt_shaped") and token.get("usable") is False)
+
+
+def auto_refresh_token(local_path: Path) -> dict[str, object]:
+    if not DEFAULT_REFRESH_ENV.exists():
+        return {"attempted": False, "reason": "refresh config absent"}
+    command = [
+        sys.executable,
+        str(ROOT / "scripts" / "mcp_runtime_token_refresh.py"),
+        "--config",
+        str(DEFAULT_REFRESH_ENV),
+        "--local-env",
+        str(local_path),
+    ]
+    try:
+        result = subprocess.run(command, check=False, capture_output=True, text=True, timeout=45)
+    except Exception as exc:  # noqa: BLE001 - metadata-only status.
+        return {"attempted": True, "ok": False, "error": str(exc)}
+    try:
+        payload = json.loads(result.stdout or "{}")
+    except json.JSONDecodeError:
+        payload = {"ok": False, "error": "refresh helper returned non-json output"}
+    payload["attempted"] = True
+    payload["returncode"] = result.returncode
+    return payload
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Load MCP runtime env from Infisical or local fallback.")
     parser.add_argument("--local-env", default=str(DEFAULT_LOCAL_ENV))
@@ -165,22 +266,40 @@ def main() -> int:
     local_path = Path(args.local_env).expanduser()
     if args.command == "init-local":
         init_local(local_path)
-        print(json.dumps({"ok": True, "path": str(local_path), "mode": local_file_mode(local_path)}, indent=2))
+        print(json.dumps({"ok": True, "mode": local_file_mode(local_path)}, indent=2))
         return 0
 
     values, sources = merged_env(local_path)
     if args.command == "status":
-        print(json.dumps(safe_status(values, sources), indent=2))
-        return 0 if all(values.get(key) for key in REQUIRED_KEYS) else 2
+        status = safe_status(values, sources)
+        print(json.dumps(status, indent=2))
+        return 0 if status["ok"] else 2
 
     argv = list(args.argv)
     if argv and argv[0] == "--":
         argv = argv[1:]
     if not argv:
         raise SystemExit("exec requires a command after --")
-    missing = [key for key in REQUIRED_KEYS if not values.get(key)]
-    if missing:
-        print(json.dumps({"ok": False, "missing": missing, "sources": sources}, indent=2), file=sys.stderr)
+    refresh_result: dict[str, object] | None = None
+    if token_needs_refresh(values):
+        refresh_result = auto_refresh_token(local_path)
+        if refresh_result.get("ok"):
+            values, sources = merged_env(local_path)
+
+    blockers = runtime_blockers(values)
+    if blockers:
+        print(
+            json.dumps(
+                {
+                    "ok": False,
+                    "blockers": blockers,
+                    "refresh": refresh_result,
+                    "status": safe_status(values, sources),
+                },
+                indent=2,
+            ),
+            file=sys.stderr,
+        )
         return 2
     child_env = os.environ.copy()
     child_env.update({key: values[key] for key in REQUIRED_KEYS})

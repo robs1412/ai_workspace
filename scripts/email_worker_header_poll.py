@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import contextlib
 import html
 import imaplib
 import json
@@ -56,6 +57,11 @@ OWNER_QUESTION_PATTERNS = re.compile(
 OWNER_QUESTION_TARGETS: dict[str, tuple[str, str, str]] = {
     "asher": ("sonat@kovaldistillery.com", "Sonat", "Asher Wilde"),
     "venetia": ("sonat@kovaldistillery.com", "Sonat", "Venetia Tempest-Dunn"),
+}
+
+DEFAULT_BCC_BY_WORKER: dict[str, list[str]] = {
+    "asher": ["sonat@kovaldistillery.com"],
+    "venetia": ["sonat@kovaldistillery.com"],
 }
 
 
@@ -263,6 +269,21 @@ def normalize_recipients(value) -> list[str]:
     return recipients
 
 
+def recipient_email(value: str) -> str:
+    return parseaddr(str(value or ""))[1].strip().lower()
+
+
+def add_default_bcc(worker: str, to_addrs: list[str], cc_addrs: list[str], bcc_addrs: list[str]) -> list[str]:
+    present = {recipient_email(addr) for addr in [*to_addrs, *cc_addrs, *bcc_addrs]}
+    result = list(bcc_addrs)
+    for addr in DEFAULT_BCC_BY_WORKER.get(str(worker or "").strip().lower(), []):
+        normalized = recipient_email(addr)
+        if normalized and normalized not in present:
+            result.append(addr)
+            present.add(normalized)
+    return result
+
+
 def safe_outbox_name(path: Path) -> str:
     return re.sub(r"[^a-zA-Z0-9._-]+", "-", path.name).strip("-") or "approved.json"
 
@@ -456,6 +477,57 @@ def queue_owner_question_draft(
     return True
 
 
+def parse_imap_folder_name(raw_folder) -> str:
+    text = raw_folder.decode("utf-8", errors="replace") if isinstance(raw_folder, bytes) else str(raw_folder)
+    match = re.search(r'(?:"([^"]+)"| ([^ ]+))$', text)
+    return (match.group(1) or match.group(2)) if match else ""
+
+
+def sent_folder_candidates(conn: imaplib.IMAP4_SSL) -> list[str]:
+    discovered: list[str] = []
+    try:
+        status, folders = conn.list()
+    except Exception:
+        status, folders = "NO", []
+    if status == "OK":
+        for raw_folder in folders or []:
+            text = raw_folder.decode("utf-8", errors="replace") if isinstance(raw_folder, bytes) else str(raw_folder)
+            folder = parse_imap_folder_name(raw_folder)
+            if not folder:
+                continue
+            if "\\Sent" in text or "sent" in folder.lower():
+                discovered.append(folder)
+    candidates = [*discovered, "INBOX.Sent", "Sent", "Sent Mail", "[Gmail]/Sent Mail"]
+    ordered: list[str] = []
+    seen: set[str] = set()
+    for folder in candidates:
+        key = folder.lower()
+        if key in seen:
+            continue
+        seen.add(key)
+        ordered.append(folder)
+    return ordered
+
+
+def append_message_to_sent_folder(creds: dict[str, str], msg: EmailMessage) -> str:
+    raw_message = msg.as_bytes()
+    last_error = ""
+    conn = imaplib.IMAP4_SSL(creds["server"], int(creds["imap_port"]), timeout=30)
+    try:
+        conn.login(creds["user"], creds["password"])
+        for folder in sent_folder_candidates(conn):
+            try:
+                status, _ = conn.append(folder, "\\Seen", imaplib.Time2Internaldate(time.time()), raw_message)
+                if status == "OK":
+                    return folder
+            except Exception as exc:
+                last_error = f"{folder}: {exc}"
+    finally:
+        with contextlib.suppress(Exception):
+            conn.logout()
+    raise RuntimeError(f"sent folder append failed for {msg.get('Message-ID', '')}: {last_error or 'no sent folder accepted APPEND'}")
+
+
 def send_approved_outbox(creds: dict[str, str], state_dir: Path, worker: str) -> dict:
     outbox_dir = state_dir / "outbox"
     sent_dir = state_dir / "sent"
@@ -479,11 +551,14 @@ def send_approved_outbox(creds: dict[str, str], state_dir: Path, worker: str) ->
         failed_dir.mkdir(parents=True, exist_ok=True)
         for path in drafts:
             started_at = time.strftime("%Y-%m-%dT%H:%M:%S%z")
+            message_id = ""
+            smtp_sent = False
             try:
                 payload = json.loads(path.read_text(encoding="utf-8", errors="replace"))
                 to_addrs = normalize_recipients(payload.get("to"))
                 cc_addrs = normalize_recipients(payload.get("cc"))
                 bcc_addrs = normalize_recipients(payload.get("bcc"))
+                bcc_addrs = add_default_bcc(worker, to_addrs, cc_addrs, bcc_addrs)
                 subject = str(payload.get("subject") or "").strip()
                 body = str(payload.get("body") or payload.get("text") or "").strip()
                 if not to_addrs or not subject or not body:
@@ -523,6 +598,8 @@ def send_approved_outbox(creds: dict[str, str], state_dir: Path, worker: str) ->
                 with smtplib.SMTP_SSL(creds["smtp_server"], int(creds["smtp_port"]), context=ssl.create_default_context(), timeout=30) as smtp:
                     smtp.login(creds["user"], creds["password"])
                     smtp.send_message(msg, from_addr=from_addr, to_addrs=[*to_addrs, *cc_addrs, *bcc_addrs])
+                smtp_sent = True
+                sent_folder = append_message_to_sent_folder(creds, msg)
                 row = {
                     "logged_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
                     "worker": worker,
@@ -535,11 +612,13 @@ def send_approved_outbox(creds: dict[str, str], state_dir: Path, worker: str) ->
                     "subject": subject,
                     "message_id": message_id,
                     "started_at": started_at,
+                    "sent_folder_appended": True,
+                    "sent_folder": sent_folder,
                 }
                 append_jsonl(log_path, row)
                 record_header_worker_email_trace(state_dir, worker, creds, row, event="email_action_logged")
                 archive_payload = dict(payload)
-                archive_payload.update({"sent_at": row["logged_at"], "message_id": message_id, "send_status": "sent"})
+                archive_payload.update({"sent_at": row["logged_at"], "message_id": message_id, "send_status": "sent", "sent_folder_appended": True, "sent_folder": sent_folder})
                 archive_path = sent_dir / f"{safe_outbox_name(path)}.sent-{int(time.time())}.json"
                 archive_path.write_text(json.dumps(archive_payload, ensure_ascii=True, indent=2) + "\n", encoding="utf-8")
                 archive_path.chmod(0o600)
@@ -552,6 +631,8 @@ def send_approved_outbox(creds: dict[str, str], state_dir: Path, worker: str) ->
                     "draft": path.name,
                     "error_type": exc.__class__.__name__,
                     "error": re.sub(r"(?i)(password|app pw|secret|token)\S*", "[REDACTED]", str(exc)),
+                    "message_id": message_id,
+                    "smtp_sent": smtp_sent,
                 }
                 append_jsonl(log_path, {"event": "approved_email_failed", **failed_payload})
                 failed_path = failed_dir / f"{safe_outbox_name(path)}.failed-{int(time.time())}.json"

@@ -1,7 +1,7 @@
 # AGENTS.md - ai_workspace Compact Startup
 
 Scope: Applies to everything under `ai_workspace/` and overrides parent instructions when conflicts exist.
-Last Updated: 2026-05-27 17:30 CDT (Machine: Macmini.lan)
+Last Updated: 2026-06-07 14:40 CDT (Machine: Macmini.lan)
 
 This root file is intentionally compact. Do not preload long lane histories, handoffs, transcripts, or project-hub files at startup. Load the narrow reference named by the task only after the current task requires it.
 
@@ -19,8 +19,10 @@ This root file is intentionally compact. Do not preload long lane histories, han
 
 ## Task Tracking
 
-- Primary durable task state is the DB-backed task spine: OPS/Portal task IDs when available, Workspaceboard Task Flow state, and project-hub notes that cite those IDs.
+- Primary durable task state is the DB-backed task spine: OPS/Portal task IDs when available, Workspaceboard Task Flow state, and DB-backed Task Flow handoff entries that cite those IDs.
 - At the start of substantive work, check the relevant DB-backed task source when a task id, Task Flow key, OPS id, Portal id, or Workspaceboard session is present.
+- When Robert says `write handoff`, `update handoff`, `record handoff`, or asks for cross-session state, write `koval_crm.ai_task_flow_handoff_entries` through `scripts/handoff_mysql_recorder.php`; do not treat `HANDOFF.md` or `daily-inputs/*.md` as canonical.
+- `HANDOFF.md` files are generated/readable projections or emergency fallback notes only. Do not create new canonical handoff state by editing Markdown first; if Markdown is updated for readability, it must match an existing DB handoff entry and Task Flow row when the work is task-scoped.
 - `TODO.md`, `TODO2.md`, `ToDo-append.md`, and `TODO-append.md` are legacy fallback surfaces only. Do not read them at task start unless Robert explicitly asks for local Markdown queue work or no DB-backed path exists.
 - When the current chat is explicitly `task mode`, treat it as the execution lane for the approved scope, but still record substantive work in the DB-backed task spine or the narrow durable local surface for that workspace.
 - Task-mode inputs that change direction, approve a blocker, add a durable workflow rule, or start substantive work must be mirrored through `scripts/ai_manager_chat_entry_adapter.php` with `--source-channel task-mode-chat` and the related Task Flow key when one exists.
@@ -58,5 +60,5 @@ This root file is intentionally compact. Do not preload long lane histories, han
 
 ## Completion Notes
 
-- For Markdown-based durable notes in task mode, add a timestamped `done` entry with what finished, what changed, and any exact blocker or next step.
+- For task-mode durable notes, write a DB handoff entry with what finished, what changed, and any exact blocker or next step. Markdown notes are optional projections only and must not be the only durable record.
 - Final reports should match the durable record and mention verification performed. If a task only changed docs/startup instructions, a focused git diff/stat and file readback are enough verification.

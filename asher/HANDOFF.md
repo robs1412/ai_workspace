@@ -1,5 +1,13 @@
 # HANDOFF - asher
 
+## 2026-06-07 Sonat BCC Directive Recorded
+
+Directive recorded at 2026-06-07 14:24 CDT: Asher outbound emails must include Sonat Birnecker Hart at `sonat@kovaldistillery.com` as Bcc unless Sonat is already an explicit To/Cc/Bcc recipient on the same message.
+
+- AI Manager input: row `2863`, UUID `ai-manager-chat-20260607192442-b0e0b4c8eaee`.
+- Papers durability path: `ai-manager/durability/2026-06-07-decision-directive-venetia-and-asher-outbound-emails-must-always-bcc-sonat.md`.
+- Enforcement: approved-send helper `scripts/email_worker_header_poll.py` now applies the default Bcc rule for worker `asher`; runtime copy synced to `/Users/admin/.asher-launch/runtime/scripts/email_worker_header_poll.py`.
+
 ## 2026-04-27 Setup Scaffold
 
 Asher workspace created for `asher@thecultivater.com`.

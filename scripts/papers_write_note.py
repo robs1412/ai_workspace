@@ -72,6 +72,8 @@ def main() -> int:
     parser.add_argument("--summary", default="Non-secret durable note.")
     parser.add_argument("--tags", default="")
     parser.add_argument("--created-by", default="codex")
+    parser.add_argument("--guid", default="", help="Existing Papers GUID to update instead of creating a new document.")
+    parser.add_argument("--updated-by", default="codex")
     parser.add_argument("--input-file", default="")
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
@@ -82,7 +84,7 @@ def main() -> int:
 
     mcp_env()
     if args.dry_run:
-        print(json.dumps({"ok": True, "dry_run": True, "path": args.path, "title": args.title}, ensure_ascii=True))
+        print(json.dumps({"ok": True, "dry_run": True, "path": args.path, "title": args.title, "guid": args.guid}, ensure_ascii=True))
         return 0
 
     _, session_id = mcp_call(
@@ -90,22 +92,42 @@ def main() -> int:
         {"protocolVersion": "2025-03-26", "capabilities": {}, "clientInfo": {"name": "codex-papers-write", "version": "1"}},
         1,
     )
-    result, _ = mcp_call(
-        "tools/call",
-        {
-            "name": "papers_create",
-            "arguments": {
-                "path": args.path,
-                "content": body,
-                "title": args.title,
-                "summary": args.summary,
-                "tags": [tag.strip() for tag in re.split(r"[,\s]+", args.tags) if tag.strip()],
-                "created_by": args.created_by,
+    tags = [tag.strip() for tag in re.split(r"[,\s]+", args.tags) if tag.strip()]
+    if args.guid:
+        result, _ = mcp_call(
+            "tools/call",
+            {
+                "name": "papers_update",
+                "arguments": {
+                    "guid": args.guid,
+                    "path": args.path,
+                    "content": body,
+                    "title": args.title,
+                    "summary": args.summary,
+                    "tags": tags,
+                    "updated_by": args.updated_by,
+                },
             },
-        },
-        2,
-        session_id,
-    )
+            2,
+            session_id,
+        )
+    else:
+        result, _ = mcp_call(
+            "tools/call",
+            {
+                "name": "papers_create",
+                "arguments": {
+                    "path": args.path,
+                    "content": body,
+                    "title": args.title,
+                    "summary": args.summary,
+                    "tags": tags,
+                    "created_by": args.created_by,
+                },
+            },
+            2,
+            session_id,
+        )
     print(json.dumps({"ok": True, "result": result, "path": args.path}, ensure_ascii=True))
     return 0
 

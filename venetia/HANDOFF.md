@@ -1,5 +1,50 @@
 # HANDOFF - venetia
 
+# 2026-06-07 Sonat BCC Directive Recorded
+
+Directive recorded at 2026-06-07 14:24 CDT: Venetia outbound emails must include Sonat Birnecker Hart at `sonat@kovaldistillery.com` as Bcc unless Sonat is already an explicit To/Cc/Bcc recipient on the same message.
+
+- AI Manager input: row `2863`, UUID `ai-manager-chat-20260607192442-b0e0b4c8eaee`.
+- Papers durability path: `ai-manager/durability/2026-06-07-decision-directive-venetia-and-asher-outbound-emails-must-always-bcc-sonat.md`.
+- Enforcement: approved-send helper `scripts/email_worker_header_poll.py` now applies the default Bcc rule for worker `venetia`; runtime copy synced to `/Users/admin/.venetia-launch/runtime/scripts/email_worker_header_poll.py`.
+
+# 2026-06-07 Sonat New Businesses And Follow-Ups Open
+
+Recorded at 2026-06-07 14:19 CDT after live Venetia poller pickup.
+
+- Source: Sonat reply `New businesses to reach out to and Next Steps`, Message-ID `<CALbLtzwbcfoZDi86xx7WTgZhe8mdvgoz-ZJzJOg+7kXEz9jvAQ@mail.gmail.com>`.
+- Poller proof: `/Users/admin/.venetia-launch/state/header-poll-log.jsonl` captured `imap_id=22` at 2026-06-07 14:06 CDT with body read.
+- Body proof: `/Users/admin/.venetia-launch/state/bodies/calbltzwbcfozdi86xx7wtgzhe8mdvgoz-zjzjog-7kxez9jvaq-mail.gmail.com.txt`.
+- Open work: send follow-up emails to businesses that have not responded; prepare another business in each Venetia editorial pillar, with coverage including Eastern Europe, at least one USA business, and at least one Europe business; send Sonat the suggested list and draft emails.
+- Task Flow readback: `taskflow-f5b10b5d2ad74468` recorded as `task_created`.
+- Approval/proof rule: any outbound email must use the approved send path and prove both `sent-log.jsonl` Message-ID and IMAP `INBOX.Sent` readback before being reported complete.
+
+# 2026-06-07 Dylan Follow-Up Sent To Slow Art Collective After Sonat Approval
+
+Done at 2026-06-07 14:18 CDT after Sonat's same-day approval/edit reply.
+
+- Source: Sonat reply `Re: Follow up`, Message-ID `<CALbLtzx9SYLzPw-zkTu4=JZMS9kdvmxdUB=r0bqMFRxx0gyg6Q@mail.gmail.com>`.
+- Poller proof: `/Users/admin/.venetia-launch/state/header-poll-log.jsonl` captured `imap_id=21` at 2026-06-07 14:02 CDT with body read.
+- Action: applied Sonat's edit and sent the Dylan / Slow Art Collective follow-up to `dylanmartorell@gmail.com`, cc `chacokato@gmail.com`.
+- Send-path note: the helper failure happened after SMTP accepted the message and before Sent APPEND; no retry/resend was performed.
+- Repair proof: appended the exact sent RFC822 message to Venetia IMAP `INBOX.Sent` and recorded `approved_email_sent_repaired_after_sent_folder_timeout`.
+- Message-ID: `<178085953884.16698.13848771873447122029@thecultivater.com>`.
+- IMAP Sent readback: `INBOX.Sent` has one hit, UID `19`, Date `Sun, 07 Jun 2026 14:12:18 -0500`.
+- Runtime archive: `/Users/admin/.venetia-launch/state/sent/venetia-dylan-follow-up-sonat-approved-2026-06-07.approved.json.sent-repaired-1780859538.json`.
+
+# 2026-06-07 Dylan Follow-Up Draft Sent To Sonat For Approval
+
+Done at 2026-06-07 13:52 CDT for Sonat's same-day Venetia follow-up instruction.
+
+- Source: Sonat reply `Re: owner question: Follow up`, Message-ID `<CALbLtzxkUnELZmPsCv9q+PkdCJY1xEAnsuykbD3uuXFeVmSF3w@mail.gmail.com>`.
+- Action: drafted the Dylan / Slow Art Collective follow-up and sent it to Sonat for approval only.
+- Draft saved at `venetia/drafts/sonat-dylan-follow-up-draft-approval-2026-06-07.md`.
+- Send proof: `/Users/admin/.venetia-launch/state/sent-log.jsonl` row for draft `venetia-sonat-dylan-follow-up-draft-approval-2026-06-07.approved.json`; mirrored to local `sent-log.jsonl`.
+- Message-ID: `<178085832072.9857.4295917191616458204@thecultivater.com>`.
+- Runtime readback: approved-send cycle reported `queued_sends_seen=1`, `queued_sends_sent=1`, `queued_sends_failed=0`.
+- Sent-folder repair: appended the exact sent message to Venetia IMAP `INBOX.Sent`; readback search found `uid_count=1` for the Message-ID.
+- External-send status: no email was sent to Dylan; next action is waiting for Sonat approval or edits.
+
 # 2026-06-03 Slow Art Follow-Up Sent
 
 Done at 2026-06-03 16:39 CDT for Task Flow key `taskflow-owner-reply-237ceae35173ffbb` / Workspaceboard session `4be6d3d8`.
