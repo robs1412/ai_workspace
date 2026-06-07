@@ -312,12 +312,27 @@ def classify_proof_issue(item: dict) -> ProofIssue:
     )
 
 
+def proof_issue_has_blocker_marker(item: dict) -> bool:
+    return any(
+        safe_text(item.get(field), 300)
+        for field in [
+            "completion_or_blocker_email",
+            "clarification_email",
+        ]
+    )
+
+
 def classify_proof_issues(proof_report: dict) -> list[ProofIssue]:
     issues: list[ProofIssue] = []
     for item in proof_report.get("items", []):
         if not isinstance(item, dict):
             continue
         if safe_text(item.get("severity"), 80) in {"closeout_gap", "attention", "blocked"}:
+            if (
+                safe_text(item.get("blocked_resolution_state"), 120) == "blocker_email_required"
+                and proof_issue_has_blocker_marker(item)
+            ):
+                continue
             issues.append(classify_proof_issue(item))
     return issues
 

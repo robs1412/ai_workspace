@@ -1,11 +1,11 @@
 # Task Flow Truth Drift Check
 
-- Recorded: 2026-06-07 12:36:41
+- Recorded: 2026-06-07 12:41:13
 - Config: `/Users/werkstatt/ai_workspace/scripts/task_flow_truth_surfaces.json`
 - Board ok: `True`
 - Managed sessions: `194`
 - Task Flow rows scanned: `500`
-- Proof rows scanned: `39`
+- Proof rows scanned: `38`
 - Drift count: `0`
 
 ## Summary
@@ -17,7 +17,6 @@
 ## Proof Issue Classes
 
 - active_worker_missing_domain_task: `3`
-- blocked_missing_blocker_email: `4`
 - blocked_needs_owner_question_proof: `4`
 
 ## Proof Issue Samples
@@ -40,11 +39,6 @@
   - detail: blocked row is routed-needs-owner-question and needs owner-question/blocker proof
   - dedupe_key: `avignon-direct-owner-sonat-CALbLtzyBP2fzO-on-WRtBg5c-UrRObKV-xRTMJ99hoJ-BVCg-mail-gmail-com`
   - owner_lane: `sonat`
-- blocked_missing_blocker_email: `blocked` taskflow-bdec436ccbf88991
-  - detail: blocked row requires blocker email or equivalent source-backed blocker proof
-  - dedupe_key: `taskflow-bdec436ccbf88991`
-  - session_id: `5de66c59`
-  - owner_lane: `outreach-coordinator`
 - active_worker_missing_domain_task: `attention` taskflow-82e27c83e26920f1
   - detail: working row has visible session abbb9e24 but lacks ops_portal_or_domain_task
   - dedupe_key: `taskflow-82e27c83e26920f1`
@@ -58,20 +52,6 @@
   - detail: blocked row is routed-needs-owner-question and needs owner-question/blocker proof
   - dedupe_key: `avignon-direct-owner-sonat-CALbLtzzULHVdGbQa2wjAX-R4psjUwJp97eM7a2YQMA9tvhBswg-mail-gmail-com`
   - owner_lane: `sonat`
-- blocked_missing_blocker_email: `blocked` portal work
-  - detail: blocked row requires blocker email or equivalent source-backed blocker proof
-  - dedupe_key: `avignon-direct-owner-sonat-CALbLtzwKJP87X89-LKAGGMXVQGtadoJKZrgCXSSyjbxKDDwCjw-mail-gmail-com`
-  - session_id: `75c0fa6e`
-  - owner_lane: `sonat`
-- blocked_missing_blocker_email: `blocked` Re: Chat access
-  - detail: blocked row requires blocker email or equivalent source-backed blocker proof
-  - dedupe_key: `taskflow-owner-reply-db8df6401df47f3d`
-  - session_id: `fd3b95b2`
-  - owner_lane: `email-coordinator`
-- blocked_missing_blocker_email: `blocked` taskflow-vanessa-open-cot-shifts-48h-2026-06-07-0800
-  - detail: blocked row requires blocker email or equivalent source-backed blocker proof
-  - dedupe_key: `taskflow-vanessa-open-cot-shifts-48h-2026-06-07-0800`
-  - owner_lane: `outreach-coordinator`
 
 ## Drift
 

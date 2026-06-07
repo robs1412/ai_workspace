@@ -7,10 +7,9 @@
   "proof_closeout_issues": 11,
   "proof_issue_class_counts": {
     "active_worker_missing_domain_task": 3,
-    "blocked_missing_blocker_email": 4,
     "blocked_needs_owner_question_proof": 4
   },
-  "proof_issue_count": 11,
+  "proof_issue_count": 7,
   "proof_issue_samples": [
     {
       "dedupe_key": "avignon-direct-owner-sonat-CALbLtzybRf2Q7-v9Rk8DhHOVGUQXJ3ZzaQphge-pOiA07o9tg-mail-gmail-com",
@@ -61,16 +60,6 @@
       "title": "Tasks"
     },
     {
-      "dedupe_key": "taskflow-bdec436ccbf88991",
-      "detail": "blocked row requires blocker email or equivalent source-backed blocker proof",
-      "kind": "blocked_missing_blocker_email",
-      "missing_fields": [],
-      "owner_lane": "outreach-coordinator",
-      "session_id": "5de66c59",
-      "severity": "blocked",
-      "title": "taskflow-bdec436ccbf88991"
-    },
-    {
       "dedupe_key": "taskflow-82e27c83e26920f1",
       "detail": "working row has visible session abbb9e24 but lacks ops_portal_or_domain_task",
       "kind": "active_worker_missing_domain_task",
@@ -105,39 +94,9 @@
       "session_id": "",
       "severity": "blocked",
       "title": "Mariano's Cancelation Process"
-    },
-    {
-      "dedupe_key": "avignon-direct-owner-sonat-CALbLtzwKJP87X89-LKAGGMXVQGtadoJKZrgCXSSyjbxKDDwCjw-mail-gmail-com",
-      "detail": "blocked row requires blocker email or equivalent source-backed blocker proof",
-      "kind": "blocked_missing_blocker_email",
-      "missing_fields": [],
-      "owner_lane": "sonat",
-      "session_id": "75c0fa6e",
-      "severity": "blocked",
-      "title": "portal work"
-    },
-    {
-      "dedupe_key": "taskflow-owner-reply-db8df6401df47f3d",
-      "detail": "blocked row requires blocker email or equivalent source-backed blocker proof",
-      "kind": "blocked_missing_blocker_email",
-      "missing_fields": [],
-      "owner_lane": "email-coordinator",
-      "session_id": "fd3b95b2",
-      "severity": "blocked",
-      "title": "Re: Chat access"
-    },
-    {
-      "dedupe_key": "taskflow-vanessa-open-cot-shifts-48h-2026-06-07-0800",
-      "detail": "blocked row requires blocker email or equivalent source-backed blocker proof",
-      "kind": "blocked_missing_blocker_email",
-      "missing_fields": [],
-      "owner_lane": "outreach-coordinator",
-      "session_id": "",
-      "severity": "blocked",
-      "title": "taskflow-vanessa-open-cot-shifts-48h-2026-06-07-0800"
     }
   ],
-  "proof_rows_scanned": 39,
+  "proof_rows_scanned": 38,
   "scheduler_route_candidates": 0,
   "scheduler_violations": 0,
   "task_flow_rows_scanned": 500
