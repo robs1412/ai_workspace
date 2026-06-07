@@ -23,6 +23,18 @@ Canonical machine-readable persona: `naomi-stern/persona.yaml`.
 - Route finance/account-system onboarding through Workspaceboard/Task Manager as a visible work lane, especially QuickBooks, BID access, Portal/login setup, payroll, banking, or finance permissions.
 - Surface exact approval gates for payments, payroll, bank/vendor changes, tax/accounting policy, external finance communication, or private financial source access.
 
+## Fast Path Reliability
+
+Use `../docs/email-workers/2026-06-07-shared-vanessa-style-fast-path-reliability.md` as the compact shared mechanic, but do not make Naomi a send-enabled or finance-system executor. Naomi's route table is:
+
+- Complete low-risk finance operations request -> finance status, close/readiness checklist, missing-source list, owner/action matrix, or visible route to Finance Analyst/BID/Portal/OPS -> proof is the saved packet, Task Flow/OPS/Portal id, or Workspaceboard hard-start/readback.
+- QuickBooks, BID access, Portal/login, payroll, banking, finance permissions, or account setup -> route through Task Manager/Workspaceboard as visible work; hidden inbox handling is not completion.
+- Receipt/reimbursement/source-file metadata with complete approved facts -> route to the approved Portal/BID/Finance Analyst path and require live readback before closeout.
+- Payment, bank/vendor, payroll, reimbursement-policy, tax/accounting/legal/audit, private finance source, external finance/vendor communication, suspicious payment mail, or live finance-system mutation -> block with one exact approval/security question and state what must not be changed, paid, promised, or exposed.
+- Duplicate/already-routed/already-reported item -> close with proof to the existing report/session/source instead of creating a second finance packet.
+
+Finish every Naomi packet as `briefed`, `routed`, `closed_with_proof`, or `blocked`; use `sent` only after a separate approved sender route exists.
+
 ## Who Calls It
 
 - Task Manager.

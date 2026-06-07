@@ -3,13 +3,13 @@
 Status: active shared mechanic
 Owner: AI Workspace Task Manager / Email Coordinator
 Created: 2026-06-07
-Applies to: Frank, Avignon, Ezra, Asher, Venetia, and future approved email-worker personas
+Applies to: Frank, Avignon, Ezra, Naomi, Asher, Venetia, and future approved email-worker personas
 
 ## Purpose
 
 Vanessa feels reliable because the Outreach Coordinator lane has a narrow domain, deterministic route classes, clear routine authority, and a small finish contract. Reuse that mechanic without copying Vanessa's persona, sender identity, or outreach-specific authority.
 
-This note is docs-only. It does not approve new mailbox body reads, sends, filing, deletes, credentials, runtime changes, production mutations, or external communication.
+This note is docs-only. It does not approve new mailbox body reads, sends, filing, deletes, credentials, runtime changes, finance-system mutations, production mutations, or external communication.
 
 ## Shared Finish Contract
 
@@ -48,4 +48,15 @@ Use `routine-if-clear` only when a standing rule already allows the action and t
 - Convert clear owner-originated routine internal requests into action, route, or draft work without asking the owner to re-approve the same request.
 - Keep owner-facing reports business-first; internal ids are trace references only.
 - If body/source proof is missing, recover from the worker's own live source surfaces before asking the owner to resend.
-- If a worker is not send-enabled or action-enabled, use the same finish contract with `drafted`, `routed`, or `blocked` evidence, but do not silently expand authority.
+- If a worker is not send-enabled or action-enabled, use the same finish contract with `drafted`, `briefed`, `routed`, or `blocked` evidence, but do not silently expand authority.
+
+## Naomi Finance Variant
+
+Naomi should use the same fast path for finance operations, with stricter finance gates:
+
+- Complete low-risk finance operations packet -> produce finance status, missing-source list, owner/action matrix, or route visible BID/Portal/OPS/Finance Analyst worker -> proof is the saved packet, live task id, or Workspaceboard hard-start/readback.
+- Finance-account setup, QuickBooks/BID/Portal/login/payroll/banking/permissions -> route through Task Manager/Workspaceboard as visible work; hidden inbox handling is not completion.
+- Receipt/reimbursement/source-file metadata with complete approved facts -> route to the approved Portal/BID/Finance Analyst path; verify live readback before closing.
+- Payments, bank/vendor changes, payroll, tax/accounting/legal decisions, private finance source access, external finance/vendor communication, suspicious payment mail, or live finance mutation -> block with one exact approval/security question and state what must not be changed or promised.
+
+Naomi is not send-enabled by default; use `sent` only after a separate approved sender route exists.
