@@ -52,6 +52,12 @@ FIX_POLICIES: dict[str, FixClassPolicy] = {
         ],
         proof_hint="Registry, service parity, and truth-drift checks all return clean.",
     ),
+    "proof-closeout-classification": FixClassPolicy(
+        name="proof-closeout-classification",
+        mutates_live_state=False,
+        verifier=["./scripts/task_flow_truth_drift_check.py", "--fail-on-drift"],
+        proof_hint="Truth-drift checker returns zero drift and proof issue classes are present for triage.",
+    ),
     "registry-metadata-fix": FixClassPolicy(
         name="registry-metadata-fix",
         mutates_live_state=False,
@@ -119,6 +125,15 @@ def parse_args() -> argparse.Namespace:
         help="Permit allowlisted policies that mutate live/runtime state.",
     )
     execute.add_argument("--json", action="store_true")
+
+    supersede = subparsers.add_parser(
+        "supersede",
+        help="Mark a blocked proposal as superseded by a later verified retry.",
+    )
+    supersede.add_argument("--proposal-id", required=True, help="Blocked proposal id to supersede.")
+    supersede.add_argument("--by-proposal-id", required=True, help="Verified replacement proposal id.")
+    supersede.add_argument("--reason", required=True, help="Source-backed reason for superseding.")
+    supersede.add_argument("--json", action="store_true")
 
     return parser.parse_args()
 
@@ -242,7 +257,7 @@ def collect_policy_proof(policy: FixClassPolicy, verifier_result: dict[str, Any]
         proof["service_parity_report"] = str(
             ROOT / "project_hub/artifacts/recursive-tools/service-parity-check-latest.md"
         )
-    elif policy.name == "truth-drift-single-item-repair":
+    elif policy.name in {"truth-drift-single-item-repair", "proof-closeout-classification"}:
         proof["truth_drift_report"] = str(
             ROOT / "project_hub/artifacts/recursive-tools/task-flow-truth-drift-latest.md"
         )
@@ -268,7 +283,7 @@ def approved_state(proposal: dict[str, Any]) -> bool:
 def execution_authorized(proposal: dict[str, Any], fix_class: str) -> bool:
     if approved_state(proposal):
         return True
-    return not proposal.get("approval_required") and fix_class == "no-op-monitoring"
+    return not proposal.get("approval_required") and fix_class in {"no-op-monitoring", "proof-closeout-classification"}
 
 
 def execution_statuses() -> dict[str, Any]:
@@ -320,6 +335,75 @@ def fail_event(proposal_id: str, proposal: dict[str, Any], state: str, reason: s
         "allowed_fix_class": proposal.get("allowed_fix_class"),
         "risk_class": proposal.get("risk_class"),
     }
+
+
+def verified_retry_state(proposal: dict[str, Any]) -> bool:
+    return proposal.get("execution_state") == "verified" and proposal.get("ratchet_result") == "keep"
+
+
+def supersede(args: argparse.Namespace) -> int:
+    path, proposal = load_proposal(args.proposal_id)
+    _, replacement = load_proposal(args.by_proposal_id)
+
+    if proposal.get("execution_state") != "blocked":
+        event = fail_event(
+            args.proposal_id,
+            proposal,
+            "blocked_not_supersedable",
+            f"execution_state is {proposal.get('execution_state') or 'unset'}, not blocked",
+        )
+        append_jsonl(EXECUTION_LOG, event)
+        if args.json:
+            print(json.dumps(event, indent=2, sort_keys=True))
+        else:
+            print(f"blocked={event['reason']}")
+        return 2
+
+    if not verified_retry_state(replacement):
+        event = fail_event(
+            args.proposal_id,
+            proposal,
+            "blocked_replacement_not_verified",
+            f"replacement {args.by_proposal_id} is not verified with ratchet_result=keep",
+        )
+        event["replacement_proposal_id"] = args.by_proposal_id
+        append_jsonl(EXECUTION_LOG, event)
+        if args.json:
+            print(json.dumps(event, indent=2, sort_keys=True))
+        else:
+            print(f"blocked={event['reason']}")
+        return 2
+
+    recorded_at = now_local()
+    event = {
+        "event": "execution_superseded",
+        "proposal_id": args.proposal_id,
+        "replacement_proposal_id": args.by_proposal_id,
+        "recorded_at": recorded_at,
+        "execution_state": "superseded_by_verified_retry",
+        "recommended_action": proposal.get("recommended_action"),
+        "allowed_fix_class": proposal.get("allowed_fix_class"),
+        "risk_class": proposal.get("risk_class"),
+        "ratchet_result": "superseded",
+        "ratchet_reason": args.reason,
+    }
+    append_jsonl(EXECUTION_LOG, event)
+
+    proposal["execution_state"] = event["execution_state"]
+    proposal["execution_recorded_at"] = recorded_at
+    proposal["superseded_by"] = args.by_proposal_id
+    proposal["superseded_reason"] = args.reason
+    proposal["ratchet_result"] = event["ratchet_result"]
+    proposal["ratchet_reason"] = event["ratchet_reason"]
+    write_json(path, proposal)
+
+    if args.json:
+        print(json.dumps(event, indent=2, sort_keys=True))
+    else:
+        print(f"proposal_id={args.proposal_id}")
+        print(f"execution_state={event['execution_state']}")
+        print(f"superseded_by={args.by_proposal_id}")
+    return 0
 
 
 def execute(args: argparse.Namespace) -> int:
@@ -400,7 +484,7 @@ def execute(args: argparse.Namespace) -> int:
             print(f"verifier={policy.verifier}")
         return 0
 
-    if policy.auto_mutator is None and fix_class != "no-op-monitoring":
+    if policy.auto_mutator is None and fix_class not in {"no-op-monitoring", "proof-closeout-classification"}:
         event = fail_event(
             proposal_id,
             proposal,
@@ -508,6 +592,8 @@ def main() -> int:
         return print_status(args)
     if args.command == "execute":
         return execute(args)
+    if args.command == "supersede":
+        return supersede(args)
     raise SystemExit(f"unsupported command: {args.command}")
 
 

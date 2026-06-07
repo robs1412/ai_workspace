@@ -41,6 +41,18 @@ class Drift:
     dedupe_key: str = ""
 
 
+@dataclass
+class ProofIssue:
+    kind: str
+    severity: str
+    title: str
+    detail: str
+    dedupe_key: str = ""
+    session_id: str = ""
+    owner_lane: str = ""
+    missing_fields: list[str] | None = None
+
+
 def safe_text(value: object, limit: int = 220) -> str:
     text = " ".join(str(value or "").split())
     return text[:limit]
@@ -253,11 +265,69 @@ def build_drifts(config: dict, board_sessions: dict[str, dict], tf_report: dict,
     return drifts
 
 
+def classify_proof_issue(item: dict) -> ProofIssue:
+    severity = safe_text(item.get("severity"), 80)
+    effective_status = safe_text(item.get("effective_status") or item.get("status"), 80)
+    status = safe_text(item.get("status"), 80)
+    dedupe_key = safe_text(item.get("dedupe_key"), 180)
+    owner_lane = safe_text(item.get("owner_lane"), 80)
+    session_id = safe_text(item.get("workspaceboard_session"), 80)
+    title = safe_text(item.get("display_name") or item.get("title") or item.get("source_links") or dedupe_key, 180)
+    missing_fields = [safe_text(field, 80) for field in item.get("missing_fields", []) if safe_text(field, 80)]
+    blocked_state = safe_text(item.get("blocked_resolution_state"), 120)
+    latest_event = safe_text(item.get("latest_event"), 120)
+    next_update = safe_text(item.get("next_update"), 220)
+
+    if effective_status == "working" and "ops_portal_or_domain_task" in missing_fields and session_id:
+        kind = "active_worker_missing_domain_task"
+        detail = f"working row has visible session {session_id} but lacks ops_portal_or_domain_task"
+    elif blocked_state == "routed_needs_owner_question":
+        kind = "blocked_needs_owner_question_proof"
+        detail = "blocked row is routed-needs-owner-question and needs owner-question/blocker proof"
+    elif blocked_state == "blocker_email_required":
+        kind = "blocked_missing_blocker_email"
+        detail = "blocked row requires blocker email or equivalent source-backed blocker proof"
+    elif status == "blocked" or effective_status == "blocked":
+        kind = "blocked_unclassified_proof_gap"
+        detail = f"blocked row has unclassified proof posture: {blocked_state or latest_event or next_update}"
+    elif severity == "attention":
+        kind = "attention_missing_finish_link"
+        detail = f"attention row missing {', '.join(missing_fields) if missing_fields else 'proof/readback fields'}"
+    elif severity == "closeout_gap":
+        kind = "closed_closeout_gap"
+        detail = "closed/reported/filed row lacks closeout proof marker"
+    else:
+        kind = "proof_issue_unclassified"
+        detail = f"{severity or 'unknown'} proof issue for status {effective_status or status}"
+
+    return ProofIssue(
+        kind=kind,
+        severity=severity,
+        title=title,
+        detail=detail,
+        dedupe_key=dedupe_key,
+        session_id=session_id,
+        owner_lane=owner_lane,
+        missing_fields=missing_fields,
+    )
+
+
+def classify_proof_issues(proof_report: dict) -> list[ProofIssue]:
+    issues: list[ProofIssue] = []
+    for item in proof_report.get("items", []):
+        if not isinstance(item, dict):
+            continue
+        if safe_text(item.get("severity"), 80) in {"closeout_gap", "attention", "blocked"}:
+            issues.append(classify_proof_issue(item))
+    return issues
+
+
 def build_report(
     board: dict,
     tf_report: dict,
     proof_report: dict,
     drifts: list[Drift],
+    proof_issues: list[ProofIssue],
     config_path: Path,
 ) -> str:
     now = datetime.now().strftime("%Y-%m-%d %H:%M:%S %Z")
@@ -278,9 +348,37 @@ def build_report(
         f"- scheduler_route_candidates: `{int(tf_report.get('totals', {}).get('scheduler_route_candidates') or 0)}`",
         f"- proof_closeout_issues: `{int(proof_report.get('totals', {}).get('closeout_issues_shown') or 0)}`",
         "",
-        "## Drift",
+        "## Proof Issue Classes",
         "",
     ]
+    if proof_issues:
+        counts: dict[str, int] = {}
+        for item in proof_issues:
+            counts[item.kind] = counts.get(item.kind, 0) + 1
+        for kind, count in sorted(counts.items()):
+            lines.append(f"- {kind}: `{count}`")
+        lines.extend(["", "## Proof Issue Samples", ""])
+        for item in proof_issues[:20]:
+            lines.extend(
+                [
+                    f"- {item.kind}: `{item.severity}` {item.title}",
+                    f"  - detail: {item.detail}",
+                    f"  - dedupe_key: `{item.dedupe_key}`",
+                ]
+            )
+            if item.session_id:
+                lines.append(f"  - session_id: `{item.session_id}`")
+            if item.owner_lane:
+                lines.append(f"  - owner_lane: `{item.owner_lane}`")
+    else:
+        lines.append("- None")
+    lines.extend(
+        [
+            "",
+            "## Drift",
+            "",
+        ]
+    )
     if drifts:
         for item in drifts[:40]:
             lines.extend(
@@ -298,6 +396,8 @@ def build_report(
     lines.extend(["", "## Recommendation", ""])
     if drifts:
         lines.append("- Truth drift exists. Repair should stay targeted to the named contradiction classes, not broad queue mutation.")
+    elif proof_issues:
+        lines.append("- Truth drift is clean, but proof issue classes remain. Classify or repair one named class before returning to monitor mode.")
     else:
         lines.append("- Checked board, Task Flow, and proof surfaces are aligned at current coverage.")
     return "\n".join(lines) + "\n"
@@ -324,13 +424,17 @@ def main(argv: list[str]) -> int:
     )
     proof_report = run_json_command(config["task_flow"]["proof_report_cmd"], None, timeout=20)
     drifts = build_drifts(config, board_sessions, tf_report, proof_report)
+    proof_issues = classify_proof_issues(proof_report)
 
     args.report.parent.mkdir(parents=True, exist_ok=True)
     args.report.write_text(
-        build_report(board, tf_report, proof_report, drifts, args.config),
+        build_report(board, tf_report, proof_report, drifts, proof_issues, args.config),
         encoding="utf-8",
     )
     args.json.parent.mkdir(parents=True, exist_ok=True)
+    proof_issue_counts: dict[str, int] = {}
+    for item in proof_issues:
+        proof_issue_counts[item.kind] = proof_issue_counts.get(item.kind, 0) + 1
     payload = {
         "config": str(args.config),
         "board_ok": bool(board.get("ok")),
@@ -340,6 +444,9 @@ def main(argv: list[str]) -> int:
         "scheduler_violations": int(tf_report.get("totals", {}).get("scheduler_violations") or 0),
         "scheduler_route_candidates": int(tf_report.get("totals", {}).get("scheduler_route_candidates") or 0),
         "proof_closeout_issues": int(proof_report.get("totals", {}).get("closeout_issues_shown") or 0),
+        "proof_issue_count": len(proof_issues),
+        "proof_issue_class_counts": proof_issue_counts,
+        "proof_issue_samples": [asdict(item) for item in proof_issues[:20]],
         "drift_count": len(drifts),
         "drifts": [asdict(item) for item in drifts],
     }

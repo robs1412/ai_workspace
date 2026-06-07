@@ -163,6 +163,9 @@ def load_checker_snapshot(*, refresh_historical: bool = False) -> dict[str, Any]
         "service_parity_drift_items": service_drift_items[:10],
         "truth_drift_count": int(truth.get("drift_count") or 0),
         "truth_drifts": truth_drifts[:10],
+        "proof_issue_count": int(truth.get("proof_issue_count") or truth.get("proof_closeout_issues") or 0),
+        "proof_issue_class_counts": truth.get("proof_issue_class_counts") or {},
+        "proof_issue_samples": truth.get("proof_issue_samples") or [],
         "registry_ok": bool(registry.get("ok")),
         "coverage_ok": any(
             item.get("name") == "recursive_checker_coverage" and item.get("status") == "ok"
@@ -206,6 +209,14 @@ def choose_action(snapshot: dict[str, Any]) -> tuple[str, bool, str, str, str]:
             "truth-drift-single-item-repair",
             f"Task Flow truth drift reports {snapshot['truth_drift_count']} contradiction item(s).",
         )
+    if int(snapshot.get("proof_issue_count") or 0) > 0:
+        return (
+            "classify-proof-closeout-issues",
+            False,
+            "low",
+            "proof-closeout-classification",
+            f"Truth drift is clean, but proof issue classification reports {snapshot['proof_issue_count']} issue item(s).",
+        )
     if not historical_ok:
         return (
             "repair-recommendation-benchmark",
@@ -232,6 +243,7 @@ def snapshot_context_lines(snapshot: dict[str, Any]) -> list[str]:
     lines = [
         f"Service parity drift: {snapshot.get('service_parity_drift')}",
         f"Truth drift count: {snapshot.get('truth_drift_count')}",
+        f"Proof issue count: {snapshot.get('proof_issue_count')}",
         f"Registry lint: {'ok' if snapshot.get('registry_ok') else 'not ok'}",
         f"Coverage manifest: {'ok' if snapshot.get('coverage_ok') else 'not ok'}",
         f"Historical recommendation benchmark: {snapshot.get('historical_clean_success')}",
@@ -243,6 +255,12 @@ def snapshot_context_lines(snapshot: dict[str, Any]) -> list[str]:
         detail = str(first.get("detail") or "").strip()
         if detail:
             lines.append(f"Current drift detail: {detail}")
+    proof_counts = snapshot.get("proof_issue_class_counts") or {}
+    if proof_counts:
+        lines.append(
+            "Proof issue classes: "
+            + ", ".join(f"{key}={value}" for key, value in sorted(proof_counts.items()))
+        )
     return lines
 
 
@@ -384,6 +402,10 @@ def build_proposal(snapshot: dict[str, Any], proposal_dir: Path, frank_draft_dir
         change = "Repair the recommendation corpus or benchmark logic so historical replay matches expected outcomes."
         no_change = "No live service, mailbox, OPS, Portal, or Task Flow data mutation."
         proof = "`recursive-improve eval eval/historical-recommendation-traces --output-dir eval/historical-recommendation-benchmark` returns `clean_success_rate=100%`."
+    elif action == "classify-proof-closeout-issues":
+        change = "Classify the proof issue classes and choose one narrow class for later source-first repair or exact blocker recording."
+        no_change = "No Task Flow closeout mutation, mailbox action, service restart, credential work, or OPS/Portal mutation."
+        proof = "`./scripts/task_flow_truth_drift_check.py --fail-on-drift` returns zero drift and includes proof_issue_class_counts."
     else:
         change = "No change proposed. Keep the recursive lane in monitoring mode."
         no_change = "No execution or approval request will be sent for this no-op monitor proposal."

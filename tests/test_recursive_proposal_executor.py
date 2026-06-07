@@ -55,6 +55,15 @@ class RecursiveProposalExecutorAuthorizationTest(unittest.TestCase):
 
         self.assertIs(self.executor.execution_authorized(proposal, "registry-metadata-fix"), False)
 
+    def test_no_approval_proof_classification_is_authorized(self):
+        proposal = {
+            "approval_required": False,
+            "allowed_fix_class": "proof-closeout-classification",
+            "decision_state": "",
+        }
+
+        self.assertIs(self.executor.execution_authorized(proposal, "proof-closeout-classification"), True)
+
     def test_approved_repair_is_authorized_before_live_mutation_gate(self):
         proposal = {
             "approval_required": True,
@@ -63,6 +72,20 @@ class RecursiveProposalExecutorAuthorizationTest(unittest.TestCase):
         }
 
         self.assertIs(self.executor.execution_authorized(proposal, "source-runtime-parity-fix"), True)
+
+    def test_verified_retry_state_requires_keep_ratchet(self):
+        self.assertIs(
+            self.executor.verified_retry_state(
+                {"execution_state": "verified", "ratchet_result": "keep"}
+            ),
+            True,
+        )
+        self.assertIs(
+            self.executor.verified_retry_state(
+                {"execution_state": "verified", "ratchet_result": "revert_required"}
+            ),
+            False,
+        )
 
 
 if __name__ == "__main__":
