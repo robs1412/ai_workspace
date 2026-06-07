@@ -1,5 +1,13 @@
 # National Outreach Handoff
 
+## 2026-06-07 Vanessa tasting-selection and cancellation automation instructions requested
+
+- 2026-06-07 14:58 CDT done entry for task-mode chat request recorded through AI Manager recorder row `2876`, UUID `ai-manager-chat-20260607194924-18f913a51ea2`.
+- Robert gave Vanessa three automation items: start picking Whole Foods tastings daily after Sonat defines what/how much; account for Binny's monthly cadence and Mariano's portal; generalize the June 7 Mariano's cancellation process into all-event cancellation fallback, including 24-hour-before uncovered-shift checks and last-minute unassignment/calloff-by-email checks up until shift start.
+- Action taken: Vanessa emailed Sonat asking for the decision rules before automation. Subject `Instructions needed: tasting selection and cancellation automation`; sent to `sonat@kovaldistillery.com`; Message-ID `<178086190924.32511.14999589232386336613@kovaldistillery.com>`.
+- Runtime note: the approved-send cycle returned `queued_sends_failed=1` with `RuntimeError`, but bounded IMAP Sent Mail readback found the exact message in `[Gmail]/Sent Mail` UID `5855`, dated `Sun, 07 Jun 2026 14:51:49 -0500`; `sent-log.jsonl` was repaired with `recovered_after_runtime_failure` proof instead of resending.
+- Task Flow readback target: `taskflow-vanessa-tasting-selection-cancellation-automation-20260607` is waiting on Sonat instructions, due check `2026-06-09 09:00 America/Chicago`. No OPS cancellation automation, portal cadence automation, or event-state mutation was made in this pass.
+
 ## 2026-06-07 Wild Onion Market open shift added and team notice sent
 
 - 2026-06-07 14:33 CDT done entry for Workspaceboard session `e3aed9af` / Task Flow `taskflow-b5c9a2f7f67624d7`, source Message-ID `caatx44bajyq=heh-ktjrp-wvj4peu7audnfhj8j2ycfae7cpig@mail.gmail.com`.
