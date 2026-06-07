@@ -3,15 +3,30 @@
 from __future__ import annotations
 
 import json
+import os
 import re
 import subprocess
 import sys
+import tempfile
 from datetime import date, datetime, timedelta
 from pathlib import Path
 
 OPS_BOOTSTRAP = "/Users/werkstatt/ops/bootstrap.php"
 BACKUP_SCRIPT = "/Users/werkstatt/ai_workspace/scripts/ai_box_backup.sh"
 DEFAULT_TASK_ID = 369899
+BACKUP_ROOT = Path("/Users/werkstatt/ai_box_backups")
+STALE_SUCCESS_WARNING_DAYS = int(os.environ.get("AI_BOX_BACKUP_STALE_WARNING_DAYS", "2"))
+WARNING_EMAIL_SCRIPT = Path("/Users/werkstatt/ai_workspace/scripts/send_codex_ops_email.py")
+WARNING_EMAIL_TO = os.environ.get("AI_BOX_BACKUP_WARNING_TO", "robert@kovaldistillery.com")
+WARNING_EMAIL_CREDS = os.environ.get(
+    "AI_BOX_BACKUP_WARNING_CREDS_FILE",
+    "/Users/werkstatt/ai_workspace/.private/mailboxes/nationaloutreach/credential.txt",
+)
+WARNING_EMAIL_SENT_LOG = os.environ.get(
+    "AI_BOX_BACKUP_WARNING_SENT_LOG",
+    "/Users/admin/.nationaloutreach-launch/state/sent-log.jsonl",
+)
+WARNING_EMAIL_DRY_RUN = os.environ.get("AI_BOX_BACKUP_WARNING_DRY_RUN", "0") == "1"
 
 
 def parse_key_value_output(text: str) -> dict[str, str]:
@@ -35,6 +50,107 @@ def run_backup() -> tuple[int, dict[str, str], str, str]:
     combined = "\n".join(part for part in [proc.stdout, proc.stderr] if part).strip()
     parsed = parse_key_value_output(combined)
     return proc.returncode, parsed, proc.stdout, proc.stderr
+
+
+def parse_backup_created(value: str) -> datetime | None:
+    value = value.strip()
+    if re.fullmatch(r"\d{8}-\d{6}", value):
+        return datetime.strptime(value, "%Y%m%d-%H%M%S")
+    return None
+
+
+def manifest_values(path: Path) -> dict[str, str]:
+    values: dict[str, str] = {}
+    if not path.is_file():
+        return values
+    for raw_line in path.read_text(encoding="utf-8", errors="replace").splitlines():
+        if "=" not in raw_line:
+            continue
+        key, value = raw_line.split("=", 1)
+        values[key.strip()] = value.strip()
+    return values
+
+
+def latest_successful_backup() -> dict[str, object]:
+    latest: dict[str, object] = {"path": "", "created": "", "age_days": None}
+    if not BACKUP_ROOT.is_dir():
+        return latest
+    newest_created: datetime | None = None
+    newest_path: Path | None = None
+    for manifest in BACKUP_ROOT.glob("*/MANIFEST.txt"):
+        values = manifest_values(manifest)
+        if values.get("remote_push_status") != "success":
+            continue
+        created = parse_backup_created(values.get("created", "")) or parse_backup_created(manifest.parent.name)
+        if created is None:
+            continue
+        if newest_created is None or created > newest_created:
+            newest_created = created
+            newest_path = manifest.parent
+    if newest_created is None or newest_path is None:
+        return latest
+    age = datetime.now() - newest_created
+    return {
+        "path": str(newest_path),
+        "created": newest_created.strftime("%Y%m%d-%H%M%S"),
+        "age_days": age.total_seconds() / 86400,
+    }
+
+
+def send_stale_success_warning(reason: str, latest_success: dict[str, object], backup_meta: dict[str, str], stdout_text: str, stderr_text: str) -> dict[str, str]:
+    if not WARNING_EMAIL_SCRIPT.is_file():
+        return {"status": "script_missing", "message_id": ""}
+    body = (
+        "Hi Robert,\n\n"
+        "The AI box backup lane needs attention.\n\n"
+        f"Reason: {reason}\n"
+        f"Latest successful .205 push: {latest_success.get('path') or '[none found]'}\n"
+        f"Latest successful timestamp: {latest_success.get('created') or '[none found]'}\n"
+        f"Latest successful age days: {latest_success.get('age_days')}\n"
+        f"Current run local backup: {backup_meta.get('backup', '')}\n"
+        f"Current run remote_push_status: {backup_meta.get('remote_push_status', '')}\n"
+        f"Current run warning_email_status: {backup_meta.get('warning_email_status', '')}\n\n"
+        "This warning is sent because the latest successful remote backup is older than the configured stale threshold.\n\n"
+        "Codex\n"
+    )
+    if stderr_text.strip():
+        body += "\nNon-secret stderr summary:\n" + stderr_text.strip()[:1200] + "\n"
+    elif stdout_text.strip():
+        body += "\nNon-secret stdout summary:\n" + stdout_text.strip()[:1200] + "\n"
+    with tempfile.NamedTemporaryFile("w", encoding="utf-8", delete=False) as handle:
+        handle.write(body)
+        body_path = handle.name
+    cmd = [
+        sys.executable,
+        str(WARNING_EMAIL_SCRIPT),
+        "--creds-file",
+        WARNING_EMAIL_CREDS,
+        "--to",
+        WARNING_EMAIL_TO,
+        "--subject",
+        "AI box backup stale warning",
+        "--body-file",
+        body_path,
+        "--from-address",
+        "codex@kovaldistillery.com",
+        "--from-name",
+        "Codex Local Agent",
+        "--sent-log",
+        WARNING_EMAIL_SENT_LOG,
+    ]
+    if WARNING_EMAIL_DRY_RUN:
+        cmd.append("--dry-run")
+    try:
+        proc = subprocess.run(cmd, text=True, capture_output=True, check=False)
+        if proc.returncode != 0:
+            return {"status": "failed", "message_id": "", "error": (proc.stderr or proc.stdout).strip()[:500]}
+        payload = json.loads(proc.stdout.strip() or "{}")
+        return {
+            "status": "dry_run" if WARNING_EMAIL_DRY_RUN else "sent",
+            "message_id": str(payload.get("message_id", "")),
+        }
+    finally:
+        Path(body_path).unlink(missing_ok=True)
 
 
 def load_task(task_id: int) -> dict[str, str]:
@@ -98,9 +214,10 @@ def advance_task(task_id: int, new_due_date: str) -> None:
     query = (
         "require '" + OPS_BOOTSTRAP + "';"
         "$pdo=get_tracktime_pdo();"
-        "$stmt=$pdo->prepare(\"UPDATE koval_crm.vtiger_activity "
-        "SET date_start=?, due_date=?, status='Not Started', sendnotification=0 "
-        "WHERE activitytype='Task' AND activityid=?\");"
+        "$stmt=$pdo->prepare(\"UPDATE koval_crm.vtiger_activity AS a "
+        "JOIN koval_crm.vtiger_crmentity AS e ON e.crmid=a.activityid "
+        "SET a.date_start=?, a.due_date=?, a.status='Not Started', a.sendnotification=0, e.modifiedtime=NOW(), e.modifiedby=1332 "
+        "WHERE a.activitytype='Task' AND a.activityid=?\");"
         "$stmt->execute(['" + new_due_date + "','" + new_due_date + "'," + str(task_id) + "]);"
         "if ($stmt->rowCount() < 1) { fwrite(STDERR, 'No OPS task rows updated.'); exit(1); }"
     )
@@ -111,7 +228,9 @@ def advance_task(task_id: int, new_due_date: str) -> None:
 
 def main() -> int:
     task_id = DEFAULT_TASK_ID
+    latest_success_before = latest_successful_backup()
     returncode, backup_meta, stdout_text, stderr_text = run_backup()
+    latest_success_after = latest_successful_backup()
     result: dict[str, object] = {
         "task_id": task_id,
         "backup_exit_code": returncode,
@@ -119,14 +238,41 @@ def main() -> int:
         "remote_push_status": backup_meta.get("remote_push_status", ""),
         "warning_email_status": backup_meta.get("warning_email_status", ""),
         "warning_email_message_id": backup_meta.get("warning_email_message_id", ""),
+        "latest_success_before": latest_success_before,
+        "latest_success_after": latest_success_after,
     }
+    stale_age = latest_success_after.get("age_days")
+    stale = isinstance(stale_age, (int, float)) and stale_age > STALE_SUCCESS_WARNING_DAYS
 
     if returncode != 0:
+        if stale:
+            result["stale_success_warning"] = send_stale_success_warning(
+                "backup wrapper failed",
+                latest_success_after,
+                backup_meta,
+                stdout_text,
+                stderr_text,
+            )
         result["task_advanced"] = False
         result["stdout"] = stdout_text.strip()
         result["stderr"] = stderr_text.strip()
         print(json.dumps(result, ensure_ascii=True))
         return returncode
+
+    if backup_meta.get("remote_push_status") != "success" and stale:
+        if backup_meta.get("warning_email_status") in {"sent", "dry_run"}:
+            result["stale_success_warning"] = {
+                "status": "covered_by_remote_push_warning",
+                "message_id": backup_meta.get("warning_email_message_id", ""),
+            }
+        else:
+            result["stale_success_warning"] = send_stale_success_warning(
+                "remote push failed and latest successful remote backup is stale",
+                latest_success_after,
+                backup_meta,
+                stdout_text,
+                stderr_text,
+            )
 
     task = load_task(task_id)
     recurring_type = task.get("recurringtype", "")
