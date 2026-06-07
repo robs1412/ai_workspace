@@ -106,6 +106,16 @@ FIX_POLICIES: dict[str, FixClassPolicy] = {
         auto_mutator=None,
         proof_hint="Truth-drift checker returns zero drift. No generic live mutator is allowed yet.",
     ),
+    "source-backed-proof-repair-candidate": FixClassPolicy(
+        name="source-backed-proof-repair-candidate",
+        mutates_live_state=True,
+        verifier=["./scripts/task_flow_proof_repair_candidates.py", "--print-json"],
+        auto_mutator=None,
+        proof_hint=(
+            "Proof repair candidate detector returns source-backed candidate metadata. "
+            "No generic live mutator is allowed for this class."
+        ),
+    ),
 }
 
 
@@ -260,6 +270,10 @@ def collect_policy_proof(policy: FixClassPolicy, verifier_result: dict[str, Any]
     elif policy.name in {"truth-drift-single-item-repair", "proof-closeout-classification"}:
         proof["truth_drift_report"] = str(
             ROOT / "project_hub/artifacts/recursive-tools/task-flow-truth-drift-latest.md"
+        )
+    elif policy.name == "source-backed-proof-repair-candidate":
+        proof["proof_repair_candidates_report"] = str(
+            ROOT / "project_hub/artifacts/recursive-tools/task-flow-proof-repair-candidates-latest.md"
         )
     return proof
 

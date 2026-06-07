@@ -83,6 +83,14 @@ def run_command(command: list[str], *, cwd: Path = ROOT, timeout: int = 180) -> 
     return subprocess.run(command, cwd=cwd, check=False, capture_output=True, text=True, timeout=timeout)
 
 
+def explicit_int(data: dict[str, Any], key: str, fallback_key: str | None = None) -> int:
+    if key in data:
+        return int(data.get(key) or 0)
+    if fallback_key is not None:
+        return int(data.get(fallback_key) or 0)
+    return 0
+
+
 def refresh_historical_benchmark() -> dict[str, Any]:
     trace_run = run_command(
         [str(RECURSIVE_IMPROVE_PYTHON), str(HISTORICAL_BENCHMARK_RUNNER.name)],
@@ -135,6 +143,7 @@ def load_checker_snapshot(*, refresh_historical: bool = False) -> dict[str, Any]
             capture_output=True,
             text=True,
         )
+        proof_candidates = run_json_command(["./scripts/task_flow_proof_repair_candidates.py", "--print-json"])
         service = json.loads(service_json.read_text(encoding="utf-8"))
         truth = json.loads(truth_json.read_text(encoding="utf-8"))
 
@@ -163,9 +172,11 @@ def load_checker_snapshot(*, refresh_historical: bool = False) -> dict[str, Any]
         "service_parity_drift_items": service_drift_items[:10],
         "truth_drift_count": int(truth.get("drift_count") or 0),
         "truth_drifts": truth_drifts[:10],
-        "proof_issue_count": int(truth.get("proof_issue_count") or truth.get("proof_closeout_issues") or 0),
+        "proof_issue_count": explicit_int(truth, "proof_issue_count", "proof_closeout_issues"),
         "proof_issue_class_counts": truth.get("proof_issue_class_counts") or {},
         "proof_issue_samples": truth.get("proof_issue_samples") or [],
+        "proof_repair_candidate_count": int(proof_candidates.get("candidate_count") or 0),
+        "proof_repair_candidates": proof_candidates.get("candidates") or [],
         "registry_ok": bool(registry.get("ok")),
         "coverage_ok": any(
             item.get("name") == "recursive_checker_coverage" and item.get("status") == "ok"
@@ -208,6 +219,17 @@ def choose_action(snapshot: dict[str, Any]) -> tuple[str, bool, str, str, str]:
             "medium",
             "truth-drift-single-item-repair",
             f"Task Flow truth drift reports {snapshot['truth_drift_count']} contradiction item(s).",
+        )
+    if int(snapshot.get("proof_repair_candidate_count") or 0) > 0:
+        return (
+            "review-source-backed-proof-repair-candidates",
+            True,
+            "low",
+            "source-backed-proof-repair-candidate",
+            (
+                "The proof candidate detector found "
+                f"{snapshot['proof_repair_candidate_count']} source-backed Task Flow repair candidate(s)."
+            ),
         )
     if int(snapshot.get("proof_issue_count") or 0) > 0:
         return (
@@ -261,6 +283,13 @@ def snapshot_context_lines(snapshot: dict[str, Any]) -> list[str]:
             "Proof issue classes: "
             + ", ".join(f"{key}={value}" for key, value in sorted(proof_counts.items()))
         )
+    candidate_count = int(snapshot.get("proof_repair_candidate_count") or 0)
+    lines.append(f"Proof repair candidates: {candidate_count}")
+    candidates = snapshot.get("proof_repair_candidates") or []
+    if candidates:
+        first = candidates[0]
+        lines.append(f"First proof repair kind: {first.get('proof_kind', 'unknown')}")
+        lines.append(f"First proof repair key: {first.get('dedupe_key', 'unknown')}")
     return lines
 
 
@@ -406,6 +435,22 @@ def build_proposal(snapshot: dict[str, Any], proposal_dir: Path, frank_draft_dir
         change = "Classify the proof issue classes and choose one narrow class for later source-first repair or exact blocker recording."
         no_change = "No Task Flow closeout mutation, mailbox action, service restart, credential work, or OPS/Portal mutation."
         proof = "`./scripts/task_flow_truth_drift_check.py --fail-on-drift` returns zero drift and includes proof_issue_class_counts."
+    elif action == "review-source-backed-proof-repair-candidates":
+        first = (snapshot.get("proof_repair_candidates") or [{}])[0]
+        title = first.get("dedupe_key") or "the first source-backed proof repair candidate"
+        kind = first.get("proof_kind") or "source-backed proof repair"
+        change = (
+            f"Review `{title}` from `{kind}` and, if approved, perform only the lane-aware Task Flow proof repair "
+            "described by the candidate source metadata."
+        )
+        no_change = (
+            "No generic auto-mutation, mailbox send, message-body copying, service restart, credential work, "
+            "or OPS/Portal mutation. The detector itself remains read-only."
+        )
+        proof = (
+            "`./scripts/task_flow_proof_repair_candidates.py --print-json` shows the candidate source, "
+            "and post-repair `./scripts/task_flow_truth_drift_check.py --fail-on-drift` keeps drift at zero."
+        )
     else:
         change = "No change proposed. Keep the recursive lane in monitoring mode."
         no_change = "No execution or approval request will be sent for this no-op monitor proposal."

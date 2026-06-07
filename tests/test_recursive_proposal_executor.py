@@ -73,6 +73,21 @@ class RecursiveProposalExecutorAuthorizationTest(unittest.TestCase):
 
         self.assertIs(self.executor.execution_authorized(proposal, "source-runtime-parity-fix"), True)
 
+    def test_source_backed_proof_candidate_requires_approval_and_has_no_auto_mutator(self):
+        proposal = {
+            "approval_required": True,
+            "allowed_fix_class": "source-backed-proof-repair-candidate",
+            "decision_state": "",
+        }
+
+        self.assertIs(
+            self.executor.execution_authorized(proposal, "source-backed-proof-repair-candidate"),
+            False,
+        )
+        policy = self.executor.FIX_POLICIES["source-backed-proof-repair-candidate"]
+        self.assertIs(policy.mutates_live_state, True)
+        self.assertIsNone(policy.auto_mutator)
+
     def test_verified_retry_state_requires_keep_ratchet(self):
         self.assertIs(
             self.executor.verified_retry_state(

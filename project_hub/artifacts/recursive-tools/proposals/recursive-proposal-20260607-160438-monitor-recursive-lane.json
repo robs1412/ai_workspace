@@ -1,0 +1,63 @@
+{
+  "allowed_fix_class": "no-op-monitoring",
+  "approval_required": false,
+  "created_at": "2026-06-07 16:04:38 CDT",
+  "execution_proof": {
+    "proof_hint": "Registry, service parity, and truth-drift checks all return clean.",
+    "verifier_command": [
+      "/bin/bash",
+      "-lc",
+      "./scripts/recursive_registry_lint.py --json >/dev/null && ./scripts/service_parity_check.py --mode all --fail-on-drift >/dev/null && ./scripts/task_flow_truth_drift_check.py --fail-on-drift >/dev/null"
+    ],
+    "verifier_cwd": "/Users/werkstatt/ai_workspace",
+    "verifier_returncode": 0
+  },
+  "execution_proof_hint": "Registry, service parity, and truth-drift checks all return clean.",
+  "execution_recorded_at": "2026-06-07 16:04:48 CDT",
+  "execution_state": "verified",
+  "execution_verifier_result": {
+    "command": [
+      "/bin/bash",
+      "-lc",
+      "./scripts/recursive_registry_lint.py --json >/dev/null && ./scripts/service_parity_check.py --mode all --fail-on-drift >/dev/null && ./scripts/task_flow_truth_drift_check.py --fail-on-drift >/dev/null"
+    ],
+    "cwd": "/Users/werkstatt/ai_workspace",
+    "returncode": 0,
+    "stderr_tail": "",
+    "stdout_tail": ""
+  },
+  "frank_email_body_path": "/Users/werkstatt/ai_workspace/frank/drafts/recursive-proposals/recursive-proposal-20260607-160438-monitor-recursive-lane.txt",
+  "frank_email_html_body_path": "/Users/werkstatt/ai_workspace/frank/drafts/recursive-proposals/recursive-proposal-20260607-160438-monitor-recursive-lane.html",
+  "frank_email_subject": "Recursive monitor: monitor-recursive-lane",
+  "proof_required": "Current checker readback remains clean.",
+  "proposal_id": "recursive-proposal-20260607-160438-monitor-recursive-lane",
+  "ratchet_reason": "no-op-monitoring verifier passed; execution proof is durable.",
+  "ratchet_result": "keep",
+  "recommended_action": "monitor-recursive-lane",
+  "risk_class": "low",
+  "rollback_note": "If verification fails, stop and record one exact blocker; do not continue into a broader repair class.",
+  "source_snapshot": {
+    "coverage_ok": true,
+    "historical_benchmark_refreshed": false,
+    "historical_benchmark_run_id": "4b1934a45c5b",
+    "historical_benchmark_trace_count": 7,
+    "historical_clean_success": 1.0,
+    "proof_closeout_issues": 2,
+    "proof_issue_class_counts": {},
+    "proof_issue_count": 0,
+    "proof_issue_samples": [],
+    "proof_repair_candidate_count": 0,
+    "proof_repair_candidates": [],
+    "registry_ok": true,
+    "service_parity_drift": 0,
+    "service_parity_drift_items": [],
+    "service_results_checked": 91,
+    "truth_drift_count": 0,
+    "truth_drifts": [],
+    "truth_managed_sessions": 124,
+    "truth_rows_scanned": 500
+  },
+  "what_changes_if_approved": "No change proposed. Keep the recursive lane in monitoring mode.",
+  "what_will_not_change": "No execution or approval request will be sent for this no-op monitor proposal.",
+  "why_now": "Recursive checkers and recommendation benchmarks are currently clean."
+}

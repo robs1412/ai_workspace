@@ -1,0 +1,247 @@
+{
+  "auto_executed": true,
+  "commands": {
+    "queue": {
+      "command": [
+        "/usr/local/bin/python3.13",
+        "scripts/recursive_proposal_queue.py",
+        "--skip-historical-benchmark-refresh",
+        "--json"
+      ],
+      "returncode": 0,
+      "stderr_tail": "",
+      "stdout_tail": "{\n  \"allowed_fix_class\": \"no-op-monitoring\",\n  \"approval_required\": false,\n  \"created_at\": \"2026-06-07 16:04:38 CDT\",\n  \"frank_email_body_path\": \"/Users/werkstatt/ai_workspace/frank/drafts/recursive-proposals/recursive-proposal-20260607-160438-monitor-recursive-lane.txt\",\n  \"frank_email_html_body_path\": \"/Users/werkstatt/ai_workspace/frank/drafts/recursive-proposals/recursive-proposal-20260607-160438-monitor-recursive-lane.html\",\n  \"frank_email_subject\": \"Recursive monitor: monitor-recursive-lane\",\n  \"proof_required\": \"Current checker readback remains clean.\",\n  \"proposal_id\": \"recursive-proposal-20260607-160438-monitor-recursive-lane\",\n  \"recommended_action\": \"monitor-recursive-lane\",\n  \"risk_class\": \"low\",\n  \"rollback_note\": \"If verification fails, stop and record one exact blocker; do not continue into a broader repair class.\",\n  \"source_snapshot\": {\n    \"coverage_ok\": true,\n    \"historical_benchmark_refreshed\": false,\n    \"historical_benchmark_run_id\": \"4b1934a45c5b\",\n    \"historical_benchmark_trace_count\": 7,\n    \"historical_clean_success\": 1.0,\n    \"proof_closeout_issues\": 2,\n    \"proof_issue_class_counts\": {},\n    \"proof_issue_count\": 0,\n    \"proof_issue_samples\": [],\n    \"proof_repair_candidate_count\": 0,\n    \"proof_repair_candidates\": [],\n    \"registry_ok\": true,\n    \"service_parity_drift\": 0,\n    \"service_parity_drift_items\": [],\n    \"service_results_checked\": 91,\n    \"truth_drift_count\": 0,\n    \"truth_drifts\": [],\n    \"truth_managed_sessions\": 124,\n    \"truth_rows_scanned\": 500\n  },\n  \"what_changes_if_approved\": \"No change proposed. Keep the recursive lane in monitoring mode.\",\n  \"what_will_not_change\": \"No execution or approval request will be sent for this no-op monitor proposal.\",\n  \"why_now\": \"Recursive checkers and recommendation benchmarks are currently clean.\"\n}\n"
+    },
+    "status": {
+      "command": [
+        "/usr/local/bin/python3.13",
+        "scripts/recursive_proposal_executor.py",
+        "status",
+        "--json"
+      ],
+      "returncode": 0,
+      "stderr_tail": "",
+      "stdout_tail": "ane\",\n      \"ratchet_result\": \"keep\",\n      \"recommended_action\": \"monitor-recursive-lane\"\n    },\n    {\n      \"allowed_fix_class\": \"no-op-monitoring\",\n      \"approved_unexecuted\": false,\n      \"decision_state\": \"\",\n      \"execution_authorized\": false,\n      \"execution_state\": \"verified\",\n      \"executor_allowlisted\": true,\n      \"has_auto_mutator\": false,\n      \"mutates_live_state\": false,\n      \"proposal_id\": \"recursive-proposal-20260607-120058-monitor-recursive-lane\",\n      \"ratchet_result\": \"keep\",\n      \"recommended_action\": \"monitor-recursive-lane\"\n    },\n    {\n      \"allowed_fix_class\": \"no-op-monitoring\",\n      \"approved_unexecuted\": false,\n      \"decision_state\": \"\",\n      \"execution_authorized\": false,\n      \"execution_state\": \"verified\",\n      \"executor_allowlisted\": true,\n      \"has_auto_mutator\": false,\n      \"mutates_live_state\": false,\n      \"proposal_id\": \"recursive-proposal-20260607-120820-monitor-recursive-lane\",\n      \"ratchet_result\": \"keep\",\n      \"recommended_action\": \"monitor-recursive-lane\"\n    },\n    {\n      \"allowed_fix_class\": \"proof-closeout-classification\",\n      \"approved_unexecuted\": false,\n      \"decision_state\": \"\",\n      \"execution_authorized\": false,\n      \"execution_state\": \"superseded_by_verified_retry\",\n      \"executor_allowlisted\": true,\n      \"has_auto_mutator\": false,\n      \"mutates_live_state\": false,\n      \"proposal_id\": \"recursive-proposal-20260607-123003-classify-proof-closeout-issues\",\n      \"ratchet_result\": \"superseded\",\n      \"recommended_action\": \"classify-proof-closeout-issues\"\n    },\n    {\n      \"allowed_fix_class\": \"proof-closeout-classification\",\n      \"approved_unexecuted\": false,\n      \"decision_state\": \"\",\n      \"execution_authorized\": false,\n      \"execution_state\": \"verified\",\n      \"executor_allowlisted\": true,\n      \"has_auto_mutator\": false,\n      \"mutates_live_state\": false,\n      \"proposal_id\": \"recursive-proposal-20260607-123150-classify-proof-closeout-issues\",\n      \"ratchet_result\": \"keep\",\n      \"recommended_action\": \"classify-proof-closeout-issues\"\n    },\n    {\n      \"allowed_fix_class\": \"proof-closeout-classification\",\n      \"approved_unexecuted\": false,\n      \"decision_state\": \"\",\n      \"execution_authorized\": false,\n      \"execution_state\": \"superseded_by_verified_retry\",\n      \"executor_allowlisted\": true,\n      \"has_auto_mutator\": false,\n      \"mutates_live_state\": false,\n      \"proposal_id\": \"recursive-proposal-20260607-155628-classify-proof-closeout-issues\",\n      \"ratchet_result\": \"\",\n      \"recommended_action\": \"classify-proof-closeout-issues\"\n    },\n    {\n      \"allowed_fix_class\": \"no-op-monitoring\",\n      \"approved_unexecuted\": false,\n      \"decision_state\": \"\",\n      \"execution_authorized\": false,\n      \"execution_state\": \"verified\",\n      \"executor_allowlisted\": true,\n      \"has_auto_mutator\": false,\n      \"mutates_live_state\": false,\n      \"proposal_id\": \"recursive-proposal-20260607-155717-monitor-recursive-lane\",\n      \"ratchet_result\": \"keep\",\n      \"recommended_action\": \"monitor-recursive-lane\"\n    },\n    {\n      \"allowed_fix_class\": \"proof-closeout-classification\",\n      \"approved_unexecuted\": false,\n      \"decision_state\": \"\",\n      \"execution_authorized\": true,\n      \"execution_state\": \"\",\n      \"executor_allowlisted\": true,\n      \"has_auto_mutator\": false,\n      \"mutates_live_state\": false,\n      \"proposal_id\": \"recursive-proposal-20260607-160304-classify-proof-closeout-issues\",\n      \"ratchet_result\": \"\",\n      \"recommended_action\": \"classify-proof-closeout-issues\"\n    },\n    {\n      \"allowed_fix_class\": \"no-op-monitoring\",\n      \"approved_unexecuted\": false,\n      \"decision_state\": \"\",\n      \"execution_authorized\": false,\n      \"execution_state\": \"verified\",\n      \"executor_allowlisted\": true,\n      \"has_auto_mutator\": false,\n      \"mutates_live_state\": false,\n      \"proposal_id\": \"recursive-proposal-20260607-160438-monitor-recursive-lane\",\n      \"ratchet_result\": \"keep\",\n      \"recommended_action\": \"monitor-recursive-lane\"\n    }\n  ]\n}\n"
+    }
+  },
+  "execution": {
+    "allowed_fix_class": "no-op-monitoring",
+    "event": "execution_verified",
+    "execution_proof": {
+      "proof_hint": "Registry, service parity, and truth-drift checks all return clean.",
+      "verifier_command": [
+        "/bin/bash",
+        "-lc",
+        "./scripts/recursive_registry_lint.py --json >/dev/null && ./scripts/service_parity_check.py --mode all --fail-on-drift >/dev/null && ./scripts/task_flow_truth_drift_check.py --fail-on-drift >/dev/null"
+      ],
+      "verifier_cwd": "/Users/werkstatt/ai_workspace",
+      "verifier_returncode": 0
+    },
+    "execution_state": "verified",
+    "mutator_result": null,
+    "proof_hint": "Registry, service parity, and truth-drift checks all return clean.",
+    "proposal_id": "recursive-proposal-20260607-160438-monitor-recursive-lane",
+    "ratchet_reason": "no-op-monitoring verifier passed; execution proof is durable.",
+    "ratchet_result": "keep",
+    "recommended_action": "monitor-recursive-lane",
+    "recorded_at": "2026-06-07 16:04:48 CDT",
+    "risk_class": "low",
+    "verifier_result": {
+      "command": [
+        "/bin/bash",
+        "-lc",
+        "./scripts/recursive_registry_lint.py --json >/dev/null && ./scripts/service_parity_check.py --mode all --fail-on-drift >/dev/null && ./scripts/task_flow_truth_drift_check.py --fail-on-drift >/dev/null"
+      ],
+      "cwd": "/Users/werkstatt/ai_workspace",
+      "returncode": 0,
+      "stderr_tail": "",
+      "stdout_tail": ""
+    }
+  },
+  "executor_status": {
+    "allowlisted_fix_classes": [
+      "no-op-monitoring",
+      "proof-closeout-classification",
+      "recommendation-corpus-fix",
+      "registry-metadata-fix",
+      "source-backed-proof-repair-candidate",
+      "source-runtime-parity-fix",
+      "truth-drift-single-item-repair"
+    ],
+    "approved_unexecuted_count": 0,
+    "blocked_execution_count": 0,
+    "checked_at": "2026-06-07 16:04:48 CDT",
+    "proposals": [
+      {
+        "allowed_fix_class": "truth-drift-single-item-repair",
+        "approved_unexecuted": false,
+        "decision_state": "superseded_by_clean_monitor",
+        "execution_authorized": false,
+        "execution_state": "",
+        "executor_allowlisted": true,
+        "has_auto_mutator": false,
+        "mutates_live_state": true,
+        "proposal_id": "recursive-proposal-20260524-134350-repair-truth-drift",
+        "ratchet_result": "",
+        "recommended_action": "repair-truth-drift"
+      },
+      {
+        "allowed_fix_class": "no-op-monitoring",
+        "approved_unexecuted": false,
+        "decision_state": "",
+        "execution_authorized": false,
+        "execution_state": "verified",
+        "executor_allowlisted": true,
+        "has_auto_mutator": false,
+        "mutates_live_state": false,
+        "proposal_id": "recursive-proposal-20260524-134813-monitor-recursive-lane",
+        "ratchet_result": "keep",
+        "recommended_action": "monitor-recursive-lane"
+      },
+      {
+        "allowed_fix_class": "no-op-monitoring",
+        "approved_unexecuted": false,
+        "decision_state": "",
+        "execution_authorized": false,
+        "execution_state": "verified",
+        "executor_allowlisted": true,
+        "has_auto_mutator": false,
+        "mutates_live_state": false,
+        "proposal_id": "recursive-proposal-20260607-120058-monitor-recursive-lane",
+        "ratchet_result": "keep",
+        "recommended_action": "monitor-recursive-lane"
+      },
+      {
+        "allowed_fix_class": "no-op-monitoring",
+        "approved_unexecuted": false,
+        "decision_state": "",
+        "execution_authorized": false,
+        "execution_state": "verified",
+        "executor_allowlisted": true,
+        "has_auto_mutator": false,
+        "mutates_live_state": false,
+        "proposal_id": "recursive-proposal-20260607-120820-monitor-recursive-lane",
+        "ratchet_result": "keep",
+        "recommended_action": "monitor-recursive-lane"
+      },
+      {
+        "allowed_fix_class": "proof-closeout-classification",
+        "approved_unexecuted": false,
+        "decision_state": "",
+        "execution_authorized": false,
+        "execution_state": "superseded_by_verified_retry",
+        "executor_allowlisted": true,
+        "has_auto_mutator": false,
+        "mutates_live_state": false,
+        "proposal_id": "recursive-proposal-20260607-123003-classify-proof-closeout-issues",
+        "ratchet_result": "superseded",
+        "recommended_action": "classify-proof-closeout-issues"
+      },
+      {
+        "allowed_fix_class": "proof-closeout-classification",
+        "approved_unexecuted": false,
+        "decision_state": "",
+        "execution_authorized": false,
+        "execution_state": "verified",
+        "executor_allowlisted": true,
+        "has_auto_mutator": false,
+        "mutates_live_state": false,
+        "proposal_id": "recursive-proposal-20260607-123150-classify-proof-closeout-issues",
+        "ratchet_result": "keep",
+        "recommended_action": "classify-proof-closeout-issues"
+      },
+      {
+        "allowed_fix_class": "proof-closeout-classification",
+        "approved_unexecuted": false,
+        "decision_state": "",
+        "execution_authorized": false,
+        "execution_state": "superseded_by_verified_retry",
+        "executor_allowlisted": true,
+        "has_auto_mutator": false,
+        "mutates_live_state": false,
+        "proposal_id": "recursive-proposal-20260607-155628-classify-proof-closeout-issues",
+        "ratchet_result": "",
+        "recommended_action": "classify-proof-closeout-issues"
+      },
+      {
+        "allowed_fix_class": "no-op-monitoring",
+        "approved_unexecuted": false,
+        "decision_state": "",
+        "execution_authorized": false,
+        "execution_state": "verified",
+        "executor_allowlisted": true,
+        "has_auto_mutator": false,
+        "mutates_live_state": false,
+        "proposal_id": "recursive-proposal-20260607-155717-monitor-recursive-lane",
+        "ratchet_result": "keep",
+        "recommended_action": "monitor-recursive-lane"
+      },
+      {
+        "allowed_fix_class": "proof-closeout-classification",
+        "approved_unexecuted": false,
+        "decision_state": "",
+        "execution_authorized": true,
+        "execution_state": "",
+        "executor_allowlisted": true,
+        "has_auto_mutator": false,
+        "mutates_live_state": false,
+        "proposal_id": "recursive-proposal-20260607-160304-classify-proof-closeout-issues",
+        "ratchet_result": "",
+        "recommended_action": "classify-proof-closeout-issues"
+      },
+      {
+        "allowed_fix_class": "no-op-monitoring",
+        "approved_unexecuted": false,
+        "decision_state": "",
+        "execution_authorized": false,
+        "execution_state": "verified",
+        "executor_allowlisted": true,
+        "has_auto_mutator": false,
+        "mutates_live_state": false,
+        "proposal_id": "recursive-proposal-20260607-160438-monitor-recursive-lane",
+        "ratchet_result": "keep",
+        "recommended_action": "monitor-recursive-lane"
+      }
+    ]
+  },
+  "mode": "daily",
+  "outcome": "monitor_verified",
+  "proposal": {
+    "allowed_fix_class": "no-op-monitoring",
+    "approval_required": false,
+    "created_at": "2026-06-07 16:04:38 CDT",
+    "frank_email_body_path": "/Users/werkstatt/ai_workspace/frank/drafts/recursive-proposals/recursive-proposal-20260607-160438-monitor-recursive-lane.txt",
+    "frank_email_html_body_path": "/Users/werkstatt/ai_workspace/frank/drafts/recursive-proposals/recursive-proposal-20260607-160438-monitor-recursive-lane.html",
+    "frank_email_subject": "Recursive monitor: monitor-recursive-lane",
+    "proof_required": "Current checker readback remains clean.",
+    "proposal_id": "recursive-proposal-20260607-160438-monitor-recursive-lane",
+    "recommended_action": "monitor-recursive-lane",
+    "risk_class": "low",
+    "rollback_note": "If verification fails, stop and record one exact blocker; do not continue into a broader repair class.",
+    "source_snapshot": {
+      "coverage_ok": true,
+      "historical_benchmark_refreshed": false,
+      "historical_benchmark_run_id": "4b1934a45c5b",
+      "historical_benchmark_trace_count": 7,
+      "historical_clean_success": 1.0,
+      "proof_closeout_issues": 2,
+      "proof_issue_class_counts": {},
+      "proof_issue_count": 0,
+      "proof_issue_samples": [],
+      "proof_repair_candidate_count": 0,
+      "proof_repair_candidates": [],
+      "registry_ok": true,
+      "service_parity_drift": 0,
+      "service_parity_drift_items": [],
+      "service_results_checked": 91,
+      "truth_drift_count": 0,
+      "truth_drifts": [],
+      "truth_managed_sessions": 124,
+      "truth_rows_scanned": 500
+    },
+    "what_changes_if_approved": "No change proposed. Keep the recursive lane in monitoring mode.",
+    "what_will_not_change": "No execution or approval request will be sent for this no-op monitor proposal.",
+    "why_now": "Recursive checkers and recommendation benchmarks are currently clean."
+  },
+  "recorded_at": "2026-06-07 16:04:48 CDT"
+}

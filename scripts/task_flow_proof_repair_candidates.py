@@ -1,0 +1,366 @@
+#!/usr/local/bin/python3.13
+"""Find source-backed Task Flow proof repair candidates without mutation."""
+
+from __future__ import annotations
+
+import argparse
+import json
+import subprocess
+import sys
+from dataclasses import asdict, dataclass
+from datetime import datetime
+from pathlib import Path
+from typing import Any
+
+
+ROOT = Path("/Users/werkstatt/ai_workspace")
+DEFAULT_JSON = (
+    ROOT / "project_hub/artifacts/recursive-tools/task-flow-proof-repair-candidates-latest.json"
+)
+DEFAULT_REPORT = (
+    ROOT / "project_hub/artifacts/recursive-tools/task-flow-proof-repair-candidates-latest.md"
+)
+DEFAULT_RECORDER = ROOT / "scripts/task_flow_mysql_recorder.php"
+DEFAULT_NATIONALOUTREACH_FAILED_DIR = Path("/Users/admin/.nationaloutreach-launch/state/failed")
+DEFAULT_AVIGNON_EVENTS = Path("/Users/admin/.avignon-launch/state/task-flow-events.jsonl")
+
+
+@dataclass(frozen=True)
+class RepairCandidate:
+    dedupe_key: str
+    intake_channel: str
+    status: str
+    proof_kind: str
+    source_path: str
+    source_event: str
+    source_logged_at: str
+    subject: str
+    owner_lane: str
+    responsible_worker_or_persona: str
+    ops_portal_or_domain_task: str
+    completion_or_blocker_email: str
+    verification_readback: str
+    next_update: str
+    confidence: str
+    mutation_allowed: bool = False
+
+
+def safe_text(value: object, limit: int = 300) -> str:
+    if isinstance(value, list):
+        value = ", ".join(str(item) for item in value)
+    text = " ".join(str(value or "").split())
+    return text[:limit]
+
+
+def read_json(path: Path) -> dict[str, Any]:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def run_recorder_report(recorder: Path, limit: int) -> dict[str, Any]:
+    proc = subprocess.run(
+        ["php", str(recorder), "report", str(limit), "all"],
+        cwd=ROOT,
+        check=False,
+        capture_output=True,
+        text=True,
+        timeout=60,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(safe_text(proc.stderr or proc.stdout, 500))
+    return json.loads(proc.stdout)
+
+
+def candidate_needed(row: dict[str, Any]) -> bool:
+    missing_fields = set(row.get("missing_fields") or [])
+    return bool(
+        not safe_text(row.get("owner_lane"))
+        or not safe_text(row.get("responsible_worker_or_persona"))
+        or not safe_text(row.get("ops_portal_or_domain_task"))
+        or "ops_portal_or_domain_task" in missing_fields
+        or "completion_or_blocker_email" in missing_fields
+        or not safe_text(row.get("completion_or_blocker_email"))
+    )
+
+
+def failed_artifact_paths(row: dict[str, Any], failed_dir: Path) -> list[Path]:
+    refs = [
+        safe_text(row.get("source_ref"), 500),
+        safe_text(row.get("source_links"), 500),
+        safe_text(row.get("verification_readback"), 500),
+        safe_text(row.get("completion_or_blocker_email"), 500),
+    ]
+    paths: list[Path] = []
+    for ref in refs:
+        if not ref:
+            continue
+        for token in ref.replace("`", " ").replace(",", " ").split():
+            if ".failed-" not in token or not token.endswith(".json"):
+                continue
+            path = Path(token)
+            if not path.is_absolute():
+                path = failed_dir / path.name
+            paths.append(path)
+    if safe_text(row.get("intake_channel")).startswith("approved-send:nationaloutreach"):
+        source_ref = safe_text(row.get("source_ref"), 500)
+        if ".failed-" in source_ref and source_ref.endswith(".json"):
+            paths.append(failed_dir / Path(source_ref).name)
+    seen: set[Path] = set()
+    ordered: list[Path] = []
+    for path in paths:
+        if path not in seen:
+            seen.add(path)
+            ordered.append(path)
+    return ordered
+
+
+def build_failed_artifact_candidate(row: dict[str, Any], path: Path) -> RepairCandidate | None:
+    if not path.exists():
+        return None
+    data = read_json(path)
+    packet = data.get("task_packet") if isinstance(data.get("task_packet"), dict) else {}
+    owner = safe_text(packet.get("owner_lane") or data.get("owner_lane"), 120)
+    worker = safe_text(
+        packet.get("responsible_worker_or_persona") or data.get("responsible_worker_or_persona"),
+        180,
+    )
+    domain = safe_text(packet.get("ops_portal_or_domain_task") or data.get("ops_portal_or_domain_task"), 260)
+    subject = safe_text(data.get("subject") or packet.get("source_links") or row.get("source_links"), 220)
+    if not owner or not worker or not domain:
+        return None
+    dedupe_key = safe_text(row.get("dedupe_key") or packet.get("dedupe_key"), 220)
+    return RepairCandidate(
+        dedupe_key=dedupe_key,
+        intake_channel=safe_text(row.get("intake_channel"), 120),
+        status=safe_text(row.get("effective_status") or row.get("status"), 80),
+        proof_kind="failed_approved_send_artifact",
+        source_path=str(path),
+        source_event="failed_send_artifact",
+        source_logged_at="",
+        subject=subject,
+        owner_lane=owner,
+        responsible_worker_or_persona=worker,
+        ops_portal_or_domain_task=domain,
+        completion_or_blocker_email=(
+            f"Failed approved-send artifact exists at {path.name}; no sent Message-ID was produced. "
+            "Review and resend only through the approved sender path."
+        ),
+        verification_readback=(
+            f"Failed artifact metadata readback: owner_lane={owner}; "
+            f"responsible_worker_or_persona={worker}; ops_portal_or_domain_task={domain}."
+        ),
+        next_update=safe_text(
+            packet.get("next_update") or data.get("next_update") or "Review failed draft and retry approved send path.",
+            260,
+        ),
+        confidence="source-backed",
+    )
+
+
+def find_failed_artifact_candidates(
+    rows: list[dict[str, Any]],
+    failed_dir: Path,
+) -> list[RepairCandidate]:
+    candidates: list[RepairCandidate] = []
+    for row in rows:
+        if not candidate_needed(row):
+            continue
+        channel = safe_text(row.get("intake_channel"), 120)
+        if "nationaloutreach" not in channel and "nationaloutreach" not in safe_text(row.get("source_ref"), 500):
+            continue
+        for path in failed_artifact_paths(row, failed_dir):
+            candidate = build_failed_artifact_candidate(row, path)
+            if candidate:
+                candidates.append(candidate)
+    return candidates
+
+
+def row_matches_avignon_timeout_shape(row: dict[str, Any]) -> bool:
+    if safe_text(row.get("intake_channel"), 120) != "email:avignon":
+        return False
+    if safe_text(row.get("owner_lane"), 80) != "sonat":
+        return False
+    gate = safe_text(row.get("approval_gates"), 220)
+    readback = safe_text(row.get("verification_readback"), 220)
+    if "previously-logged-direct-owner" not in gate:
+        return False
+    if readback not in {"not-pending", "blocked_report_sent"}:
+        return False
+    return candidate_needed(row)
+
+
+def matching_avignon_event(row: dict[str, Any], events_path: Path) -> dict[str, Any] | None:
+    if not events_path.exists():
+        return None
+    dedupe_key = safe_text(row.get("dedupe_key"), 260)
+    source_ref = safe_text(row.get("source_ref"), 260).strip("<>")
+    latest: dict[str, Any] | None = None
+    with events_path.open("r", encoding="utf-8") as handle:
+        for line in handle:
+            if dedupe_key not in line and (not source_ref or source_ref not in line):
+                continue
+            try:
+                event = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+            if safe_text(event.get("event"), 120) not in {
+                "avignon_message_action",
+                "avignon_previous_message_reconciled",
+            }:
+                continue
+            action = event.get("action") if isinstance(event.get("action"), dict) else {}
+            if action.get("dedupe_key") != dedupe_key and safe_text(action.get("source_message_id"), 260).strip("<>") != source_ref:
+                continue
+            decision = safe_text(action.get("decision"), 180)
+            blocker = safe_text(action.get("route_blocker"), 180)
+            state = safe_text(action.get("current_state"), 180)
+            if decision != "direct-owner-route-blocked-local-no-email" and blocker != "timed out" and state != "captured_route_blocked_local_retry":
+                continue
+            latest = event
+    return latest
+
+
+def build_avignon_timeout_candidate(
+    row: dict[str, Any],
+    event: dict[str, Any],
+    events_path: Path,
+) -> RepairCandidate:
+    action = event.get("action") if isinstance(event.get("action"), dict) else {}
+    subject = safe_text(action.get("subject") or row.get("source_links") or row.get("scheduled_action"), 220)
+    blocker = safe_text(action.get("route_blocker") or "timed out", 160)
+    decision = safe_text(action.get("decision") or "direct-owner-route-blocked-local-no-email", 180)
+    state = safe_text(action.get("current_state"), 180)
+    logged_at = safe_text(event.get("logged_at"), 80)
+    domain = safe_text(row.get("dedupe_key"), 260)
+    return RepairCandidate(
+        dedupe_key=domain,
+        intake_channel=safe_text(row.get("intake_channel"), 120),
+        status=safe_text(row.get("effective_status") or row.get("status"), 80),
+        proof_kind="avignon_route_timeout_blocker",
+        source_path=str(events_path),
+        source_event=safe_text(event.get("event"), 120),
+        source_logged_at=logged_at,
+        subject=subject,
+        owner_lane=safe_text(row.get("owner_lane") or action.get("owner"), 120),
+        responsible_worker_or_persona=safe_text(row.get("responsible_worker_or_persona") or "avignon", 120),
+        ops_portal_or_domain_task=domain,
+        completion_or_blocker_email=(
+            f"Blocked locally: Avignon direct-owner route for subject {subject} hit {blocker} "
+            "before visible-worker completion or blocker proof. No owner-facing completion email was sent."
+        ),
+        verification_readback=(
+            f"Source event readback: classification {safe_text(action.get('classification'), 160)}; "
+            f"decision {decision}; current_state {state}; route_blocker {blocker}; "
+            f"archived {bool(action.get('archived'))}; "
+            f"completion_target {safe_text(action.get('completion_target'), 160)}."
+        ),
+        next_update=f"Re-route or restart visible Avignon worker for {subject}, then send Sonat completion or one exact blocker before filing.",
+        confidence="source-backed",
+    )
+
+
+def find_avignon_timeout_candidates(
+    rows: list[dict[str, Any]],
+    events_path: Path,
+) -> list[RepairCandidate]:
+    candidates: list[RepairCandidate] = []
+    for row in rows:
+        if not row_matches_avignon_timeout_shape(row):
+            continue
+        event = matching_avignon_event(row, events_path)
+        if event:
+            candidates.append(build_avignon_timeout_candidate(row, event, events_path))
+    return candidates
+
+
+def unique_candidates(candidates: list[RepairCandidate]) -> list[RepairCandidate]:
+    seen: set[tuple[str, str]] = set()
+    unique: list[RepairCandidate] = []
+    for candidate in candidates:
+        key = (candidate.dedupe_key, candidate.proof_kind)
+        if key in seen:
+            continue
+        seen.add(key)
+        unique.append(candidate)
+    return unique
+
+
+def build_report(payload: dict[str, Any]) -> str:
+    lines = [
+        "# Task Flow Proof Repair Candidates",
+        "",
+        f"- Recorded: {payload['generated_at']}",
+        f"- Rows scanned: `{payload['rows_scanned']}`",
+        f"- Candidate count: `{payload['candidate_count']}`",
+        f"- Mutation allowed: `{payload['mutation_allowed']}`",
+        "",
+        "## Candidates",
+        "",
+    ]
+    if not payload["candidates"]:
+        lines.append("- None")
+    for item in payload["candidates"]:
+        lines.extend(
+            [
+                f"- {item['proof_kind']}: `{item['dedupe_key']}`",
+                f"  - subject: {item['subject']}",
+                f"  - source: `{Path(item['source_path']).name}`",
+                f"  - owner_lane: `{item['owner_lane']}`",
+                f"  - responsible_worker_or_persona: `{item['responsible_worker_or_persona']}`",
+                f"  - ops_portal_or_domain_task: `{item['ops_portal_or_domain_task']}`",
+            ]
+        )
+    lines.extend(
+        [
+            "",
+            "## Boundary",
+            "",
+            "- This report is read-only. It proposes source-backed repair fields only; it does not update Task Flow.",
+        ]
+    )
+    return "\n".join(lines) + "\n"
+
+
+def parse_args(argv: list[str]) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--recorder", type=Path, default=DEFAULT_RECORDER)
+    parser.add_argument("--limit", type=int, default=500)
+    parser.add_argument("--json", type=Path, default=DEFAULT_JSON)
+    parser.add_argument("--report", type=Path, default=DEFAULT_REPORT)
+    parser.add_argument("--print-json", action="store_true")
+    parser.add_argument("--nationaloutreach-failed-dir", type=Path, default=DEFAULT_NATIONALOUTREACH_FAILED_DIR)
+    parser.add_argument("--avignon-events", type=Path, default=DEFAULT_AVIGNON_EVENTS)
+    return parser.parse_args(argv)
+
+
+def main(argv: list[str]) -> int:
+    args = parse_args(argv)
+    tf_report = run_recorder_report(args.recorder, args.limit)
+    rows = [item for item in tf_report.get("items", []) if isinstance(item, dict)]
+    candidates = unique_candidates(
+        [
+            *find_failed_artifact_candidates(rows, args.nationaloutreach_failed_dir),
+            *find_avignon_timeout_candidates(rows, args.avignon_events),
+        ]
+    )
+    payload = {
+        "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S %Z"),
+        "rows_scanned": len(rows),
+        "candidate_count": len(candidates),
+        "mutation_allowed": False,
+        "candidates": [asdict(candidate) for candidate in candidates],
+    }
+    args.json.parent.mkdir(parents=True, exist_ok=True)
+    args.report.parent.mkdir(parents=True, exist_ok=True)
+    args.json.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    args.report.write_text(build_report(payload), encoding="utf-8")
+    if args.print_json:
+        print(json.dumps(payload, indent=2, sort_keys=True))
+    else:
+        print(f"report={args.report}")
+        print(f"json={args.json}")
+        print(f"candidate_count={len(candidates)}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main(sys.argv[1:]))
