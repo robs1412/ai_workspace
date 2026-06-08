@@ -1,0 +1,35 @@
+{
+  "direct_messages": {
+    "robert@kovaldistillery.com": {
+      "space": "spaces/gVyCGEAAAAE",
+      "label": "Robert"
+    },
+    "sonat@kovaldistillery.com": {
+      "space": "spaces/yVm16EAAAAE",
+      "label": "Sonat"
+    },
+    "mark@kovaldistillery.com": {
+      "space": "spaces/k5fzSEAAAAE",
+      "label": "Mark"
+    },
+    "dmytro.klymentiev@kovaldistillery.com": {
+      "space": "spaces/9LT_aEAAAAE",
+      "label": "Dmytro"
+    },
+    "sebastian.saller@kovaldistillery.com": {
+      "space": "spaces/iieIXsAAAAE",
+      "label": "Sebastian"
+    }
+  },
+  "spaces": {
+    "KOVAL Agents": {
+      "space": "spaces/AAQA1OBOzXw"
+    },
+    "KOVAL Codex": {
+      "space": "spaces/AAQAqjUcFE0"
+    },
+    "Outreach Team": {
+      "space": "spaces/AAQAavtZFOs"
+    }
+  }
+}

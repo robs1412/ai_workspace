@@ -55,6 +55,10 @@ except ImportError:  # pragma: no cover - DB email trace is optional fail-open a
 ROBERT_EMAIL = "robert@kovaldistillery.com"
 DMYTRO_EMAIL = "dmytro.klymentiev@kovaldistillery.com"
 CLAUDE_EMAIL = "claude@koval-distillery.com"
+CLAUDE_EMAIL_ALIASES = {
+    CLAUDE_EMAIL,
+    "claude@kovaldistillery.com",
+}
 CLAUDE_WORKSPACE_THREAD_TASK = "frank-2026-claude-ai-workspace-setup-review"
 BOARD_API = os.environ.get("WORKSPACEBOARD_API", "http://127.0.0.1:17878").rstrip("/")
 DIRECT_PRIMARY_PENDING_STATES = {"routed_pending_completion"}
@@ -652,6 +656,10 @@ def email_list_contains(value: str, email: str) -> bool:
     return email.lower() in (value or "").lower()
 
 
+def sender_is_claude(sender_email: str) -> bool:
+    return sender_email.strip().lower() in CLAUDE_EMAIL_ALIASES
+
+
 def is_copied_only(message: dict, assistant_email: str) -> bool:
     return email_list_contains(message.get("cc", ""), assistant_email) and not email_list_contains(
         message.get("to", ""), assistant_email
@@ -695,10 +703,24 @@ def is_claude_workspace_thread(tracked: dict) -> bool:
 
 
 def is_papers_access_followup(message: dict, tracked: dict, sender_email: str) -> bool:
-    if sender_email != CLAUDE_EMAIL or not is_claude_workspace_thread(tracked):
+    if not sender_is_claude(sender_email) or not is_claude_workspace_thread(tracked):
         return False
     body = (message.get("body") or "").lower()
     return "papers.koval.lan" in body and ("codex" in body or "frank" in body)
+
+
+def looks_like_claude_status_copy(message: dict, primary_email: str, assistant_name: str, assistant_email: str) -> bool:
+    sender_email = sender_email_from_header(message.get("from", ""))
+    if not sender_is_claude(sender_email):
+        return False
+    if not email_list_contains(message.get("cc", ""), primary_email):
+        return False
+    if explicitly_requests_assistant_action(message, assistant_name, assistant_email):
+        return False
+    text = re.sub(r"\s+", " ", f"{message.get('subject', '')} {message.get('body', '')}".lower())
+    return bool(
+        re.search(r"\b(thanks|thank you|noted|confirmed|resolved|clean|even with origin/main|no further action)\b", text)
+    )
 
 
 def classify_message(
@@ -754,6 +776,11 @@ def classify_message(
         return "cc-fyi-no-action", {
             "summary": "Frank was copied on this message and no explicit Frank action request was detected.",
             "handled_reason": "Copied/FYI message without a Frank action request; log and file without decision email, including credential/auth status copies already visible to the primary recipient.",
+        }
+    if looks_like_claude_status_copy(message, primary_email, assistant_name, assistant_email):
+        return "cc-fyi-no-action", {
+            "summary": "Claude sent a status acknowledgement with Robert visible and no explicit Frank action request.",
+            "handled_reason": "Claude status/acknowledgement copy without a Frank action request; log and file without decision email.",
         }
     if "portal digest" in subject.lower() or "digest" in subject.lower():
         return "digest", {"summary": summarize_body(message)}

@@ -140,6 +140,50 @@ function coteam_bcc_recipients(): array
     ];
 }
 
+function shift_group_ids_by_names(array $names): array
+{
+    $wanted = array_fill_keys(array_map(static fn(string $name): string => strtolower($name), $names), true);
+    $ids = [];
+    foreach (fetch_vtiger_groups() as $group) {
+        $label = strtolower(trim((string) ($group['groupname'] ?? '')));
+        $id = (int) ($group['groupid'] ?? 0);
+        if ($id > 0 && isset($wanted[$label])) {
+            $ids[$id] = true;
+        }
+    }
+    return array_values(array_keys($ids));
+}
+
+function open_tracktime_shift_rows(string $from, string $to, array $groupIds): array
+{
+    if ($groupIds === []) {
+        return [];
+    }
+    $groupMap = [];
+    foreach (fetch_vtiger_groups() as $group) {
+        $groupMap[(int) ($group['groupid'] ?? 0)] = (string) ($group['groupname'] ?? '');
+    }
+    $rows = fetch_tracktime_shifts($from, $to, ['group_ids' => $groupIds]);
+    $assignments = fetch_tracktime_shift_assignments(array_column($rows, 'id'));
+    $openRows = [];
+    foreach ($rows as $row) {
+        $shiftId = (int) ($row['id'] ?? 0);
+        if ($shiftId <= 0 || !empty($assignments[$shiftId] ?? [])) {
+            continue;
+        }
+        $groupId = (int) ($row['group_id'] ?? 0);
+        $openRows[] = [
+            'shift_id' => $shiftId,
+            'date' => (string) ($row['start_date'] ?? ''),
+            'time' => time_label($row['start_time'] ?? '', $row['end_time'] ?? ''),
+            'group' => $groupMap[$groupId] ?? ('Group #' . $groupId),
+            'notes' => product_prep_note($row['notes'] ?? ''),
+            'link' => 'https://www.koval-distillery.com/ops/index.php?view=shifts&focus=' . $shiftId,
+        ];
+    }
+    return $openRows;
+}
+
 $dateRaw = arg_value($argv, '--date', date('Y-m-d'));
 $stateDir = rtrim((string) arg_value($argv, '--state-dir', '/Users/admin/.nationaloutreach-launch/state'), '/');
 $date = DateTimeImmutable::createFromFormat('Y-m-d', (string) $dateRaw);
@@ -314,6 +358,121 @@ if ($openRows === []) {
     $skipped = 1;
 }
 
+$storeQueued = 0;
+$storeSkipped = 0;
+$storeOpenRows = [];
+$storeSourceRef = '';
+if ($date->format('N') === '1') {
+    $storeGroupIds = shift_group_ids_by_names(['Tasting Room', 'Outreach and Store']);
+    $storeRangeStart = $date;
+    $storeRangeEnd = $date->modify('+28 days');
+    $storeOpenRows = open_tracktime_shift_rows($storeRangeStart->format('Y-m-d'), $storeRangeEnd->format('Y-m-d'), $storeGroupIds);
+    $storeSourceRef = 'vanessa-open-store-shifts-4w-' . $storeRangeStart->format('Y-m-d') . '-0800';
+
+    if ($storeOpenRows === []) {
+        $storeSkipped = 1;
+    } elseif (!isset($existingRefs[normalize_ref($storeSourceRef)])) {
+        $rangeLabel = $storeRangeStart->format('F j') . ' - ' . $storeRangeEnd->format('F j');
+        $subject = 'Open store and tasting room shifts for ' . $rangeLabel;
+        $tableRows = '';
+        foreach ($storeOpenRows as $row) {
+            $tableRows .= '<tr style="background:#fce4e4;">'
+                . '<td>' . h($row['date']) . '</td>'
+                . '<td>' . h($row['time']) . '</td>'
+                . '<td>' . h($row['group']) . '</td>'
+                . '<td>' . h('Shift #' . $row['shift_id']) . '</td>'
+                . '<td>' . h($row['notes']) . '</td>'
+                . '<td><a href="' . h($row['link']) . '">OPS</a></td>'
+                . '</tr>' . "\n";
+        }
+        $html = '<!doctype html><html><body style="font-family:Arial,sans-serif;">'
+            . '<p>Hi team,</p>'
+            . '<p>These store and tasting room shifts are open in OPS for the next four weeks. Please claim coverage in OPS if you can take one.</p>'
+            . '<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;font-family:Arial,sans-serif;font-size:13px;">'
+            . '<thead><tr style="background:#f2f2f2;"><th>Date</th><th>Time</th><th>Category</th><th>Shift</th><th>Notes</th><th>Link</th></tr></thead><tbody>'
+            . $tableRows . '</tbody></table>'
+            . '<p>Best,<br><br>Vanessa</p>'
+            . '<p>Vanessa Sterling<br><br>Outreach Coordinator<br>KOVAL Distillery<br>4241 N Ravenswood Ave<br>Chicago, IL 60613<br>312 878 7988<br>http://www.koval-distillery.com<br><br>X | Instagram | Facebook</p>'
+            . '</body></html>';
+        $plain = [
+            'Hi team,',
+            '',
+            'These store and tasting room shifts are open in OPS for the next four weeks. Please claim coverage in OPS if you can take one.',
+            '',
+            'Date | Time | Category | Shift | Notes | Link',
+        ];
+        foreach ($storeOpenRows as $row) {
+            $plain[] = implode(' | ', [$row['date'], $row['time'], $row['group'], 'Shift #' . $row['shift_id'], $row['notes'], $row['link']]);
+        }
+        $plain = array_merge($plain, ['', 'Best,', '', 'Vanessa', '', 'Vanessa Sterling', '', 'Outreach Coordinator', 'KOVAL Distillery', '4241 N Ravenswood Ave', 'Chicago, IL 60613', '312 878 7988', 'http://www.koval-distillery.com', '', 'X | Instagram | Facebook']);
+
+        $emailPayload = [
+            'from' => 'vanessa.sterling@kovaldistillery.com',
+            'from_name' => 'Vanessa Sterling',
+            'to' => ['vanessa.sterling@kovaldistillery.com'],
+            'cc' => ['robert@kovaldistillery.com', 'mark@kovaldistillery.com'],
+            'bcc' => coteam_bcc_recipients(),
+            'subject' => $subject,
+            'body' => implode("\n", $plain),
+            'html_body' => $html,
+            'source_ref' => $storeSourceRef,
+            'task_packet' => [
+                'source_ref' => $storeSourceRef,
+                'dedupe_key' => 'taskflow-' . $storeSourceRef,
+                'intake_channel' => 'scheduled-action:nationaloutreach',
+                'requester' => 'Robert Birnecker',
+                'owner_lane' => 'outreach-coordinator',
+                'responsible_worker_or_persona' => 'Vanessa Sterling',
+                'ops_portal_or_domain_task' => 'OPS open shifts',
+                'status' => 'reported',
+                'due_or_trigger' => $date->format('Y-m-d') . ' 08:00 America/Chicago',
+                'scheduled_action' => $storeSourceRef,
+                'requested_deliverable' => 'Monday 8 AM four-week open store/tasting room shift reminder, Robert and Mark copied.',
+                'human_owner_or_recipient' => 'COTeam BCC; Robert and Mark copied',
+                'output_channel' => 'email',
+                'proof_required' => 'sent Message-ID plus sent-log recipient counts',
+                'verification_readback' => 'Generated from live OPS TrackTime open shifts for groups Tasting Room and Outreach and Store from ' . $storeRangeStart->format('Y-m-d') . ' through ' . $storeRangeEnd->format('Y-m-d') . '.',
+                'papers_projection' => 'not_required',
+                'next_update' => 'Pending Monday 8:00 AM scheduled-action queue for approved send cycle.',
+                'proof_marker' => 'STORE_OPEN_SHIFT_4W_REMINDER_QUEUED_' . $storeRangeStart->format('Ymd'),
+            ],
+        ];
+
+        $newRow = [
+            'id' => $storeSourceRef,
+            'kind' => 'store_open_shift_4w_reminder',
+            'status' => 'pending',
+            'ops_task_id' => 0,
+            'due_at' => $date->format('Y-m-d') . 'T08:00:00-05:00',
+            'owner' => 'Robert Birnecker',
+            'worker' => 'Vanessa Sterling',
+            'dependency' => 'Four-week open store/tasting room shift reminder for ' . $storeRangeStart->format('Y-m-d') . ' through ' . $storeRangeEnd->format('Y-m-d'),
+            'resolution_checks' => [],
+            'shift_ids' => array_map(static fn(array $row): int => (int) $row['shift_id'], $storeOpenRows),
+            'email' => $emailPayload,
+            'source_ref' => $storeSourceRef,
+            'intake_channel' => 'scheduled-action:nationaloutreach',
+            'requester' => 'Robert Birnecker',
+            'owner_lane' => 'outreach-coordinator',
+            'responsible_worker_or_persona' => 'Vanessa Sterling',
+            'source_links' => 'OPS open shifts ' . implode(', ', array_map(static fn(array $row): int => (int) $row['shift_id'], $storeOpenRows)),
+            'approval_gates' => 'Approved internal outreach team reminder; Robert and Mark cc required.',
+            'verification_readback' => 'Generated from live OPS TrackTime groups Tasting Room and Outreach and Store.',
+            'papers_projection' => 'not_applicable',
+            'next_update' => 'Pending Monday 8:00 AM scheduled-action queue for approved send cycle.',
+            'target_shift_range_start' => $storeRangeStart->format('Y-m-d'),
+            'target_shift_range_end' => $storeRangeEnd->format('Y-m-d'),
+        ];
+        $scheduledRows[] = $newRow;
+        $rowsForDbSync[] = $newRow;
+        $storeQueued = 1;
+    } else {
+        $storeSkipped = 1;
+    }
+} else {
+    $storeSkipped = 1;
+}
+
 write_jsonl_rows($scheduledPath, $scheduledRows);
 sync_scheduled_actions_db($rowsForDbSync);
 
@@ -325,4 +484,8 @@ echo json_encode([
     'open_events_found' => count($openRows),
     'queued' => $queued,
     'skipped' => $skipped,
+    'store_source_ref' => $storeSourceRef,
+    'store_open_shifts_found' => count($storeOpenRows),
+    'store_queued' => $storeQueued,
+    'store_skipped' => $storeSkipped,
 ], JSON_UNESCAPED_SLASHES) . "\n";

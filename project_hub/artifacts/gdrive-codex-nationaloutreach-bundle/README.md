@@ -22,11 +22,19 @@ Default OAuth scopes:
 
 This is narrower than full Drive access. It supports metadata reads plus app-created/explicit file access. Do not widen to full Drive without a separate approval.
 
+Google Chat uses a separate local token file so the working Drive token is not overwritten. Approved Chat scopes:
+
+- `https://www.googleapis.com/auth/chat.messages.create`
+- `https://www.googleapis.com/auth/chat.messages.readonly`
+- `https://www.googleapis.com/auth/chat.spaces.readonly`
+
 ## Private Paths
 
 - OAuth client: `.private/google-oauth/frank-drive-desktop-client.json`
 - Local token: `.private/google-oauth/nationaloutreach-google-drive-token.json`
+- Local Chat token: `.private/google-oauth/nationaloutreach-google-chat-token.json`
 - Future Infisical refresh-token secret: `GOOGLE_DRIVE_CODEX_NATIONALOUTREACH_REFRESH_TOKEN`
+- Future Chat refresh-token secret: `GOOGLE_CHAT_CODEX_NATIONALOUTREACH_REFRESH_TOKEN`
 
 Do not print, email, commit, or paste token values.
 
@@ -49,6 +57,77 @@ Run metadata test after OAuth:
 ```sh
 project_hub/artifacts/gdrive-codex-nationaloutreach-bundle/test.sh
 ```
+
+Authorize Google Chat read access:
+
+```sh
+project_hub/artifacts/gdrive-codex-nationaloutreach-bundle/authorize-chat.sh
+```
+
+After the browser redirects to the broken localhost callback, copy the full
+address bar and run this in a second terminal:
+
+```sh
+pbpaste | project_hub/artifacts/gdrive-codex-nationaloutreach-bundle/paste-chat-callback.sh
+```
+
+Run the Chat spaces metadata test:
+
+```sh
+project_hub/artifacts/gdrive-codex-nationaloutreach-bundle/chat-test.sh
+```
+
+Read only the approved Chat readback set:
+
+```sh
+project_hub/artifacts/gdrive-codex-nationaloutreach-bundle/chat-readback.sh --list-allowed
+project_hub/artifacts/gdrive-codex-nationaloutreach-bundle/chat-readback.sh --target robert@kovaldistillery.com --limit 5
+project_hub/artifacts/gdrive-codex-nationaloutreach-bundle/chat-readback.sh --target "KOVAL Codex" --limit 5
+```
+
+Approved readback is limited to direct messages with Robert, Sonat, Mark, Dmytro,
+and Sebastian, plus the named spaces `KOVAL Agents` and `KOVAL Codex`. Do not
+scan or summarize other direct messages, group chats, or spaces from this token.
+
+Send to only the same approved Chat target set:
+
+```sh
+project_hub/artifacts/gdrive-codex-nationaloutreach-bundle/chat-send.sh --target "KOVAL Codex" --message "Message text"
+project_hub/artifacts/gdrive-codex-nationaloutreach-bundle/chat-send.sh --target robert@kovaldistillery.com --message-file /path/to/message.txt
+```
+
+Approved send targets are identical to the readback allowlist: direct messages
+with Robert, Sonat, Mark, Dmytro, and Sebastian, plus `KOVAL Agents`,
+`KOVAL Codex`, and `Outreach Team`. The sender refuses all other direct
+messages, group chats, and spaces even if the token can see them.
+
+Run the adaptive Chat checker:
+
+```sh
+project_hub/artifacts/gdrive-codex-nationaloutreach-bundle/chat-watch.sh
+```
+
+The checker polls only the approved allowlist. It runs every 60 seconds while
+idle, switches to 15 seconds after a new message is detected, and returns to 60
+seconds after 4 minutes without another new message. Its state and event log are
+local runtime files under `nationaloutreach/runtime/`; polling does not use
+model tokens unless a separate worker routes a message into Codex for reasoning.
+
+Route actionable Chat messages through AI Manager and Task Manager:
+
+```sh
+project_hub/artifacts/gdrive-codex-nationaloutreach-bundle/chat-task-router.sh
+```
+
+The router consumes `google-chat-watch-events.jsonl`, ignores Codex's own
+outgoing Chat sender, skips short acknowledgements by default, and keeps
+ordinary question-style messages as discussion-only with no worker. When a
+message contains substantive work/action language, it captures the request as an
+AI Manager daily input and replies in the same approved Chat target asking for
+explicit approval. A worker is not created or focused until Robert replies
+`Approve` in that same Chat target. After approval, the router hands the task to
+Task Manager with a finish contract and replies with the route state, worker
+session id when available, Task Flow key, and first check / ETA.
 
 Confirm the authenticated Drive identity without listing shared-drive content:
 

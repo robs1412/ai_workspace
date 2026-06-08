@@ -9,6 +9,7 @@ export NATIONALOUTREACH_ARCHIVE_REDUNDANT_OVERDUE_REPORTS="${NATIONALOUTREACH_AR
 export NATIONALOUTREACH_ARCHIVE_SELF_SENT_INBOX_COPIES="${NATIONALOUTREACH_ARCHIVE_SELF_SENT_INBOX_COPIES:-1}"
 export NATIONALOUTREACH_ARCHIVE_REPLIED_INBOX="${NATIONALOUTREACH_ARCHIVE_REPLIED_INBOX:-1}"
 script_dir="$(CDPATH= cd -- "$(dirname "$0")" && pwd)"
+workspace_root="$(CDPATH= cd -- "$script_dir/.." && pwd)"
 export NATIONALOUTREACH_RUNTIME_ROOT="${NATIONALOUTREACH_RUNTIME_ROOT:-$script_dir}"
 lock_dir="$state_dir/nationaloutreach-cycle.lock"
 lock_max_age="${NATIONALOUTREACH_CYCLE_LOCK_MAX_AGE_SECONDS:-900}"
@@ -62,6 +63,7 @@ generator_script="$script_dir/sync_day_of_cot_event_details.php"
 post_tasting_generator_script="$script_dir/sync_vanessa_post_tasting_checkin.php"
 open_shift_generator_script="$script_dir/sync_vanessa_open_shift_reminder.php"
 mitch_weekly_generator_script="$script_dir/sync_vanessa_mitch_weekly_report.php"
+marianos_cancellation_fallback_script="$workspace_root/nationaloutreach/scripts/sync_vanessa_marianos_cancellation_fallback.php"
 mail_cycle_script="$script_dir/nationaloutreach_mail_cycle.py"
 if [ ! -f "$generator_script" ] && [ -f "/Users/admin/.nationaloutreach-launch/runtime/scripts/sync_day_of_cot_event_details.php" ]; then
   generator_script="/Users/admin/.nationaloutreach-launch/runtime/scripts/sync_day_of_cot_event_details.php"
@@ -74,6 +76,9 @@ if [ ! -f "$open_shift_generator_script" ] && [ -f "/Users/admin/.nationaloutrea
 fi
 if [ ! -f "$mitch_weekly_generator_script" ] && [ -f "/Users/admin/.nationaloutreach-launch/runtime/scripts/sync_vanessa_mitch_weekly_report.php" ]; then
   mitch_weekly_generator_script="/Users/admin/.nationaloutreach-launch/runtime/scripts/sync_vanessa_mitch_weekly_report.php"
+fi
+if [ ! -f "$marianos_cancellation_fallback_script" ] && [ -f "/Users/admin/.nationaloutreach-launch/runtime/scripts/sync_vanessa_marianos_cancellation_fallback.php" ]; then
+  marianos_cancellation_fallback_script="/Users/admin/.nationaloutreach-launch/runtime/scripts/sync_vanessa_marianos_cancellation_fallback.php"
 fi
 if [ ! -f "$mail_cycle_script" ] && [ -f "/Users/admin/.nationaloutreach-launch/runtime/scripts/nationaloutreach_mail_cycle.py" ]; then
   mail_cycle_script="/Users/admin/.nationaloutreach-launch/runtime/scripts/nationaloutreach_mail_cycle.py"
@@ -95,6 +100,16 @@ while [ "$count" -le "$cycles" ]; do
     "$php_bin" "$mitch_weekly_generator_script" \
       --date "$(date +%F)" \
       --state-dir "$state_dir" || generator_status=$?
+    if [ -f "$marianos_cancellation_fallback_script" ]; then
+      if [ "${NATIONALOUTREACH_MARIANOS_CANCELLATION_QUEUE_APPROVED:-1}" = "1" ]; then
+        "$php_bin" "$marianos_cancellation_fallback_script" \
+          --state-dir "$state_dir" \
+          --queue-approved || generator_status=$?
+      else
+        "$php_bin" "$marianos_cancellation_fallback_script" \
+          --state-dir "$state_dir" || generator_status=$?
+      fi
+    fi
   else
     echo "PHP executable not found for National Outreach COT generator" >&2
     generator_status=127
