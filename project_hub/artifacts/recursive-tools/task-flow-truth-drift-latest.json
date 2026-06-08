@@ -3,12 +3,67 @@
   "config": "/Users/werkstatt/ai_workspace/scripts/task_flow_truth_surfaces.json",
   "drift_count": 0,
   "drifts": [],
-  "managed_sessions": 124,
-  "proof_closeout_issues": 2,
-  "proof_issue_class_counts": {},
-  "proof_issue_count": 0,
-  "proof_issue_samples": [],
-  "proof_rows_scanned": 36,
+  "managed_sessions": 100,
+  "proof_closeout_issues": 6,
+  "proof_issue_class_counts": {
+    "active_worker_missing_domain_task": 1,
+    "blocked_needs_owner_question_proof": 3
+  },
+  "proof_issue_count": 4,
+  "proof_issue_samples": [
+    {
+      "dedupe_key": "taskflow-760a7508ffeabfe5",
+      "detail": "blocked row is routed-needs-owner-question and needs owner-question/blocker proof",
+      "kind": "blocked_needs_owner_question_proof",
+      "missing_fields": [
+        "owner_lane",
+        "clarification_or_blocker_email"
+      ],
+      "owner_lane": "",
+      "session_id": "",
+      "severity": "blocked",
+      "title": "taskflow-760a7508ffeabfe5"
+    },
+    {
+      "dedupe_key": "taskflow-1db47dff91264646",
+      "detail": "blocked row is routed-needs-owner-question and needs owner-question/blocker proof",
+      "kind": "blocked_needs_owner_question_proof",
+      "missing_fields": [
+        "owner_lane",
+        "clarification_or_blocker_email"
+      ],
+      "owner_lane": "",
+      "session_id": "",
+      "severity": "blocked",
+      "title": "taskflow-1db47dff91264646"
+    },
+    {
+      "dedupe_key": "taskflow-3981bd77dabf07ce",
+      "detail": "blocked row is routed-needs-owner-question and needs owner-question/blocker proof",
+      "kind": "blocked_needs_owner_question_proof",
+      "missing_fields": [
+        "owner_lane",
+        "clarification_or_blocker_email"
+      ],
+      "owner_lane": "",
+      "session_id": "",
+      "severity": "blocked",
+      "title": "taskflow-3981bd77dabf07ce"
+    },
+    {
+      "dedupe_key": "taskflow-09043689ee2660fe",
+      "detail": "working row has visible session 5bae2106 but lacks ops_portal_or_domain_task",
+      "kind": "active_worker_missing_domain_task",
+      "missing_fields": [
+        "ops_portal_or_domain_task"
+      ],
+      "owner_lane": "outreach-coordinator",
+      "session_id": "5bae2106",
+      "severity": "attention",
+      "title": "taskflow-09043689ee2660fe"
+    }
+  ],
+  "proof_rows_scanned": 44,
   "scheduler_route_candidates": 0,
   "scheduler_violations": 0,
   "task_flow_rows_scanned": 500

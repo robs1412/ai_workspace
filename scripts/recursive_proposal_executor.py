@@ -134,6 +134,11 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Permit allowlisted policies that mutate live/runtime state.",
     )
+    execute.add_argument(
+        "--verify-only",
+        action="store_true",
+        help="Run the policy verifier without a mutator and record a verified no-op when it passes.",
+    )
     execute.add_argument("--json", action="store_true")
 
     supersede = subparsers.add_parser(
@@ -440,7 +445,9 @@ def execute(args: argparse.Namespace) -> int:
             print(f"blocked={event['reason']}")
         return 2
 
-    if proposal.get("execution_state") in {"verified", "executed", "blocked"}:
+    if proposal.get("execution_state") in {"verified", "verified_noop", "executed"} or (
+        proposal.get("execution_state") == "blocked" and not args.verify_only
+    ):
         event = fail_event(
             proposal_id,
             proposal,
@@ -498,7 +505,11 @@ def execute(args: argparse.Namespace) -> int:
             print(f"verifier={policy.verifier}")
         return 0
 
-    if policy.auto_mutator is None and fix_class not in {"no-op-monitoring", "proof-closeout-classification"}:
+    if (
+        policy.auto_mutator is None
+        and fix_class not in {"no-op-monitoring", "proof-closeout-classification"}
+        and not args.verify_only
+    ):
         event = fail_event(
             proposal_id,
             proposal,
@@ -517,6 +528,7 @@ def execute(args: argparse.Namespace) -> int:
         return 2
 
     mutator_result: dict[str, Any] | None = None
+    verify_only_noop = bool(args.verify_only and policy.auto_mutator is None)
     if policy.auto_mutator:
         mutator_result = run_command(policy.auto_mutator, policy.mutator_cwd)
         if mutator_result["returncode"] != 0:
@@ -551,10 +563,11 @@ def execute(args: argparse.Namespace) -> int:
         "event": "execution_verified" if verified else "execution_blocked",
         "proposal_id": proposal_id,
         "recorded_at": recorded_at,
-        "execution_state": "verified" if verified else "blocked",
+        "execution_state": "verified_noop" if verified and verify_only_noop else ("verified" if verified else "blocked"),
         "recommended_action": proposal.get("recommended_action"),
         "allowed_fix_class": fix_class,
         "risk_class": proposal.get("risk_class"),
+        "verify_only": verify_only_noop,
         "mutator_result": mutator_result,
         "verifier_result": verifier_result,
         "execution_proof": proof,
