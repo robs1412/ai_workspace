@@ -1,5 +1,5 @@
 {
-  "auto_executed": true,
+  "auto_executed": false,
   "commands": {
     "queue": {
       "command": [
@@ -10,7 +10,17 @@
       ],
       "returncode": 0,
       "stderr_tail": "",
-      "stdout_tail": "{\n  \"allowed_fix_class\": \"no-op-monitoring\",\n  \"approval_required\": false,\n  \"created_at\": \"2026-06-07 16:04:38 CDT\",\n  \"frank_email_body_path\": \"/Users/werkstatt/ai_workspace/frank/drafts/recursive-proposals/recursive-proposal-20260607-160438-monitor-recursive-lane.txt\",\n  \"frank_email_html_body_path\": \"/Users/werkstatt/ai_workspace/frank/drafts/recursive-proposals/recursive-proposal-20260607-160438-monitor-recursive-lane.html\",\n  \"frank_email_subject\": \"Recursive monitor: monitor-recursive-lane\",\n  \"proof_required\": \"Current checker readback remains clean.\",\n  \"proposal_id\": \"recursive-proposal-20260607-160438-monitor-recursive-lane\",\n  \"recommended_action\": \"monitor-recursive-lane\",\n  \"risk_class\": \"low\",\n  \"rollback_note\": \"If verification fails, stop and record one exact blocker; do not continue into a broader repair class.\",\n  \"source_snapshot\": {\n    \"coverage_ok\": true,\n    \"historical_benchmark_refreshed\": false,\n    \"historical_benchmark_run_id\": \"4b1934a45c5b\",\n    \"historical_benchmark_trace_count\": 7,\n    \"historical_clean_success\": 1.0,\n    \"proof_closeout_issues\": 2,\n    \"proof_issue_class_counts\": {},\n    \"proof_issue_count\": 0,\n    \"proof_issue_samples\": [],\n    \"proof_repair_candidate_count\": 0,\n    \"proof_repair_candidates\": [],\n    \"registry_ok\": true,\n    \"service_parity_drift\": 0,\n    \"service_parity_drift_items\": [],\n    \"service_results_checked\": 91,\n    \"truth_drift_count\": 0,\n    \"truth_drifts\": [],\n    \"truth_managed_sessions\": 124,\n    \"truth_rows_scanned\": 500\n  },\n  \"what_changes_if_approved\": \"No change proposed. Keep the recursive lane in monitoring mode.\",\n  \"what_will_not_change\": \"No execution or approval request will be sent for this no-op monitor proposal.\",\n  \"why_now\": \"Recursive checkers and recommendation benchmarks are currently clean.\"\n}\n"
+      "stdout_tail": "in_task=OPS outreach events 866, 867.\"\n      },\n      {\n        \"completion_or_blocker_email\": \"Failed approved-send artifact exists at owner-question-taskflow-6ea601be2d0823f4-ravenswood-on-tap.failed-1780871588.json; no sent Message-ID was produced. Review and resend only through the approved sender path.\",\n        \"confidence\": \"source-backed\",\n        \"dedupe_key\": \"taskflow-bdb48fb8db67a6a6\",\n        \"intake_channel\": \"approved-send:nationaloutreach\",\n        \"mutation_allowed\": false,\n        \"next_update\": \"Robert must approve the drink plan before Vanessa replies to Amy.\",\n        \"ops_portal_or_domain_task\": \"OPS outreach events 866, 867\",\n        \"owner_lane\": \"outreach-coordinator\",\n        \"proof_kind\": \"failed_approved_send_artifact\",\n        \"responsible_worker_or_persona\": \"vanessa.sterling@kovaldistillery.com\",\n        \"source_event\": \"failed_send_artifact\",\n        \"source_logged_at\": \"\",\n        \"source_path\": \"/Users/admin/.nationaloutreach-launch/state/failed/owner-question-taskflow-6ea601be2d0823f4-ravenswood-on-tap.failed-1780871588.json\",\n        \"status\": \"blocked\",\n        \"subject\": \"Re: Fwd: Ravenswood On Tap 2026 - Drinks\",\n        \"verification_readback\": \"Failed artifact metadata readback: owner_lane=outreach-coordinator; responsible_worker_or_persona=vanessa.sterling@kovaldistillery.com; ops_portal_or_domain_task=OPS outreach events 866, 867.\"\n      }\n    ],\n    \"registry_ok\": true,\n    \"service_parity_drift\": 0,\n    \"service_parity_drift_items\": [],\n    \"service_results_checked\": 91,\n    \"truth_drift_count\": 5,\n    \"truth_drifts\": [\n      {\n        \"dedupe_key\": \"frank-direct-primary-CAAtX44Y-8zHhju0qwVuWateFAw16-W-N2iQ6UJ6Xu6wVBxCyCA-mail-gmail-com\",\n        \"detail\": \"active Task Flow row references missing board session d5961eef\",\n        \"kind\": \"active_missing_board_session\",\n        \"path\": \"\",\n        \"session_id\": \"d5961eef\",\n        \"severity\": \"high\",\n        \"title\": \"worker-readback-next-check\"\n      },\n      {\n        \"dedupe_key\": \"frank-direct-primary-CAAtX44aYkuTMHyrTPk3A5-453GYgsAccVMWrzVRDLVPvUDiwcQ-mail-gmail-com\",\n        \"detail\": \"active Task Flow row references missing board session ebd7fa09\",\n        \"kind\": \"active_missing_board_session\",\n        \"path\": \"\",\n        \"session_id\": \"ebd7fa09\",\n        \"severity\": \"high\",\n        \"title\": \"worker-readback-next-check\"\n      },\n      {\n        \"dedupe_key\": \"frank-direct-primary-CAAtX44YL-cdpejiaxMZ-Ad06b7ac76pkeV18jSWstXDwqSZ3Q-mail-gmail-com\",\n        \"detail\": \"active Task Flow row references missing board session dbf9b169\",\n        \"kind\": \"active_missing_board_session\",\n        \"path\": \"\",\n        \"session_id\": \"dbf9b169\",\n        \"severity\": \"high\",\n        \"title\": \"worker-readback-next-check\"\n      },\n      {\n        \"dedupe_key\": \"avignon-direct-owner-sonat-CALbLtzzXU7SahfZ-4bUFts-K9fUAQDrKjM0Q54evGHWehxP-Cg-mail-gmail-com\",\n        \"detail\": \"active Task Flow row references missing board session 0cdfa142\",\n        \"kind\": \"active_missing_board_session\",\n        \"path\": \"\",\n        \"session_id\": \"0cdfa142\",\n        \"severity\": \"high\",\n        \"title\": \"worker-readback-next-check\"\n      },\n      {\n        \"dedupe_key\": \"avignon-direct-owner-sonat-CALbLtzwALqFwLdxDd-JedrMiePpf3WhXJrvBavMDRwf2-EAhsA-mail-gmail-com\",\n        \"detail\": \"active Task Flow row references missing board session 99671a25\",\n        \"kind\": \"active_missing_board_session\",\n        \"path\": \"\",\n        \"session_id\": \"99671a25\",\n        \"severity\": \"high\",\n        \"title\": \"Portal worker 9f0ae713\"\n      }\n    ],\n    \"truth_managed_sessions\": 76,\n    \"truth_rows_scanned\": 500\n  },\n  \"what_changes_if_approved\": \"Investigate and repair the single contradiction `worker-readback-next-check` through the approved Task Flow / Workspaceboard path.\",\n  \"what_will_not_change\": \"No broad Task Flow closeout mutation, mailbox action, service restart, credential work, or OPS/Portal mutation.\",\n  \"why_now\": \"Task Flow truth drift reports 5 contradiction item(s).\"\n}\n"
+    },
+    "server_health": {
+      "command": [
+        "/usr/local/bin/python3.13",
+        "scripts/server_health_auto_runner.py",
+        "--print-json"
+      ],
+      "returncode": 0,
+      "stderr_tail": "",
+      "stdout_tail": "{\n  \"classification\": {\n    \"issues\": [\n      {\n        \"id\": \"large-processes\",\n        \"reason\": \"large resident processes: codex app-server 4738.8 MB, bitdefender daemon 2799.3 MB, python process 1211.0 MB\"\n      },\n      {\n        \"id\": \"dirty-repositories\",\n        \"reason\": \"dirty repos 7 > 4\"\n      }\n    ],\n    \"recommended_action\": \"reuse existing Codex sessions and close proof-backed stale wrappers before launching more workers\",\n    \"status\": \"attention\"\n  },\n  \"epoch\": 1780943818,\n  \"recorded_at\": \"2026-06-08 13:36:58 CDT\",\n  \"server_health\": {\n    \"disk\": {\n      \"available_bytes\": 87489912832,\n      \"checked_path\": \"/System/Volumes/Data\",\n      \"filesystem\": \"/dev/disk1s2\",\n      \"mount\": \"/System/Volumes/Data\",\n      \"ok\": true,\n      \"total_bytes\": 229171314688,\n      \"used_bytes\": 141681401856,\n      \"used_percent\": 62\n    },\n    \"generated_at\": \"2026-06-08T18:36:56.578Z\",\n    \"host\": \"roberts-mini-ethernet.lan\",\n    \"load_average\": {\n      \"fifteen\": 3.08837890625,\n      \"five\": 3.1904296875,\n      \"one\": 3.11181640625\n    },\n    \"memory\": {\n      \"free_bytes\": 20622045184,\n      \"total_bytes\": 68719476736,\n      \"used_bytes\": 48097431552,\n      \"used_percent\": 70\n    },\n    \"ok\": true,\n    \"repositories\": {\n      \"dirty\": 7,\n      \"needs_action\": 7,\n      \"total\": 16\n    },\n    \"uptime_human\": \"7 weeks, 22 hours, 20 minutes\"\n  },\n  \"server_health_url\": \"http://127.0.0.1:17878/api/server-health\",\n  \"top_processes\": [\n    {\n      \"label\": \"codex app-server\",\n      \"mem_percent\": 7.2,\n      \"pid\": 24134,\n      \"ppid\": 24131,\n      \"rss_mb\": 4738.8\n    },\n    {\n      \"label\": \"bitdefender daemon\",\n      \"mem_percent\": 4.3,\n      \"pid\": 72137,\n      \"ppid\": 1,\n      \"rss_mb\": 2799.3\n    },\n    {\n      \"label\": \"python process\",\n      \"mem_percent\": 1.8,\n      \"pid\": 71421,\n      \"ppid\": 71413,\n      \"rss_mb\": 1211.0\n    },\n    {\n      \"label\": \"codex session\",\n      \"mem_percent\": 0.5,\n      \"pid\": 49796,\n      \"ppid\": 49790,\n      \"rss_mb\": 359.7\n    },\n    {\n      \"label\": \"codex session\",\n      \"mem_percent\": 0.5,\n      \"pid\": 3234,\n      \"ppid\": 1,\n      \"rss_mb\": 307.6\n    },\n    {\n      \"label\": \"codex session\",\n      \"mem_percent\": 0.4,\n      \"pid\": 44325,\n      \"ppid\": 44308,\n      \"rss_mb\": 248.6\n    },\n    {\n      \"label\": \"mds_stores\",\n      \"mem_percent\": 0.3,\n      \"pid\": 304,\n      \"ppid\": 1,\n      \"rss_mb\": 225.7\n    },\n    {\n      \"label\": \"codex session\",\n      \"mem_percent\": 0.3,\n      \"pid\": 2391,\n      \"ppid\": 2367,\n      \"rss_mb\": 222.1\n    },\n    {\n      \"label\": \"codex session\",\n      \"mem_percent\": 0.3,\n      \"pid\": 67250,\n      \"ppid\": 67231,\n      \"rss_mb\": 215.7\n    },\n    {\n      \"label\": \"codex session\",\n      \"mem_percent\": 0.3,\n      \"pid\": 59942,\n      \"ppid\": 59923,\n      \"rss_mb\": 214.9\n    },\n    {\n      \"label\": \"codex session\",\n      \"mem_percent\": 0.3,\n      \"pid\": 7624,\n      \"ppid\": 7616,\n      \"rss_mb\": 212.4\n    },\n    {\n      \"label\": \"codex session\",\n      \"mem_percent\": 0.3,\n      \"pid\": 3601,\n      \"ppid\": 3582,\n      \"rss_mb\": 212.2\n    }\n  ]\n}\n"
     },
     "status": {
       "command": [
@@ -21,43 +31,10 @@
       ],
       "returncode": 0,
       "stderr_tail": "",
-      "stdout_tail": "ane\",\n      \"ratchet_result\": \"keep\",\n      \"recommended_action\": \"monitor-recursive-lane\"\n    },\n    {\n      \"allowed_fix_class\": \"no-op-monitoring\",\n      \"approved_unexecuted\": false,\n      \"decision_state\": \"\",\n      \"execution_authorized\": false,\n      \"execution_state\": \"verified\",\n      \"executor_allowlisted\": true,\n      \"has_auto_mutator\": false,\n      \"mutates_live_state\": false,\n      \"proposal_id\": \"recursive-proposal-20260607-120058-monitor-recursive-lane\",\n      \"ratchet_result\": \"keep\",\n      \"recommended_action\": \"monitor-recursive-lane\"\n    },\n    {\n      \"allowed_fix_class\": \"no-op-monitoring\",\n      \"approved_unexecuted\": false,\n      \"decision_state\": \"\",\n      \"execution_authorized\": false,\n      \"execution_state\": \"verified\",\n      \"executor_allowlisted\": true,\n      \"has_auto_mutator\": false,\n      \"mutates_live_state\": false,\n      \"proposal_id\": \"recursive-proposal-20260607-120820-monitor-recursive-lane\",\n      \"ratchet_result\": \"keep\",\n      \"recommended_action\": \"monitor-recursive-lane\"\n    },\n    {\n      \"allowed_fix_class\": \"proof-closeout-classification\",\n      \"approved_unexecuted\": false,\n      \"decision_state\": \"\",\n      \"execution_authorized\": false,\n      \"execution_state\": \"superseded_by_verified_retry\",\n      \"executor_allowlisted\": true,\n      \"has_auto_mutator\": false,\n      \"mutates_live_state\": false,\n      \"proposal_id\": \"recursive-proposal-20260607-123003-classify-proof-closeout-issues\",\n      \"ratchet_result\": \"superseded\",\n      \"recommended_action\": \"classify-proof-closeout-issues\"\n    },\n    {\n      \"allowed_fix_class\": \"proof-closeout-classification\",\n      \"approved_unexecuted\": false,\n      \"decision_state\": \"\",\n      \"execution_authorized\": false,\n      \"execution_state\": \"verified\",\n      \"executor_allowlisted\": true,\n      \"has_auto_mutator\": false,\n      \"mutates_live_state\": false,\n      \"proposal_id\": \"recursive-proposal-20260607-123150-classify-proof-closeout-issues\",\n      \"ratchet_result\": \"keep\",\n      \"recommended_action\": \"classify-proof-closeout-issues\"\n    },\n    {\n      \"allowed_fix_class\": \"proof-closeout-classification\",\n      \"approved_unexecuted\": false,\n      \"decision_state\": \"\",\n      \"execution_authorized\": false,\n      \"execution_state\": \"superseded_by_verified_retry\",\n      \"executor_allowlisted\": true,\n      \"has_auto_mutator\": false,\n      \"mutates_live_state\": false,\n      \"proposal_id\": \"recursive-proposal-20260607-155628-classify-proof-closeout-issues\",\n      \"ratchet_result\": \"\",\n      \"recommended_action\": \"classify-proof-closeout-issues\"\n    },\n    {\n      \"allowed_fix_class\": \"no-op-monitoring\",\n      \"approved_unexecuted\": false,\n      \"decision_state\": \"\",\n      \"execution_authorized\": false,\n      \"execution_state\": \"verified\",\n      \"executor_allowlisted\": true,\n      \"has_auto_mutator\": false,\n      \"mutates_live_state\": false,\n      \"proposal_id\": \"recursive-proposal-20260607-155717-monitor-recursive-lane\",\n      \"ratchet_result\": \"keep\",\n      \"recommended_action\": \"monitor-recursive-lane\"\n    },\n    {\n      \"allowed_fix_class\": \"proof-closeout-classification\",\n      \"approved_unexecuted\": false,\n      \"decision_state\": \"\",\n      \"execution_authorized\": true,\n      \"execution_state\": \"\",\n      \"executor_allowlisted\": true,\n      \"has_auto_mutator\": false,\n      \"mutates_live_state\": false,\n      \"proposal_id\": \"recursive-proposal-20260607-160304-classify-proof-closeout-issues\",\n      \"ratchet_result\": \"\",\n      \"recommended_action\": \"classify-proof-closeout-issues\"\n    },\n    {\n      \"allowed_fix_class\": \"no-op-monitoring\",\n      \"approved_unexecuted\": false,\n      \"decision_state\": \"\",\n      \"execution_authorized\": false,\n      \"execution_state\": \"verified\",\n      \"executor_allowlisted\": true,\n      \"has_auto_mutator\": false,\n      \"mutates_live_state\": false,\n      \"proposal_id\": \"recursive-proposal-20260607-160438-monitor-recursive-lane\",\n      \"ratchet_result\": \"keep\",\n      \"recommended_action\": \"monitor-recursive-lane\"\n    }\n  ]\n}\n"
+      "stdout_tail": "esult\": \"keep\",\n      \"recommended_action\": \"monitor-recursive-lane\"\n    },\n    {\n      \"allowed_fix_class\": \"no-op-monitoring\",\n      \"approved_unexecuted\": false,\n      \"decision_state\": \"\",\n      \"execution_authorized\": false,\n      \"execution_state\": \"verified\",\n      \"executor_allowlisted\": true,\n      \"has_auto_mutator\": false,\n      \"mutates_live_state\": false,\n      \"proposal_id\": \"recursive-proposal-20260607-120820-monitor-recursive-lane\",\n      \"ratchet_result\": \"keep\",\n      \"recommended_action\": \"monitor-recursive-lane\"\n    },\n    {\n      \"allowed_fix_class\": \"proof-closeout-classification\",\n      \"approved_unexecuted\": false,\n      \"decision_state\": \"\",\n      \"execution_authorized\": false,\n      \"execution_state\": \"superseded_by_verified_retry\",\n      \"executor_allowlisted\": true,\n      \"has_auto_mutator\": false,\n      \"mutates_live_state\": false,\n      \"proposal_id\": \"recursive-proposal-20260607-123003-classify-proof-closeout-issues\",\n      \"ratchet_result\": \"superseded\",\n      \"recommended_action\": \"classify-proof-closeout-issues\"\n    },\n    {\n      \"allowed_fix_class\": \"proof-closeout-classification\",\n      \"approved_unexecuted\": false,\n      \"decision_state\": \"\",\n      \"execution_authorized\": false,\n      \"execution_state\": \"verified\",\n      \"executor_allowlisted\": true,\n      \"has_auto_mutator\": false,\n      \"mutates_live_state\": false,\n      \"proposal_id\": \"recursive-proposal-20260607-123150-classify-proof-closeout-issues\",\n      \"ratchet_result\": \"keep\",\n      \"recommended_action\": \"classify-proof-closeout-issues\"\n    },\n    {\n      \"allowed_fix_class\": \"proof-closeout-classification\",\n      \"approved_unexecuted\": false,\n      \"decision_state\": \"\",\n      \"execution_authorized\": false,\n      \"execution_state\": \"superseded_by_verified_retry\",\n      \"executor_allowlisted\": true,\n      \"has_auto_mutator\": false,\n      \"mutates_live_state\": false,\n      \"proposal_id\": \"recursive-proposal-20260607-155628-classify-proof-closeout-issues\",\n      \"ratchet_result\": \"\",\n      \"recommended_action\": \"classify-proof-closeout-issues\"\n    },\n    {\n      \"allowed_fix_class\": \"no-op-monitoring\",\n      \"approved_unexecuted\": false,\n      \"decision_state\": \"\",\n      \"execution_authorized\": false,\n      \"execution_state\": \"verified\",\n      \"executor_allowlisted\": true,\n      \"has_auto_mutator\": false,\n      \"mutates_live_state\": false,\n      \"proposal_id\": \"recursive-proposal-20260607-155717-monitor-recursive-lane\",\n      \"ratchet_result\": \"keep\",\n      \"recommended_action\": \"monitor-recursive-lane\"\n    },\n    {\n      \"allowed_fix_class\": \"proof-closeout-classification\",\n      \"approved_unexecuted\": false,\n      \"decision_state\": \"\",\n      \"execution_authorized\": false,\n      \"execution_state\": \"superseded_by_verified_retry\",\n      \"executor_allowlisted\": true,\n      \"has_auto_mutator\": false,\n      \"mutates_live_state\": false,\n      \"proposal_id\": \"recursive-proposal-20260607-160304-classify-proof-closeout-issues\",\n      \"ratchet_result\": \"\",\n      \"recommended_action\": \"classify-proof-closeout-issues\"\n    },\n    {\n      \"allowed_fix_class\": \"no-op-monitoring\",\n      \"approved_unexecuted\": false,\n      \"decision_state\": \"\",\n      \"execution_authorized\": false,\n      \"execution_state\": \"verified\",\n      \"executor_allowlisted\": true,\n      \"has_auto_mutator\": false,\n      \"mutates_live_state\": false,\n      \"proposal_id\": \"recursive-proposal-20260607-160438-monitor-recursive-lane\",\n      \"ratchet_result\": \"keep\",\n      \"recommended_action\": \"monitor-recursive-lane\"\n    },\n    {\n      \"allowed_fix_class\": \"truth-drift-single-item-repair\",\n      \"approved_unexecuted\": false,\n      \"decision_state\": \"\",\n      \"execution_authorized\": false,\n      \"execution_state\": \"\",\n      \"executor_allowlisted\": true,\n      \"has_auto_mutator\": false,\n      \"mutates_live_state\": true,\n      \"proposal_id\": \"recursive-proposal-20260608-133717-repair-truth-drift\",\n      \"ratchet_result\": \"\",\n      \"recommended_action\": \"repair-truth-drift\"\n    }\n  ]\n}\n"
     }
   },
-  "execution": {
-    "allowed_fix_class": "no-op-monitoring",
-    "event": "execution_verified",
-    "execution_proof": {
-      "proof_hint": "Registry, service parity, and truth-drift checks all return clean.",
-      "verifier_command": [
-        "/bin/bash",
-        "-lc",
-        "./scripts/recursive_registry_lint.py --json >/dev/null && ./scripts/service_parity_check.py --mode all --fail-on-drift >/dev/null && ./scripts/task_flow_truth_drift_check.py --fail-on-drift >/dev/null"
-      ],
-      "verifier_cwd": "/Users/werkstatt/ai_workspace",
-      "verifier_returncode": 0
-    },
-    "execution_state": "verified",
-    "mutator_result": null,
-    "proof_hint": "Registry, service parity, and truth-drift checks all return clean.",
-    "proposal_id": "recursive-proposal-20260607-160438-monitor-recursive-lane",
-    "ratchet_reason": "no-op-monitoring verifier passed; execution proof is durable.",
-    "ratchet_result": "keep",
-    "recommended_action": "monitor-recursive-lane",
-    "recorded_at": "2026-06-07 16:04:48 CDT",
-    "risk_class": "low",
-    "verifier_result": {
-      "command": [
-        "/bin/bash",
-        "-lc",
-        "./scripts/recursive_registry_lint.py --json >/dev/null && ./scripts/service_parity_check.py --mode all --fail-on-drift >/dev/null && ./scripts/task_flow_truth_drift_check.py --fail-on-drift >/dev/null"
-      ],
-      "cwd": "/Users/werkstatt/ai_workspace",
-      "returncode": 0,
-      "stderr_tail": "",
-      "stdout_tail": ""
-    }
-  },
+  "execution": {},
   "executor_status": {
     "allowlisted_fix_classes": [
       "no-op-monitoring",
@@ -70,7 +47,7 @@
     ],
     "approved_unexecuted_count": 0,
     "blocked_execution_count": 0,
-    "checked_at": "2026-06-07 16:04:48 CDT",
+    "checked_at": "2026-06-08 13:37:17 CDT",
     "proposals": [
       {
         "allowed_fix_class": "truth-drift-single-item-repair",
@@ -180,8 +157,8 @@
         "allowed_fix_class": "proof-closeout-classification",
         "approved_unexecuted": false,
         "decision_state": "",
-        "execution_authorized": true,
-        "execution_state": "",
+        "execution_authorized": false,
+        "execution_state": "superseded_by_verified_retry",
         "executor_allowlisted": true,
         "has_auto_mutator": false,
         "mutates_live_state": false,
@@ -201,22 +178,35 @@
         "proposal_id": "recursive-proposal-20260607-160438-monitor-recursive-lane",
         "ratchet_result": "keep",
         "recommended_action": "monitor-recursive-lane"
+      },
+      {
+        "allowed_fix_class": "truth-drift-single-item-repair",
+        "approved_unexecuted": false,
+        "decision_state": "",
+        "execution_authorized": false,
+        "execution_state": "",
+        "executor_allowlisted": true,
+        "has_auto_mutator": false,
+        "mutates_live_state": true,
+        "proposal_id": "recursive-proposal-20260608-133717-repair-truth-drift",
+        "ratchet_result": "",
+        "recommended_action": "repair-truth-drift"
       }
     ]
   },
   "mode": "daily",
-  "outcome": "monitor_verified",
+  "outcome": "approval_required",
   "proposal": {
-    "allowed_fix_class": "no-op-monitoring",
-    "approval_required": false,
-    "created_at": "2026-06-07 16:04:38 CDT",
-    "frank_email_body_path": "/Users/werkstatt/ai_workspace/frank/drafts/recursive-proposals/recursive-proposal-20260607-160438-monitor-recursive-lane.txt",
-    "frank_email_html_body_path": "/Users/werkstatt/ai_workspace/frank/drafts/recursive-proposals/recursive-proposal-20260607-160438-monitor-recursive-lane.html",
-    "frank_email_subject": "Recursive monitor: monitor-recursive-lane",
-    "proof_required": "Current checker readback remains clean.",
-    "proposal_id": "recursive-proposal-20260607-160438-monitor-recursive-lane",
-    "recommended_action": "monitor-recursive-lane",
-    "risk_class": "low",
+    "allowed_fix_class": "truth-drift-single-item-repair",
+    "approval_required": true,
+    "created_at": "2026-06-08 13:37:17 CDT",
+    "frank_email_body_path": "/Users/werkstatt/ai_workspace/frank/drafts/recursive-proposals/recursive-proposal-20260608-133717-repair-truth-drift.txt",
+    "frank_email_html_body_path": "/Users/werkstatt/ai_workspace/frank/drafts/recursive-proposals/recursive-proposal-20260608-133717-repair-truth-drift.html",
+    "frank_email_subject": "Approval needed: repair-truth-drift",
+    "proof_required": "`./scripts/task_flow_truth_drift_check.py --fail-on-drift` returns zero drift, or the exact blocker is recorded.",
+    "proposal_id": "recursive-proposal-20260608-133717-repair-truth-drift",
+    "recommended_action": "repair-truth-drift",
+    "risk_class": "medium",
     "rollback_note": "If verification fails, stop and record one exact blocker; do not continue into a broader repair class.",
     "source_snapshot": {
       "coverage_ok": true,
@@ -224,24 +214,613 @@
       "historical_benchmark_run_id": "4b1934a45c5b",
       "historical_benchmark_trace_count": 7,
       "historical_clean_success": 1.0,
-      "proof_closeout_issues": 2,
-      "proof_issue_class_counts": {},
-      "proof_issue_count": 0,
-      "proof_issue_samples": [],
-      "proof_repair_candidate_count": 0,
-      "proof_repair_candidates": [],
+      "proof_closeout_issues": 34,
+      "proof_issue_class_counts": {
+        "active_worker_missing_domain_task": 3,
+        "attention_missing_finish_link": 4,
+        "blocked_needs_owner_question_proof": 16
+      },
+      "proof_issue_count": 23,
+      "proof_issue_samples": [
+        {
+          "dedupe_key": "taskflow-3981bd77dabf07ce",
+          "detail": "blocked row is routed-needs-owner-question and needs owner-question/blocker proof",
+          "kind": "blocked_needs_owner_question_proof",
+          "missing_fields": [
+            "owner_lane",
+            "clarification_or_blocker_email"
+          ],
+          "owner_lane": "",
+          "session_id": "",
+          "severity": "blocked",
+          "title": "taskflow-3981bd77dabf07ce"
+        },
+        {
+          "dedupe_key": "taskflow-09043689ee2660fe",
+          "detail": "working row has visible session 5bae2106 but lacks ops_portal_or_domain_task",
+          "kind": "active_worker_missing_domain_task",
+          "missing_fields": [
+            "ops_portal_or_domain_task"
+          ],
+          "owner_lane": "outreach-coordinator",
+          "session_id": "5bae2106",
+          "severity": "attention",
+          "title": "taskflow-09043689ee2660fe"
+        },
+        {
+          "dedupe_key": "taskflow-1513f992055a281d",
+          "detail": "blocked row is routed-needs-owner-question and needs owner-question/blocker proof",
+          "kind": "blocked_needs_owner_question_proof",
+          "missing_fields": [
+            "owner_lane",
+            "clarification_or_blocker_email"
+          ],
+          "owner_lane": "",
+          "session_id": "",
+          "severity": "blocked",
+          "title": "taskflow-1513f992055a281d"
+        },
+        {
+          "dedupe_key": "taskflow-1f6e3188f9c1c18f",
+          "detail": "blocked row is routed-needs-owner-question and needs owner-question/blocker proof",
+          "kind": "blocked_needs_owner_question_proof",
+          "missing_fields": [
+            "owner_lane",
+            "clarification_or_blocker_email"
+          ],
+          "owner_lane": "",
+          "session_id": "",
+          "severity": "blocked",
+          "title": "taskflow-1f6e3188f9c1c18f"
+        },
+        {
+          "dedupe_key": "taskflow-8019cf2410556f69",
+          "detail": "blocked row is routed-needs-owner-question and needs owner-question/blocker proof",
+          "kind": "blocked_needs_owner_question_proof",
+          "missing_fields": [
+            "owner_lane",
+            "clarification_or_blocker_email"
+          ],
+          "owner_lane": "",
+          "session_id": "",
+          "severity": "blocked",
+          "title": "taskflow-8019cf2410556f69"
+        },
+        {
+          "dedupe_key": "taskflow-bb8c20b3438d70a7",
+          "detail": "attention row missing ops_portal_or_domain_task",
+          "kind": "attention_missing_finish_link",
+          "missing_fields": [
+            "ops_portal_or_domain_task"
+          ],
+          "owner_lane": "outreach-coordinator",
+          "session_id": "",
+          "severity": "attention",
+          "title": "OPS open shifts 5345, 5270"
+        },
+        {
+          "dedupe_key": "taskflow-88906a605debd945",
+          "detail": "blocked row is routed-needs-owner-question and needs owner-question/blocker proof",
+          "kind": "blocked_needs_owner_question_proof",
+          "missing_fields": [
+            "owner_lane",
+            "clarification_or_blocker_email"
+          ],
+          "owner_lane": "",
+          "session_id": "",
+          "severity": "blocked",
+          "title": "taskflow-88906a605debd945"
+        },
+        {
+          "dedupe_key": "taskflow-22b8a02dc900f954",
+          "detail": "blocked row is routed-needs-owner-question and needs owner-question/blocker proof",
+          "kind": "blocked_needs_owner_question_proof",
+          "missing_fields": [
+            "owner_lane",
+            "clarification_or_blocker_email"
+          ],
+          "owner_lane": "",
+          "session_id": "",
+          "severity": "blocked",
+          "title": "taskflow-22b8a02dc900f954"
+        },
+        {
+          "dedupe_key": "taskflow-66bff1533318e8e6",
+          "detail": "blocked row is routed-needs-owner-question and needs owner-question/blocker proof",
+          "kind": "blocked_needs_owner_question_proof",
+          "missing_fields": [
+            "owner_lane",
+            "clarification_or_blocker_email"
+          ],
+          "owner_lane": "",
+          "session_id": "",
+          "severity": "blocked",
+          "title": "taskflow-66bff1533318e8e6"
+        },
+        {
+          "dedupe_key": "taskflow-a9b9481a1663f2af",
+          "detail": "blocked row is routed-needs-owner-question and needs owner-question/blocker proof",
+          "kind": "blocked_needs_owner_question_proof",
+          "missing_fields": [
+            "owner_lane",
+            "clarification_or_blocker_email"
+          ],
+          "owner_lane": "",
+          "session_id": "",
+          "severity": "blocked",
+          "title": "taskflow-a9b9481a1663f2af"
+        },
+        {
+          "dedupe_key": "taskflow-bdb48fb8db67a6a6",
+          "detail": "blocked row is routed-needs-owner-question and needs owner-question/blocker proof",
+          "kind": "blocked_needs_owner_question_proof",
+          "missing_fields": [
+            "owner_lane",
+            "clarification_or_blocker_email"
+          ],
+          "owner_lane": "",
+          "session_id": "",
+          "severity": "blocked",
+          "title": "taskflow-bdb48fb8db67a6a6"
+        },
+        {
+          "dedupe_key": "taskflow-6ea601be2d0823f4",
+          "detail": "working row has visible session 413c02b9 but lacks ops_portal_or_domain_task",
+          "kind": "active_worker_missing_domain_task",
+          "missing_fields": [
+            "ops_portal_or_domain_task"
+          ],
+          "owner_lane": "outreach-coordinator",
+          "session_id": "413c02b9",
+          "severity": "attention",
+          "title": "taskflow-6ea601be2d0823f4"
+        },
+        {
+          "dedupe_key": "taskflow-bb72fb37d3246552",
+          "detail": "working row has visible session 8e2abb16 but lacks ops_portal_or_domain_task",
+          "kind": "active_worker_missing_domain_task",
+          "missing_fields": [
+            "ops_portal_or_domain_task"
+          ],
+          "owner_lane": "outreach-coordinator",
+          "session_id": "8e2abb16",
+          "severity": "attention",
+          "title": "taskflow-bb72fb37d3246552"
+        },
+        {
+          "dedupe_key": "taskflow-f419b95a8de9650e",
+          "detail": "attention row missing ops_portal_or_domain_task, due_or_trigger_or_scheduled_action",
+          "kind": "attention_missing_finish_link",
+          "missing_fields": [
+            "ops_portal_or_domain_task",
+            "due_or_trigger_or_scheduled_action"
+          ],
+          "owner_lane": "outreach-coordinator",
+          "session_id": "",
+          "severity": "attention",
+          "title": "Event Schedule Request for Koval Inc. dba KOVAL Distillery"
+        },
+        {
+          "dedupe_key": "taskflow-cb3650c4908af2d9",
+          "detail": "blocked row is routed-needs-owner-question and needs owner-question/blocker proof",
+          "kind": "blocked_needs_owner_question_proof",
+          "missing_fields": [
+            "owner_lane",
+            "clarification_or_blocker_email"
+          ],
+          "owner_lane": "",
+          "session_id": "",
+          "severity": "blocked",
+          "title": "taskflow-cb3650c4908af2d9"
+        },
+        {
+          "dedupe_key": "taskflow-dcd3b23df830b215",
+          "detail": "blocked row is routed-needs-owner-question and needs owner-question/blocker proof",
+          "kind": "blocked_needs_owner_question_proof",
+          "missing_fields": [
+            "owner_lane",
+            "clarification_or_blocker_email"
+          ],
+          "owner_lane": "",
+          "session_id": "",
+          "severity": "blocked",
+          "title": "taskflow-dcd3b23df830b215"
+        },
+        {
+          "dedupe_key": "taskflow-bb13c953755d0477",
+          "detail": "blocked row is routed-needs-owner-question and needs owner-question/blocker proof",
+          "kind": "blocked_needs_owner_question_proof",
+          "missing_fields": [
+            "owner_lane",
+            "clarification_or_blocker_email"
+          ],
+          "owner_lane": "",
+          "session_id": "",
+          "severity": "blocked",
+          "title": "taskflow-bb13c953755d0477"
+        },
+        {
+          "dedupe_key": "taskflow-8dbdb0a71ae849d5",
+          "detail": "attention row missing ops_portal_or_domain_task, due_or_trigger_or_scheduled_action",
+          "kind": "attention_missing_finish_link",
+          "missing_fields": [
+            "ops_portal_or_domain_task",
+            "due_or_trigger_or_scheduled_action"
+          ],
+          "owner_lane": "outreach-coordinator",
+          "session_id": "",
+          "severity": "attention",
+          "title": "Lifetime Fitness Tasting Dinner"
+        },
+        {
+          "dedupe_key": "taskflow-ab214935d0184e17",
+          "detail": "attention row missing ops_portal_or_domain_task, due_or_trigger_or_scheduled_action",
+          "kind": "attention_missing_finish_link",
+          "missing_fields": [
+            "ops_portal_or_domain_task",
+            "due_or_trigger_or_scheduled_action"
+          ],
+          "owner_lane": "outreach-coordinator",
+          "session_id": "",
+          "severity": "attention",
+          "title": "Gold Eagle Wine and Spirits"
+        },
+        {
+          "dedupe_key": "taskflow-5b6fa4efab572601",
+          "detail": "blocked row is routed-needs-owner-question and needs owner-question/blocker proof",
+          "kind": "blocked_needs_owner_question_proof",
+          "missing_fields": [
+            "owner_lane",
+            "clarification_or_blocker_email"
+          ],
+          "owner_lane": "",
+          "session_id": "",
+          "severity": "blocked",
+          "title": "taskflow-5b6fa4efab572601"
+        }
+      ],
+      "proof_repair_candidate_count": 8,
+      "proof_repair_candidates": [
+        {
+          "completion_or_blocker_email": "Failed approved-send artifact exists at benjamin-bottles-cans-too-ops1055-completion.failed-1780935440.json; no sent Message-ID was produced. Review and resend only through the approved sender path.",
+          "confidence": "source-backed",
+          "dedupe_key": "taskflow-3981bd77dabf07ce",
+          "intake_channel": "approved-send:nationaloutreach",
+          "mutation_allowed": false,
+          "next_update": "Complete after same-thread link reply is sent.",
+          "ops_portal_or_domain_task": "OPS Outreach event 1055 / shift 5584 / Google UID ops-outreach-1055@koval-distillery.com",
+          "owner_lane": "outreach-coordinator",
+          "proof_kind": "failed_approved_send_artifact",
+          "responsible_worker_or_persona": "vanessa.sterling@kovaldistillery.com",
+          "source_event": "failed_send_artifact",
+          "source_logged_at": "",
+          "source_path": "/Users/admin/.nationaloutreach-launch/state/failed/benjamin-bottles-cans-too-ops1055-completion.failed-1780935440.json",
+          "status": "blocked",
+          "subject": "Re: New tasting",
+          "verification_readback": "Failed artifact metadata readback: owner_lane=outreach-coordinator; responsible_worker_or_persona=vanessa.sterling@kovaldistillery.com; ops_portal_or_domain_task=OPS Outreach event 1055 / shift 5584 / Google UID ops-outreach-1055@koval-distillery.com."
+        },
+        {
+          "completion_or_blocker_email": "Failed approved-send artifact exists at wild-onion-shift-time-update-ops1054-20260608.failed-1780929775.json; no sent Message-ID was produced. Review and resend only through the approved sender path.",
+          "confidence": "source-backed",
+          "dedupe_key": "taskflow-1513f992055a281d",
+          "intake_channel": "approved-send:nationaloutreach",
+          "mutation_allowed": false,
+          "next_update": "sent",
+          "ops_portal_or_domain_task": "OPS event 1054 / TrackTime shift 5582 / Google outreach UID ops-outreach-1054@koval-distillery.com",
+          "owner_lane": "outreach-coordinator",
+          "proof_kind": "failed_approved_send_artifact",
+          "responsible_worker_or_persona": "vanessa.sterling@kovaldistillery.com",
+          "source_event": "failed_send_artifact",
+          "source_logged_at": "",
+          "source_path": "/Users/admin/.nationaloutreach-launch/state/failed/wild-onion-shift-time-update-ops1054-20260608.failed-1780929775.json",
+          "status": "blocked",
+          "subject": "Re: Wild Onion Market 2nd Anniversary Event",
+          "verification_readback": "Failed artifact metadata readback: owner_lane=outreach-coordinator; responsible_worker_or_persona=vanessa.sterling@kovaldistillery.com; ops_portal_or_domain_task=OPS event 1054 / TrackTime shift 5582 / Google outreach UID ops-outreach-1054@koval-distillery.com."
+        },
+        {
+          "completion_or_blocker_email": "Failed approved-send artifact exists at vanessa-open-store-shifts-4w-2026-06-08-0800.failed-1780923678.json; no sent Message-ID was produced. Review and resend only through the approved sender path.",
+          "confidence": "source-backed",
+          "dedupe_key": "taskflow-1f6e3188f9c1c18f",
+          "intake_channel": "approved-send:nationaloutreach",
+          "mutation_allowed": false,
+          "next_update": "Pending Monday 8:00 AM scheduled-action queue for approved send cycle.",
+          "ops_portal_or_domain_task": "OPS open shifts",
+          "owner_lane": "outreach-coordinator",
+          "proof_kind": "failed_approved_send_artifact",
+          "responsible_worker_or_persona": "Vanessa Sterling",
+          "source_event": "failed_send_artifact",
+          "source_logged_at": "",
+          "source_path": "/Users/admin/.nationaloutreach-launch/state/failed/vanessa-open-store-shifts-4w-2026-06-08-0800.failed-1780923678.json",
+          "status": "blocked",
+          "subject": "Open store and tasting room shifts for June 8 - July 6",
+          "verification_readback": "Failed artifact metadata readback: owner_lane=outreach-coordinator; responsible_worker_or_persona=Vanessa Sterling; ops_portal_or_domain_task=OPS open shifts."
+        },
+        {
+          "completion_or_blocker_email": "Failed approved-send artifact exists at vanessa-mitch-weekly-direct-2026-06-08-0800.failed-1780923672.json; no sent Message-ID was produced. Review and resend only through the approved sender path.",
+          "confidence": "source-backed",
+          "dedupe_key": "taskflow-8019cf2410556f69",
+          "intake_channel": "approved-send:nationaloutreach",
+          "mutation_allowed": false,
+          "next_update": "Pending Monday 8:00 AM scheduled-action queue for approved send cycle.",
+          "ops_portal_or_domain_task": "OPS 367856",
+          "owner_lane": "outreach-coordinator",
+          "proof_kind": "failed_approved_send_artifact",
+          "responsible_worker_or_persona": "Vanessa Sterling",
+          "source_event": "failed_send_artifact",
+          "source_logged_at": "",
+          "source_path": "/Users/admin/.nationaloutreach-launch/state/failed/vanessa-mitch-weekly-direct-2026-06-08-0800.failed-1780923672.json",
+          "status": "blocked",
+          "subject": "Upcoming KOVAL tastings this week",
+          "verification_readback": "Failed artifact metadata readback: owner_lane=outreach-coordinator; responsible_worker_or_persona=Vanessa Sterling; ops_portal_or_domain_task=OPS 367856."
+        },
+        {
+          "completion_or_blocker_email": "Failed approved-send artifact exists at vanessa-cancellation-reminder-robert-sonat-20260607.failed-1780873129.json; no sent Message-ID was produced. Review and resend only through the approved sender path.",
+          "confidence": "source-backed",
+          "dedupe_key": "taskflow-22b8a02dc900f954",
+          "intake_channel": "approved-send:nationaloutreach",
+          "mutation_allowed": false,
+          "next_update": "sent",
+          "ops_portal_or_domain_task": "ordinary tasting cancellation coordination; no specific OPS event/calendar row in source",
+          "owner_lane": "outreach-coordinator",
+          "proof_kind": "failed_approved_send_artifact",
+          "responsible_worker_or_persona": "vanessa.sterling@kovaldistillery.com",
+          "source_event": "failed_send_artifact",
+          "source_logged_at": "",
+          "source_path": "/Users/admin/.nationaloutreach-launch/state/failed/vanessa-cancellation-reminder-robert-sonat-20260607.failed-1780873129.json",
+          "status": "blocked",
+          "subject": "Re: Cancellation instructions for Whole Foods and Binny's tastings",
+          "verification_readback": "Failed artifact metadata readback: owner_lane=outreach-coordinator; responsible_worker_or_persona=vanessa.sterling@kovaldistillery.com; ops_portal_or_domain_task=ordinary tasting cancellation coordination; no specific OPS event/calendar row in source."
+        },
+        {
+          "completion_or_blocker_email": "Failed approved-send artifact exists at vanessa-sonat-wholefoods-binnys-cancellation-instructions-recorded-20260607.failed-1780872528.json; no sent Message-ID was produced. Review and resend only through the approved sender path.",
+          "confidence": "source-backed",
+          "dedupe_key": "taskflow-66bff1533318e8e6",
+          "intake_channel": "approved-send:nationaloutreach",
+          "mutation_allowed": false,
+          "next_update": "Cancellation instruction blocker removed; future approved fallback uses the recorded rules.",
+          "ops_portal_or_domain_task": "Vanessa cancellation automation / Whole Foods and Binny's instructions",
+          "owner_lane": "outreach-coordinator",
+          "proof_kind": "failed_approved_send_artifact",
+          "responsible_worker_or_persona": "vanessa.sterling@kovaldistillery.com",
+          "source_event": "failed_send_artifact",
+          "source_logged_at": "",
+          "source_path": "/Users/admin/.nationaloutreach-launch/state/failed/vanessa-sonat-wholefoods-binnys-cancellation-instructions-recorded-20260607.failed-1780872528.json",
+          "status": "blocked",
+          "subject": "Re: Cancellation instructions for Whole Foods and Binny's tastings",
+          "verification_readback": "Failed artifact metadata readback: owner_lane=outreach-coordinator; responsible_worker_or_persona=vanessa.sterling@kovaldistillery.com; ops_portal_or_domain_task=Vanessa cancellation automation / Whole Foods and Binny's instructions."
+        },
+        {
+          "completion_or_blocker_email": "Failed approved-send artifact exists at status-reply-taskflow-6ea601be2d0823f4-ravenswood-on-tap.failed-1780871689.json; no sent Message-ID was produced. Review and resend only through the approved sender path.",
+          "confidence": "source-backed",
+          "dedupe_key": "taskflow-a9b9481a1663f2af",
+          "intake_channel": "approved-send:nationaloutreach",
+          "mutation_allowed": false,
+          "next_update": "Ravenswood On Tap remains recorded as OPS planning placeholders until exact coverage times and staffing details are confirmed.",
+          "ops_portal_or_domain_task": "OPS outreach events 866, 867",
+          "owner_lane": "outreach-coordinator",
+          "proof_kind": "failed_approved_send_artifact",
+          "responsible_worker_or_persona": "vanessa.sterling@kovaldistillery.com",
+          "source_event": "failed_send_artifact",
+          "source_logged_at": "",
+          "source_path": "/Users/admin/.nationaloutreach-launch/state/failed/status-reply-taskflow-6ea601be2d0823f4-ravenswood-on-tap.failed-1780871689.json",
+          "status": "blocked",
+          "subject": "Re: Fwd: Ravenswood On Tap 2026 - Drinks",
+          "verification_readback": "Failed artifact metadata readback: owner_lane=outreach-coordinator; responsible_worker_or_persona=vanessa.sterling@kovaldistillery.com; ops_portal_or_domain_task=OPS outreach events 866, 867."
+        },
+        {
+          "completion_or_blocker_email": "Failed approved-send artifact exists at owner-question-taskflow-6ea601be2d0823f4-ravenswood-on-tap.failed-1780871588.json; no sent Message-ID was produced. Review and resend only through the approved sender path.",
+          "confidence": "source-backed",
+          "dedupe_key": "taskflow-bdb48fb8db67a6a6",
+          "intake_channel": "approved-send:nationaloutreach",
+          "mutation_allowed": false,
+          "next_update": "Robert must approve the drink plan before Vanessa replies to Amy.",
+          "ops_portal_or_domain_task": "OPS outreach events 866, 867",
+          "owner_lane": "outreach-coordinator",
+          "proof_kind": "failed_approved_send_artifact",
+          "responsible_worker_or_persona": "vanessa.sterling@kovaldistillery.com",
+          "source_event": "failed_send_artifact",
+          "source_logged_at": "",
+          "source_path": "/Users/admin/.nationaloutreach-launch/state/failed/owner-question-taskflow-6ea601be2d0823f4-ravenswood-on-tap.failed-1780871588.json",
+          "status": "blocked",
+          "subject": "Re: Fwd: Ravenswood On Tap 2026 - Drinks",
+          "verification_readback": "Failed artifact metadata readback: owner_lane=outreach-coordinator; responsible_worker_or_persona=vanessa.sterling@kovaldistillery.com; ops_portal_or_domain_task=OPS outreach events 866, 867."
+        }
+      ],
       "registry_ok": true,
       "service_parity_drift": 0,
       "service_parity_drift_items": [],
       "service_results_checked": 91,
-      "truth_drift_count": 0,
-      "truth_drifts": [],
-      "truth_managed_sessions": 124,
+      "truth_drift_count": 5,
+      "truth_drifts": [
+        {
+          "dedupe_key": "frank-direct-primary-CAAtX44Y-8zHhju0qwVuWateFAw16-W-N2iQ6UJ6Xu6wVBxCyCA-mail-gmail-com",
+          "detail": "active Task Flow row references missing board session d5961eef",
+          "kind": "active_missing_board_session",
+          "path": "",
+          "session_id": "d5961eef",
+          "severity": "high",
+          "title": "worker-readback-next-check"
+        },
+        {
+          "dedupe_key": "frank-direct-primary-CAAtX44aYkuTMHyrTPk3A5-453GYgsAccVMWrzVRDLVPvUDiwcQ-mail-gmail-com",
+          "detail": "active Task Flow row references missing board session ebd7fa09",
+          "kind": "active_missing_board_session",
+          "path": "",
+          "session_id": "ebd7fa09",
+          "severity": "high",
+          "title": "worker-readback-next-check"
+        },
+        {
+          "dedupe_key": "frank-direct-primary-CAAtX44YL-cdpejiaxMZ-Ad06b7ac76pkeV18jSWstXDwqSZ3Q-mail-gmail-com",
+          "detail": "active Task Flow row references missing board session dbf9b169",
+          "kind": "active_missing_board_session",
+          "path": "",
+          "session_id": "dbf9b169",
+          "severity": "high",
+          "title": "worker-readback-next-check"
+        },
+        {
+          "dedupe_key": "avignon-direct-owner-sonat-CALbLtzzXU7SahfZ-4bUFts-K9fUAQDrKjM0Q54evGHWehxP-Cg-mail-gmail-com",
+          "detail": "active Task Flow row references missing board session 0cdfa142",
+          "kind": "active_missing_board_session",
+          "path": "",
+          "session_id": "0cdfa142",
+          "severity": "high",
+          "title": "worker-readback-next-check"
+        },
+        {
+          "dedupe_key": "avignon-direct-owner-sonat-CALbLtzwALqFwLdxDd-JedrMiePpf3WhXJrvBavMDRwf2-EAhsA-mail-gmail-com",
+          "detail": "active Task Flow row references missing board session 99671a25",
+          "kind": "active_missing_board_session",
+          "path": "",
+          "session_id": "99671a25",
+          "severity": "high",
+          "title": "Portal worker 9f0ae713"
+        }
+      ],
+      "truth_managed_sessions": 76,
       "truth_rows_scanned": 500
     },
-    "what_changes_if_approved": "No change proposed. Keep the recursive lane in monitoring mode.",
-    "what_will_not_change": "No execution or approval request will be sent for this no-op monitor proposal.",
-    "why_now": "Recursive checkers and recommendation benchmarks are currently clean."
+    "what_changes_if_approved": "Investigate and repair the single contradiction `worker-readback-next-check` through the approved Task Flow / Workspaceboard path.",
+    "what_will_not_change": "No broad Task Flow closeout mutation, mailbox action, service restart, credential work, or OPS/Portal mutation.",
+    "why_now": "Task Flow truth drift reports 5 contradiction item(s)."
   },
-  "recorded_at": "2026-06-07 16:04:48 CDT"
+  "recorded_at": "2026-06-08 13:37:17 CDT",
+  "server_health": {
+    "classification": {
+      "issues": [
+        {
+          "id": "large-processes",
+          "reason": "large resident processes: codex app-server 4738.8 MB, bitdefender daemon 2799.3 MB, python process 1211.0 MB"
+        },
+        {
+          "id": "dirty-repositories",
+          "reason": "dirty repos 7 > 4"
+        }
+      ],
+      "recommended_action": "reuse existing Codex sessions and close proof-backed stale wrappers before launching more workers",
+      "status": "attention"
+    },
+    "epoch": 1780943818,
+    "recorded_at": "2026-06-08 13:36:58 CDT",
+    "server_health": {
+      "disk": {
+        "available_bytes": 87489912832,
+        "checked_path": "/System/Volumes/Data",
+        "filesystem": "/dev/disk1s2",
+        "mount": "/System/Volumes/Data",
+        "ok": true,
+        "total_bytes": 229171314688,
+        "used_bytes": 141681401856,
+        "used_percent": 62
+      },
+      "generated_at": "2026-06-08T18:36:56.578Z",
+      "host": "roberts-mini-ethernet.lan",
+      "load_average": {
+        "fifteen": 3.08837890625,
+        "five": 3.1904296875,
+        "one": 3.11181640625
+      },
+      "memory": {
+        "free_bytes": 20622045184,
+        "total_bytes": 68719476736,
+        "used_bytes": 48097431552,
+        "used_percent": 70
+      },
+      "ok": true,
+      "repositories": {
+        "dirty": 7,
+        "needs_action": 7,
+        "total": 16
+      },
+      "uptime_human": "7 weeks, 22 hours, 20 minutes"
+    },
+    "server_health_url": "http://127.0.0.1:17878/api/server-health",
+    "top_processes": [
+      {
+        "label": "codex app-server",
+        "mem_percent": 7.2,
+        "pid": 24134,
+        "ppid": 24131,
+        "rss_mb": 4738.8
+      },
+      {
+        "label": "bitdefender daemon",
+        "mem_percent": 4.3,
+        "pid": 72137,
+        "ppid": 1,
+        "rss_mb": 2799.3
+      },
+      {
+        "label": "python process",
+        "mem_percent": 1.8,
+        "pid": 71421,
+        "ppid": 71413,
+        "rss_mb": 1211.0
+      },
+      {
+        "label": "codex session",
+        "mem_percent": 0.5,
+        "pid": 49796,
+        "ppid": 49790,
+        "rss_mb": 359.7
+      },
+      {
+        "label": "codex session",
+        "mem_percent": 0.5,
+        "pid": 3234,
+        "ppid": 1,
+        "rss_mb": 307.6
+      },
+      {
+        "label": "codex session",
+        "mem_percent": 0.4,
+        "pid": 44325,
+        "ppid": 44308,
+        "rss_mb": 248.6
+      },
+      {
+        "label": "mds_stores",
+        "mem_percent": 0.3,
+        "pid": 304,
+        "ppid": 1,
+        "rss_mb": 225.7
+      },
+      {
+        "label": "codex session",
+        "mem_percent": 0.3,
+        "pid": 2391,
+        "ppid": 2367,
+        "rss_mb": 222.1
+      },
+      {
+        "label": "codex session",
+        "mem_percent": 0.3,
+        "pid": 67250,
+        "ppid": 67231,
+        "rss_mb": 215.7
+      },
+      {
+        "label": "codex session",
+        "mem_percent": 0.3,
+        "pid": 59942,
+        "ppid": 59923,
+        "rss_mb": 214.9
+      },
+      {
+        "label": "codex session",
+        "mem_percent": 0.3,
+        "pid": 7624,
+        "ppid": 7616,
+        "rss_mb": 212.4
+      },
+      {
+        "label": "codex session",
+        "mem_percent": 0.3,
+        "pid": 3601,
+        "ppid": 3582,
+        "rss_mb": 212.2
+      }
+    ]
+  }
 }

@@ -137,7 +137,7 @@ def load_checker_snapshot(*, refresh_historical: bool = False) -> dict[str, Any]
             text=True,
         )
         subprocess.run(
-            ["./scripts/task_flow_truth_drift_check.py", "--json", str(truth_json)],
+            ["./scripts/task_flow_truth_drift_check.py", "--json", str(truth_json), "--timeout", "30"],
             cwd=ROOT,
             check=True,
             capture_output=True,

@@ -1,0 +1,502 @@
+# Recursive Proposal recursive-proposal-20260608-133717-repair-truth-drift
+
+- Created: 2026-06-08 13:37:17 CDT
+- Recommended action: `repair-truth-drift`
+- Approval required: `True`
+- Risk class: `medium`
+- Allowed fix class: `truth-drift-single-item-repair`
+
+## Why Now
+
+Task Flow truth drift reports 5 contradiction item(s).
+
+## Approval Packet
+
+- What changes if approved: Investigate and repair the single contradiction `worker-readback-next-check` through the approved Task Flow / Workspaceboard path.
+- What will not change: No broad Task Flow closeout mutation, mailbox action, service restart, credential work, or OPS/Portal mutation.
+- Proof required: `./scripts/task_flow_truth_drift_check.py --fail-on-drift` returns zero drift, or the exact blocker is recorded.
+- Rollback note: If verification fails, stop and record one exact blocker; do not continue into a broader repair class.
+
+## Frank Email
+
+- Subject: `Approval needed: repair-truth-drift`
+- Body path: `/Users/werkstatt/ai_workspace/frank/drafts/recursive-proposals/recursive-proposal-20260608-133717-repair-truth-drift.txt`
+- HTML body path: `/Users/werkstatt/ai_workspace/frank/drafts/recursive-proposals/recursive-proposal-20260608-133717-repair-truth-drift.html`
+
+## Source Snapshot
+
+```json
+{
+  "coverage_ok": true,
+  "historical_benchmark_refreshed": false,
+  "historical_benchmark_run_id": "4b1934a45c5b",
+  "historical_benchmark_trace_count": 7,
+  "historical_clean_success": 1.0,
+  "proof_closeout_issues": 34,
+  "proof_issue_class_counts": {
+    "active_worker_missing_domain_task": 3,
+    "attention_missing_finish_link": 4,
+    "blocked_needs_owner_question_proof": 16
+  },
+  "proof_issue_count": 23,
+  "proof_issue_samples": [
+    {
+      "dedupe_key": "taskflow-3981bd77dabf07ce",
+      "detail": "blocked row is routed-needs-owner-question and needs owner-question/blocker proof",
+      "kind": "blocked_needs_owner_question_proof",
+      "missing_fields": [
+        "owner_lane",
+        "clarification_or_blocker_email"
+      ],
+      "owner_lane": "",
+      "session_id": "",
+      "severity": "blocked",
+      "title": "taskflow-3981bd77dabf07ce"
+    },
+    {
+      "dedupe_key": "taskflow-09043689ee2660fe",
+      "detail": "working row has visible session 5bae2106 but lacks ops_portal_or_domain_task",
+      "kind": "active_worker_missing_domain_task",
+      "missing_fields": [
+        "ops_portal_or_domain_task"
+      ],
+      "owner_lane": "outreach-coordinator",
+      "session_id": "5bae2106",
+      "severity": "attention",
+      "title": "taskflow-09043689ee2660fe"
+    },
+    {
+      "dedupe_key": "taskflow-1513f992055a281d",
+      "detail": "blocked row is routed-needs-owner-question and needs owner-question/blocker proof",
+      "kind": "blocked_needs_owner_question_proof",
+      "missing_fields": [
+        "owner_lane",
+        "clarification_or_blocker_email"
+      ],
+      "owner_lane": "",
+      "session_id": "",
+      "severity": "blocked",
+      "title": "taskflow-1513f992055a281d"
+    },
+    {
+      "dedupe_key": "taskflow-1f6e3188f9c1c18f",
+      "detail": "blocked row is routed-needs-owner-question and needs owner-question/blocker proof",
+      "kind": "blocked_needs_owner_question_proof",
+      "missing_fields": [
+        "owner_lane",
+        "clarification_or_blocker_email"
+      ],
+      "owner_lane": "",
+      "session_id": "",
+      "severity": "blocked",
+      "title": "taskflow-1f6e3188f9c1c18f"
+    },
+    {
+      "dedupe_key": "taskflow-8019cf2410556f69",
+      "detail": "blocked row is routed-needs-owner-question and needs owner-question/blocker proof",
+      "kind": "blocked_needs_owner_question_proof",
+      "missing_fields": [
+        "owner_lane",
+        "clarification_or_blocker_email"
+      ],
+      "owner_lane": "",
+      "session_id": "",
+      "severity": "blocked",
+      "title": "taskflow-8019cf2410556f69"
+    },
+    {
+      "dedupe_key": "taskflow-bb8c20b3438d70a7",
+      "detail": "attention row missing ops_portal_or_domain_task",
+      "kind": "attention_missing_finish_link",
+      "missing_fields": [
+        "ops_portal_or_domain_task"
+      ],
+      "owner_lane": "outreach-coordinator",
+      "session_id": "",
+      "severity": "attention",
+      "title": "OPS open shifts 5345, 5270"
+    },
+    {
+      "dedupe_key": "taskflow-88906a605debd945",
+      "detail": "blocked row is routed-needs-owner-question and needs owner-question/blocker proof",
+      "kind": "blocked_needs_owner_question_proof",
+      "missing_fields": [
+        "owner_lane",
+        "clarification_or_blocker_email"
+      ],
+      "owner_lane": "",
+      "session_id": "",
+      "severity": "blocked",
+      "title": "taskflow-88906a605debd945"
+    },
+    {
+      "dedupe_key": "taskflow-22b8a02dc900f954",
+      "detail": "blocked row is routed-needs-owner-question and needs owner-question/blocker proof",
+      "kind": "blocked_needs_owner_question_proof",
+      "missing_fields": [
+        "owner_lane",
+        "clarification_or_blocker_email"
+      ],
+      "owner_lane": "",
+      "session_id": "",
+      "severity": "blocked",
+      "title": "taskflow-22b8a02dc900f954"
+    },
+    {
+      "dedupe_key": "taskflow-66bff1533318e8e6",
+      "detail": "blocked row is routed-needs-owner-question and needs owner-question/blocker proof",
+      "kind": "blocked_needs_owner_question_proof",
+      "missing_fields": [
+        "owner_lane",
+        "clarification_or_blocker_email"
+      ],
+      "owner_lane": "",
+      "session_id": "",
+      "severity": "blocked",
+      "title": "taskflow-66bff1533318e8e6"
+    },
+    {
+      "dedupe_key": "taskflow-a9b9481a1663f2af",
+      "detail": "blocked row is routed-needs-owner-question and needs owner-question/blocker proof",
+      "kind": "blocked_needs_owner_question_proof",
+      "missing_fields": [
+        "owner_lane",
+        "clarification_or_blocker_email"
+      ],
+      "owner_lane": "",
+      "session_id": "",
+      "severity": "blocked",
+      "title": "taskflow-a9b9481a1663f2af"
+    },
+    {
+      "dedupe_key": "taskflow-bdb48fb8db67a6a6",
+      "detail": "blocked row is routed-needs-owner-question and needs owner-question/blocker proof",
+      "kind": "blocked_needs_owner_question_proof",
+      "missing_fields": [
+        "owner_lane",
+        "clarification_or_blocker_email"
+      ],
+      "owner_lane": "",
+      "session_id": "",
+      "severity": "blocked",
+      "title": "taskflow-bdb48fb8db67a6a6"
+    },
+    {
+      "dedupe_key": "taskflow-6ea601be2d0823f4",
+      "detail": "working row has visible session 413c02b9 but lacks ops_portal_or_domain_task",
+      "kind": "active_worker_missing_domain_task",
+      "missing_fields": [
+        "ops_portal_or_domain_task"
+      ],
+      "owner_lane": "outreach-coordinator",
+      "session_id": "413c02b9",
+      "severity": "attention",
+      "title": "taskflow-6ea601be2d0823f4"
+    },
+    {
+      "dedupe_key": "taskflow-bb72fb37d3246552",
+      "detail": "working row has visible session 8e2abb16 but lacks ops_portal_or_domain_task",
+      "kind": "active_worker_missing_domain_task",
+      "missing_fields": [
+        "ops_portal_or_domain_task"
+      ],
+      "owner_lane": "outreach-coordinator",
+      "session_id": "8e2abb16",
+      "severity": "attention",
+      "title": "taskflow-bb72fb37d3246552"
+    },
+    {
+      "dedupe_key": "taskflow-f419b95a8de9650e",
+      "detail": "attention row missing ops_portal_or_domain_task, due_or_trigger_or_scheduled_action",
+      "kind": "attention_missing_finish_link",
+      "missing_fields": [
+        "ops_portal_or_domain_task",
+        "due_or_trigger_or_scheduled_action"
+      ],
+      "owner_lane": "outreach-coordinator",
+      "session_id": "",
+      "severity": "attention",
+      "title": "Event Schedule Request for Koval Inc. dba KOVAL Distillery"
+    },
+    {
+      "dedupe_key": "taskflow-cb3650c4908af2d9",
+      "detail": "blocked row is routed-needs-owner-question and needs owner-question/blocker proof",
+      "kind": "blocked_needs_owner_question_proof",
+      "missing_fields": [
+        "owner_lane",
+        "clarification_or_blocker_email"
+      ],
+      "owner_lane": "",
+      "session_id": "",
+      "severity": "blocked",
+      "title": "taskflow-cb3650c4908af2d9"
+    },
+    {
+      "dedupe_key": "taskflow-dcd3b23df830b215",
+      "detail": "blocked row is routed-needs-owner-question and needs owner-question/blocker proof",
+      "kind": "blocked_needs_owner_question_proof",
+      "missing_fields": [
+        "owner_lane",
+        "clarification_or_blocker_email"
+      ],
+      "owner_lane": "",
+      "session_id": "",
+      "severity": "blocked",
+      "title": "taskflow-dcd3b23df830b215"
+    },
+    {
+      "dedupe_key": "taskflow-bb13c953755d0477",
+      "detail": "blocked row is routed-needs-owner-question and needs owner-question/blocker proof",
+      "kind": "blocked_needs_owner_question_proof",
+      "missing_fields": [
+        "owner_lane",
+        "clarification_or_blocker_email"
+      ],
+      "owner_lane": "",
+      "session_id": "",
+      "severity": "blocked",
+      "title": "taskflow-bb13c953755d0477"
+    },
+    {
+      "dedupe_key": "taskflow-8dbdb0a71ae849d5",
+      "detail": "attention row missing ops_portal_or_domain_task, due_or_trigger_or_scheduled_action",
+      "kind": "attention_missing_finish_link",
+      "missing_fields": [
+        "ops_portal_or_domain_task",
+        "due_or_trigger_or_scheduled_action"
+      ],
+      "owner_lane": "outreach-coordinator",
+      "session_id": "",
+      "severity": "attention",
+      "title": "Lifetime Fitness Tasting Dinner"
+    },
+    {
+      "dedupe_key": "taskflow-ab214935d0184e17",
+      "detail": "attention row missing ops_portal_or_domain_task, due_or_trigger_or_scheduled_action",
+      "kind": "attention_missing_finish_link",
+      "missing_fields": [
+        "ops_portal_or_domain_task",
+        "due_or_trigger_or_scheduled_action"
+      ],
+      "owner_lane": "outreach-coordinator",
+      "session_id": "",
+      "severity": "attention",
+      "title": "Gold Eagle Wine and Spirits"
+    },
+    {
+      "dedupe_key": "taskflow-5b6fa4efab572601",
+      "detail": "blocked row is routed-needs-owner-question and needs owner-question/blocker proof",
+      "kind": "blocked_needs_owner_question_proof",
+      "missing_fields": [
+        "owner_lane",
+        "clarification_or_blocker_email"
+      ],
+      "owner_lane": "",
+      "session_id": "",
+      "severity": "blocked",
+      "title": "taskflow-5b6fa4efab572601"
+    }
+  ],
+  "proof_repair_candidate_count": 8,
+  "proof_repair_candidates": [
+    {
+      "completion_or_blocker_email": "Failed approved-send artifact exists at benjamin-bottles-cans-too-ops1055-completion.failed-1780935440.json; no sent Message-ID was produced. Review and resend only through the approved sender path.",
+      "confidence": "source-backed",
+      "dedupe_key": "taskflow-3981bd77dabf07ce",
+      "intake_channel": "approved-send:nationaloutreach",
+      "mutation_allowed": false,
+      "next_update": "Complete after same-thread link reply is sent.",
+      "ops_portal_or_domain_task": "OPS Outreach event 1055 / shift 5584 / Google UID ops-outreach-1055@koval-distillery.com",
+      "owner_lane": "outreach-coordinator",
+      "proof_kind": "failed_approved_send_artifact",
+      "responsible_worker_or_persona": "vanessa.sterling@kovaldistillery.com",
+      "source_event": "failed_send_artifact",
+      "source_logged_at": "",
+      "source_path": "/Users/admin/.nationaloutreach-launch/state/failed/benjamin-bottles-cans-too-ops1055-completion.failed-1780935440.json",
+      "status": "blocked",
+      "subject": "Re: New tasting",
+      "verification_readback": "Failed artifact metadata readback: owner_lane=outreach-coordinator; responsible_worker_or_persona=vanessa.sterling@kovaldistillery.com; ops_portal_or_domain_task=OPS Outreach event 1055 / shift 5584 / Google UID ops-outreach-1055@koval-distillery.com."
+    },
+    {
+      "completion_or_blocker_email": "Failed approved-send artifact exists at wild-onion-shift-time-update-ops1054-20260608.failed-1780929775.json; no sent Message-ID was produced. Review and resend only through the approved sender path.",
+      "confidence": "source-backed",
+      "dedupe_key": "taskflow-1513f992055a281d",
+      "intake_channel": "approved-send:nationaloutreach",
+      "mutation_allowed": false,
+      "next_update": "sent",
+      "ops_portal_or_domain_task": "OPS event 1054 / TrackTime shift 5582 / Google outreach UID ops-outreach-1054@koval-distillery.com",
+      "owner_lane": "outreach-coordinator",
+      "proof_kind": "failed_approved_send_artifact",
+      "responsible_worker_or_persona": "vanessa.sterling@kovaldistillery.com",
+      "source_event": "failed_send_artifact",
+      "source_logged_at": "",
+      "source_path": "/Users/admin/.nationaloutreach-launch/state/failed/wild-onion-shift-time-update-ops1054-20260608.failed-1780929775.json",
+      "status": "blocked",
+      "subject": "Re: Wild Onion Market 2nd Anniversary Event",
+      "verification_readback": "Failed artifact metadata readback: owner_lane=outreach-coordinator; responsible_worker_or_persona=vanessa.sterling@kovaldistillery.com; ops_portal_or_domain_task=OPS event 1054 / TrackTime shift 5582 / Google outreach UID ops-outreach-1054@koval-distillery.com."
+    },
+    {
+      "completion_or_blocker_email": "Failed approved-send artifact exists at vanessa-open-store-shifts-4w-2026-06-08-0800.failed-1780923678.json; no sent Message-ID was produced. Review and resend only through the approved sender path.",
+      "confidence": "source-backed",
+      "dedupe_key": "taskflow-1f6e3188f9c1c18f",
+      "intake_channel": "approved-send:nationaloutreach",
+      "mutation_allowed": false,
+      "next_update": "Pending Monday 8:00 AM scheduled-action queue for approved send cycle.",
+      "ops_portal_or_domain_task": "OPS open shifts",
+      "owner_lane": "outreach-coordinator",
+      "proof_kind": "failed_approved_send_artifact",
+      "responsible_worker_or_persona": "Vanessa Sterling",
+      "source_event": "failed_send_artifact",
+      "source_logged_at": "",
+      "source_path": "/Users/admin/.nationaloutreach-launch/state/failed/vanessa-open-store-shifts-4w-2026-06-08-0800.failed-1780923678.json",
+      "status": "blocked",
+      "subject": "Open store and tasting room shifts for June 8 - July 6",
+      "verification_readback": "Failed artifact metadata readback: owner_lane=outreach-coordinator; responsible_worker_or_persona=Vanessa Sterling; ops_portal_or_domain_task=OPS open shifts."
+    },
+    {
+      "completion_or_blocker_email": "Failed approved-send artifact exists at vanessa-mitch-weekly-direct-2026-06-08-0800.failed-1780923672.json; no sent Message-ID was produced. Review and resend only through the approved sender path.",
+      "confidence": "source-backed",
+      "dedupe_key": "taskflow-8019cf2410556f69",
+      "intake_channel": "approved-send:nationaloutreach",
+      "mutation_allowed": false,
+      "next_update": "Pending Monday 8:00 AM scheduled-action queue for approved send cycle.",
+      "ops_portal_or_domain_task": "OPS 367856",
+      "owner_lane": "outreach-coordinator",
+      "proof_kind": "failed_approved_send_artifact",
+      "responsible_worker_or_persona": "Vanessa Sterling",
+      "source_event": "failed_send_artifact",
+      "source_logged_at": "",
+      "source_path": "/Users/admin/.nationaloutreach-launch/state/failed/vanessa-mitch-weekly-direct-2026-06-08-0800.failed-1780923672.json",
+      "status": "blocked",
+      "subject": "Upcoming KOVAL tastings this week",
+      "verification_readback": "Failed artifact metadata readback: owner_lane=outreach-coordinator; responsible_worker_or_persona=Vanessa Sterling; ops_portal_or_domain_task=OPS 367856."
+    },
+    {
+      "completion_or_blocker_email": "Failed approved-send artifact exists at vanessa-cancellation-reminder-robert-sonat-20260607.failed-1780873129.json; no sent Message-ID was produced. Review and resend only through the approved sender path.",
+      "confidence": "source-backed",
+      "dedupe_key": "taskflow-22b8a02dc900f954",
+      "intake_channel": "approved-send:nationaloutreach",
+      "mutation_allowed": false,
+      "next_update": "sent",
+      "ops_portal_or_domain_task": "ordinary tasting cancellation coordination; no specific OPS event/calendar row in source",
+      "owner_lane": "outreach-coordinator",
+      "proof_kind": "failed_approved_send_artifact",
+      "responsible_worker_or_persona": "vanessa.sterling@kovaldistillery.com",
+      "source_event": "failed_send_artifact",
+      "source_logged_at": "",
+      "source_path": "/Users/admin/.nationaloutreach-launch/state/failed/vanessa-cancellation-reminder-robert-sonat-20260607.failed-1780873129.json",
+      "status": "blocked",
+      "subject": "Re: Cancellation instructions for Whole Foods and Binny's tastings",
+      "verification_readback": "Failed artifact metadata readback: owner_lane=outreach-coordinator; responsible_worker_or_persona=vanessa.sterling@kovaldistillery.com; ops_portal_or_domain_task=ordinary tasting cancellation coordination; no specific OPS event/calendar row in source."
+    },
+    {
+      "completion_or_blocker_email": "Failed approved-send artifact exists at vanessa-sonat-wholefoods-binnys-cancellation-instructions-recorded-20260607.failed-1780872528.json; no sent Message-ID was produced. Review and resend only through the approved sender path.",
+      "confidence": "source-backed",
+      "dedupe_key": "taskflow-66bff1533318e8e6",
+      "intake_channel": "approved-send:nationaloutreach",
+      "mutation_allowed": false,
+      "next_update": "Cancellation instruction blocker removed; future approved fallback uses the recorded rules.",
+      "ops_portal_or_domain_task": "Vanessa cancellation automation / Whole Foods and Binny's instructions",
+      "owner_lane": "outreach-coordinator",
+      "proof_kind": "failed_approved_send_artifact",
+      "responsible_worker_or_persona": "vanessa.sterling@kovaldistillery.com",
+      "source_event": "failed_send_artifact",
+      "source_logged_at": "",
+      "source_path": "/Users/admin/.nationaloutreach-launch/state/failed/vanessa-sonat-wholefoods-binnys-cancellation-instructions-recorded-20260607.failed-1780872528.json",
+      "status": "blocked",
+      "subject": "Re: Cancellation instructions for Whole Foods and Binny's tastings",
+      "verification_readback": "Failed artifact metadata readback: owner_lane=outreach-coordinator; responsible_worker_or_persona=vanessa.sterling@kovaldistillery.com; ops_portal_or_domain_task=Vanessa cancellation automation / Whole Foods and Binny's instructions."
+    },
+    {
+      "completion_or_blocker_email": "Failed approved-send artifact exists at status-reply-taskflow-6ea601be2d0823f4-ravenswood-on-tap.failed-1780871689.json; no sent Message-ID was produced. Review and resend only through the approved sender path.",
+      "confidence": "source-backed",
+      "dedupe_key": "taskflow-a9b9481a1663f2af",
+      "intake_channel": "approved-send:nationaloutreach",
+      "mutation_allowed": false,
+      "next_update": "Ravenswood On Tap remains recorded as OPS planning placeholders until exact coverage times and staffing details are confirmed.",
+      "ops_portal_or_domain_task": "OPS outreach events 866, 867",
+      "owner_lane": "outreach-coordinator",
+      "proof_kind": "failed_approved_send_artifact",
+      "responsible_worker_or_persona": "vanessa.sterling@kovaldistillery.com",
+      "source_event": "failed_send_artifact",
+      "source_logged_at": "",
+      "source_path": "/Users/admin/.nationaloutreach-launch/state/failed/status-reply-taskflow-6ea601be2d0823f4-ravenswood-on-tap.failed-1780871689.json",
+      "status": "blocked",
+      "subject": "Re: Fwd: Ravenswood On Tap 2026 - Drinks",
+      "verification_readback": "Failed artifact metadata readback: owner_lane=outreach-coordinator; responsible_worker_or_persona=vanessa.sterling@kovaldistillery.com; ops_portal_or_domain_task=OPS outreach events 866, 867."
+    },
+    {
+      "completion_or_blocker_email": "Failed approved-send artifact exists at owner-question-taskflow-6ea601be2d0823f4-ravenswood-on-tap.failed-1780871588.json; no sent Message-ID was produced. Review and resend only through the approved sender path.",
+      "confidence": "source-backed",
+      "dedupe_key": "taskflow-bdb48fb8db67a6a6",
+      "intake_channel": "approved-send:nationaloutreach",
+      "mutation_allowed": false,
+      "next_update": "Robert must approve the drink plan before Vanessa replies to Amy.",
+      "ops_portal_or_domain_task": "OPS outreach events 866, 867",
+      "owner_lane": "outreach-coordinator",
+      "proof_kind": "failed_approved_send_artifact",
+      "responsible_worker_or_persona": "vanessa.sterling@kovaldistillery.com",
+      "source_event": "failed_send_artifact",
+      "source_logged_at": "",
+      "source_path": "/Users/admin/.nationaloutreach-launch/state/failed/owner-question-taskflow-6ea601be2d0823f4-ravenswood-on-tap.failed-1780871588.json",
+      "status": "blocked",
+      "subject": "Re: Fwd: Ravenswood On Tap 2026 - Drinks",
+      "verification_readback": "Failed artifact metadata readback: owner_lane=outreach-coordinator; responsible_worker_or_persona=vanessa.sterling@kovaldistillery.com; ops_portal_or_domain_task=OPS outreach events 866, 867."
+    }
+  ],
+  "registry_ok": true,
+  "service_parity_drift": 0,
+  "service_parity_drift_items": [],
+  "service_results_checked": 91,
+  "truth_drift_count": 5,
+  "truth_drifts": [
+    {
+      "dedupe_key": "frank-direct-primary-CAAtX44Y-8zHhju0qwVuWateFAw16-W-N2iQ6UJ6Xu6wVBxCyCA-mail-gmail-com",
+      "detail": "active Task Flow row references missing board session d5961eef",
+      "kind": "active_missing_board_session",
+      "path": "",
+      "session_id": "d5961eef",
+      "severity": "high",
+      "title": "worker-readback-next-check"
+    },
+    {
+      "dedupe_key": "frank-direct-primary-CAAtX44aYkuTMHyrTPk3A5-453GYgsAccVMWrzVRDLVPvUDiwcQ-mail-gmail-com",
+      "detail": "active Task Flow row references missing board session ebd7fa09",
+      "kind": "active_missing_board_session",
+      "path": "",
+      "session_id": "ebd7fa09",
+      "severity": "high",
+      "title": "worker-readback-next-check"
+    },
+    {
+      "dedupe_key": "frank-direct-primary-CAAtX44YL-cdpejiaxMZ-Ad06b7ac76pkeV18jSWstXDwqSZ3Q-mail-gmail-com",
+      "detail": "active Task Flow row references missing board session dbf9b169",
+      "kind": "active_missing_board_session",
+      "path": "",
+      "session_id": "dbf9b169",
+      "severity": "high",
+      "title": "worker-readback-next-check"
+    },
+    {
+      "dedupe_key": "avignon-direct-owner-sonat-CALbLtzzXU7SahfZ-4bUFts-K9fUAQDrKjM0Q54evGHWehxP-Cg-mail-gmail-com",
+      "detail": "active Task Flow row references missing board session 0cdfa142",
+      "kind": "active_missing_board_session",
+      "path": "",
+      "session_id": "0cdfa142",
+      "severity": "high",
+      "title": "worker-readback-next-check"
+    },
+    {
+      "dedupe_key": "avignon-direct-owner-sonat-CALbLtzwALqFwLdxDd-JedrMiePpf3WhXJrvBavMDRwf2-EAhsA-mail-gmail-com",
+      "detail": "active Task Flow row references missing board session 99671a25",
+      "kind": "active_missing_board_session",
+      "path": "",
+      "session_id": "99671a25",
+      "severity": "high",
+      "title": "Portal worker 9f0ae713"
+    }
+  ],
+  "truth_managed_sessions": 76,
+  "truth_rows_scanned": 500
+}
+```

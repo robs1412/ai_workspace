@@ -74,21 +74,33 @@ def build_report(payload: dict[str, Any]) -> str:
     proposal = payload.get("proposal") or {}
     execution = payload.get("execution") or {}
     status = payload.get("executor_status") or {}
+    server_health = payload.get("server_health") or {}
+    server_classification = server_health.get("classification") or {}
     lines = [
         "# Recursive Daily Run",
         "",
         f"- Recorded: {payload.get('recorded_at')}",
         f"- Mode: `{payload.get('mode')}`",
         f"- Outcome: `{payload.get('outcome')}`",
+        f"- Server health: `{server_classification.get('status', 'not-recorded')}`",
         f"- Proposal: `{proposal.get('proposal_id', '')}`",
         f"- Recommended action: `{proposal.get('recommended_action', '')}`",
         f"- Approval required: `{proposal.get('approval_required', '')}`",
         f"- Allowed fix class: `{proposal.get('allowed_fix_class', '')}`",
         f"- Auto executed: `{payload.get('auto_executed')}`",
         "",
+        "## Server Health",
+        "",
+        f"- status: `{server_classification.get('status', 'not-recorded')}`",
+        f"- recommended_action: {server_classification.get('recommended_action', '')}",
+    ]
+    for issue in (server_classification.get("issues") or [])[:5]:
+        lines.append(f"- `{issue.get('id')}`: {issue.get('reason')}")
+    lines.extend([
+        "",
         "## Snapshot",
         "",
-    ]
+    ])
     snapshot = proposal.get("source_snapshot") if isinstance(proposal.get("source_snapshot"), dict) else {}
     for key in [
         "service_parity_drift",
@@ -133,6 +145,15 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
 
 def main(argv: list[str]) -> int:
     args = parse_args(argv)
+    server_health_result = run_command(
+        [
+            "/usr/local/bin/python3.13",
+            "scripts/server_health_auto_runner.py",
+            "--print-json",
+        ],
+        timeout=60,
+    )
+    server_health = parse_json_stdout(server_health_result)
     queue_command = ["/usr/local/bin/python3.13", "scripts/recursive_proposal_queue.py", "--json"]
     mode = "weekly-refresh" if args.refresh_historical else "daily"
     if not args.refresh_historical:
@@ -173,10 +194,12 @@ def main(argv: list[str]) -> int:
         "mode": mode,
         "outcome": outcome,
         "auto_executed": auto_executed,
+        "server_health": server_health,
         "proposal": proposal,
         "execution": execution,
         "executor_status": status,
         "commands": {
+            "server_health": summarize_command(server_health_result),
             "queue": summarize_command(queue_result),
             "status": summarize_command(status_result),
         },
