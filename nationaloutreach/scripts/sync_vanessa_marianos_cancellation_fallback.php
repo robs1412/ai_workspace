@@ -8,6 +8,7 @@ const DEFAULT_STATE_DIR = '/Users/admin/.nationaloutreach-launch/state';
 const MARIANOS_CANCEL_TO = 'abseventrequest@abstastings.com';
 const MARIANOS_CANCEL_CC = 'rafael@abstastings.com';
 const BINNYS_CANCEL_TO = 'rpaquin@binnys.com';
+const CALL_REMINDER_TO = ['robert@kovaldistillery.com', 'sonat@kovaldistillery.com'];
 
 function arg_value(array $argv, string $name, ?string $default = null): ?string
 {
@@ -110,8 +111,10 @@ function cancellation_rule_for_event(array $event): array
         return [
             'key' => 'whole-foods',
             'label' => 'Whole Foods',
-            'channel' => 'manual',
-            'manual_rule' => 'Under 24 hours, call the store. With more than 24 hours notice, cancel in the portal.',
+            'channel' => 'internal_call_reminder',
+            'to' => CALL_REMINDER_TO,
+            'manual_rule' => 'Under 24 hours, Robert and Sonat need an email reminder to call the store. With more than 24 hours notice, cancel in the portal.',
+            'approval_gates' => 'Approved Whole Foods cancellation path: under 24 hours, Vanessa cannot call; email Robert and Sonat the store-call reminder instead.',
         ];
     }
 
@@ -262,6 +265,75 @@ function build_cancel_payload(array $event, array $shiftSummary, string $actionI
     ];
 }
 
+function build_call_reminder_payload(array $event, array $shiftSummary, string $actionId, DateTimeImmutable $now, string $reason, array $rule): array
+{
+    $eventId = (int) ($event['id'] ?? 0);
+    $eventName = trim((string) ($event['event_name'] ?? 'Whole Foods tasting'));
+    $eventDate = (string) ($event['event_date'] ?? '');
+    $start = event_start_datetime($event, new DateTimeZone('America/Chicago'));
+    $dateLabel = $start ? $start->format('l, F j, Y') : $eventDate;
+    $timeLabel = format_time_label((string) ($event['start_time'] ?? ''), (string) ($event['end_time'] ?? ''));
+    $location = trim((string) ($event['event_location'] ?? ''));
+    $shiftIds = array_values(array_filter(array_map('intval', $shiftSummary['shift_ids'] ?? [])));
+    $opsTask = 'OPS event ' . $eventId . ($shiftIds ? ' / TrackTime shift ' . implode(',', $shiftIds) : '');
+    $subject = 'Call needed: KOVAL tasting at ' . $eventName . ' on ' . ($start ? $start->format('l, F j') : $eventDate);
+
+    $body = [
+        'Hi Robert and Sonat,',
+        '',
+        'This tasting is inside the 24-hour cancellation window and needs a store call:',
+        '',
+        'Event: ' . $eventName,
+        'Date/time: ' . $dateLabel . ($timeLabel !== '' ? ', ' . $timeLabel : ''),
+        'Location: ' . ($location !== '' ? $location : 'not listed'),
+        'OPS reference: ' . $opsTask,
+        'Reason: ' . $reason,
+        '',
+        'Vanessa cannot make the store call directly, so please call the store for the cancellation.',
+        '',
+        'Thank you,',
+        '',
+        'Vanessa',
+    ];
+
+    return [
+        'from' => 'vanessa.sterling@kovaldistillery.com',
+        'from_name' => 'Vanessa Sterling',
+        'to' => array_values($rule['to'] ?? CALL_REMINDER_TO),
+        'cc' => [],
+        'subject' => $subject,
+        'body' => implode("\n", $body),
+        'source_ref' => $actionId,
+        'intake_channel' => 'ops-cancellation-fallback',
+        'owner_lane' => 'outreach-coordinator',
+        'responsible_worker_or_persona' => 'vanessa.sterling@kovaldistillery.com',
+        'requester' => 'OPS Outreach cancellation fallback',
+        'human_owner_or_recipient' => 'Robert Birnecker <robert@kovaldistillery.com>; Sonat Birnecker <sonat@kovaldistillery.com>',
+        'output_channel' => 'email',
+        'requested_deliverable' => 'Internal under-24-hour Whole Foods store-call reminder.',
+        'verification_readback' => 'Whole Foods under-24-hour cancellation trigger produced an internal Robert/Sonat store-call reminder.',
+        'next_update' => 'queued for approved send cycle',
+        'approval_gates' => $rule['approval_gates'] ?? '',
+        'task_packet' => [
+            'dedupe_key' => $actionId,
+            'source_ref' => $actionId,
+            'intake_channel' => 'ops-cancellation-fallback',
+            'owner_lane' => 'outreach-coordinator',
+            'responsible_worker_or_persona' => 'vanessa.sterling@kovaldistillery.com',
+            'ops_portal_or_domain_task' => $opsTask,
+            'status' => 'reported',
+            'scheduled_action' => 'Send internal store-call reminder for uncovered Whole Foods tasting inside 24 hours.',
+            'source_links' => 'OPS event ' . $eventId,
+            'approval_gates' => $rule['approval_gates'] ?? '',
+            'verification_readback' => 'Whole Foods under-24-hour cancellation trigger produced an internal Robert/Sonat store-call reminder.',
+            'next_update' => 'queued for approved send cycle',
+            'human_owner_or_recipient' => 'Robert Birnecker <robert@kovaldistillery.com>; Sonat Birnecker <sonat@kovaldistillery.com>',
+            'output_channel' => 'email',
+            'proof_required' => 'sent-log Message-ID or approved-send queue artifact.',
+        ],
+    ];
+}
+
 function queue_payload(string $stateDir, array $payload, string $actionId, int $eventId, string $status): string
 {
     $outbox = $stateDir . '/outbox';
@@ -356,21 +428,6 @@ foreach ($events as $event) {
     }
     $rule = cancellation_rule_for_event($event);
     $result['cancellation_rule'] = $rule['key'];
-    if (($rule['channel'] ?? '') === 'manual') {
-        $result['status'] = 'manual_cancellation_required';
-        $result['next_step'] = $rule['manual_rule'];
-        $blocked++;
-        $results[] = $result;
-        continue;
-    }
-    if (($rule['channel'] ?? '') !== 'email') {
-        $result['status'] = 'blocked_missing_cancellation_rule';
-        $result['blocker'] = $rule['manual_rule'] ?? 'No approved cancellation recipient/rule recorded for this event.';
-        $blocked++;
-        $results[] = $result;
-        continue;
-    }
-
     $totalShifts = (int) ($summary['total_shifts'] ?? 0);
     $assignedShifts = (int) ($summary['assigned_shifts'] ?? 0);
     $reason = '';
@@ -391,6 +448,41 @@ foreach ($events as $event) {
     }
     $result['action_id'] = $actionId;
     $result['reason'] = $reason;
+    if (($rule['channel'] ?? '') === 'manual') {
+        $result['status'] = 'manual_cancellation_required';
+        $result['next_step'] = $rule['manual_rule'];
+        $blocked++;
+        $results[] = $result;
+        continue;
+    }
+    if (($rule['channel'] ?? '') === 'internal_call_reminder') {
+        if (isset($seen[strtolower($actionId)])) {
+            $result['status'] = 'skipped_duplicate';
+            $skipped++;
+            $results[] = $result;
+            continue;
+        }
+        $eligible++;
+        if ($queueApproved) {
+            $payload = build_call_reminder_payload($event, $summary, $actionId, $now, $reason, $rule);
+            $draftPath = queue_payload($stateDir, $payload, $actionId, $id, 'queued_approved_internal_call_reminder');
+            $result['status'] = 'queued_approved';
+            $result['draft'] = $draftPath;
+            $queued++;
+        } else {
+            $result['status'] = 'eligible_dry_run';
+            $result['next_step'] = $rule['manual_rule'];
+        }
+        $results[] = $result;
+        continue;
+    }
+    if (($rule['channel'] ?? '') !== 'email') {
+        $result['status'] = 'blocked_missing_cancellation_rule';
+        $result['blocker'] = $rule['manual_rule'] ?? 'No approved cancellation recipient/rule recorded for this event.';
+        $blocked++;
+        $results[] = $result;
+        continue;
+    }
     if (isset($seen[strtolower($actionId)])) {
         $result['status'] = 'skipped_duplicate';
         $skipped++;
