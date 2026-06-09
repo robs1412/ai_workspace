@@ -1,0 +1,45 @@
+{
+  "access": "ok",
+  "account": "nationaloutreach@kovaldistillery.com",
+  "folder_url": "https://drive.google.com/drive/folders/1Nm_Euby266IlztFERi8EqrjGpVlhoNRW",
+  "folder_id": "1Nm_Euby266IlztFERi8EqrjGpVlhoNRW",
+  "folder_items": [
+    {
+      "mimeType": "application/vnd.google-apps.folder",
+      "webViewLink": "https://drive.google.com/drive/folders/16Uo_qF4pIyGewVwRAhi-4Fa4I598MN9L",
+      "id": "16Uo_qF4pIyGewVwRAhi-4Fa4I598MN9L",
+      "name": "Benefits CRM",
+      "modifiedTime": "2022-09-23T15:31:15.135Z"
+    },
+    {
+      "mimeType": "application/vnd.google-apps.folder",
+      "webViewLink": "https://drive.google.com/drive/folders/14ZvDW1JM_b1OCgh7r0jP2yFbUBZmzaOV",
+      "id": "14ZvDW1JM_b1OCgh7r0jP2yFbUBZmzaOV",
+      "name": "Insurance ",
+      "modifiedTime": "2020-08-19T15:33:22.131Z"
+    },
+    {
+      "mimeType": "application/vnd.google-apps.folder",
+      "webViewLink": "https://drive.google.com/drive/folders/1e18q9kgyS3HqgP7mnj-Fnt9MvwPz74bR",
+      "id": "1e18q9kgyS3HqgP7mnj-Fnt9MvwPz74bR",
+      "name": "Training Material",
+      "modifiedTime": "2025-05-20T18:06:45.926Z"
+    }
+  ],
+  "doc_url": "https://docs.google.com/document/d/1pSK3-ODNVlG2vdpZnjbmJKNWud49_S2ex8JOJlKzZKo/edit?tab=t.0",
+  "doc": {
+    "id": "1pSK3-ODNVlG2vdpZnjbmJKNWud49_S2ex8JOJlKzZKo",
+    "name": "Modules For Onboarding and Training Summer 2026",
+    "mimeType": "application/vnd.google-apps.document",
+    "webViewLink": "https://docs.google.com/document/d/1pSK3-ODNVlG2vdpZnjbmJKNWud49_S2ex8JOJlKzZKo/edit?usp=drivesdk",
+    "modifiedTime": "2026-06-08T18:04:19.748Z",
+    "owners": [
+      {
+        "emailAddress": "sonat@kovaldistillery.com"
+      }
+    ]
+  },
+  "export_ok": true,
+  "export_text_file": "/Users/werkstatt/ai_workspace/project_hub/artifacts/training-onboarding/sonat-overview-google-doc.txt",
+  "text_chars": 3301
+}

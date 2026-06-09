@@ -1,0 +1,183 @@
+Source: Training Material/COT Training Folder 2026/CRM/CRM Tips & Tricks
+URL: https://docs.google.com/document/d/1lg-JK9xjRgERaPOS054hqky_QdAUNCQbz4rUHLXA_D0/edit?usp=drivesdk
+
+﻿CRM
+Tips & Tricks
+
+
+
+
+
+
+
+
+
+
+
+
+
+Time Track
+My time
+* Click on a day with a checkmark to see a breakdown of hours worked
+* To add time
+   * Hit the small ‘+’ button
+   * Under ‘Day Type’, select ‘Forgotten Day’
+   * Select the date
+   * Select the time
+      * Please submit in military time
+   * Under ‘Notes’, please list why you are submitting a forgotten time
+      * i.e: I forgot to clock in for my Whole Foods - Halsted tasting from 12:00-3:00
+   * Hit ‘Save’
+* Time Track How to Video
+Important Dates
+* A list of company holidays
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Payroll
+My Payroll
+* Allows you to see weekly pay, reimbursements, pay additions, bonus payments, and gross payment
+   * Select timeframe you want to view
+* This information can also be found in OnPay
+Payroll Calendar
+* Allows you to see beginning and end of pay period, the payroll run date (the day you will receive an email from OnPay), and the pay date
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Reimbursements
+My Reimbursements
+* Suburban Tasting
+   * Enter .5 for tastings over 12 miles
+   * Enter .75 for tastings over 20 miles
+   * List the miles and destination under ‘Notes’
+   * Mileage Reimbursement Policy
+* Tolls & Parking
+   * Add receipt under ‘Related Documents’
+* Mileage
+   * Mileage Reimbursement Policy
+   * List the miles and destinations under ‘Notes’
+* Expenses
+   * Purchases like mixers
+      * Spirits should not be purchased at an account unless discussed with a manager beforehand
+   * List the expenses under ‘Notes’
+   * Add receipt under ‘Related Documents’
+* Save and view to ensure everything is correct
+* Reimbursements should be submitted as soon as possible to ensure you are reimbursed in a timely manner
+
+
+
+
+
+
+
+
+
+
+
+
+Account Touchpoints
+My Activities
+* View all of your submitted activities
+   * View based on timeframe
+* Add new activity
+   * Select ‘+ Create’
+   * Select Category
+   * Select Account
+   * Enter Activity Date
+   * Enter time of activity
+      * In military time
+   * Under ‘Description’, answer tasting questions
+      * 1. What SKUs are they carrying?
+      * 2. Is anything low or out of stock?
+      * 3. What did you sample, and how many of each?
+      * 4. How many bottles of what were sold?
+      * 5. If not listed in the notes, what is the buyer's name?
+      * 6. What was the foot traffic like?
+         * If the buyer/manager/associate mentions their best time and days for foot traffic, please include that as well.
+      * 7. Note any problems the buyer/manager/associate mentions (i.e. bad shipment, an ordered SKU not arriving, etc.)
+         * Please also send me a direct message
+      * 8. Note any interesting conversations, contact information you received from potential accounts, event requests, etc.
+   * Fill out section under ‘Tastings’
+
+
+
+
+
+
+Relationship Management
+Accounts
+* Can search all accounts
+   * Based on account name
+   * Based on state and city
+      * Under ‘Country’, select ‘United States’
+      * Enter state
+      * Enter city
+   * The search function is very particular
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+POS and Samples
+Sample Request
+1. Hit the ‘+ Create’ button on the left side of the screen
+2. Under Account, select ‘KOVAL’
+3. Under Date Needed, select your date
+   1. Please try to request samples with at least a week's notice
+4. Type in Notes how many of each sample you need OR
+5. Under Request Items, select the bottle icon to how many of each product you need
+   1. Thresh & Winnow is not currently on the list, so please use the Notes section to list any Thresh & Winnow samples you need.
+   2. For T&W samples, please list them as minis (i.e. T&W Citrine and Foret minis)
+6. Under Shipping Details, list your first and last name, phone number, and select ‘Pick Up’ under Delivery Type
+7. Shipping samples is on a case-by-case basis, so please contact Macee if this applies to you.
+8. Hit ‘Save and View’ to ensure the request submitted correctly
+Video: How to Submit Sample Request

@@ -1,0 +1,137 @@
+Source: Training Material/COT Training Folder 2026/2025 Koval Manual (COT)
+URL: https://docs.google.com/document/d/1ABj6TjGRrCTM_1pyamQugCXreN8HN26Jge_iUu5DgkQ/edit?usp=drivesdk
+
+﻿Tab 1
+ ::::private:var:folders:5g:sgvkb5yx2f198w1lxw640wcr0000gt:T:com.apple.mail.drag-T0x10bc23690.tmp.WUutuD:Koval_logo.eps
+
+
+
+
+
+4241 NORTH RAVENSWOOD AVENUE  |  CHICAGO, ILLINOIS 60613
+(312) 878-7988  |  FAX (312) 275-8595
+info@kovaldistillery.com
+www.koval-distillery.com
+
+
+2025 Koval Manual
+(last update: September 10, 2025)
+
+
+Welcome to the Koval Manual – a resource designed to support your day-to-day work and supplement our formal Employee Handbook. While the Handbook covers our core policies and legal commitments, this guide focuses on practical topics: how we communicate, where to find things, how to manage information, and what’s expected in our shared work environment.
+
+
+Whether you're new to Koval or a long-time team member, this guide is here to help you work efficiently, stay secure, and represent the company well – internally and externally.
+
+
+How to Use This Manual Efficiently
+
+
+To make this guide easy to navigate, we've structured it around short summaries for each key topic, with embedded links to more detailed documents, templates, or internal pages.
+
+
+Tips for Using This Manual:
+
+
+* Scan the Table of Contents to jump straight to the topic you need
+* Read the section summary for a quick overview
+* Click the embedded link (highlighted in blue) to access the full document or resource
+* Use Ctrl+F (Windows) or Cmd+F (Mac) to quickly find specific words or topics
+* Bookmark this guide for quick access when questions come up
+* Some links open Google Docs, Shared Drive folders, or internal templates – make sure you're logged into your Koval account
+
+
+This guide works best when used as a living document. Check back occasionally, as sections may be updated with the latest tools or best practices.
+
+
+________________
+
+
+Table of Contents:
+
+
+1. Key Directory & Who to Contact
+A quick-reference list of internal contacts organized by department and function. Know exactly who to reach out to for IT issues, HR questions, operations support, or creative needs.
+Key Directory & Who to Contact
+
+
+2. 2025 KOVAL Login Experience
+We’ve streamlined the login experience and added a per‑user landing preference so you can get where you need faster.
+2025 KOVAL Login Experience
+
+
+3. Email Signature & Out-of-Office (OOO) Responder Templates
+Ensure a professional and consistent Koval brand in every email. This section outlines the approved email signature format and tips for writing effective OOO messages.
+2025 Koval Email Signature & Out-Of-Office Responder
+
+
+4. Koval Letterhead
+For official communications, proposals, or external-facing documents, use the Koval-branded letterhead.
+2025 KOVAL Letterhead Template
+
+
+5. Google Shared Drives Management
+Best practices for organizing, naming, sharing, and maintaining folders in Google Shared Drives. Helps teams stay aligned and information easy to find.
+2025-06-09 KOVAL Google Drive Management Guidelines
+
+
+6. Sample Request Procedures
+Need to request a product sample? This outlines who to ask, how to submit a request, and how fulfillment works.
+POS and Sample Guidelines
+
+
+7. Account Duplicates Guide
+This is a guide to handling account duplicates in the Koval portal
+Guide to Handling Account Duplicates in the Koval Portal
+
+
+8. Koval Importer - Batch Upload Instructions
+Enter multiple contacts and accounts and upload them via the Koval Importer
+08-27-2025 Batch Upload Instructions
+________________
+
+
+
+
+9. Adding Contacts and Accounts During Activity Submission
+This guide explains how to add new contacts or accounts to the portal when submitting an activity, specifically when they are not already available in the dropdown menu.
+Adding Contacts and Accounts During Activity Submission
+
+
+10. Online Security & Phishing Awareness
+Protecting company and customer data is everyone’s responsibility. Learn how to recognize phishing emails, report suspicious activity, and keep your digital workspace secure.
+Online Security and Phishing
+
+
+11. Maintaining a Comfortable and Professional Work Environment
+Creating a respectful, inclusive, and professional workplace is core to Koval’s culture. This section outlines general conduct expectations in both office and remote settings.
+Work Environment Guidelines
+
+
+12. Meeting Guidelines (Scheduling, Agendas, Notes)
+To respect everyone’s time, our meeting culture includes clear agendas, ownership, and documented outcomes. Here's how to keep meetings efficient and actionable.
+Meeting Guidelines
+
+
+13. Reports
+Adding reports to the Portal and updated Templates
+2025 Report Guidelines
+
+
+14. Group Messages
+Here are also some group messages to review.
+Group Messages to review
+
+
+
+
+Additional Important Documents:
+
+
+KOVAL Portal 2.5 Manual - All Office
+
+
+Koval Employee Handbook 2024-08-01
+
+
+Parking Reimbursement Policy
