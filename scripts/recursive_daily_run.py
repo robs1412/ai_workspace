@@ -132,7 +132,14 @@ def build_report(payload: dict[str, Any]) -> str:
 
 def parse_args(argv: list[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--json", type=Path, default=DEFAULT_JSON)
+    parser.add_argument(
+        "--json",
+        nargs="?",
+        const=DEFAULT_JSON,
+        type=Path,
+        default=DEFAULT_JSON,
+        help="JSON output path. If passed without a path, write the default JSON artifact.",
+    )
     parser.add_argument("--report", type=Path, default=DEFAULT_REPORT)
     parser.add_argument(
         "--refresh-historical",

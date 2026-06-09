@@ -55,6 +55,19 @@ class RecursiveDailyRunGatingTest(unittest.TestCase):
 
         self.assertIs(self.runner.should_auto_execute(proposal), False)
 
+    def test_bare_json_flag_uses_default_artifact_path(self):
+        args = self.runner.parse_args(["--json"])
+
+        self.assertEqual(args.json, self.runner.DEFAULT_JSON)
+        self.assertIs(args.print_json, False)
+
+    def test_json_flag_still_accepts_custom_artifact_path(self):
+        custom_path = ROOT / "tmp" / "recursive-daily-run-test.json"
+
+        args = self.runner.parse_args(["--json", str(custom_path)])
+
+        self.assertEqual(args.json, custom_path)
+
 
 if __name__ == "__main__":
     unittest.main()

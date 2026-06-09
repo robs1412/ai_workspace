@@ -1,40 +1,40 @@
 # Task Flow Truth Drift Check
 
-- Recorded: 2026-06-08 18:07:13 
+- Recorded: 2026-06-08 22:36:26 CDT
 - Config: `/Users/werkstatt/ai_workspace/scripts/task_flow_truth_surfaces.json`
 - Board ok: `True`
-- Managed sessions: `100`
+- Managed sessions: `108`
 - Task Flow rows scanned: `500`
-- Proof rows scanned: `44`
+- Proof rows scanned: `43`
 - Drift count: `0`
 
 ## Summary
 
 - scheduler_violations: `0`
 - scheduler_route_candidates: `0`
-- proof_closeout_issues: `6`
+- proof_closeout_issues: `7`
 
 ## Proof Issue Classes
 
-- active_worker_missing_domain_task: `1`
-- blocked_needs_owner_question_proof: `3`
+- blocked_needs_owner_question_proof: `5`
 
 ## Proof Issue Samples
 
+- blocked_needs_owner_question_proof: `blocked` taskflow-5cfd58716334576b
+  - detail: blocked row is routed-needs-owner-question and needs owner-question/blocker proof
+  - dedupe_key: `taskflow-5cfd58716334576b`
+- blocked_needs_owner_question_proof: `blocked` taskflow-bf15206feb1385cf
+  - detail: blocked row is routed-needs-owner-question and needs owner-question/blocker proof
+  - dedupe_key: `taskflow-bf15206feb1385cf`
+- blocked_needs_owner_question_proof: `blocked` taskflow-a151053058c9c6c0
+  - detail: blocked row is routed-needs-owner-question and needs owner-question/blocker proof
+  - dedupe_key: `taskflow-a151053058c9c6c0`
 - blocked_needs_owner_question_proof: `blocked` taskflow-760a7508ffeabfe5
   - detail: blocked row is routed-needs-owner-question and needs owner-question/blocker proof
   - dedupe_key: `taskflow-760a7508ffeabfe5`
 - blocked_needs_owner_question_proof: `blocked` taskflow-1db47dff91264646
   - detail: blocked row is routed-needs-owner-question and needs owner-question/blocker proof
   - dedupe_key: `taskflow-1db47dff91264646`
-- blocked_needs_owner_question_proof: `blocked` taskflow-3981bd77dabf07ce
-  - detail: blocked row is routed-needs-owner-question and needs owner-question/blocker proof
-  - dedupe_key: `taskflow-3981bd77dabf07ce`
-- active_worker_missing_domain_task: `attention` taskflow-09043689ee2660fe
-  - detail: working row has visible session 5bae2106 but lacks ops_portal_or_domain_task
-  - dedupe_key: `taskflow-09043689ee2660fe`
-  - session_id: `5bae2106`
-  - owner_lane: `outreach-coordinator`
 
 ## Drift
 

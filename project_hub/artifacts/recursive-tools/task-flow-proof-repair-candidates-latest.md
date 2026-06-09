@@ -1,12 +1,30 @@
 # Task Flow Proof Repair Candidates
 
-- Recorded: 2026-06-08 13:37:17 
+- Recorded: 2026-06-08 22:36:20 CDT
 - Rows scanned: `500`
-- Candidate count: `8`
+- Candidate count: `5`
 - Mutation allowed: `False`
 
 ## Candidates
 
+- failed_approved_send_artifact: `taskflow-5cfd58716334576b`
+  - subject: Weekly finance update with QBO PDFs - June 8
+  - source: `naomi-weekly-finance-june8-corrected-pdfs-20260608.failed-1780966535.json`
+  - owner_lane: `naomi-finance`
+  - responsible_worker_or_persona: `naomi.stern@kovaldistillery.com`
+  - ops_portal_or_domain_task: `OPS 368746`
+- failed_approved_send_artifact: `taskflow-760a7508ffeabfe5`
+  - subject: Re: Instructions needed: tasting selection and cancellation automation
+  - source: `vanessa-sonat-tasting-selection-cancellation-rules-taskflow-owner-reply-a02995c7547f63de.failed-1780958297.json`
+  - owner_lane: `outreach-coordinator`
+  - responsible_worker_or_persona: `vanessa.sterling@kovaldistillery.com`
+  - ops_portal_or_domain_task: `taskflow-owner-reply-a02995c7547f63de / Sonat tasting-selection and cancellation rules`
+- failed_approved_send_artifact: `taskflow-1db47dff91264646`
+  - subject: Re: Fwd: Ravenswood On Tap 2026 - Drinks
+  - source: `status-reply-taskflow-6ea601be2d0823f4-ravenswood-on-tap.retry-20260608-1728.failed-1780957848.json`
+  - owner_lane: `outreach-coordinator`
+  - responsible_worker_or_persona: `vanessa.sterling@kovaldistillery.com`
+  - ops_portal_or_domain_task: `OPS outreach events 866, 867`
 - failed_approved_send_artifact: `taskflow-3981bd77dabf07ce`
   - subject: Re: New tasting
   - source: `benjamin-bottles-cans-too-ops1055-completion.failed-1780935440.json`
@@ -19,42 +37,6 @@
   - owner_lane: `outreach-coordinator`
   - responsible_worker_or_persona: `vanessa.sterling@kovaldistillery.com`
   - ops_portal_or_domain_task: `OPS event 1054 / TrackTime shift 5582 / Google outreach UID ops-outreach-1054@koval-distillery.com`
-- failed_approved_send_artifact: `taskflow-1f6e3188f9c1c18f`
-  - subject: Open store and tasting room shifts for June 8 - July 6
-  - source: `vanessa-open-store-shifts-4w-2026-06-08-0800.failed-1780923678.json`
-  - owner_lane: `outreach-coordinator`
-  - responsible_worker_or_persona: `Vanessa Sterling`
-  - ops_portal_or_domain_task: `OPS open shifts`
-- failed_approved_send_artifact: `taskflow-8019cf2410556f69`
-  - subject: Upcoming KOVAL tastings this week
-  - source: `vanessa-mitch-weekly-direct-2026-06-08-0800.failed-1780923672.json`
-  - owner_lane: `outreach-coordinator`
-  - responsible_worker_or_persona: `Vanessa Sterling`
-  - ops_portal_or_domain_task: `OPS 367856`
-- failed_approved_send_artifact: `taskflow-22b8a02dc900f954`
-  - subject: Re: Cancellation instructions for Whole Foods and Binny's tastings
-  - source: `vanessa-cancellation-reminder-robert-sonat-20260607.failed-1780873129.json`
-  - owner_lane: `outreach-coordinator`
-  - responsible_worker_or_persona: `vanessa.sterling@kovaldistillery.com`
-  - ops_portal_or_domain_task: `ordinary tasting cancellation coordination; no specific OPS event/calendar row in source`
-- failed_approved_send_artifact: `taskflow-66bff1533318e8e6`
-  - subject: Re: Cancellation instructions for Whole Foods and Binny's tastings
-  - source: `vanessa-sonat-wholefoods-binnys-cancellation-instructions-recorded-20260607.failed-1780872528.json`
-  - owner_lane: `outreach-coordinator`
-  - responsible_worker_or_persona: `vanessa.sterling@kovaldistillery.com`
-  - ops_portal_or_domain_task: `Vanessa cancellation automation / Whole Foods and Binny's instructions`
-- failed_approved_send_artifact: `taskflow-a9b9481a1663f2af`
-  - subject: Re: Fwd: Ravenswood On Tap 2026 - Drinks
-  - source: `status-reply-taskflow-6ea601be2d0823f4-ravenswood-on-tap.failed-1780871689.json`
-  - owner_lane: `outreach-coordinator`
-  - responsible_worker_or_persona: `vanessa.sterling@kovaldistillery.com`
-  - ops_portal_or_domain_task: `OPS outreach events 866, 867`
-- failed_approved_send_artifact: `taskflow-bdb48fb8db67a6a6`
-  - subject: Re: Fwd: Ravenswood On Tap 2026 - Drinks
-  - source: `owner-question-taskflow-6ea601be2d0823f4-ravenswood-on-tap.failed-1780871588.json`
-  - owner_lane: `outreach-coordinator`
-  - responsible_worker_or_persona: `vanessa.sterling@kovaldistillery.com`
-  - ops_portal_or_domain_task: `OPS outreach events 866, 867`
 
 ## Boundary
 

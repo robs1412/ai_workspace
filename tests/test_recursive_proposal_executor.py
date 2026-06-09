@@ -87,6 +87,20 @@ class RecursiveProposalExecutorAuthorizationTest(unittest.TestCase):
         policy = self.executor.FIX_POLICIES["source-backed-proof-repair-candidate"]
         self.assertIs(policy.mutates_live_state, True)
         self.assertIsNone(policy.auto_mutator)
+        self.assertIs(self.executor.verifier_only_safe(policy), True)
+
+    def test_status_exposes_verifier_only_metadata(self):
+        status = self.executor.execution_statuses()
+        source_backed = [
+            item
+            for item in status["proposals"]
+            if item["allowed_fix_class"] == "source-backed-proof-repair-candidate"
+        ]
+
+        self.assertTrue(source_backed)
+        self.assertIs(source_backed[-1]["requires_approval"], True)
+        self.assertIs(source_backed[-1]["verifier_available"], True)
+        self.assertIs(source_backed[-1]["verifier_only_safe"], True)
 
     def test_verified_retry_state_requires_keep_ratchet(self):
         self.assertIs(

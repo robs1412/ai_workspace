@@ -1,13 +1,13 @@
 # Service Parity Check
 
-- Recorded: 2026-06-08 13:36:58
+- Recorded: 2026-06-08 22:34:01
 - Mode: `all`
 - Scope: source/runtime parity and installed deployment-state checks for local AI service surfaces
 
 ## Totals
 
-- Surfaces checked: 91
-- ok: 91
+- Surfaces checked: 93
+- ok: 93
 
 ## Results
 
@@ -522,6 +522,12 @@
   - Observed: `no direct python interpreter`
   - Note: Launchd plist does not directly invoke Python.
   - Path: `/Library/LaunchDaemons/com.koval.ops-ai-worker-runner-bridge.plist`
+- KOVAL plist com.koval.server-health-auto-runner.plist: `ok`
+  - Group: `installed-plist-scan`
+  - Expectation: `/usr/local/bin/python3.13 or no direct Python interpreter`
+  - Observed: `/usr/local/bin/python3.13`
+  - Note: Launchd plist uses the pinned Python 3.13 path.
+  - Path: `/Library/LaunchDaemons/com.koval.server-health-auto-runner.plist`
 - KOVAL plist com.koval.task-flow-reminders.plist: `ok`
   - Group: `installed-plist-scan`
   - Expectation: `/usr/local/bin/python3.13 or no direct Python interpreter`
@@ -546,6 +552,12 @@
   - Observed: `no direct python interpreter`
   - Note: Launchd plist does not directly invoke Python.
   - Path: `/Library/LaunchDaemons/com.koval.workspaceboard.plist`
+- KOVAL plist com.koval.server-health-auto-runner.plist: `ok`
+  - Group: `installed-plist-scan`
+  - Expectation: `/usr/local/bin/python3.13 or no direct Python interpreter`
+  - Observed: `/usr/local/bin/python3.13`
+  - Note: Launchd plist uses the pinned Python 3.13 path.
+  - Path: `/Users/admin/Library/LaunchAgents/com.koval.server-health-auto-runner.plist`
 - KOVAL plist com.koval.workspaceboard-automation.plist: `ok`
   - Group: `installed-plist-scan`
   - Expectation: `/usr/local/bin/python3.13 or no direct Python interpreter`

@@ -1,6 +1,111 @@
+# Recursive Proposal recursive-proposal-20260608-223415-review-source-backed-proof-repair-candidates
+
+- Created: 2026-06-08 22:34:15 CDT
+- Recommended action: `review-source-backed-proof-repair-candidates`
+- Approval required: `True`
+- Risk class: `low`
+- Allowed fix class: `source-backed-proof-repair-candidate`
+
+## Why Now
+
+The proof candidate detector found 5 source-backed Task Flow repair candidate(s).
+
+## Approval Packet
+
+- What changes if approved: Review `taskflow-5cfd58716334576b` from `failed_approved_send_artifact` and, if approved, perform only the lane-aware Task Flow proof repair described by the candidate source metadata.
+- What will not change: No generic auto-mutation, mailbox send, message-body copying, service restart, credential work, or OPS/Portal mutation. The detector itself remains read-only.
+- Proof required: `./scripts/task_flow_proof_repair_candidates.py --print-json` shows the candidate source, and post-repair `./scripts/task_flow_truth_drift_check.py --fail-on-drift` keeps drift at zero.
+- Rollback note: If verification fails, stop and record one exact blocker; do not continue into a broader repair class.
+
+## Frank Email
+
+- Subject: `Approval needed: review-source-backed-proof-repair-candidates`
+- Body path: `/Users/werkstatt/ai_workspace/frank/drafts/recursive-proposals/recursive-proposal-20260608-223415-review-source-backed-proof-repair-candidates.txt`
+- HTML body path: `/Users/werkstatt/ai_workspace/frank/drafts/recursive-proposals/recursive-proposal-20260608-223415-review-source-backed-proof-repair-candidates.html`
+
+## Source Snapshot
+
+```json
 {
-  "candidate_count": 5,
-  "candidates": [
+  "coverage_ok": true,
+  "historical_benchmark_refreshed": false,
+  "historical_benchmark_run_id": "4b1934a45c5b",
+  "historical_benchmark_trace_count": 7,
+  "historical_clean_success": 1.0,
+  "proof_closeout_issues": 7,
+  "proof_issue_class_counts": {
+    "blocked_needs_owner_question_proof": 5
+  },
+  "proof_issue_count": 5,
+  "proof_issue_samples": [
+    {
+      "dedupe_key": "taskflow-5cfd58716334576b",
+      "detail": "blocked row is routed-needs-owner-question and needs owner-question/blocker proof",
+      "kind": "blocked_needs_owner_question_proof",
+      "missing_fields": [
+        "owner_lane",
+        "clarification_or_blocker_email"
+      ],
+      "owner_lane": "",
+      "session_id": "",
+      "severity": "blocked",
+      "title": "taskflow-5cfd58716334576b"
+    },
+    {
+      "dedupe_key": "taskflow-bf15206feb1385cf",
+      "detail": "blocked row is routed-needs-owner-question and needs owner-question/blocker proof",
+      "kind": "blocked_needs_owner_question_proof",
+      "missing_fields": [
+        "owner_lane",
+        "clarification_or_blocker_email"
+      ],
+      "owner_lane": "",
+      "session_id": "",
+      "severity": "blocked",
+      "title": "taskflow-bf15206feb1385cf"
+    },
+    {
+      "dedupe_key": "taskflow-a151053058c9c6c0",
+      "detail": "blocked row is routed-needs-owner-question and needs owner-question/blocker proof",
+      "kind": "blocked_needs_owner_question_proof",
+      "missing_fields": [
+        "owner_lane",
+        "clarification_or_blocker_email"
+      ],
+      "owner_lane": "",
+      "session_id": "",
+      "severity": "blocked",
+      "title": "taskflow-a151053058c9c6c0"
+    },
+    {
+      "dedupe_key": "taskflow-760a7508ffeabfe5",
+      "detail": "blocked row is routed-needs-owner-question and needs owner-question/blocker proof",
+      "kind": "blocked_needs_owner_question_proof",
+      "missing_fields": [
+        "owner_lane",
+        "clarification_or_blocker_email"
+      ],
+      "owner_lane": "",
+      "session_id": "",
+      "severity": "blocked",
+      "title": "taskflow-760a7508ffeabfe5"
+    },
+    {
+      "dedupe_key": "taskflow-1db47dff91264646",
+      "detail": "blocked row is routed-needs-owner-question and needs owner-question/blocker proof",
+      "kind": "blocked_needs_owner_question_proof",
+      "missing_fields": [
+        "owner_lane",
+        "clarification_or_blocker_email"
+      ],
+      "owner_lane": "",
+      "session_id": "",
+      "severity": "blocked",
+      "title": "taskflow-1db47dff91264646"
+    }
+  ],
+  "proof_repair_candidate_count": 5,
+  "proof_repair_candidates": [
     {
       "completion_or_blocker_email": "Failed approved-send artifact exists at naomi-weekly-finance-june8-corrected-pdfs-20260608.failed-1780966535.json; no sent Message-ID was produced. Review and resend only through the approved sender path.",
       "confidence": "source-backed",
@@ -92,7 +197,13 @@
       "verification_readback": "Failed artifact metadata readback: owner_lane=outreach-coordinator; responsible_worker_or_persona=vanessa.sterling@kovaldistillery.com; ops_portal_or_domain_task=OPS event 1054 / TrackTime shift 5582 / Google outreach UID ops-outreach-1054@koval-distillery.com."
     }
   ],
-  "generated_at": "2026-06-08 22:36:20 CDT",
-  "mutation_allowed": false,
-  "rows_scanned": 500
+  "registry_ok": true,
+  "service_parity_drift": 0,
+  "service_parity_drift_items": [],
+  "service_results_checked": 93,
+  "truth_drift_count": 0,
+  "truth_drifts": [],
+  "truth_managed_sessions": 108,
+  "truth_rows_scanned": 500
 }
+```

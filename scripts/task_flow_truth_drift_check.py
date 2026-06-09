@@ -345,7 +345,7 @@ def build_report(
     proof_issues: list[ProofIssue],
     config_path: Path,
 ) -> str:
-    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S %Z")
+    now = datetime.now().astimezone().strftime("%Y-%m-%d %H:%M:%S %Z")
     lines = [
         "# Task Flow Truth Drift Check",
         "",

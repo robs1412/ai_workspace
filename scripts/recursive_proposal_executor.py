@@ -277,8 +277,28 @@ def collect_policy_proof(policy: FixClassPolicy, verifier_result: dict[str, Any]
             ROOT / "project_hub/artifacts/recursive-tools/task-flow-truth-drift-latest.md"
         )
     elif policy.name == "source-backed-proof-repair-candidate":
-        proof["proof_repair_candidates_report"] = str(
-            ROOT / "project_hub/artifacts/recursive-tools/task-flow-proof-repair-candidates-latest.md"
+        candidates_json = ROOT / "project_hub/artifacts/recursive-tools/task-flow-proof-repair-candidates-latest.json"
+        candidates_report = ROOT / "project_hub/artifacts/recursive-tools/task-flow-proof-repair-candidates-latest.md"
+        candidates = load_optional_json(candidates_json)
+        proof.update(
+            {
+                "proof_repair_candidates_json": str(candidates_json),
+                "proof_repair_candidates_report": str(candidates_report),
+                "proof_repair_candidate_count": candidates.get("candidate_count", 0),
+                "proof_repair_mutation_allowed": bool(candidates.get("mutation_allowed")),
+                "proof_repair_candidate_keys": [
+                    str(item.get("dedupe_key") or "")
+                    for item in (candidates.get("candidates") or [])[:5]
+                    if isinstance(item, dict)
+                ],
+                "proof_repair_candidate_kinds": sorted(
+                    {
+                        str(item.get("proof_kind") or "")
+                        for item in (candidates.get("candidates") or [])
+                        if isinstance(item, dict) and item.get("proof_kind")
+                    }
+                ),
+            }
         )
     return proof
 
@@ -303,6 +323,10 @@ def execution_authorized(proposal: dict[str, Any], fix_class: str) -> bool:
     if approved_state(proposal):
         return True
     return not proposal.get("approval_required") and fix_class in {"no-op-monitoring", "proof-closeout-classification"}
+
+
+def verifier_only_safe(policy: FixClassPolicy | None) -> bool:
+    return bool(policy and policy.auto_mutator is None and policy.verifier)
 
 
 def execution_statuses() -> dict[str, Any]:
@@ -332,6 +356,9 @@ def execution_statuses() -> dict[str, Any]:
                 "executor_allowlisted": bool(policy),
                 "mutates_live_state": bool(policy.mutates_live_state) if policy else False,
                 "has_auto_mutator": bool(policy.auto_mutator) if policy else False,
+                "verifier_available": bool(policy.verifier) if policy else False,
+                "verifier_only_safe": verifier_only_safe(policy),
+                "requires_approval": bool(proposal.get("approval_required")),
             }
         )
     return {

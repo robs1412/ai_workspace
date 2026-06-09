@@ -351,7 +351,7 @@ def main(argv: list[str]) -> int:
         ]
     )
     payload = {
-        "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S %Z"),
+        "generated_at": datetime.now().astimezone().strftime("%Y-%m-%d %H:%M:%S %Z"),
         "rows_scanned": len(rows),
         "candidate_count": len(candidates),
         "mutation_allowed": False,
