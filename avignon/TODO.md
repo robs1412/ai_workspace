@@ -5,6 +5,16 @@ Archived: 2026-05-18 CDT (Machine: Macmini.lan)
 This file is archived and contains no active queue items.
 Active work now lives in DB-backed Task Flow / Workspaceboard / OPS records.
 
+## 2026-06-08 - Done - Activities Austin TX report
+
+- Source Message-ID: `<CALbLtzyTh0vs1+wC8eiufx1LXhGVOO9my0mSof-0bSGZBp9PoQ@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzyTh0vs1-wC8eiufx1LXhGVOO9my0mSof-0bSGZBp9PoQ-mail-gmail-com`
+- Workspaceboard session: `7bb3fb2a` / `Avignon direct Sonat: Activities Austin TX`
+- Classification: `closed_with_proof`; generated read-only Austin activities report `/Users/werkstatt/salesreport/doc/avignon-sonat-austin-tx-activities-2026-06-08.md`, 45 non-task activities across 28 Austin accounts, report SHA-256 `2eaadff69d65ec29a73bc7c16ceafb879ecf805af6686ff71b9d10439f93c95d`.
+- Proof: DB handoff entries `77` / UUID `handoff-avignon-20260608195858-5054c103036e` and `78` / UUID `handoff-avignon-20260608200319-45d6e308f4e0`; completion email to Sonat `<178094867585.641.6999249098494070776@kovaldistillery.com>`; acknowledgement `<178094842370.99024.13175490806115855659@kovaldistillery.com>`; source archived to `Handled` with exact IMAP readback `INBOX=0`, `Handled=1`; AI Manager recorder input `2947` / UUID `ai-manager-chat-20260608195810-97b39196b3b1`.
+- Not done: no Robert copy, external reply, Portal/CRM/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, deploy, commit, push, reset, clean, or unrelated mutation.
+- Remaining action: none unless Sonat asks for a distributor/account follow-up draft.
+
 ## 2026-06-06 - Done - Sonat Tasks tracked thank-you no-action
 
 - 2026-06-06 19:03 CDT session `a6a3c13e` rechecked the same thank-you-only tracked reply. Classification is `no-action/filed`; proof checked: prior completion report `<178076346914.56897.10310241233963174526@kovaldistillery.com>` remains in `sent-log.jsonl` line 51, original filing remains in `archive-log.jsonl` line 25, and this pass appended `archive-log.jsonl` line 137, `email-trace-events.jsonl` line 135, and `task-flow-events.jsonl` line 424. AI Manager recorder row `2817` / UUID `ai-manager-chat-20260607000340-aedfe6fb0ed3`; Workspaceboard readback confirmed `closed_with_proof` with proof marker `avignon-direct-owner-sonat-CALbLtzwcWt159f9edDzJtPbmCEJ-no-action-filed-2026-06-06T19:03CDT`. No new Sonat email, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, duplicate route, or live archive claim.
