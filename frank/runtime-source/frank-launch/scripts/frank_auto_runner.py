@@ -59,6 +59,9 @@ CLAUDE_EMAIL_ALIASES = {
     CLAUDE_EMAIL,
     "claude@kovaldistillery.com",
 }
+CODEX_EMAIL_ALIASES = {
+    "codex@kovaldistillery.com",
+}
 CLAUDE_WORKSPACE_THREAD_TASK = "frank-2026-claude-ai-workspace-setup-review"
 BOARD_API = os.environ.get("WORKSPACEBOARD_API", "http://127.0.0.1:17878").rstrip("/")
 DIRECT_PRIMARY_PENDING_STATES = {"routed_pending_completion"}
@@ -666,6 +669,14 @@ def is_copied_only(message: dict, assistant_email: str) -> bool:
     )
 
 
+def is_codex_addressed_frank_cc(message: dict, assistant_email: str) -> bool:
+    if email_list_contains(message.get("to", ""), assistant_email):
+        return False
+    if not email_list_contains(message.get("cc", ""), assistant_email):
+        return False
+    return any(email_list_contains(message.get("to", ""), alias) for alias in CODEX_EMAIL_ALIASES)
+
+
 def explicitly_requests_assistant_action(message: dict, assistant_name: str, assistant_email: str) -> bool:
     subject = message.get("subject", "")
     body = message.get("body", "")
@@ -773,6 +784,11 @@ def classify_message(
     if is_copied_only(message, assistant_email) and not explicitly_requests_assistant_action(
         message, assistant_name, assistant_email
     ):
+        if is_codex_addressed_frank_cc(message, assistant_email):
+            return "cc-fyi-no-action", {
+                "summary": "Codex was the addressed worker and Frank was copied with no explicit Frank action request.",
+                "handled_reason": "Codex-addressed task/status copy; Frank should assume Codex owns recording/routing and log/file without a Frank decision email unless a concrete Frank action request or safety objection is present.",
+            }
         return "cc-fyi-no-action", {
             "summary": "Frank was copied on this message and no explicit Frank action request was detected.",
             "handled_reason": "Copied/FYI message without a Frank action request; log and file without decision email, including credential/auth status copies already visible to the primary recipient.",

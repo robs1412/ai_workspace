@@ -53,6 +53,56 @@ def load_module():
 
 
 class FrankAutoRunnerTests(unittest.TestCase):
+    def test_codex_addressed_message_with_frank_cc_is_fyi_no_action(self) -> None:
+        module = load_module()
+        message = {
+            "message_id": "<codex-task-copy@example.com>",
+            "date": "Mon, 08 Jun 2026 14:19:05 -0500",
+            "from": "Claude <claude@kovaldistillery.com>",
+            "to": "Codex Local Agent <codex@kovaldistillery.com>",
+            "cc": "Frank Cannoli <frank.cannoli@kovaldistillery.com>",
+            "subject": "Re: Portal barrels sample-request rollback check",
+            "body": (
+                "Hi Codex, OK on commit eb9b92ef. The change is right; "
+                "it closes the gap in BarrelsController::update()."
+            ),
+        }
+
+        classification, metadata = module.classify_message(
+            message,
+            {},
+            "robert@kovaldistillery.com",
+            "frank.cannoli@kovaldistillery.com",
+            "Frank",
+        )
+
+        self.assertEqual(classification, "cc-fyi-no-action")
+        self.assertIn("Codex was the addressed worker", metadata["summary"])
+        self.assertIn("without a Frank decision email", metadata["handled_reason"])
+
+    def test_codex_addressed_message_with_explicit_frank_request_still_escalates(self) -> None:
+        module = load_module()
+        message = {
+            "message_id": "<codex-task-copy-frank-request@example.com>",
+            "date": "Mon, 08 Jun 2026 14:19:05 -0500",
+            "from": "Claude <claude@kovaldistillery.com>",
+            "to": "Codex Local Agent <codex@kovaldistillery.com>",
+            "cc": "Frank Cannoli <frank.cannoli@kovaldistillery.com>",
+            "subject": "Re: Portal barrels sample-request rollback check",
+            "body": "Hi Codex, OK on commit eb9b92ef. Frank, please route the follow-up to Robert.",
+        }
+
+        classification, metadata = module.classify_message(
+            message,
+            {},
+            "robert@kovaldistillery.com",
+            "frank.cannoli@kovaldistillery.com",
+            "Frank",
+        )
+
+        self.assertEqual(classification, "unclear")
+        self.assertIn("Frank, please route", metadata["summary"])
+
     def test_primary_input_route_passes_state_dir_to_direct_primary_router(self) -> None:
         module = load_module()
         with tempfile.TemporaryDirectory() as tmpdir:
