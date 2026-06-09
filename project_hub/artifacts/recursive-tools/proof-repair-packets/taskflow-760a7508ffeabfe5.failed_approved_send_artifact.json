@@ -1,0 +1,51 @@
+{
+  "approval": {
+    "approval_note": "Approval is required before retrying external send paths or mutating Task Flow/OPS/Portal state.",
+    "external_send_allowed": false,
+    "production_mutation_allowed": false,
+    "required": true
+  },
+  "confidence": "source-backed",
+  "dedupe_key": "taskflow-760a7508ffeabfe5",
+  "generated_at": "2026-06-09 09:25:39 CDT",
+  "guardrails": [
+    "Do not auto-send from this packet.",
+    "Do not edit Task Flow/OPS/Portal state without explicit approval.",
+    "Use the lane-specific sender or owner-notification path only after approval.",
+    "If source context is incomplete, stop with one exact blocker."
+  ],
+  "next_update": "Same-thread Vanessa confirmation queued for approved send cycle.",
+  "owner": {
+    "lane": "outreach-coordinator",
+    "ops_portal_or_domain_task": "taskflow-owner-reply-a02995c7547f63de / Sonat tasting-selection and cancellation rules",
+    "responsible_worker_or_persona": "vanessa.sterling@kovaldistillery.com"
+  },
+  "packet_version": 1,
+  "proof_kind": "failed_approved_send_artifact",
+  "proposed_action": "review_failed_send_artifact_then_retry_or_block",
+  "review": {
+    "decision": "blocked",
+    "notes": "Source failed artifact has no message_id, no sent_message_id, and empty completion_or_blocker_email despite task_packet.status=reported. No external resend or production mutation authorized in this review pass.",
+    "reviewed_at": "2026-06-09 11:39:33 CDT",
+    "reviewed_by": "Codex",
+    "source_ref": "/Users/admin/.nationaloutreach-launch/state/failed/vanessa-sonat-tasting-selection-cancellation-rules-taskflow-owner-reply-a02995c7547f63de.failed-1780958297.json"
+  },
+  "source": {
+    "event": "failed_send_artifact",
+    "intake_channel": "approved-send:nationaloutreach",
+    "logged_at": "",
+    "path": "/Users/admin/.nationaloutreach-launch/state/failed/vanessa-sonat-tasting-selection-cancellation-rules-taskflow-owner-reply-a02995c7547f63de.failed-1780958297.json",
+    "task_status": "blocked"
+  },
+  "state_updated_at": "2026-06-09 11:39:33 CDT",
+  "status": "blocked",
+  "subject": "Re: Instructions needed: tasting selection and cancellation automation",
+  "verification": {
+    "current_readback": "Failed artifact metadata readback: owner_lane=outreach-coordinator; responsible_worker_or_persona=vanessa.sterling@kovaldistillery.com; ops_portal_or_domain_task=taskflow-owner-reply-a02995c7547f63de / Sonat tasting-selection and cancellation rules.",
+    "required_after_action": [
+      "sent Message-ID or explicit no-send blocker proof",
+      "Task Flow row readback showing truthful state",
+      "proof-repair candidate scan no longer reports this unresolved candidate"
+    ]
+  }
+}

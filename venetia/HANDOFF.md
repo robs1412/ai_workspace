@@ -1,5 +1,34 @@
 # HANDOFF - venetia
 
+# 2026-06-09 Five New Venetia Businesses Sent After Approval
+
+Done at 2026-06-09 15:23 CDT after Robert approved all draft emails in the Cultivater packet and instructed Asher and Venetia to send them.
+
+- Approval packet: `https://papers.koval.lan/c789b6fd-4b43-4a56-bc0d-a72830b098b6`.
+- DB handoff entry: `189`.
+- Approved-send helper: `scripts/email_worker_header_poll.py --worker venetia --send-approved`.
+- Send result: `queued_sends_seen=5`, `queued_sends_sent=5`, `queued_sends_failed=0`.
+- Outbox remaining for this packet: `0`.
+- Sent-log proof: `venetia/sent-log.jsonl` rows logged at `2026-06-09T15:23:31-0500` through `2026-06-09T15:23:40-0500`.
+- Recipients sent: `info@desertboard.ae`, `press@mogu.bio`, `info@planq.nl`, `contact@madeofair.com`, `evrnu@BPCM.com`.
+- Message-IDs: `<178103661036.4345.15621232301539957990@thecultivater.com>`, `<178103661263.4345.18353054495890792547@thecultivater.com>`, `<178103661495.4345.7406646959499935964@thecultivater.com>`, `<178103661704.4345.17302180067783117449@thecultivater.com>`, `<178103661916.4345.4454522513037050007@thecultivater.com>`.
+- Sent-folder proof: every row records `sent_folder_appended=true` and `sent_folder=INBOX.Sent`.
+- Sonat Bcc proof: every row records `bcc_count=1`.
+
+# 2026-06-09 Five New Venetia Businesses Drafted For Approval
+
+Done at 2026-06-09 15:04 CDT after Robert asked Venetia to research another five businesses within her Cultivater pillars, including at least three in Europe and one in the UAE.
+
+- Accessible approval packet: `https://papers.koval.lan/c789b6fd-4b43-4a56-bc0d-a72830b098b6`.
+- Approval owner: Sonat manages The Cultivater; route draft approval to Sonat before any external send.
+- Sonat approval-link email sent 2026-06-09 15:16 CDT; Message-ID `<178103616801.1181.3474221571082227116@kovaldistillery.com>`.
+- Draft path: `venetia/drafts/sonat-five-new-venetia-businesses-approval-2026-06-09.md`.
+- Targets researched: Desert Board, Mogu, Planq, Made of Air, and Evrnu.
+- Geography: three Europe targets, one UAE target, and one USA target.
+- Pillars covered: material science, circular interiors, green design, sustainable fashion, biomaterials, and future-facing design systems.
+- Public contact routes are included in the draft for each target.
+- Status: drafted for approval only; no external email was sent.
+
 # 2026-06-07 Sonat BCC Directive Recorded
 
 Directive recorded at 2026-06-07 14:24 CDT: Venetia outbound emails must include Sonat Birnecker Hart at `sonat@kovaldistillery.com` as Bcc unless Sonat is already an explicit To/Cc/Bcc recipient on the same message.

@@ -6,6 +6,7 @@ from __future__ import annotations
 import importlib.util
 import sys
 import unittest
+from datetime import datetime, timedelta
 from pathlib import Path
 
 
@@ -72,6 +73,87 @@ class RecursiveProposalExecutorAuthorizationTest(unittest.TestCase):
         }
 
         self.assertIs(self.executor.execution_authorized(proposal, "source-runtime-parity-fix"), True)
+
+    def approval_contract(self, **overrides):
+        policy = self.executor.FIX_POLICIES["source-backed-proof-repair-candidate"]
+        expires_at = (datetime.now().astimezone() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S %Z")
+        contract = {
+            "proposal_id": "recursive-proposal-example",
+            "allowed_fix_class": "source-backed-proof-repair-candidate",
+            "approved_by": "Robert",
+            "approved_at": datetime.now().astimezone().strftime("%Y-%m-%d %H:%M:%S %Z"),
+            "expires_at": expires_at,
+            "allowed_action": "review-source-backed-proof-repair-candidates",
+            "mutation_surface": "none",
+            "external_send_allowed": False,
+            "production_mutation_allowed": False,
+            "verifier_command": policy.verifier,
+            "required_readback": ["candidate detector output"],
+        }
+        contract.update(overrides)
+        return contract
+
+    def approved_contract_proposal(self, contract):
+        return {
+            "approval_required": True,
+            "allowed_fix_class": "source-backed-proof-repair-candidate",
+            "decision_state": "approved",
+            "approval_contract": contract,
+        }
+
+    def test_approval_contract_valid_for_verify_only_candidate_review(self):
+        policy = self.executor.FIX_POLICIES["source-backed-proof-repair-candidate"]
+        proposal = self.approved_contract_proposal(self.approval_contract())
+
+        result = self.executor.approval_contract_status(
+            "recursive-proposal-example",
+            proposal,
+            policy,
+            verify_only=True,
+        )
+
+        self.assertTrue(result["ok"])
+
+    def test_approval_contract_missing_blocks_approved_proposal(self):
+        policy = self.executor.FIX_POLICIES["source-backed-proof-repair-candidate"]
+        proposal = {
+            "approval_required": True,
+            "allowed_fix_class": "source-backed-proof-repair-candidate",
+            "decision_state": "approved",
+        }
+
+        result = self.executor.approval_contract_status("recursive-proposal-example", proposal, policy)
+
+        self.assertFalse(result["ok"])
+        self.assertEqual(result["reason"], "missing_approval_contract")
+
+    def test_approval_contract_expired_blocks_execution(self):
+        policy = self.executor.FIX_POLICIES["source-backed-proof-repair-candidate"]
+        expired = (datetime.now().astimezone() - timedelta(minutes=1)).strftime("%Y-%m-%d %H:%M:%S %Z")
+        proposal = self.approved_contract_proposal(self.approval_contract(expires_at=expired))
+
+        result = self.executor.approval_contract_status("recursive-proposal-example", proposal, policy)
+
+        self.assertFalse(result["ok"])
+        self.assertEqual(result["reason"], "approval_contract_expired")
+
+    def test_approval_contract_verifier_mismatch_blocks_execution(self):
+        policy = self.executor.FIX_POLICIES["source-backed-proof-repair-candidate"]
+        proposal = self.approved_contract_proposal(self.approval_contract(verifier_command=["/bin/false"]))
+
+        result = self.executor.approval_contract_status("recursive-proposal-example", proposal, policy)
+
+        self.assertFalse(result["ok"])
+        self.assertEqual(result["reason"], "approval_contract_verifier_mismatch")
+
+    def test_approval_contract_external_send_is_overbroad_for_recursive_executor(self):
+        policy = self.executor.FIX_POLICIES["source-backed-proof-repair-candidate"]
+        proposal = self.approved_contract_proposal(self.approval_contract(external_send_allowed=True))
+
+        result = self.executor.approval_contract_status("recursive-proposal-example", proposal, policy)
+
+        self.assertFalse(result["ok"])
+        self.assertEqual(result["reason"], "approval_contract_external_send_overbroad")
 
     def test_source_backed_proof_candidate_requires_approval_and_has_no_auto_mutator(self):
         proposal = {

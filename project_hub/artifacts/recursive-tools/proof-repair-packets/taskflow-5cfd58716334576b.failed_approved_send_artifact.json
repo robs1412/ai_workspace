@@ -1,0 +1,51 @@
+{
+  "approval": {
+    "approval_note": "Approval is required before retrying external send paths or mutating Task Flow/OPS/Portal state.",
+    "external_send_allowed": false,
+    "production_mutation_allowed": false,
+    "required": true
+  },
+  "confidence": "source-backed",
+  "dedupe_key": "taskflow-5cfd58716334576b",
+  "generated_at": "2026-06-09 09:25:39 CDT",
+  "guardrails": [
+    "Do not auto-send from this packet.",
+    "Do not edit Task Flow/OPS/Portal state without explicit approval.",
+    "Use the lane-specific sender or owner-notification path only after approval.",
+    "If source context is incomplete, stop with one exact blocker."
+  ],
+  "next_update": "sent; recovered from runtime failure with Sent Mail readback",
+  "owner": {
+    "lane": "naomi-finance",
+    "ops_portal_or_domain_task": "OPS 368746",
+    "responsible_worker_or_persona": "naomi.stern@kovaldistillery.com"
+  },
+  "packet_version": 1,
+  "proof_kind": "failed_approved_send_artifact",
+  "proposed_action": "review_failed_send_artifact_then_retry_or_block",
+  "review": {
+    "decision": "duplicate_no_action",
+    "notes": "Recovered sent proof exists in source artifact: Message-ID <178096652949.22647.6083703658822257594@kovaldistillery.com>; task_packet.status=reported and next_update says recovered from runtime failure with Sent Mail readback. No resend or production mutation.",
+    "reviewed_at": "2026-06-09 11:39:33 CDT",
+    "reviewed_by": "Codex",
+    "source_ref": "/Users/admin/.nationaloutreach-launch/state/failed/naomi-weekly-finance-june8-corrected-pdfs-20260608.failed-1780966535.json"
+  },
+  "source": {
+    "event": "failed_send_artifact",
+    "intake_channel": "approved-send:nationaloutreach",
+    "logged_at": "",
+    "path": "/Users/admin/.nationaloutreach-launch/state/failed/naomi-weekly-finance-june8-corrected-pdfs-20260608.failed-1780966535.json",
+    "task_status": "blocked"
+  },
+  "state_updated_at": "2026-06-09 11:39:33 CDT",
+  "status": "duplicate_no_action",
+  "subject": "Weekly finance update with QBO PDFs - June 8",
+  "verification": {
+    "current_readback": "Failed artifact metadata readback: owner_lane=naomi-finance; responsible_worker_or_persona=naomi.stern@kovaldistillery.com; ops_portal_or_domain_task=OPS 368746.",
+    "required_after_action": [
+      "sent Message-ID or explicit no-send blocker proof",
+      "Task Flow row readback showing truthful state",
+      "proof-repair candidate scan no longer reports this unresolved candidate"
+    ]
+  }
+}

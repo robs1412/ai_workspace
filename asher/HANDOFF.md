@@ -1,5 +1,87 @@
 # HANDOFF - asher
 
+## 2026-06-09 Music Preservation Outreach Sent / REVERB Blocked
+
+Done at 2026-06-09 15:38 CDT after Robert approved the Asher music-preservation outreach drafts.
+
+- Approval packet: `https://papers.koval.lan/84f23d16-f6f1-4d18-b246-5704dd709ba0`.
+- DB handoff entry: `192`.
+- Sent via Asher approved-send helper: Dust-to-Digital and Association for Cultural Equity.
+- Send result: `queued_sends_seen=2`, `queued_sends_sent=2`, `queued_sends_failed=0`.
+- Outbox remaining for these sent emails: `0`.
+- Recipients sent: `info@dust-digital.com`, `staff@culturalequity.org`.
+- Message-IDs: `<178103750580.9718.15775884225662922998@thecultivater.com>`, `<178103750791.9718.12649446078956175791@thecultivater.com>`.
+- Sent-folder proof: both rows in `asher/sent-log.jsonl` record `sent_folder_appended=true` and `sent_folder=INBOX.Sent`.
+- Sonat Bcc proof: both rows record `bcc_count=1`.
+- REVERB status: not sent. Its public Contact Form 7 endpoint returned HTTP `200` but status `spam` with message `There was an error trying to send your message. Please try again later.` No direct public REVERB email address was found in the workspace or quick public search. Next step is a human-browser form submission or a direct editorial/contact email from Sonat/Robert.
+
+## 2026-06-09 Music Preservation Outreach Drafts For Approval
+
+Done at 2026-06-09 after Robert asked Asher to draft outreach emails to Dust-to-Digital, ACE, and REVERB.
+
+- Accessible approval packet: `https://papers.koval.lan/84f23d16-f6f1-4d18-b246-5704dd709ba0`.
+- Research packet: `https://papers.koval.lan/93bfa5d0-d335-484a-8920-dd20f4f9b23c`.
+- Local working draft: `asher/drafts/sonat-music-preservation-outreach-drafts-2026-06-09.md`.
+- Draft targets: Dust-to-Digital / Dust-to-Digital Foundation, Association for Cultural Equity / Alan Lomax Archive / Global Jukebox, and REVERB.
+- Contact routes: ACE has `staff@culturalequity.org`; Dust-to-Digital and REVERB are public contact-form routes unless Sonat supplies direct editorial email addresses.
+- Status: drafted for Sonat approval only; no external emails or contact-form submissions were sent.
+
+## 2026-06-09 Sustainable Music And Language Preservation Research
+
+Done at 2026-06-09 after Robert asked for three businesses or people engaging in sustainable music or reviving old music that would otherwise be lost, plus a scan of who is doing comparable work for languages.
+
+- Owner lane recommendation: Asher, because the strongest fit is preservation, cultural memory, provenance, endangered traditions, and craft-lineage editorial work. Venetia may support the sustainable live-music angle if Sonat wants a design/systems sidebar.
+- Accessible research packet: `https://papers.koval.lan/93bfa5d0-d335-484a-8920-dd20f4f9b23c`.
+- Local working draft: `asher/drafts/sonat-sustainable-music-language-preservation-research-2026-06-09.md`.
+- Primary music/sound targets researched: Dust-to-Digital / Dust-to-Digital Foundation, Association for Cultural Equity / Alan Lomax Archive / Global Jukebox, and REVERB.
+- Language-preservation scan: Endangered Languages Project, Living Tongues / Living Dictionaries, and Torwali language/music/poetry as a bridge example.
+- Status: research only; no outreach drafts written and no external emails sent.
+- Recommended next step: ask Sonat whether Asher should draft outreach to the three music/sound targets, draft a separate language-preservation packet, or first shape this as one combined feature concept.
+
+## 2026-06-09 Five New Pillar Businesses Sent After Approval
+
+Done at 2026-06-09 15:23 CDT after Robert approved all draft emails in the Cultivater packet and instructed Asher and Venetia to send them.
+
+- Approval packet: `https://papers.koval.lan/c789b6fd-4b43-4a56-bc0d-a72830b098b6`.
+- DB handoff entry: `189`.
+- Approved-send helper: `scripts/email_worker_header_poll.py --worker asher --send-approved`.
+- Send result: `queued_sends_seen=5`, `queued_sends_sent=5`, `queued_sends_failed=0`.
+- Outbox remaining for this packet: `0`.
+- Sent-log proof: `asher/sent-log.jsonl` rows logged at `2026-06-09T15:23:00-0500` through `2026-06-09T15:23:08-0500`.
+- Recipients sent: `info@whiteoakpastures.com`, `info@mainegrains.com`, `customersupport@janiesmill.com`, `hello@hodmedods.co.uk`, `karina@westcombedairy.com`.
+- Message-IDs: `<178103657880.4291.8347162125053429764@thecultivater.com>`, `<178103658079.4291.8079798496199663436@thecultivater.com>`, `<178103658273.4291.10931286518852439026@thecultivater.com>`, `<178103658477.4291.12904693226354833314@thecultivater.com>`, `<178103658685.4291.4351653200793081291@thecultivater.com>`.
+- Sent-folder proof: every row records `sent_folder_appended=true` and `sent_folder=INBOX.Sent`.
+- Sonat Bcc proof: every row records `bcc_count=1`.
+
+## 2026-06-09 Five New Pillar Businesses Drafted For Approval
+
+Done at 2026-06-09 15:00 CDT after Robert asked Asher to research another five businesses in his Cultivater pillars, with at least one USA and one non-USA target, and prepare drafts for approval before any send.
+
+- Accessible approval packet: `https://papers.koval.lan/c789b6fd-4b43-4a56-bc0d-a72830b098b6`.
+- Approval owner: Sonat manages The Cultivater; route draft approval to Sonat before any external send.
+- Sonat approval-link email sent 2026-06-09 15:16 CDT; Message-ID `<178103616801.1181.3474221571082227116@kovaldistillery.com>`.
+- Draft path: `asher/drafts/sonat-five-new-pillar-businesses-approval-2026-06-09.md`.
+- Targets researched: White Oak Pastures, Maine Grains, Janie's Mill, Hodmedod's, and Westcombe Dairy.
+- Geography: three USA targets and two UK targets.
+- Pillars covered: organic farming, food and drink, regional grain, traditional milling, provenance, stewardship, and craft-lineage food systems.
+- Public contact routes are included in the draft for each target.
+- Status: drafted for approval only; no external email was sent.
+
+## 2026-06-09 Approved Cultivater Outreach Sent
+
+Done at 2026-06-09 14:50 CDT after Robert confirmed Sonat had approved Asher to send the company outreach on 2026-05-18.
+
+- DB handoff entry: `185`.
+- Approval basis: Sonat's May 18 approval plus Robert's 2026-06-09 instruction to send the approved Asher pillar-company emails now.
+- Send helper: `scripts/email_worker_header_poll.py --send-approved`.
+- Sent count: `5`; failed count: `0`; outbox remaining: `0`.
+- Sent-log proof: `asher/sent-log.jsonl` lines `8-12`.
+- Recipients sent: `info@virenxia.com`, `jakin@greencover.com`, `farmers@napahospitalitygroup.com`, `info@singlethreadfarms.com`, `info@theabsolutcompany.com`.
+- Message-IDs: `<178103461335.91474.1366311429229213552@thecultivater.com>`, `<178103461560.91474.8822920110191230823@thecultivater.com>`, `<178103461763.91474.6292653536150838916@thecultivater.com>`, `<178103461957.91474.9339232731976390862@thecultivater.com>`, `<178103462159.91474.3909255127861916505@thecultivater.com>`.
+- Sent-folder proof: every sent-log row records `sent_folder_appended=true` and `sent_folder=INBOX.Sent`.
+- Sonat Bcc directive: every row records `bcc_count=1`.
+- Remaining blocker: Propagate was not sent because the original contact sheet listed only `propagateventures.com`; the checked public Propagate pages exposed only placeholder `user@domain.com`, not a real recipient address.
+
 ## 2026-06-07 Sonat BCC Directive Recorded
 
 Directive recorded at 2026-06-07 14:24 CDT: Asher outbound emails must include Sonat Birnecker Hart at `sonat@kovaldistillery.com` as Bcc unless Sonat is already an explicit To/Cc/Bcc recipient on the same message.

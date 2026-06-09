@@ -26,6 +26,33 @@ DEFAULT_SKIP_DIRS = {
     "worktree",
 }
 
+LIVE_CHECKOUT_POLICIES = {
+    "ai_workspace": {
+        "kind": "coordination_repo",
+        "known_live_checkout": "",
+        "live_update_policy": "no_live_pull",
+        "notes": "Coordination repo; commit/push only after explicit owner approval.",
+    },
+    "workspaceboard": {
+        "kind": "local_runtime_copy",
+        "known_live_checkout": "/Users/admin/.workspaceboard-launch/runtime/app",
+        "live_update_policy": "runtime_copy_restart",
+        "notes": "Runtime copy/restart path is outside /Users/werkstatt and is not inspected by this read-only inventory.",
+    },
+    "salesreport": {
+        "kind": "web_module",
+        "known_live_checkout": "/home/koval/public_html/salesreport",
+        "live_update_policy": "live_pull",
+        "notes": "Live pull requires explicit approval plus clean live checkout readback before mutation.",
+    },
+    "bid": {
+        "kind": "web_module",
+        "known_live_checkout": "",
+        "live_update_policy": "push_only_no_live_pull",
+        "notes": "BID is push-only; do not plan a live pull unless the owner supplies a newer module rule.",
+    },
+}
+
 
 @dataclass(frozen=True)
 class GitResult:
@@ -65,6 +92,18 @@ def parse_ahead_behind(status_line: str) -> str:
     if "[" not in status_line or "]" not in status_line:
         return ""
     return status_line[status_line.find("[") + 1 : status_line.find("]")]
+
+
+def ahead_behind_counts(ahead_behind: str) -> dict[str, int]:
+    counts = {"ahead": 0, "behind": 0}
+    for chunk in ahead_behind.split(","):
+        parts = chunk.strip().split()
+        if len(parts) == 2 and parts[0] in counts:
+            try:
+                counts[parts[0]] = int(parts[1])
+            except ValueError:
+                counts[parts[0]] = 0
+    return counts
 
 
 def recommended_action(repo: Path, tracked_dirty: int, untracked: int, remote: str) -> str:
@@ -141,6 +180,42 @@ def inventory_repo(repo: Path, sample_limit: int) -> dict[str, Any]:
         "worktrees": worktree_count,
         "status_line": first_status_line,
         "recommended_action": recommended_action(repo, len(tracked), len(untracked), remote),
+    }
+
+
+def live_checkout_policy(repo: str) -> dict[str, Any]:
+    name = Path(repo).name
+    policy = LIVE_CHECKOUT_POLICIES.get(
+        name,
+        {
+            "kind": "unknown",
+            "known_live_checkout": "",
+            "live_update_policy": "unknown",
+            "notes": "No live checkout policy is registered for this repo.",
+        },
+    )
+    known_live_checkout = policy["known_live_checkout"]
+    live_state = "not_applicable"
+    live_dirty_state = "not_applicable"
+    if known_live_checkout:
+        live_path = Path(known_live_checkout)
+        if not str(live_path).startswith("/Users/werkstatt/"):
+            live_state = "not_checked_outside_workspace"
+            live_dirty_state = "unknown_not_checked"
+        elif not live_path.exists():
+            live_state = "missing"
+            live_dirty_state = "unknown_missing"
+        elif not (live_path / ".git").exists() and not (live_path / ".git").is_file():
+            live_state = "not_git_checkout"
+            live_dirty_state = "unknown_not_git"
+        else:
+            status = run_git(live_path, ["status", "--porcelain=v1"])
+            live_state = "checked" if status.returncode == 0 else "status_failed"
+            live_dirty_state = "dirty" if status.stdout.strip() else "clean"
+    return {
+        **policy,
+        "live_state": live_state,
+        "live_dirty_state": live_dirty_state,
     }
 
 
@@ -226,6 +301,102 @@ def build_plan(rows: list[dict[str, Any]]) -> dict[str, Any]:
         "repo_count": len(rows),
         "dirty_repo_count": sum(1 for row in rows if row["tracked_dirty"] or row["untracked"]),
         "buckets": buckets,
+    }
+
+
+def action_gate(
+    operation: str,
+    row: dict[str, Any],
+    selected_repos: set[str],
+    approval_ref: str,
+    live_policy: dict[str, Any],
+) -> dict[str, Any]:
+    repo = row["repo"]
+    selected = repo in selected_repos or Path(repo).name in selected_repos
+    dirty = bool(row["tracked_dirty"] or row["untracked"])
+    remote = bool(row["remote"])
+    counts = ahead_behind_counts(row["ahead_behind"])
+    blockers: list[str] = []
+    exclusions: list[str] = []
+
+    if operation == "commit":
+        if not dirty:
+            exclusions.append("repo_clean")
+        if not selected:
+            blockers.append("repo_not_selected")
+    elif operation == "push":
+        if not remote:
+            blockers.append("missing_origin_remote")
+        if not selected:
+            blockers.append("repo_not_selected")
+        if counts["ahead"] == 0:
+            exclusions.append("no_local_commits_ahead")
+    elif operation == "pull_live":
+        if live_policy["live_update_policy"] != "live_pull":
+            exclusions.append(f"live_policy_{live_policy['live_update_policy']}")
+        if not selected:
+            blockers.append("repo_not_selected")
+        if live_policy["live_dirty_state"] != "clean":
+            blockers.append(f"live_dirty_state_{live_policy['live_dirty_state']}")
+
+    if not approval_ref:
+        blockers.append("missing_explicit_approval_ref")
+
+    return {
+        "operation": operation,
+        "selected": selected,
+        "approval_ref": approval_ref,
+        "allowed_to_execute": False,
+        "would_require_approval": True,
+        "blockers": blockers,
+        "exclusions": exclusions,
+        "next_step": "Record explicit owner approval and rerun a preflight verifier before executing this operation.",
+    }
+
+
+def build_action_plan(rows: list[dict[str, Any]], selected_repos: set[str], approval_ref: str) -> dict[str, Any]:
+    repos = []
+    for row in rows:
+        if row["tracked_dirty"] == 0 and row["untracked"] == 0 and row["ahead_behind"] == "":
+            continue
+        live_policy = live_checkout_policy(row["repo"])
+        repos.append(
+            {
+                "repo": row["repo"],
+                "branch": row["branch"],
+                "head": row["head"],
+                "remote": row["remote"],
+                "ahead_behind": row["ahead_behind"],
+                "ahead_behind_counts": ahead_behind_counts(row["ahead_behind"]),
+                "tracked_dirty": row["tracked_dirty"],
+                "untracked": row["untracked"],
+                "dirty_files_sample": row["sample_tracked"] + row["sample_untracked"],
+                "tracked_groups": row["tracked_groups"],
+                "untracked_groups": row["untracked_groups"],
+                "bucket": plan_bucket(row),
+                "known_live_checkout": live_policy["known_live_checkout"],
+                "live_update_policy": live_policy["live_update_policy"],
+                "live_state": live_policy["live_state"],
+                "live_dirty_state": live_policy["live_dirty_state"],
+                "live_policy_notes": live_policy["notes"],
+                "operations": [
+                    action_gate("commit", row, selected_repos, approval_ref, live_policy),
+                    action_gate("push", row, selected_repos, approval_ref, live_policy),
+                    action_gate("pull_live", row, selected_repos, approval_ref, live_policy),
+                ],
+            }
+        )
+    return {
+        "mode": "read-only-approved-action-plan",
+        "mutations": [],
+        "approval_required": True,
+        "approval_ref": approval_ref,
+        "selected_repos": sorted(selected_repos),
+        "repo_count": len(rows),
+        "planned_repo_count": len(repos),
+        "dirty_repo_count": sum(1 for row in rows if row["tracked_dirty"] or row["untracked"]),
+        "boundary": "No commit, push, pull, clean, reset, stash, or delete is performed by this generator.",
+        "repos": repos,
     }
 
 
@@ -330,6 +501,50 @@ def render_plan_markdown(plan: dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
+def render_action_plan_markdown(plan: dict[str, Any]) -> str:
+    lines = [
+        "# Git Hygiene Approved Action Plan",
+        "",
+        "- mode: read-only-approved-action-plan",
+        "- mutations: none; no commit, push, pull, clean, reset, stash, or delete",
+        f"- approval_ref: `{plan['approval_ref']}`",
+        f"- selected_repos: `{json.dumps(plan['selected_repos'])}`",
+        f"- repos_scanned: `{plan['repo_count']}`",
+        f"- planned_repos: `{plan['planned_repo_count']}`",
+        f"- dirty_repos: `{plan['dirty_repo_count']}`",
+        "",
+        "| repo | branch | head | dirty | untracked | ahead/behind | live_policy | live_dirty | blocked_ops |",
+        "| --- | --- | --- | ---: | ---: | --- | --- | --- | --- |",
+    ]
+    for repo in plan["repos"]:
+        blocked_ops = [
+            op["operation"]
+            for op in repo["operations"]
+            if op["blockers"]
+        ]
+        lines.append(
+            "| "
+            + " | ".join(
+                [
+                    repo["repo"],
+                    repo["branch"] or "(detached)",
+                    repo["head"],
+                    str(repo["tracked_dirty"]),
+                    str(repo["untracked"]),
+                    repo["ahead_behind"],
+                    repo["live_update_policy"],
+                    repo["live_dirty_state"],
+                    ", ".join(blocked_ops) or "none",
+                ]
+            )
+            + " |"
+        )
+    if not plan["repos"]:
+        lines.append("")
+        lines.append("No dirty or ahead/behind repositories found.")
+    return "\n".join(lines) + "\n"
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", default=str(DEFAULT_ROOT), help="Root directory to scan.")
@@ -337,6 +552,9 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--dirty-only", action="store_true", help="Only show repos with tracked or untracked changes.")
     parser.add_argument("--include-worktrees", action="store_true", help="Include nested Git worktrees in recursive run folders.")
     parser.add_argument("--plan", action="store_true", help="Group dirty repositories into read-only next-action buckets.")
+    parser.add_argument("--action-plan", action="store_true", help="Emit read-only commit/push/live-pull action gates.")
+    parser.add_argument("--selected-repo", action="append", default=[], help="Repo path or basename selected for approved action planning.")
+    parser.add_argument("--approval-ref", default="", help="Human approval reference for selected repo action gates.")
     parser.add_argument("--repo", default="", help="Emit one read-only action packet for a single repository.")
     parser.add_argument("--group", default="", help="With --repo, emit one top-level dirty group packet.")
     parser.add_argument("--sample-limit", type=int, default=8, help="Maximum sample paths per dirty category.")
@@ -358,7 +576,13 @@ def main() -> int:
 
     repos = discover_repos(root, args.include_worktrees)
     rows = [inventory_repo(repo, max(0, args.sample_limit)) for repo in repos]
-    if args.plan:
+    if args.action_plan:
+        plan = build_action_plan(rows, set(args.selected_repo), args.approval_ref)
+        if args.json:
+            print(json.dumps(plan, indent=2, sort_keys=True))
+        else:
+            print(render_action_plan_markdown(plan), end="")
+    elif args.plan:
         plan = build_plan(rows)
         if args.json:
             print(json.dumps(plan, indent=2, sort_keys=True))

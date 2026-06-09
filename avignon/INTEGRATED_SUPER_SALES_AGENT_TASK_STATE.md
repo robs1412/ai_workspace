@@ -5,6 +5,20 @@ Keep entries concise, dated, and decision-oriented. Record substantive
 conversations, calibration decisions, next actions, and approval gates here so
 the project state survives beyond chat.
 
+## 2026-06-09
+
+- Source: Sonat direct-owner email, subject `Account list`, Message-ID `<CALbLtzzN6cRfQccuB_1xaKvTSnbVAATtMsqORPX2xZJyY=hRPQ@mail.gmail.com>`; AI Manager input `3017`; visible worker session `afc3565b`.
+- Topic: Current Illinois operating account ledger for the Integrated Super Sales Agent.
+- What changed: Salesreport generated a 2026 Illinois top-200 account contact sheet from read-only Salesreport/CRM invoice, account, address, product, and contact tables. The output includes purchase amount, purchased products, address where available, CRM contact information where available, and Portal account URLs.
+- New source artifacts: `/Users/werkstatt/salesreport/doc/avignon-sonat-illinois-top200-account-contact-sheet-2026-06-09.md` and `/Users/werkstatt/salesreport/doc/avignon-sonat-illinois-top200-account-contact-sheet-2026-06-09.csv`; generator `/Users/werkstatt/salesreport/scripts/generate_avignon_illinois_top200_account_sheet.php`.
+- Readback: 200 Illinois accounts; 43 accounts with at least one CRM contact; 157 accounts without CRM contact; combined 2026 purchased amount `$329,928.03`; combined 2026 cases `2,813.33`; invoice window `2026-01-01` through `2026-05-31`.
+- Current follow-through: Built a read-only top-50 action split from the top-200 CSV at `/Users/werkstatt/ai_workspace/avignon/docs/integrated-super-sales-agent-top50-action-plan-2026-06-09.md` and `/Users/werkstatt/ai_workspace/avignon/docs/integrated-super-sales-agent-top50-action-plan-2026-06-09.csv`; generator `/Users/werkstatt/ai_workspace/scripts/avignon_integrated_sales_agent_action_plan.py`.
+- Action-plan readback: top 50 reviewed; 5 rep-ready non-chain accounts with email/phone routes; 16 non-chain accounts needing contact cleanup; 29 chain/program accounts; 5 initial field briefings; 25 contact-cleanup targets.
+- Owner-facing packet: Avignon emailed Sonat the current action packet on 2026-06-09 with subject `Integrated Super Sales Agent: Illinois action packet`, Message-ID `<178102847118.48164.8463415706429370315@kovaldistillery.com>`, no cc/bcc.
+- Concrete next action: Convert the available initial field briefings into a Sonat/rep review packet, and run a contact-cleanup research pass for the 25 highest-value non-chain accounts without usable contact routes.
+- Remaining approval gates: no CRM/Portal contact creation or updates, no external account email, no pricing/sample/allocation/account commitments, and no chain/program outreach until Sonat approves the specific next action lane.
+- Boundaries observed: read-only analysis/report generation and Avignon ledger update only. No external sends, CRM/Portal/OPS mutation, auth/OAuth/token work, pricing/sample/allocation/account commitments, or credential exposure.
+
 ## 2026-06-07
 
 - Source: Workspaceboard session `f2536c08`, scheduler-bridge packet `scheduler-bridge-avignon-20260607-115920`, AI Manager input `2826` / UUID `ai-manager-chat-20260607165744-1299c29cd296`.

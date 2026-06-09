@@ -1,0 +1,29 @@
+{
+  "degraded_count": 0,
+  "generated_at": "2026-06-09 16:11:35 CDT",
+  "git_dirty_reviews": {
+    "blocked_review_count": 0,
+    "pending_review_count": 0,
+    "repo_count": 4
+  },
+  "mode": "read-only-loop-status",
+  "mutation_allowed": false,
+  "next_action": "reduce_active_session_pressure",
+  "proof_repair": {
+    "blocked_count": 4,
+    "duplicate_no_action_count": 1,
+    "needs_approval_count": 0,
+    "packet_count": 5,
+    "pending_review_count": 0
+  },
+  "schema_version": 2,
+  "truth_drift_count": 0,
+  "workspaceboard_monitor": {
+    "by_status": {
+      "green": 18
+    },
+    "count": 18,
+    "error": "",
+    "ok": true
+  }
+}

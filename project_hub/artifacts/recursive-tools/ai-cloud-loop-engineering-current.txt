@@ -1,0 +1,321 @@
+Loop Engineering
+
+
+https://addyosmani.com/blog/loop-engineering/
+
+
+
+Codex assessment and implementation plan - 2026-06-08 23:10 CDT
+
+Source context
+
+- Document title: Loop Engineering.
+- Existing reference: https://addyosmani.com/blog/loop-engineering/
+- Image 1: the loop-engineering infographic. The useful standard is: load context, inject task, agent acts, run checks, feed back errors, retry or escalate. It also emphasizes stable context, narrow roles, concrete inputs, a component that can say no, raw error feedback, anti-gaming checks, small loops before big loops, explicit state, clear stopping conditions, real verification, minimal diffs, layered checks, and keeping humans at the right altitude.
+- Image 2: the Tiger VC Loop Engineering Shift graphic. The useful additions are persistent agents, memory/context, evaluation loops, orchestration, parallel agents, high-leverage human system design, and shipping as the outcome.
+
+Current standing
+
+We are past the prompt-engineering stage. The stack already has real loop infrastructure: compact task-mode startup, durable task-mode input recording, Workspaceboard read models, recursive proposal generation, recursive proposal execution policy, service parity checks, truth-drift checks, proof-repair candidate detection, git hygiene inventory, and a recursive experiment harness with isolated worktrees, immutable evaluators, proof JSON, promotion checks, dry-run promotion, and proof-backed stale worktree retirement.
+
+The strongest part of the system is that it increasingly judges work by source proof instead of route labels. It can now distinguish clean monitor mode, truth drift, proof-closeout issues, failed approved-send artifacts, stale recursive patches, dirty repos, and blocked work that needs a real owner question.
+
+Current verified readback after starting implementation:
+
+- Workspaceboard monitor: 18 checks, 18 green.
+- Recursive executor: 0 approved unexecuted proposals, 0 blocked executions.
+- Truth drift: 0 drift.
+- Proof issues: 5 unresolved proof-repair candidates.
+- Proof-repair packets: 5 generated, all read-only, all requiring approval before send or production mutation.
+- Git hygiene: 31 repos scanned, 1 dirty repo bucket, currently active-lane work in ai_workspace.
+- Current loop next action: review_proof_repair_packets_for_approval.
+
+What changed in this pass
+
+1. Added a read-only loop status surface.
+
+New script: scripts/loop_status.py
+
+It aggregates the current loop state into:
+
+- project_hub/artifacts/recursive-tools/loop-status-latest.json
+- project_hub/artifacts/recursive-tools/loop-status-latest.md
+
+The report combines Workspaceboard monitor status, recursive executor status, truth/proof counts, proof-repair packet counts, git hygiene summary, and one next action. It is explicitly read-only: no sends, no Task Flow mutation, no OPS/Portal mutation, no git commit/push/pull/clean.
+
+2. Upgraded proof-repair candidates into explicit packets.
+
+Updated script: scripts/task_flow_proof_repair_candidates.py
+
+New output:
+
+- project_hub/artifacts/recursive-tools/task-flow-proof-repair-packets-latest.json
+- project_hub/artifacts/recursive-tools/task-flow-proof-repair-packets-latest.md
+- project_hub/artifacts/recursive-tools/proof-repair-packets/*.json
+
+Each packet now has:
+
+- dedupe key
+- proof kind
+- source artifact
+- owner lane
+- responsible worker/persona
+- OPS/Portal/domain task reference
+- proposed action
+- approval requirement
+- external_send_allowed=false by default
+- production_mutation_allowed=false by default
+- required post-action verification
+- guardrails that block auto-send and production mutation without approval
+
+This is the first concrete step in turning the proof-repair lane from a report into a controlled queue.
+
+Why proof repair is the right pressure point
+
+The proof-repair lane is useful because it is repeated, concrete, source-backed, and risky enough to need controls. The latest detector found five failed approved-send artifacts. That means the system can prove a worker intended or attempted a communication, but no sent Message-ID was produced. This is exactly where loop engineering helps: the loop should not guess, should not auto-send, and should not mark work complete. It should build a packet, show the evidence, require approval, execute through the correct lane path, and verify the live proof afterward.
+
+The current five packeted items are:
+
+1. taskflow-5cfd58716334576b - Weekly finance update with QBO PDFs - June 8 - Naomi finance - OPS 368746.
+2. taskflow-760a7508ffeabfe5 - tasting selection and cancellation automation - outreach coordinator.
+3. taskflow-1db47dff91264646 - Ravenswood On Tap 2026 drinks - OPS outreach events 866 and 867.
+4. taskflow-3981bd77dabf07ce - New tasting - OPS Outreach event 1055 / shift 5584.
+5. taskflow-1513f992055a281d - Wild Onion Market 2nd Anniversary Event - OPS event 1054 / shift 5582.
+
+All five are now review packets, not permission to send.
+
+Unified plan
+
+Phase 1 - Make loop status the daily control surface
+
+Goal: one source-backed readout for whether the system should monitor, ask for approval, repair proof, fix drift, or stop.
+
+Current status: started. scripts/loop_status.py now produces the first read-only aggregate status and points the loop to proof-repair packet approval.
+
+Next work:
+
+- [completed 2026-06-09 09:28 CDT] Add tests/snapshot checks for the loop status schema.
+- [completed 2026-06-09 09:28 CDT] Add clearer degraded-state reporting for slow monitor endpoints.
+- [completed 2026-06-09 09:28 CDT] Add artifact timestamps for every imported source so stale data is obvious.
+- [completed 2026-06-09 09:28 CDT] Add a compact Workspaceboard-facing view of loop-status-latest.json.
+
+Proof required:
+
+- loop-status-latest.md shows monitor count, proposal counts, proof counts, packet counts, git hygiene count, and one next action.
+- If a subsystem fails, the report must show the failing command or URL and the exact error.
+
+Stop condition:
+
+- If the status cannot prove a subsystem state, it reports degraded or unknown. It must not report green by assumption.
+
+Phase 2 - Turn proof repair into an auditable approval queue
+
+Goal: each proof issue becomes a packet with source evidence, next action, approval gate, and required readback.
+
+Current status: started. Five read-only proof-repair packets now exist. They all require approval before any external send or production mutation.
+
+Next work:
+
+- [completed 2026-06-09 09:28 CDT] Add a packet reviewer command that can mark a packet as approved, rejected, duplicate/no-action, needs-owner-question, or blocked.
+- [completed 2026-06-09 09:28 CDT] Add an approval contract: approved_by, approved_at, expires_at, allowed action, allowed sender path, allowed mutation surface, and required readback.
+- [completed 2026-06-09 09:28 CDT] Add a verifier that re-runs the candidate detector and confirms a repaired packet no longer appears unresolved.
+- [completed 2026-06-09 09:28 CDT] Keep lane-specific send/retry execution outside the detector; the packet only prepares the controlled action.
+
+Proof required:
+
+- Every packet has one source artifact and one next action.
+- Approval state is durable before execution.
+- After action, proof includes sent Message-ID or explicit no-send blocker, Task Flow readback, and candidate scan readback.
+
+Stop condition:
+
+- No approval means no send and no production mutation.
+- Missing source artifact or lane rule means one exact blocker, not a guessed repair.
+
+Phase 3 - Formalize recursive approval contracts
+
+Goal: make human approval narrow, durable, and machine-checkable.
+
+Next work:
+
+- [completed 2026-06-09 09:28 CDT] Define approval JSON for recursive proposals: proposal_id, allowed_fix_class, mutation_surface, external_send_allowed, production_mutation_allowed, approved_by, approved_at, expires_at, verifier command, rollback/stop condition, and readback requirement.
+- [completed 2026-06-09 09:28 CDT] Teach recursive_proposal_executor.py to reject missing, expired, mismatched, or overbroad approvals.
+- [completed 2026-06-09 09:28 CDT] Separate verifier-only no-op checks from mutation-capable actions.
+
+Proof required:
+
+- Valid approval dry-run reports executable.
+- Expired or mismatched approval dry-run reports blocked with exact reason.
+- Verifier-only safe classes remain available without broad mutation authority.
+
+Stop condition:
+
+- Approval mismatch blocks execution.
+
+Phase 4 - Upgrade Workspaceboard for parallel-agent ownership
+
+Goal: make parallel agents safe by making ownership and proof visible.
+
+Next work:
+
+- [completed 2026-06-09 11:17 CDT] Expose worker role, owned files/domain surface, expected proof, collision boundaries, and approval gates on the board.
+- [completed 2026-06-09 11:17 CDT] Add warnings when multiple workers touch the same repo, lane, source artifact, or live surface without explicit coordination.
+- [completed 2026-06-09 11:17 CDT] Show loop status next action on the board so recurring runners do not need manual transcript reading.
+
+Proof required:
+
+- Board readback shows owner, scope, proof, and next action per active worker.
+- Parallel worker collisions are visible before execution, not discovered after dirty worktrees appear.
+
+Stop condition:
+
+- If ownership is ambiguous, the board should route to review rather than launch more work.
+
+Phase 5 - Improve persistent memory and compact context
+
+Goal: agents should survive across tasks through precise state, not long transcript preload.
+
+Next work:
+
+- Define lane context packets with current state, source-of-truth URLs or artifact paths, approval gates, recent proof, and next safe action.
+- Add staleness checks for memory-derived facts.
+- Keep thin startup as the default; load broad history only after exact-id checks miss.
+
+Proof required:
+
+- A new task-mode worker can start from AGENTS.md, docs/task-mode-startup.md, and a narrow context packet without reading old handoffs.
+- Stale context is detected and marked stale instead of silently trusted.
+
+Stop condition:
+
+- If current live readback contradicts memory, live readback wins.
+
+Phase 6 - Harden the recursive harness promotion path
+
+Goal: make recursive improvements safe enough for routine use.
+
+Next work:
+
+- Add a fresh-run template that enforces one hypothesis, one mutable surface, one immutable evaluator, one metric, token budget, and proof path.
+- Add promotion preflight for main checkout cleanliness, patch applicability, evaluator pass, diff hash, and forbidden-file patterns.
+- Add post-promotion readback with commit hash or diff hash, verifier output, and retirement status.
+
+Proof required:
+
+- A harmless docs/test-only recursive attempt can run dry-run and approved promotion.
+- A stale patch records apply_check_failed without changing main.
+- Worktree retirement requires a dirty patch hash matching recorded proof.
+
+Stop condition:
+
+- Evaluator failure, patch mismatch, or forbidden surface blocks promotion.
+
+Phase 7 - Turn repo/live hygiene into a repeatable loop
+
+Goal: make clean/commit/push/pull-live work repeatable without resets or hidden deploys.
+
+Next work:
+
+- Extend git_hygiene_inventory.py into an approved action plan generator.
+- Track repo path, branch, dirty files, ahead/behind, remote, known live checkout, and live dirty state.
+- Only commit/push/pull selected repos after explicit approval.
+- Preserve unrelated live modifications and report them as blockers or exclusions.
+
+Proof required:
+
+- Read-only inventory works across /Users/werkstatt.
+- Approved plan handles ai_workspace, workspaceboard, salesreport, and bid separately.
+- Live pull proof includes before/after commit and live dirty-state note.
+
+Stop condition:
+
+- Unknown live path, dirty live checkout, or unrelated local changes blocks that repo.
+
+Phase 8 - Make Google Docs/Drive writeback reusable
+
+Goal: stop reimplementing Doc append/update logic inline.
+
+Next work:
+
+- Add a helper for metadata-first fetch, export, append/replace section, and readback marker.
+- Use the approved OAuth route.
+- Keep credential details out of chat and durable notes.
+
+Proof required:
+
+- Helper reports title, canEdit, modifiedTime, line/char count, and marker readback.
+- If canEdit is false or scope is insufficient, it returns one exact blocker.
+
+Stop condition:
+
+- No token refresh workaround, alternate credential, or permission bypass without explicit approval.
+
+Operating cadence
+
+Daily:
+
+- Run loop status.
+- If next_action is monitor_mode, record readback and stop.
+- If next_action is review_proof_repair_packets_for_approval, review packets and ask for explicit approval where needed.
+- If drift exists, repair drift before returning to monitor mode.
+- If a monitor is degraded, classify it before launching more workers.
+
+Weekly:
+
+- Review recursive proposal outcomes: kept, rejected, blocked, superseded.
+- Retire proof-backed stale worktrees.
+- Refresh repo/live hygiene inventory.
+- Pick one repeated manual operation to convert into a verifier-backed loop.
+
+Before any mutation:
+
+- Confirm approval contract.
+- Confirm narrow mutable surface.
+- Run preflight verifier.
+- Apply the smallest diff possible.
+- Run post-change verifier and live/read-model proof.
+- Record the result in the durable task spine.
+
+Success definition
+
+The next level is not more 
+
+Implementation update - 2026-06-09 09:28 CDT
+
+- Completed Phase 1 loop status upgrades: schema version 2, source artifact timestamps, degraded-source reporting, packet-review import, and loop-status-board-latest.json.
+- Completed Phase 2 approval queue upgrades: non-executing packet reviewer, durable packet decision log, approval contract fields, and post-action verifier that reruns or reads the candidate detector.
+- Completed Phase 3 recursive approval contract enforcement: recursive_proposal_executor.py now reports and blocks missing, expired, mismatched, or overbroad contracts before approval-required execution.
+- Verification: py_compile passed for loop_status.py, task_flow_proof_repair_packet_reviewer.py, and recursive_proposal_executor.py; unittest passed 23 tests across recursive executor, loop status, packet reviewer, and proof candidate detector.
+- Current readback: 18/18 Workspaceboard monitor checks green; truth drift 0; proof-repair candidates 5; proof-repair packets 5; pending packet reviews 5; no degraded sources; no sends or production mutations performed.
+autonomy by default. It is reliable autonomy under constraints. The system should repeatedly ship small useful improvements because it has stable context, explicit state, narrow worker roles, concrete inputs, real verification, feedback from raw failures, anti-
+
+Implementation update - 2026-06-09 11:17 CDT
+
+- Completed Phase 4 Workspaceboard ownership/proof surfacing. /api/management/overview now includes parallel_ownership with loop_status, worker_claims, collision_warnings, and approval_gate_summary.
+- Task Light now shows Loop and Collisions stats plus ownership/collision cards in the Monitors tab.
+- Verification: npm run check passed; node --test server/test/session-status.test.js server/test/workspaceboard-dashboard.test.js passed 85 tests; normal runtime readback on 127.0.0.1:17878 shows loop_next_action=review_proof_repair_packets_for_approval, pending_reviews=5, collision_warning_count=8, and approval gates true.
+- Runtime note: the LaunchAgent install copied the runtime but launchctl bootstrap/kickstart returned Domain does not support specified action, so the Workspaceboard listener was restarted narrowly through the installed runtime script.
+gaming checks, clear stop conditions, persistent memory, and human approval at the right altitude.
+
+Implementation update - 2026-06-09 11:41 CDT
+- Completed proof-repair packet review: 5/5 packets reviewed; pending_review_count is now 0.
+- Naomi weekly finance packet marked duplicate_no_action because the source failed artifact contains recovered sent proof Message-ID <178096652949.22647.6083703658822257594@kovaldistillery.com>.
+- Four Outreach failed-send packets marked blocked because their source artifacts have no message_id, no sent_message_id, and empty completion_or_blocker_email; no external resend or production mutation was authorized.
+- Fixed loop_status next_action to prefer reviewer pending count over stale generated packet-index needs_approval_count.
+- Verification passed: py_compile for loop_status/reviewer, unittest tests.test_loop_status tests.test_task_flow_proof_repair_packet_reviewer, and fresh loop status readback.
+- Current next action: review_dirty_repositories; proof-repair packet review is no longer the active next step.
+
+Implementation update - 2026-06-09 12:00 CDT
+- Completed dirty-repo review phase: 3/3 dirty repos reviewed, pending_review_count=0, blocked_review_count=0.
+- Added git_dirty_repo_reviewer.py to record non-destructive review decisions against each repo's current git status signature.
+- Integrated dirty repo review state into loop_status so legitimate active work no longer blocks the loop forever.
+- Recorded ai_workspace and workspaceboard as in-scope active implementation state; recorded salesreport as external active Avignon account-sheet work to leave untouched.
+- Verification passed: py_compile for loop_status and git_dirty_repo_reviewer; unittest tests.test_loop_status; fresh loop_status and Workspaceboard management overview both read next_action=monitor_mode.
+
+Implementation update - 2026-06-09 12:31 CDT
+- Completed collision warning normalization: Workspaceboard now annotates parallel ownership collision warnings with stable signatures, classification, review_status, review_decision, and next_action.
+- Added a collision decision log at project_hub/artifacts/recursive-tools/parallel-ownership-collision-decisions.jsonl; current 8 live warnings are reviewed with pending_review_count=0 and blocked_review_count=0.
+- Current classifications: 6 stale_or_waiting_shared_workspace, 1 needs_coordination for Frank task #1751 duplicates, and 1 shared_expected for the AI control lane.
+- Task Light now shows attention only when collision reviews are pending, while still displaying reviewed collision details.
+- Verification passed: npm run check, node --test server/test/session-status.test.js server/test/workspaceboard-dashboard.test.js, runtime syntax check, runtime copy/restart, and live management overview readback.
+

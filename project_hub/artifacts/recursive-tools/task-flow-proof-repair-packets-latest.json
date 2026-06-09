@@ -1,0 +1,48 @@
+{
+  "generated_at": "2026-06-09 09:25:39 CDT",
+  "mode": "read-only-packets",
+  "mutation_allowed": false,
+  "packet_count": 5,
+  "packets": [
+    {
+      "approval_required": true,
+      "dedupe_key": "taskflow-5cfd58716334576b",
+      "packet_path": "/Users/werkstatt/ai_workspace/project_hub/artifacts/recursive-tools/proof-repair-packets/taskflow-5cfd58716334576b.failed_approved_send_artifact.json",
+      "proof_kind": "failed_approved_send_artifact",
+      "proposed_action": "review_failed_send_artifact_then_retry_or_block",
+      "status": "duplicate_no_action"
+    },
+    {
+      "approval_required": true,
+      "dedupe_key": "taskflow-760a7508ffeabfe5",
+      "packet_path": "/Users/werkstatt/ai_workspace/project_hub/artifacts/recursive-tools/proof-repair-packets/taskflow-760a7508ffeabfe5.failed_approved_send_artifact.json",
+      "proof_kind": "failed_approved_send_artifact",
+      "proposed_action": "review_failed_send_artifact_then_retry_or_block",
+      "status": "blocked"
+    },
+    {
+      "approval_required": true,
+      "dedupe_key": "taskflow-1db47dff91264646",
+      "packet_path": "/Users/werkstatt/ai_workspace/project_hub/artifacts/recursive-tools/proof-repair-packets/taskflow-1db47dff91264646.failed_approved_send_artifact.json",
+      "proof_kind": "failed_approved_send_artifact",
+      "proposed_action": "review_failed_send_artifact_then_retry_or_block",
+      "status": "blocked"
+    },
+    {
+      "approval_required": true,
+      "dedupe_key": "taskflow-3981bd77dabf07ce",
+      "packet_path": "/Users/werkstatt/ai_workspace/project_hub/artifacts/recursive-tools/proof-repair-packets/taskflow-3981bd77dabf07ce.failed_approved_send_artifact.json",
+      "proof_kind": "failed_approved_send_artifact",
+      "proposed_action": "review_failed_send_artifact_then_retry_or_block",
+      "status": "blocked"
+    },
+    {
+      "approval_required": true,
+      "dedupe_key": "taskflow-1513f992055a281d",
+      "packet_path": "/Users/werkstatt/ai_workspace/project_hub/artifacts/recursive-tools/proof-repair-packets/taskflow-1513f992055a281d.failed_approved_send_artifact.json",
+      "proof_kind": "failed_approved_send_artifact",
+      "proposed_action": "review_failed_send_artifact_then_retry_or_block",
+      "status": "blocked"
+    }
+  ]
+}

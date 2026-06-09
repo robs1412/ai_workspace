@@ -282,6 +282,15 @@ def load_credentials(path: Path) -> dict[str, str]:
 def append_message_to_sent_folder(creds: dict[str, str], msg: EmailMessage) -> str:
     raw_message = msg.as_bytes()
     last_error = ""
+
+    def imap_mailbox_arg(folder: str) -> str:
+        value = str(folder or "")
+        if value.startswith('"') and value.endswith('"'):
+            return value
+        if any(ch.isspace() for ch in value) or any(ch in value for ch in ['"', '\\']):
+            return '"' + value.replace("\\", "\\\\").replace('"', '\\"') + '"'
+        return value
+
     conn = imaplib.IMAP4_SSL(creds["imap_server"], int(creds["imap_port"]), timeout=30)
     try:
         conn.login(creds["user"], creds["password"])
@@ -308,7 +317,7 @@ def append_message_to_sent_folder(creds: dict[str, str], msg: EmailMessage) -> s
             ordered_candidates.append(folder)
         for folder in ordered_candidates:
             try:
-                status, _ = conn.append(folder, "\\Seen", imaplib.Time2Internaldate(time.time()), raw_message)
+                status, _ = conn.append(imap_mailbox_arg(folder), "\\Seen", imaplib.Time2Internaldate(time.time()), raw_message)
                 if status == "OK":
                     return folder
             except Exception as exc:

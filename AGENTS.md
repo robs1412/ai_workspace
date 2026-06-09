@@ -16,6 +16,8 @@ This root file is intentionally compact. Do not preload long lane histories, han
 - Use `/usr/local/bin/rg` for searches when available and `/usr/local/bin/python3.13` for Python commands and shebangs.
 - Keep diagnostics metadata-first: use counts, stats, `head`, `jq`, and targeted line ranges before reading full logs, transcripts, or instruction files.
 - Keep proof gathering bounded: start from exact Task Flow keys, session ids, Message-IDs, OPS/Portal ids, or source refs; use `rg --max-count`, `head`/`tail`, `jq`, `wc`, and targeted line ranges before full recursive searches or full API/log dumps.
+- Owner-facing review packets must not be left only as local `.md` or `.csv` files under `/Users/werkstatt`. Publish them to Google Drive AI Cloud, Papers, or a repo-backed access-gated HTML/page surface, then provide the full accessible link. Local files may be working copies only.
+- The Cultivater is managed by Sonat. Send all The Cultivater communications, including Asher/Venetia drafts, approval packets, blocker details, route-info notes, completion reports, and follow-up packets, to Sonat by default, not Robert. Robert may receive brief chat status when he asks, but do not email The Cultivater operational packets to Robert unless he explicitly says to copy himself in addition to Sonat.
 
 ## Task Tracking
 

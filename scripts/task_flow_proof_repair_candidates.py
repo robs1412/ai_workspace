@@ -21,6 +21,13 @@ DEFAULT_JSON = (
 DEFAULT_REPORT = (
     ROOT / "project_hub/artifacts/recursive-tools/task-flow-proof-repair-candidates-latest.md"
 )
+DEFAULT_PACKET_DIR = ROOT / "project_hub/artifacts/recursive-tools/proof-repair-packets"
+DEFAULT_PACKET_INDEX = (
+    ROOT / "project_hub/artifacts/recursive-tools/task-flow-proof-repair-packets-latest.json"
+)
+DEFAULT_PACKET_REPORT = (
+    ROOT / "project_hub/artifacts/recursive-tools/task-flow-proof-repair-packets-latest.md"
+)
 DEFAULT_RECORDER = ROOT / "scripts/task_flow_mysql_recorder.php"
 DEFAULT_NATIONALOUTREACH_FAILED_DIR = Path("/Users/admin/.nationaloutreach-launch/state/failed")
 DEFAULT_AVIGNON_EVENTS = Path("/Users/admin/.avignon-launch/state/task-flow-events.jsonl")
@@ -75,7 +82,12 @@ def run_recorder_report(recorder: Path, limit: int) -> dict[str, Any]:
     )
     if proc.returncode != 0:
         raise RuntimeError(safe_text(proc.stderr or proc.stdout, 500))
-    return json.loads(proc.stdout)
+    try:
+        parsed = json.loads(proc.stdout)
+    except json.JSONDecodeError as exc:
+        output = safe_text(proc.stderr or proc.stdout, 500)
+        raise RuntimeError(f"recorder returned non-JSON output: {output}") from exc
+    return parsed if isinstance(parsed, dict) else {}
 
 
 def candidate_needed(row: dict[str, Any]) -> bool:
@@ -122,7 +134,10 @@ def failed_artifact_paths(row: dict[str, Any], failed_dir: Path) -> list[Path]:
 
 
 def build_failed_artifact_candidate(row: dict[str, Any], path: Path) -> RepairCandidate | None:
-    if not path.exists():
+    try:
+        if not path.exists():
+            return None
+    except OSError:
         return None
     data = read_json(path)
     packet = data.get("task_packet") if isinstance(data.get("task_packet"), dict) else {}
@@ -328,6 +343,179 @@ def build_report(payload: dict[str, Any]) -> str:
     return "\n".join(lines) + "\n"
 
 
+def packet_action(candidate: RepairCandidate) -> str:
+    if candidate.proof_kind == "failed_approved_send_artifact":
+        return "review_failed_send_artifact_then_retry_or_block"
+    if candidate.proof_kind == "avignon_route_timeout_blocker":
+        return "restart_visible_worker_or_send_exact_blocker"
+    return "review_source_backed_candidate"
+
+
+def packet_approval_required(candidate: RepairCandidate) -> bool:
+    return candidate.proof_kind in {
+        "failed_approved_send_artifact",
+        "avignon_route_timeout_blocker",
+    }
+
+
+def build_repair_packet(candidate: RepairCandidate) -> dict[str, Any]:
+    approval_required = packet_approval_required(candidate)
+    return {
+        "packet_version": 1,
+        "generated_at": datetime.now().astimezone().strftime("%Y-%m-%d %H:%M:%S %Z"),
+        "dedupe_key": candidate.dedupe_key,
+        "status": "needs_approval" if approval_required else "ready_for_review",
+        "proof_kind": candidate.proof_kind,
+        "confidence": candidate.confidence,
+        "source": {
+            "path": candidate.source_path,
+            "event": candidate.source_event,
+            "logged_at": candidate.source_logged_at,
+            "intake_channel": candidate.intake_channel,
+            "task_status": candidate.status,
+        },
+        "owner": {
+            "lane": candidate.owner_lane,
+            "responsible_worker_or_persona": candidate.responsible_worker_or_persona,
+            "ops_portal_or_domain_task": candidate.ops_portal_or_domain_task,
+        },
+        "subject": candidate.subject,
+        "proposed_action": packet_action(candidate),
+        "next_update": candidate.next_update,
+        "approval": {
+            "required": approval_required,
+            "external_send_allowed": False,
+            "production_mutation_allowed": False,
+            "approval_note": (
+                "Approval is required before retrying external send paths or mutating Task Flow/OPS/Portal state."
+                if approval_required
+                else "Read-only review packet; no external send or production mutation is authorized."
+            ),
+        },
+        "verification": {
+            "current_readback": candidate.verification_readback,
+            "required_after_action": [
+                "sent Message-ID or explicit no-send blocker proof",
+                "Task Flow row readback showing truthful state",
+                "proof-repair candidate scan no longer reports this unresolved candidate",
+            ],
+        },
+        "guardrails": [
+            "Do not auto-send from this packet.",
+            "Do not edit Task Flow/OPS/Portal state without explicit approval.",
+            "Use the lane-specific sender or owner-notification path only after approval.",
+            "If source context is incomplete, stop with one exact blocker.",
+        ],
+    }
+
+
+def packet_path(packet_dir: Path, candidate: RepairCandidate) -> Path:
+    safe_key = re.sub(r"[^A-Za-z0-9_.-]+", "-", candidate.dedupe_key).strip("-")
+    safe_kind = re.sub(r"[^A-Za-z0-9_.-]+", "-", candidate.proof_kind).strip("-")
+    return packet_dir / f"{safe_key}.{safe_kind}.json"
+
+
+def preserve_packet_review_state(packet: dict[str, Any], path: Path) -> dict[str, Any]:
+    if not path.exists():
+        return packet
+    try:
+        existing = read_json(path)
+    except (OSError, json.JSONDecodeError):
+        return packet
+    if (
+        existing.get("dedupe_key") != packet.get("dedupe_key")
+        or existing.get("proof_kind") != packet.get("proof_kind")
+    ):
+        return packet
+
+    for field in ("review", "approval_contract", "post_action_verification", "state_updated_at"):
+        if field in existing:
+            packet[field] = existing[field]
+    if existing.get("status") not in {"", None, "needs_approval", "ready_for_review"}:
+        packet["status"] = existing["status"]
+    existing_approval = existing.get("approval") if isinstance(existing.get("approval"), dict) else {}
+    if isinstance(packet.get("approval"), dict):
+        packet["approval"]["external_send_allowed"] = bool(existing_approval.get("external_send_allowed", False))
+        packet["approval"]["production_mutation_allowed"] = bool(
+            existing_approval.get("production_mutation_allowed", False)
+        )
+    return packet
+
+
+def write_repair_packets(
+    candidates: list[RepairCandidate],
+    packet_dir: Path,
+    packet_index: Path,
+    packet_report: Path,
+) -> dict[str, Any]:
+    packet_dir.mkdir(parents=True, exist_ok=True)
+    packets = []
+    for candidate in candidates:
+        packet = build_repair_packet(candidate)
+        path = packet_path(packet_dir, candidate)
+        packet = preserve_packet_review_state(packet, path)
+        path.write_text(json.dumps(packet, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+        packets.append(
+            {
+                "dedupe_key": candidate.dedupe_key,
+                "proof_kind": candidate.proof_kind,
+                "status": packet["status"],
+                "approval_required": packet["approval"]["required"],
+                "proposed_action": packet["proposed_action"],
+                "packet_path": str(path),
+            }
+        )
+    index = {
+        "generated_at": datetime.now().astimezone().strftime("%Y-%m-%d %H:%M:%S %Z"),
+        "mode": "read-only-packets",
+        "mutation_allowed": False,
+        "packet_count": len(packets),
+        "packets": packets,
+    }
+    packet_index.parent.mkdir(parents=True, exist_ok=True)
+    packet_index.write_text(json.dumps(index, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    packet_report.write_text(build_packet_report(index), encoding="utf-8")
+    return index
+
+
+def build_packet_report(index: dict[str, Any]) -> str:
+    lines = [
+        "# Task Flow Proof Repair Packets",
+        "",
+        f"- Recorded: {index['generated_at']}",
+        f"- Packet count: `{index['packet_count']}`",
+        f"- Mutation allowed: `{index['mutation_allowed']}`",
+        "",
+        "| dedupe_key | proof_kind | status | approval | action |",
+        "| --- | --- | --- | --- | --- |",
+    ]
+    for packet in index["packets"]:
+        lines.append(
+            "| "
+            + " | ".join(
+                [
+                    packet["dedupe_key"],
+                    packet["proof_kind"],
+                    packet["status"],
+                    "required" if packet["approval_required"] else "not-required",
+                    packet["proposed_action"],
+                ]
+            )
+            + " |"
+        )
+    if not index["packets"]:
+        lines.append("| none | none | none | none | none |")
+    lines.extend(
+        [
+            "",
+            "## Boundary",
+            "",
+            "- Packets are read-only next-action records. They do not send email or update Task Flow, OPS, or Portal state.",
+        ]
+    )
+    return "\n".join(lines) + "\n"
+
+
 def parse_args(argv: list[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--recorder", type=Path, default=DEFAULT_RECORDER)
@@ -335,6 +523,10 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     parser.add_argument("--json", type=Path, default=DEFAULT_JSON)
     parser.add_argument("--report", type=Path, default=DEFAULT_REPORT)
     parser.add_argument("--print-json", action="store_true")
+    parser.add_argument("--write-packets", action="store_true")
+    parser.add_argument("--packet-dir", type=Path, default=DEFAULT_PACKET_DIR)
+    parser.add_argument("--packet-index", type=Path, default=DEFAULT_PACKET_INDEX)
+    parser.add_argument("--packet-report", type=Path, default=DEFAULT_PACKET_REPORT)
     parser.add_argument("--nationaloutreach-failed-dir", type=Path, default=DEFAULT_NATIONALOUTREACH_FAILED_DIR)
     parser.add_argument("--avignon-events", type=Path, default=DEFAULT_AVIGNON_EVENTS)
     return parser.parse_args(argv)
@@ -342,7 +534,11 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
 
 def main(argv: list[str]) -> int:
     args = parse_args(argv)
-    tf_report = run_recorder_report(args.recorder, args.limit)
+    try:
+        tf_report = run_recorder_report(args.recorder, args.limit)
+    except RuntimeError as exc:
+        print(f"error={exc}", file=sys.stderr)
+        return 2
     rows = [item for item in tf_report.get("items", []) if isinstance(item, dict)]
     candidates = unique_candidates(
         [
@@ -361,12 +557,27 @@ def main(argv: list[str]) -> int:
     args.report.parent.mkdir(parents=True, exist_ok=True)
     args.json.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     args.report.write_text(build_report(payload), encoding="utf-8")
+    packet_index: dict[str, Any] | None = None
+    if args.write_packets:
+        packet_index = write_repair_packets(
+            candidates,
+            args.packet_dir,
+            args.packet_index,
+            args.packet_report,
+        )
     if args.print_json:
-        print(json.dumps(payload, indent=2, sort_keys=True))
+        printed_payload = dict(payload)
+        if packet_index is not None:
+            printed_payload["packet_index"] = packet_index
+        print(json.dumps(printed_payload, indent=2, sort_keys=True))
     else:
         print(f"report={args.report}")
         print(f"json={args.json}")
         print(f"candidate_count={len(candidates)}")
+        if packet_index is not None:
+            print(f"packet_report={args.packet_report}")
+            print(f"packet_index={args.packet_index}")
+            print(f"packet_count={packet_index['packet_count']}")
     return 0
 
 

@@ -319,6 +319,76 @@ def approved_state(proposal: dict[str, Any]) -> bool:
     return proposal.get("decision_state") == "approved"
 
 
+def parse_contract_time(value: object) -> datetime | None:
+    raw = str(value or "").strip()
+    if not raw:
+        return None
+    for fmt in ("%Y-%m-%d %H:%M:%S %Z", "%Y-%m-%dT%H:%M:%S%z", "%Y-%m-%d %H:%M:%S%z"):
+        try:
+            parsed = datetime.strptime(raw, fmt)
+        except ValueError:
+            continue
+        return parsed.astimezone() if parsed.tzinfo else parsed.astimezone()
+    parts = raw.rsplit(" ", 1)
+    if len(parts) == 2 and parts[1].isalpha():
+        try:
+            return datetime.strptime(parts[0], "%Y-%m-%d %H:%M:%S").astimezone()
+        except ValueError:
+            pass
+    try:
+        return datetime.fromisoformat(raw).astimezone()
+    except ValueError:
+        return None
+
+
+def approval_contract_status(
+    proposal_id: str,
+    proposal: dict[str, Any],
+    policy: FixClassPolicy | None,
+    *,
+    allow_live_mutation: bool = False,
+    verify_only: bool = False,
+) -> dict[str, Any]:
+    if not proposal.get("approval_required"):
+        return {"ok": True, "reason": "approval_not_required"}
+    if not approved_state(proposal):
+        return {"ok": False, "reason": "proposal_not_approved"}
+    if policy is None:
+        return {"ok": False, "reason": "fix_class_not_allowlisted"}
+    contract = proposal.get("approval_contract")
+    if not isinstance(contract, dict):
+        return {"ok": False, "reason": "missing_approval_contract"}
+
+    required_text = ["approved_by", "approved_at", "expires_at", "allowed_fix_class", "verifier_command"]
+    missing = [field for field in required_text if not str(contract.get(field) or "").strip()]
+    if missing:
+        return {"ok": False, "reason": f"approval_contract_missing_fields:{','.join(missing)}"}
+    if str(contract.get("proposal_id") or proposal_id) != proposal_id:
+        return {"ok": False, "reason": "approval_contract_proposal_id_mismatch"}
+    if str(contract.get("allowed_fix_class") or "") != policy.name:
+        return {"ok": False, "reason": "approval_contract_fix_class_mismatch"}
+    if contract.get("verifier_command") != policy.verifier:
+        return {"ok": False, "reason": "approval_contract_verifier_mismatch"}
+    expires_at = parse_contract_time(contract.get("expires_at"))
+    if expires_at is None:
+        return {"ok": False, "reason": "approval_contract_expiry_unparseable"}
+    if expires_at <= datetime.now().astimezone():
+        return {"ok": False, "reason": "approval_contract_expired"}
+    if bool(contract.get("external_send_allowed")):
+        return {"ok": False, "reason": "approval_contract_external_send_overbroad"}
+    production_allowed = bool(contract.get("production_mutation_allowed"))
+    if not policy.mutates_live_state and production_allowed:
+        return {"ok": False, "reason": "approval_contract_production_mutation_overbroad"}
+    if verify_only and production_allowed:
+        return {"ok": False, "reason": "approval_contract_verify_only_overbroad"}
+    if policy.mutates_live_state and allow_live_mutation and not verify_only:
+        if not production_allowed:
+            return {"ok": False, "reason": "approval_contract_missing_production_mutation"}
+        if str(contract.get("mutation_surface") or "").strip() in {"", "none", "*"}:
+            return {"ok": False, "reason": "approval_contract_mutation_surface_missing_or_overbroad"}
+    return {"ok": True, "reason": "approval_contract_valid"}
+
+
 def execution_authorized(proposal: dict[str, Any], fix_class: str) -> bool:
     if approved_state(proposal):
         return True
@@ -341,6 +411,7 @@ def execution_statuses() -> dict[str, Any]:
         proposal = read_json(path)
         fix_class = str(proposal.get("allowed_fix_class") or "")
         policy = FIX_POLICIES.get(fix_class)
+        contract = approval_contract_status(str(proposal_id), proposal, policy)
         proposals.append(
             {
                 "proposal_id": proposal_id,
@@ -359,6 +430,8 @@ def execution_statuses() -> dict[str, Any]:
                 "verifier_available": bool(policy.verifier) if policy else False,
                 "verifier_only_safe": verifier_only_safe(policy),
                 "requires_approval": bool(proposal.get("approval_required")),
+                "approval_contract_ok": bool(contract["ok"]),
+                "approval_contract_reason": contract["reason"],
             }
         )
     return {
@@ -490,6 +563,28 @@ def execute(args: argparse.Namespace) -> int:
 
     if policy is None:
         event = fail_event(proposal_id, proposal, "blocked_unallowlisted", f"fix class {fix_class} is not allowlisted")
+        append_jsonl(EXECUTION_LOG, event)
+        if args.json:
+            print(json.dumps(event, indent=2, sort_keys=True))
+        else:
+            print(f"blocked={event['reason']}")
+        return 2
+
+    contract = approval_contract_status(
+        proposal_id,
+        proposal,
+        policy,
+        allow_live_mutation=bool(args.allow_live_mutation),
+        verify_only=bool(args.verify_only),
+    )
+    if not contract["ok"]:
+        event = fail_event(
+            proposal_id,
+            proposal,
+            "blocked_approval_contract",
+            contract["reason"],
+        )
+        event["approval_contract_status"] = contract
         append_jsonl(EXECUTION_LOG, event)
         if args.json:
             print(json.dumps(event, indent=2, sort_keys=True))

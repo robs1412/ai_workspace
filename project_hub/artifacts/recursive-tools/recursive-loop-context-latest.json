@@ -1,0 +1,69 @@
+{
+  "approval_gates": {
+    "approval_required_for_packet_execution": true,
+    "approved_packet_count": 0,
+    "boundary": "No external sends, Task Flow mutations, OPS/Portal mutations, deploys, commits, pushes, pulls, or cleanup without explicit approval.",
+    "external_send_allowed": false,
+    "production_mutation_allowed": false
+  },
+  "current_state": {
+    "dirty_repo_count": 1,
+    "loop_status_generated_at": "2026-06-09 11:50:09 CDT",
+    "next_action": "repair_or_classify_workspaceboard_monitor_status",
+    "packet_pending_review_count": 0,
+    "proof_issue_count": 5,
+    "proof_repair_packet_count": 5,
+    "truth_drift_count": 0,
+    "workspaceboard_monitor_count": 0,
+    "workspaceboard_monitor_ok": false
+  },
+  "degraded_sources": [
+    {
+      "command": "",
+      "error": "<urlopen error [Errno 1] Operation not permitted>",
+      "section": "workspaceboard_monitor",
+      "url": "http://127.0.0.1:17878/api/monitor-status"
+    }
+  ],
+  "generated_at": "2026-06-09 11:50:16 CDT",
+  "mode": "read-only-recursive-loop-context",
+  "mutation_allowed": false,
+  "next_safe_action": "classify_degraded_sources_before_execution",
+  "recent_proof": [
+    "loop-status-latest.json readback",
+    "proof-repair packet review status readback",
+    "Workspaceboard monitor summary readback"
+  ],
+  "schema_version": 1,
+  "source_artifacts": [
+    {
+      "exists": true,
+      "max_age_hours": 24,
+      "mtime": "2026-06-09 11:50:16 CDT",
+      "path": "/Users/werkstatt/ai_workspace/project_hub/artifacts/recursive-tools/loop-status-latest.json",
+      "stale": false
+    },
+    {
+      "exists": true,
+      "max_age_hours": 24,
+      "mtime": "2026-06-09 09:25:39 CDT",
+      "path": "/Users/werkstatt/ai_workspace/project_hub/artifacts/recursive-tools/task-flow-proof-repair-candidates-latest.json",
+      "stale": false
+    },
+    {
+      "exists": true,
+      "max_age_hours": 24,
+      "mtime": "2026-06-09 09:25:39 CDT",
+      "path": "/Users/werkstatt/ai_workspace/project_hub/artifacts/recursive-tools/task-flow-proof-repair-packets-latest.json",
+      "stale": false
+    }
+  ],
+  "stale_source_count": 0,
+  "startup_files": [
+    "/Users/werkstatt/ai_workspace/AGENTS.md",
+    "/Users/werkstatt/ai_workspace/docs/task-mode-startup.md",
+    "/Users/werkstatt/ai_workspace/project_hub/artifacts/recursive-tools/recursive-loop-context-latest.json"
+  ],
+  "stop_condition": "If source artifacts are stale, missing, or contradicted by live readback, refresh/read live state before acting.",
+  "workspace": "/Users/werkstatt/ai_workspace"
+}

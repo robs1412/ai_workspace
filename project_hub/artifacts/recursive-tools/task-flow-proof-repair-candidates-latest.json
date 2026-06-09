@@ -92,7 +92,7 @@
       "verification_readback": "Failed artifact metadata readback: owner_lane=outreach-coordinator; responsible_worker_or_persona=vanessa.sterling@kovaldistillery.com; ops_portal_or_domain_task=OPS event 1054 / TrackTime shift 5582 / Google outreach UID ops-outreach-1054@koval-distillery.com."
     }
   ],
-  "generated_at": "2026-06-08 22:36:20 CDT",
+  "generated_at": "2026-06-09 09:25:39 CDT",
   "mutation_allowed": false,
   "rows_scanned": 500
 }

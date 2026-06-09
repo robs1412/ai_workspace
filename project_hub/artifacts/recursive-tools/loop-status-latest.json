@@ -1,0 +1,496 @@
+{
+  "degraded_sources": [],
+  "generated_at": "2026-06-09 14:56:11 CDT",
+  "git_dirty_reviews": {
+    "blocked_review_count": 0,
+    "checked_at": "2026-06-09 14:56:36 CDT",
+    "ok": true,
+    "pending_review_count": 0,
+    "repo_count": 4,
+    "repos": [
+      {
+        "branch": "main",
+        "bucket": "Review by lane and commit only coherent completed groups.",
+        "decision": "in_scope_active",
+        "head": "fec28aa",
+        "notes": "Final review after handoff entry 186 and collision decision update; active dirty files are in-scope for recursive loop/mail runtime repair work.",
+        "repo": "/Users/werkstatt/ai_workspace",
+        "review_status": "reviewed",
+        "reviewed_at": "2026-06-09 14:55:33 CDT",
+        "sample_tracked": [
+          "M asher/HANDOFF.md",
+          " M avignon/EMAIL_DERIVED_DECISIONS.md",
+          " M avignon/HANDOFF.md",
+          " M avignon/INTEGRATED_SUPER_SALES_AGENT_TASK_STATE.md",
+          " M avignon/TODO.md",
+          " M daily-inputs/2026-06-08.md",
+          " M project_hub/artifacts/recursive-tools/task-flow-proof-repair-candidates-latest.json",
+          " M project_hub/artifacts/recursive-tools/task-flow-proof-repair-candidates-latest.md"
+        ],
+        "sample_untracked": [
+          "?? asher/seen-headers.json",
+          "?? asher/sent/",
+          "?? avignon/docs/integrated-super-sales-agent-top50-action-plan-2026-06-09.csv",
+          "?? avignon/docs/integrated-super-sales-agent-top50-action-plan-2026-06-09.md",
+          "?? daily-inputs/2026-06-09.md",
+          "?? project_hub/artifacts/recursive-tools/ai-cloud-loop-engineering-current.txt",
+          "?? project_hub/artifacts/recursive-tools/git-dirty-repo-decisions.jsonl",
+          "?? project_hub/artifacts/recursive-tools/loop-status-board-latest.json"
+        ],
+        "state_signature": "fec28aa:15:27:28f8cc0156e60bdf",
+        "status_hash": "28f8cc0156e60bdf",
+        "tracked_dirty": 15,
+        "untracked": 27
+      },
+      {
+        "branch": "main",
+        "bucket": "Identify whether untracked files are generated residue or real work.",
+        "decision": "external_active",
+        "head": "58ab861",
+        "notes": "Untracked scripts/tour_review_worker.php is a real Square to phpList Post-Tour Reviews automation script. It is outside this Workspaceboard API/session cleanup commit scope; leave untouched for the owning lists lane.",
+        "repo": "/Users/werkstatt/lists",
+        "review_status": "reviewed",
+        "reviewed_at": "2026-06-09 16:12:20 CDT",
+        "sample_tracked": [],
+        "sample_untracked": [
+          "?? scripts/tour_review_worker.php"
+        ],
+        "state_signature": "58ab861:0:1:d001d8333e45ec8b",
+        "status_hash": "d001d8333e45ec8b",
+        "tracked_dirty": 0,
+        "untracked": 1
+      },
+      {
+        "branch": "master",
+        "bucket": "Identify whether untracked files are generated residue or real work.",
+        "decision": "external_active",
+        "head": "e816f01",
+        "notes": "Untracked Avignon/Sonat Illinois top-200 account sheet artifacts. Outside this recursive loop implementation scope; leave untouched.",
+        "repo": "/Users/werkstatt/salesreport",
+        "review_status": "reviewed",
+        "reviewed_at": "2026-06-09 12:06:38 CDT",
+        "sample_tracked": [],
+        "sample_untracked": [
+          "?? doc/avignon-sonat-illinois-top200-account-contact-sheet-2026-06-09.csv",
+          "?? doc/avignon-sonat-illinois-top200-account-contact-sheet-2026-06-09.md",
+          "?? scripts/generate_avignon_illinois_top200_account_sheet.php"
+        ],
+        "state_signature": "e816f01:0:3:108735b9c224c947",
+        "status_hash": "108735b9c224c947",
+        "tracked_dirty": 0,
+        "untracked": 3
+      },
+      {
+        "branch": "main",
+        "bucket": "Inspect tracked diff before deciding commit, split, or leave active.",
+        "decision": "in_scope_active",
+        "head": "24c8960",
+        "notes": "Workspaceboard dirty state remains expected; no new code edits in this pass, only live session work-state closeouts through API.",
+        "repo": "/Users/werkstatt/workspaceboard",
+        "review_status": "reviewed",
+        "reviewed_at": "2026-06-09 14:12:19 CDT",
+        "sample_tracked": [
+          "M assets/mi-pages.js",
+          " M assets/task-management-light.js",
+          " M server/index.js",
+          " M server/test/session-status.test.js",
+          " M server/test/workspaceboard-dashboard.test.js",
+          " M workspaceboard_auth.php",
+          " M workspaceboard_nav.php"
+        ],
+        "sample_untracked": [
+          "?? api/handoff/",
+          "?? handoff-db.html",
+          "?? handoff-db.php"
+        ],
+        "state_signature": "24c8960:7:3:87fea2584390581c",
+        "status_hash": "87fea2584390581c",
+        "tracked_dirty": 7,
+        "untracked": 3
+      }
+    ],
+    "reviewed_count": 4
+  },
+  "git_hygiene": {
+    "buckets": {
+      "active-lane-work": 1,
+      "dirty-review": 1,
+      "untracked-review": 2
+    },
+    "checked_at": "2026-06-09 14:56:26 CDT",
+    "dirty_repo_count": 4,
+    "ok": true,
+    "repo_count": 31,
+    "state": "ok"
+  },
+  "mode": "read-only-loop-status",
+  "mutation_allowed": false,
+  "next_action": "review_dirty_repositories",
+  "proof_repair_packet_reviews": {
+    "checked_at": "2026-06-09 14:56:36 CDT",
+    "ok": true,
+    "packet_count": 5,
+    "packets": [
+      {
+        "approval_required": true,
+        "decision": "blocked",
+        "dedupe_key": "taskflow-1513f992055a281d",
+        "external_send_allowed": false,
+        "packet_path": "/Users/werkstatt/ai_workspace/project_hub/artifacts/recursive-tools/proof-repair-packets/taskflow-1513f992055a281d.failed_approved_send_artifact.json",
+        "production_mutation_allowed": false,
+        "proof_kind": "failed_approved_send_artifact",
+        "status": "blocked",
+        "subject": "Re: Wild Onion Market 2nd Anniversary Event"
+      },
+      {
+        "approval_required": true,
+        "decision": "blocked",
+        "dedupe_key": "taskflow-1db47dff91264646",
+        "external_send_allowed": false,
+        "packet_path": "/Users/werkstatt/ai_workspace/project_hub/artifacts/recursive-tools/proof-repair-packets/taskflow-1db47dff91264646.failed_approved_send_artifact.json",
+        "production_mutation_allowed": false,
+        "proof_kind": "failed_approved_send_artifact",
+        "status": "blocked",
+        "subject": "Re: Fwd: Ravenswood On Tap 2026 - Drinks"
+      },
+      {
+        "approval_required": true,
+        "decision": "blocked",
+        "dedupe_key": "taskflow-3981bd77dabf07ce",
+        "external_send_allowed": false,
+        "packet_path": "/Users/werkstatt/ai_workspace/project_hub/artifacts/recursive-tools/proof-repair-packets/taskflow-3981bd77dabf07ce.failed_approved_send_artifact.json",
+        "production_mutation_allowed": false,
+        "proof_kind": "failed_approved_send_artifact",
+        "status": "blocked",
+        "subject": "Re: New tasting"
+      },
+      {
+        "approval_required": true,
+        "decision": "duplicate_no_action",
+        "dedupe_key": "taskflow-5cfd58716334576b",
+        "external_send_allowed": false,
+        "packet_path": "/Users/werkstatt/ai_workspace/project_hub/artifacts/recursive-tools/proof-repair-packets/taskflow-5cfd58716334576b.failed_approved_send_artifact.json",
+        "production_mutation_allowed": false,
+        "proof_kind": "failed_approved_send_artifact",
+        "status": "duplicate_no_action",
+        "subject": "Weekly finance update with QBO PDFs - June 8"
+      },
+      {
+        "approval_required": true,
+        "decision": "blocked",
+        "dedupe_key": "taskflow-760a7508ffeabfe5",
+        "external_send_allowed": false,
+        "packet_path": "/Users/werkstatt/ai_workspace/project_hub/artifacts/recursive-tools/proof-repair-packets/taskflow-760a7508ffeabfe5.failed_approved_send_artifact.json",
+        "production_mutation_allowed": false,
+        "proof_kind": "failed_approved_send_artifact",
+        "status": "blocked",
+        "subject": "Re: Instructions needed: tasting selection and cancellation automation"
+      }
+    ],
+    "pending_review_count": 0
+  },
+  "proposal_executor": {
+    "allowlisted_fix_classes": [
+      "no-op-monitoring",
+      "proof-closeout-classification",
+      "recommendation-corpus-fix",
+      "registry-metadata-fix",
+      "source-backed-proof-repair-candidate",
+      "source-runtime-parity-fix",
+      "truth-drift-single-item-repair"
+    ],
+    "approved_unexecuted_count": 0,
+    "blocked_execution_count": 0,
+    "checked_at": "2026-06-09 14:56:17 CDT",
+    "ok": true,
+    "proposals": [
+      {
+        "allowed_fix_class": "truth-drift-single-item-repair",
+        "approval_contract_ok": false,
+        "approval_contract_reason": "proposal_not_approved",
+        "approved_unexecuted": false,
+        "decision_state": "superseded_by_clean_monitor",
+        "execution_authorized": false,
+        "execution_state": "",
+        "executor_allowlisted": true,
+        "has_auto_mutator": false,
+        "mutates_live_state": true,
+        "proposal_id": "recursive-proposal-20260524-134350-repair-truth-drift",
+        "ratchet_result": "",
+        "recommended_action": "repair-truth-drift",
+        "requires_approval": true,
+        "verifier_available": true,
+        "verifier_only_safe": true
+      },
+      {
+        "allowed_fix_class": "no-op-monitoring",
+        "approval_contract_ok": true,
+        "approval_contract_reason": "approval_not_required",
+        "approved_unexecuted": false,
+        "decision_state": "",
+        "execution_authorized": false,
+        "execution_state": "verified",
+        "executor_allowlisted": true,
+        "has_auto_mutator": false,
+        "mutates_live_state": false,
+        "proposal_id": "recursive-proposal-20260524-134813-monitor-recursive-lane",
+        "ratchet_result": "keep",
+        "recommended_action": "monitor-recursive-lane",
+        "requires_approval": false,
+        "verifier_available": true,
+        "verifier_only_safe": true
+      },
+      {
+        "allowed_fix_class": "no-op-monitoring",
+        "approval_contract_ok": true,
+        "approval_contract_reason": "approval_not_required",
+        "approved_unexecuted": false,
+        "decision_state": "",
+        "execution_authorized": false,
+        "execution_state": "verified",
+        "executor_allowlisted": true,
+        "has_auto_mutator": false,
+        "mutates_live_state": false,
+        "proposal_id": "recursive-proposal-20260607-120058-monitor-recursive-lane",
+        "ratchet_result": "keep",
+        "recommended_action": "monitor-recursive-lane",
+        "requires_approval": false,
+        "verifier_available": true,
+        "verifier_only_safe": true
+      },
+      {
+        "allowed_fix_class": "no-op-monitoring",
+        "approval_contract_ok": true,
+        "approval_contract_reason": "approval_not_required",
+        "approved_unexecuted": false,
+        "decision_state": "",
+        "execution_authorized": false,
+        "execution_state": "verified",
+        "executor_allowlisted": true,
+        "has_auto_mutator": false,
+        "mutates_live_state": false,
+        "proposal_id": "recursive-proposal-20260607-120820-monitor-recursive-lane",
+        "ratchet_result": "keep",
+        "recommended_action": "monitor-recursive-lane",
+        "requires_approval": false,
+        "verifier_available": true,
+        "verifier_only_safe": true
+      },
+      {
+        "allowed_fix_class": "proof-closeout-classification",
+        "approval_contract_ok": true,
+        "approval_contract_reason": "approval_not_required",
+        "approved_unexecuted": false,
+        "decision_state": "",
+        "execution_authorized": false,
+        "execution_state": "superseded_by_verified_retry",
+        "executor_allowlisted": true,
+        "has_auto_mutator": false,
+        "mutates_live_state": false,
+        "proposal_id": "recursive-proposal-20260607-123003-classify-proof-closeout-issues",
+        "ratchet_result": "superseded",
+        "recommended_action": "classify-proof-closeout-issues",
+        "requires_approval": false,
+        "verifier_available": true,
+        "verifier_only_safe": true
+      },
+      {
+        "allowed_fix_class": "proof-closeout-classification",
+        "approval_contract_ok": true,
+        "approval_contract_reason": "approval_not_required",
+        "approved_unexecuted": false,
+        "decision_state": "",
+        "execution_authorized": false,
+        "execution_state": "verified",
+        "executor_allowlisted": true,
+        "has_auto_mutator": false,
+        "mutates_live_state": false,
+        "proposal_id": "recursive-proposal-20260607-123150-classify-proof-closeout-issues",
+        "ratchet_result": "keep",
+        "recommended_action": "classify-proof-closeout-issues",
+        "requires_approval": false,
+        "verifier_available": true,
+        "verifier_only_safe": true
+      },
+      {
+        "allowed_fix_class": "proof-closeout-classification",
+        "approval_contract_ok": true,
+        "approval_contract_reason": "approval_not_required",
+        "approved_unexecuted": false,
+        "decision_state": "",
+        "execution_authorized": false,
+        "execution_state": "superseded_by_verified_retry",
+        "executor_allowlisted": true,
+        "has_auto_mutator": false,
+        "mutates_live_state": false,
+        "proposal_id": "recursive-proposal-20260607-155628-classify-proof-closeout-issues",
+        "ratchet_result": "",
+        "recommended_action": "classify-proof-closeout-issues",
+        "requires_approval": false,
+        "verifier_available": true,
+        "verifier_only_safe": true
+      },
+      {
+        "allowed_fix_class": "no-op-monitoring",
+        "approval_contract_ok": true,
+        "approval_contract_reason": "approval_not_required",
+        "approved_unexecuted": false,
+        "decision_state": "",
+        "execution_authorized": false,
+        "execution_state": "verified",
+        "executor_allowlisted": true,
+        "has_auto_mutator": false,
+        "mutates_live_state": false,
+        "proposal_id": "recursive-proposal-20260607-155717-monitor-recursive-lane",
+        "ratchet_result": "keep",
+        "recommended_action": "monitor-recursive-lane",
+        "requires_approval": false,
+        "verifier_available": true,
+        "verifier_only_safe": true
+      },
+      {
+        "allowed_fix_class": "proof-closeout-classification",
+        "approval_contract_ok": true,
+        "approval_contract_reason": "approval_not_required",
+        "approved_unexecuted": false,
+        "decision_state": "",
+        "execution_authorized": false,
+        "execution_state": "superseded_by_verified_retry",
+        "executor_allowlisted": true,
+        "has_auto_mutator": false,
+        "mutates_live_state": false,
+        "proposal_id": "recursive-proposal-20260607-160304-classify-proof-closeout-issues",
+        "ratchet_result": "",
+        "recommended_action": "classify-proof-closeout-issues",
+        "requires_approval": false,
+        "verifier_available": true,
+        "verifier_only_safe": true
+      },
+      {
+        "allowed_fix_class": "no-op-monitoring",
+        "approval_contract_ok": true,
+        "approval_contract_reason": "approval_not_required",
+        "approved_unexecuted": false,
+        "decision_state": "",
+        "execution_authorized": false,
+        "execution_state": "verified",
+        "executor_allowlisted": true,
+        "has_auto_mutator": false,
+        "mutates_live_state": false,
+        "proposal_id": "recursive-proposal-20260607-160438-monitor-recursive-lane",
+        "ratchet_result": "keep",
+        "recommended_action": "monitor-recursive-lane",
+        "requires_approval": false,
+        "verifier_available": true,
+        "verifier_only_safe": true
+      },
+      {
+        "allowed_fix_class": "truth-drift-single-item-repair",
+        "approval_contract_ok": false,
+        "approval_contract_reason": "missing_approval_contract",
+        "approved_unexecuted": false,
+        "decision_state": "approved",
+        "execution_authorized": false,
+        "execution_state": "verified_noop",
+        "executor_allowlisted": true,
+        "has_auto_mutator": false,
+        "mutates_live_state": true,
+        "proposal_id": "recursive-proposal-20260608-133717-repair-truth-drift",
+        "ratchet_result": "keep",
+        "recommended_action": "repair-truth-drift",
+        "requires_approval": true,
+        "verifier_available": true,
+        "verifier_only_safe": true
+      },
+      {
+        "allowed_fix_class": "source-backed-proof-repair-candidate",
+        "approval_contract_ok": false,
+        "approval_contract_reason": "proposal_not_approved",
+        "approved_unexecuted": false,
+        "decision_state": "",
+        "execution_authorized": false,
+        "execution_state": "",
+        "executor_allowlisted": true,
+        "has_auto_mutator": false,
+        "mutates_live_state": true,
+        "proposal_id": "recursive-proposal-20260608-223415-review-source-backed-proof-repair-candidates",
+        "ratchet_result": "",
+        "recommended_action": "review-source-backed-proof-repair-candidates",
+        "requires_approval": true,
+        "verifier_available": true,
+        "verifier_only_safe": true
+      }
+    ]
+  },
+  "recursive": {
+    "daily": {
+      "approval_required": false,
+      "outcome": "approval_required",
+      "proposal_id": "",
+      "recommended_action": "",
+      "recorded_at": "2026-06-08 22:34:15 CDT",
+      "server_health_status": "",
+      "source": {
+        "exists": true,
+        "generated_at": "2026-06-08 22:34:15 CDT",
+        "mtime": "2026-06-08 22:34:15 CDT",
+        "path": "/Users/werkstatt/ai_workspace/project_hub/artifacts/recursive-tools/recursive-daily-run-latest.json"
+      }
+    },
+    "proof_repair_candidates": {
+      "candidate_count": 5,
+      "candidate_keys": [
+        "taskflow-5cfd58716334576b",
+        "taskflow-760a7508ffeabfe5",
+        "taskflow-1db47dff91264646",
+        "taskflow-3981bd77dabf07ce",
+        "taskflow-1513f992055a281d"
+      ],
+      "generated_at": "2026-06-09 09:25:39 CDT",
+      "mutation_allowed": false,
+      "source": {
+        "exists": true,
+        "generated_at": "2026-06-09 09:25:39 CDT",
+        "mtime": "2026-06-09 09:25:39 CDT",
+        "path": "/Users/werkstatt/ai_workspace/project_hub/artifacts/recursive-tools/task-flow-proof-repair-candidates-latest.json"
+      }
+    },
+    "proof_repair_packets": {
+      "generated_at": "2026-06-09 09:25:39 CDT",
+      "mutation_allowed": false,
+      "needs_approval_count": 5,
+      "packet_count": 5,
+      "source": {
+        "exists": true,
+        "generated_at": "2026-06-09 09:25:39 CDT",
+        "mtime": "2026-06-09 09:25:39 CDT",
+        "path": "/Users/werkstatt/ai_workspace/project_hub/artifacts/recursive-tools/task-flow-proof-repair-packets-latest.json"
+      }
+    },
+    "truth_drift": {
+      "board_ok": true,
+      "drift_count": 0,
+      "proof_issue_classes": {},
+      "proof_issue_count": 5,
+      "recorded_at": "",
+      "source": {
+        "exists": true,
+        "generated_at": "",
+        "mtime": "2026-06-08 22:36:26 CDT",
+        "path": "/Users/werkstatt/ai_workspace/project_hub/artifacts/recursive-tools/task-flow-truth-drift-latest.json"
+      }
+    }
+  },
+  "schema_version": 2,
+  "workspaceboard_monitor": {
+    "by_status": {
+      "green": 18
+    },
+    "checked_at": "2026-06-09 14:56:17 CDT",
+    "count": 18,
+    "error": "",
+    "ok": true,
+    "state": "ok",
+    "url": "http://127.0.0.1:17878/api/monitor-status"
+  }
+}

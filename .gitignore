@@ -51,6 +51,7 @@ avignon/*.jsonl
 asher/*.jsonl
 venetia/*.jsonl
 nationaloutreach/*.jsonl
+header-poll-log.jsonl
 nationaloutreach/active-inbox.json
 nationaloutreach/runtime/
 frank/drafts/
@@ -58,6 +59,10 @@ avignon/drafts/
 asher/drafts/
 venetia/drafts/
 nationaloutreach/drafts/
+asher/seen-headers.json
+asher/sent/
+venetia/seen-headers.json
+venetia/sent/
 nationaloutreach/reports/
 mail-review.jsonl
 *.send-body.txt
