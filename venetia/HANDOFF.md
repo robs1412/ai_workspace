@@ -1,5 +1,35 @@
 # HANDOFF - venetia
 
+# 2026-06-10 SUSMATA Q&A Response Sent After Robert Approval
+
+Done at 2026-06-10 15:31 CDT after Robert approved the revised SUSMATA Q&A response in chat and instructed Venetia to send it.
+
+- Recipient: `future@susmata.com`.
+- Cc: `press@susmata.com`.
+- Subject: `Re: Material Intelligence: SUSMATA x The Cultivater`.
+- Source approval: Robert chat approval on 2026-06-10 for the SUSMATA questions draft without pay-placement language.
+- Reply anchor: SUSMATA inbound Message-ID `<B2AC2325-EC50-4567-A2BE-56B518364662@susmata.com>`.
+- Approved-send helper: `scripts/email_worker_header_poll.py --worker venetia --send-approved`.
+- Send result: `queued_sends_seen=1`, `queued_sends_sent=1`, `queued_sends_failed=0`.
+- Message-ID: `<178112347243.72826.12875120050010358561@thecultivater.com>`.
+- Sent-log proof: `venetia/sent-log.jsonl` row logged at `2026-06-10T15:31:13-0500`.
+- Sent-folder proof: row records `sent_folder_appended=true` and `sent_folder=INBOX.Sent`.
+- Sonat Bcc proof: row records `bcc_count=1`.
+
+# 2026-06-10 Bill Browning / Terrapin Follow-Up Sent After Robert Approval
+
+Done at 2026-06-10 15:26 CDT after Robert approved the revised follow-up draft in chat and instructed Venetia to send it.
+
+- Recipient: `info@terrapinbg.com`.
+- Subject: `Re: The Cultivater Feature Inquiry`.
+- Source approval: Robert chat approval on 2026-06-10 for the Bill Browning follow-up draft including earned-placement language, launch-issue context, interview questions, and image/video request.
+- Approved-send helper: `scripts/email_worker_header_poll.py --worker venetia --send-approved`.
+- Send result: `queued_sends_seen=1`, `queued_sends_sent=1`, `queued_sends_failed=0`.
+- Message-ID: `<178112316233.70582.877767234051015893@thecultivater.com>`.
+- Sent-log proof: `venetia/sent-log.jsonl` row logged at `2026-06-10T15:26:03-0500`.
+- Sent-folder proof: row records `sent_folder_appended=true` and `sent_folder=INBOX.Sent`.
+- Sonat Bcc proof: row records `bcc_count=1`.
+
 # 2026-06-09 Five New Venetia Businesses Sent After Approval
 
 Done at 2026-06-09 15:23 CDT after Robert approved all draft emails in the Cultivater packet and instructed Asher and Venetia to send them.
