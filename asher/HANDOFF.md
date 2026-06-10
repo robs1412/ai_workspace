@@ -1,5 +1,20 @@
 # HANDOFF - asher
 
+## 2026-06-10 Karina St. Clair / Westcombe Q&A Response Sent After Robert Approval
+
+Done at 2026-06-10 15:47 CDT after Robert approved the revised Westcombe Q&A response in chat and instructed Asher to send it.
+
+- Recipient: `karina@westcombedairy.com`.
+- Subject: `Re: Somerset Cheesemaking and The Cultivater`.
+- Source approval: Robert chat approval on 2026-06-10 for the Karina / Westcombe Q&A response, with the short-practice-overview request removed.
+- Reply anchor: Karina St. Clair inbound Message-ID `<CAMkkrQUQLpsDt1434dr5d4taBh=gbJ=-hQEYA4L1HV9ScRMSXQ@mail.gmail.com>`.
+- Approved-send helper: `scripts/email_worker_header_poll.py --worker asher --send-approved`.
+- Send result: `queued_sends_seen=1`, `queued_sends_sent=1`, `queued_sends_failed=0`.
+- Message-ID: `<178112445683.81064.15671937244158766483@thecultivater.com>`.
+- Sent-log proof: `asher/sent-log.jsonl` row logged at `2026-06-10T15:47:38-0500`.
+- Sent-folder proof: row records `sent_folder_appended=true` and `sent_folder=INBOX.Sent`.
+- Sonat Bcc proof: row records `bcc_count=1`.
+
 ## 2026-06-09 Music Preservation Outreach Sent / REVERB Blocked
 
 Done at 2026-06-09 15:38 CDT after Robert approved the Asher music-preservation outreach drafts.
