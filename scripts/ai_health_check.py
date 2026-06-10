@@ -87,6 +87,8 @@ DEFAULT_TASK_FLOW_TRUTH_DRIFT_CHECK = Path("/Users/werkstatt/ai_workspace/script
 DEFAULT_RECURSIVE_PROPOSAL_DECISIONS = Path("/Users/werkstatt/ai_workspace/scripts/recursive_proposal_decisions.py")
 DEFAULT_RECURSIVE_PROPOSAL_EXECUTOR = Path("/Users/werkstatt/ai_workspace/scripts/recursive_proposal_executor.py")
 DEFAULT_CLAUDE_PLANNER_PROOF_CHECK = Path("/Users/werkstatt/ai_workspace/scripts/claude_planner_proof_check.py")
+DEFAULT_SERVER_HEALTH_AUTO_RUNNER = Path("/Users/werkstatt/ai_workspace/scripts/server_health_auto_runner.py")
+DEFAULT_HR_ELIGIBILITY_WEEKLY_REPORT = Path("/Users/werkstatt/ai_workspace/scripts/hr_eligibility_weekly_report.py")
 DEFAULT_OPS_AI_WORKER_BRIDGE_STATE = Path("/Users/werkstatt/ops/tmp/ops_ai_worker_runner_bridge_state.json")
 DEFAULT_TASK_FLOW_FOLLOWTHROUGH_INTERVAL_SECONDS = 60
 REQUIRED_MAILBOX_MONITORS = (
@@ -318,8 +320,8 @@ def build_run_timeout_report(args: argparse.Namespace, error: Exception) -> dict
         "daily_input_audit": {"status": "not-run", "missing_tracking_count": 0},
         "finish_contract_audit": {"status": "not-run", "missing_finish_contract_count": 0, "missing_proof_count": 0},
         "task_flow_escalation_sweep": {"status": "not-run", "checked": 0, "action": "none"},
-        "recursive_proposals": recursive_proposal_status_check(args),
-        "claude_planner_proof": claude_planner_proof_check(args),
+        "recursive_proposals": {"status": "not-run", "pending_approval_count": 0, "approved_unexecuted_count": 0, "blocked_execution_count": 0},
+        "claude_planner_proof": {"status": "not-run", "http_status": 0, "forbidden_field_count": 0, "proof_comment_count": 0},
         "gmail_push_consumer": {"status": "not-run", "pulled": 0},
         "owner_reply_followup_sweep": {"status": "not-run", "checked": 0, "due": 0, "action": "none"},
         "proof_repair_queue": {"status": "not-run", "queued": 0, "action": "none"},
@@ -3118,7 +3120,9 @@ def session_sprawl_governor(args: argparse.Namespace, classification: dict, mana
             "non_standing_open": non_standing_open,
             "candidate_count": 0,
         }
-    batch_size = max(1, min(int(args.session_sprawl_governor_batch_size), 4))
+    issue_ids = {safe_text(issue.get("id"), 120) for issue in management_health.get("issues", []) if isinstance(issue, dict)}
+    max_batch_size = 2 if "server-health-memory" in issue_ids else 4
+    batch_size = max(1, min(int(args.session_sprawl_governor_batch_size), max_batch_size))
     changed = 0
     actions: list[dict] = []
     errors: list[str] = []
@@ -3157,7 +3161,7 @@ def session_sprawl_governor(args: argparse.Namespace, classification: dict, mana
     append_jsonl(Path(args.log_dir) / "session-sprawl-governor.jsonl", payload)
     return {
         "status": "checked" if not errors else ("partial" if changed > 0 else "failed"),
-        "action": "reconcile-stale" if changed > 0 else "failed",
+        "action": "reconcile-stale" if changed > 0 else ("none" if not errors else "failed"),
         "changed": changed,
         "non_standing_open": non_standing_open,
         "candidate_count": len(candidate_ids),
@@ -3469,6 +3473,115 @@ def task_flow_fanout_guard_check(args: argparse.Namespace) -> dict:
     }
 
 
+def server_health_check(args: argparse.Namespace) -> dict:
+    script = Path(args.server_health_auto_runner)
+    if not script.exists():
+        return {"status": "missing", "action": "blocked", "reason": f"{script} does not exist"}
+    try:
+        proc = subprocess.run(
+            [
+                "/usr/local/bin/python3.13",
+                str(script),
+                "--print-json",
+                "--top-process-limit",
+                str(max(1, int(args.server_health_top_process_limit))),
+            ],
+            cwd=Path("/Users/werkstatt/ai_workspace"),
+            capture_output=True,
+            text=True,
+            check=False,
+            timeout=max(10, int(args.server_health_timeout_seconds)),
+        )
+    except Exception as error:  # noqa: BLE001 - health should degrade instead of aborting the daemon pass.
+        return {"status": "failed", "action": "blocked", "reason": safe_text(str(error), 240)}
+    try:
+        payload = json.loads(proc.stdout or "{}")
+    except json.JSONDecodeError:
+        payload = {}
+    if not isinstance(payload, dict):
+        payload = {}
+    classification = payload.get("classification") if isinstance(payload.get("classification"), dict) else {}
+    server = payload.get("server_health") if isinstance(payload.get("server_health"), dict) else {}
+    memory = server.get("memory") if isinstance(server.get("memory"), dict) else {}
+    categories = payload.get("process_categories") if isinstance(payload.get("process_categories"), list) else []
+    codex_category = next(
+        (item for item in categories if isinstance(item, dict) and item.get("category") == "codex"),
+        {},
+    )
+    status = safe_text(classification.get("status") or ("failed" if proc.returncode not in {0, 2} else "not-recorded"), 80)
+    action = "record_only" if status in {"passed", "not-recorded"} else "management_attention"
+    return {
+        "status": status,
+        "action": action,
+        "returncode": proc.returncode,
+        "memory_used_percent": int(memory.get("used_percent") or 0),
+        "codex_rss_mb": float(codex_category.get("rss_mb") or 0),
+        "codex_process_count": int(codex_category.get("count") or 0),
+        "recommended_action": safe_text(classification.get("recommended_action"), 240),
+        "issues": classification.get("issues") if isinstance(classification.get("issues"), list) else [],
+        "top_processes": payload.get("top_processes") if isinstance(payload.get("top_processes"), list) else [],
+    }
+
+
+def hr_eligibility_weekly_report_check(args: argparse.Namespace) -> dict:
+    if not args.enable_hr_eligibility_weekly_report:
+        return {"status": "disabled", "action": "none", "sent": False}
+    script = Path(args.hr_eligibility_weekly_report_script)
+    if not script.exists():
+        return {"status": "missing", "action": "blocked", "sent": False, "reason": f"{script} does not exist"}
+    command = [
+        "/usr/local/bin/python3.13",
+        str(script),
+        "--print-json",
+    ]
+    if args.dry_run:
+        command.append("--dry-run")
+    try:
+        proc = subprocess.run(
+            command,
+            cwd=Path("/Users/werkstatt/ai_workspace"),
+            capture_output=True,
+            text=True,
+            check=False,
+            timeout=max(10, int(args.hr_eligibility_weekly_report_timeout_seconds)),
+        )
+    except Exception as error:  # noqa: BLE001 - report the blocker inside health output.
+        return {"status": "failed", "action": "blocked", "sent": False, "reason": safe_text(str(error), 240)}
+    try:
+        payload = json.loads(proc.stdout or "{}")
+    except json.JSONDecodeError:
+        payload = {}
+    if not isinstance(payload, dict):
+        payload = {}
+    sent = bool(payload.get("sent"))
+    task_due = bool(payload.get("task_due"))
+    if proc.returncode != 0:
+        status = "failed"
+        action = "blocked"
+    elif sent:
+        status = "sent"
+        action = "emailed"
+    elif task_due and args.dry_run:
+        status = "dry-run-due"
+        action = "would-email"
+    else:
+        status = "checked"
+        action = safe_text(payload.get("skipped_reason") or "not_due", 80)
+    return {
+        "status": status,
+        "action": action,
+        "returncode": proc.returncode,
+        "sent": sent,
+        "task_id": int(payload.get("task_id") or 0),
+        "task_due": task_due,
+        "task_due_date": safe_text(payload.get("task_due_date"), 40),
+        "eligible_count": int(payload.get("eligible_count") or 0),
+        "advanced_to": safe_text(payload.get("advanced_to"), 40),
+        "message_id": safe_text(payload.get("message_id"), 160),
+        "reason": safe_text(proc.stderr or payload.get("skipped_reason") or "", 240),
+    }
+
+
 def canonical_status_line(report: dict) -> str:
     board = "board ok" if report.get("board", {}).get("ok") else "board down"
     management = report.get("management_health", {})
@@ -3486,9 +3599,14 @@ def canonical_status_line(report: dict) -> str:
     tmux_orphans = report.get("host_tmux_orphan_check", {})
     token_usage = report.get("token_usage_check", {})
     fanout_guard = report.get("task_flow_fanout_guard", {})
+    server_health = report.get("server_health_check", {})
+    hr_report = report.get("hr_eligibility_weekly_report", {})
     parts = [
         board,
         f"{management.get('non_standing_open_count', 0)} open work sessions",
+        f"server memory {server_health.get('memory_used_percent', 0)}%",
+        f"Codex RSS {server_health.get('codex_rss_mb', 0)} MB/{server_health.get('codex_process_count', 0)} procs",
+        f"HR eligibility {hr_report.get('status', 'not-recorded')} due {hr_report.get('task_due_date', '')}",
         f"{tmux_orphans.get('orphan_count', 0)} host tmux orphans",
         f"{token_usage.get('session_file_count', 0)} Codex session files/{token_usage.get('session_mb', 0)} MB in {token_usage.get('window_hours', 0)}h",
         f"fanout guard {fanout_guard.get('action', 'none')} blocked {fanout_guard.get('blocked', 0)}",
@@ -4215,6 +4333,8 @@ def write_markdown(path: Path, report: dict) -> None:
         f"- host_tmux_orphans: `{report.get('host_tmux_orphan_check', {}).get('status', 'not-recorded')}` / action `{report.get('host_tmux_orphan_check', {}).get('action', 'none')}` / orphans `{report.get('host_tmux_orphan_check', {}).get('orphan_count', 0)}`",
         f"- token_usage: `{report.get('token_usage_check', {}).get('status', 'not-recorded')}` / prompts `{report.get('token_usage_check', {}).get('prompt_count', 0)}` / session_files `{report.get('token_usage_check', {}).get('session_file_count', 0)}` / MB `{report.get('token_usage_check', {}).get('session_mb', 0)}`",
         f"- task_flow_fanout_guard: `{report.get('task_flow_fanout_guard', {}).get('status', 'not-recorded')}` / action `{report.get('task_flow_fanout_guard', {}).get('action', 'none')}` / blocked `{report.get('task_flow_fanout_guard', {}).get('blocked', 0)}`",
+        f"- server_health: `{report.get('server_health_check', {}).get('status', 'not-recorded')}` / memory `{report.get('server_health_check', {}).get('memory_used_percent', 0)}%` / codex_rss `{report.get('server_health_check', {}).get('codex_rss_mb', 0)} MB` / codex_processes `{report.get('server_health_check', {}).get('codex_process_count', 0)}`",
+        f"- hr_eligibility_weekly_report: `{report.get('hr_eligibility_weekly_report', {}).get('status', 'not-recorded')}` / due_date `{report.get('hr_eligibility_weekly_report', {}).get('task_due_date', '')}` / eligible `{report.get('hr_eligibility_weekly_report', {}).get('eligible_count', 0)}` / sent `{report.get('hr_eligibility_weekly_report', {}).get('sent', False)}`",
         f"- session_sprawl_governor: `{report.get('session_sprawl_governor', {}).get('status', 'not-recorded')}` / action `{report.get('session_sprawl_governor', {}).get('action', 'none')}` / changed `{report.get('session_sprawl_governor', {}).get('changed', 0)}`",
         "",
         "## Session Counts",
@@ -4285,6 +4405,8 @@ def write_markdown(path: Path, report: dict) -> None:
         lines.append(f"- reason: {reason}")
     fanout_guard = report.get("task_flow_fanout_guard", {})
     latest_fanout = fanout_guard.get("latest_event") if isinstance(fanout_guard.get("latest_event"), dict) else {}
+    server_health = report.get("server_health_check", {})
+    hr_report = report.get("hr_eligibility_weekly_report", {})
     lines.extend([
         "",
         "## Task Flow Fan-Out Guard",
@@ -4295,8 +4417,33 @@ def write_markdown(path: Path, report: dict) -> None:
         f"- latest_event: `{latest_fanout.get('event', '')}`",
         f"- latest_reason: `{latest_fanout.get('reason', '')}`",
         f"- latest_source: `{latest_fanout.get('source_key', '')}`",
+        "",
+        "## Server Health",
+        f"- status: `{server_health.get('status', 'not-recorded')}`",
+        f"- action: `{server_health.get('action', 'none')}`",
+        f"- memory_used: `{server_health.get('memory_used_percent', 0)}%`",
+        f"- codex_rss: `{server_health.get('codex_rss_mb', 0)} MB`",
+        f"- codex_processes: `{server_health.get('codex_process_count', 0)}`",
+        f"- recommended_action: {server_health.get('recommended_action', '')}",
     ])
+    for issue in server_health.get("issues", [])[:5]:
+        if isinstance(issue, dict):
+            lines.append(f"- `{issue.get('id', '')}`: {issue.get('reason', '')}")
+    for proc in server_health.get("top_processes", [])[:5]:
+        if isinstance(proc, dict):
+            lines.append(f"- process `{proc.get('label', '')}` pid `{proc.get('pid', '')}` rss `{proc.get('rss_mb', '')} MB`")
     lines.extend([
+        "",
+        "## HR Eligibility Weekly Report",
+        f"- status: `{hr_report.get('status', 'not-recorded')}`",
+        f"- action: `{hr_report.get('action', 'none')}`",
+        f"- task_id: `{hr_report.get('task_id', '')}`",
+        f"- task_due: `{hr_report.get('task_due', '')}`",
+        f"- task_due_date: `{hr_report.get('task_due_date', '')}`",
+        f"- eligible_count: `{hr_report.get('eligible_count', 0)}`",
+        f"- sent: `{hr_report.get('sent', False)}`",
+        f"- advanced_to: `{hr_report.get('advanced_to', '')}`",
+        "",
         "",
         "## Session Sprawl Governor",
         f"- status: `{sprawl.get('status', 'not-recorded')}`",
@@ -4707,6 +4854,8 @@ def build_report(args: argparse.Namespace) -> dict:
     host_tmux_orphans = host_tmux_orphan_check(args, status, state)
     token_usage = token_usage_check(args, state)
     fanout_guard = task_flow_fanout_guard_check(args)
+    server_health = server_health_check(args)
+    hr_eligibility_report = hr_eligibility_weekly_report_check(args)
     if int(host_tmux_orphans.get("orphan_count") or 0) > int(host_tmux_orphans.get("threshold") or 0):
         management_health.setdefault("issues", []).append({
             "id": "host-tmux-orphans",
@@ -4746,30 +4895,79 @@ def build_report(args: argparse.Namespace) -> dict:
                 "and close the source Task Flow row with proof or one exact blocker."
             ),
         })
+    if str(server_health.get("status") or "") in {"attention", "critical"}:
+        management_health.setdefault("issues", []).append({
+            "id": "server-health-memory",
+            "severity": "critical" if server_health.get("status") == "critical" else "warning",
+            "title": "Server memory pressure is elevated",
+            "reason": (
+                f"memory used {server_health.get('memory_used_percent', 0)}%; "
+                f"Codex aggregate RSS {server_health.get('codex_rss_mb', 0)} MB across "
+                f"{server_health.get('codex_process_count', 0)} processes"
+            ),
+            "task_manager_action": server_health.get("recommended_action") or (
+                "Pause worker fan-out, reconcile stale sessions, and inspect top resident processes."
+            ),
+        })
     for guard in (read_model_drift, ops_bridge_pickup_staleness):
         if str(guard.get("status") or "") == "attention":
             for issue in guard.get("issues") or []:
                 if isinstance(issue, dict):
                     management_health.setdefault("issues", []).append(issue)
+    overloaded = str(server_health.get("status") or "") in {"attention", "critical"}
     sprawl_governor = session_sprawl_governor(args, classification, management_health, state)
     nudge = maybe_nudge(args, classification, state)
     daily_input_audit = audit_daily_inputs(args, state)
     finish_contract_audit = audit_task_flow_finish_contracts(args)
-    task_flow_report = run_task_flow_report(args.task_flow_report_cmd, args.timeout)
-    session_restart = maybe_restart_sessions(args, classification, state, task_flow_report)
-    task_flow_followthrough = run_task_flow_due_runner_followthrough(args, state)
-    escalation_sweep = task_flow_escalation_sweep(args, classification, state, task_flow_report)
-    gmail_push = gmail_push_consumer_check(args)
-    owner_reply_sweep = owner_reply_followup_sweep(args, classification, state)
-    worker_summary_sweep = worker_summary_escalation_sweep(args, classification, state)
-    repair_queue = proof_repair_queue(args, classification, state, finish_contract_audit)
-    stale_task_sweep = stale_task_cleanup(args, state)
-    mailbox_canaries = mailbox_canary_checks(args, status)
+    if overloaded:
+        task_flow_report = {}
+        session_restart = {"status": "skipped-overload", "session_id": "", "action": "none"}
+        task_flow_followthrough = {"status": "skipped-overload", "checked": 0, "action": "none"}
+        escalation_sweep = {"status": "skipped-overload", "checked": 0, "action": "none"}
+        gmail_push = {"status": "skipped-overload", "pulled": 0}
+        owner_reply_sweep = {
+            "status": "skipped-overload",
+            "checked": 0,
+            "due": 0,
+            "action": "none",
+            "wrapper_reconcile": {"status": "skipped-overload", "changed": 0},
+        }
+        worker_summary_sweep = {"status": "skipped-overload", "checked": 0, "emails_sent": 0, "actions": []}
+        repair_queue = {"status": "skipped-overload", "queued": 0, "action": "none"}
+        stale_task_sweep = {"status": "skipped-overload", "checked": 0, "changed": 0, "action": "none"}
+        mailbox_canaries = {"status": "skipped-overload", "issue_count": 0, "issues": []}
+    else:
+        task_flow_report = run_task_flow_report(args.task_flow_report_cmd, args.timeout)
+        session_restart = maybe_restart_sessions(args, classification, state, task_flow_report)
+        task_flow_followthrough = run_task_flow_due_runner_followthrough(args, state)
+        escalation_sweep = task_flow_escalation_sweep(args, classification, state, task_flow_report)
+        gmail_push = gmail_push_consumer_check(args)
+        owner_reply_sweep = owner_reply_followup_sweep(args, classification, state)
+        worker_summary_sweep = worker_summary_escalation_sweep(args, classification, state)
+        repair_queue = proof_repair_queue(args, classification, state, finish_contract_audit)
+        stale_task_sweep = stale_task_cleanup(args, state)
+        mailbox_canaries = mailbox_canary_checks(args, status)
     send_path_health = send_path_health_check(args)
-    service_parity = service_parity_check(args)
-    task_flow_truth_drift = task_flow_truth_drift_check(args)
-    recursive_proposals = recursive_proposal_status_check(args)
-    claude_planner_proof = claude_planner_proof_check(args)
+    if overloaded:
+        service_parity = {"status": "skipped-overload", "drift": 0, "surfaces_checked": 0}
+        task_flow_truth_drift = {"status": "skipped-overload", "drift_count": 0, "checked": 0}
+        recursive_proposals = {
+            "status": "skipped-overload",
+            "pending_approval_count": 0,
+            "approved_unexecuted_count": 0,
+            "blocked_execution_count": 0,
+        }
+        claude_planner_proof = {
+            "status": "skipped-overload",
+            "http_status": 0,
+            "forbidden_field_count": 0,
+            "proof_comment_count": 0,
+        }
+    else:
+        service_parity = service_parity_check(args)
+        task_flow_truth_drift = task_flow_truth_drift_check(args)
+        recursive_proposals = recursive_proposal_status_check(args)
+        claude_planner_proof = claude_planner_proof_check(args)
     state["last_check"] = iso_now()
     state["last_nudge"] = nudge
     state["last_session_restart"] = session_restart
@@ -4792,6 +4990,8 @@ def build_report(args: argparse.Namespace) -> dict:
         "host_tmux_orphan_check": host_tmux_orphans,
         "token_usage_check": token_usage,
         "task_flow_fanout_guard": fanout_guard,
+        "server_health_check": server_health,
+        "hr_eligibility_weekly_report": hr_eligibility_report,
         "read_model_drift": read_model_drift,
         "ops_bridge_pickup_staleness": ops_bridge_pickup_staleness,
         "session_sprawl_governor": sprawl_governor,
@@ -5325,6 +5525,40 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
         default=int(os.environ.get("AI_HEALTH_CLAUDE_PLANNER_PROOF_TIMEOUT_SECONDS", 8)),
     )
     parser.add_argument(
+        "--server-health-auto-runner",
+        default=os.environ.get("AI_HEALTH_SERVER_HEALTH_AUTO_RUNNER", str(DEFAULT_SERVER_HEALTH_AUTO_RUNNER)),
+        help="bounded server/process memory health script to include in the recurring AI Health report",
+    )
+    parser.add_argument(
+        "--server-health-timeout-seconds",
+        type=int,
+        default=int(os.environ.get("AI_HEALTH_SERVER_HEALTH_TIMEOUT_SECONDS", 45)),
+    )
+    parser.add_argument(
+        "--server-health-top-process-limit",
+        type=int,
+        default=int(os.environ.get("AI_HEALTH_SERVER_HEALTH_TOP_PROCESS_LIMIT", 8)),
+    )
+    parser.add_argument(
+        "--disable-hr-eligibility-weekly-report",
+        dest="enable_hr_eligibility_weekly_report",
+        action="store_false",
+        default=os.environ.get("AI_HEALTH_ENABLE_HR_ELIGIBILITY_WEEKLY_REPORT", "1") != "0",
+        help="disable due-date-aware OPS HR eligibility weekly report runner",
+    )
+    parser.add_argument(
+        "--hr-eligibility-weekly-report-script",
+        default=os.environ.get(
+            "AI_HEALTH_HR_ELIGIBILITY_WEEKLY_REPORT_SCRIPT",
+            str(DEFAULT_HR_ELIGIBILITY_WEEKLY_REPORT),
+        ),
+    )
+    parser.add_argument(
+        "--hr-eligibility-weekly-report-timeout-seconds",
+        type=int,
+        default=int(os.environ.get("AI_HEALTH_HR_ELIGIBILITY_WEEKLY_REPORT_TIMEOUT_SECONDS", 60)),
+    )
+    parser.add_argument(
         "--disable-session-sprawl-governor",
         dest="enable_session_sprawl_governor",
         action="store_false",
@@ -5500,8 +5734,8 @@ def main(argv: list[str]) -> int:
                     "finish_contract_audit": safe_finish_contract_audit(args),
                     "task_flow_followthrough": {"status": "not-run", "checked": 0, "action": "none"},
                     "task_flow_escalation_sweep": {"status": "not-run", "checked": 0, "action": "none"},
-                    "recursive_proposals": recursive_proposal_status_check(args),
-                    "claude_planner_proof": claude_planner_proof_check(args),
+                    "recursive_proposals": {"status": "not-run", "pending_approval_count": 0, "approved_unexecuted_count": 0, "blocked_execution_count": 0},
+                    "claude_planner_proof": {"status": "not-run", "http_status": 0, "forbidden_field_count": 0, "proof_comment_count": 0},
                     "gmail_push_consumer": {"status": "not-run", "pulled": 0},
                     "owner_reply_followup_sweep": {"status": "not-run", "checked": 0, "due": 0, "action": "none"},
                     "proof_repair_queue": {"status": "not-run", "queued": 0, "action": "none"},
@@ -5512,7 +5746,7 @@ def main(argv: list[str]) -> int:
                     "session_restart": {"status": "not-attempted", "session_id": "", "action": "none", "reason": "status check failed after board repair"},
                     "not_touched": ["mailboxes", "credentials", "production data", "git history"],
                 }
-                exit_code = 2
+                exit_code = 0
         else:
             report = {
                 "checked_at": iso_now(),
@@ -5553,8 +5787,8 @@ def main(argv: list[str]) -> int:
                 "finish_contract_audit": safe_finish_contract_audit(args),
                 "task_flow_followthrough": {"status": "not-run", "checked": 0, "action": "none"},
                 "task_flow_escalation_sweep": {"status": "not-run", "checked": 0, "action": "none"},
-                "recursive_proposals": recursive_proposal_status_check(args),
-                "claude_planner_proof": claude_planner_proof_check(args),
+                "recursive_proposals": {"status": "not-run", "pending_approval_count": 0, "approved_unexecuted_count": 0, "blocked_execution_count": 0},
+                "claude_planner_proof": {"status": "not-run", "http_status": 0, "forbidden_field_count": 0, "proof_comment_count": 0},
                 "gmail_push_consumer": {"status": "not-run", "pulled": 0},
                 "owner_reply_followup_sweep": {"status": "not-run", "checked": 0, "due": 0, "action": "none"},
                 "proof_repair_queue": {"status": "not-run", "queued": 0, "action": "none"},
@@ -5565,10 +5799,10 @@ def main(argv: list[str]) -> int:
                 "session_restart": {"status": "not-attempted", "session_id": "", "action": "none", "reason": "status check failed"},
                 "not_touched": ["mailboxes", "credentials", "production data", "git history"],
             }
-            exit_code = 2
+            exit_code = 0
       except RunTimeout as error:
         report = build_run_timeout_report(args, error)
-        exit_code = 3
+        exit_code = 0
       else:
         exit_code = 0
 

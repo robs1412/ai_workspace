@@ -27,7 +27,7 @@ def fetch_json(url: str, timeout: int) -> dict[str, Any]:
     return payload if isinstance(payload, dict) else {}
 
 
-def run_ps(limit: int) -> list[dict[str, Any]]:
+def run_ps() -> list[dict[str, Any]]:
     proc = subprocess.run(
         ["/bin/ps", "-axo", "pid,ppid,rss,%mem,command"],
         check=False,
@@ -58,7 +58,7 @@ def run_ps(limit: int) -> list[dict[str, Any]]:
             }
         )
     rows.sort(key=lambda item: float(item["rss_mb"]), reverse=True)
-    return rows[: max(1, limit)]
+    return rows
 
 
 def safe_process_label(command: str) -> str:
@@ -82,6 +82,28 @@ def safe_process_label(command: str) -> str:
     return command.split()[0].split("/")[-1][:80] or "process"
 
 
+def process_categories(processes: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    categories: dict[str, dict[str, Any]] = {}
+    for item in processes:
+        label = str(item.get("label") or "process")
+        category = label
+        if label in {"codex session", "codex app-server"}:
+            category = "codex"
+        elif label in {"python process", "ai health manager", "frank auto runner"}:
+            category = "python workers"
+        elif label in {"node process", "workspaceboard server"}:
+            category = "node/workspaceboard"
+        bucket = categories.setdefault(category, {"category": category, "count": 0, "rss_mb": 0.0})
+        bucket["count"] += 1
+        bucket["rss_mb"] += float(item.get("rss_mb") or 0)
+    result = [
+        {"category": value["category"], "count": value["count"], "rss_mb": round(value["rss_mb"], 1)}
+        for value in categories.values()
+    ]
+    result.sort(key=lambda item: float(item["rss_mb"]), reverse=True)
+    return result
+
+
 def classify(payload: dict[str, Any], processes: list[dict[str, Any]], args: argparse.Namespace) -> dict[str, Any]:
     memory = payload.get("memory") if isinstance(payload.get("memory"), dict) else {}
     repositories = payload.get("repositories") if isinstance(payload.get("repositories"), dict) else {}
@@ -90,6 +112,10 @@ def classify(payload: dict[str, Any], processes: list[dict[str, Any]], args: arg
     dirty_repos = int(repositories.get("dirty") or 0)
     disk_used = int(disk.get("used_percent") or 0)
     high_processes = [item for item in processes if float(item.get("rss_mb") or 0) >= args.process_rss_warning_mb]
+    categories = {str(item["category"]): item for item in process_categories(processes)}
+    codex_category = categories.get("codex", {})
+    codex_rss = float(codex_category.get("rss_mb") or 0)
+    codex_count = int(codex_category.get("count") or 0)
     issues: list[dict[str, Any]] = []
     status = "passed"
 
@@ -108,6 +134,14 @@ def classify(payload: dict[str, Any], processes: list[dict[str, Any]], args: arg
         status = max_status(status, "attention")
         labels = ", ".join(f"{item['label']} {item['rss_mb']} MB" for item in high_processes[:5])
         issues.append({"id": "large-processes", "reason": f"large resident processes: {labels}"})
+
+    if codex_rss >= args.codex_total_rss_warning_mb:
+        status = max_status(status, "attention")
+        issues.append({"id": "codex-memory-aggregate", "reason": f"Codex aggregate RSS {codex_rss:.1f} MB >= {args.codex_total_rss_warning_mb:.1f} MB"})
+
+    if codex_count >= args.codex_process_count_warning:
+        status = max_status(status, "attention")
+        issues.append({"id": "codex-process-count", "reason": f"Codex process count {codex_count} >= {args.codex_process_count_warning}"})
 
     if dirty_repos > args.dirty_repo_warning_count:
         status = max_status(status, "attention")
@@ -131,6 +165,8 @@ def recommended_action(status: str, issues: list[dict[str, Any]]) -> str:
     issue_ids = {str(issue.get("id")) for issue in issues}
     if "memory-critical" in issue_ids:
         return "stop worker fan-out; reconcile stale sessions before starting new workers; inspect top resident processes"
+    if "codex-memory-aggregate" in issue_ids or "codex-process-count" in issue_ids:
+        return "pause new Codex worker fan-out; close stale sessions; reuse existing workers until aggregate RSS drops"
     if "large-processes" in issue_ids:
         return "reuse existing Codex sessions and close proof-backed stale wrappers before launching more workers"
     if "dirty-repositories" in issue_ids:
@@ -162,6 +198,9 @@ def build_report(record: dict[str, Any]) -> str:
     ]
     for item in record.get("top_processes", [])[:10]:
         lines.append(f"- `{item.get('label')}` pid `{item.get('pid')}` rss `{item.get('rss_mb')} MB` mem `{item.get('mem_percent')}%`")
+    lines.extend(["", "## Process Categories", ""])
+    for item in record.get("process_categories", [])[:10]:
+        lines.append(f"- `{item.get('category')}` rss `{item.get('rss_mb')} MB` across `{item.get('count')}` processes")
     lines.extend(["", "## Issues", ""])
     issues = classification.get("issues") or []
     if not issues:
@@ -190,6 +229,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--memory-critical-percent", type=int, default=85)
     parser.add_argument("--disk-warning-percent", type=int, default=85)
     parser.add_argument("--process-rss-warning-mb", type=float, default=1024.0)
+    parser.add_argument("--codex-total-rss-warning-mb", type=float, default=4096.0)
+    parser.add_argument("--codex-process-count-warning", type=int, default=12)
     parser.add_argument("--dirty-repo-warning-count", type=int, default=4)
     parser.add_argument("--print-json", action="store_true")
     return parser.parse_args()
@@ -198,8 +239,9 @@ def parse_args() -> argparse.Namespace:
 def main() -> int:
     args = parse_args()
     server_health = fetch_json(args.url, args.timeout_seconds)
-    processes = run_ps(args.top_process_limit)
+    processes = run_ps()
     classification = classify(server_health, processes, args)
+    categories = process_categories(processes)
     record = {
         "recorded_at": datetime.now().astimezone().strftime("%Y-%m-%d %H:%M:%S %Z"),
         "epoch": int(time.time()),
@@ -219,7 +261,8 @@ def main() -> int:
                 "total": (server_health.get("repositories") or {}).get("total", 0),
             },
         },
-        "top_processes": processes,
+        "top_processes": processes[: max(1, args.top_process_limit)],
+        "process_categories": categories,
     }
     args.json.parent.mkdir(parents=True, exist_ok=True)
     args.report.parent.mkdir(parents=True, exist_ok=True)
