@@ -1,0 +1,72 @@
+{
+  "created_at": "2026-06-10 13:23:26 CDT",
+  "next_step": "Next phase: review/commit/deploy the changed repos, then run live bounded OPS bridge reroute if approved.",
+  "notes": [
+    "Goal: lower server memory, reduce token burn, and make the recursive loop advance without repeated owner nudges.",
+    "Rule: update this document and DB-backed Task Flow/handoff as tasks complete."
+  ],
+  "tasks": [
+    {
+      "id": "plan-doc",
+      "proof": "Google Doc created or updated in AI Cloud / IT and read back through Docs API.",
+      "status": "done",
+      "title": "Create AI Cloud IT planning document with checklist and live update path"
+    },
+    {
+      "id": "record-taskflow",
+      "proof": "Task Flow key taskflow-20260610-ai-codex-server-improvement recorded; handoff entry 264 recorded.",
+      "status": "done",
+      "title": "Record the plan and progress in Task Flow plus DB handoff"
+    },
+    {
+      "id": "dirty-state",
+      "proof": "Pre-existing ai_workspace edits preserved; misplaced OPS project_hub duplicate removed; canonical ai_workspace skill index rebuilt with skill_count=43.",
+      "status": "done",
+      "title": "Inspect current dirty state before changing server/process code"
+    },
+    {
+      "id": "workspaceboard-reconcile",
+      "proof": "Workspaceboard selected reconcile durable-closed fast path verified; node -c passed; npm run test:session passed 81/81.",
+      "status": "done",
+      "title": "Verify and harden Workspaceboard selected-session reconcile/read-model patch"
+    },
+    {
+      "id": "session-auto-close",
+      "proof": "Closed finished live sessions 7fbeb032, 0a2ac64a, 88084007 via /api/session-close; forced status refresh no longer lists them; DB sync wrote 16 rows with live_tmux_count=79.",
+      "status": "done",
+      "title": "Add/verify automatic close path for proof-closed or finished live sessions"
+    },
+    {
+      "id": "process-memory-diagnostics",
+      "proof": "Added scripts/compact_process_memory.py; verified compact JSON without full process args; Codex-family RSS surfaced as dominant memory category.",
+      "status": "done",
+      "title": "Add compact process-memory diagnostics that do not print prompt command lines"
+    },
+    {
+      "id": "mailbox-runner-bounds",
+      "proof": "Patched Avignon inbox cycle with IMAP timeout, default 100-message scan cap, and count-only final readback; py_compile passed for Avignon and Frank runners.",
+      "status": "done",
+      "title": "Convert or cap high-memory mailbox runners with bounded one-shot cycle behavior"
+    },
+    {
+      "id": "token-output-caps",
+      "proof": "Updated docs/task-mode-startup.md to require compact process diagnostics and avoid full ps args/prompt dumps.",
+      "status": "done",
+      "title": "Add token/output-budget guardrails for broad rg, ps, logs, and session reads"
+    },
+    {
+      "id": "ops-bridge-pickup",
+      "proof": "Patched OPS bridge to require concrete worker/routed session id instead of Task Manager session; dry-run limit=5 showed stale_pickup_rerouting for 370259, 370260, 370444.",
+      "status": "done",
+      "title": "Patch OPS bridge stale pickup logic to validate real live worker state"
+    },
+    {
+      "id": "handoff-closeout",
+      "proof": "Final verification passed: Workspaceboard check and test:session 81/81; Python/PHP syntax passed; live board has 0 actionable, 3 waiting, 1 blocked; closed session IDs absent.",
+      "status": "done",
+      "title": "Record final handoff with proof, exact blockers, and next phase"
+    }
+  ],
+  "title": "2026-06-10-AI-Codex-server-improvement",
+  "updated_at": "2026-06-10 13:38:57 CDT"
+}

@@ -42,6 +42,7 @@ DEFAULT_TASK_FLOW_FINISH_RESTART_MINUTES = 60
 DEFAULT_MAX_NON_STANDING_OPEN = 8
 DEFAULT_MAX_ROBERT_BLOCKERS = 6
 DEFAULT_INPUT_LOG_DIR = Path("/Users/werkstatt/ai_workspace/daily-inputs")
+DEFAULT_INPUT_RECORDER_CMD = "php scripts/ai_manager_input_recorder.php recent 100"
 DEFAULT_INPUT_AUDIT_INTERVAL_SECONDS = 60
 DEFAULT_ESCALATION_TIMEOUT_SECONDS = 2 * 60
 DEFAULT_ESCALATION_COOLDOWN_SECONDS = 24 * 60 * 60
@@ -1009,16 +1010,63 @@ def section_has_tracking(body: str) -> bool:
     return any(marker in lowered for marker in INPUT_TRACKING_MARKERS)
 
 
+def db_daily_input_sections(command: str, timeout: float) -> tuple[list[dict], dict]:
+    if not command.strip():
+        return [], {"status": "disabled"}
+    try:
+        result = subprocess.run(
+            shlex.split(command),
+            cwd=str(Path("/Users/werkstatt/ai_workspace")),
+            capture_output=True,
+            text=True,
+            timeout=timeout,
+            check=False,
+        )
+    except (OSError, subprocess.TimeoutExpired) as error:
+        return [], {"status": "failed", "error": safe_text(error, 240)}
+    try:
+        parsed = json.loads(result.stdout or "{}")
+    except json.JSONDecodeError:
+        return [], {"status": "failed", "error": safe_text(result.stderr or result.stdout, 240)}
+    if result.returncode != 0 or not parsed.get("ok"):
+        return [], {"status": "failed", "error": safe_text(result.stderr or parsed, 240)}
+    sections = []
+    for item in parsed.get("items", []) or []:
+        if not isinstance(item, dict):
+            continue
+        heading = f"DB input {item.get('id') or item.get('input_uuid') or ''} {item.get('created_at') or ''}".strip()
+        body_parts = [
+            str(item.get("input_text") or ""),
+            str(item.get("related_session_id") or ""),
+            str(item.get("related_task_id") or ""),
+            str(item.get("related_taskflow_key") or ""),
+            str(item.get("proof_marker") or ""),
+            str(item.get("status") or ""),
+        ]
+        sections.append({
+            "file": "koval_crm.ai_manager_inputs",
+            "heading": safe_text(heading, 140),
+            "body": "\n".join(body_parts),
+        })
+    return sections, {"status": "checked", "source": "ai_manager_inputs", "count": len(sections)}
+
+
 def audit_daily_inputs(args: argparse.Namespace, state: dict) -> dict:
     now_epoch = int(time.time())
     input_state = state.setdefault("daily_input_audit", {})
     prior_epoch = int(input_state.get("last_full_audit_epoch") or 0)
     due = now_epoch - prior_epoch >= args.input_audit_interval_seconds
+    sections, source_readback = db_daily_input_sections(args.input_recorder_cmd, args.timeout)
     input_log_dir = Path(args.input_log_dir)
-    files = daily_input_files(input_log_dir, utc_now())
-    sections: list[dict] = []
-    for path in files:
-        sections.extend(parse_daily_input_sections(path))
+    if source_readback.get("status") != "checked":
+        files = daily_input_files(input_log_dir, utc_now())
+        for path in files:
+            sections.extend(parse_daily_input_sections(path))
+        source_readback = {
+            **source_readback,
+            "fallback_source": "daily-inputs markdown",
+            "input_log_dir": str(input_log_dir),
+        }
 
     missing_tracking = [
         {
@@ -1033,7 +1081,7 @@ def audit_daily_inputs(args: argparse.Namespace, state: dict) -> dict:
     audit = {
         "status": "not-due",
         "due": due,
-        "input_log_dir": str(input_log_dir),
+        "input_source": source_readback,
         "interval_seconds": args.input_audit_interval_seconds,
         "section_count": len(sections),
         "missing_tracking_count": len(missing_tracking),
@@ -1057,7 +1105,7 @@ def audit_daily_inputs(args: argparse.Namespace, state: dict) -> dict:
             session_id = task_manager_sessions[0].get("id") or ""
             headings = "; ".join(item["heading"] for item in missing_tracking[:5])
             message = (
-                "AI Health Manager missed-input audit: daily input sections need capture/follow-through. "
+                "AI Health Manager missed-input audit: DB-backed daily inputs need capture/follow-through. "
                 f"Missing Task Flow/domain/no-action marker: {headings}. "
                 "Do not start a broad worker burst; create or update the correct Task Flow/domain records, "
                 "queue anything over capacity, and return one concise readback."
@@ -4979,6 +5027,11 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
         action="store_false",
         default=True,
         help="disable the default Task Manager nudge for untracked daily input sections",
+    )
+    parser.add_argument(
+        "--input-recorder-cmd",
+        default=os.environ.get("AI_HEALTH_INPUT_RECORDER_CMD", DEFAULT_INPUT_RECORDER_CMD),
+        help="DB-backed AI Manager input recorder command used for daily-input audit; falls back to Markdown only if this fails",
     )
     parser.add_argument("--cadence-seconds", type=int, default=900)
     parser.add_argument("--dry-run", action="store_true", help="report only and do not nudge")

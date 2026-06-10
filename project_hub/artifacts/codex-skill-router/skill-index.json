@@ -1,8 +1,8 @@
 {
   "body_loaded": false,
-  "generated_at": "2026-05-27T23:26:13.424058+00:00",
+  "generated_at": "2026-06-10T18:24:50.120460+00:00",
   "schema_version": 1,
-  "skill_count": 39,
+  "skill_count": 43,
   "skills": [
     {
       "description": "Use when working in AI Manager mode or AI phone manager mode and the user expects prompts and outcomes to be mirrored into ai_manager_inputs and the daily-input trail.",
@@ -19,6 +19,23 @@
         "expects",
         "prompts",
         "outcomes"
+      ]
+    },
+    {
+      "description": "Use when asked to run, rerun, validate, or hand off the Binny's/Binnys Playwright scraper, including scrapebinnys-exec, scrapebinnys-second-exec, recurring BID reports, VPN gating, and copying fresh Binny's report CSVs to live BID on 192.168.55.205.",
+      "name": "binnys-scraper",
+      "path": "/Users/admin/.codex/skills/binnys-scraper/SKILL.md",
+      "tags": [
+        "binnys",
+        "scraper",
+        "binny",
+        "scrapebinnys",
+        "exec",
+        "bid",
+        "asked",
+        "run",
+        "rerun",
+        "validate"
       ]
     },
     {
@@ -294,6 +311,23 @@
       ]
     },
     {
+      "description": "Use when OPS event, Market Event, or Outreach Event records need Google Calendar sync coverage across all configured calendars, especially when events are created or changed and must sync to the correct OPS Events, Market Events, or Outreach Events calendar instead of being treated as OPS-only.",
+      "name": "ops-google-calendar-sync",
+      "path": "/Users/admin/.codex/skills/ops-google-calendar-sync/SKILL.md",
+      "tags": [
+        "ops",
+        "calendar",
+        "sync",
+        "google",
+        "events",
+        "event",
+        "market",
+        "outreach",
+        "records",
+        "need"
+      ]
+    },
+    {
       "description": "Use when a user asks to pull OPS live after a push, verify the current live OPS commit, or check the standard SSH live route for OPS. Applies to the git-backed live checkout at ftp.koval-distillery.com:/home/koval/public_html/ops and should be used instead of re-deriving the host/path each time.",
       "name": "ops-live-pull",
       "path": "/Users/admin/.codex/skills/ops-live-pull/SKILL.md",
@@ -359,6 +393,40 @@
         "assessment",
         "policy",
         "note"
+      ]
+    },
+    {
+      "description": "Use when handling Naomi/BID recurring COTeam bonus payroll emails, OPS task 368750, payroll bonus lists, or payroll-cycle recurrence markers; verify the Portal payroll calendar cadence, BID payroll bonus cross-check, and sent proof before advancing the OPS task.",
+      "name": "payroll-coteam-bonus-recurring",
+      "path": "/Users/admin/.codex/skills/payroll-coteam-bonus-recurring/SKILL.md",
+      "tags": [
+        "payroll",
+        "bonus",
+        "coteam",
+        "recurring",
+        "bid",
+        "ops",
+        "task",
+        "handling",
+        "naomi",
+        "emails"
+      ]
+    },
+    {
+      "description": "Use when Robert asks Vanessa or another KOVAL persona to draft or send an internal phpList campaign about OPS open shifts, COTeam/Management updates, Connecteam transition status, or related group-list shift communications.",
+      "name": "phplist-internal-shift-email",
+      "path": "/Users/admin/.codex/skills/phplist-internal-shift-email/SKILL.md",
+      "tags": [
+        "phplist",
+        "internal",
+        "shift",
+        "email",
+        "robert",
+        "asks",
+        "vanessa",
+        "another",
+        "koval",
+        "persona"
       ]
     },
     {

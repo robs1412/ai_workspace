@@ -103,6 +103,8 @@ GOOGLE_CAL_TOKEN = Path("/Users/admin/.frank-launch/private/frank-google-calenda
 ROBERT_EMAIL = "robert@kovaldistillery.com"
 SONAT_EMAIL = "sonat@kovaldistillery.com"
 BOARD_API = os.environ.get("WORKSPACEBOARD_API", "http://127.0.0.1:17878").rstrip("/")
+IMAP_TIMEOUT_SECONDS = int(os.environ.get("AVIGNON_IMAP_TIMEOUT_SECONDS", "45"))
+INBOX_SCAN_LIMIT = int(os.environ.get("AVIGNON_INBOX_SCAN_LIMIT", "100"))
 DIRECT_OWNER_PENDING_STATES = {
     "routed_pending_completion",
     "blocked_pending_security_guard",
@@ -344,100 +346,119 @@ def latest_action_for_source(records: dict[str, list[dict]], source_id: str) -> 
     return items[-1] if items else None
 
 
-def fetch_inbox(user: str, app_pw: str, seen_ids: set[str] | None = None) -> list[dict]:
-    conn = imaplib.IMAP4_SSL("imap.gmail.com", 993)
+def open_imap(user: str, app_pw: str) -> imaplib.IMAP4_SSL:
+    conn = imaplib.IMAP4_SSL("imap.gmail.com", 993, timeout=IMAP_TIMEOUT_SECONDS)
     conn.login(user, app_pw)
-    conn.select("INBOX", readonly=True)
-    status, data = conn.search(None, "ALL")
-    seen_ids = seen_ids or set()
-    ids = data[0].split() if status == "OK" and data else []
-    messages: list[dict] = []
-    for imap_id in ids:
-        status, header_data = conn.fetch(imap_id, "(BODY.PEEK[HEADER.FIELDS (MESSAGE-ID DATE FROM TO CC SUBJECT IN-REPLY-TO REFERENCES)])")
-        if status != "OK":
-            continue
-        header_raw = b"".join(part[1] for part in header_data if isinstance(part, tuple))
-        if not header_raw:
-            continue
-        header_msg = message_from_bytes(header_raw)
-        header_record = {
-            "imap_id": imap_id.decode(),
-            "date": decode_value(header_msg.get("Date", "")),
-            "from": decode_value(header_msg.get("From", "")),
-            "to": decode_value(header_msg.get("To", "")),
-            "cc": decode_value(header_msg.get("Cc", "")),
-            "subject": decode_value(header_msg.get("Subject", "")),
-            "message_id": decode_value(header_msg.get("Message-ID", "")),
-            "in_reply_to": decode_value(header_msg.get("In-Reply-To", "")),
-            "references": decode_value(header_msg.get("References", "")),
-            "body": "",
-            "attachments": [],
-            "body_fetched": False,
-        }
-        source_id = normalize_message_id(header_record["message_id"])
-        if source_id and source_id in seen_ids:
-            messages.append(header_record)
-            continue
+    return conn
 
-        status, msg_data = conn.fetch(imap_id, "(BODY.PEEK[])")
+
+def fetch_inbox_count(user: str, app_pw: str) -> int:
+    conn = open_imap(user, app_pw)
+    try:
+        status, data = conn.select("INBOX", readonly=True)
         if status != "OK":
-            continue
-        raw = b"".join(part[1] for part in msg_data if isinstance(part, tuple))
-        msg = message_from_bytes(raw)
-        body_parts: list[str] = []
-        html_parts: list[str] = []
-        attachments: list[dict] = []
-        for part in msg.walk():
-            content_type = part.get_content_type()
-            disposition = str(part.get("Content-Disposition", "")).lower()
-            filename = decode_value(part.get_filename(""))
-            payload = part.get_payload(decode=True) or b""
-            if payload and "attachment" not in disposition:
-                if content_type == "text/plain":
-                    body_parts.append(
-                        payload.decode(part.get_content_charset() or "utf-8", errors="replace")
-                    )
-                elif content_type == "text/html":
-                    html_parts.append(
-                        payload.decode(part.get_content_charset() or "utf-8", errors="replace")
-                    )
-            if filename or "attachment" in disposition:
-                attachments.append(
-                    {
-                        "filename": filename or "[unnamed]",
-                        "content_type": content_type,
-                        "bytes": len(payload),
-                    }
-                )
-        body = "\n".join(body_parts).strip()
-        if not body and html_parts:
-            body = html_to_text("\n".join(html_parts))
-        header_record.update(
-            {
-                "date": decode_value(msg.get("Date", header_record["date"])),
-                "from": decode_value(msg.get("From", header_record["from"])),
-                "to": decode_value(msg.get("To", header_record["to"])),
-                "cc": decode_value(msg.get("Cc", header_record["cc"])),
-                "subject": decode_value(msg.get("Subject", header_record["subject"])),
-                "message_id": decode_value(msg.get("Message-ID", header_record["message_id"])),
-                "in_reply_to": decode_value(msg.get("In-Reply-To", header_record["in_reply_to"])),
-                "references": decode_value(msg.get("References", header_record["references"])),
-                "body": body,
-                "attachments": attachments,
-                "body_fetched": True,
+            return 0
+        return int(data[0]) if data and data[0] else 0
+    finally:
+        conn.logout()
+
+
+def fetch_inbox(user: str, app_pw: str, seen_ids: set[str] | None = None, limit: int = INBOX_SCAN_LIMIT) -> list[dict]:
+    conn = open_imap(user, app_pw)
+    try:
+        conn.select("INBOX", readonly=True)
+        status, data = conn.search(None, "ALL")
+        seen_ids = seen_ids or set()
+        ids = data[0].split() if status == "OK" and data else []
+        if limit > 0:
+            ids = ids[-limit:]
+        messages: list[dict] = []
+        for imap_id in ids:
+            status, header_data = conn.fetch(imap_id, "(BODY.PEEK[HEADER.FIELDS (MESSAGE-ID DATE FROM TO CC SUBJECT IN-REPLY-TO REFERENCES)])")
+            if status != "OK":
+                continue
+            header_raw = b"".join(part[1] for part in header_data if isinstance(part, tuple))
+            if not header_raw:
+                continue
+            header_msg = message_from_bytes(header_raw)
+            header_record = {
+                "imap_id": imap_id.decode(),
+                "date": decode_value(header_msg.get("Date", "")),
+                "from": decode_value(header_msg.get("From", "")),
+                "to": decode_value(header_msg.get("To", "")),
+                "cc": decode_value(header_msg.get("Cc", "")),
+                "subject": decode_value(header_msg.get("Subject", "")),
+                "message_id": decode_value(header_msg.get("Message-ID", "")),
+                "in_reply_to": decode_value(header_msg.get("In-Reply-To", "")),
+                "references": decode_value(header_msg.get("References", "")),
+                "body": "",
+                "attachments": [],
+                "body_fetched": False,
             }
-        )
-        messages.append(header_record)
-    conn.logout()
-    return messages
+            source_id = normalize_message_id(header_record["message_id"])
+            if source_id and source_id in seen_ids:
+                messages.append(header_record)
+                continue
+
+            status, msg_data = conn.fetch(imap_id, "(BODY.PEEK[])")
+            if status != "OK":
+                continue
+            raw = b"".join(part[1] for part in msg_data if isinstance(part, tuple))
+            msg = message_from_bytes(raw)
+            body_parts: list[str] = []
+            html_parts: list[str] = []
+            attachments: list[dict] = []
+            for part in msg.walk():
+                content_type = part.get_content_type()
+                disposition = str(part.get("Content-Disposition", "")).lower()
+                filename = decode_value(part.get_filename(""))
+                payload = part.get_payload(decode=True) or b""
+                if payload and "attachment" not in disposition:
+                    if content_type == "text/plain":
+                        body_parts.append(
+                            payload.decode(part.get_content_charset() or "utf-8", errors="replace")
+                        )
+                    elif content_type == "text/html":
+                        html_parts.append(
+                            payload.decode(part.get_content_charset() or "utf-8", errors="replace")
+                        )
+                if filename or "attachment" in disposition:
+                    attachments.append(
+                        {
+                            "filename": filename or "[unnamed]",
+                            "content_type": content_type,
+                            "bytes": len(payload),
+                        }
+                    )
+            body = "\n".join(body_parts).strip()
+            if not body and html_parts:
+                body = html_to_text("\n".join(html_parts))
+            header_record.update(
+                {
+                    "date": decode_value(msg.get("Date", header_record["date"])),
+                    "from": decode_value(msg.get("From", header_record["from"])),
+                    "to": decode_value(msg.get("To", header_record["to"])),
+                    "cc": decode_value(msg.get("Cc", header_record["cc"])),
+                    "subject": decode_value(msg.get("Subject", header_record["subject"])),
+                    "message_id": decode_value(msg.get("Message-ID", header_record["message_id"])),
+                    "in_reply_to": decode_value(msg.get("In-Reply-To", header_record["in_reply_to"])),
+                    "references": decode_value(msg.get("References", header_record["references"])),
+                    "body": body,
+                    "attachments": attachments,
+                    "body_fetched": True,
+                }
+            )
+            messages.append(header_record)
+        return messages
+    finally:
+        conn.logout()
 
 
 def fetch_message_by_message_id(user: str, app_pw: str, source_message_id: str) -> dict | None:
     normalized = normalize_message_id(source_message_id)
     if not normalized:
         return None
-    conn = imaplib.IMAP4_SSL("imap.gmail.com", 993)
-    conn.login(user, app_pw)
+    conn = open_imap(user, app_pw)
     try:
         for mailbox in ("INBOX", '"[Gmail]/All Mail"'):
             status, _ = conn.select(mailbox, readonly=True)
@@ -1954,7 +1975,7 @@ def main() -> int:
         "logged_at": datetime.now(timezone.utc).isoformat(),
     }
     append_log(row)
-    final_count = len(fetch_inbox(user, app_pw, load_automation_ids()))
+    final_count = fetch_inbox_count(user, app_pw)
     print(
         json.dumps(
             {

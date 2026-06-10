@@ -1725,6 +1725,39 @@ def normalize_addresses(value) -> list[str]:
     return [item.strip() for item in str(value).split(",") if item.strip()]
 
 
+def normalized_email_addresses(values: list[str]) -> set[str]:
+    addresses: set[str] = set()
+    for value in values:
+        if mailbox_helpers is not None:
+            addresses.update(mailbox_helpers.email_addresses_from_text(str(value or "")))
+            continue
+        email_value = sender_email(str(value or ""))
+        if email_value:
+            addresses.add(email_value)
+    return {addr.lower() for addr in addresses if addr}
+
+
+def validate_approved_send_recipients(payload: dict, from_addr: str, to_addrs: list[str], cc_addrs: list[str], bcc_addrs: list[str]) -> None:
+    allow_self_send = str(payload.get("allow_internal_self_send") or "").strip().lower() in {"1", "true", "yes", "on"}
+    if allow_self_send:
+        return
+    from_email = sender_email(from_addr) or from_addr.lower()
+    to_emails = normalized_email_addresses(to_addrs)
+    cc_emails = normalized_email_addresses(cc_addrs)
+    bcc_emails = normalized_email_addresses(bcc_addrs)
+    all_recipient_emails = to_emails | cc_emails | bcc_emails
+    if from_email == "vanessa.sterling@kovaldistillery.com" and to_emails == {from_email}:
+        raise ValueError(
+            "National Outreach approved-send draft targets Vanessa as sender and only direct recipient; "
+            "record this as internal Task Flow/OPS state unless allow_internal_self_send is explicitly set."
+        )
+    if all_recipient_emails and all_recipient_emails <= {from_email}:
+        raise ValueError(
+            "National Outreach approved-send draft has no recipient outside the sender; "
+            "record this internally unless allow_internal_self_send is explicitly set."
+        )
+
+
 def body_to_html_with_signature_links(body: str) -> str:
     lines = body.splitlines()
     rendered: list[str] = []
@@ -1782,6 +1815,7 @@ def send_one(creds: dict[str, str], draft_path: Path, sent_dir: Path, failed_dir
     html_body = str(payload.get("html_body") or "").strip()
     in_reply_to = clean_subject(payload.get("in_reply_to") or "")
     references = clean_subject(payload.get("references") or "")
+    validate_approved_send_recipients(payload, from_addr, to_addrs, cc_addrs, bcc_addrs)
     if not to_addrs or not subject or not body:
         raise ValueError("Approved send draft requires to, subject, and body.")
     msg = EmailMessage()

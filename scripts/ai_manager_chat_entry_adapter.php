@@ -12,7 +12,7 @@ const AI_MANAGER_CHAT_ADAPTER_PAPERS_WRITER = '/Users/werkstatt/ai_workspace/scr
 
 function usage(): void
 {
-    fwrite(STDERR, "Usage: php scripts/ai_manager_chat_entry_adapter.php [--message TEXT] [--user-id N] [--user-label TEXT] [--source-path TEXT] [--source-channel TEXT] [--related-session-id TEXT] [--related-task-id TEXT] [--related-taskflow-key TEXT] [--proof-marker TEXT] [--status TEXT] [--durable] [--papers-kind TEXT] [--papers-title TEXT] [--papers-path TEXT] [--papers-summary TEXT] [--papers-tags TEXT] [--papers-created-by TEXT] [--papers-dry-run] [--skip-daily] [--skip-db]\n");
+    fwrite(STDERR, "Usage: php scripts/ai_manager_chat_entry_adapter.php [--message TEXT] [--user-id N] [--user-label TEXT] [--source-path TEXT] [--source-channel TEXT] [--related-session-id TEXT] [--related-task-id TEXT] [--related-taskflow-key TEXT] [--proof-marker TEXT] [--status TEXT] [--durable] [--papers-kind TEXT] [--papers-title TEXT] [--papers-path TEXT] [--papers-summary TEXT] [--papers-tags TEXT] [--papers-created-by TEXT] [--papers-dry-run] [--append-daily] [--skip-daily] [--skip-db]\n");
 }
 
 function currentCdtStamp(): array
@@ -70,12 +70,17 @@ function parseArgs(array $argv): array
         'papers_tags' => '',
         'papers_created_by' => 'codex-ai-manager',
         'papers_dry_run' => false,
+        'append_daily' => false,
         'skip_daily' => false,
         'skip_db' => false,
     ];
 
     for ($i = 1; $i < count($argv); $i++) {
         $arg = $argv[$i];
+        if ($arg === '--append-daily') {
+            $options['append_daily'] = true;
+            continue;
+        }
         if ($arg === '--skip-daily') {
             $options['skip_daily'] = true;
             continue;
@@ -106,7 +111,11 @@ function parseArgs(array $argv): array
         if (preg_match('/^--([^=]+)=(.*)$/', $arg, $matches)) {
             $key = str_replace('-', '_', $matches[1]);
             if (array_key_exists($key, $options)) {
-                $options[$key] = $matches[2];
+                if (in_array($key, ['append_daily', 'skip_daily', 'skip_db', 'durable', 'papers_dry_run'], true)) {
+                    $options[$key] = in_array(strtolower($matches[2]), ['1', 'true', 'yes', 'on'], true);
+                } else {
+                    $options[$key] = $matches[2];
+                }
             }
         }
     }
@@ -301,7 +310,7 @@ function appendDailyInput(string $message, array $payload, string $recordedLabel
         $mode = !empty($papersResult['dry_run']) ? 'dry-run prepared' : 'published';
         $papersLine = " Papers {$mode}: `{$papersResult['path']}`.";
     }
-    $entry = "\n### {$stampInfo['stamp']}\n\nVerbatim input:\n\n> {$quoted}\n\nWorker/action interpretation:\n\nAI Manager chat-entry adapter mirrored this prompt into `ai_manager_inputs` and the daily-input trail. Source channel: `{$payload['source_channel']}`; source path: `{$payload['source_path']}`; DB row: `{$recordedLabel}`.{$papersLine}\n";
+    $entry = "\n### {$stampInfo['stamp']}\n\nVerbatim input:\n\n> {$quoted}\n\nWorker/action interpretation:\n\nAI Manager chat-entry adapter recorded this prompt in DB-backed `ai_manager_inputs`; this Markdown entry is a legacy projection only. Source channel: `{$payload['source_channel']}`; source path: `{$payload['source_path']}`; DB row: `{$recordedLabel}`.{$papersLine}\n";
     file_put_contents($path, $entry, FILE_APPEND | LOCK_EX);
     return ['path' => $path, 'stamp' => $stampInfo['stamp']];
 }
@@ -311,6 +320,10 @@ try {
     $message = normalizeMessage($options['message'] !== '' ? (string) $options['message'] : readStdinText());
     if ($message === '') {
         throw new InvalidArgumentException('Missing message text.');
+    }
+
+    if ($options['skip_db'] && !$options['append_daily']) {
+        throw new InvalidArgumentException('DB recording is the canonical daily-input path; use --append-daily only for an explicit legacy Markdown projection.');
     }
 
     $payload = [
@@ -328,7 +341,7 @@ try {
         'metadata' => [
             'transport' => 'ai_manager_chat_entry_adapter',
             'origin' => 'ai_manager_control_lane',
-            'daily_inputs' => $options['skip_daily'] ? 'skip' : 'append',
+            'daily_inputs' => $options['append_daily'] && !$options['skip_daily'] ? 'legacy_markdown_projection' : 'db_canonical',
             'db' => $options['skip_db'] ? 'skip' : 'record',
         ],
     ];
@@ -346,7 +359,7 @@ try {
     }
 
     $dailyResult = null;
-    if (!$options['skip_daily']) {
+    if ($options['append_daily'] && !$options['skip_daily']) {
         $dailyResult = appendDailyInput(
             $message,
             $payload,
