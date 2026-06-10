@@ -1,5 +1,14 @@
 # National Outreach Handoff
 
+## 2026-06-10 weekly COT Activity report 6147829 submitted
+
+- 2026-06-10 05:23 CDT done entry for Workspaceboard session `b7c9acea` / Task Flow `taskflow-ops-ai-worker-pickup-370305` / OPS task `370305`, `Portal report: COT Activity - Weekly`.
+- Live Portal proof from production `koval-crm-backend`: notification `6147829` now links to report `8037`, `submitted_at=2026-06-10 10:22:49`; report `8037` is category `56` / `COT Activity - Weekly`, department `6` / `Brand Ambassadors`, submitter `1332`, report date `2026-04-12`, period `2026-04-06` through `2026-04-12`, `submitted=1`, `reviewed=0`.
+- Source metrics used for the report content: `222` activity rows, `19` tasting rows, `522` visitors, `61` products sold, and `0` Codex-owned invoice rows / `$0.00` invoice value for the Portal-owned weekly period.
+- Reviewer notification proof: Portal runtime `notifications_logs` rows `86590`, `86591`, `86592`, and `86593` are `reports.new_for_review`, channel `email`, status `sent`, timestamp `2026-06-10 10:22:49`.
+- OPS sync proof: task `370305` remains the weekly COT Portal report task and advanced to current reporting period `2026-06-08` through `2026-06-14`; the next open Portal notification is `6147838`.
+- Workspaceboard closeout proof marker: `PORTAL_REPORT_8037_SUBMITTED_NOTIFICATION_6147829_LOGS_86590_86593_OPS370305_ADVANCED_6147838`.
+
 ## 2026-06-07 Vanessa tasting-selection and cancellation automation instructions requested
 
 - 2026-06-07 14:58 CDT done entry for task-mode chat request recorded through AI Manager recorder row `2876`, UUID `ai-manager-chat-20260607194924-18f913a51ea2`.

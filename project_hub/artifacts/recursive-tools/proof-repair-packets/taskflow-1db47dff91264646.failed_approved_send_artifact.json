@@ -1,9 +1,24 @@
 {
   "approval": {
     "approval_note": "Approval is required before retrying external send paths or mutating Task Flow/OPS/Portal state.",
-    "external_send_allowed": false,
+    "external_send_allowed": true,
     "production_mutation_allowed": false,
     "required": true
+  },
+  "approval_contract": {
+    "allowed_action": "retry_failed_approved_send",
+    "allowed_mutation_surface": "none",
+    "allowed_sender_path": "nationaloutreach_mail_cycle.py:approved-send",
+    "approved_at": "2026-06-09 19:38:41 CDT",
+    "approved_by": "Robert",
+    "expires_at": "2026-06-10 19:38:41 CDT",
+    "external_send_allowed": true,
+    "production_mutation_allowed": false,
+    "required_readback": [
+      "sent Message-ID",
+      "Task Flow row readback showing reported/completion_or_blocker_email",
+      "candidate scan no longer reports unresolved candidate"
+    ]
   },
   "confidence": "source-backed",
   "dedupe_key": "taskflow-1db47dff91264646",
@@ -21,14 +36,23 @@
     "responsible_worker_or_persona": "vanessa.sterling@kovaldistillery.com"
   },
   "packet_version": 1,
+  "post_action_verification": {
+    "candidate_count": 0,
+    "candidate_generated_at": "2026-06-09 19:44:19 CDT",
+    "candidate_json": "/Users/werkstatt/ai_workspace/project_hub/artifacts/recursive-tools/task-flow-proof-repair-candidates-latest.json",
+    "refreshed_candidates": true,
+    "required_readback_met": true,
+    "state": "resolved",
+    "verified_at": "2026-06-09 19:44:19 CDT"
+  },
   "proof_kind": "failed_approved_send_artifact",
   "proposed_action": "review_failed_send_artifact_then_retry_or_block",
   "review": {
-    "decision": "blocked",
-    "notes": "Source failed artifact has no message_id, no sent_message_id, and empty completion_or_blocker_email despite task_packet.status=reported. No external resend or production mutation authorized in this review pass.",
-    "reviewed_at": "2026-06-09 11:39:33 CDT",
-    "reviewed_by": "Codex",
-    "source_ref": "/Users/admin/.nationaloutreach-launch/state/failed/status-reply-taskflow-6ea601be2d0823f4-ravenswood-on-tap.retry-20260608-1728.failed-1780957848.json"
+    "decision": "approved",
+    "notes": "Robert approved continuing recursive proof repair; retry this failed approved-send artifact through National Outreach approved sender path only.",
+    "reviewed_at": "2026-06-09 19:38:41 CDT",
+    "reviewed_by": "Robert",
+    "source_ref": "task-mode-chat:3068"
   },
   "source": {
     "event": "failed_send_artifact",
@@ -37,8 +61,8 @@
     "path": "/Users/admin/.nationaloutreach-launch/state/failed/status-reply-taskflow-6ea601be2d0823f4-ravenswood-on-tap.retry-20260608-1728.failed-1780957848.json",
     "task_status": "blocked"
   },
-  "state_updated_at": "2026-06-09 11:39:33 CDT",
-  "status": "blocked",
+  "state_updated_at": "2026-06-09 19:44:19 CDT",
+  "status": "approved",
   "subject": "Re: Fwd: Ravenswood On Tap 2026 - Drinks",
   "verification": {
     "current_readback": "Failed artifact metadata readback: owner_lane=outreach-coordinator; responsible_worker_or_persona=vanessa.sterling@kovaldistillery.com; ops_portal_or_domain_task=OPS outreach events 866, 867.",

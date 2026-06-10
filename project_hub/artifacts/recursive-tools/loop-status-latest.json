@@ -1,124 +1,61 @@
 {
   "degraded_sources": [],
-  "generated_at": "2026-06-09 14:56:11 CDT",
+  "generated_at": "2026-06-09 19:36:11 CDT",
   "git_dirty_reviews": {
     "blocked_review_count": 0,
-    "checked_at": "2026-06-09 14:56:36 CDT",
+    "checked_at": "2026-06-09 19:36:37 CDT",
     "ok": true,
-    "pending_review_count": 0,
-    "repo_count": 4,
+    "pending_review_count": 2,
+    "repo_count": 2,
     "repos": [
       {
         "branch": "main",
         "bucket": "Review by lane and commit only coherent completed groups.",
-        "decision": "in_scope_active",
-        "head": "fec28aa",
-        "notes": "Final review after handoff entry 186 and collision decision update; active dirty files are in-scope for recursive loop/mail runtime repair work.",
+        "decision": "",
+        "head": "822ddd9",
+        "notes": "",
         "repo": "/Users/werkstatt/ai_workspace",
-        "review_status": "reviewed",
-        "reviewed_at": "2026-06-09 14:55:33 CDT",
+        "review_status": "pending_review",
+        "reviewed_at": "",
         "sample_tracked": [
-          "M asher/HANDOFF.md",
-          " M avignon/EMAIL_DERIVED_DECISIONS.md",
-          " M avignon/HANDOFF.md",
-          " M avignon/INTEGRATED_SUPER_SALES_AGENT_TASK_STATE.md",
-          " M avignon/TODO.md",
-          " M daily-inputs/2026-06-08.md",
+          "M daily-inputs/2026-06-09.md",
           " M project_hub/artifacts/recursive-tools/task-flow-proof-repair-candidates-latest.json",
           " M project_hub/artifacts/recursive-tools/task-flow-proof-repair-candidates-latest.md"
         ],
-        "sample_untracked": [
-          "?? asher/seen-headers.json",
-          "?? asher/sent/",
-          "?? avignon/docs/integrated-super-sales-agent-top50-action-plan-2026-06-09.csv",
-          "?? avignon/docs/integrated-super-sales-agent-top50-action-plan-2026-06-09.md",
-          "?? daily-inputs/2026-06-09.md",
-          "?? project_hub/artifacts/recursive-tools/ai-cloud-loop-engineering-current.txt",
-          "?? project_hub/artifacts/recursive-tools/git-dirty-repo-decisions.jsonl",
-          "?? project_hub/artifacts/recursive-tools/loop-status-board-latest.json"
-        ],
-        "state_signature": "fec28aa:15:27:28f8cc0156e60bdf",
-        "status_hash": "28f8cc0156e60bdf",
-        "tracked_dirty": 15,
-        "untracked": 27
+        "sample_untracked": [],
+        "state_signature": "822ddd9:3:0:050e1062c71ddd54",
+        "status_hash": "050e1062c71ddd54",
+        "tracked_dirty": 3,
+        "untracked": 0
       },
       {
         "branch": "main",
-        "bucket": "Identify whether untracked files are generated residue or real work.",
-        "decision": "external_active",
-        "head": "58ab861",
-        "notes": "Untracked scripts/tour_review_worker.php is a real Square to phpList Post-Tour Reviews automation script. It is outside this Workspaceboard API/session cleanup commit scope; leave untouched for the owning lists lane.",
-        "repo": "/Users/werkstatt/lists",
-        "review_status": "reviewed",
-        "reviewed_at": "2026-06-09 16:12:20 CDT",
-        "sample_tracked": [],
-        "sample_untracked": [
-          "?? scripts/tour_review_worker.php"
-        ],
-        "state_signature": "58ab861:0:1:d001d8333e45ec8b",
-        "status_hash": "d001d8333e45ec8b",
-        "tracked_dirty": 0,
-        "untracked": 1
-      },
-      {
-        "branch": "master",
-        "bucket": "Identify whether untracked files are generated residue or real work.",
-        "decision": "external_active",
-        "head": "e816f01",
-        "notes": "Untracked Avignon/Sonat Illinois top-200 account sheet artifacts. Outside this recursive loop implementation scope; leave untouched.",
-        "repo": "/Users/werkstatt/salesreport",
-        "review_status": "reviewed",
-        "reviewed_at": "2026-06-09 12:06:38 CDT",
-        "sample_tracked": [],
-        "sample_untracked": [
-          "?? doc/avignon-sonat-illinois-top200-account-contact-sheet-2026-06-09.csv",
-          "?? doc/avignon-sonat-illinois-top200-account-contact-sheet-2026-06-09.md",
-          "?? scripts/generate_avignon_illinois_top200_account_sheet.php"
-        ],
-        "state_signature": "e816f01:0:3:108735b9c224c947",
-        "status_hash": "108735b9c224c947",
-        "tracked_dirty": 0,
-        "untracked": 3
-      },
-      {
-        "branch": "main",
-        "bucket": "Inspect tracked diff before deciding commit, split, or leave active.",
-        "decision": "in_scope_active",
-        "head": "24c8960",
-        "notes": "Workspaceboard dirty state remains expected; no new code edits in this pass, only live session work-state closeouts through API.",
-        "repo": "/Users/werkstatt/workspaceboard",
-        "review_status": "reviewed",
-        "reviewed_at": "2026-06-09 14:12:19 CDT",
+        "bucket": "Review BID import/source artifacts before any commit or cleanup.",
+        "decision": "",
+        "head": "369627a",
+        "notes": "",
+        "repo": "/Users/werkstatt/bid",
+        "review_status": "pending_review",
+        "reviewed_at": "",
         "sample_tracked": [
-          "M assets/mi-pages.js",
-          " M assets/task-management-light.js",
-          " M server/index.js",
-          " M server/test/session-status.test.js",
-          " M server/test/workspaceboard-dashboard.test.js",
-          " M workspaceboard_auth.php",
-          " M workspaceboard_nav.php"
+          "M data-management/finance-action-reports/naomi-codex-sent-log.jsonl"
         ],
-        "sample_untracked": [
-          "?? api/handoff/",
-          "?? handoff-db.html",
-          "?? handoff-db.php"
-        ],
-        "state_signature": "24c8960:7:3:87fea2584390581c",
-        "status_hash": "87fea2584390581c",
-        "tracked_dirty": 7,
-        "untracked": 3
+        "sample_untracked": [],
+        "state_signature": "369627a:1:0:9278ea95d0065e7b",
+        "status_hash": "9278ea95d0065e7b",
+        "tracked_dirty": 1,
+        "untracked": 0
       }
     ],
-    "reviewed_count": 4
+    "reviewed_count": 0
   },
   "git_hygiene": {
     "buckets": {
       "active-lane-work": 1,
-      "dirty-review": 1,
-      "untracked-review": 2
+      "finance-lane-review": 1
     },
-    "checked_at": "2026-06-09 14:56:26 CDT",
-    "dirty_repo_count": 4,
+    "checked_at": "2026-06-09 19:36:26 CDT",
+    "dirty_repo_count": 2,
     "ok": true,
     "repo_count": 31,
     "state": "ok"
@@ -127,7 +64,7 @@
   "mutation_allowed": false,
   "next_action": "review_dirty_repositories",
   "proof_repair_packet_reviews": {
-    "checked_at": "2026-06-09 14:56:36 CDT",
+    "checked_at": "2026-06-09 19:36:37 CDT",
     "ok": true,
     "packet_count": 5,
     "packets": [
@@ -201,7 +138,7 @@
     ],
     "approved_unexecuted_count": 0,
     "blocked_execution_count": 0,
-    "checked_at": "2026-06-09 14:56:17 CDT",
+    "checked_at": "2026-06-09 19:36:17 CDT",
     "ok": true,
     "proposals": [
       {
@@ -446,24 +383,24 @@
         "taskflow-3981bd77dabf07ce",
         "taskflow-1513f992055a281d"
       ],
-      "generated_at": "2026-06-09 09:25:39 CDT",
+      "generated_at": "2026-06-09 19:36:16 CDT",
       "mutation_allowed": false,
       "source": {
         "exists": true,
-        "generated_at": "2026-06-09 09:25:39 CDT",
-        "mtime": "2026-06-09 09:25:39 CDT",
+        "generated_at": "2026-06-09 19:36:16 CDT",
+        "mtime": "2026-06-09 19:36:16 CDT",
         "path": "/Users/werkstatt/ai_workspace/project_hub/artifacts/recursive-tools/task-flow-proof-repair-candidates-latest.json"
       }
     },
     "proof_repair_packets": {
       "generated_at": "2026-06-09 09:25:39 CDT",
       "mutation_allowed": false,
-      "needs_approval_count": 5,
+      "needs_approval_count": 0,
       "packet_count": 5,
       "source": {
         "exists": true,
         "generated_at": "2026-06-09 09:25:39 CDT",
-        "mtime": "2026-06-09 09:25:39 CDT",
+        "mtime": "2026-06-09 16:09:56 CDT",
         "path": "/Users/werkstatt/ai_workspace/project_hub/artifacts/recursive-tools/task-flow-proof-repair-packets-latest.json"
       }
     },
@@ -486,7 +423,7 @@
     "by_status": {
       "green": 18
     },
-    "checked_at": "2026-06-09 14:56:17 CDT",
+    "checked_at": "2026-06-09 19:36:17 CDT",
     "count": 18,
     "error": "",
     "ok": true,

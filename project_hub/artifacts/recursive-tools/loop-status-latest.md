@@ -1,6 +1,6 @@
 # Loop Status
 
-- Recorded: 2026-06-09 14:56:11 CDT
+- Recorded: 2026-06-09 19:36:11 CDT
 - Schema version: `2`
 - Mode: `read-only-loop-status`
 - Mutation allowed: `False`
@@ -9,7 +9,7 @@
 ## Workspaceboard
 
 - ok: `True`
-- checked_at: `2026-06-09 14:56:17 CDT`
+- checked_at: `2026-06-09 19:36:17 CDT`
 - checks: `18`
 - by_status: `{"green": 18}`
 - error: ``
@@ -25,18 +25,18 @@
 - proof_issue_count: `5`
 - proof_repair_candidate_count: `5`
 - proof_repair_packet_count: `5`
-- proof_repair_needs_approval_count: `5`
-- candidates_source_mtime: `2026-06-09 09:25:39 CDT`
-- packets_source_mtime: `2026-06-09 09:25:39 CDT`
+- proof_repair_needs_approval_count: `0`
+- candidates_source_mtime: `2026-06-09 19:36:16 CDT`
+- packets_source_mtime: `2026-06-09 16:09:56 CDT`
 - packet_pending_review_count: `0`
 
 ## Git Hygiene
 
 - repos_scanned: `31`
-- dirty_repos: `4`
-- dirty_repo_pending_review_count: `1`
+- dirty_repos: `2`
+- dirty_repo_pending_review_count: `2`
 - dirty_repo_blocked_review_count: `0`
-- buckets: `{"active-lane-work": 1, "dirty-review": 1, "untracked-review": 2}`
+- buckets: `{"active-lane-work": 1, "finance-lane-review": 1}`
 
 ## Degraded Sources
 

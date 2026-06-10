@@ -21,6 +21,15 @@
     "responsible_worker_or_persona": "naomi.stern@kovaldistillery.com"
   },
   "packet_version": 1,
+  "post_action_verification": {
+    "candidate_count": 0,
+    "candidate_generated_at": "2026-06-09 19:44:09 CDT",
+    "candidate_json": "/Users/werkstatt/ai_workspace/project_hub/artifacts/recursive-tools/task-flow-proof-repair-candidates-latest.json",
+    "refreshed_candidates": true,
+    "required_readback_met": true,
+    "state": "resolved",
+    "verified_at": "2026-06-09 19:44:09 CDT"
+  },
   "proof_kind": "failed_approved_send_artifact",
   "proposed_action": "review_failed_send_artifact_then_retry_or_block",
   "review": {
@@ -37,7 +46,7 @@
     "path": "/Users/admin/.nationaloutreach-launch/state/failed/naomi-weekly-finance-june8-corrected-pdfs-20260608.failed-1780966535.json",
     "task_status": "blocked"
   },
-  "state_updated_at": "2026-06-09 11:39:33 CDT",
+  "state_updated_at": "2026-06-09 19:44:09 CDT",
   "status": "duplicate_no_action",
   "subject": "Weekly finance update with QBO PDFs - June 8",
   "verification": {
