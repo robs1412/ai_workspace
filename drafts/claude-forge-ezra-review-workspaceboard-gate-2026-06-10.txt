@@ -1,0 +1,47 @@
+Claude,
+
+Please update the Forge social-posting approval process so Ezra review is a real Workspaceboard / Task Flow approval gate, not just an email notice.
+
+Recommended implementation:
+
+1. Detect when a Forge Social Posting planner item or post draft needs Ezra review.
+Trigger this for alcohol-related posts, including KOVAL product, alcohol consumption, tasting/event promotion, retailer/distributor references, product claims, paid/boosted media, influencer content, "where to buy" language, or state-specific alcohol marketing/distribution context.
+
+2. Consider the Ezra guide before the post is created, or at least before the first approval draft is treated as ready.
+The post creator should consult the overarching themes in the guide early: TTB ad basics, no misleading product/health/effect claims, label/COLA consistency, age/youth-appeal guardrails, responsible-use framing, retailer/distributor/tied-house caution, and state-specific review for event/retailer/distribution content.
+
+Guide:
+https://docs.google.com/document/d/1QEDGQARePX8kL6R88K6UN9fdl4K7KQf-b0urjUjumxE/edit?usp=drivesdk
+
+3. Create or reuse a visible Workspaceboard / Task Flow review packet for Ezra/Codex.
+The packet should include:
+- Forge planner row/post id and title
+- linked OPS task, especially social posting OPS task 369890 when applicable
+- draft caption/copy
+- image/video/link references
+- target platform
+- proposed post date
+- product/SKU/COLA if known
+- retailer, distributor, event, tasting, or where-to-buy references
+- paid/boosted/influencer flag
+- target state/geography
+- the Ezra guide link above
+
+4. Store the review state on the Forge approval record.
+Suggested fields:
+- ezra_review_status: not_needed, pending, clear, clear_with_edits, blocked
+- ezra_review_taskflow_key
+- ezra_review_workspaceboard_session
+- ezra_review_proof
+- ezra_reviewed_at
+- ezra_review_note
+
+5. Block final posting approval while Ezra review is pending or blocked.
+Final post approval should require ezra_review_status to be clear, clear_with_edits, or not_needed. If clear_with_edits, require the final copy to show the edits applied or a recorded Robert/Sonat/Mark/Dmytro/Sebastian/counsel override.
+
+6. Allow manual override only with audit.
+Robert, Sonat, Mark, Dmytro, Sebastian, or counsel can override pending/blocked Ezra review, but Forge should store who overrode it, when, and why.
+
+The important part: Forge should not treat "consult Ezra" as a passive checkbox. The controlling proof should be the Forge approval record plus Workspaceboard / Task Flow review proof.
+
+Please reply with the planned implementation surface or the exact blocker if this needs a different route.

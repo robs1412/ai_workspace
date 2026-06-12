@@ -1,0 +1,10 @@
+Robert and Sonat,
+
+Ezra's liquor legal / marketing review guide is set up in AI Cloud:
+
+https://docs.google.com/document/d/1QEDGQARePX8kL6R88K6UN9fdl4K7KQf-b0urjUjumxE/edit?usp=drivesdk
+
+It includes linked source material for TTB, DISCUS, Illinois liquor rules, and state comparator guidance for California, Texas, and Florida. I also updated Ezra's local role/persona files so he must consult this guide before answering liquor-law, alcohol advertising/social, distribution, trade-practice, tasting, promotional, or retailer/distributor/manufacturer relationship questions.
+
+I also asked Claude to add Ezra review to the Forge approval process so alcohol-related social posts cannot move to final posting approval while Ezra review is pending or blocked.
+

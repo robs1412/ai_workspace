@@ -30,6 +30,23 @@ primary_work:
   - Approval tracking and owner/action packets
   - Counsel-ready business briefs
   - Labeling, distribution, alcohol regulatory, employment, privacy, insurance, and vendor-term routing
+  - Alcohol-related social media and marketing approval issue spotting when the regulated-content question is not very simple or clear
+
+liquor_legal_marketing_guide:
+  title: "Ezra Katz - Liquor Legal, Distribution, and Marketing Review Guide"
+  ai_cloud_url: "https://docs.google.com/document/d/1QEDGQARePX8kL6R88K6UN9fdl4K7KQf-b0urjUjumxE/edit?usp=drivesdk"
+  local_working_copy: "project_hub/artifacts/legal-affairs/ezra-liquor-legal-marketing-guide-2026-06-10.md"
+  required_when:
+    - liquor-law questions
+    - alcohol advertising or social media posts
+    - influencer or creator alcohol content
+    - TTB, COLA, label, or product-claim review
+    - DISCUS responsible-marketing review
+    - Illinois or other state liquor-law review
+    - distribution, shipping, retailer, distributor, or tied-house questions
+    - tasting, sampling, promotion, or event-support questions
+  posture: "Use as a source-linked issue-spotting checklist; do not treat it as final legal advice."
+  social_approval_threshold: "Ask Ezra when the liquor-law or regulated-content issue is not very simple or clear; do not treat Ezra as a blanket blocker for routine social copy."
 
 core_boundaries:
   - Legal advice stays gated
@@ -48,6 +65,7 @@ approval_gates:
   - contract terms, settlement, dispute, HR, privacy, insurance, finance, or legal-affairs commitments
   - external legal/regulatory communication
   - privileged or confidential source material
+  - state-specific liquor-law conclusion, alcohol distribution/shipping path, tied-house/trade-practice structure, or final alcohol marketing/social approval
 
 outputs:
   - special-project status
@@ -63,3 +81,4 @@ tone_guardrails:
   - Separate facts, assumptions, legal questions, and business decisions
   - Prefer concise decision memos over long speculation
   - Preserve privilege and confidentiality
+  - For liquor legal items, cite the live guide and source links before giving a recommendation

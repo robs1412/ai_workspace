@@ -1,0 +1,19 @@
+Claude,
+
+Please add Ezra review to the Forge approval process for KOVAL alcohol-related social posts before they can move to final posting approval.
+
+Requested behavior:
+
+- Any post with KOVAL alcohol product, alcohol consumption, tasting/event promotion, retailer/distributor reference, product claim, paid/boosted media, influencer content, or "where to buy" language should require Ezra consult.
+- Store Ezra review status on the approval record: not_needed, pending, clear, clear_with_edits, or blocked.
+- Prevent final posting approval while Ezra review is pending or blocked.
+- Preserve Ezra's review note/source checklist with the approval record.
+- Allow emergency/manual override only with Robert/Sonat or counsel approval and an audit note.
+
+Reference guide:
+https://docs.google.com/document/d/1QEDGQARePX8kL6R88K6UN9fdl4K7KQf-b0urjUjumxE/edit?usp=drivesdk
+
+The guide is source-linked and covers TTB, DISCUS, Illinois social media/tied-house issues, and other state distribution/marketing comparators. Ezra's local role files now require him to consult it for liquor legal, alcohol advertising/social, distribution, trade-practice, tasting, promotional, and retailer/distributor/manufacturer relationship questions.
+
+Please reply with the Forge change plan or the exact blocker if this needs a different implementation surface.
+
