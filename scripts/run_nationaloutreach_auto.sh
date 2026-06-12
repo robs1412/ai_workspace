@@ -8,6 +8,7 @@ export NATIONALOUTREACH_WORKER_ROUTE_LIMIT_PER_CYCLE="${NATIONALOUTREACH_WORKER_
 export NATIONALOUTREACH_ARCHIVE_REDUNDANT_OVERDUE_REPORTS="${NATIONALOUTREACH_ARCHIVE_REDUNDANT_OVERDUE_REPORTS:-1}"
 export NATIONALOUTREACH_ARCHIVE_SELF_SENT_INBOX_COPIES="${NATIONALOUTREACH_ARCHIVE_SELF_SENT_INBOX_COPIES:-1}"
 export NATIONALOUTREACH_ARCHIVE_REPLIED_INBOX="${NATIONALOUTREACH_ARCHIVE_REPLIED_INBOX:-1}"
+export NATIONALOUTREACH_ARCHIVE_ONLY_PREFLIGHT="${NATIONALOUTREACH_ARCHIVE_ONLY_PREFLIGHT:-1}"
 script_dir="$(CDPATH= cd -- "$(dirname "$0")" && pwd)"
 workspace_root="$(CDPATH= cd -- "$script_dir/.." && pwd)"
 export NATIONALOUTREACH_RUNTIME_ROOT="${NATIONALOUTREACH_RUNTIME_ROOT:-$script_dir}"
@@ -83,6 +84,16 @@ fi
 if [ ! -f "$mail_cycle_script" ] && [ -f "/Users/admin/.nationaloutreach-launch/runtime/scripts/nationaloutreach_mail_cycle.py" ]; then
   mail_cycle_script="/Users/admin/.nationaloutreach-launch/runtime/scripts/nationaloutreach_mail_cycle.py"
 fi
+archive_args=""
+if [ "${NATIONALOUTREACH_ARCHIVE_REDUNDANT_OVERDUE_REPORTS}" = "1" ]; then
+  archive_args="$archive_args --archive-redundant-overdue-reports"
+fi
+if [ "${NATIONALOUTREACH_ARCHIVE_SELF_SENT_INBOX_COPIES}" = "1" ]; then
+  archive_args="$archive_args --archive-self-sent-inbox-copies"
+fi
+if [ "${NATIONALOUTREACH_ARCHIVE_REPLIED_INBOX}" = "1" ]; then
+  archive_args="$archive_args --archive-replied-inbox"
+fi
 
 while [ "$count" -le "$cycles" ]; do
   cycle_started="$(date +%s)"
@@ -114,14 +125,21 @@ while [ "$count" -le "$cycles" ]; do
     echo "PHP executable not found for National Outreach COT generator" >&2
     generator_status=127
   fi
+  if [ "${NATIONALOUTREACH_ARCHIVE_ONLY_PREFLIGHT}" = "1" ]; then
+    /usr/local/bin/python3.13 "$mail_cycle_script" \
+      --creds-file "${NATIONALOUTREACH_CREDS_FILE:-/Users/werkstatt/ai_workspace/.private/mailboxes/nationaloutreach/credential.txt}" \
+      --workspace-root "${NATIONALOUTREACH_WORKSPACE_ROOT:-/Users/werkstatt/ai_workspace/nationaloutreach}" \
+      --state-dir "$state_dir" \
+      --limit 1 \
+      $archive_args \
+      --archive-only || generator_status=$?
+  fi
   /usr/local/bin/python3.13 "$mail_cycle_script" \
     --creds-file "${NATIONALOUTREACH_CREDS_FILE:-/Users/werkstatt/ai_workspace/.private/mailboxes/nationaloutreach/credential.txt}" \
     --workspace-root "${NATIONALOUTREACH_WORKSPACE_ROOT:-/Users/werkstatt/ai_workspace/nationaloutreach}" \
     --state-dir "$state_dir" \
     --limit "${NATIONALOUTREACH_LIMIT:-250}" \
-    $( [ "${NATIONALOUTREACH_ARCHIVE_REDUNDANT_OVERDUE_REPORTS}" = "1" ] && printf '%s' '--archive-redundant-overdue-reports' ) \
-    $( [ "${NATIONALOUTREACH_ARCHIVE_SELF_SENT_INBOX_COPIES}" = "1" ] && printf '%s' '--archive-self-sent-inbox-copies' ) \
-    $( [ "${NATIONALOUTREACH_ARCHIVE_REPLIED_INBOX}" = "1" ] && printf '%s' '--archive-replied-inbox' ) \
+    $archive_args \
     --send-approved
   last_status=$?
   if [ "$generator_status" -ne 0 ] && [ "$last_status" -eq 0 ]; then

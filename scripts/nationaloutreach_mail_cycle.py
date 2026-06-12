@@ -248,6 +248,11 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Archive INBOX items that already have a later reply from this mailbox or its approved aliases, excluding direct-owner instructions that still require explicit completion proof.",
     )
+    parser.add_argument(
+        "--archive-only",
+        action="store_true",
+        help="Run only the safe INBOX archive pass using existing active-inbox state, without fetching full message bodies first.",
+    )
     return parser.parse_args()
 
 
@@ -1205,7 +1210,7 @@ def archive_inbox_messages(
     live_active_records = {
         source_id: record
         for source_id, record in active_records.items()
-        if str(record.get("status") or "active_inbox") == "active_inbox"
+        if str(record.get("status") or "active_inbox") in {"active_inbox", "no_action_closed"}
     }
     if not live_active_records:
         return {"archived": 0, "skipped": 0, "subjects": [], "reasons": {}}
@@ -1236,6 +1241,12 @@ def archive_inbox_messages(
             continue
         subject = str(record.get("subject") or "")
         sender = sender_email(record.get("from") or "")
+        if str(record.get("status") or "") == "no_action_closed":
+            targets[source_id] = {"reason": "already_no_action_closed", "subject": subject}
+            continue
+        if str(record.get("resolved_at") or "").strip():
+            targets[source_id] = {"reason": "resolved_projection_residue", "subject": subject}
+            continue
         if archive_self_sent_inbox_copies and sender and sender in allowed_aliases:
             targets[source_id] = {"reason": "self_sent_inbox_copy", "subject": subject}
             continue
@@ -2155,6 +2166,34 @@ def main() -> int:
     state_dir.mkdir(parents=True, exist_ok=True)
     state_dir.chmod(0o700)
     creds = load_credentials(Path(args.creds_file).expanduser())
+    if args.archive_only:
+        archive_result = (
+            archive_inbox_messages(
+                creds,
+                state_dir,
+                load_active_inbox_db_first(state_dir, "nationaloutreach", state_dir / "active-inbox.json") if is_inbox_mailbox(args.mailbox) else {},
+                args.archive_redundant_overdue_reports,
+                args.archive_self_sent_inbox_copies,
+                args.archive_replied_inbox,
+            )
+            if is_inbox_mailbox(args.mailbox)
+            else {"archived": 0, "skipped": 0, "subjects": [], "reasons": {}}
+        )
+        summary = {
+            "ok": True,
+            "worker": "nationaloutreach",
+            "mailbox": args.mailbox,
+            "body_read": False,
+            "archive_only": True,
+            "archived_inbox_count": archive_result["archived"],
+            "archived_inbox_skipped": archive_result["skipped"],
+            "archived_inbox_reasons": archive_result["reasons"],
+            "archived_inbox_subjects": archive_result["subjects"],
+            "mailbox_mutation": bool(archive_result["archived"]),
+        }
+        append_jsonl(state_dir / "cycle-log.jsonl", {"logged_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"), **summary})
+        print(json.dumps(summary, ensure_ascii=True))
+        return 0
     review = fetch_messages(creds, state_dir, workspace_root, args.limit, args.mailbox, args.search, args.review_old)
     archive_result = (
         archive_inbox_messages(
