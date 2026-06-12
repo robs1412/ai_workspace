@@ -1,5 +1,20 @@
 # HANDOFF - venetia
 
+# 2026-06-10 Two New Venetia Outreach Options Sent / Climate Policy Radar Blocked
+
+Done at 2026-06-10 16:01 CDT after Robert approved the new-option outreach drafts in chat and instructed Asher and Venetia to send them.
+
+- Approved-send helper: `scripts/email_worker_header_poll.py --worker venetia --send-approved`.
+- Send result: `queued_sends_seen=2`, `queued_sends_sent=2`, `queued_sends_failed=0`.
+- Outbox remaining for this packet: `0`.
+- Recipients sent: `press@pippasmall.com`, `info@materialcultures.org`.
+- Subjects: `Ethical Jewellery, Craft, and The Cultivater`; `Bioregional Design: Material Cultures x The Cultivater`.
+- Message-IDs: `<178112530195.87362.4216039551012939932@thecultivater.com>`, `<178112530394.87362.7811638209347151694@thecultivater.com>`.
+- Sent-log proof: `venetia/sent-log.jsonl` rows logged at `2026-06-10T16:01:43-0500` and `2026-06-10T16:01:45-0500`.
+- Sent-folder proof: both rows record `sent_folder_appended=true` and `sent_folder=INBOX.Sent`.
+- Sonat Bcc proof: both rows record `bcc_count=1`.
+- Climate Policy Radar status: not sent. The verified public route is a collaborate/contact page, but no direct email address was found in the checked public and workspace sources. Next step is a human/browser form submission through `https://www.climatepolicyradar.org/collaborate` or an approved direct email address supplied by Sonat/Robert.
+
 # 2026-06-10 SUSMATA Q&A Response Sent After Robert Approval
 
 Done at 2026-06-10 15:31 CDT after Robert approved the revised SUSMATA Q&A response in chat and instructed Venetia to send it.

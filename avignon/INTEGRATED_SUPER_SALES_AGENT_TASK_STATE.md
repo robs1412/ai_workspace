@@ -5,6 +5,15 @@ Keep entries concise, dated, and decision-oriented. Record substantive
 conversations, calibration decisions, next actions, and approval gates here so
 the project state survives beyond chat.
 
+## 2026-06-10
+
+- Source: Robert task-mode chat asked to send Sonat the list of decisions needed to move the Integrated Super Sales Agent forward.
+- Topic: Sonat next-decision packet for Illinois execution.
+- What changed: Sent Sonat a concise next-action list covering approval for the five-account field-review packet, approval for contact-cleanup research, Binny's/local-chain treatment, and recommended execution order.
+- Outbound proof: Codex Local Agent sent `Integrated Super Sales Agent: decisions needed to move Illinois forward` to Sonat at `2026-06-10 18:09 CDT`, Message-ID `<178113297762.45012.14107824674434327833@kovaldistillery.com>`. Sent-folder header readback confirmed To `sonat@kovaldistillery.com`.
+- Remaining approval gates: wait for Sonat's decisions before external account emails, CRM/Portal updates, pricing/sample/allocation/account commitments, or chain/program outreach.
+- Note: The installed Avignon sender was not executable from this shell because an installed runtime import is admin-only. The message was sent transparently as a Codex coordination note carrying Avignon's next-action list.
+
 ## 2026-06-09
 
 - Source: Sonat direct-owner email, subject `Account list`, Message-ID `<CALbLtzzN6cRfQccuB_1xaKvTSnbVAATtMsqORPX2xZJyY=hRPQ@mail.gmail.com>`; AI Manager input `3017`; visible worker session `afc3565b`.

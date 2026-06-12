@@ -1,5 +1,19 @@
 # HANDOFF - asher
 
+## 2026-06-10 Three New Asher Outreach Options Sent After Robert Approval
+
+Done at 2026-06-10 16:01 CDT after Robert approved the new-option outreach drafts in chat and instructed Asher and Venetia to send them.
+
+- Approved-send helper: `scripts/email_worker_header_poll.py --worker asher --send-approved`.
+- Send result: `queued_sends_seen=3`, `queued_sends_sent=3`, `queued_sends_failed=0`.
+- Outbox remaining for this packet: `0`.
+- Recipients sent: `info@apricotlanefarms.com`, `press@jasperhillfarm.com`, `laura.behan@ballymaloehouse.com`.
+- Subjects: `Soil, Biodiversity, and The Cultivater`; `Cave Aging, Pasture, and The Cultivater`; `Ballymaloe, Place, and The Cultivater`.
+- Message-IDs: `<178112528668.87187.15211749406542744565@thecultivater.com>`, `<178112528884.87187.6215382107445111991@thecultivater.com>`, `<178112529085.87187.7800395514999651889@thecultivater.com>`.
+- Sent-log proof: `asher/sent-log.jsonl` rows logged at `2026-06-10T16:01:28-0500` through `2026-06-10T16:01:32-0500`.
+- Sent-folder proof: all rows record `sent_folder_appended=true` and `sent_folder=INBOX.Sent`.
+- Sonat Bcc proof: all rows record `bcc_count=1`.
+
 ## 2026-06-10 Karina St. Clair / Westcombe Q&A Response Sent After Robert Approval
 
 Done at 2026-06-10 15:47 CDT after Robert approved the revised Westcombe Q&A response in chat and instructed Asher to send it.

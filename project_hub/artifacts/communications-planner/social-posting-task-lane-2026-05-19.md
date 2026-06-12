@@ -43,6 +43,8 @@ Use these sources when drafting the social post packet:
 - Do not create a separate marketing persona unless the role boundary changes.
 - Do not route the lane through Vanessa unless the channel is truly outreach scheduling or the National Outreach mailbox route.
 - Keep the output short, readable, and approval-safe.
+- Public social approval requires copy, channel, and timing approval before publishing.
+- Do not treat Ezra as a blanket blocker for every social post. Ask Ezra for liquor legal issue-spotting when the alcohol, retailer/distributor/manufacturer, claim, tasting/sample/event-support, influencer/paid/boosted, state-specific, or other regulated-content question is not very simple or clear.
 - If the source packet is not ready, record one exact blocker instead of forcing a draft.
 
 ## Mirror Later
