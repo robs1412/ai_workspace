@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.koval.ai-box-backup-daily</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/usr/local/bin/python3.13</string>
+    <string>/Users/werkstatt/ai_workspace/scripts/run_ai_box_backup_daily_task.py</string>
+  </array>
+  <key>WorkingDirectory</key>
+  <string>/Users/werkstatt/ai_workspace</string>
+  <key>UserName</key>
+  <string>admin</string>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>HOME</key>
+    <string>/Users/admin</string>
+    <key>PATH</key>
+    <string>/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+  </dict>
+  <key>RunAtLoad</key>
+  <false/>
+  <key>StartCalendarInterval</key>
+  <dict>
+    <key>Hour</key>
+    <integer>7</integer>
+    <key>Minute</key>
+    <integer>35</integer>
+  </dict>
+  <key>StandardOutPath</key>
+  <string>/Users/werkstatt/ai_box_backups/launchd.out.log</string>
+  <key>StandardErrorPath</key>
+  <string>/Users/werkstatt/ai_box_backups/launchd.err.log</string>
+</dict>
+</plist>
