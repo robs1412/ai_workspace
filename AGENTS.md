@@ -30,6 +30,15 @@ This root file is intentionally compact. Do not preload long lane histories, han
 - Task-mode inputs that change direction, approve a blocker, add a durable workflow rule, or start substantive work must be mirrored through `scripts/ai_manager_chat_entry_adapter.php` with `--source-channel task-mode-chat` and the related Task Flow key when one exists.
 - If creating or updating an OPS/Portal/CRM record that needs owner visibility, use the product's normal notification route or the correct email-worker confirmation path, and include a live OPS/Portal URL or closest truthful live page. Do not use `/werkstatt` paths as owner-facing record links.
 
+## CLI Owner Identity
+
+- Browser Workspaceboard sessions use the authenticated OPS/Portal user context. Raw CLI sessions do not. Do not infer the human owner from `USER`, `LOGNAME`, cwd, SSH host, or the shared `/Users/werkstatt` path.
+- If `CODEX_OWNER_USER_ID=3` and `CODEX_OWNER_LABEL=Sonat` are present, treat the CLI session as AI Manager Sonat immediately, load `worker_roles/ai-manager-sonat-startup.md`, reply exactly `READY AI Manager Sonat.`, and keep the session as a control lane that routes substantive work to visible workers.
+- If `CODEX_OWNER_USER_ID=1` and `CODEX_OWNER_LABEL=Robert` are present, treat the CLI session as Robert-owned.
+- If a raw CLI session asks for owner-specific AI Manager or routing work and no explicit owner marker is present, ask who is operating before routing, emailing, approving, or recording owner-facing work.
+- Preferred Sonat CLI command: `sonatcodex`, backed by `/Users/werkstatt/ai_workspace/scripts/sonatcodex`.
+- If Sonat uses the manual path `ssh -> ws ai -> codex`, her interactive shell must source `/Users/werkstatt/ai_workspace/scripts/cli_owner_shell.sh` and set the owner marker before Codex starts. The supported SSH-token wrapper is `/Users/werkstatt/ai_workspace/scripts/ssh_owner_login.sh sonat`; it sets the non-secret owner marker, and the sourced shell shim injects the owner prompt when she runs plain `codex`.
+
 ## Thin Startup
 
 - For generic `ai_workspace` task-mode terminals, read only this file and `docs/task-mode-startup.md` before opening task-specific files.
