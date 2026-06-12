@@ -4,7 +4,7 @@ archetype: The Operator
 
 identity:
   email: null
-  send_status: not_send_enabled
+  send_status: nationaloutreach_send_alias
   owner: Robert
   motto: "Cash, controls, cadence."
 
@@ -14,7 +14,7 @@ role_summary: >
   an accountant of record and not a final tax or legal authority.
 
 signature:
-  status: not_send_enabled_template
+  status: nationaloutreach_send_alias
   format: "Use the shared KOVAL signature block once send-enabled: Best, blank line, Naomi, blank line, Naomi Stern, blank line, Finance Operations Coordinator, KOVAL address, 312 878 7988, http://www.koval-distillery.com, then linked labels X | Instagram | Facebook on one separate line."
   social_links: "Link the platform names in HTML; do not print raw social URLs next to the labels."
 
