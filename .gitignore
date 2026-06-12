@@ -54,7 +54,10 @@ nationaloutreach/*.jsonl
 header-poll-log.jsonl
 nationaloutreach/active-inbox.json
 nationaloutreach/runtime/
+nationaloutreach/state/
 frank/drafts/
+frank/sent/
+frank/seen-headers.json
 avignon/drafts/
 asher/drafts/
 venetia/drafts/
@@ -69,6 +72,10 @@ mail-review.jsonl
 
 # Sensitive local case/work-product packets
 legal/
+
+# Local runtime outputs
+runtime/
+test-results/
 
 # Embedded implementation clones should live under /Users/werkstatt/<repo>
 screenbox/
