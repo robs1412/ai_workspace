@@ -89,6 +89,7 @@ DEFAULT_RECURSIVE_PROPOSAL_EXECUTOR = Path("/Users/werkstatt/ai_workspace/script
 DEFAULT_CLAUDE_PLANNER_PROOF_CHECK = Path("/Users/werkstatt/ai_workspace/scripts/claude_planner_proof_check.py")
 DEFAULT_SERVER_HEALTH_AUTO_RUNNER = Path("/Users/werkstatt/ai_workspace/scripts/server_health_auto_runner.py")
 DEFAULT_HR_ELIGIBILITY_WEEKLY_REPORT = Path("/Users/werkstatt/ai_workspace/scripts/hr_eligibility_weekly_report.py")
+DEFAULT_ALLIANZ_STOP_SHIP_WEEKLY_REPORT = Path("/Users/werkstatt/ai_workspace/scripts/allianz_stop_ship_weekly_report.py")
 DEFAULT_OPS_AI_WORKER_BRIDGE_STATE = Path("/Users/werkstatt/ops/tmp/ops_ai_worker_runner_bridge_state.json")
 DEFAULT_TASK_FLOW_FOLLOWTHROUGH_INTERVAL_SECONDS = 60
 REQUIRED_MAILBOX_MONITORS = (
@@ -3100,18 +3101,26 @@ def session_sprawl_governor(args: argparse.Namespace, classification: dict, mana
             "non_standing_open": non_standing_open,
             "last_run_at": governor_state.get("last_run_at", ""),
         }
+    issue_ids = {safe_text(issue.get("id"), 120) for issue in management_health.get("issues", []) if isinstance(issue, dict)}
+    memory_pressure = "server-health-memory" in issue_ids
     candidate_ids = []
-    for bucket in (
+    candidate_buckets = (
         "review_ready_sessions",
         "stale_waiting_sessions",
         "stale_working_sessions",
-        "active_waiting_sessions",
-    ):
+    )
+    skipped_candidate_count = 0
+    for bucket in candidate_buckets:
         for item in classification.get(bucket, []):
             session_id = safe_text(item.get("id"), 80)
             if session_id:
                 candidate_ids.append(session_id)
     candidate_ids = list(dict.fromkeys(candidate_ids))
+    if memory_pressure and len(candidate_ids) > 1:
+        skipped_candidate_count += len(candidate_ids) - 1
+        candidate_ids = candidate_ids[:1]
+    if memory_pressure:
+        skipped_candidate_count += len(classification.get("active_waiting_sessions", []))
     if non_standing_open <= args.max_non_standing_open and not candidate_ids:
         return {
             "status": "checked",
@@ -3120,8 +3129,7 @@ def session_sprawl_governor(args: argparse.Namespace, classification: dict, mana
             "non_standing_open": non_standing_open,
             "candidate_count": 0,
         }
-    issue_ids = {safe_text(issue.get("id"), 120) for issue in management_health.get("issues", []) if isinstance(issue, dict)}
-    max_batch_size = 2 if "server-health-memory" in issue_ids else 4
+    max_batch_size = 1 if memory_pressure else 4
     batch_size = max(1, min(int(args.session_sprawl_governor_batch_size), max_batch_size))
     changed = 0
     actions: list[dict] = []
@@ -3165,6 +3173,7 @@ def session_sprawl_governor(args: argparse.Namespace, classification: dict, mana
         "changed": changed,
         "non_standing_open": non_standing_open,
         "candidate_count": len(candidate_ids),
+        "skipped_candidate_count": skipped_candidate_count,
         "batch_size": batch_size,
         "batches": batches,
         "candidate_ids": candidate_ids,
@@ -3582,6 +3591,65 @@ def hr_eligibility_weekly_report_check(args: argparse.Namespace) -> dict:
     }
 
 
+def allianz_stop_ship_weekly_report_check(args: argparse.Namespace) -> dict:
+    if not args.enable_allianz_stop_ship_weekly_report:
+        return {"status": "disabled", "action": "none", "sent": False}
+    script = Path(args.allianz_stop_ship_weekly_report_script)
+    if not script.exists():
+        return {"status": "missing", "action": "blocked", "sent": False, "reason": f"{script} does not exist"}
+    command = [
+        "/usr/local/bin/python3.13",
+        str(script),
+        "--print-json",
+    ]
+    if args.dry_run:
+        command.append("--dry-run")
+    try:
+        proc = subprocess.run(
+            command,
+            cwd=Path("/Users/werkstatt/ai_workspace"),
+            capture_output=True,
+            text=True,
+            check=False,
+            timeout=max(10, int(args.allianz_stop_ship_weekly_report_timeout_seconds)),
+        )
+    except Exception as error:  # noqa: BLE001 - report the blocker inside health output.
+        return {"status": "failed", "action": "blocked", "sent": False, "reason": safe_text(str(error), 240)}
+    try:
+        payload = json.loads(proc.stdout or "{}")
+    except json.JSONDecodeError:
+        payload = {}
+    if not isinstance(payload, dict):
+        payload = {}
+    sent = bool(payload.get("sent"))
+    task_due = bool(payload.get("task_due"))
+    if proc.returncode != 0:
+        status = "failed"
+        action = "blocked"
+    elif sent:
+        status = "sent"
+        action = "emailed"
+    elif task_due and args.dry_run:
+        status = "dry-run-due"
+        action = "would-email"
+    else:
+        status = "checked"
+        action = safe_text(payload.get("skipped_reason") or "not_due", 80)
+    return {
+        "status": status,
+        "action": action,
+        "returncode": proc.returncode,
+        "sent": sent,
+        "task_id": int(payload.get("task_id") or 0),
+        "task_due": task_due,
+        "task_due_date": safe_text(payload.get("task_due_date"), 40),
+        "stop_ship_count": int(payload.get("stop_ship_count") or 0),
+        "advanced_to": safe_text(payload.get("advanced_to"), 40),
+        "message_id": safe_text(payload.get("message_id"), 160),
+        "reason": safe_text(proc.stderr or payload.get("skipped_reason") or "", 240),
+    }
+
+
 def canonical_status_line(report: dict) -> str:
     board = "board ok" if report.get("board", {}).get("ok") else "board down"
     management = report.get("management_health", {})
@@ -3601,12 +3669,14 @@ def canonical_status_line(report: dict) -> str:
     fanout_guard = report.get("task_flow_fanout_guard", {})
     server_health = report.get("server_health_check", {})
     hr_report = report.get("hr_eligibility_weekly_report", {})
+    allianz_report = report.get("allianz_stop_ship_weekly_report", {})
     parts = [
         board,
         f"{management.get('non_standing_open_count', 0)} open work sessions",
         f"server memory {server_health.get('memory_used_percent', 0)}%",
         f"Codex RSS {server_health.get('codex_rss_mb', 0)} MB/{server_health.get('codex_process_count', 0)} procs",
         f"HR eligibility {hr_report.get('status', 'not-recorded')} due {hr_report.get('task_due_date', '')}",
+        f"Allianz stop-ship {allianz_report.get('status', 'not-recorded')} due {allianz_report.get('task_due_date', '')}",
         f"{tmux_orphans.get('orphan_count', 0)} host tmux orphans",
         f"{token_usage.get('session_file_count', 0)} Codex session files/{token_usage.get('session_mb', 0)} MB in {token_usage.get('window_hours', 0)}h",
         f"fanout guard {fanout_guard.get('action', 'none')} blocked {fanout_guard.get('blocked', 0)}",
@@ -4335,6 +4405,7 @@ def write_markdown(path: Path, report: dict) -> None:
         f"- task_flow_fanout_guard: `{report.get('task_flow_fanout_guard', {}).get('status', 'not-recorded')}` / action `{report.get('task_flow_fanout_guard', {}).get('action', 'none')}` / blocked `{report.get('task_flow_fanout_guard', {}).get('blocked', 0)}`",
         f"- server_health: `{report.get('server_health_check', {}).get('status', 'not-recorded')}` / memory `{report.get('server_health_check', {}).get('memory_used_percent', 0)}%` / codex_rss `{report.get('server_health_check', {}).get('codex_rss_mb', 0)} MB` / codex_processes `{report.get('server_health_check', {}).get('codex_process_count', 0)}`",
         f"- hr_eligibility_weekly_report: `{report.get('hr_eligibility_weekly_report', {}).get('status', 'not-recorded')}` / due_date `{report.get('hr_eligibility_weekly_report', {}).get('task_due_date', '')}` / eligible `{report.get('hr_eligibility_weekly_report', {}).get('eligible_count', 0)}` / sent `{report.get('hr_eligibility_weekly_report', {}).get('sent', False)}`",
+        f"- allianz_stop_ship_weekly_report: `{report.get('allianz_stop_ship_weekly_report', {}).get('status', 'not-recorded')}` / due_date `{report.get('allianz_stop_ship_weekly_report', {}).get('task_due_date', '')}` / stop_ship `{report.get('allianz_stop_ship_weekly_report', {}).get('stop_ship_count', 0)}` / sent `{report.get('allianz_stop_ship_weekly_report', {}).get('sent', False)}`",
         f"- session_sprawl_governor: `{report.get('session_sprawl_governor', {}).get('status', 'not-recorded')}` / action `{report.get('session_sprawl_governor', {}).get('action', 'none')}` / changed `{report.get('session_sprawl_governor', {}).get('changed', 0)}`",
         "",
         "## Session Counts",
@@ -4856,6 +4927,7 @@ def build_report(args: argparse.Namespace) -> dict:
     fanout_guard = task_flow_fanout_guard_check(args)
     server_health = server_health_check(args)
     hr_eligibility_report = hr_eligibility_weekly_report_check(args)
+    allianz_stop_ship_report = allianz_stop_ship_weekly_report_check(args)
     if int(host_tmux_orphans.get("orphan_count") or 0) > int(host_tmux_orphans.get("threshold") or 0):
         management_health.setdefault("issues", []).append({
             "id": "host-tmux-orphans",
@@ -4992,6 +5064,7 @@ def build_report(args: argparse.Namespace) -> dict:
         "task_flow_fanout_guard": fanout_guard,
         "server_health_check": server_health,
         "hr_eligibility_weekly_report": hr_eligibility_report,
+        "allianz_stop_ship_weekly_report": allianz_stop_ship_report,
         "read_model_drift": read_model_drift,
         "ops_bridge_pickup_staleness": ops_bridge_pickup_staleness,
         "session_sprawl_governor": sprawl_governor,
@@ -5559,6 +5632,25 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
         default=int(os.environ.get("AI_HEALTH_HR_ELIGIBILITY_WEEKLY_REPORT_TIMEOUT_SECONDS", 60)),
     )
     parser.add_argument(
+        "--disable-allianz-stop-ship-weekly-report",
+        dest="enable_allianz_stop_ship_weekly_report",
+        action="store_false",
+        default=os.environ.get("AI_HEALTH_ENABLE_ALLIANZ_STOP_SHIP_WEEKLY_REPORT", "1") != "0",
+        help="disable due-date-aware Allianz covered-account stop-ship weekly report runner",
+    )
+    parser.add_argument(
+        "--allianz-stop-ship-weekly-report-script",
+        default=os.environ.get(
+            "AI_HEALTH_ALLIANZ_STOP_SHIP_WEEKLY_REPORT_SCRIPT",
+            str(DEFAULT_ALLIANZ_STOP_SHIP_WEEKLY_REPORT),
+        ),
+    )
+    parser.add_argument(
+        "--allianz-stop-ship-weekly-report-timeout-seconds",
+        type=int,
+        default=int(os.environ.get("AI_HEALTH_ALLIANZ_STOP_SHIP_WEEKLY_REPORT_TIMEOUT_SECONDS", 90)),
+    )
+    parser.add_argument(
         "--disable-session-sprawl-governor",
         dest="enable_session_sprawl_governor",
         action="store_false",
@@ -5592,8 +5684,8 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     parser.add_argument(
         "--enable-host-tmux-orphan-cleanup",
         action="store_true",
-        default=os.environ.get("AI_HEALTH_ENABLE_HOST_TMUX_ORPHAN_CLEANUP", "0") == "1",
-        help="kill unmanaged codex-board tmux sessions in bounded batches; off by default",
+        default=os.environ.get("AI_HEALTH_ENABLE_HOST_TMUX_ORPHAN_CLEANUP", "1") != "0",
+        help="kill unmanaged codex-board tmux sessions in bounded batches; enabled by default unless AI_HEALTH_ENABLE_HOST_TMUX_ORPHAN_CLEANUP=0",
     )
     parser.add_argument(
         "--host-tmux-orphan-cleanup-batch-size",

@@ -170,7 +170,7 @@ def recommended_action(status: str, issues: list[dict[str, Any]]) -> str:
     if "large-processes" in issue_ids:
         return "reuse existing Codex sessions and close proof-backed stale wrappers before launching more workers"
     if "dirty-repositories" in issue_ids:
-        return "route repo hygiene through Code/Git Manager; do not auto-commit without approval"
+        return "route repo hygiene through Code/Git Manager for approval-gated commit/push closeout; preserve untracked code and do not auto-commit without preflight"
     return "record attention state and route one bounded health follow-up"
 
 

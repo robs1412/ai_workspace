@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import html
 import json
 import os
 import shutil
@@ -1064,6 +1065,209 @@ def notify_robert(send_helper: Path, state_dir: Path, items: list[dict]) -> dict
     }
 
 
+def fetch_ops_tasks_overdue_24h(limit: int = 75) -> list[dict]:
+    php_code = r'''
+require_once "/Users/werkstatt/ops/bootstrap.php";
+$pdo = get_event_pdo();
+$sql = "
+SELECT
+  a.activityid AS task_id,
+  COALESCE(a.subject, '') AS subject,
+  COALESCE(a.status, '') AS status,
+  COALESCE(a.priority, '') AS priority,
+  a.due_date,
+  COALESCE(a.time_start, '') AS time_start,
+  COALESCE(a.time_end, '') AS time_end,
+  COALESCE(a.recurringtype, '') AS recurringtype,
+  TIMESTAMP(a.due_date, COALESCE(NULLIF(a.time_end, ''), NULLIF(a.time_start, ''), '23:59:59')) AS due_at,
+  COALESCE(CONCAT(owner.first_name, ' ', owner.last_name), owner.user_name, '') AS owner_name,
+  GROUP_CONCAT(
+    DISTINCT COALESCE(NULLIF(CONCAT(TRIM(COALESCE(u.first_name, '')), ' ', TRIM(COALESCE(u.last_name, ''))), ' '), u.user_name, g.groupname, CAST(a2.user_id AS CHAR))
+    ORDER BY COALESCE(u.last_name, g.groupname, CAST(a2.user_id AS CHAR)) SEPARATOR ', '
+  ) AS assignees
+FROM koval_crm.vtiger_activity a
+JOIN koval_crm.vtiger_crmentity ce ON ce.crmid = a.activityid AND ce.deleted = 0
+LEFT JOIN koval_crm.vtiger_users owner ON owner.id = ce.smownerid
+LEFT JOIN koval_crm.activity2user a2 ON a2.activity_id = a.activityid
+LEFT JOIN koval_crm.vtiger_users u ON u.id = a2.user_id
+LEFT JOIN koval_crm.vtiger_groups g ON g.groupid = a2.user_id
+WHERE a.activitytype = 'Task'
+  AND a.due_date IS NOT NULL
+  AND a.due_date <> ''
+  AND a.due_date <> '0000-00-00'
+  AND COALESCE(a.sendnotification, 0) = 1
+  AND COALESCE(a.status, '') NOT IN ('Completed', 'Cancelled', 'Canceled')
+GROUP BY a.activityid, a.subject, a.status, a.priority, a.due_date, a.time_start, a.time_end, a.recurringtype, owner.first_name, owner.last_name, owner.user_name
+HAVING due_at <= DATE_SUB(NOW(), INTERVAL 24 HOUR)
+   AND due_at > DATE_SUB(NOW(), INTERVAL 48 HOUR)
+ORDER BY due_at ASC, a.activityid ASC
+LIMIT " . (int)$argv[1];
+$rows = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC) ?: [];
+echo json_encode(["ok" => true, "items" => $rows], JSON_UNESCAPED_SLASHES);
+'''
+    result = subprocess.run(
+        [resolve_php(), "-r", php_code, str(max(1, limit))],
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        timeout=30,
+    )
+    if result.returncode != 0:
+        return []
+    try:
+        payload = json.loads(result.stdout)
+    except json.JSONDecodeError:
+        return []
+    items = payload.get("items")
+    return items if isinstance(items, list) else []
+
+
+def ops_overdue_alert_key(item: dict) -> str:
+    return f"{item.get('task_id') or ''}|{item.get('due_at') or item.get('due_date') or ''}"
+
+
+def load_ops_overdue_alert_state(path: Path) -> dict:
+    if not path.is_file():
+        return {"alerted": {}}
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return {"alerted": {}}
+    if not isinstance(payload, dict):
+        return {"alerted": {}}
+    alerted = payload.get("alerted")
+    if not isinstance(alerted, dict):
+        payload["alerted"] = {}
+    return payload
+
+
+def write_ops_overdue_alert_state(path: Path, state: dict) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(state, ensure_ascii=True, indent=2) + "\n", encoding="utf-8")
+    path.chmod(0o600)
+
+
+def render_ops_overdue_alert_html(path: Path, items: list[dict], new_keys: set[str]) -> None:
+    rows = []
+    for item in items:
+        task_id = html.escape(str(item.get("task_id") or ""))
+        subject = html.escape(str(item.get("subject") or "(no subject)"))
+        status = html.escape(str(item.get("status") or ""))
+        priority = html.escape(str(item.get("priority") or ""))
+        due_at = html.escape(str(item.get("due_at") or item.get("due_date") or ""))
+        assignees = html.escape(str(item.get("assignees") or item.get("owner_name") or ""))
+        recurring = html.escape(str(item.get("recurringtype") or ""))
+        is_new = ops_overdue_alert_key(item) in new_keys
+        rows.append(
+            "<tr>"
+            f"<td>{'New' if is_new else ''}</td>"
+            f"<td><a href=\"https://www.koval-distillery.com/ops/projects/task.php?id={task_id}\">{task_id}</a></td>"
+            f"<td>{subject}</td>"
+            f"<td>{status}</td>"
+            f"<td>{priority}</td>"
+            f"<td>{due_at}</td>"
+            f"<td>{assignees}</td>"
+            f"<td>{recurring}</td>"
+            "</tr>"
+        )
+    body = f"""<!doctype html>
+<html>
+<body style="font-family:Arial,sans-serif;color:#111827;">
+  <p>Hi Robert,</p>
+  <p>The OPS tasks below crossed the 24-hour overdue threshold. Newly alertable rows are marked <strong>New</strong>.</p>
+  <table style="border-collapse:collapse;width:100%;font-size:13px;">
+    <thead>
+      <tr>
+        <th style="text-align:left;border-bottom:1px solid #d1d5db;padding:6px;">Flag</th>
+        <th style="text-align:left;border-bottom:1px solid #d1d5db;padding:6px;">Task</th>
+        <th style="text-align:left;border-bottom:1px solid #d1d5db;padding:6px;">Subject</th>
+        <th style="text-align:left;border-bottom:1px solid #d1d5db;padding:6px;">Status</th>
+        <th style="text-align:left;border-bottom:1px solid #d1d5db;padding:6px;">Priority</th>
+        <th style="text-align:left;border-bottom:1px solid #d1d5db;padding:6px;">Due</th>
+        <th style="text-align:left;border-bottom:1px solid #d1d5db;padding:6px;">Assignee</th>
+        <th style="text-align:left;border-bottom:1px solid #d1d5db;padding:6px;">Recurring</th>
+      </tr>
+    </thead>
+    <tbody>
+      {''.join(rows)}
+    </tbody>
+  </table>
+  <p style="color:#6b7280;font-size:12px;">Generated by the Task Flow due runner for notification-enabled OPS tasks in the 24-to-48-hour overdue window.</p>
+</body>
+</html>
+"""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(body, encoding="utf-8")
+    path.chmod(0o600)
+
+
+def notify_robert_ops_overdue(send_helper: Path, state_dir: Path, *, dry_run: bool) -> dict:
+    items = fetch_ops_tasks_overdue_24h()
+    if not items:
+        return {"sent": False, "reason": "no_ops_tasks_overdue_24h", "count": 0}
+    state_path = state_dir / "ops-overdue-24h-alert-state.json"
+    state = load_ops_overdue_alert_state(state_path)
+    alerted = state.get("alerted", {})
+    new_keys = {ops_overdue_alert_key(item) for item in items if ops_overdue_alert_key(item) not in alerted}
+    if not new_keys:
+        return {"sent": False, "reason": "no_new_ops_overdue_24h_tasks", "count": len(items)}
+    html_path = state_dir / f"ops-overdue-24h-alert-{int(time.time())}.html"
+    render_ops_overdue_alert_html(html_path, items, new_keys)
+    subject = f"OPS overdue task alert: {len(new_keys)} new / {len(items)} total 24h+ overdue"
+    task_id = f"ops-overdue-24h-alert-{time.strftime('%Y-%m-%d-%H%M%S')}"
+    command = [
+        sys.executable,
+        str(send_helper),
+        "--assistant",
+        "frank",
+        "--to",
+        ROBERT_EMAIL,
+        "--subject",
+        subject,
+        "--html-body-file",
+        str(html_path),
+        "--task-id",
+        task_id,
+        "--no-signature",
+    ]
+    if dry_run:
+        command.append("--dry-run")
+    result = subprocess.run(
+        command,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        timeout=60,
+    )
+    sent = result.returncode == 0
+    if sent and not dry_run:
+        now = time.strftime("%Y-%m-%dT%H:%M:%S%z")
+        for item in items:
+            key = ops_overdue_alert_key(item)
+            if key in new_keys:
+                alerted[key] = {
+                    "alerted_at": now,
+                    "task_id": item.get("task_id"),
+                    "due_at": item.get("due_at"),
+                    "subject": item.get("subject"),
+                }
+        state["alerted"] = alerted
+        state["last_sent_at"] = now
+        state["last_sent_count"] = len(items)
+        state["last_new_count"] = len(new_keys)
+        write_ops_overdue_alert_state(state_path, state)
+    return {
+        "sent": sent,
+        "dry_run": dry_run,
+        "count": len(items),
+        "new_count": len(new_keys),
+        "task_id": task_id,
+        "body_path": str(html_path),
+        "stdout": result.stdout.strip()[-2000:],
+        "stderr": result.stderr.strip()[-2000:],
+    }
+
+
 def write_dmytro_gcp_admin_reminder(path: Path) -> None:
     lines = [
         "Hi Dmytro,",
@@ -1201,6 +1405,8 @@ def main() -> int:
     parser.add_argument("--run-watchdog", action="store_true", default=True)
     parser.add_argument("--no-watchdog", action="store_false", dest="run_watchdog")
     parser.add_argument("--notify-robert", action="store_true")
+    parser.add_argument("--ops-overdue-alert", action="store_true", default=True)
+    parser.add_argument("--no-ops-overdue-alert", action="store_false", dest="ops_overdue_alert")
     parser.add_argument("--route-worker", action="store_true", default=True)
     parser.add_argument("--no-route-worker", action="store_false", dest="route_worker")
     parser.add_argument("--limit", type=int, default=100)
@@ -1303,6 +1509,10 @@ def main() -> int:
     if args.notify_robert and not args.dry_run:
         notification = notify_robert(Path(args.send_helper), state_dir, new_items)
 
+    ops_overdue_notification = {"sent": False, "reason": "disabled"}
+    if args.notify_robert and args.ops_overdue_alert:
+        ops_overdue_notification = notify_robert_ops_overdue(Path(args.send_helper), state_dir, dry_run=args.dry_run)
+
     watchdog = {"ok": True, "skipped": True, "reason": "disabled"}
     if args.run_watchdog:
         watchdog = run_automation_watchdog(Path(args.watchdog), dry_run=args.dry_run)
@@ -1325,6 +1535,7 @@ def main() -> int:
         },
         "watchdog": watchdog,
         "notification": notification,
+        "ops_overdue_notification": ops_overdue_notification,
         "dry_run": bool(args.dry_run),
         "items": items,
     }
