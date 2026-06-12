@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import smtplib
 import ssl
 import sys
@@ -14,6 +15,7 @@ from pathlib import Path
 
 DEFAULT_FROM = "codex@kovaldistillery.com"
 DEFAULT_FROM_NAME = "Codex Local Agent"
+DEFAULT_CREDS_FILE = "/Users/werkstatt/ai_workspace/.private/mailboxes/nationaloutreach/credential.txt"
 FORBIDDEN_FROM = {
     "nationaloutreach@kovaldistillery.com",
     "nationoutreach@kovaldistillery.com",
@@ -23,7 +25,11 @@ FORBIDDEN_FROM = {
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Send a plain-text Codex ops email.")
-    parser.add_argument("--creds-file", required=True, help="Credential file with User and App password.")
+    parser.add_argument(
+        "--creds-file",
+        default=os.environ.get("CODEX_OPS_EMAIL_CREDS_FILE", DEFAULT_CREDS_FILE),
+        help="Credential file with User and App password.",
+    )
     parser.add_argument("--to", action="append", required=True, help="Recipient email. Can be repeated or comma-separated.")
     parser.add_argument("--cc", action="append", default=[], help="CC recipient email. Can be repeated or comma-separated.")
     parser.add_argument("--bcc", action="append", default=[], help="BCC recipient email. Can be repeated or comma-separated.")

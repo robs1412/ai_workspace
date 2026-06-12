@@ -8,6 +8,7 @@ const DEFAULT_STATE_DIR = '/Users/admin/.nationaloutreach-launch/state';
 const MARIANOS_CANCEL_TO = 'abseventrequest@abstastings.com';
 const MARIANOS_CANCEL_CC = 'rafael@abstastings.com';
 const BINNYS_CANCEL_TO = 'rpaquin@binnys.com';
+const ROBERT_APPROVAL_TO = ['robert@kovaldistillery.com'];
 const CALL_REMINDER_TO = ['robert@kovaldistillery.com', 'sonat@kovaldistillery.com'];
 
 function arg_value(array $argv, string $name, ?string $default = null): ?string
@@ -265,6 +266,88 @@ function build_cancel_payload(array $event, array $shiftSummary, string $actionI
     ];
 }
 
+function build_external_cancellation_approval_payload(array $event, array $shiftSummary, string $actionId, DateTimeImmutable $now, string $reason, array $rule): array
+{
+    $eventId = (int) ($event['id'] ?? 0);
+    $eventName = trim((string) ($event['event_name'] ?? 'tasting'));
+    $eventDate = (string) ($event['event_date'] ?? '');
+    $start = event_start_datetime($event, new DateTimeZone('America/Chicago'));
+    $dateLabel = $start ? $start->format('l, F j, Y') : $eventDate;
+    $timeLabel = format_time_label((string) ($event['start_time'] ?? ''), (string) ($event['end_time'] ?? ''));
+    $location = trim((string) ($event['event_location'] ?? ''));
+    $shiftIds = array_values(array_filter(array_map('intval', $shiftSummary['shift_ids'] ?? [])));
+    $opsTask = 'OPS event ' . $eventId . ($shiftIds ? ' / TrackTime shift ' . implode(',', $shiftIds) : '');
+    $accountLabel = (string) ($rule['label'] ?? 'tasting account');
+    $approvalToken = 'APPROVE ' . strtoupper((string) ($rule['key'] ?? 'tasting')) . ' CANCEL OPS ' . $eventId;
+
+    $externalTo = implode(', ', array_values($rule['to'] ?? []));
+    $externalCc = implode(', ', array_values($rule['cc'] ?? []));
+    $subject = 'Approval needed: cancel ' . $accountLabel . ' tasting OPS ' . $eventId;
+
+    $body = [
+        'Hi Robert,',
+        '',
+        'This ' . $accountLabel . ' tasting is currently uncovered and is eligible for the approved cancellation path:',
+        '',
+        'Event: ' . $eventName,
+        'Date/time: ' . $dateLabel . ($timeLabel !== '' ? ', ' . $timeLabel : ''),
+        'Location: ' . ($location !== '' ? $location : 'not listed'),
+        'OPS reference: ' . $opsTask,
+        'Coverage: ' . (int) ($shiftSummary['assigned_shifts'] ?? 0) . ' assigned active shifts out of ' . (int) ($shiftSummary['total_shifts'] ?? 0),
+        'Reason: ' . $reason,
+        '',
+        'Cancellation recipient if approved: ' . ($externalTo !== '' ? $externalTo : 'not configured'),
+        $externalCc !== '' ? 'CC if approved: ' . $externalCc : '',
+        '',
+        'Reply with exactly this line if you want Vanessa to send the cancellation:',
+        $approvalToken,
+        '',
+        'No external cancellation email has been sent yet.',
+        '',
+        'Vanessa',
+    ];
+    $body = array_values(array_filter($body, static fn(string $line): bool => $line !== ''));
+
+    return [
+        'from' => 'vanessa.sterling@kovaldistillery.com',
+        'from_name' => 'Vanessa Sterling',
+        'to' => ROBERT_APPROVAL_TO,
+        'cc' => [],
+        'subject' => $subject,
+        'body' => implode("\n", $body),
+        'source_ref' => $actionId,
+        'requester' => 'OPS Outreach cancellation fallback',
+        'owner_lane' => 'outreach-coordinator',
+        'responsible_worker_or_persona' => 'vanessa.sterling@kovaldistillery.com',
+        'approval_gates' => 'Internal Robert approval email only; no external cancellation email until Robert replies with the exact approval token.',
+        'verification_readback' => 'Queued Robert approval prompt for uncovered ' . $accountLabel . ' cancellation.',
+        'task_packet' => [
+            'source_ref' => $actionId,
+            'dedupe_key' => 'taskflow-' . $actionId,
+            'intake_channel' => 'scheduled-action:nationaloutreach',
+            'requester' => 'OPS Outreach cancellation fallback',
+            'owner_lane' => 'outreach-coordinator',
+            'responsible_worker_or_persona' => 'vanessa.sterling@kovaldistillery.com',
+            'ops_portal_or_domain_task' => $opsTask,
+            'status' => 'waiting',
+            'due_or_trigger' => $now->format('Y-m-d H:i:s T'),
+            'scheduled_action' => $actionId,
+            'calendar_event' => 'https://www.koval-distillery.com/ops/index.php?view=outreach_detail&id=' . $eventId,
+            'approval_gates' => 'Robert must approve before Vanessa sends the external ' . $accountLabel . ' cancellation.',
+            'verification_readback' => 'Approval prompt queued for Robert; external recipient remains unsent.',
+            'next_update' => 'Wait for exact approval token: ' . $approvalToken,
+            'requested_deliverable' => 'Approve or decline ' . $accountLabel . ' cancellation because fallback condition was met: ' . $reason . '.',
+            'human_owner_or_recipient' => 'Robert Birnecker <robert@kovaldistillery.com>',
+            'output_channel' => 'email',
+            'proof_required' => 'approval prompt sent Message-ID, then external cancellation sent Message-ID after approval',
+            'owner_question_required' => 'true',
+            'approval_token' => $approvalToken,
+            'external_cancel_to' => $rule['to'] ?? [],
+            'external_cancel_cc' => $rule['cc'] ?? [],
+        ],
+    ];
+}
+
 function build_call_reminder_payload(array $event, array $shiftSummary, string $actionId, DateTimeImmutable $now, string $reason, array $rule): array
 {
     $eventId = (int) ($event['id'] ?? 0);
@@ -401,6 +484,21 @@ $skipped = 0;
 foreach ($events as $event) {
     $id = (int) ($event['id'] ?? 0);
     $name = trim((string) ($event['event_name'] ?? ''));
+    $existingNotes = (string) ($event['notes'] ?? '') . "\n" . (string) ($event['important_information'] ?? '');
+    if (stripos($name, 'CANCELED - ') === 0 || str_contains($existingNotes, '[wfm-canceled:')) {
+        $result = [
+            'event_id' => $id,
+            'event_name' => $name,
+            'event_start' => null,
+            'total_shifts' => 0,
+            'assigned_shifts' => 0,
+            'shift_ids' => [],
+            'status' => 'skipped_already_canceled',
+        ];
+        $skipped++;
+        $results[] = $result;
+        continue;
+    }
     $start = event_start_datetime($event, $tz);
     $links = $linksByEvent[$id] ?? [];
     $summary = summarize_event_shift_links($links);
@@ -492,9 +590,10 @@ foreach ($events as $event) {
 
     $eligible++;
     if ($queueApproved) {
-        $payload = build_cancel_payload($event, $summary, $actionId, $now, $reason, $rule);
-        $draftPath = queue_payload($stateDir, $payload, $actionId, $id, 'queued_approved_cancellation_fallback');
-        $result['status'] = 'queued_approved';
+        $payload = build_external_cancellation_approval_payload($event, $summary, $actionId, $now, $reason, $rule);
+        $draftPath = queue_payload($stateDir, $payload, $actionId, $id, 'queued_owner_approval_for_cancellation');
+        $result['status'] = 'queued_owner_approval';
+        $result['approval_token'] = (string) (($payload['task_packet'] ?? [])['approval_token'] ?? '');
         $result['draft'] = $draftPath;
         $queued++;
     } else {

@@ -64,6 +64,10 @@ DEFAULT_BCC_BY_WORKER: dict[str, list[str]] = {
     "venetia": ["sonat@kovaldistillery.com"],
 }
 
+SONAT_EMAIL = "sonat@kovaldistillery.com"
+ROBERT_EMAIL = "robert@kovaldistillery.com"
+CULTIVATER_OWNER_WORKERS = {"asher", "venetia"}
+
 
 def decode_value(value: str) -> str:
     try:
@@ -271,6 +275,40 @@ def normalize_recipients(value) -> list[str]:
 
 def recipient_email(value: str) -> str:
     return parseaddr(str(value or ""))[1].strip().lower()
+
+
+def allow_robert_recipient(payload: dict) -> bool:
+    value = payload.get("allow_robert_recipient") or payload.get("copy_robert")
+    if isinstance(value, str):
+        return value.strip().lower() in {"1", "true", "yes", "on", "explicit"}
+    return bool(value)
+
+
+def normalize_cultivater_owner_recipients(
+    worker: str,
+    payload: dict,
+    to_addrs: list[str],
+    cc_addrs: list[str],
+    bcc_addrs: list[str],
+) -> tuple[list[str], list[str], list[str], str]:
+    if str(worker or "").strip().lower() not in CULTIVATER_OWNER_WORKERS or allow_robert_recipient(payload):
+        return to_addrs, cc_addrs, bcc_addrs, ""
+
+    def without_robert(values: list[str]) -> list[str]:
+        return [value for value in values if recipient_email(value) != ROBERT_EMAIL]
+
+    had_robert = any(recipient_email(value) == ROBERT_EMAIL for value in [*to_addrs, *cc_addrs, *bcc_addrs])
+    if not had_robert:
+        return to_addrs, cc_addrs, bcc_addrs, ""
+
+    to_addrs = without_robert(to_addrs)
+    cc_addrs = without_robert(cc_addrs)
+    bcc_addrs = without_robert(bcc_addrs)
+    present = {recipient_email(value) for value in [*to_addrs, *cc_addrs, *bcc_addrs]}
+    if not to_addrs or SONAT_EMAIL not in present:
+        bcc_addrs = [value for value in bcc_addrs if recipient_email(value) != SONAT_EMAIL]
+        to_addrs = [SONAT_EMAIL, *to_addrs]
+    return to_addrs, cc_addrs, bcc_addrs, "robert_recipient_redirected_to_sonat"
 
 
 def add_default_bcc(worker: str, to_addrs: list[str], cc_addrs: list[str], bcc_addrs: list[str]) -> list[str]:
@@ -567,6 +605,13 @@ def send_approved_outbox(creds: dict[str, str], state_dir: Path, worker: str) ->
                 to_addrs = normalize_recipients(payload.get("to"))
                 cc_addrs = normalize_recipients(payload.get("cc"))
                 bcc_addrs = normalize_recipients(payload.get("bcc"))
+                to_addrs, cc_addrs, bcc_addrs, recipient_route_override = normalize_cultivater_owner_recipients(
+                    worker,
+                    payload,
+                    to_addrs,
+                    cc_addrs,
+                    bcc_addrs,
+                )
                 bcc_addrs = add_default_bcc(worker, to_addrs, cc_addrs, bcc_addrs)
                 subject = str(payload.get("subject") or "").strip()
                 body = str(payload.get("body") or payload.get("text") or "").strip()
@@ -624,6 +669,8 @@ def send_approved_outbox(creds: dict[str, str], state_dir: Path, worker: str) ->
                     "sent_folder_appended": True,
                     "sent_folder": sent_folder,
                 }
+                if recipient_route_override:
+                    row["recipient_route_override"] = recipient_route_override
                 append_jsonl(log_path, row)
                 record_header_worker_email_trace(state_dir, worker, creds, row, event="email_action_logged")
                 archive_payload = dict(payload)

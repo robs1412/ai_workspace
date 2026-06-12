@@ -675,6 +675,7 @@ def process_scheduled_actions(creds: dict[str, str], state_dir: Path, now_ts: Op
                     shared_task_flow.append_event(state_dir / "task-flow-events.jsonl", failed_packet, "scheduled_action_failed", error=row["error"])
                 failed += 1
                 continue
+            payload = scheduled_action_email_payload(row, payload, task_packet)
             draft_name = re.sub(r"[^a-zA-Z0-9_.-]+", "-", str(row.get("id") or f"scheduled-{int(now)}")).strip("-") + ".approved.json"
             draft_path = outbox / draft_name
             draft_path.write_text(json.dumps(payload, ensure_ascii=True, indent=2), encoding="utf-8")
@@ -695,6 +696,29 @@ def process_scheduled_actions(creds: dict[str, str], state_dir: Path, now_ts: Op
         if lock_acquired:
             with contextlib.suppress(OSError):
                 lock_dir.rmdir()
+
+
+def scheduled_action_email_payload(row: dict, payload: dict, task_packet: dict) -> dict:
+    normalized = dict(payload)
+    action_id = str(row.get("id") or "").strip()
+    canonical_packet = dict(task_packet) if isinstance(task_packet, dict) else {}
+    existing_packet = normalized.get("task_packet") if isinstance(normalized.get("task_packet"), dict) else {}
+
+    if canonical_packet:
+        merged_packet = {**existing_packet, **canonical_packet}
+        for field in ("requested_deliverable", "human_owner_or_recipient", "output_channel", "proof_required"):
+            if str(existing_packet.get(field) or "").strip():
+                merged_packet[field] = existing_packet[field]
+        normalized["task_packet"] = merged_packet
+    elif existing_packet:
+        normalized["task_packet"] = existing_packet
+
+    if action_id and not str(normalized.get("source_ref") or "").strip():
+        normalized["source_ref"] = action_id
+    for field in ("requester", "owner_lane", "approval_gates", "verification_readback"):
+        if not str(normalized.get(field) or "").strip() and str(row.get(field) or "").strip():
+            normalized[field] = row[field]
+    return normalized
 
 
 def write_json(path: Path, payload: dict) -> None:
@@ -1757,7 +1781,8 @@ def validate_approved_send_recipients(payload: dict, from_addr: str, to_addrs: l
     cc_emails = normalized_email_addresses(cc_addrs)
     bcc_emails = normalized_email_addresses(bcc_addrs)
     all_recipient_emails = to_emails | cc_emails | bcc_emails
-    if from_email == "vanessa.sterling@kovaldistillery.com" and to_emails == {from_email}:
+    outside_sender = all_recipient_emails - {from_email}
+    if from_email == "vanessa.sterling@kovaldistillery.com" and to_emails == {from_email} and not outside_sender:
         raise ValueError(
             "National Outreach approved-send draft targets Vanessa as sender and only direct recipient; "
             "record this as internal Task Flow/OPS state unless allow_internal_self_send is explicitly set."
@@ -2029,6 +2054,9 @@ def mark_scheduled_action_sent(
     updated_rows = []
     for row in rows:
         if str(row.get("id") or "") == action_id:
+            verification_readback = str(row.get("verification_readback") or "").strip()
+            if message_id and not verification_readback:
+                verification_readback = "scheduled_action_sent"
             row = {
                 **row,
                 "status": "completed",
@@ -2036,6 +2064,9 @@ def mark_scheduled_action_sent(
                 "sent_message_id": message_id,
                 "sent_draft": sent_draft,
                 "resolved_at": sent_at,
+                "completion_or_blocker_email": message_id or row.get("completion_or_blocker_email") or "",
+                "verification_readback": verification_readback or row.get("verification_readback") or "",
+                "next_update": "sent" if message_id else row.get("next_update") or "",
             }
             changed = True
         updated_rows.append(row)

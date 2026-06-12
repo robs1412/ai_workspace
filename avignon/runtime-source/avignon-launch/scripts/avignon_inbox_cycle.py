@@ -154,24 +154,33 @@ def task_flow_packet_from_action(action: dict) -> dict:
         return {}
     source_ref = str(action.get("source_message_id") or "")
     report_target = action.get("report_target") if isinstance(action.get("report_target"), dict) else {}
+    routed_session_id = action.get("routed_session_id") or ""
+    dedupe_key = action.get("dedupe_key") or ""
+    reported_state = action.get("monitor_state") or action.get("current_state") or ""
+    reported_message_id = action.get("completion_message_id") or action.get("blocker_message_id")
+    if not reported_message_id and reported_state in {"blocked_report_sent", "completed_report_sent", "captured_route_blocked_report_sent"}:
+        reported_message_id = action.get("ack_message_id") or ""
+    verification_readback = action.get("monitor_state") or action.get("decision") or ""
+    if reported_message_id and "closeout_proof_marker" not in str(verification_readback):
+        verification_readback = f"closeout_proof_marker: {verification_readback or reported_state}"
     return shared_task_flow.build_packet(
         source_ref=source_ref,
-        dedupe_key=action.get("dedupe_key") or "",
+        dedupe_key=dedupe_key,
         intake_channel="email:avignon",
         requester=action.get("from") or "",
         owner_lane=action.get("owner") or "avignon",
         responsible_worker_or_persona="avignon",
-        workspaceboard_session=action.get("routed_session_id") or "",
-        ops_portal_or_domain_task=action.get("ops_portal_or_domain_task") or action.get("task_id") or action.get("thread_task_id") or (",".join(action.get("decision_items") or []) if isinstance(action.get("decision_items"), list) else ""),
+        workspaceboard_session=routed_session_id,
+        ops_portal_or_domain_task=action.get("ops_portal_or_domain_task") or action.get("task_id") or action.get("thread_task_id") or (f"workspaceboard:{routed_session_id}" if routed_session_id else "") or (f"email-report:{dedupe_key}" if reported_message_id and dedupe_key else "") or (",".join(action.get("decision_items") or []) if isinstance(action.get("decision_items"), list) else ""),
         status=task_flow_status_from_action(action),
         due_or_trigger="",
         scheduled_action="",
         calendar_event=action.get("calendar_event_id") or "",
         clarification_email=action.get("ack_message_id") or action.get("blocker_message_id") or "",
-        completion_or_blocker_email=action.get("completion_message_id") or action.get("blocker_message_id") or "",
+        completion_or_blocker_email=reported_message_id or "",
         source_links=action.get("subject") or "",
         approval_gates=action.get("classification") or "",
-        verification_readback=action.get("monitor_state") or action.get("decision") or "",
+        verification_readback=verification_readback,
         papers_projection="",
         next_update=action.get("completion_target") or report_target.get("to") or action.get("decision") or "",
     )
@@ -1017,6 +1026,14 @@ def handle_direct_owner_message(message: dict, owner: str) -> dict:
             "current_state": "blocked_pending_security_guard",
             "archivable_now": False,
         }
+    if reply_to_prior_direct_owner_email(load_avignon_sent_logs(), message, owner):
+        return {
+            **base,
+            "classification": "direct-owner-reply-to-prior-report",
+            "decision": "direct-owner-prior-report-reply-filed-no-resend",
+            "current_state": "completed_report_sent",
+            "archivable_now": True,
+        }
     try:
         route = create_visible_direct_owner_route(message, owner)
         in_reply_to, references = source_thread_headers(message)
@@ -1390,14 +1407,19 @@ def compose_direct_owner_closeout_html(action: dict, session: dict, blocked: boo
 
 def monitor_direct_owner_action(action: dict, user: str | None = None, app_pw: str | None = None) -> dict:
     state = str(action.get("current_state") or "")
-    reported_state = direct_owner_closeout_state(load_sent_log(SENT_LOG), action)
+    reported_closeout = direct_owner_closeout_report(load_avignon_sent_logs(), action)
+    reported_state = str(reported_closeout.get("state") or "")
+    reported_message_id = str(reported_closeout.get("message_id") or "")
     if state in DIRECT_OWNER_DONE_STATES:
         return {"monitor_state": state, "current_state": state, "archivable_now": True}
     if reported_state or state in {"blocked_report_sent", "completed_report_sent"} or action.get("blocker_message_id") or action.get("completion_message_id"):
+        report_is_blocked = reported_state == "blocked_report_sent" or action.get("blocker_message_id")
         return {
             "monitor_state": "already-reported",
             "current_state": reported_state or state or ("blocked_report_sent" if action.get("blocker_message_id") else "completed_report_sent"),
-            "session_status": "blocked" if (reported_state == "blocked_report_sent" or action.get("blocker_message_id")) else "finished",
+            "session_status": "blocked" if report_is_blocked else "finished",
+            "blocker_message_id": reported_message_id if report_is_blocked else "",
+            "completion_message_id": reported_message_id if not report_is_blocked else "",
             "archivable_now": True,
         }
     if state not in DIRECT_OWNER_PENDING_STATES:
@@ -1498,20 +1520,90 @@ def direct_owner_closeout_already_sent(sent_log: dict[str, dict], action: dict) 
     return False
 
 
+def load_avignon_sent_logs() -> dict[str, dict]:
+    sent_log = load_sent_log(SENT_LOG)
+    runtime_sent_log = Path("/Users/admin/.avignon-launch/state/sent-log.jsonl")
+    if runtime_sent_log != SENT_LOG and runtime_sent_log.exists():
+        sent_log.update(load_sent_log(runtime_sent_log))
+    return sent_log
+
+
+def reply_to_prior_direct_owner_email(sent_log: dict[str, dict], message: dict, owner: str) -> bool:
+    refs_raw = " ".join(
+        [
+            str(message.get("in_reply_to") or ""),
+            str(message.get("references") or ""),
+        ]
+    )
+    referenced_ids = {
+        normalize_message_id(match)
+        for match in re.findall(r"<[^>]+>", refs_raw)
+        if normalize_message_id(match)
+    }
+    if not referenced_ids:
+        return False
+    owner_prefix = f"avignon-direct-owner-{owner}-"
+    for row in sent_log.values():
+        if normalize_message_id(str(row.get("message_id") or "")) not in referenced_ids:
+            continue
+        task_id = str(row.get("task_id") or "")
+        sender_path = str(row.get("sender_path") or "")
+        if task_id.startswith(owner_prefix) and "avignon:" in sender_path:
+            return True
+    return False
+
+
 def direct_owner_closeout_state(sent_log: dict[str, dict], action: dict) -> str:
+    return str(direct_owner_closeout_report(sent_log, action).get("state") or "")
+
+
+def direct_owner_closeout_report(sent_log: dict[str, dict], action: dict) -> dict:
     dedupe_key = str(action.get("dedupe_key") or "").strip()
     if not dedupe_key:
-        return ""
-    blocked_task_id = f"{dedupe_key}-blocked_report_sent"
-    completed_task_id = f"{dedupe_key}-completed_report_sent"
-    captured_blocked_task_id = f"{dedupe_key}-captured_route_blocked_report_sent"
+        return {}
+    source_ref = normalize_message_id(str(action.get("source_message_id") or ""))
+    blocked_suffixes = (
+        "blocked_report_sent",
+        "captured_route_blocked_report_sent",
+        "external-send-blocker",
+        "blocker_report_sent",
+    )
+    completed_suffixes = (
+        "completed_report_sent",
+        "correction_report_sent",
+        "draft-ready",
+    )
+    prefix = f"{dedupe_key}-"
     for row in sent_log.values():
         task_id = str(row.get("task_id") or "")
-        if task_id == blocked_task_id or task_id == captured_blocked_task_id:
-            return "blocked_report_sent"
-        if task_id == completed_task_id:
-            return "completed_report_sent"
-    return ""
+        if not task_id.startswith(prefix):
+            continue
+        suffix = task_id[len(prefix):]
+        message_id = str(row.get("message_id") or "")
+        if suffix in blocked_suffixes:
+            return {"state": "blocked_report_sent", "message_id": message_id}
+        if suffix in completed_suffixes:
+            return {"state": "completed_report_sent", "message_id": message_id}
+    if source_ref:
+        for row in sent_log.values():
+            refs = " ".join([
+                str(row.get("in_reply_to") or ""),
+                str(row.get("references") or ""),
+            ])
+            referenced_ids = {
+                normalize_message_id(match)
+                for match in re.findall(r"<[^>]+>", refs)
+                if normalize_message_id(match)
+            }
+            if source_ref not in referenced_ids:
+                continue
+            task_id = str(row.get("task_id") or "").lower()
+            message_id = str(row.get("message_id") or "")
+            if any(token in task_id for token in ("blocker", "blocked", "external-send-blocker")):
+                return {"state": "blocked_report_sent", "message_id": message_id}
+            if any(token in task_id for token in ("completed", "correction", "draft-ready")):
+                return {"state": "completed_report_sent", "message_id": message_id}
+    return {}
 
 
 def is_direct_owner_action(action: dict) -> bool:
