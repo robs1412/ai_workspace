@@ -96,6 +96,131 @@ function event_time_label(array $event): string
     return $start !== '' ? $start : $end;
 }
 
+function fixed_width_table(array $headers, array $rows): array
+{
+    $widths = [];
+    foreach ($headers as $idx => $header) {
+        $widths[$idx] = strlen((string) $header);
+    }
+    foreach ($rows as $row) {
+        foreach ($headers as $idx => $_header) {
+            $widths[$idx] = max($widths[$idx], strlen((string) ($row[$idx] ?? '')));
+        }
+    }
+
+    $formatRow = static function (array $row) use ($widths, $headers): string {
+        $cells = [];
+        foreach ($headers as $idx => $_header) {
+            $cells[] = str_pad((string) ($row[$idx] ?? ''), $widths[$idx]);
+        }
+        return implode(' | ', $cells);
+    };
+
+    $lines = [$formatRow($headers)];
+    $separator = [];
+    foreach ($headers as $idx => $_header) {
+        $separator[] = str_repeat('-', $widths[$idx]);
+    }
+    $lines[] = implode('-+-', $separator);
+    foreach ($rows as $row) {
+        $lines[] = $formatRow($row);
+    }
+    return $lines;
+}
+
+function build_attendance_rows(string $dateYmd, array $events): array
+{
+    $eventIds = [];
+    $userIds = [];
+    foreach ($events as $event) {
+        $eventId = (int) ($event['id'] ?? 0);
+        if ($eventId > 0) {
+            $eventIds[$eventId] = $eventId;
+        }
+        foreach ((array) ($event['staff_rows'] ?? []) as $staffRow) {
+            $uid = (int) ($staffRow['user_id'] ?? 0);
+            if ($uid > 0) {
+                $userIds[$uid] = $uid;
+            }
+        }
+    }
+
+    $logsByUser = [];
+    if (!empty($userIds)) {
+        try {
+            $logs = fetch_tracktime_logs($dateYmd, $dateYmd, ['user_ids' => array_values($userIds)]);
+            foreach ($logs as $log) {
+                $uid = (int) ($log['user_id'] ?? $log['trackuserid'] ?? 0);
+                if ($uid <= 0) {
+                    continue;
+                }
+                $clockIn = format_short_time((string) ($log['tracktime'] ?? ''));
+                $clockOut = format_short_time((string) ($log['trackouttime'] ?? ''));
+                if (!isset($logsByUser[$uid])) {
+                    $logsByUser[$uid] = ['clock_in' => $clockIn, 'clock_out' => $clockOut];
+                    continue;
+                }
+                if ($clockIn !== '' && ($logsByUser[$uid]['clock_in'] === '' || strcmp($clockIn, $logsByUser[$uid]['clock_in']) < 0)) {
+                    $logsByUser[$uid]['clock_in'] = $clockIn;
+                }
+                if ($clockOut !== '' && strcmp($clockOut, (string) $logsByUser[$uid]['clock_out']) > 0) {
+                    $logsByUser[$uid]['clock_out'] = $clockOut;
+                }
+            }
+        } catch (Throwable $ignored) {
+            $logsByUser = [];
+        }
+    }
+
+    $attendanceByEvent = !empty($eventIds) && function_exists('fetch_event_attendance_events')
+        ? fetch_event_attendance_events(array_values($eventIds), null)
+        : [];
+    $photoCounts = !empty($eventIds) && function_exists('fetch_event_attendance_file_counts')
+        ? fetch_event_attendance_file_counts(array_values($eventIds), null)
+        : [];
+
+    $rows = [];
+    foreach ($events as $event) {
+        $eventId = (int) ($event['id'] ?? 0);
+        foreach ((array) ($event['staff_rows'] ?? []) as $staffRow) {
+            $uid = (int) ($staffRow['user_id'] ?? 0);
+            $shiftId = (int) ($staffRow['shift_id'] ?? 0);
+            $arrival = '';
+            $departure = '';
+            foreach (($attendanceByEvent[$eventId] ?? []) as $attendanceRow) {
+                if ($uid > 0 && (int) ($attendanceRow['user_id'] ?? 0) !== $uid) {
+                    continue;
+                }
+                $attendanceShiftId = (int) ($attendanceRow['shift_id'] ?? 0);
+                if ($shiftId > 0 && $attendanceShiftId > 0 && $attendanceShiftId !== $shiftId) {
+                    continue;
+                }
+                $createdAt = (string) ($attendanceRow['created_at'] ?? '');
+                $time = strlen($createdAt) >= 16 ? substr($createdAt, 11, 5) : $createdAt;
+                if ((string) ($attendanceRow['action_type'] ?? '') === 'arrival' && $arrival === '') {
+                    $arrival = $time;
+                } elseif ((string) ($attendanceRow['action_type'] ?? '') === 'departure' && $departure === '') {
+                    $departure = $time;
+                }
+            }
+
+            $logs = $logsByUser[$uid] ?? ['clock_in' => '', 'clock_out' => ''];
+            $rows[] = [
+                (string) ($event['event_name'] ?? 'Outreach Event'),
+                (string) ($staffRow['full_name'] ?? 'Staff'),
+                event_time_label($event) ?: '-',
+                (string) ($staffRow['shift_time'] ?? '-'),
+                (string) ($logs['clock_in'] ?: '-'),
+                $arrival !== '' ? $arrival : '-',
+                (string) ($logs['clock_out'] ?: '-'),
+                $departure !== '' ? $departure : '-',
+                (string) ((int) ($photoCounts[$eventId] ?? 0)),
+            ];
+        }
+    }
+    return $rows;
+}
+
 function build_body(string $dateLabel, array $events): string
 {
     $lines = [
@@ -120,6 +245,26 @@ function build_body(string $dateLabel, array $events): string
             $lines[] = '  Location: ' . $location;
         }
         $lines[] = '  OPS event link: https://www.koval-distillery.com/ops/index.php?view=outreach_detail&id=' . (int) ($event['id'] ?? 0);
+    }
+
+    $attendanceRows = build_attendance_rows((string) ($events[0]['event_date'] ?? date('Y-m-d')), $events);
+    if (!empty($attendanceRows)) {
+        $lines = array_merge($lines, [
+            '',
+            'OPS attendance comparison:',
+            '',
+        ]);
+        $lines = array_merge($lines, fixed_width_table([
+            'Event',
+            'Staff',
+            'Event time',
+            'Shift time',
+            'Clock in',
+            'Event arrival',
+            'Clock out',
+            'Event departure',
+            'Photos',
+        ], $attendanceRows));
     }
 
     $lines = array_merge($lines, [
@@ -190,6 +335,7 @@ foreach ($eventRows as $row) {
         continue;
     }
     $assignedNames = [];
+    $staffRows = [];
     foreach (($linkedShifts[$eventId] ?? []) as $link) {
         if ((int) ($link['deleted'] ?? 0) === 1) {
             continue;
@@ -203,11 +349,21 @@ foreach ($eventRows as $row) {
         if ($shiftId > 0) {
             $shiftIds[$shiftId] = $shiftId;
         }
+        $assignedUserIds = array_values(array_filter(array_map('intval', (array) ($link['assigned_user_ids'] ?? [])), static fn(int $uid): bool => $uid > 0));
+        foreach ($assigned as $idx => $assignedName) {
+            $staffRows[] = [
+                'user_id' => (int) ($assignedUserIds[$idx] ?? 0),
+                'full_name' => (string) $assignedName,
+                'shift_id' => $shiftId,
+                'shift_time' => trim(format_short_time((string) ($link['start_time'] ?? '')) . ' - ' . format_short_time((string) ($link['end_time'] ?? '')), ' -'),
+            ];
+        }
     }
     if (empty($assignedNames)) {
         continue;
     }
     $row['assigned_names'] = $assignedNames;
+    $row['staff_rows'] = $staffRows;
     $staffedEvents[] = $row;
 }
 
