@@ -27,10 +27,15 @@ or related Tennessee distributor/customer activity.
 - Distributor anchor: Lipman Brothers, LLC, Nashville, Tennessee.
 - Lipman contact: Dylan Lewis, Portfolio Manager, Lipman Brothers.
 - Lipman contact: Tom Henderson, copied on Sonat's June 4 recap.
+- Fall 2026 brand-plan lead: Dylan Lewis / Lipman Brothers, with Benjamin
+  leading Knoxville and Chattanooga expansion visits where Sonat is not in
+  market.
 - Tennessee distributor scope also includes Phoenix Selections and James Perry
   when mentioned in future source packets.
 - Source body saved privately at `.private/source-bodies/<CALbLtzwz-wqeo3XaxhGUzVzHTLq6RC1Vt_DczdhwnX-qb4F6bg-mail-gmail-com>.txt`.
 - Attachments saved privately under `.private/source-bodies/tn-market-recap-2026-06-04-attachments/`.
+- Fall 2026 brand-plan source body and extracted activity recap saved privately
+  under `.private/source-bodies/activity-for-tn-2026-06-14/`.
 
 ## Future Intake Checklist
 
@@ -122,3 +127,27 @@ or related Tennessee distributor/customer activity.
 - Treat deal-book pricing and program details as reference material only. Do not
   quote pricing, discounts, or deal terms externally without Sonat's approval and
   a current distributor/source check.
+
+## 2026-06-14 Tennessee Fall 2026 Brand Plan
+
+- Source: Sonat direct-owner email, subject `Activity for TN`, Message-ID
+  `<CALbLtzwuHvuxtj5u6H92sEB_w4ChTMhus8N_OWyL9DBO32ZPBg@mail.gmail.com>`.
+- Sonat instruction: add the recap to Avignon's TN memory/reference and log it
+  as an OPS/Portal activity for Sonat with subject `Brand Plan TN Fall 2026`.
+- Portal activity target: Lipman Brothers / Dylan Lewis unless Sonat later
+  corrects the target; this follows the standing distributor-anchor rule for TN.
+- Strategic read: Tennessee needs more frequent targeted rep visits, stronger
+  product presentations, and a tighter fall programming plan before menu
+  placements.
+- Core SKUs for fall focus: KOVAL Bourbon, KOVAL Rye, KOVAL Dry Gin, and KOVAL
+  Cranberry Gin, with Amburana and brandy-finish opportunities treated as
+  selective account/program opportunities.
+- Pricing/programming watchouts: do not quote or commit pricing, DAs, 60/40
+  splits, five-case deals, tiered POD incentives, manager bonuses, or distributor
+  cost-sharing externally without Sonat approval and current distributor/source
+  confirmation.
+- Market cadence: Knoxville and Chattanooga need more coverage; Benjamin is the
+  likely expansion lead, with market days expected in September and October.
+- Near-term internal next actions: confirm immediate PO timing, review pricing
+  and DA scenarios, prepare updated assets after the packaging refresh, and
+  coordinate Nashville follow-up around the September market visit.
