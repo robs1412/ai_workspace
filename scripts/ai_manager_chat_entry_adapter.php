@@ -6,13 +6,12 @@ declare(strict_types=1);
 require_once '/Users/werkstatt/ops/bootstrap.php';
 
 const AI_MANAGER_CHAT_ADAPTER_RECORDER = '/Users/werkstatt/ai_workspace/scripts/ai_manager_input_recorder.php';
-const AI_MANAGER_CHAT_ADAPTER_DAILY_DIR = '/Users/werkstatt/ai_workspace/daily-inputs';
 const AI_MANAGER_CHAT_ADAPTER_MCP_ENV = '/Users/werkstatt/ai_workspace/scripts/mcp_runtime_env.py';
 const AI_MANAGER_CHAT_ADAPTER_PAPERS_WRITER = '/Users/werkstatt/ai_workspace/scripts/papers_write_note.py';
 
 function usage(): void
 {
-    fwrite(STDERR, "Usage: php scripts/ai_manager_chat_entry_adapter.php [--message TEXT] [--user-id N] [--user-label TEXT] [--source-path TEXT] [--source-channel TEXT] [--related-session-id TEXT] [--related-task-id TEXT] [--related-taskflow-key TEXT] [--proof-marker TEXT] [--status TEXT] [--durable] [--papers-kind TEXT] [--papers-title TEXT] [--papers-path TEXT] [--papers-summary TEXT] [--papers-tags TEXT] [--papers-created-by TEXT] [--papers-dry-run] [--append-daily] [--skip-daily] [--skip-db]\n");
+    fwrite(STDERR, "Usage: php scripts/ai_manager_chat_entry_adapter.php [--message TEXT] [--user-id N] [--user-label TEXT] [--source-path TEXT] [--source-channel TEXT] [--related-session-id TEXT] [--related-task-id TEXT] [--related-taskflow-key TEXT] [--proof-marker TEXT] [--status TEXT] [--durable] [--papers-kind TEXT] [--papers-title TEXT] [--papers-path TEXT] [--papers-summary TEXT] [--papers-tags TEXT] [--papers-created-by TEXT] [--papers-dry-run] [--skip-db]\n");
 }
 
 function currentCdtStamp(): array
@@ -70,20 +69,16 @@ function parseArgs(array $argv): array
         'papers_tags' => '',
         'papers_created_by' => 'codex-ai-manager',
         'papers_dry_run' => false,
-        'append_daily' => false,
-        'skip_daily' => false,
         'skip_db' => false,
     ];
 
     for ($i = 1; $i < count($argv); $i++) {
         $arg = $argv[$i];
         if ($arg === '--append-daily') {
-            $options['append_daily'] = true;
-            continue;
+            throw new InvalidArgumentException('Legacy daily-input Markdown writes are disabled; record AI Manager inputs in DB only.');
         }
         if ($arg === '--skip-daily') {
-            $options['skip_daily'] = true;
-            continue;
+            throw new InvalidArgumentException('Legacy daily-input Markdown writes are disabled; --skip-daily is no longer needed.');
         }
         if ($arg === '--skip-db') {
             $options['skip_db'] = true;
@@ -110,8 +105,11 @@ function parseArgs(array $argv): array
         }
         if (preg_match('/^--([^=]+)=(.*)$/', $arg, $matches)) {
             $key = str_replace('-', '_', $matches[1]);
+            if (in_array($key, ['append_daily', 'skip_daily'], true)) {
+                throw new InvalidArgumentException('Legacy daily-input Markdown writes are disabled; record AI Manager inputs in DB only.');
+            }
             if (array_key_exists($key, $options)) {
-                if (in_array($key, ['append_daily', 'skip_daily', 'skip_db', 'durable', 'papers_dry_run'], true)) {
+                if (in_array($key, ['skip_db', 'durable', 'papers_dry_run'], true)) {
                     $options[$key] = in_array(strtolower($matches[2]), ['1', 'true', 'yes', 'on'], true);
                 } else {
                     $options[$key] = $matches[2];
@@ -297,24 +295,6 @@ function invokePapersWriter(string $body, array $papersConfig, bool $dryRun): ar
     return $decoded;
 }
 
-function appendDailyInput(string $message, array $payload, string $recordedLabel, ?array $papersResult = null): array
-{
-    if (!is_dir(AI_MANAGER_CHAT_ADAPTER_DAILY_DIR)) {
-        throw new RuntimeException('Daily-inputs directory is missing.');
-    }
-    $stampInfo = currentCdtStamp();
-    $path = AI_MANAGER_CHAT_ADAPTER_DAILY_DIR . '/' . $stampInfo['date'] . '.md';
-    $quoted = implode("\n> ", array_map('rtrim', explode("\n", $message)));
-    $papersLine = '';
-    if (is_array($papersResult) && !empty($papersResult['path'])) {
-        $mode = !empty($papersResult['dry_run']) ? 'dry-run prepared' : 'published';
-        $papersLine = " Papers {$mode}: `{$papersResult['path']}`.";
-    }
-    $entry = "\n### {$stampInfo['stamp']}\n\nVerbatim input:\n\n> {$quoted}\n\nWorker/action interpretation:\n\nAI Manager chat-entry adapter recorded this prompt in DB-backed `ai_manager_inputs`; this Markdown entry is a legacy projection only. Source channel: `{$payload['source_channel']}`; source path: `{$payload['source_path']}`; DB row: `{$recordedLabel}`.{$papersLine}\n";
-    file_put_contents($path, $entry, FILE_APPEND | LOCK_EX);
-    return ['path' => $path, 'stamp' => $stampInfo['stamp']];
-}
-
 try {
     $options = parseArgs($argv);
     $message = normalizeMessage($options['message'] !== '' ? (string) $options['message'] : readStdinText());
@@ -322,8 +302,8 @@ try {
         throw new InvalidArgumentException('Missing message text.');
     }
 
-    if ($options['skip_db'] && !$options['append_daily']) {
-        throw new InvalidArgumentException('DB recording is the canonical daily-input path; use --append-daily only for an explicit legacy Markdown projection.');
+    if ($options['skip_db']) {
+        throw new InvalidArgumentException('DB recording is the canonical AI Manager input path; --skip-db is reserved for tests and disabled here.');
     }
 
     $payload = [
@@ -341,15 +321,13 @@ try {
         'metadata' => [
             'transport' => 'ai_manager_chat_entry_adapter',
             'origin' => 'ai_manager_control_lane',
-            'daily_inputs' => $options['append_daily'] && !$options['skip_daily'] ? 'legacy_markdown_projection' : 'db_canonical',
-            'db' => $options['skip_db'] ? 'skip' : 'record',
+            'daily_inputs' => 'disabled',
+            'db' => 'record',
         ],
     ];
 
     $recorderResult = null;
-    if (!$options['skip_db']) {
-        $recorderResult = invokeRecorder($payload);
-    }
+    $recorderResult = invokeRecorder($payload);
 
     $papersResult = null;
     if ($options['durable']) {
@@ -358,21 +336,10 @@ try {
         $papersResult = invokePapersWriter($papersBody, $papersConfig, (bool) $options['papers_dry_run']);
     }
 
-    $dailyResult = null;
-    if ($options['append_daily'] && !$options['skip_daily']) {
-        $dailyResult = appendDailyInput(
-            $message,
-            $payload,
-            (string) ($recorderResult['input_id'] ?? 'pending'),
-            $papersResult
-        );
-    }
-
     echo json_encode([
         'ok' => true,
         'recorder' => $recorderResult,
         'papers' => $papersResult,
-        'daily_input' => $dailyResult,
         'input_uuid' => $payload['input_uuid'],
     ], JSON_UNESCAPED_SLASHES) . PHP_EOL;
     exit(0);
