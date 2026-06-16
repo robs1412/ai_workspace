@@ -26,7 +26,7 @@ The interactive table script had a stale `salesColumnIndex` value after the tabl
 - Repo Log ID: `salesreport-20260616-il-top-products`
 - Commit SHA: `897f9f8`
 - Commit Date: `2026-06-16`
-- Change Summary: Added `2026-IL-Top-Products.php`, registered it in the custom reports list and menu, and corrected the Top Accounts running-total sales column index from `9` to `10`.
+- Change Summary: Added `2026-IL-Top-Products.php`, registered it in the custom reports list and menu, and corrected the Top Accounts running-total sales column index from `9` to `10`. Follow-up commits `618692f`, `ac79d4f`, and `be199a8` added the product payout calculator, changed both product report Top-N summaries to `5, 10, 15, 20, 25, 30, 40, 50`, added total-filtered-sales percentage columns, and corrected the calculator margin formula to use `price / (1 - margin)`.
 
 ## Verification Notes
 
@@ -38,6 +38,9 @@ The interactive table script had a stale `salesColumnIndex` value after the tabl
 - Live PHP syntax passed for the same touched files.
 - Live PHP render smoke returned `title=present` and `summary=present` for the product report.
 - Live PHP render smoke returned `sales_index=10` for the account report.
+- Live Salesreport fast-forwarded to `618692f` for `2026-IL-Product-Payout-Calculator.php`; live PHP syntax passed and render smoke returned calculator title, selling price, tax, net price, and KOVAL net markers.
+- Live Salesreport fast-forwarded to `ac79d4f` for the Product and Calculator Top-N summary changes; live PHP syntax passed for both product pages.
+- Live Salesreport fast-forwarded to `be199a8` for the corrected margin formula; local arithmetic readback confirmed `144 / 0.70 = 205.71`, live PHP syntax passed, and live render smoke returned `Selling price uses margin math`, `Top-N Payout Summary`, and `% of Total Filtered Sales`.
 
 ## Rollback Plan
 
