@@ -1,7 +1,7 @@
 # Worker Roles Directory
 
 Status: source-of-truth role reference
-Updated: 2026-05-27 CDT
+Updated: 2026-06-16 CDT
 
 This folder is the durable role reference for the Codex / Claude worker system. Keep role definitions, personas, call patterns, and boundaries here so the organigram and Workspaceboard can point back to a single source of truth.
 
@@ -32,6 +32,16 @@ This folder is the durable role reference for the Codex / Claude worker system. 
 - `human-owners.md`: decision and approval owners.
 - `codex-claude-overlap-matrix.md`: local-versus-Claude routing comparison.
 - Shared worker background sources: `project_hub/artifacts/ai-workers-setup/foh-handbook-2-guide.md`, Google Drive folder `https://drive.google.com/drive/folders/1-5zAmaDT8cTKrQM3oFBKToXnh5w-qWvt`, and `https://www.koval-distillery.com/` for public KOVAL context.
+
+## Current DB-Backed Work Surfaces
+
+Workspaceboard presents live DB-backed work records alongside this role map:
+
+- `https://wb.koval.lan/workspaceboard/handoff-db.php`: DB-backed handoff entries from `koval_crm.ai_task_flow_handoff_entries`, including sources, proof, blockers, and next steps.
+- `https://wb.koval.lan/workspaceboard/task-db.php`: Task Flow packet readback for DB-backed task state and worker routing.
+- `https://wb.koval.lan/workspaceboard/email-db.php`: DB-backed email trace metadata, worker/lane attribution, status, and message drill-downs.
+
+These pages are the preferred readback surfaces for durable handoffs/logs. Local Markdown notes remain readable projections or working notes unless a task explicitly says local Markdown is the canonical surface.
 
 ## Shared Worker Background Rule
 
@@ -70,3 +80,8 @@ When a role changes, update the role doc, the persona file if one exists, the ro
 - `tester-agent.md`: independent verification role that Codex or Claude can invoke before closeout.
 - `sanity-reality-checker.md`: practical senior-professional challenge role for questionable plans.
 - `consigliere.md`: Robert-facing advisory escalation role when a direction seems off or should be rerouted.
+- `ai-manager-sonat.md`: Sonat control-lane role for priorities, approvals, and chain-of-command status.
+- `asher.md` and `venetia.md`: The Cultivater editorial mailbox/persona workers managed by Avignon by default.
+- `ezra-katz.md`: Special Projects & Legal Affairs coordination role.
+- `naomi-stern.md`: Finance Operations Coordinator role distinct from Finance Analyst.
+- `gia-garibaldi.md`: communications/email trace lane for Gia Garibaldi, aligned with Workspaceboard Email DB worker attribution.
