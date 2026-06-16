@@ -26,7 +26,7 @@ The interactive table script had a stale `salesColumnIndex` value after the tabl
 - Repo Log ID: `salesreport-20260616-il-top-products`
 - Commit SHA: `897f9f8`
 - Commit Date: `2026-06-16`
-- Change Summary: Added `2026-IL-Top-Products.php`, registered it in the custom reports list and menu, and corrected the Top Accounts running-total sales column index from `9` to `10`. Follow-up commits `618692f`, `ac79d4f`, `be199a8`, `91da778`, `90b2e2b`, `86f1874`, `7c04692`, `30303e2`, and `88fdf2c` added the product payout calculator, changed both product report Top-N summaries to `5, 10, 15, 20, 25, 30, 40, 50`, added filtered footer totals, added total shipping cost, added commission input units, added static `% of Sales`, restored server-rendered `Running % of Sales`, renamed the Top Products footer label to `Total Sales`, corrected the calculator margin formula to use `price / (1 - margin)`, and recalculated taxes per invoice line by ABV, account channel, and Chicago/Cook/outside-Cook location.
+- Change Summary: Added `2026-IL-Top-Products.php`, registered it in the custom reports list and menu, and corrected the Top Accounts running-total sales column index from `9` to `10`. Follow-up commits `618692f`, `ac79d4f`, `be199a8`, `91da778`, `90b2e2b`, `86f1874`, `7c04692`, `30303e2`, `88fdf2c`, and `95c0c7c` added the product payout calculator, changed both product report Top-N summaries to `5, 10, 15, 20, 25, 30, 40, 50`, added filtered footer totals, added total shipping cost, added commission input units, added static `% of Sales`, restored server-rendered `Running % of Sales`, renamed Product and Calculator footer labels to `Total Sales`, renamed Calculator `% of Total Filtered Sales` labels to `% of Total Sales`, corrected the calculator margin formula to use `price / (1 - margin)`, and recalculated taxes per invoice line by ABV, account channel, and Chicago/Cook/outside-Cook location.
 
 ## Verification Notes
 
@@ -47,6 +47,7 @@ The interactive table script had a stale `salesColumnIndex` value after the tabl
 - Live Salesreport fast-forwarded to `7c04692` for location/channel/ABV-based calculator tax logic; live PHP syntax passed and render smoke returned `Tax is calculated per invoice line`, `Total tax estimate`, `Tax / Case`, and `KOVAL Net Total`.
 - Live Salesreport fast-forwarded to `30303e2` for restored server-rendered Top Products `Running % of Sales`; live PHP syntax passed and render smoke returned `Running % of Sales=present`, `% of Sales=present`, `running-pct-total=missing`, and `% of Shown Total Sales=missing`.
 - Live Salesreport fast-forwarded to `88fdf2c` for the Top Products footer label change from `Filtered Total` to `Total Sales`; live PHP syntax passed and render smoke returned `Total Sales=present` and `Filtered Total=missing`.
+- Live Salesreport fast-forwarded to `95c0c7c` for Product Payout Calculator label changes; live PHP syntax passed and render smoke returned `% of Total Sales=present`, `% of Total Filtered Sales=missing`, `Total Sales=present`, and `Filtered Total=missing`.
 
 ## Rollback Plan
 
