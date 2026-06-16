@@ -3,6 +3,12 @@ Last Updated: 2026-06-16 CDT (Machine: Macmini.lan)
 
 ## Completed
 
+- **2026-06-16 Salesreport Illinois Top Products Report**
+  - Master ID: `AI-INC-20260616-SALESREPORT-IL-TOP-PRODUCTS-01`
+  - Detail log: `project_hub/issues/2026-06-16-salesreport-il-top-products-report.md`
+  - Repos: `salesreport`, live Salesreport checkout
+  - Status: completed. Added a tabbed Illinois top-products report at `2026-IL-Top-Products.php`, registered it in Custom Reports and the Salesreport menu, and fixed the existing `2026-IL-Top-Accounts.php` running total script so it recalculates from the Sales column instead of WG. Salesreport commit `897f9f8` is pushed to `origin/master` and live Salesreport fast-forwarded to `897f9f8`; live syntax and render smoke checks passed.
+
 - **2026-06-16 OPS Stay Logged In Session Cookie Fix**
   - Master ID: `AI-INC-20260616-OPS-STAY-LOGGED-IN-SESSION-COOKIE-01`
   - Detail log: `project_hub/issues/2026-06-16-ops-stay-logged-in-session-cookie-fix.md`
