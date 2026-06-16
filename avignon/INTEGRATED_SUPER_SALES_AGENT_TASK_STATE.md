@@ -5,6 +5,17 @@ Keep entries concise, dated, and decision-oriented. Record substantive
 conversations, calibration decisions, next actions, and approval gates here so
 the project state survives beyond chat.
 
+## 2026-06-16
+
+- Source: Sonat direct-owner email, subject `Heinens and Woodmans`, Message-ID `<CALbLtzymzc3jD0qSxsi0WLHMzWAQDsLb4j1XpzjcQMjBaoGH2g@mail.gmail.com>`; dedupe key `avignon-direct-owner-sonat-CALbLtzymzc3jD0qSxsi0WLHMzWAQDsLb4j1XpzjcQMjBaoGH2g-mail-gmail-com`; Workspaceboard session `5c27b015`.
+- Topic: Woodman's operating model for the Integrated Super Sales Agent.
+- Decision: Treat Woodman's as a store-by-store purchasing-manager opportunity, not as a single corporate-buyer lane. Sonat's note says Woodman's stores are run by each store's purchasing manager; she has reached out to the DMs to secure buyer information, but the field plan should still include store-specific visits.
+- What changed: Future Integrated Super Sales Agent logic should tag Woodman's as a local chain/store-led account type. For Woodman's rows, the next action should be buyer discovery by store, DM buyer-info follow-up, and store-specific visit planning rather than corporate-only chain outreach.
+- Current source-data readback: the 2026 Illinois top-200 account sheet already includes Woodman's Buffalo Grove, Carpentersville, North Aurora, and Bloomingdale rows, plus Heinen's Glenview and Lake Bluff rows. This update changes only Woodman's operating guidance because this packet provided no separate Heinen's operating instruction.
+- Concrete next action: On the next account-action-plan revision, add a `store-led local chain` treatment for Woodman's with per-location buyer-contact fields, visit prompts, and DM follow-up notes.
+- Remaining approval gates: no external account outreach, CRM/Portal contact updates, pricing/sample/allocation/account commitments, or Heinen's treatment change until Sonat approves a specific execution lane or provides the missing operating facts.
+- Boundaries observed: durable Avignon ledger/decision update and Sonat completion report only. No CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, external reply, Robert copy, pricing/sample/allocation/account commitment, or live data mutation.
+
 ## 2026-06-10
 
 - Source: Robert task-mode chat asked to send Sonat the list of decisions needed to move the Integrated Super Sales Agent forward.

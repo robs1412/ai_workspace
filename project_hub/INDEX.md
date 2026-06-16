@@ -1,7 +1,13 @@
 # AI Workspace Project Hub
-Last Updated: 2026-05-19 CDT (Machine: Macmini.lan)
+Last Updated: 2026-06-16 CDT (Machine: Macmini.lan)
 
 ## Completed
+
+- **2026-06-16 OPS Stay Logged In Session Cookie Fix**
+  - Master ID: `AI-INC-20260616-OPS-STAY-LOGGED-IN-SESSION-COOKIE-01`
+  - Detail log: `project_hub/issues/2026-06-16-ops-stay-logged-in-session-cookie-fix.md`
+  - Repos: `login`, observed through `ops`
+  - Status: pushed; live pull blocked. Patched the shared Login session helper so PHPSESSID retry recomputes authenticated state and so login, remember-device recovery, and OPS SSO recovery refresh PHPSESSID/alias cookies only after authenticated identity is written into the session. Login commit `669b448` is pushed to `origin/master`; live SSH port 22 is reachable, but SSH command execution to `ftp.koval-distillery.com` timed out/exited `255` before checkout readback, so no live pull, credential change, or production session mutation was performed.
 
 - **2026-04-19 IKEv2 VPN DNS For koval.lan**
   - Master ID: `AI-INC-20260419-IKEV2-VPN-DNS-01`

@@ -5,6 +5,16 @@ Archived: 2026-05-18 CDT (Machine: Macmini.lan)
 This file is archived and contains no active queue items.
 Active work now lives in DB-backed Task Flow / Workspaceboard / OPS records.
 
+## 2026-06-15 - Done - Contacts / Illinois Governor's Office
+
+- Source Message-ID: `<CALbLtzxzjpA6gucndytkf_6hXWiuMbGU4k069k8+yaWGFZYvTg@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzxzjpA6gucndytkf-6hXWiuMbGU4k069k8-yaWGFZYvTg-mail-gmail-com`
+- Workspaceboard session: `3cb89dbc` / `Avignon direct Sonat: Contacts`
+- Status: `closed_with_proof`; canonical DB handoff entry `600` / UUID `handoff-avignon-20260615223440-d1544849a9f5`.
+- Proof: Portal account `372508` / `ACC20763` created for Illinois Governor's Office; exact-email Daniel Thomas contact `292609` / `CON11077` reused and linked with contact-account history `5382`; Sonat completion Message-ID `<178156283706.30290.2530147724375379207@kovaldistillery.com>` in runtime sent-log line `525`.
+- Boundaries: no duplicate Daniel contact, no removal of existing Illinois Office of Tourism association, no Robert copy, no external reply, no auth/OAuth/token work, no credential exposure, no pricing/account commitment, and no unrelated Portal/CRM/OPS mutation.
+- Remaining action: none unless Sonat wants the title shortened because the Portal title field read back truncated as `Deputy Director, Illinois Office of Tourism, Illin`.
+
 ## 2026-06-12 - Done - Activities original source reconciliation
 
 - Source Message-ID: `<CALbLtzwfmnwuHVuPc5VgSh-Q7GK0vhWdU9+7m1XKwWFiWcUbbg@mail.gmail.com>`
