@@ -157,6 +157,17 @@ The first implementation stage must not:
 - Do not deploy the BID route switch live ahead of the Portal template/rule deployment. The Portal migration should be deployed/run first, then BID can be synced so Remind sends through the correct Portal notification event.
 - OPS task 372664 was created for Codex pickup on 2026-06-18 at 10:00 AM CDT. It covers the next items: Portal fast-capture support, QBO API pull by card user starting with Sonat, and BID summary email enhancement.
 
+## Deployment Notes - 2026-06-17
+
+- Portal backend was deployed live with image tag `koval-crm-backend:v20260617receiptmsg`.
+- Targeted Portal migration `2026_06_17_000200_add_company_card_receipt_reminder_notification` ran successfully in the live backend container.
+- Live Portal readback confirmed the email template and active rule for `receipts.company_card_reminder` with template path `emails.events.receipts.company_card_reminder`.
+- BID commit `779fa30` was deployed to both `/srv/development/bid/creditcard_matching.php` and `/srv/bid/creditcard_matching.php`.
+- Remote BID syntax checks passed for both deployed files, and both deployed files matched local SHA1 `f1a6fdc41c7f87ee94e1261b80681ec336acd03d`.
+- Live BID unauthenticated checks for `/bid/creditcard_matching.php?statement=current&user=Sonat` and `/bid/creditcard.php` returned login redirects, not fatal errors.
+- No live reminder email was sent during deployment validation.
+- The `/ops` fast receipt upload/camera capture workflow is not implemented yet. It remains the next slice in OPS task 372664 for 2026-06-18 at 10:00 AM CDT unless Robert asks to start it sooner.
+
 ## Verbatim Robert Instructions
 
 ```text
