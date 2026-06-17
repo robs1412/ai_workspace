@@ -149,6 +149,14 @@ The first implementation stage must not:
 - Earlier local development readback also showed a mandatory Portal password-reset blocker for one configured API user. Treat that as local-context evidence only; the deployed server trees currently need the Portal API base URL and credentials configuration fixed first.
 - No live reminder email was sent during validation.
 
+## Implementation Notes - Portal Notification Route Follow-up
+
+- Robert clarified that reminder sends should use the existing /portal send-report/notification route rather than BID local mail.
+- BID commit 779fa30 switches the reminder payload to Portal `POST /notifications/send` with category/event `receipts.company_card_reminder`.
+- Portal commit 7fb10a9b adds the `receipts.company_card_reminder` notification migration and Blade email template on the Portal `dev` branch.
+- Do not deploy the BID route switch live ahead of the Portal template/rule deployment. The Portal migration should be deployed/run first, then BID can be synced so Remind sends through the correct Portal notification event.
+- OPS task 372664 was created for Codex pickup on 2026-06-18 at 10:00 AM CDT. It covers the next items: Portal fast-capture support, QBO API pull by card user starting with Sonat, and BID summary email enhancement.
+
 ## Verbatim Robert Instructions
 
 ```text
