@@ -11,7 +11,6 @@ import subprocess
 import tempfile
 from dataclasses import dataclass
 from datetime import date, datetime, timedelta
-from email.utils import make_msgid
 from pathlib import Path
 from typing import Any
 
@@ -202,10 +201,6 @@ def build_body(payload: dict[str, Any]) -> str:
 
 
 def send_email(args: argparse.Namespace, body: str) -> str:
-    if not args.creds_file:
-        if args.dry_run:
-            return make_msgid(domain="kovaldistillery.com")
-        raise RuntimeError("Codex ops email credential path is not configured.")
     with tempfile.NamedTemporaryFile("w", encoding="utf-8", delete=False) as handle:
         handle.write(body)
         body_path = Path(handle.name)
@@ -213,8 +208,6 @@ def send_email(args: argparse.Namespace, body: str) -> str:
         command = [
             "/usr/local/bin/python3.13",
             str(args.send_script),
-            "--creds-file",
-            str(args.creds_file),
             "--to",
             args.to,
             "--subject",
@@ -228,6 +221,8 @@ def send_email(args: argparse.Namespace, body: str) -> str:
             "--sent-log",
             str(args.sent_log),
         ]
+        if args.creds_file:
+            command.extend(["--creds-file", str(args.creds_file)])
         if args.dry_run:
             command.append("--dry-run")
         proc = subprocess.run(command, text=True, capture_output=True, check=False, timeout=45)
