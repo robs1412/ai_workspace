@@ -166,7 +166,21 @@ The first implementation stage must not:
 - Remote BID syntax checks passed for both deployed files, and both deployed files matched local SHA1 `f1a6fdc41c7f87ee94e1261b80681ec336acd03d`.
 - Live BID unauthenticated checks for `/bid/creditcard_matching.php?statement=current&user=Sonat` and `/bid/creditcard.php` returned login redirects, not fatal errors.
 - No live reminder email was sent during deployment validation.
-- The `/ops` fast receipt upload/camera capture workflow is not implemented yet. It remains the next slice in OPS task 372664 for 2026-06-18 at 10:00 AM CDT unless Robert asks to start it sooner.
+- At the time of the Portal/BID reminder-route deployment, the `/ops` fast receipt upload/camera capture workflow was still pending. Robert then asked to implement it immediately, and the completed implementation is recorded below.
+
+## Fast Receipt Capture Implementation - 2026-06-17
+
+- OPS commit `bf7e360` adds `/ops/receipt_capture.php` and `receipt_capture_helpers.php`.
+- The OPS page is authenticated, supports drag/drop and camera/file selection, loads Portal receipt categories/currency through the existing OPS Portal API helpers, creates Portal company-card receipts, and attaches the uploaded file through Portal `/files`.
+- The save path updates an existing QBO placeholder receipt when `qbo_transaction_key` is present; otherwise it creates a new Portal receipt with `qbo_source=ops_fast_capture` and notes that the receipt is pending QBO match.
+- Optional image readout is available through `ajax.php?action=receipt_extract` when an OPS `OPENAI_API_KEY` is configured. If not configured, the page still saves receipts with reviewed manual fields.
+- OPS navigation now includes `Receipt Capture` under the Portal section.
+- Local verification: PHP syntax checks passed for `receipt_capture.php`, `receipt_capture_helpers.php`, `ajax.php`, and `header.php`; authenticated CLI render found the expected capture controls; Playwright desktop/mobile checks against a local PHP server returned HTTP 200 with no checked overflow.
+- Live OPS was fast-forwarded to `bf7e360`; live readback confirmed branch `main`, commit `bf7e360`, commit subject `Add fast company card receipt capture`, and clean PHP syntax for the changed live files.
+- BID commit `2e15a8c` points the Add receipt/reminder quick link to `https://www.koval-distillery.com/ops/receipt_capture.php` with transaction context in the query string.
+- BID `2e15a8c` was deployed to both `/srv/development/bid/creditcard_matching.php` and `/srv/bid/creditcard_matching.php`; both live files passed PHP syntax and matched SHA1 `4f5749dce0bbe8a7561502c13ec374c124181d0e`.
+- Live BID unauthenticated check for `/bid/creditcard_matching.php?statement=current&user=Sonat` returned a login redirect, not a fatal error.
+- No live reminder email and no live receipt creation were triggered during validation.
 
 ## Verbatim Robert Instructions
 
