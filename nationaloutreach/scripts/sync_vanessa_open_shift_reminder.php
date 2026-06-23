@@ -107,6 +107,40 @@ function product_prep_note(?string $notes): string
 
 function coteam_bcc_recipients(): array
 {
+    $listId = (int) (getenv('NATIONALOUTREACH_COTEAM_PHPLIST_ID') ?: 73);
+    if ($listId > 0) {
+        try {
+            $pdo = get_event_pdo();
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $stmt = $pdo->prepare(
+                "SELECT LOWER(TRIM(u.email)) AS email
+                   FROM koval_plst1.phplist_user_user u
+                   JOIN koval_plst1.phplist_listuser lu ON lu.userid = u.id
+                   JOIN koval_plst1.phplist_list l ON l.id = lu.listid
+                  WHERE lu.listid = :list_id
+                    AND l.active = 1
+                    AND u.confirmed = 1
+                    AND COALESCE(u.blacklisted, 0) = 0
+                    AND COALESCE(u.disabled, 0) = 0
+                    AND TRIM(u.email) <> ''
+                  ORDER BY LOWER(TRIM(u.email))"
+            );
+            $stmt->execute([':list_id' => $listId]);
+            $emails = [];
+            foreach ($stmt->fetchAll(PDO::FETCH_COLUMN) ?: [] as $email) {
+                $email = trim((string) $email);
+                if ($email !== '' && filter_var($email, FILTER_VALIDATE_EMAIL) && !in_array($email, $emails, true)) {
+                    $emails[] = $email;
+                }
+            }
+            if ($emails !== []) {
+                return $emails;
+            }
+        } catch (Throwable $e) {
+            fwrite(STDERR, 'phpList COTeam BCC lookup failed for list ' . $listId . ': ' . $e->getMessage() . PHP_EOL);
+        }
+    }
+
     $override = trim((string) getenv('NATIONALOUTREACH_COTEAM_BCC_JSON'));
     if ($override !== '') {
         $decoded = json_decode($override, true);
@@ -123,7 +157,6 @@ function coteam_bcc_recipients(): array
         'clwilander@gmail.com',
         'darla.swango@kovaldistillery.com',
         'dereck.atwater@kovaldistillery.com',
-        'dylancollinsgphs@gmail.com',
         'gabriele.thormann99@gmail.com',
         'jth2d@hotmail.com',
         'julie.feyerer@kovaldistillery.com',
