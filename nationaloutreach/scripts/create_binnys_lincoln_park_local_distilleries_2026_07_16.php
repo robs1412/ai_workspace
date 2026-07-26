@@ -5,7 +5,7 @@ declare(strict_types=1);
 require_once '/Users/werkstatt/ops/config.php';
 require_once '/Users/werkstatt/ops/bootstrap.php';
 
-function downers_week_day_id(string $date): int
+function blp_week_day_id(string $date): int
 {
     $timestamp = strtotime($date);
     if ($timestamp === false) {
@@ -14,7 +14,7 @@ function downers_week_day_id(string $date): int
     return (int) date('N', $timestamp);
 }
 
-function downers_google_token_user_id(PDO $pdo): ?int
+function blp_google_token_user_id(PDO $pdo): ?int
 {
     google_oauth_tokens_table_ready($pdo);
     $stmt = $pdo->query('SELECT user_id FROM ops_google_oauth_tokens ORDER BY updated_at DESC');
@@ -27,7 +27,7 @@ function downers_google_token_user_id(PDO $pdo): ?int
     return null;
 }
 
-function downers_upsert_google_link(PDO $pdo, int $eventId, string $uid): void
+function blp_upsert_google_link(PDO $pdo, int $eventId, string $uid): void
 {
     $pdo->exec("CREATE TABLE IF NOT EXISTS event_booking_google_links (
         event_booking_id INT NOT NULL,
@@ -40,25 +40,23 @@ function downers_upsert_google_link(PDO $pdo, int $eventId, string $uid): void
         CONSTRAINT fk_event_booking_google_links_event FOREIGN KEY (event_booking_id) REFERENCES event_bookings(id) ON DELETE CASCADE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
 
-    $cleanup = $pdo->prepare('DELETE FROM event_booking_google_links WHERE google_event_uid = ? AND event_booking_id <> ?');
-    $cleanup->execute([$uid, $eventId]);
-
-    $stmt = $pdo->prepare(
+    $pdo->prepare('DELETE FROM event_booking_google_links WHERE google_event_uid = ? AND event_booking_id <> ?')
+        ->execute([$uid, $eventId]);
+    $pdo->prepare(
         'INSERT INTO event_booking_google_links (event_booking_id, google_event_uid, calendar_type)
          VALUES (?, ?, ?)
          ON DUPLICATE KEY UPDATE google_event_uid = VALUES(google_event_uid), calendar_type = VALUES(calendar_type), updated_at = CURRENT_TIMESTAMP'
-    );
-    $stmt->execute([$eventId, $uid, 'outreach']);
+    )->execute([$eventId, $uid, 'outreach']);
 }
 
-function downers_write_json_file(string $path, array $payload): void
+function blp_write_json_file(string $path, array $payload): void
 {
     $json = json_encode($payload, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
     if ($json === false) {
         throw new RuntimeException('Unable to encode JSON payload.');
     }
-    if (file_put_contents($path, $json . "\n", LOCK_EX) === false) {
-        throw new RuntimeException('Unable to write approved reply payload.');
+    if (file_put_contents($path, $json . "\n") === false) {
+        throw new RuntimeException('Unable to write ' . $path);
     }
     chmod($path, 0600);
 }
@@ -66,27 +64,26 @@ function downers_write_json_file(string $path, array $payload): void
 $eventPdo = get_event_pdo();
 $trackPdo = get_tracktime_pdo();
 
-$eventName = "Binny's Downers Grove Midwest Whiskey Event";
-$eventDate = '2026-07-18';
+$eventName = "Binny's Lincoln Park Local Distilleries Event";
+$eventDate = '2026-07-16';
 $eventStart = '18:00';
 $eventEnd = '20:00';
-$accountId = 2681;
+$accountId = 240363;
 $createdBy = 1332;
 $eventHost = 1343;
 $cotGroupId = 169;
-$sourceMessageId = '<CH3PR13MB6387DF5BB47F05C703BC1CF4A2FA2@CH3PR13MB6387.namprd13.prod.outlook.com>';
-$sourceRef = 'taskflow-d16aeb2e9c2e7e6d';
-$location = "Binny's Downers Grove, 2020 Butterfield Rd., Downers Grove, IL 60515";
+$sourceMessageId = '<ds5pr13mb765321f1cae2c26ada008f56aaed2@ds5pr13mb7653.namprd13.prod.outlook.com>';
+$taskFlowKey = 'taskflow-d648c4645e10e892';
+$location = "Binny's Lincoln Park, 1720 N Marcey St, Chicago, IL 60614";
 $notes = implode("\n", [
-    'Latest source: Alexis Scholtens email, subject "Re: Binny\'s Downers Grove - Midwest Whiskey Event - 7/18/26", Message-ID ' . $sourceMessageId . '.',
-    'Downers Grove team is hosting a walkaround whiskey event and asked KOVAL to be one of the showcased distilleries.',
-    'Updated event details from source: Binny\'s Downers Grove, July 18, 2026, 6:00 PM-8:00 PM.',
-    'Binny\'s will provide tables, table covers, ice buckets, and ice. KOVAL may bring swag or giveaways.',
-    'Confirmed pour list: KOVAL Bourbon, KOVAL Rye, KOVAL Four Grain, and KOVAL Oat.',
+    'Source: Rob Weekley email, subject "Binny\'s Lincoln Park - Local Distilleries Event - 7/16/26", Message-ID ' . $sourceMessageId . '.',
+    'Binny\'s asked KOVAL to attend its Local Distilleries event and complete the attached pour list form.',
+    'Event details from source: Binny\'s Lincoln Park, Thursday, July 16, 2026, 6:00 PM-8:00 PM.',
+    'The National Outreach runtime did not expose a saved pour-list attachment for this source message, so Vanessa asked Rob to resend it.',
     'Coordinator: Vanessa Sterling. Open COTeam shift is intentionally unassigned pending staff coverage.',
-    'Task Flow: ' . $sourceRef . '.',
+    'Task Flow: ' . $taskFlowKey . '.',
 ]);
-$importantInformation = 'Walkaround whiskey event, 6:00 PM-8:00 PM. Binny\'s provides tables, covers, ice buckets, and ice. Bring KOVAL Bourbon, Rye, Four Grain, Oat, plus optional swag/giveaways. Open COTeam shift pending coverage assignment.';
+$importantInformation = 'Local Distilleries event. Vanessa Sterling confirmed KOVAL attendance and asked Rob Weekley to resend the pour-list form because no attachment was available in the National Outreach runtime.';
 
 $eventPdo->beginTransaction();
 if (!$trackPdo->inTransaction()) {
@@ -108,7 +105,7 @@ try {
           ORDER BY eb.id DESC
           LIMIT 1"
     );
-    $dupeStmt->execute([$eventDate, $accountId, '%Downers Grove%Whiskey%', '%Downers Grove%', '%' . $sourceMessageId . '%']);
+    $dupeStmt->execute([$eventDate, $accountId, '%Local Distilleries%', '%Lincoln Park%', '%' . trim($sourceMessageId, '<>') . '%']);
     $eventId = (int) ($dupeStmt->fetchColumn() ?: 0);
 
     if ($eventId > 0) {
@@ -121,22 +118,9 @@ try {
               WHERE id = ?'
         );
         $updateEvent->execute([
-            $eventName,
-            $eventDate,
-            null,
-            'Outreach',
-            $location,
-            $accountId,
-            $eventStart,
-            $eventEnd,
-            'Alexis Scholtens',
-            'ascholtens@binnys.com',
-            '630-705-9463',
-            null,
-            $notes,
-            $importantInformation,
-            $eventHost,
-            $eventId,
+            $eventName, $eventDate, null, 'Outreach', $location, $accountId, $eventStart, $eventEnd,
+            'Rob Weekley', 'rweekley@binnys.com', '224-491-6156', null, $notes, $importantInformation,
+            $eventHost, $eventId,
         ]);
     } else {
         $insertEvent = $eventPdo->prepare(
@@ -148,28 +132,9 @@ try {
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
         );
         $insertEvent->execute([
-            $eventName,
-            $eventDate,
-            null,
-            'Outreach',
-            $location,
-            $accountId,
-            $eventStart,
-            $eventEnd,
-            'Alexis Scholtens',
-            'ascholtens@binnys.com',
-            '630-705-9463',
-            0,
-            null,
-            null,
-            null,
-            $notes,
-            $importantInformation,
-            0,
-            null,
-            null,
-            $createdBy,
-            $eventHost,
+            $eventName, $eventDate, null, 'Outreach', $location, $accountId, $eventStart, $eventEnd,
+            'Rob Weekley', 'rweekley@binnys.com', '224-491-6156', 0, null, null, null, $notes,
+            $importantInformation, 0, null, null, $createdBy, $eventHost,
         ]);
         $eventId = (int) $eventPdo->lastInsertId();
         if ($eventId <= 0) {
@@ -186,44 +151,20 @@ try {
     $shiftLookup = $eventPdo->prepare('SELECT shift_id FROM event_booking_shift_links WHERE event_booking_id = ? ORDER BY id ASC LIMIT 1');
     $shiftLookup->execute([$eventId]);
     $shiftId = (int) ($shiftLookup->fetchColumn() ?: 0);
-    $shiftNotes = "Outreach: Binny's Downers Grove Midwest Whiskey Event - coverage pending";
+    $shiftNotes = "Outreach: Binny's Lincoln Park Local Distilleries Event - coverage pending";
     if ($shiftId > 0) {
-        $updateShift = $trackPdo->prepare(
+        $trackPdo->prepare(
             "UPDATE " . TRACKTIME_DB_NAME . ".shifts
                 SET week_day_id = ?, start_date = ?, end_date = ?, start_time = ?, end_time = ?,
                     notes = ?, group_id = ?, account_id = ?, activity_id = 0, updated_by = ?
               WHERE id = ?"
-        );
-        $updateShift->execute([
-            downers_week_day_id($eventDate),
-            $eventDate,
-            $eventDate,
-            $eventStart,
-            $eventEnd,
-            $shiftNotes,
-            $cotGroupId,
-            $accountId,
-            $createdBy,
-            $shiftId,
-        ]);
+        )->execute([$eventDate ? blp_week_day_id($eventDate) : 0, $eventDate, $eventDate, $eventStart, $eventEnd, $shiftNotes, $cotGroupId, $accountId, $createdBy, $shiftId]);
     } else {
-        $insertShift = $trackPdo->prepare(
+        $trackPdo->prepare(
             "INSERT INTO " . TRACKTIME_DB_NAME . ".shifts
              (parent_id, week_day_id, start_date, end_date, start_time, end_time, deleted, notes, is_template, group_id, account_id, activity_id, created_by, updated_by)
              VALUES (0, ?, ?, ?, ?, ?, 0, ?, 0, ?, ?, 0, ?, ?)"
-        );
-        $insertShift->execute([
-            downers_week_day_id($eventDate),
-            $eventDate,
-            $eventDate,
-            $eventStart,
-            $eventEnd,
-            $shiftNotes,
-            $cotGroupId,
-            $accountId,
-            $createdBy,
-            $createdBy,
-        ]);
+        )->execute([blp_week_day_id($eventDate), $eventDate, $eventDate, $eventStart, $eventEnd, $shiftNotes, $cotGroupId, $accountId, $createdBy, $createdBy]);
         $shiftId = (int) $trackPdo->lastInsertId();
         if ($shiftId <= 0) {
             throw new RuntimeException('Shift insert did not return an id.');
@@ -252,7 +193,7 @@ try {
 
 $googleSync = ['attempted' => false, 'status' => 'not_attempted', 'uid' => ''];
 try {
-    $tokenUserId = downers_google_token_user_id($eventPdo);
+    $tokenUserId = blp_google_token_user_id($eventPdo);
     if ($tokenUserId === null) {
         throw new RuntimeException('No usable Google OAuth refresh token user found.');
     }
@@ -268,28 +209,16 @@ try {
     $calendarId = google_calendar_outreach_id();
     $existing = google_calendar_find_event_by_icaluid($calendarId, $uid, true, $tokenUserId);
     if (is_array($existing) && !empty($existing['id'])) {
-        $resp = google_calendar_request(
-            'PATCH',
-            'calendars/' . rawurlencode($calendarId) . '/events/' . rawurlencode((string) $existing['id']),
-            [],
-            $payload,
-            $tokenUserId
-        );
+        $resp = google_calendar_request('PATCH', 'calendars/' . rawurlencode($calendarId) . '/events/' . rawurlencode((string) $existing['id']), [], $payload, $tokenUserId);
         $operation = 'patched';
     } else {
-        $resp = google_calendar_request(
-            'POST',
-            'calendars/' . rawurlencode($calendarId) . '/events',
-            [],
-            $payload,
-            $tokenUserId
-        );
+        $resp = google_calendar_request('POST', 'calendars/' . rawurlencode($calendarId) . '/events', [], $payload, $tokenUserId);
         $operation = 'created';
     }
     if (empty($resp['success'])) {
         throw new RuntimeException((string) ($resp['error'] ?? 'Google Calendar request failed.'));
     }
-    downers_upsert_google_link($eventPdo, $eventId, $uid);
+    blp_upsert_google_link($eventPdo, $eventId, $uid);
     $googleSync = ['attempted' => true, 'status' => $operation, 'uid' => $uid];
 } catch (Throwable $e) {
     $googleSync = ['attempted' => true, 'status' => 'failed', 'error' => $e->getMessage(), 'uid' => ''];
@@ -314,21 +243,16 @@ $row = $readback->fetch(PDO::FETCH_ASSOC);
 
 $stateDir = '/Users/admin/.nationaloutreach-launch/state';
 $outbox = $stateDir . '/outbox';
-if (!is_dir($outbox) && !mkdir($outbox, 0700, true) && !is_dir($outbox)) {
-    throw new RuntimeException('Unable to create National Outreach outbox.');
+if (!is_dir($outbox)) {
+    mkdir($outbox, 0700, true);
 }
+$opsUrl = 'https://www.koval-distillery.com/ops/index.php?view=outreach_detail&id=' . $eventId;
 $body = implode("\n", [
-    'Hi Alexis,',
+    'Hi Rob,',
     '',
-    'Thank you for the updated details. I have changed our calendar to 6:00-8:00 PM on July 18.',
+    'Thanks for sending this over. I have KOVAL down for the Local Distilleries event at Binny\'s Lincoln Park on Thursday, July 16 from 6:00-8:00 PM.',
     '',
-    'We are planning to pour:',
-    '- KOVAL Bourbon',
-    '- KOVAL Rye',
-    '- KOVAL Four Grain',
-    '- KOVAL Oat',
-    '',
-    'Thank you as well for confirming the table and ice setup. We will bring any swag or giveaways with us.',
+    'I do not see the pour list form attachment on my side. Could you please resend it so I can complete that for you?',
     '',
     'Best,',
     '',
@@ -344,93 +268,45 @@ $body = implode("\n", [
     '',
     'X | Instagram | Facebook',
 ]);
-$verification = 'OPS event ' . $eventId . ' and linked shift ' . $shiftId . ' read back at 2026-07-18 18:00-20:00; Outreach calendar UID ops-outreach-' . $eventId . '@koval-distillery.com ' . ($googleSync['status'] ?? 'unknown') . '.';
 $taskPacket = [
     'source_ref' => trim($sourceMessageId, '<>'),
-    'dedupe_key' => $sourceRef,
+    'dedupe_key' => $taskFlowKey,
     'intake_channel' => 'approved-send:nationaloutreach',
-    'requester' => 'Alexis Scholtens <ascholtens@binnys.com>',
+    'requester' => 'Rob Weekley <rweekley@binnys.com>',
     'owner_lane' => 'outreach-coordinator',
     'responsible_worker_or_persona' => 'vanessa.sterling@kovaldistillery.com',
-    'workspaceboard_session' => '3ee759f5',
-    'ops_portal_or_domain_task' => 'OPS event ' . $eventId . ' / TrackTime shift ' . $shiftId,
-    'status' => 'reported',
+    'ops_portal_or_domain_task' => 'OPS event ' . $eventId . ' / TrackTime shift ' . (string) ($row['shift_id'] ?? ''),
+    'status' => 'completion_with_external_followup',
     'calendar_event' => 'ops-outreach-' . $eventId . '@koval-distillery.com',
-    'source_links' => "Re: Binny's Downers Grove - Midwest Whiskey Event - 7/18/26",
+    'source_links' => "Binny's Lincoln Park - Local Distilleries Event - 7/16/26",
     'approval_gates' => 'routine-if-clear',
-    'verification_readback' => $verification,
-    'next_update' => 'Complete unless Binny\'s replies with another event change.',
-    'requested_deliverable' => 'Update the event time and provide the whiskey pour list to Binny\'s.',
-    'human_owner_or_recipient' => 'Alexis Scholtens <ascholtens@binnys.com>',
+    'verification_readback' => 'OPS event readback completed; pour-list attachment unavailable in National Outreach runtime; reply queued asking Rob to resend it.',
+    'next_update' => 'Watch for Rob Weekley to resend the pour-list form.',
+    'requested_deliverable' => 'Confirm KOVAL attendance and fill out the Binny\'s pour list form.',
+    'human_owner_or_recipient' => 'Rob Weekley <rweekley@binnys.com>',
     'output_channel' => 'email',
-    'proof_required' => 'OPS event/shift/calendar readback plus sent Message-ID and source filing proof',
+    'proof_required' => 'sent Message-ID plus OPS event readback',
     'owner_question_required' => 'false',
 ];
-$draftPath = $outbox . '/taskflow-d16aeb2e9c2e7e6d-binnys-downers-grove-update.approved.json';
-downers_write_json_file($draftPath, [
+$draftPayload = [
     'from' => 'vanessa.sterling@kovaldistillery.com',
     'from_name' => 'Vanessa Sterling',
-    'to' => ['ascholtens@binnys.com'],
-    'cc' => ['Managers25@binnys.com', 'sonat@kovaldistillery.com', 'robert@kovaldistillery.com'],
-    'subject' => "Re: Binny's Downers Grove - Midwest Whiskey Event - 7/18/26",
+    'to' => ['rweekley@binnys.com'],
+    'cc' => ['sonat@kovaldistillery.com', 'brittney.barcelona@rndc-usa.com', 'robert@kovaldistillery.com'],
+    'subject' => "Re: Binny's Lincoln Park - Local Distilleries Event - 7/16/26",
     'body' => $body,
     'in_reply_to' => $sourceMessageId,
-    'references' => '<DS5PR13MB765371A7C1412059B4849DAFAA132@DS5PR13MB7653.namprd13.prod.outlook.com> <CALbLtzw-GD4qZDMSu=CD0TWDB120T90-6DUa8eAsEpmmvALjtA@mail.gmail.com> ' . $sourceMessageId,
+    'references' => $sourceMessageId,
     'source_ref' => trim($sourceMessageId, '<>'),
     'task_packet' => $taskPacket,
-]);
-
-$blockerBody = implode("\n", [
-    'Hi Robert,',
-    '',
-    'I updated OPS event 1028 and its linked shift to the confirmed July 18 time of 6:00-8:00 PM, and the Binny\'s pour-list reply is ready to send.',
-    '',
-    'The KOVAL Outreach Events Google Calendar copy could not update because OPS has no usable Google OAuth refresh token. OAuth and the Outreach calendar are configured, and token rows exist, but none resolves to a usable refresh token.',
-    '',
-    'Please complete a fresh Google OAuth consent for OPS Calendar. After that, I can rerun the sync for event 1028.',
-    '',
-    'OPS event:',
-    'https://www.koval-distillery.com/ops/index.php?view=outreach_detail&id=1028',
-    '',
-    'Best,',
-    '',
-    'Vanessa',
-    '',
-    'Vanessa Sterling',
-    'Outreach Coordinator',
-    'KOVAL Distillery',
-    '4241 N Ravenswood Ave',
-    'Chicago, IL 60613',
-    '312 878 7988',
-    'http://www.koval-distillery.com',
-    '',
-    'X | Instagram | Facebook',
-]);
-$blockerPacket = $taskPacket;
-$blockerPacket['status'] = 'blocked';
-$blockerPacket['human_owner_or_recipient'] = 'Robert Birnecker <robert@kovaldistillery.com>';
-$blockerPacket['verification_readback'] = $verification . ' OAuth is configured and token rows exist, but all usable-token resolver lengths are zero.';
-$blockerPacket['next_update'] = 'Robert must complete fresh Google OAuth consent for OPS Calendar; then rerun Outreach calendar sync for OPS event 1028.';
-$blockerPacket['requested_deliverable'] = 'Restore the usable OPS Google OAuth refresh-token path and sync OPS event 1028 to KOVAL Outreach Events.';
-$blockerPacket['proof_required'] = 'Owner blocker-email Message-ID, then live Google calendar readback after fresh consent';
-$blockerPacket['owner_question_required'] = 'true';
-$blockerPath = $outbox . '/taskflow-d16aeb2e9c2e7e6d-google-oauth-blocker.approved.json';
-downers_write_json_file($blockerPath, [
-    'from' => 'vanessa.sterling@kovaldistillery.com',
-    'from_name' => 'Vanessa Sterling',
-    'to' => ['robert@kovaldistillery.com'],
-    'cc' => ['sonat@kovaldistillery.com'],
-    'subject' => "Action needed: refresh OPS Google Calendar access for Binny's Downers Grove event",
-    'body' => $blockerBody,
-    'source_ref' => trim($sourceMessageId, '<>'),
-    'task_packet' => $blockerPacket,
-]);
+];
+$draftPath = $outbox . '/binnys-lincoln-park-local-distilleries-2026-07-16.approved.json';
+blp_write_json_file($draftPath, $draftPayload);
 
 echo json_encode([
     'ok' => true,
     'event' => $row,
+    'ops_url' => $opsUrl,
     'google_sync' => $googleSync,
     'draft' => $draftPath,
-    'blocker_draft' => $blockerPath,
-    'verification' => $verification,
 ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . "\n";

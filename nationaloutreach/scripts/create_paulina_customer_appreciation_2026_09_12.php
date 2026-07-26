@@ -5,7 +5,7 @@ declare(strict_types=1);
 require_once '/Users/werkstatt/ops/config.php';
 require_once '/Users/werkstatt/ops/bootstrap.php';
 
-function downers_week_day_id(string $date): int
+function paulina_week_day_id(string $date): int
 {
     $timestamp = strtotime($date);
     if ($timestamp === false) {
@@ -14,7 +14,7 @@ function downers_week_day_id(string $date): int
     return (int) date('N', $timestamp);
 }
 
-function downers_google_token_user_id(PDO $pdo): ?int
+function paulina_google_token_user_id(PDO $pdo): ?int
 {
     google_oauth_tokens_table_ready($pdo);
     $stmt = $pdo->query('SELECT user_id FROM ops_google_oauth_tokens ORDER BY updated_at DESC');
@@ -27,7 +27,7 @@ function downers_google_token_user_id(PDO $pdo): ?int
     return null;
 }
 
-function downers_upsert_google_link(PDO $pdo, int $eventId, string $uid): void
+function paulina_upsert_google_link(PDO $pdo, int $eventId, string $uid): void
 {
     $pdo->exec("CREATE TABLE IF NOT EXISTS event_booking_google_links (
         event_booking_id INT NOT NULL,
@@ -51,42 +51,28 @@ function downers_upsert_google_link(PDO $pdo, int $eventId, string $uid): void
     $stmt->execute([$eventId, $uid, 'outreach']);
 }
 
-function downers_write_json_file(string $path, array $payload): void
-{
-    $json = json_encode($payload, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
-    if ($json === false) {
-        throw new RuntimeException('Unable to encode JSON payload.');
-    }
-    if (file_put_contents($path, $json . "\n", LOCK_EX) === false) {
-        throw new RuntimeException('Unable to write approved reply payload.');
-    }
-    chmod($path, 0600);
-}
-
 $eventPdo = get_event_pdo();
 $trackPdo = get_tracktime_pdo();
 
-$eventName = "Binny's Downers Grove Midwest Whiskey Event";
-$eventDate = '2026-07-18';
-$eventStart = '18:00';
-$eventEnd = '20:00';
-$accountId = 2681;
+$eventName = 'Paulina Meat Market Customer Appreciation Event';
+$eventDate = '2026-09-12';
+$eventStart = '10:00';
+$eventEnd = '14:00';
+$accountId = 44998;
 $createdBy = 1332;
 $eventHost = 1343;
 $cotGroupId = 169;
-$sourceMessageId = '<CH3PR13MB6387DF5BB47F05C703BC1CF4A2FA2@CH3PR13MB6387.namprd13.prod.outlook.com>';
-$sourceRef = 'taskflow-d16aeb2e9c2e7e6d';
-$location = "Binny's Downers Grove, 2020 Butterfield Rd., Downers Grove, IL 60515";
+$sourceMessageId = '<cahpmwzxxcobnvy6mo061tdr8=qo0hzrodc5xkvw-dvdimeyr0g@mail.gmail.com>';
+$taskFlowKey = 'taskflow-2cc454783398188a';
+$location = 'Paulina Meat Market, 3501 N Lincoln Ave., Chicago, IL 60657';
 $notes = implode("\n", [
-    'Latest source: Alexis Scholtens email, subject "Re: Binny\'s Downers Grove - Midwest Whiskey Event - 7/18/26", Message-ID ' . $sourceMessageId . '.',
-    'Downers Grove team is hosting a walkaround whiskey event and asked KOVAL to be one of the showcased distilleries.',
-    'Updated event details from source: Binny\'s Downers Grove, July 18, 2026, 6:00 PM-8:00 PM.',
-    'Binny\'s will provide tables, table covers, ice buckets, and ice. KOVAL may bring swag or giveaways.',
-    'Confirmed pour list: KOVAL Bourbon, KOVAL Rye, KOVAL Four Grain, and KOVAL Oat.',
-    'Coordinator: Vanessa Sterling. Open COTeam shift is intentionally unassigned pending staff coverage.',
-    'Task Flow: ' . $sourceRef . '.',
+    'Source: Darla Swango email, subject "Paulina Meat Market - Sept. 12 Customer Appreciation Event", Message-ID ' . $sourceMessageId . '.',
+    'Darla asked National Outreach to note that KOVAL is invited again to Paulina Meat Market\'s Customer Appreciation Event on Saturday, September 12, 2026.',
+    'Initial time frame from source: 10:00 AM-2:00 PM. More details to follow.',
+    'Coordinator: Vanessa Sterling. Open COTeam shift is intentionally unassigned pending coverage/details.',
+    'Task Flow: ' . $taskFlowKey . '.',
 ]);
-$importantInformation = 'Walkaround whiskey event, 6:00 PM-8:00 PM. Binny\'s provides tables, covers, ice buckets, and ice. Bring KOVAL Bourbon, Rye, Four Grain, Oat, plus optional swag/giveaways. Open COTeam shift pending coverage assignment.';
+$importantInformation = 'Customer Appreciation Event invitation. Initial time frame 10:00 AM-2:00 PM; details and coverage are pending.';
 
 $eventPdo->beginTransaction();
 if (!$trackPdo->inTransaction()) {
@@ -108,7 +94,7 @@ try {
           ORDER BY eb.id DESC
           LIMIT 1"
     );
-    $dupeStmt->execute([$eventDate, $accountId, '%Downers Grove%Whiskey%', '%Downers Grove%', '%' . $sourceMessageId . '%']);
+    $dupeStmt->execute([$eventDate, $accountId, '%Paulina%Customer Appreciation%', '%Paulina Meat%', '%' . $sourceMessageId . '%']);
     $eventId = (int) ($dupeStmt->fetchColumn() ?: 0);
 
     if ($eventId > 0) {
@@ -129,9 +115,9 @@ try {
             $accountId,
             $eventStart,
             $eventEnd,
-            'Alexis Scholtens',
-            'ascholtens@binnys.com',
-            '630-705-9463',
+            'Darla Swango',
+            'darla.swango@kovaldistillery.com',
+            '',
             null,
             $notes,
             $importantInformation,
@@ -156,9 +142,9 @@ try {
             $accountId,
             $eventStart,
             $eventEnd,
-            'Alexis Scholtens',
-            'ascholtens@binnys.com',
-            '630-705-9463',
+            'Darla Swango',
+            'darla.swango@kovaldistillery.com',
+            '',
             0,
             null,
             null,
@@ -186,7 +172,7 @@ try {
     $shiftLookup = $eventPdo->prepare('SELECT shift_id FROM event_booking_shift_links WHERE event_booking_id = ? ORDER BY id ASC LIMIT 1');
     $shiftLookup->execute([$eventId]);
     $shiftId = (int) ($shiftLookup->fetchColumn() ?: 0);
-    $shiftNotes = "Outreach: Binny's Downers Grove Midwest Whiskey Event - coverage pending";
+    $shiftNotes = 'Outreach: Paulina Meat Market Customer Appreciation Event - coverage pending';
     if ($shiftId > 0) {
         $updateShift = $trackPdo->prepare(
             "UPDATE " . TRACKTIME_DB_NAME . ".shifts
@@ -195,7 +181,7 @@ try {
               WHERE id = ?"
         );
         $updateShift->execute([
-            downers_week_day_id($eventDate),
+            paulina_week_day_id($eventDate),
             $eventDate,
             $eventDate,
             $eventStart,
@@ -213,7 +199,7 @@ try {
              VALUES (0, ?, ?, ?, ?, ?, 0, ?, 0, ?, ?, 0, ?, ?)"
         );
         $insertShift->execute([
-            downers_week_day_id($eventDate),
+            paulina_week_day_id($eventDate),
             $eventDate,
             $eventDate,
             $eventStart,
@@ -252,7 +238,7 @@ try {
 
 $googleSync = ['attempted' => false, 'status' => 'not_attempted', 'uid' => ''];
 try {
-    $tokenUserId = downers_google_token_user_id($eventPdo);
+    $tokenUserId = paulina_google_token_user_id($eventPdo);
     if ($tokenUserId === null) {
         throw new RuntimeException('No usable Google OAuth refresh token user found.');
     }
@@ -289,7 +275,7 @@ try {
     if (empty($resp['success'])) {
         throw new RuntimeException((string) ($resp['error'] ?? 'Google Calendar request failed.'));
     }
-    downers_upsert_google_link($eventPdo, $eventId, $uid);
+    paulina_upsert_google_link($eventPdo, $eventId, $uid);
     $googleSync = ['attempted' => true, 'status' => $operation, 'uid' => $uid];
 } catch (Throwable $e) {
     $googleSync = ['attempted' => true, 'status' => 'failed', 'error' => $e->getMessage(), 'uid' => ''];
@@ -311,126 +297,4 @@ $readback = $eventPdo->prepare(
 );
 $readback->execute([$eventId]);
 $row = $readback->fetch(PDO::FETCH_ASSOC);
-
-$stateDir = '/Users/admin/.nationaloutreach-launch/state';
-$outbox = $stateDir . '/outbox';
-if (!is_dir($outbox) && !mkdir($outbox, 0700, true) && !is_dir($outbox)) {
-    throw new RuntimeException('Unable to create National Outreach outbox.');
-}
-$body = implode("\n", [
-    'Hi Alexis,',
-    '',
-    'Thank you for the updated details. I have changed our calendar to 6:00-8:00 PM on July 18.',
-    '',
-    'We are planning to pour:',
-    '- KOVAL Bourbon',
-    '- KOVAL Rye',
-    '- KOVAL Four Grain',
-    '- KOVAL Oat',
-    '',
-    'Thank you as well for confirming the table and ice setup. We will bring any swag or giveaways with us.',
-    '',
-    'Best,',
-    '',
-    'Vanessa',
-    '',
-    'Vanessa Sterling',
-    'Outreach Coordinator',
-    'KOVAL Distillery',
-    '4241 N Ravenswood Ave',
-    'Chicago, IL 60613',
-    '312 878 7988',
-    'http://www.koval-distillery.com',
-    '',
-    'X | Instagram | Facebook',
-]);
-$verification = 'OPS event ' . $eventId . ' and linked shift ' . $shiftId . ' read back at 2026-07-18 18:00-20:00; Outreach calendar UID ops-outreach-' . $eventId . '@koval-distillery.com ' . ($googleSync['status'] ?? 'unknown') . '.';
-$taskPacket = [
-    'source_ref' => trim($sourceMessageId, '<>'),
-    'dedupe_key' => $sourceRef,
-    'intake_channel' => 'approved-send:nationaloutreach',
-    'requester' => 'Alexis Scholtens <ascholtens@binnys.com>',
-    'owner_lane' => 'outreach-coordinator',
-    'responsible_worker_or_persona' => 'vanessa.sterling@kovaldistillery.com',
-    'workspaceboard_session' => '3ee759f5',
-    'ops_portal_or_domain_task' => 'OPS event ' . $eventId . ' / TrackTime shift ' . $shiftId,
-    'status' => 'reported',
-    'calendar_event' => 'ops-outreach-' . $eventId . '@koval-distillery.com',
-    'source_links' => "Re: Binny's Downers Grove - Midwest Whiskey Event - 7/18/26",
-    'approval_gates' => 'routine-if-clear',
-    'verification_readback' => $verification,
-    'next_update' => 'Complete unless Binny\'s replies with another event change.',
-    'requested_deliverable' => 'Update the event time and provide the whiskey pour list to Binny\'s.',
-    'human_owner_or_recipient' => 'Alexis Scholtens <ascholtens@binnys.com>',
-    'output_channel' => 'email',
-    'proof_required' => 'OPS event/shift/calendar readback plus sent Message-ID and source filing proof',
-    'owner_question_required' => 'false',
-];
-$draftPath = $outbox . '/taskflow-d16aeb2e9c2e7e6d-binnys-downers-grove-update.approved.json';
-downers_write_json_file($draftPath, [
-    'from' => 'vanessa.sterling@kovaldistillery.com',
-    'from_name' => 'Vanessa Sterling',
-    'to' => ['ascholtens@binnys.com'],
-    'cc' => ['Managers25@binnys.com', 'sonat@kovaldistillery.com', 'robert@kovaldistillery.com'],
-    'subject' => "Re: Binny's Downers Grove - Midwest Whiskey Event - 7/18/26",
-    'body' => $body,
-    'in_reply_to' => $sourceMessageId,
-    'references' => '<DS5PR13MB765371A7C1412059B4849DAFAA132@DS5PR13MB7653.namprd13.prod.outlook.com> <CALbLtzw-GD4qZDMSu=CD0TWDB120T90-6DUa8eAsEpmmvALjtA@mail.gmail.com> ' . $sourceMessageId,
-    'source_ref' => trim($sourceMessageId, '<>'),
-    'task_packet' => $taskPacket,
-]);
-
-$blockerBody = implode("\n", [
-    'Hi Robert,',
-    '',
-    'I updated OPS event 1028 and its linked shift to the confirmed July 18 time of 6:00-8:00 PM, and the Binny\'s pour-list reply is ready to send.',
-    '',
-    'The KOVAL Outreach Events Google Calendar copy could not update because OPS has no usable Google OAuth refresh token. OAuth and the Outreach calendar are configured, and token rows exist, but none resolves to a usable refresh token.',
-    '',
-    'Please complete a fresh Google OAuth consent for OPS Calendar. After that, I can rerun the sync for event 1028.',
-    '',
-    'OPS event:',
-    'https://www.koval-distillery.com/ops/index.php?view=outreach_detail&id=1028',
-    '',
-    'Best,',
-    '',
-    'Vanessa',
-    '',
-    'Vanessa Sterling',
-    'Outreach Coordinator',
-    'KOVAL Distillery',
-    '4241 N Ravenswood Ave',
-    'Chicago, IL 60613',
-    '312 878 7988',
-    'http://www.koval-distillery.com',
-    '',
-    'X | Instagram | Facebook',
-]);
-$blockerPacket = $taskPacket;
-$blockerPacket['status'] = 'blocked';
-$blockerPacket['human_owner_or_recipient'] = 'Robert Birnecker <robert@kovaldistillery.com>';
-$blockerPacket['verification_readback'] = $verification . ' OAuth is configured and token rows exist, but all usable-token resolver lengths are zero.';
-$blockerPacket['next_update'] = 'Robert must complete fresh Google OAuth consent for OPS Calendar; then rerun Outreach calendar sync for OPS event 1028.';
-$blockerPacket['requested_deliverable'] = 'Restore the usable OPS Google OAuth refresh-token path and sync OPS event 1028 to KOVAL Outreach Events.';
-$blockerPacket['proof_required'] = 'Owner blocker-email Message-ID, then live Google calendar readback after fresh consent';
-$blockerPacket['owner_question_required'] = 'true';
-$blockerPath = $outbox . '/taskflow-d16aeb2e9c2e7e6d-google-oauth-blocker.approved.json';
-downers_write_json_file($blockerPath, [
-    'from' => 'vanessa.sterling@kovaldistillery.com',
-    'from_name' => 'Vanessa Sterling',
-    'to' => ['robert@kovaldistillery.com'],
-    'cc' => ['sonat@kovaldistillery.com'],
-    'subject' => "Action needed: refresh OPS Google Calendar access for Binny's Downers Grove event",
-    'body' => $blockerBody,
-    'source_ref' => trim($sourceMessageId, '<>'),
-    'task_packet' => $blockerPacket,
-]);
-
-echo json_encode([
-    'ok' => true,
-    'event' => $row,
-    'google_sync' => $googleSync,
-    'draft' => $draftPath,
-    'blocker_draft' => $blockerPath,
-    'verification' => $verification,
-], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . "\n";
+echo json_encode(['event' => $row, 'google_sync' => $googleSync], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . "\n";

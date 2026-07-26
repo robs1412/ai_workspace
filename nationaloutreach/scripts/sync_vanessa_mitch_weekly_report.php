@@ -126,7 +126,7 @@ function mitch_facing_payload(DateTimeImmutable $monday): array
     $payload = json_decode((string) $stdout, true, flags: JSON_THROW_ON_ERROR);
     $body = str_replace(
         "Hi Robert,\n\nDraft for approval: this is the current weekly upcoming tastings report for Mitch Conti. It has not been sent to Mitch.\n\nSummary:",
-        "Hi Mitch,\n\nHere is this week's upcoming KOVAL tasting schedule.\n\nSummary:",
+        "Hi Robert and Sonat,\n\nHere is this week's upcoming KOVAL tasting schedule.\n\nSummary:",
         (string) ($payload['body'] ?? '')
     );
     $body = str_replace(
@@ -136,15 +136,15 @@ function mitch_facing_payload(DateTimeImmutable $monday): array
     );
     $html = str_replace(
         '<p>Hi Robert,</p><p>Draft for approval: this is the current weekly upcoming tastings report for Mitch Conti. It has not been sent to Mitch.</p>',
-        "<p>Hi Mitch,</p><p>Here is this week's upcoming KOVAL tasting schedule.</p>",
+        "<p>Hi Robert and Sonat,</p><p>Here is this week's upcoming KOVAL tasting schedule.</p>",
         (string) ($payload['html_body'] ?? '')
     );
     return [
         'from' => 'vanessa.sterling@kovaldistillery.com',
         'from_name' => 'Vanessa Sterling',
-        'to' => ['Mitch.Conti@rndc-usa.com'],
-        'cc' => ['robert@kovaldistillery.com'],
-        'bcc' => coteam_bcc_recipients(),
+        'to' => ['robert@kovaldistillery.com', 'sonat@kovaldistillery.com'],
+        'cc' => [],
+        'bcc' => [],
         'subject' => 'Upcoming KOVAL tastings this week',
         'body' => $body,
         'html_body' => $html,
@@ -200,8 +200,8 @@ if (!isset($existingRefs[normalize_ref($sourceRef)])) {
         'responsible_worker_or_persona' => 'Vanessa Sterling',
         'ops_portal_or_domain_task' => 'OPS 367856',
         'status' => 'reported',
-        'requested_deliverable' => 'Monday 8 AM Mitch Conti weekly upcoming tasting report, Robert copied, COTeam BCC.',
-        'human_owner_or_recipient' => 'Mitch Conti; Robert copied; COTeam BCC',
+        'requested_deliverable' => 'Monday 8 AM weekly upcoming tasting report sent to Robert and Sonat.',
+        'human_owner_or_recipient' => 'Robert Birnecker; Sonat',
         'output_channel' => 'email',
         'proof_required' => 'sent Message-ID plus sent-log recipient counts',
         'verification_readback' => 'Generated from live OPS Outreach schedule for week starting ' . $monday->format('Y-m-d') . '.',
@@ -216,7 +216,7 @@ if (!isset($existingRefs[normalize_ref($sourceRef)])) {
         'due_at' => $monday->format('Y-m-d') . 'T08:00:00-05:00',
         'owner' => 'Robert Birnecker',
         'worker' => 'Vanessa Sterling',
-        'dependency' => 'Monday 8 AM Mitch weekly upcoming tastings report direct send',
+        'dependency' => 'Monday 8 AM weekly upcoming tastings report direct send',
         'resolution_checks' => [],
         'email' => $payload,
         'source_ref' => $sourceRef,
@@ -225,7 +225,7 @@ if (!isset($existingRefs[normalize_ref($sourceRef)])) {
         'owner_lane' => 'outreach-coordinator',
         'responsible_worker_or_persona' => 'Vanessa Sterling',
         'source_links' => 'OPS task 367856',
-        'approval_gates' => 'Approved recurring Monday direct send; Robert cc required.',
+        'approval_gates' => 'Approved recurring Monday direct send to Robert and Sonat.',
         'verification_readback' => 'Generated from live OPS Outreach schedule.',
         'papers_projection' => 'not_applicable',
         'next_update' => 'Pending Monday 8:00 AM scheduled-action queue for approved send cycle.',
