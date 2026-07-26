@@ -1,6 +1,6 @@
 # Avignon Market SOP
 
-Last Updated: 2026-04-26
+Last Updated: 2026-07-23
 
 Source: Sonat's Avignon SOP uploaded as `/Users/werkstatt/forge/private-imports/cot-team-2026-04-26/incoming/avignon-sop.md`.
 
@@ -59,6 +59,15 @@ Prioritize market reporting and draft work in this order:
 5. Tasting intelligence: Consumer Outreach Team reliability, tasting attendance, cancellations, high-performing off-premise accounts, slipped off-premise accounts, and new/reactivated retail accounts that should be considered for tastings.
 
 For tasting recommendations, start with Illinois, focus on off-premise retail accounts, and use a long enough sales window to identify meaningful slippage or reactivation rather than one-day noise.
+
+### Current Illinois Distribution Routing
+
+- KOVAL is not currently distributed through Heritage Wine Cellars or RNDC in Illinois.
+- SATLA Spirits through `/order` is the default current Illinois route.
+- An account explicitly enabled in KOVAL's Illinois self-distribution account set is the exception and must be handled through `/dist`.
+- For any account-specific tracker, report, draft, CRM activity, order instruction, or follow-up, check the live `/dist` account set first. If the account is not enabled there, identify SATLA as the current distributor.
+- Treat Heritage/RNDC references in older emails, trackers, invoices, CRM history, or feature documents as historical context only. Never promote a historical distributor name into a current claim merely because it appears in the source.
+- When a current source conflicts with this routing rule, flag the discrepancy and verify the live account route instead of silently copying the stale distributor field.
 
 ## Tactical Playbook
 

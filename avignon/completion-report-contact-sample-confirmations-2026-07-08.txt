@@ -1,0 +1,30 @@
+Hi Sonat,
+
+Done. I finished the contact follow-through and confirmed the sample-request correction from the same thread.
+
+What changed:
+- Added John Haskins to Heidelberg Distributing Company. Portal contact ID 374266.
+- Created the Heinen's Corporate account because there was no active exact match, then added Emily Roberts, Jeff Hunsaker, and Mark Hoffman. Portal account ID 374265; contact IDs 374267, 374268, and 374269.
+- Added Russell Ryan to the existing Hotel Zachary Chicago account, which was the single active Hotel Zachary match. Portal contact ID 374270.
+- Confirmed the barrel-sample workflow correction was already recorded: explicit barrel samples now go through the regular Portal sample-request create form with the barrel-samples toggle switched on, and no extra sample request was created from the correction-only email.
+
+What I did not do:
+- I did not send any external replies.
+- I did not make pricing, distributor, account-commitment, merge, delete, or unrelated CRM changes.
+- I did not create a new sample request in this pass because the sample email was a workflow correction, not a specific shipment packet.
+
+Remaining decisions or approval gates:
+None for these items.
+
+Best,
+
+Avignon
+
+Avignon Rose
+Assistant to Sonat Birnecker Hart
+KOVAL Distillery
+4241 N Ravenswood Ave
+Chicago, IL 60613
+http://www.koval-distillery.com
+
+X | Instagram | Facebook

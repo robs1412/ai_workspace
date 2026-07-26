@@ -1,6 +1,6 @@
 # Avignon Barrel Program Guidance
 
-Updated: 2026-04-27
+Updated: 2026-07-08
 
 This is Avignon's standing guidance for Sonat emails about the WH Barrel Program, barrel samples, reservations, sold barrels, bottling, and barrel-program task flow.
 
@@ -28,6 +28,7 @@ Do not use this guidance for a generic product/sample request unless Sonat expli
 - Barrel detail: `https://www.koval-distillery.com/salesreport/wh_barrel_detail.php?barrel_number=####`
 - Manual: `https://www.koval-distillery.com/salesreport/barrelprogram.md`
 - Portal sample request area: `https://portal.koval-distillery.com/#/pos-and-samples/sample-requests`
+- New Portal sample request form: `https://portal.koval-distillery.com/#/pos-and-samples/sample-request/create`
 
 ## Ownership Pattern
 
@@ -49,6 +50,8 @@ For a barrel action, capture:
 - date needed and bottling/program details if supplied;
 - whether Matt has already reserved/selected the barrel;
 - completion-report target, normally Sonat.
+
+For a barrel sample request, use the Portal sample-request create form with the `barrel samples` toggle switched on. Fill the account with the account for whom the samples are requested. If Sonat asks for the samples for pickup, use pickup delivery and Sonat's name in the pickup/shipping details. Fill `Date Needed` from Sonat's requested date, or use the next calendar day if no date is provided. Notes must say what kind of barrel samples are requested, such as `Rye 55%`, `Rye 50%`, or `Bourbon 55%`. If Sonat says `cask strength`, translate it to `55%`.
 
 If any of the required business target fields are missing, ask one concrete question in plain English. Do not ask Sonat to work from Message-IDs or old thread ids.
 
@@ -82,5 +85,6 @@ When complete, Avignon reports to Sonat unless Robert is supervising the lane. T
 - what was verified after the action;
 - what was not done;
 - any remaining missing fields, approval gates, or human owner actions.
+- for sample requests, the live Portal request id/link and confirmation that the barrel-sample notification path was sent.
 
 Keep the report business-first and concise. Internal session ids and source ids are trace references only.

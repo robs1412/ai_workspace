@@ -32,10 +32,16 @@ or related Tennessee distributor/customer activity.
   market.
 - Tennessee distributor scope also includes Phoenix Selections and James Perry
   when mentioned in future source packets.
+- Phoenix Selections / Memphis anchors: James Perry is the off-premise lead,
+  Mason is the on-premise lead, Shawn is the accountant, and a fourth Phoenix
+  employee is starting in Nashville. Benjamin Green's June 15-17 Memphis visit
+  is the current Phoenix transition recap source.
 - Source body saved privately at `.private/source-bodies/<CALbLtzwz-wqeo3XaxhGUzVzHTLq6RC1Vt_DczdhwnX-qb4F6bg-mail-gmail-com>.txt`.
 - Attachments saved privately under `.private/source-bodies/tn-market-recap-2026-06-04-attachments/`.
 - Fall 2026 brand-plan source body and extracted activity recap saved privately
   under `.private/source-bodies/activity-for-tn-2026-06-14/`.
+- Phoenix Selections Memphis market-visit source body saved privately under
+  `.private/source-bodies/phoenix-selections-memphis-2026-06-20/`.
 
 ## Future Intake Checklist
 
@@ -151,3 +157,74 @@ or related Tennessee distributor/customer activity.
 - Near-term internal next actions: confirm immediate PO timing, review pricing
   and DA scenarios, prepare updated assets after the packaging refresh, and
   coordinate Nashville follow-up around the September market visit.
+
+## 2026-06-15 To 2026-06-17 Phoenix Selections Memphis Visit
+
+- Source: Sonat direct-owner email, subject `Fwd: Phoenix Selections Memphis
+  Market Visit Recap`, Message-ID
+  `<CALbLtzxJwq3oR+M7geJwwDYq5n=gdA3oGFppTe_504dTERofAw@mail.gmail.com>`.
+- Sonat instruction: read Benjamin Green's forwarded recap and convert it into
+  durable Avignon memory for future Tennessee market work.
+- Distributor read: Phoenix Selections is a better Memphis alignment for KOVAL
+  than the prior Southern Glazers route. James Perry and Mason are trusted
+  locally, relationship-oriented, and known to their accounts; Memphis moves
+  slowly and is strongly trust-driven.
+- Phoenix structure: James Perry is mostly off-premise in Memphis; Mason is
+  mostly on-premise and is being pushed toward the full on-premise route; Shawn
+  handles accounting; a fourth employee is starting in Nashville. Phoenix's
+  core business is organic wine, and KOVAL is both its first multi-product
+  spirits producer and its largest spirits account.
+- Visit cadence lesson: Tuesday through Thursday is better for Memphis market
+  work than Monday. Monday visits can still work for lower-pressure check-ins,
+  but Phoenix generally schedules more productive account meetings Tuesday
+  through Thursday.
+- Brand-positioning lesson: Memphis accounts already know KOVAL from the prior
+  distributor relationship. Sustainable production, unique mash bills,
+  husband-and-wife/family-business identity, heritage-minded language, and the
+  Japanese-botanical story for Thresh and Winnow gins resonated. Use kosher
+  certification carefully and contextually, not as the lead story for every
+  account.
+- Product pull: KOVAL Bourbon, Rye, Dry Gin, Cranberry Gin Liqueur, and Thresh
+  and Winnow Citrine all received direct buying signals during the visit.
+  Cranberry Gin was repeatedly recognized as an OND/fall opportunity.
+- Pending source dependency: James Perry is expected to send the account-level
+  order recap showing which products sold where. Do not treat this note as final
+  case-count proof; update individual CRM/account entries only from James's
+  order recap or another explicit source.
+- Likely next planning action: Benjamin recommended a TN alignment meeting
+  within two to three weeks to coordinate upcoming visits. This is a planning
+  recommendation, not authorization to schedule a calendar invite without
+  Sonat's direct instruction.
+
+### Memphis Account Signals
+
+- Kimbrough: previously stocked most KOVAL SKUs through Southern Glazers and was
+  already familiar with Phoenix. Immediate order signal for Dry Gin, Cranberry
+  Gin Liqueur, Bourbon, Rye, and Thresh and Winnow Citrine.
+- The Majestic Grill: Thresh and Winnow Citrine placement secured; follow up
+  for any menu-placement details or name drops.
+- Amelia Gene: KOVAL Bourbon placed into the weekly Old Fashioned program.
+  Buyer formerly worked for Southern Glazers, knew the KOVAL lineup, and also
+  plans to bring in Cranberry Gin for fall; follow up for menu photo.
+- The Station: high-value new off-premise retailer with very large shelf
+  capacity and a KOVAL fan influencing the spirits buyer. Strong target for
+  broad Phoenix SKU placement.
+- Cheers Wine & Spirits: strong barrel-pick opportunity.
+- JEM: kosher certification created an immediate order signal because the owner
+  is Jewish; this is a specific account cue, not a general instruction to lead
+  with kosher positioning everywhere.
+- Midtown prospecting: The Beauty Shop and Tiger and Peacock look like strong
+  KOVAL-fit accounts but are difficult to reach. Treat Midtown as a promising
+  growth neighborhood with high-quality restaurants and bars.
+- Mason-recommended prospecting targets: one art-bar/gallery account, one live
+  music old-school account, and one Vietnamese cocktail bar need follow-up
+  details from Benjamin/Mason before CRM/account action.
+
+### Boundaries
+
+- No CRM/Portal/OPS mutation, external reply, pricing commitment, sample
+  commitment, distributor commitment, OAuth/token/auth work, or Robert copy was
+  authorized by this recordkeeping request.
+- Preserve this entry as market memory and follow-up context. For account-level
+  updates, wait for James Perry's order recap, Benjamin's CRM entries, or a
+  future Sonat instruction with exact targets.

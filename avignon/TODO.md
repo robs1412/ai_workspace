@@ -5,6 +5,571 @@ Archived: 2026-05-18 CDT (Machine: Macmini.lan)
 This file is archived and contains no active queue items.
 Active work now lives in DB-backed Task Flow / Workspaceboard / OPS records.
 
+## 2026-07-22 - Working projection - Whole Foods Illinois September/October weekly tracker
+
+- Source Message-ID: `<CALbLtzx5ex3fJGSs=nheykT+UfryA_ojyUp7wfU0quyueVno-w@mail.gmail.com>`; dedupe key `avignon-direct-owner-sonat-CALbLtzx5ex3fJGSs-nheykT-UfryA-ojyUp7wfU0quyueVno-w-mail-gmail-com`.
+- Canonical start state: DB handoff entry `1353`; parent lifecycle session `85e8c937`; visible Salesreport worker `5471abc0`; completion handback session `5bb50c13`.
+- Deliverable: owner-accessible AI Cloud tracker for the exact 27 Whole Foods Illinois feature stores, with weekly September/October order quantities, comparison/flag, last order, action/owner, next check, and source/as-of labels.
+- Boundary: read-only analysis only. Do not email Sonat or file the source from this worker.
+- Next: wait for Salesreport worker artifact/readback or one exact source/matching blocker, then hand proof to `5bb50c13`.
+
+## 2026-07-21 - Blocked projection - TX TPSA activities, accounts, and contacts
+
+- Canonical state: DB Task Flow key `avignon-direct-owner-sonat-CALbLtzyp-9gkZmf5JpOwrVhqbPDzP7zYQqa5z9Ks-SSybJ1whA-mail-gmail-com`; DB handoff entry `1323` (supersedes `1320`); source session `820c177c`; Portal worker `292ff4e8`.
+- Completed: created 3 accounts, reused 7 exact accounts, and created/linked 12 contacts with live Portal readback. Follow-through on 2026-07-23 created/linked Freedom Libations contacts Erica `?` `376562` / `CON22401` and Emily `?` `376563` / `CON22402` under Sonat's surname-placeholder rule.
+- Blocker: no activities were created because the source lacks the activity date/type; ten account rows still need exact targets.
+- Owner report: Sonat same-thread Message-ID `<178465634603.86523.7809461830006320558@kovaldistillery.com>`.
+- Source filing: `INBOX=0`, `Handled=1`, `[Gmail]/All Mail=1`.
+- Next: resume only when Sonat supplies the missing fields; do not guess at CRM targets.
+
+## 2026-07-20 - Done - Texas durable market memory
+
+- Source: Sonat direct-owner `TX Durable Memory`; Workspaceboard session `8e091d30`.
+- Status: complete; DB handoff entry `1312` and AI Manager input `3757` are canonical.
+- Completion proof: `TEXAS_MARKET_MEMORY.md` contains all three live Drive sources, including 13 San Antonio accounts, 27 Houston targets, and 20 statewide roster rows; exact account/section verification returned no missing items; source filing readback was `INBOX=0`, `Handled=1`, `[Gmail]/All Mail=1`.
+- Boundaries: no Drive, CRM, Portal, OPS, or integrated-sales-agent mutation; no email or external send.
+- Next: future Sonat updates can begin `TX Ledger Update`; recommended first market follow-through is Mon Chou Chou contact/sample verification, then Favorite Brands/Bryce Irvine route verification.
+
+## 2026-07-15 - Done - Quality Brands Distribution account and Shauna Wallace contact
+
+- Source Message-ID: `<CALbLtzy6YdQwyUnOK9M2RrW+z_1QuQg4NU-HSL7MX1yZ8h_r6A@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzy6YdQwyUnOK9M2RrW-z-1QuQg4NU-HSL7MX1yZ8h-r6A-mail-gmail-com`
+- Workspaceboard session: `60c170bd` / `Avignon direct Sonat: New Distributor`
+- Status: complete; DB handoff entry `1259` is canonical.
+- Completion proof: created Quality Brands Distribution `376062` / `ACC22310` as a Nebraska Distributor; created and linked Shauna Wallace `376063` / `CON22311` with contact-account history `7646`; Sonat completion Message-ID `<178415950269.24482.514730196043694525@kovaldistillery.com>`; source filed with readback `INBOX=0`, `Handled=1`, `[Gmail]/All Mail=1`.
+- Next: no action.
+
+## 2026-07-06 - Done - Costco Corporate Aaron Vella and Jeff Landwehr contact add
+
+- Source Message-ID: `<CALbLtzwgE8ZHaDqrBGT7-5Gh3yJda7it25to-rE8+NWgPEvCog@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzwgE8ZHaDqrBGT7-5Gh3yJda7it25to-rE8-NWgPEvCog-mail-gmail-com`
+- Workspaceboard session: `53eaa331` / `Avignon direct Sonat: Costco Corporate`
+- Status: `closed_with_proof`; DB handoff entry `1157` is canonical.
+- Completion proof: Portal readback created Aaron Vella `374092` / `CON21011` and Jeff Landwehr `374093` / `CON21012`, linked both to Costco Corporate account `372416` / `ACC20749` with contact-account histories `5588` and `5589`; Sonat completion Message-ID `<178334458756.29643.11923439618561766275@kovaldistillery.com>`; source filed with readback `INBOX=0`, `Handled=1`, `[Gmail]/All Mail=1`.
+- Next: no action.
+
+## 2026-07-06 - Done - Favorite Brands Samantha Covington contact add
+
+- Source Message-ID: `<CALbLtzxnU0C753Tap+SC9OKrPZdopzhZ9pJds-Cy2Rndo0OzZQ@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzxnU0C753Tap-SC9OKrPZdopzhZ9pJds-Cy2Rndo0OzZQ-mail-gmail-com`
+- Workspaceboard session: `00f34e06` / `Avignon direct Sonat: contact Favorite Brands`
+- Status: `closed_with_proof`; DB handoff entry `1156` is canonical.
+- Completion proof: Portal readback created contact `374091` / `CON21010`, linked to Favorite Brands account `130091` with contact-account history `5587`; Sonat completion Message-ID `<178334317458.22942.1033619609983320869@kovaldistillery.com>`; source filed with readback `INBOX=0`, `Handled=1`, `[Gmail]/All Mail=1`.
+- Next: no action.
+
+## 2026-06-29 - Done - Restaurant Groups Portal account/contact setup
+
+- Source Message-ID: `<CALbLtzyH1rY47WTVyyM4Da0xMYheQLP_i+r2KJ0Ouor8Atq-4g@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzyH1rY47WTVyyM4Da0xMYheQLP-i-r2KJ0Ouor8Atq-4g-mail-gmail-com`
+- Workspaceboard session: `bf3861df` / `Avignon direct Sonat: Restaurant Groups`
+- Status: `closed_with_proof`; DB handoff entry `1113` is canonical.
+- Completion proof: Portal readback created accounts `373522`-`373525`, reused accounts `345515` and `336873`, created/reused and linked seven contacts, sent Sonat completion Message-ID `<178276109131.38680.12488177022240745345@kovaldistillery.com>`, and filed the source with readback `INBOX=0`, `Handled=1`, `[Gmail]/All Mail=1`.
+- Next: no action.
+
+## 2026-06-28 - Done - The Whale Chicago Justin Torres contact cleanup
+
+- Source Message-ID: `<CALbLtzwnRDQrh7FEJFq2AjZcaBMudxCwwjb_uVzrMVVasM3mPA@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzwnRDQrh7FEJFq2AjZcaBMudxCwwjb-uVzrMVVasM3mPA-mail-gmail-com`
+- Workspaceboard session: `009c3763` / `Avignon direct Sonat: Contact`
+- Status: `closed_with_proof`; live Portal readback found account `364985` / `ACC19860` The Whale Chicago and contact `351061` / `CON17579` Justin Torres linked to it. Contact fields were cleaned to match Sonat's request.
+- Completion proof: source-thread Sonat report Message-ID `<178270205555.74330.7398513337098033954@kovaldistillery.com>`; source archive returned `archived_to_handled=true`; proof marker `portal-account-364985-contact-351061-linked-sent-178270205555-archive-handled-session-009c3763`.
+- Next: no action.
+
+## 2026-06-22 - Done - contacts duplicate-proof refresh
+
+- Source Message-ID: `<CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW+Njwk=pGDoA@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW-Njwk-pGDoA-mail-gmail-com`
+- Workspaceboard session: `dfb1e109` / `Avignon direct Sonat: contacts`
+- Status: `closed_with_proof` / duplicate-with-proof/no-action; canonical DB handoff entry `911` / UUID `handoff-avignon-202606222336-dfb1e109-contacts-duplicate`; AI Manager input `3497` / UUID `ai-manager-chat-20260622233643-b3a2a244051c`.
+- Existing proof remains `INTEGRATED_SUPER_SALES_AGENT_TASK_STATE.md` lines `10`-`17` and `sent-log.jsonl` line `70`, Message-ID `<178215451024.30703.11125863178618759820@kovaldistillery.com>`.
+- No duplicate Sonat report, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, or unrelated mutation.
+- Next: no action unless Sonat supplies additional buyer details, asks for external outreach, or requests another account/contact update.
+
+## 2026-06-22 - Done - contacts duplicate-proof refresh
+
+- Source Message-ID: `<CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW+Njwk=pGDoA@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW-Njwk-pGDoA-mail-gmail-com`
+- Workspaceboard session: `53bb012a` / `Avignon direct Sonat: contacts`
+- Status: `closed_with_proof` / duplicate-with-proof/no-action; canonical DB handoff entry `910` / UUID `handoff-avignon-202606221833-53bb012a-contacts-duplicate`; AI Manager input `3496` / UUID `ai-manager-chat-20260622233442-af7bf4141e1f`.
+- Existing proof remains `INTEGRATED_SUPER_SALES_AGENT_TASK_STATE.md` lines `10`-`17` and `sent-log.jsonl` line `70`, Message-ID `<178215451024.30703.11125863178618759820@kovaldistillery.com>`.
+- No duplicate Sonat report, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, or unrelated mutation.
+- Next: no action unless Sonat supplies additional buyer details, asks for external outreach, or requests another account/contact update.
+
+## 2026-06-22 - Done - contacts duplicate-proof refresh
+
+- Source Message-ID: `<CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW+Njwk=pGDoA@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW-Njwk-pGDoA-mail-gmail-com`
+- Workspaceboard session: `021b2bb8` / `Avignon direct Sonat: contacts`
+- Status: `closed_with_proof` / duplicate-with-proof/no-action; canonical DB handoff entry `908` / UUID `handoff-avignon-202606221826-021b2bb8-contacts-duplicate`; AI Manager input `3494` / UUID `ai-manager-chat-20260622232807-5263047e3290`.
+- Existing proof remains `INTEGRATED_SUPER_SALES_AGENT_TASK_STATE.md` lines `10`-`17` and `sent-log.jsonl` line `70`, Message-ID `<178215451024.30703.11125863178618759820@kovaldistillery.com>`.
+- No duplicate Sonat report, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, or unrelated mutation.
+- Next: no action unless Sonat supplies additional buyer details, asks for external outreach, or requests another account/contact update.
+
+## 2026-06-22 - Done - contacts duplicate-proof refresh
+
+- Source Message-ID: `<CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW+Njwk=pGDoA@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW-Njwk-pGDoA-mail-gmail-com`
+- Workspaceboard session: `6ef47722` / `Avignon direct Sonat: contacts`
+- Status: `closed_with_proof` / duplicate-with-proof/no-action; canonical DB handoff entry `907` / UUID `handoff-avignon-202606221824-6ef47722-contacts-duplicate`; AI Manager input `3493` / UUID `ai-manager-chat-20260622232433-c15c164a78e5`.
+- Existing proof remains `INTEGRATED_SUPER_SALES_AGENT_TASK_STATE.md` lines `10`-`17` and `sent-log.jsonl` line `70`, Message-ID `<178215451024.30703.11125863178618759820@kovaldistillery.com>`.
+- No duplicate Sonat report, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, or unrelated mutation.
+- Next: no action unless Sonat supplies additional buyer details, asks for external outreach, or requests another account/contact update.
+
+## 2026-06-22 - Done - contacts duplicate-proof refresh
+
+- Source Message-ID: `<CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW+Njwk=pGDoA@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW-Njwk-pGDoA-mail-gmail-com`
+- Workspaceboard session: `77b883cd` / `Avignon direct Sonat: contacts`
+- Status: `closed_with_proof` / duplicate-with-proof/no-action; canonical DB handoff entry `906` / UUID `handoff-avignon-202606221822-77b883cd-contacts-duplicate`; AI Manager input `3492` / UUID `ai-manager-chat-20260622232219-71e044c84153`.
+- Existing proof remains `INTEGRATED_SUPER_SALES_AGENT_TASK_STATE.md` lines `10`-`17` and `sent-log.jsonl` line `70`, Message-ID `<178215451024.30703.11125863178618759820@kovaldistillery.com>`.
+- No duplicate Sonat report, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, or unrelated mutation.
+- Next: no action unless Sonat supplies additional buyer details, asks for external outreach, or requests another account/contact update.
+
+## 2026-06-22 - Done - contacts duplicate-proof refresh
+
+- Source Message-ID: `<CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW+Njwk=pGDoA@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW-Njwk-pGDoA-mail-gmail-com`
+- Workspaceboard session: `3f490e60` / `Avignon direct Sonat: contacts`
+- Status: `closed_with_proof` / duplicate-with-proof/no-action; canonical DB handoff entry `905` / UUID `handoff-avignon-202606221819-3f490e60-contacts-duplicate`; AI Manager input `3491` / UUID `ai-manager-chat-20260622231925-192060af83d6`.
+- Existing proof remains `INTEGRATED_SUPER_SALES_AGENT_TASK_STATE.md` lines `10`-`17` and `sent-log.jsonl` line `70`, Message-ID `<178215451024.30703.11125863178618759820@kovaldistillery.com>`.
+- No duplicate Sonat report, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, or unrelated mutation.
+- Next: no action unless Sonat supplies additional buyer details, asks for external outreach, or requests another account/contact update.
+
+## 2026-06-22 - Done - contacts duplicate-proof refresh
+
+- Source Message-ID: `<CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW+Njwk=pGDoA@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW-Njwk-pGDoA-mail-gmail-com`
+- Workspaceboard session: `5983513e` / `Avignon direct Sonat: contacts`
+- Status: `closed_with_proof` / duplicate-with-proof/no-action; canonical DB handoff entry `904` / UUID `handoff-avignon-202606221815-5983513e-contacts-duplicate`; AI Manager input `3490` / UUID `ai-manager-chat-20260622231541-63356a798442`.
+- Existing proof remains `INTEGRATED_SUPER_SALES_AGENT_TASK_STATE.md` lines `10`-`17` and `sent-log.jsonl` line `70`, Message-ID `<178215451024.30703.11125863178618759820@kovaldistillery.com>`.
+- No duplicate Sonat report, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, or unrelated mutation.
+- Next: no action unless Sonat supplies additional buyer details, asks for external outreach, or requests another account/contact update.
+
+## 2026-06-22 - Done - contacts duplicate-proof refresh
+
+- Source Message-ID: `<CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW+Njwk=pGDoA@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW-Njwk-pGDoA-mail-gmail-com`
+- Workspaceboard session: `eeb8c3db` / `Avignon direct Sonat: contacts`
+- Status: `closed_with_proof` / duplicate-with-proof/no-action; canonical DB handoff entry `903` / UUID `handoff-avignon-202606221811-eeb8c3db-contacts-duplicate`; AI Manager input `3489` / UUID `ai-manager-chat-20260622231209-80ef67510f5b`.
+- Existing proof remains `INTEGRATED_SUPER_SALES_AGENT_TASK_STATE.md` lines `10`-`17` and `sent-log.jsonl` line `70`, Message-ID `<178215451024.30703.11125863178618759820@kovaldistillery.com>`.
+- No duplicate Sonat report, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, or unrelated mutation.
+- Next: no action unless Sonat supplies additional buyer details, asks for external outreach, or requests another account/contact update.
+
+## 2026-06-22 - Done - contacts duplicate-proof refresh
+
+- Source Message-ID: `<CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW+Njwk=pGDoA@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW-Njwk-pGDoA-mail-gmail-com`
+- Workspaceboard session: `40ff18de` / `Avignon direct Sonat: contacts`
+- Status: `closed_with_proof` / duplicate-with-proof/no-action; canonical DB handoff entry `899` / UUID `handoff-avignon-202606222259-40ff18de-contacts-duplicate`; AI Manager input `3485` / UUID `ai-manager-chat-20260622230109-4905f5270d37`.
+- Existing proof remains `INTEGRATED_SUPER_SALES_AGENT_TASK_STATE.md` lines `10`-`17` and `sent-log.jsonl` line `70`, Message-ID `<178215451024.30703.11125863178618759820@kovaldistillery.com>`.
+- No duplicate Sonat report, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, or unrelated mutation.
+- Next: no action unless Sonat supplies additional buyer details, asks for external outreach, or requests another account/contact update.
+
+## 2026-06-22 - Done - contacts duplicate-proof refresh
+
+- Source Message-ID: `<CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW+Njwk=pGDoA@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW-Njwk-pGDoA-mail-gmail-com`
+- Workspaceboard session: `c4d3fc0c` / `Avignon direct Sonat: contacts`
+- Status: `closed_with_proof` / duplicate-with-proof/no-action; canonical DB handoff entry `897` / UUID `handoff-avignon-20260622225505-b7b923b566dd`; AI Manager input `3483` / UUID `ai-manager-chat-20260622225515-f4897eeabada`.
+- Existing proof remains `INTEGRATED_SUPER_SALES_AGENT_TASK_STATE.md` lines `10`-`17` and `sent-log.jsonl` line `70`, Message-ID `<178215451024.30703.11125863178618759820@kovaldistillery.com>`.
+- No duplicate Sonat report, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, or unrelated mutation.
+- Next: no action unless Sonat supplies additional buyer details, asks for external outreach, or requests another account/contact update.
+
+## 2026-06-22 - Done - contacts duplicate-proof refresh
+
+- Source Message-ID: `<CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW+Njwk=pGDoA@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW-Njwk-pGDoA-mail-gmail-com`
+- Workspaceboard session: `20e5a347` / `Avignon direct Sonat: contacts`
+- Status: `closed_with_proof` / duplicate-with-proof/no-action; canonical DB handoff entry `894` / UUID `handoff-avignon-202606222246-20e5a347-contacts-duplicate`; AI Manager input `3480` / UUID `ai-manager-chat-20260622224616-5460b4584f14`.
+- Proof: existing durable Super Sales state records the Chicago buyer/contact guidance and live Portal contact changes in `INTEGRATED_SUPER_SALES_AGENT_TASK_STATE.md` lines `10`-`17`; same-thread Sonat completion proof is `sent-log.jsonl` line `70`, Message-ID `<178215451024.30703.11125863178618759820@kovaldistillery.com>`.
+- No duplicate Sonat report, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, or remaining decision.
+
+## 2026-06-22 - Done - contacts duplicate-proof refresh
+
+- Source Message-ID: `<CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW+Njwk=pGDoA@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW-Njwk-pGDoA-mail-gmail-com`
+- Workspaceboard session: `ceb17d53` / `Avignon direct Sonat: contacts`
+- Status: `closed_with_proof` / duplicate-with-proof/no-action; canonical DB handoff entry `891` / UUID `handoff-avignon-20260622223653-a3719a1ae5d4`; AI Manager input `3477` / UUID `ai-manager-chat-20260622223704-97121089120d`.
+- Proof: existing durable Super Sales state records the Chicago buyer/contact guidance and live Portal contact changes in `INTEGRATED_SUPER_SALES_AGENT_TASK_STATE.md` lines `10`-`17`; same-thread Sonat completion proof is `sent-log.jsonl` line `70`, Message-ID `<178215451024.30703.11125863178618759820@kovaldistillery.com>`.
+- No duplicate Sonat report, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, or remaining decision.
+
+## 2026-06-22 - Done - contacts duplicate-proof refresh
+
+- Source Message-ID: `<CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW+Njwk=pGDoA@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW-Njwk-pGDoA-mail-gmail-com`
+- Workspaceboard session: `17ac2143` / `Avignon direct Sonat: contacts`
+- Status: `closed_with_proof` / duplicate-with-proof/no-action; canonical DB handoff entry `889` / UUID `handoff-avignon-20260622173057-17ac2143-contacts-duplicate`; AI Manager input `3475` / UUID `ai-manager-chat-20260622223123-2c1aff7a1d81`.
+- Proof: existing durable Super Sales state records the Chicago buyer/contact guidance and live Portal contact changes in `INTEGRATED_SUPER_SALES_AGENT_TASK_STATE.md` lines `10`-`17`; same-thread Sonat completion proof is `sent-log.jsonl` line `70`, Message-ID `<178215451024.30703.11125863178618759820@kovaldistillery.com>`.
+- No duplicate Sonat report, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, or remaining decision.
+
+## 2026-06-22 - Done - contacts duplicate-proof refresh
+
+- Source Message-ID: `<CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW+Njwk=pGDoA@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW-Njwk-pGDoA-mail-gmail-com`
+- Workspaceboard session: `cbedc7ef` / `Avignon direct Sonat: contacts`
+- Status: `closed_with_proof` / duplicate-with-proof/no-action; canonical DB handoff entry `888` / UUID `handoff-avignon-20260622272731-cbedc7ef-contacts-duplicate`; AI Manager input `3474` / UUID `ai-manager-chat-20260622222809-3a02938643f5`.
+- Proof: existing durable Super Sales state records the Chicago buyer/contact guidance and live Portal contact changes in `INTEGRATED_SUPER_SALES_AGENT_TASK_STATE.md` lines `10`-`17`; same-thread Sonat completion proof is `sent-log.jsonl` line `70`, Message-ID `<178215451024.30703.11125863178618759820@kovaldistillery.com>`.
+- No duplicate Sonat report, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, or remaining decision.
+
+## 2026-06-22 - Done - contacts duplicate-proof refresh
+
+- Source Message-ID: `<CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW+Njwk=pGDoA@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW-Njwk-pGDoA-mail-gmail-com`
+- Workspaceboard session: `a4bd1c9a` / `Avignon direct Sonat: contacts`
+- Status: `closed_with_proof` / duplicate-with-proof/no-action; canonical DB handoff entry `886` / UUID `handoff-avignon-20260622172308-a4bd1c9a-contacts-duplicate`; AI Manager input `3472` / UUID `ai-manager-chat-20260622222310-44bf8a877714`.
+- Proof: existing durable Super Sales state records the Chicago buyer/contact guidance and live Portal contact changes in `INTEGRATED_SUPER_SALES_AGENT_TASK_STATE.md` lines `10`-`17`; same-thread Sonat completion proof is `sent-log.jsonl` line `70`, Message-ID `<178215451024.30703.11125863178618759820@kovaldistillery.com>`.
+- No duplicate Sonat report, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, or remaining decision.
+
+## 2026-06-22 - Done - contacts duplicate-proof refresh
+
+- Source Message-ID: `<CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW+Njwk=pGDoA@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW-Njwk-pGDoA-mail-gmail-com`
+- Workspaceboard session: `1197e3f0` / `Avignon direct Sonat: contacts`
+- Status: `closed_with_proof` / duplicate-with-proof/no-action; canonical DB handoff entry `885` / UUID `handoff-avignon-20260622221930-1197e3f0-contacts-duplicate`; AI Manager input `3471` / UUID `ai-manager-chat-20260622222029-6f5dc566b85f`.
+- Proof: existing durable Super Sales state records the Chicago buyer/contact guidance and live Portal contact changes in `INTEGRATED_SUPER_SALES_AGENT_TASK_STATE.md` lines `10`-`17`; same-thread Sonat completion proof is `sent-log.jsonl` line `70`, Message-ID `<178215451024.30703.11125863178618759820@kovaldistillery.com>`, plus runtime sent-log tail proof for `Re: contacts`, Message-ID `<178215388848.26271.14132154086701025604@kovaldistillery.com>`.
+- No duplicate Sonat report, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, or remaining decision.
+
+## 2026-06-22 - Done - contacts duplicate-proof refresh
+
+- Source Message-ID: `<CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW+Njwk=pGDoA@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW-Njwk-pGDoA-mail-gmail-com`
+- Workspaceboard session: `d75bf2e2` / `Avignon direct Sonat: contacts`
+- Status: `closed_with_proof` / duplicate-with-proof/no-action; canonical DB handoff entry `884` / UUID `handoff-avignon-20260622221738-d75bf2e2-contacts-duplicate`; AI Manager input `3470` / UUID `ai-manager-chat-20260622221738-2912139e00e2`.
+- Proof: existing durable Super Sales state records the Chicago buyer/contact guidance and live Portal contact changes in `INTEGRATED_SUPER_SALES_AGENT_TASK_STATE.md` lines `10`-`17`; same-thread Sonat completion proof is `sent-log.jsonl` line `70`, Message-ID `<178215451024.30703.11125863178618759820@kovaldistillery.com>`.
+- No duplicate Sonat report, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, or remaining decision.
+
+## 2026-06-22 - Done - contacts duplicate-proof refresh
+
+- Source Message-ID: `<CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW+Njwk=pGDoA@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW-Njwk-pGDoA-mail-gmail-com`
+- Workspaceboard session: `abc75fcf` / `Avignon direct Sonat: contacts`
+- Status: `closed_with_proof` / duplicate-with-proof/no-action; canonical DB handoff entry `882` / UUID `handoff-avignon-20260622221000-abc75fcf-contacts-duplicate`; AI Manager input `3468` / UUID `ai-manager-chat-20260622221154-0779e9a78cfb`.
+- Proof: existing durable Super Sales state records the Chicago buyer/contact guidance and live Portal contact changes in `INTEGRATED_SUPER_SALES_AGENT_TASK_STATE.md` lines `10`-`17`; same-thread Sonat completion proof is `sent-log.jsonl` line `70`, Message-ID `<178215451024.30703.11125863178618759820@kovaldistillery.com>`.
+- No duplicate Sonat report, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, or remaining decision.
+
+## 2026-06-22 - Done - contacts duplicate-proof refresh
+
+- Source Message-ID: `<CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW+Njwk=pGDoA@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW-Njwk-pGDoA-mail-gmail-com`
+- Workspaceboard session: `9ff5b304` / `Avignon direct Sonat: contacts`
+- Status: `closed_with_proof` / duplicate-with-proof/no-action; canonical DB handoff entry `881` / UUID `handoff-avignon-20260622220735-9ff5b304-contacts-duplicate`; AI Manager input `3467` / UUID `ai-manager-chat-20260622220848-bd4b3ca97b97`.
+- Proof: existing durable Super Sales state records the Chicago buyer/contact guidance and live Portal contact changes in `INTEGRATED_SUPER_SALES_AGENT_TASK_STATE.md` lines `10`-`17`; same-thread Sonat completion proof is `sent-log.jsonl` line `70`, Message-ID `<178215451024.30703.11125863178618759820@kovaldistillery.com>`.
+- No duplicate Sonat report, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, or remaining decision.
+
+## 2026-06-22 - Done - contacts duplicate-proof refresh
+
+- Source Message-ID: `<CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW+Njwk=pGDoA@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW-Njwk-pGDoA-mail-gmail-com`
+- Workspaceboard session: `597f37f7` / `Avignon direct Sonat: contacts`
+- Status: `closed_with_proof` / duplicate-with-proof/no-action; canonical DB handoff entry `880` / UUID `handoff-avignon-20260622220420-597f37f7-contacts-duplicate`; AI Manager input `3466` / UUID `ai-manager-chat-20260622220451-25abee8297ef`.
+- Proof: existing durable Super Sales state records the Chicago buyer/contact guidance and live Portal contact changes in `INTEGRATED_SUPER_SALES_AGENT_TASK_STATE.md` lines `10`-`17`; same-thread Sonat completion proof is `sent-log.jsonl` line `70`, Message-ID `<178215451024.30703.11125863178618759820@kovaldistillery.com>`.
+- Boundaries: no duplicate Sonat email, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, or new approval gate.
+- Remaining action: none unless Sonat supplies additional buyer details, asks for external outreach, or requests another account/contact update.
+
+## 2026-06-22 - Done - contacts duplicate-proof refresh
+
+- Source Message-ID: `<CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW+Njwk=pGDoA@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW-Njwk-pGDoA-mail-gmail-com`
+- Workspaceboard session: `2d56477a` / `Avignon direct Sonat: contacts`
+- Status: `closed_with_proof` / duplicate-with-proof/no-action; canonical DB handoff entry `877` / UUID `handoff-avignon-20260622215442-2d56477a-contacts-duplicate`; AI Manager input `3463` / UUID `ai-manager-chat-20260622215442-db68e51756ff`.
+- Proof: existing durable Super Sales state records the Chicago buyer/contact guidance and live Portal contact changes in `INTEGRATED_SUPER_SALES_AGENT_TASK_STATE.md` lines `10`-`17`; same-thread Sonat completion proof is `sent-log.jsonl` line `70`, Message-ID `<178215451024.30703.11125863178618759820@kovaldistillery.com>`, plus runtime sent-log line `578`, Message-ID `<178215388848.26271.14132154086701025604@kovaldistillery.com>`.
+- Boundaries: no duplicate Sonat email, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, or new approval gate.
+- Remaining action: none unless Sonat supplies additional buyer details, asks for external outreach, or requests another account/contact update.
+
+## 2026-06-22 - Done - contacts duplicate-proof refresh
+
+- Source Message-ID: `<CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW+Njwk=pGDoA@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW-Njwk-pGDoA-mail-gmail-com`
+- Workspaceboard session: `5c98723e` / `Avignon direct Sonat: contacts`
+- Status: `closed_with_proof` / duplicate-with-proof/no-action; canonical DB handoff entry `876` / UUID `handoff-avignon-20260622215100-bd4065710ec4`; AI Manager input `3462` / UUID `ai-manager-chat-20260622215100-3742c5165761`.
+- Proof: existing durable Super Sales state records the Chicago buyer/contact guidance and live Portal contact changes in `INTEGRATED_SUPER_SALES_AGENT_TASK_STATE.md` lines `10`-`17`; same-thread Sonat completion proof is `sent-log.jsonl` line `70`, Message-ID `<178215451024.30703.11125863178618759820@kovaldistillery.com>`, plus runtime sent-log line `578`, Message-ID `<178215388848.26271.14132154086701025604@kovaldistillery.com>`.
+- Boundaries: no duplicate Sonat email, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, or new approval gate.
+- Remaining action: none unless Sonat supplies additional buyer details, asks for external outreach, or requests another account/contact update.
+
+## 2026-06-22 - Done - contacts duplicate-proof refresh
+
+- Source Message-ID: `<CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW+Njwk=pGDoA@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW-Njwk-pGDoA-mail-gmail-com`
+- Workspaceboard session: `4a39eb38` / `Avignon direct Sonat: contacts`
+- Status: `closed_with_proof` / duplicate-with-proof/no-action; canonical DB handoff entry `874` / UUID `handoff-avignon-20260622214450-6f3b9d3f1ed2`; AI Manager input `3460` / UUID `ai-manager-chat-20260622214505-f2ce353b279b`.
+- Proof: existing durable Super Sales state records the Chicago buyer/contact guidance and live Portal contact changes in `INTEGRATED_SUPER_SALES_AGENT_TASK_STATE.md` lines `10`-`17`; same-thread Sonat completion proof is `sent-log.jsonl` line `70`, Message-ID `<178215451024.30703.11125863178618759820@kovaldistillery.com>`, plus runtime sent-log line `578`, Message-ID `<178215388848.26271.14132154086701025604@kovaldistillery.com>`.
+- Boundaries: no duplicate Sonat email, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, or new approval gate.
+- Remaining action: none unless Sonat supplies additional buyer details, asks for external outreach, or requests another account/contact update.
+
+## 2026-06-22 - Done - contacts duplicate-proof refresh
+
+- Source Message-ID: `<CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW+Njwk=pGDoA@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW-Njwk-pGDoA-mail-gmail-com`
+- Workspaceboard session: `96c72b6d` / `Avignon direct Sonat: contacts`
+- Status: `closed_with_proof` / duplicate-with-proof/no-action; canonical DB handoff entry `873` / UUID `handoff-avignon-20260622214212-23592c060766`; AI Manager input `3459` / UUID `ai-manager-chat-20260622214223-66a34e404ed0`.
+- Proof: existing durable Super Sales state records the Chicago buyer/contact guidance and live Portal contact changes in `INTEGRATED_SUPER_SALES_AGENT_TASK_STATE.md` lines `10`-`17`; same-thread Sonat completion proof is `sent-log.jsonl` line `70`, Message-ID `<178215451024.30703.11125863178618759820@kovaldistillery.com>`, plus runtime sent-log line `578`, Message-ID `<178215388848.26271.14132154086701025604@kovaldistillery.com>`.
+- Boundaries: no duplicate Sonat email, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, or new approval gate.
+- Remaining action: none unless Sonat supplies additional buyer details, asks for external outreach, or requests another account/contact update.
+
+## 2026-06-22 - Done - contacts duplicate-proof refresh
+
+- Source Message-ID: `<CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW+Njwk=pGDoA@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW-Njwk-pGDoA-mail-gmail-com`
+- Workspaceboard session: `a1510e18` / `Avignon direct Sonat: contacts`
+- Status: `closed_with_proof` / duplicate-with-proof/no-action; canonical DB handoff entry `872` / UUID `handoff-avignon-20260622213850-5eec86505ef9`; AI Manager input `3458` / UUID `ai-manager-chat-20260622213901-6cf3a87ef68a`.
+- Proof: existing durable Super Sales state records the Chicago buyer/contact guidance and live Portal contact changes in `INTEGRATED_SUPER_SALES_AGENT_TASK_STATE.md` lines `10`-`17`; same-thread Sonat completion proof is `sent-log.jsonl` line `70`, Message-ID `<178215451024.30703.11125863178618759820@kovaldistillery.com>`, plus runtime sent-log line `578`, Message-ID `<178215388848.26271.14132154086701025604@kovaldistillery.com>`.
+- Boundaries: no duplicate Sonat email, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, or new approval gate.
+- Remaining action: none unless Sonat supplies additional buyer details, asks for external outreach, or requests another account/contact update.
+
+## 2026-06-22 - Done - contacts duplicate-proof refresh
+
+- Source Message-ID: `<CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW+Njwk=pGDoA@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW-Njwk-pGDoA-mail-gmail-com`
+- Workspaceboard session: `d2abd245` / `Avignon direct Sonat: contacts`
+- Status: `closed_with_proof` / duplicate-with-proof/no-action; canonical DB handoff entry `871` / UUID `handoff-avignon-20260622213400-d2abd245-contacts-duplicate`; AI Manager input `3457` / UUID `ai-manager-chat-20260622213628-4a7188278a60`.
+- Proof: existing durable Super Sales state records the Chicago buyer/contact guidance and live Portal contact changes in `INTEGRATED_SUPER_SALES_AGENT_TASK_STATE.md` lines `10`-`17`; same-thread Sonat completion proof is `sent-log.jsonl` line `70`, Message-ID `<178215451024.30703.11125863178618759820@kovaldistillery.com>`, plus runtime sent-log line `578`, Message-ID `<178215388848.26271.14132154086701025604@kovaldistillery.com>`.
+- Boundaries: no duplicate Sonat email, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, or new approval gate.
+- Remaining action: none unless Sonat supplies additional buyer details, asks for external outreach, or requests another account/contact update.
+
+## 2026-06-22 - Done - contacts duplicate-proof refresh
+
+- Source Message-ID: `<CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW+Njwk=pGDoA@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW-Njwk-pGDoA-mail-gmail-com`
+- Workspaceboard session: `a1d1c652` / `Avignon direct Sonat: contacts`
+- Status: `closed_with_proof` / duplicate-with-proof/no-action; canonical DB handoff entry `869` / UUID `handoff-avignon-20260622212700-a1d1c652-contacts-duplicate`; AI Manager input `3455` / UUID `ai-manager-chat-20260622213000-a1d1c652contacts`.
+- Proof: existing durable Super Sales state records the Chicago buyer/contact guidance and live Portal contact changes in `INTEGRATED_SUPER_SALES_AGENT_TASK_STATE.md` lines `10`-`17`; same-thread Sonat completion proof is `sent-log.jsonl` line `70`, Message-ID `<178215451024.30703.11125863178618759820@kovaldistillery.com>`, plus runtime sent-log line `578`, Message-ID `<178215388848.26271.14132154086701025604@kovaldistillery.com>`.
+- Boundaries: no duplicate Sonat email, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, or new approval gate.
+- Remaining action: none unless Sonat supplies additional buyer details, asks for external outreach, or requests another account/contact update.
+
+## 2026-06-22 - Done - contacts duplicate-proof refresh
+
+- Source Message-ID: `<CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW+Njwk=pGDoA@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW-Njwk-pGDoA-mail-gmail-com`
+- Workspaceboard session: `6124d8ff` / `Avignon direct Sonat: contacts`
+- Status: `closed_with_proof` / duplicate-with-proof/no-action; canonical DB handoff entry `866` / UUID `handoff-avignon-20260622212100-5acd383d4262`; AI Manager input `3452` / UUID `ai-manager-chat-20260622212111-4488cc1512a0`.
+- Proof: existing durable Super Sales state records the Chicago buyer/contact guidance and live Portal contact changes in `INTEGRATED_SUPER_SALES_AGENT_TASK_STATE.md` lines `10`-`17`; same-thread Sonat completion proof is `sent-log.jsonl` line `70`, Message-ID `<178215451024.30703.11125863178618759820@kovaldistillery.com>`, plus runtime sent-log line `578`, Message-ID `<178215388848.26271.14132154086701025604@kovaldistillery.com>`.
+- Boundaries: no duplicate Sonat email, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, or new approval gate.
+- Remaining action: none unless Sonat supplies additional buyer details, asks for external outreach, or requests another account/contact update.
+
+## 2026-06-22 - Done - contacts duplicate-proof refresh
+
+- Source Message-ID: `<CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW+Njwk=pGDoA@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW-Njwk-pGDoA-mail-gmail-com`
+- Workspaceboard session: `f227ce52` / `Avignon direct Sonat: contacts`
+- Status: `closed_with_proof` / duplicate-with-proof/no-action; canonical DB handoff entry `864` / UUID `handoff-avignon-20260622211444-196e4e049d91`; AI Manager input `3450` / UUID `ai-manager-chat-20260622211457-6d1698de40aa`.
+- Proof: existing durable Super Sales state records the Chicago buyer/contact guidance and live Portal contact changes in `INTEGRATED_SUPER_SALES_AGENT_TASK_STATE.md` lines `10`-`17`; same-thread Sonat completion proof is `sent-log.jsonl` line `70`, Message-ID `<178215451024.30703.11125863178618759820@kovaldistillery.com>`, plus runtime sent-log line `578`, Message-ID `<178215388848.26271.14132154086701025604@kovaldistillery.com>`.
+- Boundaries: no duplicate Sonat email, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, or new approval gate.
+- Remaining action: none unless Sonat supplies additional buyer details, asks for external outreach, or requests another account/contact update.
+
+## 2026-06-22 - Done - contacts duplicate-proof refresh
+
+- Source Message-ID: `<CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW+Njwk=pGDoA@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW-Njwk-pGDoA-mail-gmail-com`
+- Workspaceboard session: `28218c39` / `Avignon direct Sonat: contacts`
+- Status: `closed_with_proof` / duplicate-with-proof/no-action; canonical DB handoff entry `863` / UUID `handoff-avignon-20260622211300-28218c39-contacts-duplicate`; AI Manager input `3449` / UUID `ai-manager-chat-20260622211238-9bc4a3166a22`.
+- Proof: existing durable Super Sales state records the Chicago buyer/contact guidance and live Portal contact changes in `INTEGRATED_SUPER_SALES_AGENT_TASK_STATE.md` lines `10`-`17`; same-thread Sonat completion proof is `sent-log.jsonl` line `70`, Message-ID `<178215451024.30703.11125863178618759820@kovaldistillery.com>`, plus runtime sent-log line `578`, Message-ID `<178215388848.26271.14132154086701025604@kovaldistillery.com>`.
+- Boundaries: no duplicate Sonat email, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, or new approval gate.
+- Remaining action: none unless Sonat supplies additional buyer details, asks for external outreach, or requests another account/contact update.
+
+## 2026-06-22 - Done - contacts duplicate-proof refresh
+
+- Source Message-ID: `<CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW+Njwk=pGDoA@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW-Njwk-pGDoA-mail-gmail-com`
+- Workspaceboard session: `61617c67` / `Avignon direct Sonat: contacts`
+- Status: `closed_with_proof` / duplicate-with-proof/no-action; canonical DB handoff entry `862` / UUID `handoff-avignon-20260622211700-61617c67-contacts-duplicate`; AI Manager input `3448` / UUID `ai-manager-chat-20260622211033-54fceb8ab73e`.
+- Proof: existing durable Super Sales state records the Chicago buyer/contact guidance and live Portal contact changes in `INTEGRATED_SUPER_SALES_AGENT_TASK_STATE.md` lines `10`-`17`; same-thread Sonat completion proof is `sent-log.jsonl` line `70`, Message-ID `<178215451024.30703.11125863178618759820@kovaldistillery.com>`, plus runtime sent-log line `578`, Message-ID `<178215388848.26271.14132154086701025604@kovaldistillery.com>`.
+- Boundaries: no duplicate Sonat email, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, or new approval gate.
+- Remaining action: none unless Sonat supplies additional buyer details, asks for external outreach, or requests another account/contact update.
+
+## 2026-06-22 - Done - contacts duplicate-proof refresh
+
+- Source Message-ID: `<CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW+Njwk=pGDoA@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW-Njwk-pGDoA-mail-gmail-com`
+- Workspaceboard session: `fdd3cfb9` / `Avignon direct Sonat: contacts`
+- Status: `closed_with_proof` / duplicate-with-proof/no-action; canonical DB handoff entry `858` / UUID `handoff-avignon-20260622210100-fdd3cfb9-contacts-duplicate`; AI Manager input `3444` / UUID `ai-manager-chat-20260622210038-8c3dceac7920`.
+- Proof: existing durable Super Sales state records the Chicago buyer/contact guidance and live Portal contact changes in `INTEGRATED_SUPER_SALES_AGENT_TASK_STATE.md` lines `10`-`17`; runtime sent-log proof is `/Users/admin/.avignon-launch/state/sent-log.jsonl` line `578`, Message-ID `<178215388848.26271.14132154086701025604@kovaldistillery.com>`, same-thread `Re: contacts`, appended to Gmail Sent Mail.
+- Boundaries: no duplicate Sonat email, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, or new approval gate.
+- Remaining action: none unless Sonat supplies additional buyer details, asks for external outreach, or requests another account/contact update.
+
+## 2026-06-22 - Done - contacts duplicate-proof refresh
+
+- Source Message-ID: `<CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW+Njwk=pGDoA@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW-Njwk-pGDoA-mail-gmail-com`
+- Workspaceboard session: `8291ee06` / `Avignon direct Sonat: contacts`
+- Status: `closed_with_proof` / duplicate-with-proof/no-action; canonical DB handoff entry `857` / UUID `handoff-avignon-20260622205500-8291ee06-contacts-duplicate`; AI Manager input `3443` / UUID `ai-manager-chat-20260622205654-0f5de9e669ba`.
+- Proof: existing durable Super Sales state records the Chicago buyer/contact guidance and live Portal contact changes in `INTEGRATED_SUPER_SALES_AGENT_TASK_STATE.md` lines `10`-`17`; runtime sent-log proof is `/Users/admin/.avignon-launch/state/sent-log.jsonl` line `578`, Message-ID `<178215388848.26271.14132154086701025604@kovaldistillery.com>`, same-thread `Re: contacts`, appended to Gmail Sent Mail.
+- Boundaries: no duplicate Sonat email, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, or new approval gate.
+- Remaining action: none unless Sonat supplies additional buyer details, asks for external outreach, or requests another account/contact update.
+
+## 2026-06-22 - Done - contacts duplicate-proof refresh
+
+- Source Message-ID: `<CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW+Njwk=pGDoA@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW-Njwk-pGDoA-mail-gmail-com`
+- Workspaceboard session: `f1410e09` / `Avignon direct Sonat: contacts`
+- Status: `closed_with_proof` / duplicate-with-proof/no-action; canonical DB handoff entry `856` / UUID `handoff-avignon-20260622215300-f1410e09-contacts-duplicate`; AI Manager input `3442` / UUID `ai-manager-chat-20260622205401-c503f15a19a9`.
+- Proof: existing durable Super Sales state records the Chicago buyer/contact guidance and live Portal contact changes in `INTEGRATED_SUPER_SALES_AGENT_TASK_STATE.md` lines `10`-`17`; runtime sent-log proof is `/Users/admin/.avignon-launch/state/sent-log.jsonl` line `578`, Message-ID `<178215388848.26271.14132154086701025604@kovaldistillery.com>`, same-thread `Re: contacts`, appended to Gmail Sent Mail.
+- Boundaries: no duplicate Sonat email, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, or new approval gate.
+- Remaining action: none unless Sonat supplies additional buyer details, asks for external outreach, or requests another account/contact update.
+
+## 2026-06-22 - Done - contacts duplicate-proof refresh
+
+- Source Message-ID: `<CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW+Njwk=pGDoA@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW-Njwk-pGDoA-mail-gmail-com`
+- Workspaceboard session: `97a52df5` / `Avignon direct Sonat: contacts`
+- Status: `closed_with_proof` / duplicate-with-proof/no-action; canonical DB handoff entry `854` / UUID `handoff-avignon-20260622210000-97a52df5-contacts-duplicate`; AI Manager input `3440` / UUID `ai-manager-chat-20260622205003-87eed2d05ad5`.
+- Proof: existing durable Super Sales state records the Chicago buyer/contact guidance and live Portal contact changes in `INTEGRATED_SUPER_SALES_AGENT_TASK_STATE.md` lines `10`-`17`; existing same-thread Sonat completion report proof is `sent-log.jsonl` line `70`, Message-ID `<178215451024.30703.11125863178618759820@kovaldistillery.com>`.
+- Boundaries: no duplicate Sonat email, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, or new approval gate.
+- Remaining action: none unless Sonat supplies additional buyer details, asks for external outreach, or requests another account/contact update.
+
+## 2026-06-22 - Done - contacts duplicate-proof refresh
+
+- Source Message-ID: `<CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW+Njwk=pGDoA@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW-Njwk-pGDoA-mail-gmail-com`
+- Workspaceboard session: `37efbb4f` / `Avignon direct Sonat: contacts`
+- Status: `closed_with_proof` / duplicate-with-proof/no-action; canonical DB handoff entry `853` / UUID `handoff-avignon-20260622210000-37efbb4f-contacts-duplicate`; AI Manager input `3439` / UUID `ai-manager-chat-20260622204734-f10641c15f4e`.
+- Proof: existing durable Super Sales state records the Chicago buyer/contact guidance and live Portal contact changes in `INTEGRATED_SUPER_SALES_AGENT_TASK_STATE.md` lines `10`-`17`; existing same-thread Sonat completion report proof is `sent-log.jsonl` line `70`, Message-ID `<178215451024.30703.11125863178618759820@kovaldistillery.com>`.
+- Boundaries: no duplicate Sonat email, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, or new approval gate.
+- Remaining action: none unless Sonat supplies additional buyer details, asks for external outreach, or requests another account/contact update.
+
+## 2026-06-22 - Done - contacts duplicate-proof refresh
+
+- Source Message-ID: `<CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW+Njwk=pGDoA@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW-Njwk-pGDoA-mail-gmail-com`
+- Workspaceboard session: `c1bcfbc3` / `Avignon direct Sonat: contacts`
+- Status: `closed_with_proof` / duplicate-with-proof/no-action; canonical DB handoff entry `852` / UUID `handoff-avignon-20260622204404-c1bcfbc3-contacts-duplicate`; AI Manager input `3438` / UUID `ai-manager-chat-20260622204437-cb6112d2a619`.
+- Proof: existing durable Super Sales state records the Chicago buyer/contact guidance and live Portal contact changes in `INTEGRATED_SUPER_SALES_AGENT_TASK_STATE.md` lines `10`-`17`; existing same-thread Sonat completion report proof is `sent-log.jsonl` line `70`, Message-ID `<178215451024.30703.11125863178618759820@kovaldistillery.com>`.
+- Boundaries: no duplicate Sonat email, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, or new approval gate.
+- Remaining action: none unless Sonat supplies additional buyer details, asks for external outreach, or requests another account/contact update.
+
+## 2026-06-22 - Done - contacts duplicate-proof refresh
+
+- Source Message-ID: `<CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW+Njwk=pGDoA@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW-Njwk-pGDoA-mail-gmail-com`
+- Workspaceboard session: `166ac1d0` / `Avignon direct Sonat: contacts`
+- Status: `closed_with_proof` / duplicate-with-proof/no-action; canonical DB handoff entry `851` / UUID `handoff-avignon-20260622204133-166ac1d0-contacts-duplicate`; AI Manager input `3437` / UUID `ai-manager-chat-20260622204157-8a55adf9f996`.
+- Proof: existing durable Super Sales state records the Chicago buyer/contact guidance and live Portal contact changes in `INTEGRATED_SUPER_SALES_AGENT_TASK_STATE.md` lines `10`-`17`; existing same-thread Sonat completion report proof is `sent-log.jsonl` line `70`, Message-ID `<178215451024.30703.11125863178618759820@kovaldistillery.com>`.
+- Boundaries: no duplicate Sonat email, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, or new approval gate.
+- Remaining action: none unless Sonat supplies additional buyer details, asks for external outreach, or requests another account/contact update.
+
+## 2026-06-22 - Done - contacts duplicate-proof refresh
+
+- Source Message-ID: `<CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW+Njwk=pGDoA@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW-Njwk-pGDoA-mail-gmail-com`
+- Workspaceboard session: `7f44efde` / `Avignon direct Sonat: contacts`
+- Status: `closed_with_proof` / duplicate-with-proof/no-action; canonical DB handoff entry `847` / UUID `handoff-avignon-20260622202902-568d253cb640`; AI Manager input `3433` / UUID `ai-manager-chat-20260622202839-41824a2e5ac6`.
+- Proof: existing durable Super Sales state records the Chicago buyer/contact guidance and live Portal contact changes in `INTEGRATED_SUPER_SALES_AGENT_TASK_STATE.md` lines `10`-`17`; existing same-thread Sonat completion report proof is `sent-log.jsonl` line `70`, Message-ID `<178215451024.30703.11125863178618759820@kovaldistillery.com>`.
+- Boundaries: no duplicate Sonat email, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, or new approval gate.
+- Remaining action: none unless Sonat supplies additional buyer details, asks for external outreach, or requests another account/contact update.
+
+## 2026-06-22 - Done - contacts duplicate-proof refresh
+
+- Source Message-ID: `<CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW+Njwk=pGDoA@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW-Njwk-pGDoA-mail-gmail-com`
+- Workspaceboard session: `717f372f` / `Avignon direct Sonat: contacts`
+- Status: `closed_with_proof` / duplicate-with-proof/no-action; canonical DB handoff entry `843` / UUID `handoff-avignon-20260622201954-746b55d6c4ff`; AI Manager input `3429` / UUID `ai-manager-chat-20260622201927-8d0e9dafe789`.
+- Proof: existing durable Super Sales state records the Chicago buyer/contact guidance and live Portal contact changes in `INTEGRATED_SUPER_SALES_AGENT_TASK_STATE.md` lines `10`-`17`; existing same-thread Sonat completion report proof is `sent-log.jsonl` line `70`, Message-ID `<178215451024.30703.11125863178618759820@kovaldistillery.com>`, plus runtime sent-log line `578`, Message-ID `<178215388848.26271.14132154086701025604@kovaldistillery.com>`.
+- Boundaries: no duplicate Sonat email, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, or new approval gate.
+- Remaining action: none unless Sonat supplies additional buyer details, asks for external outreach, or requests another account/contact update.
+
+## 2026-06-22 - Done - contacts duplicate-proof refresh
+
+- Source Message-ID: `<CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW+Njwk=pGDoA@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW-Njwk-pGDoA-mail-gmail-com`
+- Workspaceboard session: `c5080ee6` / `Avignon direct Sonat: contacts`
+- Status: `closed_with_proof` / duplicate-with-proof/no-action; canonical DB handoff entry `842` / UUID `handoff-avignon-20260622201508-d80c7fe29b7c`; AI Manager input `3428` / UUID `ai-manager-chat-20260622201449-50e77e89f975`.
+- Proof: existing durable Super Sales state records the Chicago buyer/contact guidance and live Portal contact changes in `INTEGRATED_SUPER_SALES_AGENT_TASK_STATE.md` lines `10`-`17`; existing same-thread Sonat completion report proof is `sent-log.jsonl` line `70`, Message-ID `<178215451024.30703.11125863178618759820@kovaldistillery.com>`.
+- Boundaries: no duplicate Sonat email, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, or new approval gate.
+- Remaining action: none unless Sonat supplies additional buyer details, asks for external outreach, or requests another account/contact update.
+
+## 2026-06-22 - Done - contacts duplicate-proof refresh
+
+- Source Message-ID: `<CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW+Njwk=pGDoA@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW-Njwk-pGDoA-mail-gmail-com`
+- Workspaceboard session: `41aaef7d` / `Avignon direct Sonat: contacts`
+- Status: `closed_with_proof` / duplicate-with-proof/no-action; canonical DB handoff entry `839` / UUID `handoff-avignon-20260622200645-1a7548e50186`; AI Manager input `3425` / UUID `ai-manager-chat-20260622200614-7be94fd516fa`.
+- Proof: existing durable Super Sales state records the Chicago buyer/contact guidance and live Portal contact changes in `INTEGRATED_SUPER_SALES_AGENT_TASK_STATE.md` lines `10`-`17`; existing same-thread Sonat completion report proof is `sent-log.jsonl` line `70`, Message-ID `<178215451024.30703.11125863178618759820@kovaldistillery.com>`.
+- Boundaries: no duplicate Sonat email, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, or new approval gate.
+- Remaining action: none unless Sonat supplies additional buyer details, asks for external outreach, or requests another account/contact update.
+
+## 2026-06-22 - Done - contacts duplicate-proof refresh
+
+- Source Message-ID: `<CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW+Njwk=pGDoA@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW-Njwk-pGDoA-mail-gmail-com`
+- Workspaceboard session: `468a0306` / `Avignon direct Sonat: contacts`
+- Status: `closed_with_proof` / duplicate-with-proof/no-action; canonical DB handoff entry `837` / UUID `handoff-avignon-20260622200252-64156ae95bd7`; AI Manager input `3424` / UUID `ai-manager-chat-20260622200229-bbd7a7cceff9`.
+- Proof: existing durable Super Sales state records the Chicago buyer/contact guidance and live Portal contact changes in `INTEGRATED_SUPER_SALES_AGENT_TASK_STATE.md` lines `10`-`17`; existing same-thread Sonat completion report proof is `sent-log.jsonl` line `70`, Message-ID `<178215451024.30703.11125863178618759820@kovaldistillery.com>`.
+- Boundaries: no duplicate Sonat email, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, or new approval gate.
+- Remaining action: none unless Sonat supplies additional buyer details, asks for external outreach, or requests another account/contact update.
+
+## 2026-06-22 - Done - contacts duplicate-proof refresh
+
+- Source Message-ID: `<CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW+Njwk=pGDoA@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW-Njwk-pGDoA-mail-gmail-com`
+- Workspaceboard session: `05c34e82` / `Avignon direct Sonat: contacts`
+- Status: `closed_with_proof` / duplicate-with-proof/no-action; canonical DB handoff entry `833` / UUID `handoff-avignon-20260622195254-547b9cf2de7f`; AI Manager input `3422` / UUID `ai-manager-chat-20260622195226-6ebb7358e1e1`.
+- Proof: existing durable Super Sales state records the Chicago buyer/contact guidance and live Portal contact changes in `INTEGRATED_SUPER_SALES_AGENT_TASK_STATE.md` lines `10`-`17`; existing same-thread Sonat completion report proof is `sent-log.jsonl` line `70`, Message-ID `<178215451024.30703.11125863178618759820@kovaldistillery.com>`.
+- Boundaries: no duplicate Sonat email, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, or new approval gate.
+- Remaining action: none unless Sonat supplies additional buyer details, asks for external outreach, or requests another account/contact update.
+
+## 2026-06-22 - Done - contacts duplicate-proof refresh
+
+- Source Message-ID: `<CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW+Njwk=pGDoA@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW-Njwk-pGDoA-mail-gmail-com`
+- Workspaceboard session: `428b0f5a` / `Avignon direct Sonat: contacts`
+- Status: `closed_with_proof` / duplicate-with-proof/no-action; canonical DB handoff entry `832` / UUID `handoff-avignon-20260622194923-33a912a14f74`; AI Manager input `3421` / UUID `ai-manager-chat-20260622194903-eac90819ebcd`.
+- Proof: existing durable Super Sales state records the Chicago buyer/contact guidance and live Portal contact changes in `INTEGRATED_SUPER_SALES_AGENT_TASK_STATE.md` lines `10`-`17`; existing same-thread Sonat completion report proof is `sent-log.jsonl` line `70`, Message-ID `<178215451024.30703.11125863178618759820@kovaldistillery.com>`.
+- Boundaries: no duplicate Sonat email, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, or new approval gate.
+- Remaining action: none unless Sonat supplies additional buyer details, asks for external outreach, or requests another account/contact update.
+
+## 2026-06-22 - Done - contacts duplicate-proof refresh
+
+- Source Message-ID: `<CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW+Njwk=pGDoA@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW-Njwk-pGDoA-mail-gmail-com`
+- Workspaceboard session: `0595c2a5` / `Avignon direct Sonat: contacts`
+- Status: `closed_with_proof` / duplicate-with-proof/no-action; canonical DB handoff entry `830` / UUID `handoff-avignon-20260622194254-d3b753634eb3`; AI Manager input `3418` / UUID `ai-manager-chat-20260622194233-56022a79d07d`.
+- Proof: existing durable Super Sales state records the Chicago buyer/contact guidance and live Portal contact changes in `INTEGRATED_SUPER_SALES_AGENT_TASK_STATE.md` lines `10`-`17`; existing same-thread Sonat completion report proof is `sent-log.jsonl` line `70`, Message-ID `<178215451024.30703.11125863178618759820@kovaldistillery.com>`.
+- Boundaries: no duplicate Sonat email, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, or new approval gate.
+- Remaining action: none unless Sonat supplies additional buyer details, asks for external outreach, or requests another account/contact update.
+
+## 2026-06-22 - Done - Contact / August The Mansion LLC
+
+- Source Message-ID: `<CALbLtzwfgvVQmec1RzdSZe8iXyqFEbq5XG5NFuUX-yXw+v9e+g@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzwfgvVQmec1RzdSZe8iXyqFEbq5XG5NFuUX-yXw-v9e-g-mail-gmail-com`
+- Workspaceboard session: `e118ac7d` / `Avignon direct Sonat: Contact`
+- Status: `closed_with_proof`; canonical DB handoff entry `791` / UUID `handoff-avignon-20260622163513-239d15c1cdf5`; AI Manager input `3391` / UUID `ai-manager-chat-20260622163120-9b60781b79ae`.
+- Proof: live Portal readback reused existing account `354300` / `ACC17990` / `August The Mansion LLC`, created Renee Brewer as contact `373178` / `CON20887`, title `Buyer`, phone ending `8063`, and linked her to the account with contact-account history row `5465`.
+- Owner report: Avignon sent Sonat the same-thread completion report, Message-ID `<178214607893.89824.9260447838474987794@kovaldistillery.com>`; installed sent-log readback is in `/Users/admin/.avignon-launch/state/sent-log.jsonl`.
+- Filing: exact IMAP readback in `archive-log.jsonl` at `2026-06-22T11:36:42-0500` showed source `INBOX=0`, `Handled=1`.
+- Boundaries: no Robert copy, no external reply, no auth/OAuth/token work, no credential exposure, no pricing/account commitment, and no unrelated Portal/CRM/OPS mutation.
+- Remaining action: none.
+
+## 2026-06-21 - Blocked - Spirit and Spice contacts
+
+- Source Message-ID: `<CALbLtzzMit3A0CM4u-KCpRU11kAkF5P8EbCC--iKxF1rsRn+VA@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzzMit3A0CM4u-KCpRU11kAkF5P8EbCC-iKxF1rsRn-VA-mail-gmail-com`
+- Workspaceboard session: `23e16c46` / `Avignon direct Sonat: Contact`
+- Status: `blocked` / `blocker-email-required`; DB handoff entry `758` / UUID `handoff-avignon-20260622000240-0318d6cde30f`; AI Manager input `3380` / UUID `ai-manager-chat-20260622000240-0813c7fc197d`.
+- Proof: exact local Message-ID/body-cache checks did not recover the full source body, and the visible packet cuts off after `Daniel Pepper is t...`; Avignon sent Sonat the same-thread blocker email, Message-ID `<178208657276.15556.14877976378562664561@kovaldistillery.com>`.
+- Owner question: resend the full Spirit and Spice contact list with each person's title, email, and phone if available so the Chicago Water Tower and Oak Brook account checks/creates and contact links can be completed.
+- Boundaries: no CRM/Portal mutation, no Robert copy, no external reply, no auth/OAuth/token work, no credential exposure, no pricing/account commitment, and no unrelated Portal/CRM/OPS mutation.
+
+## 2026-06-20 - Done - Mariano's Corporate
+
+- Source Message-ID: `<CALbLtzxqFwZrcN2QEQfJJ2ZP_SCcEt+w-epetzD-Q-FFjNG6jQ@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzxqFwZrcN2QEQfJJ2ZP-SCcEt-w-epetzD-Q-FFjNG6jQ-mail-gmail-com`
+- Workspaceboard session: `1a198b67` / `Avignon direct Sonat: Mariano's Corporate`
+- Status: `closed_with_proof`; final DB handoff entry `743` / UUID `handoff-avignon-20260620172939-6c4530228b2d`; interim Portal-proof handoff entry `742` / UUID `handoff-avignon-20260620172645-7030b026f854`; AI Manager input `3376` / UUID `ai-manager-chat-20260620172618-41e232105fbb`.
+- Proof: live Portal readback reused account `371522` / `ACC20659` / `Mariano's Corporate`, created contact `373057` / `CON20849` / Lindsey Johnson, email `Lindsey.Johnson@roundys.com`, linked to account `371522`, with contact-account history row `5428`.
+- Boundaries: no Robert copy, no external reply, no auth/OAuth/token work, no credential exposure, no pricing/account commitment, and no unrelated Portal/CRM/OPS mutation.
+- Owner report and filing: Avignon sent Sonat the same-thread completion report, Message-ID `<178197645986.25013.18174238630221221097@kovaldistillery.com>`; exact IMAP readback showed source `INBOX=0`, `Handled=1`, `[Gmail]/All Mail=1`.
+- Remaining action: none.
+
+## 2026-06-19 - Done - Contacts Woodmans
+
+- Source Message-ID: `<CALbLtzyNYwfFAnaL+8Q=Bg8KU0gpufH9GbOBc-+2eUrPsuRh=g@mail.gmail.com>`
+- Dedupe key: `avignon-direct-owner-sonat-CALbLtzyNYwfFAnaL-8Q-Bg8KU0gpufH9GbOBc-2eUrPsuRh-g-mail-gmail-com`
+- Workspaceboard session: `50120489` / `Avignon direct Sonat: Contacts Woodmans`
+- Status: `closed_with_proof`; canonical DB handoff entry `731` / UUID `handoff-avignon-20260619170454-ce9493d925d2`; AI Manager input `3370` / UUID `ai-manager-chat-20260619170433-0eccc7926f71`.
+- Proof: Live Portal readback confirmed six Woodmans location accounts: `372997` / `ACC20821`, `372999` / `ACC20823`, `373001` / `ACC20825`, `373003` / `ACC20827`, reused `113158` / `ACC12617`, and `373008` / `ACC20832`; eight linked buyer contacts: `372998` / `CON20822`, `373000` / `CON20824`, `373002` / `CON20826`, `373004` / `CON20828`, `373005` / `CON20829`, `373006` / `CON20830`, `373007` / `CON20831`, and `373009` / `CON20833`; contact-account history rows `5410` through `5417`.
+- Owner report: Avignon sent Sonat the same-thread completion report, Message-ID `<178188877390.33962.17573715296000874084@kovaldistillery.com>`; runtime sent-log readback line `550`; exact IMAP readback showed source `INBOX=0`, `Handled=1`.
+- Boundaries: no Robert copy, no external reply, no auth/OAuth/token work, no credential exposure, no pricing/sample/allocation/account commitment, and no unrelated CRM/Portal/OPS mutation.
+- Remaining action: none unless Sonat supplies direct buyer emails or asks for external outreach.
+
 ## 2026-06-15 - Done - Contacts / Illinois Governor's Office
 
 - Source Message-ID: `<CALbLtzxzjpA6gucndytkf_6hXWiuMbGU4k069k8+yaWGFZYvTg@mail.gmail.com>`
@@ -766,6 +1331,7 @@ Active work now lives in DB-backed Task Flow / Workspaceboard / OPS records.
 - 2026-06-06 16:34 CDT done — Workspaceboard session `8833afa6` rechecked Sonat's reply `<CALbLtzwcWt159f9edDzJtPbmCEJ_eLtMRLU3tesX1VnniwQSoA@mail.gmail.com>` / `Re: Tasks` with dedupe key `avignon-direct-owner-sonat-CALbLtzwcWt159f9edDzJtPbmCEJ-eLtMRLU3tesX1VnniwQSoA-mail-gmail-com` and kept classification `no-action/logged-thank-you`. Proof: prior completion report `<178076346914.56897.10310241233963174526@kovaldistillery.com>` remains recorded in `sent-log.jsonl` line 51; original source filing remains recorded in `archive-log.jsonl` line 25; this exact thank-you reply is logged as no-action with archive helper unavailable through `archive-log.jsonl` line 102, `email-trace-events.jsonl` line 101, and `task-flow-events.jsonl` line 389. AI Manager recorder: input `2779` / `ai-manager-chat-20260606213439-05599c1770e9`. No new Sonat email, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, duplicate task, or live archive claim.
 - 2026-06-06 16:39 CDT done — Workspaceboard session `7cf112a7` rechecked Sonat's reply `<CALbLtzwcWt159f9edDzJtPbmCEJ_eLtMRLU3tesX1VnniwQSoA@mail.gmail.com>` / `Re: Tasks` with dedupe key `avignon-direct-owner-sonat-CALbLtzwcWt159f9edDzJtPbmCEJ-eLtMRLU3tesX1VnniwQSoA-mail-gmail-com` and kept classification `no-action/logged-thank-you`. Proof: prior completion report `<178076346914.56897.10310241233963174526@kovaldistillery.com>` remains recorded in `sent-log.jsonl` line 51; original source filing remains recorded in `archive-log.jsonl` line 25; this exact thank-you reply is logged as no-action with archive helper unavailable through `archive-log.jsonl` line 103, `email-trace-events.jsonl` line 102, and `task-flow-events.jsonl` line 390. AI Manager recorder: input `2780` / `ai-manager-chat-20260606213906-5b7b6d757b71`; daily-input trail `/Users/werkstatt/ai_workspace/daily-inputs/2026-06-06.md`. No new Sonat email, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, duplicate task, or live archive claim.
 - 2026-06-06 16:43 CDT done — Workspaceboard session `48fa9b8d` rechecked Sonat's reply `<CALbLtzwcWt159f9edDzJtPbmCEJ_eLtMRLU3tesX1VnniwQSoA@mail.gmail.com>` / `Re: Tasks` with dedupe key `avignon-direct-owner-sonat-CALbLtzwcWt159f9edDzJtPbmCEJ-eLtMRLU3tesX1VnniwQSoA-mail-gmail-com` and kept classification `no-action/logged-thank-you`. Proof: prior completion report `<178076346914.56897.10310241233963174526@kovaldistillery.com>` remains recorded in `sent-log.jsonl` line 51; original source filing remains recorded in `archive-log.jsonl` line 25; this exact thank-you reply is logged as no-action with archive helper unavailable through `archive-log.jsonl` line 104, `email-trace-events.jsonl` line 103, and `task-flow-events.jsonl` line 391. AI Manager recorder: input `2781` / `ai-manager-chat-20260606214347-17eed43130ab`; daily-input trail `/Users/werkstatt/ai_workspace/daily-inputs/2026-06-06.md`. No new Sonat email, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, duplicate task, or live archive claim.
+- 2026-06-22 17:43 CDT closed_with_proof/no-action duplicate - Workspaceboard session `8024f8ca` rechecked Sonat direct-owner contacts request, source Message-ID `<CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW+Njwk=pGDoA@mail.gmail.com>`, dedupe key `avignon-direct-owner-sonat-CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW-Njwk-pGDoA-mail-gmail-com`. Existing durable proof remains `INTEGRATED_SUPER_SALES_AGENT_TASK_STATE.md` lines `10`-`17`; same-thread Sonat completion proof remains `sent-log.jsonl` line `70`, Message-ID `<178215451024.30703.11125863178618759820@kovaldistillery.com>`. DB handoff entry `893`; AI Manager mirror `3479`. No duplicate Sonat report, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, or unrelated mutation. Next: no action unless Sonat supplies additional buyer details, asks for external outreach, or requests another account/contact update.
 - 2026-06-06 16:48 CDT done — Workspaceboard session `6e660c37` rechecked Sonat's reply `<CALbLtzwcWt159f9edDzJtPbmCEJ_eLtMRLU3tesX1VnniwQSoA@mail.gmail.com>` / `Re: Tasks` with dedupe key `avignon-direct-owner-sonat-CALbLtzwcWt159f9edDzJtPbmCEJ-eLtMRLU3tesX1VnniwQSoA-mail-gmail-com` and kept classification `no-action/logged-thank-you`. Proof: prior completion report `<178076346914.56897.10310241233963174526@kovaldistillery.com>` remains recorded in `sent-log.jsonl` line 51; original source filing remains recorded in `archive-log.jsonl` line 25; this exact thank-you reply is logged as no-action with archive helper unavailable through `archive-log.jsonl` line 105, `email-trace-events.jsonl` line 104, and `task-flow-events.jsonl` line 392. AI Manager recorder: input `2782` / `ai-manager-chat-20260606214826-a54575c89fed`; daily-input trail `/Users/werkstatt/ai_workspace/daily-inputs/2026-06-06.md`; Papers dry-run path `ai-manager/durability/2026-06-06-decision-avignon-direct-owner-intake-task-source-message-id-calbltzwcwt159f9eddzjtpbmcej-.md`. No new Sonat email, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, duplicate task, or live archive claim.
 - 2026-06-06 16:51 CDT done — Workspaceboard session `d2502796` rechecked Sonat's reply `<CALbLtzwcWt159f9edDzJtPbmCEJ_eLtMRLU3tesX1VnniwQSoA@mail.gmail.com>` / `Re: Tasks` with dedupe key `avignon-direct-owner-sonat-CALbLtzwcWt159f9edDzJtPbmCEJ-eLtMRLU3tesX1VnniwQSoA-mail-gmail-com` and kept classification `no-action/logged-thank-you`. Proof: prior completion report `<178076346914.56897.10310241233963174526@kovaldistillery.com>` remains recorded in `sent-log.jsonl` line 51; original source filing remains recorded in `archive-log.jsonl` line 25; this thank-you reply is logged as no-action with archive helper unavailable through `archive-log.jsonl` line 106. AI Manager recorder: input `2783` / `ai-manager-chat-20260606215136-62354f467e3f`. No new Sonat email, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, duplicate task, or live archive claim.
 - 2026-06-06 16:55 CDT done — Workspaceboard session `1905e530` rechecked Sonat's reply `<CALbLtzwcWt159f9edDzJtPbmCEJ_eLtMRLU3tesX1VnniwQSoA@mail.gmail.com>` / `Re: Tasks` with dedupe key `avignon-direct-owner-sonat-CALbLtzwcWt159f9edDzJtPbmCEJ-eLtMRLU3tesX1VnniwQSoA-mail-gmail-com` and kept classification `no-action/logged-thank-you`. Proof: prior completion report `<178076346914.56897.10310241233963174526@kovaldistillery.com>` remains recorded in `sent-log.jsonl` line 51; original source filing remains recorded in `archive-log.jsonl` line 25; this thank-you reply is logged as no-action with archive helper unavailable through `archive-log.jsonl` line 107, `email-trace-events.jsonl` line 106, and `task-flow-events.jsonl` line 394. AI Manager recorder: input `2784` / `ai-manager-chat-20260606215518-196712b91660`; daily-input trail `/Users/werkstatt/ai_workspace/daily-inputs/2026-06-06.md`; Papers dry-run path `ai-manager/durability/2026-06-06-decision-avignon-direct-owner-intake-task.md`. No new Sonat email, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, duplicate task, or live archive claim.
@@ -785,5 +1351,11 @@ Active work now lives in DB-backed Task Flow / Workspaceboard / OPS records.
 - 2026-06-06 19:08 CDT done — Workspaceboard session `a9c8497d` rechecked the same Sonat thank-you reply `<CALbLtzwcWt159f9edDzJtPbmCEJ_eLtMRLU3tesX1VnniwQSoA@mail.gmail.com>` / `Re: Tasks` and kept classification `no-action/filed`. Proof: prior completion report `<178076346914.56897.10310241233963174526@kovaldistillery.com>` remains recorded in `sent-log.jsonl` line 51; original completed source filing remains recorded in `archive-log.jsonl` line 25; this pass appended `archive-log.jsonl`, `email-trace-events.jsonl`, and `task-flow-events.jsonl` rows with proof marker `avignon-direct-owner-sonat-CALbLtzwcWt159f9edDzJtPbmCEJ-no-action-filed-2026-06-06T19:08CDT`. AI Manager recorder: input `2818` / `ai-manager-chat-20260607000759-78f5cb728fb9`. No new Sonat email, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, duplicate route, or live archive claim.
 - 2026-06-06 19:14 CDT done — Workspaceboard session `d31c4b5b` rechecked the same Sonat thank-you reply `<CALbLtzwcWt159f9edDzJtPbmCEJ_eLtMRLU3tesX1VnniwQSoA@mail.gmail.com>` / `Re: Tasks` and kept classification `no-action/filed`. Proof: prior completion report `<178076346914.56897.10310241233963174526@kovaldistillery.com>` remains recorded in `sent-log.jsonl` line 51; original completed source filing remains recorded in `archive-log.jsonl` line 25; this pass appended `archive-log.jsonl`, `email-trace-events.jsonl`, and `task-flow-events.jsonl` rows with proof marker `avignon-direct-owner-sonat-CALbLtzwcWt159f9edDzJtPbmCEJ-no-action-filed-2026-06-06T19:14CDT`. AI Manager recorder: input `2821` / `ai-manager-chat-20260607001355-5852d1dd3dc0`. No new Sonat email, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, duplicate route, or live archive claim.
 - 2026-06-07 14:19 CDT blocked - Workspaceboard session `47563084` handled Sonat direct-owner reminder request `Opici Ct x Koval Check in meeting on 6/9`, source Message-ID `<CALbLtzx2QL6eiOCcUcEg9pnY3vouQK7Z7Njq-1NrNnMFBzVC9g@mail.gmail.com>`, dedupe key `avignon-direct-owner-sonat-CALbLtzx2QL6eiOCcUcEg9pnY3vouQK7Z7Njq-1NrNnMFBzVC9g-mail-gmail-com`. Classification: `blocker-email-required` because the packet includes the June 9 meeting date and one-hour-before reminder request but not the meeting time. Sent Sonat the one-question blocker on the original thread, Message-ID `<178085993094.19139.17088117922031325958@kovaldistillery.com>`, asking for the meeting time. AI Manager recorder input `2861` / `ai-manager-chat-20260607191910-d1aa3fc8908d`; Task Flow row recorded as blocked/waiting for meeting time. No calendar invite, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, distributor commitment, or source filing occurred. Next: when Sonat provides the meeting time, set the one-hour-before reminder with the prepared Opici CT/RNDC NY-NJ prompt.
+- 2026-06-22 17:51 CDT closed_with_proof/no-action duplicate - Workspaceboard session `b8bcf80b` rechecked Sonat direct-owner contacts request, source Message-ID `<CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW+Njwk=pGDoA@mail.gmail.com>`, dedupe key `avignon-direct-owner-sonat-CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW-Njwk-pGDoA-mail-gmail-com`. Existing durable proof remains `INTEGRATED_SUPER_SALES_AGENT_TASK_STATE.md` lines `10`-`17`; same-thread Sonat completion proof remains `sent-log.jsonl` line `70`, Message-ID `<178215451024.30703.11125863178618759820@kovaldistillery.com>`. DB handoff entry `896`; AI Manager mirror `3482`. No duplicate Sonat report, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, or unrelated mutation. Next: no action unless Sonat supplies additional buyer details, asks for external outreach, or requests another account/contact update.
 - 2026-06-09 05:22 CDT closed_with_proof/no-action duplicate - Workspaceboard session `be6fe2ea` rechecked Sonat direct-owner reminder request `Opici Ct x Koval Check in meeting on 6/9`, source Message-ID `<CALbLtzx2QL6eiOCcUcEg9pnY3vouQK7Z7Njq-1NrNnMFBzVC9g@mail.gmail.com>`, dedupe key `avignon-direct-owner-sonat-CALbLtzx2QL6eiOCcUcEg9pnY3vouQK7Z7Njq-1NrNnMFBzVC9g-mail-gmail-com`. Prior blocker `<178085993094.19139.17088117922031325958@kovaldistillery.com>` and follow-up `<178086849307.77879.4176663558278561633@kovaldistillery.com>` already asked Sonat for the missing meeting time; no duplicate email or calendar/reminder action was sent. DB handoff entry `156`; AI Manager mirror `3018`. Next: wait for Sonat to provide the meeting time, then set the one-hour-before reminder with the prepared Opici CT/RNDC NY-NJ prompt.
 - 2026-06-10 16:10 CDT blocked - Workspaceboard session `8f02d516` handled Sonat direct-owner request `Gia please draft this`, dedupe key `avignon-direct-owner-sonat-gia-please-draft-this`; source Message-ID/date were not provided in the task-mode packet. Classification: `blocker-email-required`. Gia sent Sonat the brief-needed question, Message-ID `<178112580542.90950.12147828089513126346@kovaldistillery.com>`, asking for product/campaign name, audience, channel, offer/CTA, timing, and required claims or phrases before drafting copy. DB handoff entry `325`; AI Manager mirror `3118`. No external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, or source filing claimed. Next: draft campaign copy after Sonat supplies the campaign brief.
+- 2026-06-22 16:32 CDT closed_with_proof/no-action duplicate - Workspaceboard session `ddbdfefd` rechecked Sonat direct-owner contacts request, source Message-ID `<CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW+Njwk=pGDoA@mail.gmail.com>`, dedupe key `avignon-direct-owner-sonat-CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW-Njwk-pGDoA-mail-gmail-com`. Existing durable proof remains `INTEGRATED_SUPER_SALES_AGENT_TASK_STATE.md` lines `10`-`17`; same-thread Sonat completion proof remains `sent-log.jsonl` line `70` and runtime sent-log line `578`. DB handoff entry `870`; AI Manager mirror `3456`. No duplicate Sonat report, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, or unrelated mutation. Next: no action unless Sonat supplies additional buyer details, asks for external outreach, or requests another account/contact update.
+- 2026-06-22 16:48 CDT closed_with_proof/no-action duplicate - Workspaceboard session `54f17b8b` rechecked Sonat direct-owner contacts request, source Message-ID `<CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW+Njwk=pGDoA@mail.gmail.com>`, dedupe key `avignon-direct-owner-sonat-CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW-Njwk-pGDoA-mail-gmail-com`. Existing durable proof remains `INTEGRATED_SUPER_SALES_AGENT_TASK_STATE.md` lines `10`-`17`; same-thread Sonat completion proof remains `sent-log.jsonl` line `70`. DB handoff entry `875`; AI Manager mirror `3461`. No duplicate Sonat report, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, or unrelated mutation. Next: no action unless Sonat supplies additional buyer details, asks for external outreach, or requests another account/contact update.
+- 2026-06-22 17:40 CDT closed_with_proof/no-action duplicate - Workspaceboard session `4f59bb84` rechecked Sonat direct-owner contacts request, source Message-ID `<CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW+Njwk=pGDoA@mail.gmail.com>`, dedupe key `avignon-direct-owner-sonat-CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW-Njwk-pGDoA-mail-gmail-com`. Existing durable proof remains `INTEGRATED_SUPER_SALES_AGENT_TASK_STATE.md` lines `10`-`17`; same-thread Sonat completion proof remains `sent-log.jsonl` line `70`, Message-ID `<178215451024.30703.11125863178618759820@kovaldistillery.com>`. DB handoff entry `892`; AI Manager mirror `3478`. No duplicate Sonat report, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, or unrelated mutation. Next: no action unless Sonat supplies additional buyer details, asks for external outreach, or requests another account/contact update.
+- 2026-06-22 18:31 CDT closed_with_proof/no-action duplicate - Workspaceboard session `aeaf4c33` rechecked Sonat direct-owner contacts request, source Message-ID `<CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW+Njwk=pGDoA@mail.gmail.com>`, dedupe key `avignon-direct-owner-sonat-CALbLtzwEL4Fdtqi1L8Kat6qbzp7uBra2oqEAXpW-Njwk-pGDoA-mail-gmail-com`. Existing durable proof remains `INTEGRATED_SUPER_SALES_AGENT_TASK_STATE.md` lines `10`-`17`; same-thread Sonat completion proof remains `sent-log.jsonl` line `70`, Message-ID `<178215451024.30703.11125863178618759820@kovaldistillery.com>`. DB handoff entry `909`; AI Manager mirror `3495`. No duplicate Sonat report, Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, or unrelated mutation. Next: no action unless Sonat supplies additional buyer details, asks for external outreach, or requests another account/contact update.
+- 2026-07-06 12:33 CDT done - Workspaceboard session `8d00d560` completed Sonat's direct-owner `Whole Foods Market Sept Oct Feature` review, source Message-ID `<CALbLtzyQhuuNYiE88nWc_d=DDnef55AV1S1CLp+NKbfKbcb-7A@mail.gmail.com>`, dedupe key `avignon-direct-owner-sonat-CALbLtzyQhuuNYiE88nWc-d-DDnef55AV1S1CLp-NKbfKbcb-7A-mail-gmail-com`. Avignon verified the source email plus AI Drive sheet `KOVAL, INC.` / `SEPT + OCT` (`164j7ljMoAHmIRtKLAVZDVrie-u6cVkmSnvOrUU9U904`), answered Sonat same-thread with WFM shelf-feature meaning and concrete Heritage/inventory/store-tracker plan, Message-ID `<178335799748.91810.2462585254617303819@kovaldistillery.com>`. AI Manager mirror `3694`. No Robert copy, external reply, CRM/Portal/OPS mutation, auth/OAuth/token work, credential exposure, pricing/account commitment, or distributor commitment. Next: only draft Heritage confirmation note if Sonat approves an external-send draft.
