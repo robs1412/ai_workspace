@@ -1,0 +1,44 @@
+Ezra,
+
+Source for review:
+- Task Flow: taskflow-b06e10089567b5ff
+- Source Message-ID: caebyoz5c-tepoctln2c166kqf_lht53wvp32krh1op0qdbdy7g@mail.gmail.com
+- Subject: Re: Ravenswood On Tap 2026 - Drinks
+- Sender/date: Sebastian Saller, Thu, 9 Jul 2026 10:58:12 -0500
+- Parties: Sebastian Saller and Amy Czarkowski / Greater Ravenswood Chamber of Commerce, with National Outreach, Robert, and Sonat copied on the thread.
+
+Practical issue:
+Sebastian replied that unopened bottles could be returned after the event and proposed billing after the event for only what is used instead of processing refunds. This is operationally convenient, but it should be treated as a liquor-law/trade-practice issue before anyone expands the promise, repeats it as policy, or uses it in a written sales process.
+
+Fast classification:
+- Illinois event / alcohol supply for Ravenswood On Tap.
+- Return/refund or pay-for-used-only arrangement.
+- Possible consignment-sale, guaranteed-sale, credit/return, thing-of-value, and tied-house/trade-practice review item.
+
+Known facts:
+- The external statement has already been sent by Sebastian.
+- Amy asked whether unopened cases/bottles could be returned after the event for a refund.
+- Sebastian offered a post-event true-up approach: bill only for what is used.
+- I did not send any external reply, approve the arrangement, or change OPS/Portal/order records.
+
+Missing facts:
+- Whether Ravenswood is buying as a licensee, event organizer, nonprofit/chamber, retailer, or another entity.
+- Whether KOVAL would invoice before or after delivery, and whether any product is delivered before payment.
+- Whether the product is sold through a distributor, self-distribution path, donation/sponsorship path, or another approved channel.
+- Whether Illinois rules or any event permit terms allow this return/true-up structure for this specific event.
+- Whether Robert/Sonat/Sebastian want to stand by the already-sent wording, narrow it, or replace it with a safer operational policy.
+
+Risk flags:
+- Do not treat "bill only for what you use" as cleared policy without Illinois-specific review.
+- Do not promise guaranteed returns, refunds, or sale-or-return handling in future event threads until cleared.
+- Do not send a corrective external message unless Robert/Sonat/Sebastian approve the exact business posture and wording.
+
+Recommended next owner:
+Robert/Sonat/Sebastian should decide whether to pause, narrow, or approve the return/true-up offer. If they want to proceed, route the exact structure for Illinois liquor-law review before it becomes repeatable policy.
+
+Exact owner/counsel question:
+For Ravenswood On Tap 2026, may KOVAL deliver alcohol and bill after the event only for product used, with unopened bottles/cases returned, or does Illinois/federal trade-practice or consignment-sale law require a different sale/return/invoicing structure?
+
+Best,
+
+Codex

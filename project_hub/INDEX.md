@@ -3,6 +3,24 @@ Last Updated: 2026-06-16 CDT (Machine: Macmini.lan)
 
 ## Completed
 
+- **2026-07-25 SATLA Payment And Local Tax Reporting**
+  - Master ID: `AI-INC-20260725-SATLA-PAYMENT-TAX-REPORTING-01`
+  - Detail log: `project_hub/issues/2026-07-25-satla-payment-tax-reporting.md`
+  - Repos: `order`, `salesreport`, live Order and Salesreport checkouts
+  - Status: completed. SATLA Invoice Payments now sorts and filters by account payment method and filters by invoice date. Cook County reporting retains WH schedules while adding exact DIST and SATLA tax tables, and a matching Chicago report is live. Order `563d2e2` and Salesreport `136d0cb` are deployed; July tax totals read back exactly.
+
+- **2026-07-22 Salesreport SATLA Tax Inclusion**
+  - Master ID: `AI-INC-20260722-SALESREPORT-SATLA-TAX-INCLUSION-01`
+  - Detail log: `project_hub/issues/2026-07-22-salesreport-satla-tax-inclusion.md`
+  - Repos: `salesreport`, live Salesreport checkout
+  - Status: completed. Restored SATLA warehouse invoices to the distributor report and its PG/WG tax totals while retaining the active DIST self-distribution exclusion. Per Robert's correction, SATLA SPIRITS account `373491` now has CRM billing state `Illinois`, and the temporary account-specific reporting fallback was removed. Salesreport commits through `1ab0c55` are pushed and live. The generic market query now returns those July sales under Illinois: 3 invoices, $120,010.00 subtotal, 729.9000 PG, and 932.1200 WG.
+
+- **2026-07-06 Order/DIST Report Access Matrix Alignment**
+  - Master ID: `AI-INC-20260706-ORDER-DIST-REPORT-ACCESS-MATRIX-01`
+  - Detail log: `project_hub/issues/2026-07-06-order-dist-report-access-matrix-alignment.md`
+  - Repos: `salesreport`, `contactreport`, `order`, `dist`, `login`; DB surface `koval_additionaluser.accessmatrix`
+  - Status: completed. After the 2026-07-05 report-header access enforcement, active Order/DIST users were aligned into the Salesreport and Contactreport access matrix. Readback now shows 26 active Order/DIST users, 0 missing `matrix_salesreport`, 0 missing `matrix_contactreport`, and 0 missing matrix rows. Kevin McCarthy (`kevinmccarthy`, user id `1328`) now reads back `matrix_salesreport=1` and `matrix_contactreport=1`.
+
 - **2026-06-16 Salesreport Illinois Top Products Report**
   - Master ID: `AI-INC-20260616-SALESREPORT-IL-TOP-PRODUCTS-01`
   - Detail log: `project_hub/issues/2026-06-16-salesreport-il-top-products-report.md`
@@ -699,3 +717,13 @@ Last Updated: 2026-06-16 CDT (Machine: Macmini.lan)
   - Repos: `ai_workspace`, `workspaceboard`
   - Latest: AI Health now records recursive proposal status on its existing cadence, including board-down reports. No separate recursive LaunchDaemon was added. Papers update: `https://papers.koval.lan/f95e7f60-fda6-495c-a485-b2c66ff29110`.
   - Claude bridge: Planner schema mapping recorded at `project_hub/artifacts/recursive-tools/claude-planner-recursive-schema-2026-05-24.md`; Papers `https://papers.koval.lan/1e7119d3-e2cc-4ff0-900f-d1251eaa5f0a`. The Codex-side `/proof` verifier is now wired at `scripts/claude_planner_proof_check.py` and AI Health reports `claude_planner_proof=not-ready` until `https://planner.koval.lan/api/tasks/1725/proof` is reachable and clean. Local note: `project_hub/artifacts/recursive-tools/claude-planner-proof-verifier-wired-2026-05-24.md`; Papers `https://papers.koval.lan/542f8733-3aef-4cde-ad65-0da61d6b9781`.
+
+- **2026-07-04 Login Session Recovery**
+  - Master ID: `AI-INC-20260704-LOGIN-SESSION-RECOVERY-01`
+  - Detail log: `project_hub/issues/2026-07-04-login-session-recovery.md`
+  - Repos: `login`
+
+- **2026-07-04 SATLA / DIST Dashboard Scope**
+  - Master ID: `AI-INC-20260704-SATLA-DIST-DASHBOARD-SCOPE-01`
+  - Detail log: `project_hub/issues/2026-07-04-satla-dist-dashboard-scope.md`
+  - Repos: `order`, `dist`

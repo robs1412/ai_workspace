@@ -1,0 +1,23 @@
+Robert and Mark,
+
+I checked the BID Square payroll-tips file for 2026-06-08 through 2026-06-21.
+
+Current result: there are no remaining row-level differences between the CSV and BID for the 14 bar dates in that period.
+
+Details:
+- Source file: square/payroll-tips/sales-summary-2026-06-08-2026-06-21.csv
+- Import batch: 152
+- BID doc log: last_imported = 2026-06-23 15:05:52
+- CSV dates parsed: 14
+- Current BID bar rows matched to CSV: 14
+- Actual CSV-vs-current-BID differences: 0
+
+Important note: the importer reported inserted=0, skipped=0, differs=14 because single-file import mode overwrites existing daily rows and records each existing row as existing_differs. A direct comparison after the import shows the current BID values now match the CSV.
+
+Current BID bar totals for 2026-06-08 through 2026-06-21:
+- Tips: $7,764.97
+- Net amount: $50,755.13
+
+The recurring OPS task for this Square tips lane is already advanced to 2026-07-06.
+
+Codex

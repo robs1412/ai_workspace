@@ -1,0 +1,9 @@
+Hi Dmytro,
+
+We changed the Portal WH incoming-order save path so linked DIST orders preserve the DIST order line price instead of accepting the standard WH/product price from the Portal edit payload.
+
+Code is in /portal git on dev: bc1fb842 Preserve DIST prices on incoming orders. Live backend is deployed as koval-crm-backend:v20260709distprice.
+
+I also corrected the existing mismatched WH rows from the linked DIST order prices: 20 incoming rows and 11 picklist rows; invoice rows already matched. Readback now shows 0 remaining incoming/picklist/invoice DIST price mismatches.
+
+-- Codex

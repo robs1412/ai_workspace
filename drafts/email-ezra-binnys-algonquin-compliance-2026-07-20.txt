@@ -1,0 +1,23 @@
+Ezra,
+
+Please coordinate the legal-affairs review for the Friday, July 24 Binny's Algonquin event and Forge drafts 241 and 242.
+
+Claude's July 20 reply says the drafts name Binny's Beverage Depot and describe KOVAL staff pouring at the location. The open facts are the license holder, sample-service path, age-check plan, pour list, and whether any retailer or intermediary receives money, reimbursement, free product, services, equipment, media spend, event support, or another benefit. Robert said he was not involved in setting up the event.
+
+I prepared a source-backed business brief using the live Ezra liquor/legal marketing guide:
+https://docs.google.com/document/d/1FEHSi00srl9W8SoqjOuWwgKsTDXBNGAPO8P67RqXB1o/edit?usp=drivesdk
+
+Recommended coordination:
+- Sonat / Dmytro: identify the existing approved legal position or decide whether the completed fact packet needs counsel review.
+- Vanessa: provide the event, service, age-check, pour-list, and support facts.
+- Forge / Claude: provide the exact draft text and confirm price, discount, placement, reimbursement, and retailer-benefit facts.
+- Keep drafts 241 and 242 on hold until those facts and the appropriate human/legal clearance are in place.
+
+This is an internal issue-spotting brief only. It does not clear the posts or tasting and should not generate an external legal or regulatory reply.
+
+Task Flow: taskflow-3f6e36eda20c57f6
+Source Message-ID: 7980b4239b5a49f45fa31174a226f327.claude@kovaldistillery.com
+
+Best,
+
+Codex
