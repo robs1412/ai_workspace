@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>2026 Family AI Class Demo</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <main class="shell">
+      <section class="intro">
+        <p class="eyebrow">Local demo</p>
+        <h1>2026 Family AI Class</h1>
+        <p>
+          This page is served from your own Mac. It is a simple place to show
+          how chat ideas can become files, how files become a local website, and
+          how an agent can make a small, reviewable change.
+        </p>
+      </section>
+
+      <section class="panel">
+        <h2>Tool Ladder</h2>
+        <ol class="ladder">
+          <li><strong>Chat</strong><span>Ask, rewrite, summarize, explain.</span></li>
+          <li><strong>App</strong><span>Use AI inside a product.</span></li>
+          <li><strong>Agent</strong><span>Let AI inspect and edit files with review.</span></li>
+          <li><strong>Loop</strong><span>Repeat a task until a stop condition.</span></li>
+          <li><strong>Harness</strong><span>Score and compare outputs repeatably.</span></li>
+          <li><strong>Server</strong><span>Expose a workflow through a URL.</span></li>
+        </ol>
+      </section>
+
+      <section class="panel">
+        <h2>Prompt Practice</h2>
+        <p id="prompt-output" class="prompt-output">
+          Click the button to generate a practice prompt.
+        </p>
+        <button id="prompt-button" type="button">Generate practice prompt</button>
+      </section>
+
+      <section class="panel">
+        <h2>Safety Rule</h2>
+        <p>
+          Do not paste passwords, API keys, private 2FA codes, banking details,
+          private medical information, or confidential customer data into AI
+          tools. Use fake examples when practicing.
+        </p>
+      </section>
+    </main>
+    <script src="app.js"></script>
+  </body>
+</html>
