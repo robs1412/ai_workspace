@@ -3,6 +3,12 @@ Last Updated: 2026-06-16 CDT (Machine: Macmini.lan)
 
 ## Completed
 
+- **2026-07-26 Multi-Repo Preservation And Cleanup**
+  - Master ID: `AI-INC-20260726-MULTI-REPO-CLEANUP-01`
+  - Detail log: `project_hub/issues/2026-07-26-multi-repo-cleanup.md`
+  - Repos: `salesreport`, `bid`, `dist`, `workspaceboard`, `ai_workspace`, `_birnecker.com`, `database`, `lists`, `playwright-scraper`, `ai-bridge`, plus clean fast-forwards for `forge`, `ops`, and `portal`
+  - Status: completed. All active worktrees were cleaned without deleting or moving source/private artifacts. Source and durable evidence were preserved in focused commits; private/runtime files remain local under narrow ignore rules. Salesreport and DIST were deployed and verified live. AI Bridge remains local-only because no remote is configured. Workspaceboard source is pushed and tested, while its LaunchAgent reload remains a separate GUI-session follow-up.
+
 - **2026-07-25 SATLA Payment And Local Tax Reporting**
   - Master ID: `AI-INC-20260725-SATLA-PAYMENT-TAX-REPORTING-01`
   - Detail log: `project_hub/issues/2026-07-25-satla-payment-tax-reporting.md`
