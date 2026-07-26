@@ -6,6 +6,7 @@ import argparse
 import hashlib
 import json
 import os
+import re
 import subprocess
 import sys
 import tempfile
@@ -67,6 +68,96 @@ def request_json(method: str, url: str, payload: dict | None = None) -> dict:
     except urllib.error.HTTPError as exc:
         body = exc.read().decode("utf-8", errors="replace")
         raise RuntimeError(f"{method} {url} failed: {exc.code} {body}") from exc
+
+
+def taskflow_closeout_statuses() -> set[str]:
+    return {
+        "closed",
+        "closed_with_proof",
+        "completed",
+        "complete",
+        "reported",
+        "filed",
+        "handled",
+        "no_action_closed",
+    }
+
+
+def nested_work_state(session: dict) -> dict:
+    work_state = session.get("work_state")
+    return work_state if isinstance(work_state, dict) else {}
+
+
+def session_taskflow_keys(session: dict) -> set[str]:
+    work_state = nested_work_state(session)
+    keys = {
+        str(session.get("taskflow_key") or "").strip(),
+        str(work_state.get("taskflow_key") or "").strip(),
+    }
+    details = work_state.get("details")
+    if isinstance(details, dict):
+        keys.add(str(details.get("taskflow_key") or "").strip())
+    text = "\n".join(
+        str(value or "")
+        for value in [
+            session.get("title"),
+            session.get("taskflow_key"),
+            session.get("blocker"),
+            session.get("owner_question"),
+            work_state.get("title"),
+            work_state.get("taskflow_key"),
+            work_state.get("blocker_text"),
+            work_state.get("owner_question"),
+            json.dumps(details, ensure_ascii=True) if isinstance(details, dict) else "",
+        ]
+    )
+    keys.update(match.group(0) for match in re.finditer(r"taskflow-[A-Za-z0-9]+", text))
+    return {key for key in keys if key}
+
+
+def taskflow_report_items(args: argparse.Namespace) -> list[dict]:
+    try:
+        report = request_json(
+            "GET",
+            f"{args.api_base.rstrip('/')}/api/task-flow/report?mode=all&limit=500&refresh=1",
+        )
+    except Exception:
+        return []
+    items = report.get("items") if isinstance(report.get("items"), list) else []
+    return [item for item in items if isinstance(item, dict)]
+
+
+def taskflow_text_has_message_id(text: str) -> bool:
+    return re.search(r"<[^<>\s]+@[^<>\s]+>", text) is not None
+
+
+def taskflow_closeout_for_session(session: dict, items: list[dict]) -> dict | None:
+    session_id = str(session.get("id") or session.get("session_id") or "").strip()
+    taskflow_keys = session_taskflow_keys(session)
+    if not session_id and not taskflow_keys:
+        return None
+    closeout_statuses = taskflow_closeout_statuses()
+    for item in items:
+        dedupe_key = str(item.get("dedupe_key") or "").strip()
+        item_session = str(item.get("workspaceboard_session") or item.get("session_id") or "").strip()
+        if dedupe_key not in taskflow_keys and (not session_id or item_session != session_id):
+            continue
+        status = str(item.get("status") or "").strip().lower()
+        effective = str(item.get("effective_status") or "").strip().lower()
+        completion = str(item.get("completion_or_blocker_email") or "").strip()
+        verification = str(item.get("verification_readback") or "").strip()
+        proof = completion or verification
+        sent_clarification = status in {"clarification_sent", "waiting", "waiting_owner_decision", "waiting_owner_input"} and taskflow_text_has_message_id(completion)
+        if status in closeout_statuses or effective in {"closed", "completed"} or sent_clarification:
+            return {
+                "dedupe_key": dedupe_key,
+                "status": status,
+                "effective_status": effective,
+                "workspaceboard_session": item_session,
+                "proof": proof[:240],
+                "reason": "task-flow-closeout-proof",
+            }
+    return None
 
 
 def load_state(path: Path) -> dict:
@@ -198,6 +289,7 @@ def main() -> int:
     sent_state = state.setdefault("sent", {})
     status = request_json("GET", f"{args.api_base.rstrip('/')}/api/status")
     blocked = status.get("blocked_sessions") if isinstance(status.get("blocked_sessions"), list) else []
+    taskflow_items = taskflow_report_items(args) if blocked else []
     results = []
     for session in blocked:
         if not isinstance(session, dict):
@@ -214,6 +306,36 @@ def main() -> int:
             continue
         if cooldown_hours is not None and cooldown_hours < args.cooldown_hours:
             results.append({"session_id": session.get("id"), "action": "skip_cooldown", "age_hours": round(age_hours, 2), "cooldown_hours": round(cooldown_hours, 2)})
+            continue
+        closeout = taskflow_closeout_for_session(session, taskflow_items)
+        if isinstance(closeout, dict) and closeout.get("reason") == "task-flow-closeout-proof":
+            results.append({
+                "session_id": session.get("id"),
+                "action": "skip_taskflow_proof",
+                "age_hours": round(age_hours, 2),
+                "proof": closeout,
+            })
+            sent_state[key] = {
+                "sent_at": now.isoformat(),
+                "session_id": session.get("id"),
+                "message_id": "",
+                "route_signature": f"blocked-24h:{session.get('id')}:{key.split(':')[-1]}",
+                "suppressed": True,
+                "reason": "task-flow-closeout-proof",
+                "proof": closeout,
+            }
+            append_log(log_path, {
+                "logged_at": now.isoformat(),
+                "session_id": session.get("id"),
+                "workspace_key": session.get("workspace_key"),
+                "title": session.get("title"),
+                "age_hours": round(age_hours, 2),
+                "dry_run": bool(args.dry_run),
+                "ok": True,
+                "suppressed": True,
+                "reason": "task-flow-closeout-proof",
+                "proof": closeout,
+            })
             continue
         user_id, user_label, to_addr = recipient_for_session(session)
         subject = f"Blocked reminder: {str(session.get('title') or 'Workspaceboard item')[:110]}"

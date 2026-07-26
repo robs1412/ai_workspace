@@ -1,7 +1,7 @@
 # AGENTS.md - ai_workspace Compact Startup
 
 Scope: Applies to everything under `ai_workspace/` and overrides parent instructions when conflicts exist.
-Last Updated: 2026-06-07 14:40 CDT (Machine: Macmini.lan)
+Last Updated: 2026-07-25 12:15 CDT (Machine: Macmini.lan)
 
 This root file is intentionally compact. Do not preload long lane histories, handoffs, transcripts, or project-hub files at startup. Load the narrow reference named by the task only after the current task requires it.
 
@@ -14,9 +14,14 @@ This root file is intentionally compact. Do not preload long lane histories, han
 - Never print passwords, API keys, tokens, `.env` secrets, private key material, private 2FA codes, session cookies, or credential file paths in chat, logs, notes, git, or screenshots.
 - For credential setup, report only non-secret metadata such as username, user id, role/group, and status.
 - Use `/usr/local/bin/rg` for searches when available and `/usr/local/bin/python3.13` for Python commands and shebangs.
+- During code upgrades, preserve existing user-facing functionality unless it is explicitly superseded, discussed with the owner, or verified as clearly no longer needed.
 - Keep diagnostics metadata-first: use counts, stats, `head`, `jq`, and targeted line ranges before reading full logs, transcripts, or instruction files.
 - Keep proof gathering bounded: start from exact Task Flow keys, session ids, Message-IDs, OPS/Portal ids, or source refs; use `rg --max-count`, `head`/`tail`, `jq`, `wc`, and targeted line ranges before full recursive searches or full API/log dumps.
 - Owner-facing review packets must not be left only as local `.md` or `.csv` files under `/Users/werkstatt`. Publish them to Google Drive AI Cloud, Papers, or a repo-backed access-gated HTML/page surface, then provide the full accessible link. Local files may be working copies only.
+- Owner-facing review packets for mailbox, Workspaceboard, Task Flow, or reminder cleanup must include enough source-email context for review: subject, sender, date, route/status, and a safe body gist or excerpt. Do not ask owners to decide from Message-ID or opaque task IDs alone. Keep credential, auth-code, token, device-login, private security URL, and other secret material redacted.
+- If a blocker/reminder packet has a Message-ID, session id, Task Flow key, or source ref but lacks the body/details, do the bounded source lookup first: check the matching body cache, active inbox/state, sent/archive logs, Task Flow packet/events, and session history before asking Robert/Sonat for the original. A message like `Please provide the source email/body...` is not acceptable unless those exact lookups fail; the escalation must say which source surfaces were checked and include any safe subject/sender/date/body gist found.
+- Shift-change continuity rule: for any staffing assignment, release, cancellation, unavailability, reschedule, or replacement-coverage change, the newest source-backed instruction overrides older assignment approvals. Keep the affected team member, the lane owner, the operational manager, and the requester in the completion loop; for KOVAL Tasting Room / Outreach work, that means Vanessa, Mark, and Robert by default unless the current source explicitly narrows the recipients. Do not file the source as complete until the live OPS assignment/open-shift state, replacement-coverage state or exact blocker, and sent-recipient proof all agree. A later reassignment after a team-member cancellation requires a new source-backed confirmation; stale instructions must not silently restore the assignment.
+- Current Illinois distribution truth: KOVAL is not distributed through Heritage Wine Cellars or RNDC in Illinois. The default current route is SATLA Spirits through `/order`; the exception is an account explicitly enabled in KOVAL's Illinois self-distribution account set, which must be handled through `/dist`. For account-specific work, verify the live `/dist` account set before choosing the route. Treat older Heritage/RNDC references in emails, trackers, CRM history, invoices, or source documents as historical context only unless the task explicitly concerns that historical period; do not copy them into current drafts, trackers, reports, activities, or order guidance.
 - The Cultivater is managed by Sonat. Send all The Cultivater communications, including Asher/Venetia drafts, approval packets, blocker details, route-info notes, completion reports, and follow-up packets, to Sonat by default, not Robert. Robert may receive brief chat status when he asks, but do not email The Cultivater operational packets to Robert unless he explicitly says to copy himself in addition to Sonat.
 
 ## Task Tracking

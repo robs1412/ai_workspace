@@ -519,6 +519,14 @@ def direct_primary_thread_task_id(action: dict) -> str:
     return f"{original_subject}|{original_to or ROBERT_EMAIL}"
 
 
+def is_workspaceboard_blocked_thread(action: dict) -> bool:
+    for key in ("task_id", "thread_task_id", "ops_portal_or_domain_task"):
+        value = str(action.get(key) or "").strip().lower()
+        if value.startswith("workspaceboard-blocked-"):
+            return True
+    return False
+
+
 def direct_primary_thread_key(action: dict) -> str:
     return "|".join([
         direct_primary_thread_task_id(action),
@@ -1527,6 +1535,17 @@ def monitor_direct_primary_action(
     blocked = session_state == "blocked"
     session_summary = board_session_summary(str(action.get("routed_session_id") or ""))
     closeout_state = "blocked_report_sent" if blocked else "completed_report_sent"
+    if is_workspaceboard_blocked_thread(action):
+        return {
+            "monitor_state": f"{closeout_state}_suppressed_workspaceboard_thread",
+            "current_state": closeout_state,
+            "session_status": session_state,
+            "completion_message_id": "",
+            "owner_email_suppressed": True,
+            "suppression_reason": "workspaceboard_blocked_thread_single_update_policy",
+            "archivable_now": True,
+            "archive_reason": "workspaceboard_blocked_thread_closeout_recorded_without_frank_email",
+        }
     message_id = send_plain_email(
         sender_email,
         app_pw,
@@ -1700,7 +1719,10 @@ def main() -> int:
                         decision = "direct-primary-route-still-open-not-filed"
                         classification = "previously-logged-direct-primary-pending"
                     elif previous_direct_primary and monitor_result.get("archivable_now"):
-                        decision = "direct-primary-report-sent-filed-to-handled" if archived else "direct-primary-report-sent-archive-not-found"
+                        if monitor_result.get("owner_email_suppressed"):
+                            decision = "direct-primary-workspaceboard-thread-filed-no-frank-email" if archived else "direct-primary-workspaceboard-thread-no-frank-email-archive-not-found"
+                        else:
+                            decision = "direct-primary-report-sent-filed-to-handled" if archived else "direct-primary-report-sent-archive-not-found"
                         classification = "previously-logged-direct-primary-closed"
                     else:
                         decision = "filed-previously-logged-to-handled"

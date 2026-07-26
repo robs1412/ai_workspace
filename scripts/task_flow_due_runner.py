@@ -325,8 +325,14 @@ def handoff_is_recent(row: dict, cooldown_seconds: int) -> bool:
 def workspace_for_task_flow_item(item: dict) -> str:
     owner_lane = str(item.get("owner_lane") or "").strip().lower()
     responsible = str(item.get("responsible_worker_or_persona") or "").strip().lower()
+    workspace_aliases = {
+        "salesreport": "sales",
+        "sales report": "sales",
+    }
+    if responsible in workspace_aliases:
+        return workspace_aliases[responsible]
     if responsible in {
-        "workspaceboard", "ai", "ops", "portal", "lists", "salesreport",
+        "workspaceboard", "ai", "ops", "portal", "lists", "sales",
         "bid", "forge", "frank", "avignon", "nationaloutreach", "asher", "venetia",
     }:
         return responsible
@@ -337,8 +343,10 @@ def workspace_for_task_flow_item(item: dict) -> str:
         "national outreach",
     }:
         return "nationaloutreach"
+    if owner_lane in workspace_aliases:
+        return workspace_aliases[owner_lane]
     if owner_lane in {
-        "workspaceboard", "ai", "ops", "portal", "lists", "salesreport",
+        "workspaceboard", "ai", "ops", "portal", "lists", "sales",
         "bid", "forge", "frank", "avignon", "nationaloutreach", "asher", "venetia",
     }:
         return owner_lane
@@ -380,7 +388,7 @@ def workspace_for_task_flow_item(item: dict) -> str:
     if any(token in text for token in ["phplist", "lists", "mailgun", "campaign"]):
         return "lists"
     if any(token in text for token in ["salesreport", "sales report"]):
-        return "salesreport"
+        return "sales"
     if any(token in text for token in ["bid", "qbo", "quickbooks", "finance", "naomi"]):
         return "bid"
     if any(token in text for token in ["ops task", "ops ", "shift", "calendar"]):

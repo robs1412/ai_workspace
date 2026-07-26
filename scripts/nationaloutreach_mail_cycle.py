@@ -253,6 +253,27 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Run only the safe INBOX archive pass using existing active-inbox state, without fetching full message bodies first.",
     )
+    parser.add_argument(
+        "--archive-source-message-id",
+        action="append",
+        default=[],
+        help="Archive a specifically reviewed INBOX Message-ID/source id.",
+    )
+    parser.add_argument(
+        "--archive-source-reason",
+        default="explicit_reviewed_no_action",
+        help="Reason to log when --archive-source-message-id is used.",
+    )
+    parser.add_argument(
+        "--archive-proof-marker",
+        default="",
+        help="Proof marker to include in archive-log rows for explicit reviewed archives.",
+    )
+    parser.add_argument(
+        "--archive-workspaceboard-session",
+        default="",
+        help="Workspaceboard session id to include in archive-log rows for explicit reviewed archives.",
+    )
     return parser.parse_args()
 
 
@@ -1230,6 +1251,7 @@ def archive_inbox_messages(
     archive_redundant_overdue_reports: bool,
     archive_self_sent_inbox_copies: bool,
     archive_replied_inbox: bool,
+    explicit_archive_targets: Optional[dict[str, dict[str, str]]] = None,
 ) -> dict:
     live_active_records = {
         source_id: record
@@ -1264,11 +1286,27 @@ def archive_inbox_messages(
         if source_id in targets:
             continue
         subject = str(record.get("subject") or "")
+        explicit_target = (explicit_archive_targets or {}).get(source_id)
+        if explicit_target:
+            targets[source_id] = {
+                "reason": explicit_target.get("reason") or "explicit_reviewed_no_action",
+                "subject": subject,
+                "classification": explicit_target.get("classification") or "no-action/filed",
+                "proof_marker": explicit_target.get("proof_marker") or "",
+                "workspaceboard_session": explicit_target.get("workspaceboard_session") or "",
+            }
+            continue
         sender = sender_email(record.get("from") or "")
         if str(record.get("status") or "") == "no_action_closed":
             targets[source_id] = {"reason": "already_no_action_closed", "subject": subject}
             continue
         if str(record.get("resolved_at") or "").strip():
+            # A mailbox projection can briefly mark a direct owner instruction
+            # resolved before its Portal/OPS/CRM work has completion proof. Keep
+            # those packets out of the generic residue archive path; after the
+            # write is proven they can be archived explicitly with that proof.
+            if is_direct_owner_instruction_record(record):
+                continue
             targets[source_id] = {"reason": "resolved_projection_residue", "subject": subject}
             continue
         if archive_self_sent_inbox_copies and sender and sender in allowed_aliases:
@@ -1353,7 +1391,12 @@ def archive_inbox_messages(
                         "reason": reason,
                         "mailbox_mutation": True,
                         "action": "archive_move_to_all_mail",
-                    },
+                    }
+                    | ({k: v for k, v in {
+                        "classification": target.get("classification", ""),
+                        "proof_marker": target.get("proof_marker", ""),
+                        "workspaceboard_session": target.get("workspaceboard_session", ""),
+                    }.items() if v}),
                 )
                 record_email_trace(
                     state_dir,
@@ -2197,6 +2240,16 @@ def main() -> int:
     state_dir.mkdir(parents=True, exist_ok=True)
     state_dir.chmod(0o700)
     creds = load_credentials(Path(args.creds_file).expanduser())
+    explicit_archive_targets = {
+        normalize_message_id(source_id): {
+            "reason": args.archive_source_reason,
+            "classification": "no-action/filed",
+            "proof_marker": args.archive_proof_marker,
+            "workspaceboard_session": args.archive_workspaceboard_session,
+        }
+        for source_id in args.archive_source_message_id
+        if normalize_message_id(source_id)
+    }
     if args.archive_only:
         archive_result = (
             archive_inbox_messages(
@@ -2206,6 +2259,7 @@ def main() -> int:
                 args.archive_redundant_overdue_reports,
                 args.archive_self_sent_inbox_copies,
                 args.archive_replied_inbox,
+                explicit_archive_targets,
             )
             if is_inbox_mailbox(args.mailbox)
             else {"archived": 0, "skipped": 0, "subjects": [], "reasons": {}}
@@ -2234,6 +2288,7 @@ def main() -> int:
             args.archive_redundant_overdue_reports,
             args.archive_self_sent_inbox_copies,
             args.archive_replied_inbox,
+            explicit_archive_targets,
         )
         if is_inbox_mailbox(args.mailbox)
         else {"archived": 0, "skipped": 0, "subjects": [], "reasons": {}}

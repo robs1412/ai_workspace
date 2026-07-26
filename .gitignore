@@ -36,6 +36,7 @@ tmp_*/
 **/.monitor-state/
 output/
 recordings/
+logs/
 LOG_imapsync/
 sync_backups/
 sandboxes/
@@ -69,6 +70,34 @@ venetia/sent/
 nationaloutreach/reports/
 mail-review.jsonl
 *.send-body.txt
+sent-log.jsonl
+
+# Mailbox body caches and worker runtime state
+asher/bodies/
+asher/outbox/
+asher/state/
+asher/failed/
+asher/source-material/
+avignon/bodies/
+avignon/outbox/
+avignon/state/
+avignon/failed/
+avignon/source-material/
+avignon/tmp-*
+venetia/bodies/
+venetia/outbox/
+venetia/state/
+venetia/failed/
+venetia/source-material/
+nationaloutreach/archive/
+nationaloutreach/bodies/
+nationaloutreach/seen-full-body.json
+nationaloutreach/.workspaceboard-*-reply.txt
+
+# Private downloads and generated source exports remain local
+private-downloads/
+project_hub/artifacts/ilcc-exports-*/
+project_hub/artifacts/the-cultivater/**/images/
 
 # Sensitive local case/work-product packets
 legal/

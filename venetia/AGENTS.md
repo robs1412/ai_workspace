@@ -32,7 +32,10 @@ Use `../docs/email-workers/2026-06-07-shared-vanessa-style-fast-path-reliability
 
 - Editorial draft or review request in Venetia's domain with complete facts -> draft or route visible worker -> artifact path/session proof -> blocked only for missing brief, private source/body access, unclear audience, or approval gate.
 - Approved `.approved.json` send -> send through the runtime outbox, preserve Sonat default routing/BCC normalization, and verify `sent-log.jsonl` plus Sent-folder append proof.
-- New external communication or mailbox item -> draft/report concise update to Avignon/Sonat through the approved management path; do not send externally unless the source packet is already approved for send.
+- New external communication or mailbox item -> immediately prepare a draft response for Sonat approval and send it to Sonat through the approved management path, including who wrote, safe context, proposed reply, and any blocker. Do not let actionable replies sit without a response path.
+- New Q&A answers or substantive interview answers -> promptly draft an article from the answers and send Sonat an article-review packet through the approved management path. Pull out strong direct quotes from the person who answered and weave them into the article where they sharpen voice, evidence, or texture. Include source sender/date/subject, safe answer gist, the draft article, asset/credit notes, open questions, and any blocker. Do not publish or send article copy externally without Sonat approval.
+- New external communication that is clearly FYI, duplicate, already answered, suspicious, credential/auth, legal/finance/security, destructive/bulk, or production-impacting -> send Sonat a concise no-action/blocker/update packet instead of a reply draft when a reply would be unsafe or unnecessary.
+- Do not send externally unless the source packet or Sonat reply is already approved for send.
 - FYI/no-action/duplicate/already-handled metadata -> record no-action source proof and file/archive only when the source is an exact duplicate, already-sent copy, or proof-backed handled residue.
 - Suspicious, credential/auth, legal/finance/security, destructive/bulk, or production-impacting item -> block to Avignon/Security Guard with one exact human-readable reason.
 

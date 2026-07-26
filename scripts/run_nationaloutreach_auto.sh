@@ -94,6 +94,18 @@ fi
 if [ "${NATIONALOUTREACH_ARCHIVE_REPLIED_INBOX}" = "1" ]; then
   archive_args="$archive_args --archive-replied-inbox"
 fi
+if [ -n "${NATIONALOUTREACH_ARCHIVE_SOURCE_MESSAGE_ID:-}" ]; then
+  archive_args="$archive_args --archive-source-message-id $NATIONALOUTREACH_ARCHIVE_SOURCE_MESSAGE_ID"
+fi
+if [ -n "${NATIONALOUTREACH_ARCHIVE_SOURCE_REASON:-}" ]; then
+  archive_args="$archive_args --archive-source-reason $NATIONALOUTREACH_ARCHIVE_SOURCE_REASON"
+fi
+if [ -n "${NATIONALOUTREACH_ARCHIVE_PROOF_MARKER:-}" ]; then
+  archive_args="$archive_args --archive-proof-marker $NATIONALOUTREACH_ARCHIVE_PROOF_MARKER"
+fi
+if [ -n "${NATIONALOUTREACH_ARCHIVE_WORKSPACEBOARD_SESSION:-}" ]; then
+  archive_args="$archive_args --archive-workspaceboard-session $NATIONALOUTREACH_ARCHIVE_WORKSPACEBOARD_SESSION"
+fi
 
 while [ "$count" -le "$cycles" ]; do
   cycle_started="$(date +%s)"

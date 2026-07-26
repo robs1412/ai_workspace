@@ -112,8 +112,12 @@ function sent_artifact_data(string $lane, array $row): array
 function sent_log_sources(): array
 {
     return [
+        ['lane' => 'frank', 'worker' => 'Frank', 'path' => '/Users/admin/.frank-launch/state/sent-log.jsonl'],
+        ['lane' => 'frank', 'worker' => 'Frank', 'path' => '/Users/werkstatt/ai_workspace/frank/sent-log.jsonl'],
         ['lane' => 'avignon', 'worker' => 'Avignon', 'path' => '/Users/admin/.avignon-launch/state/sent-log.jsonl'],
         ['lane' => 'avignon', 'worker' => 'Avignon', 'path' => '/Users/werkstatt/ai_workspace/avignon/sent-log.jsonl'],
+        ['lane' => 'nationaloutreach', 'worker' => 'Vanessa', 'path' => '/Users/admin/.nationaloutreach-launch/state/sent-log.jsonl'],
+        ['lane' => 'nationaloutreach', 'worker' => 'Vanessa', 'path' => '/Users/werkstatt/ai_workspace/.private/mailboxes/nationaloutreach/state/sent-log.jsonl'],
         ['lane' => 'asher', 'worker' => 'Asher', 'path' => '/Users/admin/.asher-launch/state/sent-log.jsonl'],
         ['lane' => 'asher', 'worker' => 'Asher', 'path' => '/Users/werkstatt/ai_workspace/asher/sent-log.jsonl'],
         ['lane' => 'venetia', 'worker' => 'Venetia', 'path' => '/Users/admin/.venetia-launch/state/sent-log.jsonl'],
@@ -124,10 +128,20 @@ function sent_log_sources(): array
 function lane_identity(string $lane): array
 {
     return match ($lane) {
+        'frank' => [
+            'email_account' => 'frank.cannoli@kovaldistillery.com',
+            'from_address' => 'Frank Cannoli <frank.cannoli@kovaldistillery.com>',
+            'from_name' => 'Frank Cannoli',
+        ],
         'avignon' => [
             'email_account' => 'avignon.rose@kovaldistillery.com',
             'from_address' => 'Avignon Rose <avignon.rose@kovaldistillery.com>',
             'from_name' => 'Avignon Rose',
+        ],
+        'nationaloutreach' => [
+            'email_account' => 'nationaloutreach@kovaldistillery.com',
+            'from_address' => 'Vanessa Sterling <nationaloutreach@kovaldistillery.com>',
+            'from_name' => 'Vanessa Sterling',
         ],
         'asher' => [
             'email_account' => 'asher@thecultivater.com',
@@ -150,6 +164,7 @@ function lane_identity(string $lane): array
 $apply = in_array('--apply', $argv, true);
 $limit = max(1, min(10000, (int) arg_value($argv, '--limit', '10000')));
 $onlyLane = strtolower(trim(arg_value($argv, '--lane', '')));
+$onlyMessageId = normalize_message_id(arg_value($argv, '--message-id', ''));
 
 $pdo = get_event_pdo();
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -236,6 +251,9 @@ foreach (sent_log_sources() as $source) {
         $messageId = normalize_message_id($row['message_id'] ?? '');
         if ($messageId === '') {
             $skippedNoMessage++;
+            continue;
+        }
+        if ($onlyMessageId !== '' && $messageId !== $onlyMessageId) {
             continue;
         }
         $artifact = sent_artifact_data($source['lane'], $row);
