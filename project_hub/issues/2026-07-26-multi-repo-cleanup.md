@@ -46,8 +46,8 @@ Completed feature work and operational evidence had accumulated without focused 
 ### workspaceboard
 
 - Repo Log ID: `REPO-WORKSPACEBOARD-20260726`
-- Commit SHAs: `6a1d02a`, `853f6d3`
-- Change Summary: Preserved the model-selection update, monitor-count readback, and source-context guard for blocker emails.
+- Commit SHAs: `6a1d02a`, `853f6d3`, `02cc52b`
+- Change Summary: Preserved the model-selection update, monitor-count readback, and source-context guard for blocker emails. Corrected deployment guidance and helpers to use the existing headless system LaunchDaemon instead of a GUI LaunchAgent.
 
 ### ai_workspace
 
@@ -69,10 +69,10 @@ Completed feature work and operational evidence had accumulated without focused 
 - Salesreport: six touched PHP files passed `php -l`; the publisher passed Python compilation; local and live checkouts read clean at `9376c54`.
 - BID: seven touched PHP files passed `php -l`, the Square wrapper passed `bash -n`, and the two local commits rebased without conflict.
 - DIST: both touched PHP files passed `php -l`; live checkout read clean at `a7f372b`.
-- Workspaceboard: PHP/JavaScript syntax checks passed and all 129 tests passed.
+- Workspaceboard: PHP/JavaScript syntax checks passed, the original cleanup suite passed 129 tests, and the headless-service correction passed shell syntax plus the current 113-test suite.
 - AI Workspace: 38 PHP files passed lint, nine Python files compiled, two shell scripts passed syntax checks, and the plist passed validation.
 - No staged or unstaged source changes remained after preservation. Private/runtime files remained in place and became ignored.
-- Workspaceboard LaunchAgent reinstall could not bootstrap because this shell had no usable macOS GUI launchd domain. The existing local API remained responsive; repository cleanup and push succeeded, but runtime restart was not claimed.
+- Workspaceboard is hosted by active system LaunchDaemons at `system/com.koval.workspaceboard` and `system/com.koval.workspaceboard-automation`; no GUI session is required. The refreshed runtime files match source and the API remains responsive. Restarting the system service from this unprivileged shell was correctly denied with `Operation not permitted`, so a root-authorized system-domain restart remains unclaimed.
 
 ## Rollback Plan
 
@@ -81,4 +81,4 @@ Each feature group is isolated in a focused commit and can be reverted independe
 ## Follow-Ups
 
 - Configure a remote for `ai-bridge` if that repository should be backed up centrally.
-- Refresh the Workspaceboard LaunchAgent from an interactive GUI login session if immediate runtime reload is required.
+- Run `sudo ./scripts/install_workspaceboard_launchdaemon.sh 17878` from the Workspaceboard repo to install/restart the refreshed headless runtime with root authority.
