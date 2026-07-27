@@ -67,3 +67,29 @@ country and state comparisons hid the account.
   reporting corrections.
 - Live DIST includes account `36990`, uses Illinois as delivery state, and the
   live self-service helper resolves Chicago as delivery city.
+
+## Portal login incident and repair
+
+The first `v20260727reporting` frontend image was built without
+`VUE_APP_API_URL`. Its compiled login client therefore posted to the relative
+`/undefined/auth/login` path and displayed the generic unexpected-error modal.
+The reporting-location backend was healthy; this was a frontend build-input
+failure.
+
+- Immediately restored the known-good `v20260714` frontend while keeping the
+  reporting-location backend and Eataly data intact.
+- Portal commit `17b16edb` now requires the production API URL in the build
+  script, passes it explicitly into Docker, and fails the image build if the
+  URL is absent from the compiled application bundle.
+- Portal commit `417c7f2f` makes the compiled-bundle check compatible with the
+  production image's BusyBox tools.
+- Corrected frontend image `v20260727reportingfix3` was built, validated,
+  transferred, and deployed. Build-history commit: `59a06735`.
+- Live readback shows the corrected image running, its application bundle
+  contains the configured Portal API URL, the undefined API expression is
+  absent, and the reporting-location fields are present in compiled assets.
+- The backend login endpoint on the production container route returns
+  structured JSON for a bounded invalid-user probe instead of an application
+  error.
+- Final Eataly readback remained unchanged: New York billing; Chicago,
+  Illinois shipping and reporting; `United States` in all three country fields.
