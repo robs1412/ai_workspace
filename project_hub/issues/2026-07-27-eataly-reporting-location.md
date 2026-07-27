@@ -46,3 +46,24 @@ country and state comparisons hid the account.
 - Production database readback for exact account values, Julie visibility, and
   reporting view output.
 - Live git readback for each deployed checkout.
+
+## Completion
+
+- Portal commit `a3e8b1b7` deployed as backend/frontend image
+  `v20260727reporting`; both containers are running and internal frontend/backend
+  checks return HTTP 200.
+- Order commit `558bf37` is live.
+- DIST commit `84f6593` is live and remains an ancestor of live commit
+  `7b7da76`.
+- Salesreport commit `509ef7c` is live.
+- Account `36990` readback:
+  - Bill to: New York, New York, United States.
+  - Ship to: Chicago, Illinois, United States.
+  - Reporting: Chicago, Illinois, United States.
+- The reporting-address view returns Chicago, Illinois, United States.
+- Julie user `1307` has one exact reporting-location permission match for the
+  account.
+- Seven account audit rows record the canonical billing, shipping, and
+  reporting corrections.
+- Live DIST includes account `36990`, uses Illinois as delivery state, and the
+  live self-service helper resolves Chicago as delivery city.
