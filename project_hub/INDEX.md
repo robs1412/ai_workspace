@@ -3,6 +3,12 @@ Last Updated: 2026-06-16 CDT (Machine: Macmini.lan)
 
 ## Completed
 
+- **2026-08-04 Salesreport WH DIST Toggle Regression**
+  - Master ID: `AI-INC-20260804-SALESREPORT-WH-DIST-TOGGLE-REGRESSION-01`
+  - Detail log: `project_hub/issues/2026-08-04-salesreport-wh-dist-toggle-regression.md`
+  - Repos: `salesreport`, live Salesreport checkout
+  - Status: completed. Fixed the `exclude_satla=0` path so SATLA warehouse invoices remain visible without re-admitting DIST warehouse invoices. Salesreport commit `85de5e7` is pushed and live; the six July DIST exception invoices are absent from the WH report, four July SATLA Spirits invoices remain present, and the separate DIST report still shows 16 cases / `$2,447`.
+
 - **2026-07-26 Multi-Repo Preservation And Cleanup**
   - Master ID: `AI-INC-20260726-MULTI-REPO-CLEANUP-01`
   - Detail log: `project_hub/issues/2026-07-26-multi-repo-cleanup.md`
