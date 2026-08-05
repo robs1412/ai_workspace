@@ -1,7 +1,13 @@
 # AI Workspace Project Hub
-Last Updated: 2026-06-16 CDT (Machine: Macmini.lan)
+Last Updated: 2026-08-05 CDT (Machine: Macmini.lan)
 
 ## Completed
+
+- **2026-08-05 MMK Dual-Date Illinois Tax Reporting**
+  - Master ID: `AI-INC-20260805-MMK-DUAL-DATE-REPORTING-01`
+  - Detail log: `project_hub/issues/2026-08-05-mmk-dual-date-reporting.md`
+  - Repos: `salesreport`, live Salesreport checkout; durable state in OPS and Task Flow
+  - Status: completed. July SATLA/MMK Illinois, Cook County, and Chicago reporting now requires both the authoritative MMK invoice date and delivery date to fall in the selected period. Three July-invoiced orders delivered on August 5 are shown as cross-period exceptions and excluded from July. Salesreport commits `f1527634` and `caa7ae2` are pushed and live; OPS task `376620` advanced to its September 5 recurrence with proof.
 
 - **2026-08-04 Salesreport WH DIST Toggle Regression**
   - Master ID: `AI-INC-20260804-SALESREPORT-WH-DIST-TOGGLE-REGRESSION-01`
