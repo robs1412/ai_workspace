@@ -13,6 +13,8 @@
 
 July 2026 SATLA/MMK Illinois, Cook County, and Chicago reporting now uses the actual MMK invoice date and delivery date. An invoice is included in the selected reporting month only when both dates fall in that month. Cross-period invoices remain visible in a dedicated exception table.
 
+The 2026-08-10 follow-up also makes Cook County Schedule C source-aware: `source=satla` now lists SATLA/MMK retailer deliveries outside Cook County instead of always displaying DIST invoices.
+
 ## Source readback
 
 The fresh MMK run completed at 2026-08-05 11:30 CDT with 273 unique invoices and 795 invoice lines. It found three invoices dated in July but delivered on 2026-08-05:
@@ -38,6 +40,14 @@ The fresh MMK run completed at 2026-08-05 11:30 CDT with 273 unique invoices and
 - OPS task `376620` was advanced to its next monthly due date, 2026-09-05, and its completion proof was read back. The normal Portal notification route had an expired service session, so the existing OPS database fallback was used; no separate email was sent.
 - No return was filed and no payment was made.
 
+## 2026-08-10 Schedule C SATLA follow-up
+
+- Root cause: `wh_reporting_cookcounty.php` selected SATLA for the local-tax table but called a DIST-only outside-Cook helper unconditionally for Schedule C.
+- Fix: Salesreport commit `ef2aec6e9cba61620b74cfdd645fee0e8b524a28` makes the helper source-aware and applies the established SATLA MMK invoice/delivery date, reconciliation, Product Cut, no-charge replacement, and approved DIST-exception gates.
+- July 2026 production readback: DIST remains 4 invoices / 52.420000 WG; SATLA now reads 48 invoices / 131.026688 WG, split into 27.008950 WG at or below 14% and 104.017738 WG at or above 20%.
+- Verification: focused PHP syntax checks and `tests/wh_reporting_tax_recommendations_test.php` passed locally and live. Live Salesreport fast-forwarded cleanly to `ef2aec6e9cba61620b74cfdd645fee0e8b524a28`, and the live server-side source comparison returned the same DIST and SATLA totals.
+- No return was filed and no payment was made.
+
 ## Rollback
 
-Revert the two Salesreport commits and fast-forward the live Salesreport checkout. Do not roll back the fresh MMK source readback data; it is authoritative evidence used by other reporting workflows.
+Revert the relevant Salesreport commits, including `ef2aec6` for the Schedule C follow-up, and fast-forward the live Salesreport checkout. Do not roll back the fresh MMK source readback data; it is authoritative evidence used by other reporting workflows.
