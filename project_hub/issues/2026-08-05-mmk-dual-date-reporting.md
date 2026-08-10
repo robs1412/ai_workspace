@@ -48,6 +48,14 @@ The fresh MMK run completed at 2026-08-05 11:30 CDT with 273 unique invoices and
 - Verification: focused PHP syntax checks and `tests/wh_reporting_tax_recommendations_test.php` passed locally and live. Live Salesreport fast-forwarded cleanly to `ef2aec6e9cba61620b74cfdd645fee0e8b524a28`, and the live server-side source comparison returned the same DIST and SATLA totals.
 - No return was filed and no payment was made.
 
+## 2026-08-10 Dovid communication draft
+
+- Live AI Cloud path verified as `Satla Spirits / Reporting / 2026 July`; the communication document is under `SATLA Tax Reporting / July` at `https://docs.google.com/document/d/1B_b-zgyMisX5SCBWup-t6Uy_XhgzWYfmQHmxEnm2bc4/edit`.
+- The current AI Cloud sales workbook still contains the original 301 cases / 378.211610 WG and therefore was not copied unfiltered into Schedule C.
+- Added a draft-only English email to Dovid at the top of the `Communication` document. Its Google Docs table contains 48 live Schedule C invoices plus a total row: 27.008950 WG at or below 14%, 0.000000 WG over 14% and under 20%, 104.017738 WG at or above 20%, total 131.026688 WG.
+- Filled three Portal `N/A` ZIP values from the live AI Cloud RL-26-R CSV: invoices `1236765`, `1238243`, and `1247882`. The table and all three corrections were read back through the Docs API.
+- No email was sent, no return was filed, and no payment was made.
+
 ## Rollback
 
 Revert the relevant Salesreport commits, including `ef2aec6` for the Schedule C follow-up, and fast-forward the live Salesreport checkout. Do not roll back the fresh MMK source readback data; it is authoritative evidence used by other reporting workflows.

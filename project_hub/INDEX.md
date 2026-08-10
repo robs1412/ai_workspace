@@ -7,7 +7,7 @@ Last Updated: 2026-08-10 CDT (Machine: Macmini.lan)
   - Master ID: `AI-INC-20260805-MMK-DUAL-DATE-REPORTING-01`
   - Detail log: `project_hub/issues/2026-08-05-mmk-dual-date-reporting.md`
   - Repos: `salesreport`, live Salesreport checkout; durable state in OPS and Task Flow
-  - Status: completed. July SATLA/MMK Illinois, Cook County, and Chicago reporting now requires both the authoritative MMK invoice date and delivery date to fall in the selected period. Three July-invoiced orders delivered on August 5 are shown as cross-period exceptions and excluded from July. The August 10 follow-up makes Cook County Schedule C honor `source=satla`; live July readback now shows 48 SATLA invoices / 131.026688 WG instead of the 4 DIST invoices / 52.420000 WG. Salesreport commits through `ef2aec6` are pushed and live; OPS task `376620` advanced to its September 5 recurrence with proof.
+  - Status: completed. July SATLA/MMK Illinois, Cook County, and Chicago reporting now requires both the authoritative MMK invoice date and delivery date to fall in the selected period. Three July-invoiced orders delivered on August 5 are shown as cross-period exceptions and excluded from July. The August 10 follow-up makes Cook County Schedule C honor `source=satla`; live July readback now shows 48 SATLA invoices / 131.026688 WG instead of the 4 DIST invoices / 52.420000 WG. A draft-only Dovid email with the 48-invoice Schedule C table is read back in the AI Cloud `Communication` document; no email was sent. Salesreport commits through `ef2aec6` are pushed and live; OPS task `376620` advanced to its September 5 recurrence with proof.
 
 - **2026-08-04 Salesreport WH DIST Toggle Regression**
   - Master ID: `AI-INC-20260804-SALESREPORT-WH-DIST-TOGGLE-REGRESSION-01`
