@@ -56,6 +56,13 @@ The fresh MMK run completed at 2026-08-05 11:30 CDT with 273 unique invoices and
 - Filled three Portal `N/A` ZIP values from the live AI Cloud RL-26-R CSV: invoices `1236765`, `1238243`, and `1247882`. The table and all three corrections were read back through the Docs API.
 - No email was sent, no return was filed, and no payment was made.
 
+## 2026-08-10 corrected reporting copy
+
+- Preserved the original `Satla Reporting July 2026` Google Doc and created one corrected copy in the owner-supplied AI Cloud `July` folder: `https://docs.google.com/document/d/1J03BBFJyevDkVCHV68G9Eq1Nw7hIH54qE2NA8vWOuBw/edit`.
+- Corrected both received-gallon sections to the purchase-source values: `112.537300`, `35.663220`, `863.842560`, total `1,012.043080`; the Cook combined `20% or More` amount is `899.505780`.
+- Docs API readback confirmed all seven intended replacements, no old received values remain in the copy, and the original retains its prior values.
+- No email was sent, no return was filed, and no payment was made.
+
 ## Rollback
 
 Revert the relevant Salesreport commits, including `ef2aec6` for the Schedule C follow-up, and fast-forward the live Salesreport checkout. Do not roll back the fresh MMK source readback data; it is authoritative evidence used by other reporting workflows.
