@@ -2,7 +2,7 @@
 
 - Master ID: `AI-INC-20260818-SATLA-RECONCILIATION-LEDGER-01`
 - Date: 2026-08-18
-- Repositories: `salesreport`, `bid`, `ai_workspace`
+- Repositories: `salesreport`, `bid`, `order`, `ai_workspace`
 - OPS task: `378182`
 - Status: completed; July portal-backed reconciliation finalized
 
@@ -47,7 +47,16 @@ Preliminary August 2026:
 - 230 ordered - 5 cuts = 225 shipped cases; case fee `$1,800.00`.
 - 23 paid invoices totaling `$6,641.40`; 84 unpaid invoices totaling `$29,412.72`.
 - Taxes `$2,615.49`; no August MMK Fees statement is available yet.
-- Cumulative running balance before August MMK costs is `$25,151.16`, including the finalized July carry.
+- Expected MMK fees are `$2,177.14`: storage `$447.10` (526 July 31 cases x `$0.85`), delivery/fuel `$1,207.54` (225 shipped cases at the July KOVAL blended delivery/fuel rate), inbound `$522.50` (190 known August receiving cases x `$2.75`, including 80 scheduled for August 19), and other `$0.00` until statement-only adjustments arrive.
+- Cumulative running balance after the explicitly labeled August MMK estimate is `$22,974.02`, including the finalized July carry. The final portal MMK statement replaces the estimate.
+
+## SATLA invoice follow-up in `/order`
+
+- `order_satla_portal_invoice_readbacks` stores the complete all-open KOVAL Payments invoice list; `order_satla_portal_invoice_sync_runs` stores pull counts and timestamps.
+- The August 18 14:50:48 CT pull imported 136 open invoices: 128 open and 8 overdue. All 136 matched an existing `/order` confirmed order through the MMK invoice readback.
+- The invoice-payment page shows delivery date, Net 30 due date, MMK invoice, PO, customer, cases, billed total, portal status, follow-up classification, linked order, and last pull in Chicago time.
+- Binny's and Whole Foods remain visible as automatic-payment accounts but are excluded from follow-up totals. Eight non-automatic invoices totaling `$3,012.08` currently require follow-up.
+- A row previously seen as open is marked paid only after it disappears from a later complete `all_open` pull whose parsed row count matches the portal's own all-open summary count.
 
 ## Implementation
 
@@ -57,25 +66,31 @@ Preliminary August 2026:
 - A monthly DB snapshot exposes the actual portal pull time in Chicago time and the reconciliation totals to BID.
 - BID has a finance-facing sortable SATLA page with the running balance, source status, source attachments, and links to the order/MMK and Salesreport controls.
 - Portal-backed months cannot be finalized until that month's MMK Fees statement exists. Final close uses portal paid totals, taxes, shipped cases, and MMK allocation rather than attachment aggregates.
+- Expected fee components are stored separately and displayed as estimated in BID; a final portal statement overwrites the estimate and its component breakdown.
 
 ## Verification
 
 - PHP syntax checks passed for the changed Salesreport and BID files.
 - `salesreport/tests/satla_reporting_test.php` passed.
+- `/order` SATLA portal invoice-status, MMK Product Cut import, and delivered-sales regression tests passed.
 - July seed completed transactionally and idempotently.
 - Direct DB readback confirmed ten verified remittance rows, the expected MMK cost, four source checks, no payout, and the monthly snapshot.
-- BID CLI render shows July finalized at `$22,925.25` and August preliminary at `$25,151.16` before August MMK costs, with ordered-minus-cut case math and the Chicago portal pull timestamp.
+- BID CLI render shows July finalized at `$22,925.25` and August preliminary at `$22,974.02` after the `$2,177.14` explicitly labeled MMK estimate, with its component basis and replacement-by-final-statement note.
 
 ## Deployment and operational closeout
 
 - Salesreport commits through `f358dfb` were pushed and the live `/home/koval/public_html/salesreport` checkout fast-forwarded to the same SHA. Live PHP syntax passed for the portal importer, snapshot refresh, finalizer, and reporting page.
 - BID commit `dddbfe8` was pushed and both `/srv/development/bid` and `/srv/bid` fast-forwarded to the same SHA. Live PHP syntax passed; the authenticated BID URL returns the normal Login redirect.
+- Follow-up extension commits: `/order` `b32b8f7`, Salesreport `e318e21`, and BID `43bec81`. All were pushed; live `/order`, live Salesreport, `/srv/development/bid`, and `/srv/bid` were fast-forwarded to those exact SHAs without altering unrelated live backup files.
+- Live `/order` readback confirms the 2026-08-18 14:50:48 CT portal pull, 136 matched invoices, 128 open totaling `$48,279.46`, and 8 overdue totaling `$3,012.08`. The route remains access-controlled through the normal `/order` login.
+- BID's authenticated route returns the normal login redirect; the DB-backed render readback shows the `$2,177.14` estimated MMK charge and `$22,974.02` running balance.
 - The project record was committed in `ai_workspace` as `cb9458e` before this closeout update.
 - Notified shared OPS task `378314` performs the prior-month final close on the 3rd of every month.
 - Notified shared OPS task `378315` performs the preliminary current/open-month refresh on the 18th of every month.
 - OPS `378182` contains exact portal/source/deployment proof and is completed after the July DB close.
 - Daily MMK task `376462` records the fresh 2026-08-18 19:03:53 InvoiceView/Product Cuts readback, 31 cut rows, and eight authenticated documents.
 - The original pre-portal email was corrected on the same Dovid/Robert thread under Message-ID `<178708122499.52735.17575079027554326897@kovaldistillery.com>`.
+- No additional email was sent. The owner's current instruction is to stop emailing Dovid unless a specific future message is explicitly authorized.
 
 ## Rollback
 
