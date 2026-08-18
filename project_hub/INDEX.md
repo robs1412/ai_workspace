@@ -7,7 +7,7 @@ Last Updated: 2026-08-18 CDT (Machine: Macmini.lan)
   - Master ID: `AI-INC-20260818-SATLA-RECONCILIATION-LEDGER-01`
   - Detail log: `project_hub/issues/2026-08-18-satla-reconciliation-ledger.md`
   - Repos: `salesreport`, `bid`, `ai_workspace`
-  - Status: completed implementation. Salesreport `16b56e6` and BID `6a67eb5` are pushed and live with a DB-backed sales-month ledger, source attachments, Chicago pull timestamp, running balance, and audited SATLA payout deductions. July is correctly preliminary at `$24,603.34`; Dovid received the detailed request for missing receipt/MMK allocation support under Message-ID `<178707745576.36268.15065934311676015390@kovaldistillery.com>`. OPS `378182` remains waiting on that support; monthly notified controls `378314` and `378315` now cover final and mid-month reviews.
+  - Status: completed. Salesreport `f358dfb` and BID `dddbfe8` are pushed and live with SATLA portal RL-26, MMK Fees, and KOVAL Payments as the DB-backed source of truth. July is finalized at `$22,925.25`; August is preliminary at `$25,151.16` before its missing MMK statement. Dovid and Robert received the correction under Message-ID `<178708122499.52735.17575079027554326897@kovaldistillery.com>`. OPS `378182` is completed; monthly notified controls `378314` and `378315` cover final and mid-month reviews.
 
 - **2026-08-18 Salesperson SATLA Cut And Attribution Repair**
   - Master ID: `AI-INC-20260818-SALESPERSON-SATLA-ATTRIBUTION-01`
