@@ -3,6 +3,12 @@ Last Updated: 2026-08-18 CDT (Machine: Macmini.lan)
 
 ## Completed
 
+- **2026-08-18 SATLA Reconciliation Ledger**
+  - Master ID: `AI-INC-20260818-SATLA-RECONCILIATION-LEDGER-01`
+  - Detail log: `project_hub/issues/2026-08-18-satla-reconciliation-ledger.md`
+  - Repos: `salesreport`, `bid`, `ai_workspace`
+  - Status: completed implementation. Salesreport `16b56e6` and BID `6a67eb5` are pushed and live with a DB-backed sales-month ledger, source attachments, Chicago pull timestamp, running balance, and audited SATLA payout deductions. July is correctly preliminary at `$24,603.34`; Dovid received the detailed request for missing receipt/MMK allocation support under Message-ID `<178707745576.36268.15065934311676015390@kovaldistillery.com>`. OPS `378182` remains waiting on that support; monthly notified controls `378314` and `378315` now cover final and mid-month reviews.
+
 - **2026-08-18 Salesperson SATLA Cut And Attribution Repair**
   - Master ID: `AI-INC-20260818-SALESPERSON-SATLA-ATTRIBUTION-01`
   - Detail log: `project_hub/issues/2026-08-18-salesperson-satla-cut-attribution.md`
@@ -159,12 +165,6 @@ Last Updated: 2026-08-18 CDT (Machine: Macmini.lan)
   - Status: completed. OPS task `369936` was silently completed after the live Portal backend was patched, rebuilt, and deployed as `koval-crm-backend:authfix-20260520`. Workspaceboard session `285827f3` remains the blocker proof trail, but the task itself is now closed against the same incident record.
 
 ## Open
-
-- **2026-08-18 SATLA Reconciliation Ledger**
-  - Master ID: `AI-INC-20260818-SATLA-RECONCILIATION-LEDGER-01`
-  - Detail log: `project_hub/issues/2026-08-18-satla-reconciliation-ledger.md`
-  - Repos: `salesreport`, `bid`, `ai_workspace`
-  - Status: in progress. July source readback and the DB-backed running ledger are complete; Salesreport and BID implementation is locally verified. Live deployment, twice-monthly OPS recurrence, and the Dovid source-detail email remain.
 
 - **2026-05-24 Recursive Tools Stack Plan**
   - Master ID: `AI-INC-20260524-RECURSIVE-TOOLS-01`

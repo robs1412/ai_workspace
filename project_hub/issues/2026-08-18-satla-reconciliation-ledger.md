@@ -4,7 +4,7 @@
 - Date: 2026-08-18
 - Repositories: `salesreport`, `bid`, `ai_workspace`
 - OPS task: `378182`
-- Status: in progress
+- Status: completed implementation; July close remains waiting on external source support
 
 ## Objective
 
@@ -43,12 +43,15 @@ Known exceptions remain visible rather than being forced into KOVAL revenue: `$2
 - Direct DB readback confirmed ten verified remittance rows, the expected MMK cost, four source checks, no payout, and the monthly snapshot.
 - BID CLI render shows the Chicago source-pull timestamp, `$34,411.80` receipts, 299 cases, and `$24,603.34` due.
 
-## Remaining closeout
+## Deployment and operational closeout
 
-- Commit and push the exact Salesreport and BID files without staging unrelated dirty work.
-- Deploy and verify both live pages.
-- Create the notified twice-monthly OPS controls and update OPS `378182` with exact proof.
-- Send Dovid the source-backed preliminary reconciliation and request the missing MMK allocation and receipt/bank detail.
+- Salesreport commit `16b56e6` was pushed and the live `/home/koval/public_html/salesreport` checkout fast-forwarded to the same SHA. Live PHP syntax passed for all three touched files.
+- BID commit `6a67eb5` was pushed and both `/srv/development/bid` and `/srv/bid` fast-forwarded to the same SHA. Live PHP syntax passed for the new page and touched navigation/permission files; the authenticated BID URL returns the normal Login redirect.
+- The project record was committed in `ai_workspace` as `cb9458e` before this closeout update.
+- Notified shared OPS task `378314` performs the prior-month final close on the 3rd of every month.
+- Notified shared OPS task `378315` performs the preliminary current/open-month refresh on the 18th of every month.
+- OPS `378182` contains the exact source and deployment proof and remains `Waiting for input` because July must not be finalized without Dovid's receipt ledger and the KOVAL-specific MMK allocation.
+- The detailed reconciliation request was sent to Dovid and copied to Robert under Message-ID `<178707745576.36268.15065934311676015390@kovaldistillery.com>`.
 
 ## Rollback
 
