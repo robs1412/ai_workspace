@@ -34,21 +34,21 @@ The approved Infisical credential provides read-only access to `https://orders.s
 - `MMK Fees` controls KOVAL storage, delivery/fuel, inbound, and other MMK charges.
 - `KOVAL Payments` open view controls current OPEN / OVERDUE status. Its corrected `Paid in a month` view controls PAID status, actual received amount, and the date the money was received; invoice and delivery dates are not payment dates. Advice-level Drive attachments remain audit support.
 
-Final July 2026:
+Final July 2026, corrected to payment-date cash basis:
 
 - 300 ordered - 1 cut = 299 shipped cases; case fee `$2,392.00`.
-- 93 paid invoices totaling `$32,734.01`; 52 unpaid invoices totaling `$21,878.82`.
+- 34 invoices produced `$9,941.21` of cash actually received in July. Separately, 93 July-delivered invoices totaling `$32,734.01` have been paid across July and later payment months; 52 remain unpaid totaling `$21,878.82`.
 - MMK fees `$3,993.43`: storage `$0.00`, delivery/fuel `$1,604.68`, inbound `$2,268.75`, other `$120.00`.
 - Taxes `$3,423.33`: Illinois `$2,820.55`, Cook `$558.18`, Chicago `$44.60`.
-- SATLA-to-KOVAL payouts recorded `$0.00`; locked July closing balance `$22,925.25`.
+- SATLA-to-KOVAL payouts recorded `$0.00`. The locked close was audit-revised from `$22,925.25` to `$132.45`; revision ledger row `1` preserves prior and replacement values and the reason.
 
 Preliminary August 2026:
 
-- 230 ordered - 5 cuts = 225 shipped cases; case fee `$1,800.00`.
-- 23 paid invoices totaling `$6,641.40`; 84 unpaid invoices totaling `$29,412.72`.
-- Taxes `$2,615.49`; no August MMK Fees statement is available yet.
-- Expected MMK fees are `$2,177.14`: storage `$447.10` (526 July 31 cases x `$0.85`), delivery/fuel `$1,207.54` (225 shipped cases at the July KOVAL blended delivery/fuel rate), inbound `$522.50` (190 known August receiving cases x `$2.75`, including 80 scheduled for August 19), and other `$0.00` until statement-only adjustments arrive.
-- Cumulative running balance after the explicitly labeled August MMK estimate is `$22,974.02`, including the finalized July carry. The final portal MMK statement replaces the estimate.
+- 237 ordered - 5 cuts = 232 shipped cases; case fee `$1,856.00`.
+- 82 invoices produced `$29,490.54` of cash actually received in August. Separately, 23 August-delivered invoices totaling `$6,641.40` are paid and 84 totaling `$29,412.72` remain unpaid.
+- Taxes `$2,714.25`; no August MMK Fees statement is available yet.
+- Expected MMK fees are `$2,214.70`: storage `$447.10`, delivery/fuel `$1,245.10` (232 shipped cases at the July KOVAL blended delivery/fuel rate), inbound `$522.50`, and other `$0.00` until statement-only adjustments arrive.
+- Cumulative running balance after the explicitly labeled August MMK estimate is `$22,838.04`, including the corrected July carry. The final portal MMK statement replaces the estimate.
 
 ## SATLA invoice follow-up in `/order`
 
@@ -64,7 +64,7 @@ Preliminary August 2026:
 - Remittances and SATLA payouts now retain their actual transaction date and an explicit sales-month application date.
 - Source attachments can be linked from remittance, source-check, and MMK-cost rows.
 - A monthly DB snapshot exposes the actual portal pull time in Chicago time and the reconciliation totals to BID.
-- BID has a finance-facing sortable SATLA page with the running balance, source status, source attachments, and links to the order/MMK and Salesreport controls.
+- BID has a finance-facing sortable SATLA page with the running balance, source status, source attachments, and links to the order/MMK and Salesreport controls. Its invoice table defaults to the selected month by actual Paid Date and supports Paid/Delivered/Due date From/To filters with live visible totals.
 - Portal-backed months cannot be finalized until that month's MMK Fees statement exists. Final close uses portal paid totals, taxes, shipped cases, and MMK allocation rather than attachment aggregates.
 - Expected fee components are stored separately and displayed as estimated in BID; a final portal statement overwrites the estimate and its component breakdown.
 
@@ -75,15 +75,15 @@ Preliminary August 2026:
 - `/order` SATLA portal invoice-status, MMK Product Cut import, and delivered-sales regression tests passed.
 - July seed completed transactionally and idempotently.
 - Direct DB readback confirmed ten verified remittance rows, the expected MMK cost, four source checks, no payout, and the monthly snapshot.
-- BID CLI render shows July finalized at `$22,925.25` and August preliminary at `$22,974.02` after the `$2,177.14` explicitly labeled MMK estimate, with its component basis and replacement-by-final-statement note.
+- BID CLI render shows July finalized at `$132.45` after the audited cash-date correction and August preliminary at `$22,838.04` after the `$2,214.70` explicitly labeled MMK estimate, with its component basis and replacement-by-final-statement note.
 
 ## Deployment and operational closeout
 
 - Salesreport commits through `f358dfb` were pushed and the live `/home/koval/public_html/salesreport` checkout fast-forwarded to the same SHA. Live PHP syntax passed for the portal importer, snapshot refresh, finalizer, and reporting page.
 - BID commit `dddbfe8` was pushed and both `/srv/development/bid` and `/srv/bid` fast-forwarded to the same SHA. Live PHP syntax passed; the authenticated BID URL returns the normal Login redirect.
-- Follow-up extension commits: `/order` `e897262`, Salesreport `e318e21`, and BID `43bec81`. All were pushed; live `/order`, live Salesreport, `/srv/development/bid`, and `/srv/bid` were fast-forwarded to those exact SHAs without altering unrelated live backup files.
+- Follow-up extension commits: `/order` `67920d5`, Salesreport `a4226ab`, and BID `f7b5a7b`. All were pushed; live `/order`, live Salesreport, `/srv/development/bid`, and `/srv/bid` were fast-forwarded to those exact SHAs without altering unrelated live backup files.
 - Live `/order` readback confirms the 2026-08-18 15:08:12 CT combined portal pull: 252 matched invoices, 128 open totaling `$48,279.46`, 8 overdue totaling `$3,012.08`, and 116 source-paid totaling `$39,431.75` received. Paid dates span July 18 through August 17. The route remains access-controlled through the normal `/order` login.
-- BID's authenticated route returns the normal login redirect; the DB-backed render readback shows the `$2,177.14` estimated MMK charge and `$22,974.02` running balance.
+- BID's authenticated route returns the normal login redirect; the DB-backed render readback shows `$29,490.54` received across 82 invoices by August Paid Date, the `$2,214.70` estimated MMK charge, and the `$22,838.04` running balance.
 - The project record was committed in `ai_workspace` as `cb9458e` before this closeout update.
 - Notified shared OPS task `378314` performs the prior-month final close on the 3rd of every month.
 - Notified shared OPS task `378315` performs the preliminary current/open-month refresh on the 18th of every month.
