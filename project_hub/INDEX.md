@@ -3,6 +3,12 @@ Last Updated: 2026-08-10 CDT (Machine: Macmini.lan)
 
 ## Completed
 
+- **2026-08-18 Salesperson SATLA Cut And Attribution Repair**
+  - Master ID: `AI-INC-20260818-SALESPERSON-SATLA-ATTRIBUTION-01`
+  - Detail log: `project_hub/issues/2026-08-18-salesperson-satla-cut-attribution.md`
+  - Repos: `salesreport`, live Salesreport checkout
+  - Status: completed. Sales by Salesperson now excludes linked SATLA invoices whose confirmed order was canceled or returned, credits active salesperson-entered `/order` invoices to their creator, and keeps activity-owner fallback for admin/external invoices. Live Maria readback shows Sushi U.N.I once at 6 cases / $1,278 and includes Caputo's Naperville at 2 cases / $337.50 plus South Elgin at 5 cases / $900. Salesreport commit `6e9a6cf` is pushed and live.
+
 - **2026-08-05 MMK Dual-Date Illinois Tax Reporting**
   - Master ID: `AI-INC-20260805-MMK-DUAL-DATE-REPORTING-01`
   - Detail log: `project_hub/issues/2026-08-05-mmk-dual-date-reporting.md`
