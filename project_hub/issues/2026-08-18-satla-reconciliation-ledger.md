@@ -1,0 +1,55 @@
+# SATLA Reconciliation Ledger
+
+- Master ID: `AI-INC-20260818-SATLA-RECONCILIATION-LEDGER-01`
+- Date: 2026-08-18
+- Repositories: `salesreport`, `bid`, `ai_workspace`
+- OPS task: `378182`
+- Status: in progress
+
+## Objective
+
+Create one DB-backed SATLA/MMK reconciliation that separates cash receipts from processed invoices, deducts MMK charges, KOVAL liquor taxes, the SATLA per-case fee, and payments already made to KOVAL, while retaining a running balance by sales month. Publish a finance-facing BID page, keep the operational edit/final-close surface in Salesreport, and establish twice-monthly preliminary reviews plus one final monthly close.
+
+## July 2026 source readback
+
+- Operational invoices: 143 invoices, 299 cases, invoice total `$54,612.83`.
+- KOVAL liquor taxes: Illinois `$2,820.39`, Cook County `$558.04`, Chicago `$44.60`; total `$3,423.03`.
+- Verified eligible retailer cash from source attachments through 2026-08-14:
+  - Binny's: `$29,763.99`.
+  - Whole Foods: `$4,647.81`.
+  - Total: `$34,411.80`.
+- Fintech FMS bank activity: no SATLA Fintech credits from 2026-07-01 through the 2026-08-18 pull. Processed Fintech invoices remain expected receivables, not cash.
+- MMK invoice `1256804`: `$5,393.70` for all SATLA suppliers. The proposed KOVAL allocation of `$3,993.43` is retained as expected pending allocation support.
+- SATLA fee: 299 cases x `$8.00` = `$2,392.00`.
+- No SATLA-to-KOVAL payout is recorded for July.
+- Preliminary DB-backed balance due: `$24,603.34`.
+
+Known exceptions remain visible rather than being forced into KOVAL revenue: `$205.47` short payment on Binny's advice 18365, `$137.97` paid against canceled local invoice 260157 on advice 18884, and `$210.00` Whole Foods payment above delivered value on cut invoice 260129.
+
+## Implementation
+
+- Salesreport remains the canonical operational entry and final-close surface.
+- Remittances and SATLA payouts now retain their actual transaction date and an explicit sales-month application date.
+- Source attachments can be linked from remittance, source-check, and MMK-cost rows.
+- A monthly DB snapshot exposes source-pull time in Chicago time and the reconciliation totals to BID.
+- BID has a finance-facing sortable SATLA page with the running balance, source status, source attachments, and links to the order/MMK and Salesreport controls.
+- The month cannot be finalized while MMK is expected or required source checks remain pending.
+
+## Verification
+
+- PHP syntax checks passed for the changed Salesreport and BID files.
+- `salesreport/tests/satla_reporting_test.php` passed.
+- July seed completed transactionally and idempotently.
+- Direct DB readback confirmed ten verified remittance rows, the expected MMK cost, four source checks, no payout, and the monthly snapshot.
+- BID CLI render shows the Chicago source-pull timestamp, `$34,411.80` receipts, 299 cases, and `$24,603.34` due.
+
+## Remaining closeout
+
+- Commit and push the exact Salesreport and BID files without staging unrelated dirty work.
+- Deploy and verify both live pages.
+- Create the notified twice-monthly OPS controls and update OPS `378182` with exact proof.
+- Send Dovid the source-backed preliminary reconciliation and request the missing MMK allocation and receipt/bank detail.
+
+## Rollback
+
+Revert the dedicated Salesreport and BID commits and fast-forward the live checkouts. Do not delete ledger rows; void/correct them through the audited operational page so the source trail remains intact.

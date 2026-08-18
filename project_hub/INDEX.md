@@ -160,6 +160,12 @@ Last Updated: 2026-08-18 CDT (Machine: Macmini.lan)
 
 ## Open
 
+- **2026-08-18 SATLA Reconciliation Ledger**
+  - Master ID: `AI-INC-20260818-SATLA-RECONCILIATION-LEDGER-01`
+  - Detail log: `project_hub/issues/2026-08-18-satla-reconciliation-ledger.md`
+  - Repos: `salesreport`, `bid`, `ai_workspace`
+  - Status: in progress. July source readback and the DB-backed running ledger are complete; Salesreport and BID implementation is locally verified. Live deployment, twice-monthly OPS recurrence, and the Dovid source-detail email remain.
+
 - **2026-05-24 Recursive Tools Stack Plan**
   - Master ID: `AI-INC-20260524-RECURSIVE-TOOLS-01`
   - Detail log: `project_hub/issues/2026-05-24-recursive-tools-stack-plan.md`
