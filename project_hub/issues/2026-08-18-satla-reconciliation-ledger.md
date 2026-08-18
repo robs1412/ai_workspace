@@ -32,7 +32,7 @@ The approved Infisical credential provides read-only access to `https://orders.s
 
 - `RL-26` controls KOVAL sales, ordered/cut/shipped cases, and Illinois/Cook/Chicago taxes.
 - `MMK Fees` controls KOVAL storage, delivery/fuel, inbound, and other MMK charges.
-- `KOVAL Payments` controls paid and unpaid KOVAL invoice totals. Advice-level Drive attachments remain audit support and do not override the portal monthly paid total.
+- `KOVAL Payments` open view controls current OPEN / OVERDUE status. Its corrected `Paid in a month` view controls PAID status, actual received amount, and the date the money was received; invoice and delivery dates are not payment dates. Advice-level Drive attachments remain audit support.
 
 Final July 2026:
 
@@ -52,11 +52,11 @@ Preliminary August 2026:
 
 ## SATLA invoice follow-up in `/order`
 
-- `order_satla_portal_invoice_readbacks` stores the complete all-open KOVAL Payments invoice list; `order_satla_portal_invoice_sync_runs` stores pull counts and timestamps.
-- The August 18 14:50:48 CT pull imported 136 open invoices: 128 open and 8 overdue. All 136 matched an existing `/order` confirmed order through the MMK invoice readback.
-- The invoice-payment page shows delivery date, Net 30 due date, MMK invoice, PO, customer, cases, billed total, portal status, follow-up classification, linked order, and last pull in Chicago time.
+- `order_satla_portal_invoice_readbacks` stores the complete all-open list plus every available source-paid month; `order_satla_portal_invoice_sync_runs` stores pull counts, received totals, and timestamps.
+- The August 18 15:08:12 CT pull imported 252 invoices: 128 open, 8 overdue, and 116 source-paid. All 252 matched an existing `/order` confirmed order through the MMK invoice readback. Source-paid invoices total `$39,431.75` actually received against `$39,375.41` billed.
+- The invoice-payment page shows delivery date, Net 30 due date, actual Paid Date, MMK invoice, PO, customer, cases, billed and received totals, payer, portal status, follow-up classification, linked order, and last pull in Chicago time. Paid Date is the portal deposit/payment date, never the invoice or delivery date.
 - Binny's and Whole Foods remain visible as automatic-payment accounts but are excluded from follow-up totals. Eight non-automatic invoices totaling `$3,012.08` currently require follow-up.
-- A row previously seen as open is marked paid only after it disappears from a later complete `all_open` pull whose parsed row count matches the portal's own all-open summary count.
+- Payment is never inferred from disappearance. A row absent from both the complete open view and the source-paid views becomes `UNKNOWN` for review. Page filters recalculate visible invoice, case, billed, received, paid, and balance totals.
 
 ## Implementation
 
@@ -81,15 +81,15 @@ Preliminary August 2026:
 
 - Salesreport commits through `f358dfb` were pushed and the live `/home/koval/public_html/salesreport` checkout fast-forwarded to the same SHA. Live PHP syntax passed for the portal importer, snapshot refresh, finalizer, and reporting page.
 - BID commit `dddbfe8` was pushed and both `/srv/development/bid` and `/srv/bid` fast-forwarded to the same SHA. Live PHP syntax passed; the authenticated BID URL returns the normal Login redirect.
-- Follow-up extension commits: `/order` `b32b8f7`, Salesreport `e318e21`, and BID `43bec81`. All were pushed; live `/order`, live Salesreport, `/srv/development/bid`, and `/srv/bid` were fast-forwarded to those exact SHAs without altering unrelated live backup files.
-- Live `/order` readback confirms the 2026-08-18 14:50:48 CT portal pull, 136 matched invoices, 128 open totaling `$48,279.46`, and 8 overdue totaling `$3,012.08`. The route remains access-controlled through the normal `/order` login.
+- Follow-up extension commits: `/order` `e897262`, Salesreport `e318e21`, and BID `43bec81`. All were pushed; live `/order`, live Salesreport, `/srv/development/bid`, and `/srv/bid` were fast-forwarded to those exact SHAs without altering unrelated live backup files.
+- Live `/order` readback confirms the 2026-08-18 15:08:12 CT combined portal pull: 252 matched invoices, 128 open totaling `$48,279.46`, 8 overdue totaling `$3,012.08`, and 116 source-paid totaling `$39,431.75` received. Paid dates span July 18 through August 17. The route remains access-controlled through the normal `/order` login.
 - BID's authenticated route returns the normal login redirect; the DB-backed render readback shows the `$2,177.14` estimated MMK charge and `$22,974.02` running balance.
 - The project record was committed in `ai_workspace` as `cb9458e` before this closeout update.
 - Notified shared OPS task `378314` performs the prior-month final close on the 3rd of every month.
 - Notified shared OPS task `378315` performs the preliminary current/open-month refresh on the 18th of every month.
 - OPS `378182` contains exact portal/source/deployment proof and is completed after the July DB close.
 - Daily MMK task `376462` records the fresh 2026-08-18 19:03:53 InvoiceView/Product Cuts readback, 31 cut rows, and eight authenticated documents.
-- Daily MMK task `376462` now also requires the complete SATLA KOVAL Payments all-open import and `/order` open/overdue/match readback. Mid-month task `378315` now requires an explicitly labeled fee-schedule estimate when the MMK statement is missing and forbids overwriting a final statement.
+- Daily MMK task `376462` now requires both the complete SATLA open import and every available source-paid month, with actual Paid Date/received amount and `/order` open/overdue/paid/match readback. Mid-month task `378315` requires an explicitly labeled fee-schedule estimate when the MMK statement is missing and forbids overwriting a final statement.
 - DB-backed handoff `2254` records the four deployed commit proofs, invoice counts, estimate, running balance, and the no-Dovid-email boundary.
 - The original pre-portal email was corrected on the same Dovid/Robert thread under Message-ID `<178708122499.52735.17575079027554326897@kovaldistillery.com>`.
 - No additional email was sent. The owner's current instruction is to stop emailing Dovid unless a specific future message is explicitly authorized.
