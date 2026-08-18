@@ -89,6 +89,8 @@ Preliminary August 2026:
 - Notified shared OPS task `378315` performs the preliminary current/open-month refresh on the 18th of every month.
 - OPS `378182` contains exact portal/source/deployment proof and is completed after the July DB close.
 - Daily MMK task `376462` records the fresh 2026-08-18 19:03:53 InvoiceView/Product Cuts readback, 31 cut rows, and eight authenticated documents.
+- Daily MMK task `376462` now also requires the complete SATLA KOVAL Payments all-open import and `/order` open/overdue/match readback. Mid-month task `378315` now requires an explicitly labeled fee-schedule estimate when the MMK statement is missing and forbids overwriting a final statement.
+- DB-backed handoff `2254` records the four deployed commit proofs, invoice counts, estimate, running balance, and the no-Dovid-email boundary.
 - The original pre-portal email was corrected on the same Dovid/Robert thread under Message-ID `<178708122499.52735.17575079027554326897@kovaldistillery.com>`.
 - No additional email was sent. The owner's current instruction is to stop emailing Dovid unless a specific future message is explicitly authorized.
 
