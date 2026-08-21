@@ -13,7 +13,7 @@ Last Updated: 2026-08-21 CDT (Machine: Macmini.lan)
   - Master ID: `AI-INC-20260821-SALES-COVERAGE-THRESHOLD-01`
   - Detail log: `project_hub/issues/2026-08-21-sales-coverage-threshold-correction.md`
   - Repos: `bid`, `ai_workspace`; live BID DB and AI Cloud invoice folder
-  - Status: completed. BID snapshot 1 separates SATLA retail, DIST, continuing other-WH sales, historical Illinois Heritage/RNDC, and excluded SATLA replenishment. The auto-refresh dashboard gives a corrected `$84,350–$182,484` SATLA + DIST range and keeps the explanatory report in show/hide sections. BID commits `47ead2f` and `d6a2ac9` are pushed and live in both checkouts; the earlier Google Doc is historical only. Three DIST QBO invoice PDFs were verified in AI Cloud `invoices to add`.
+  - Status: completed. BID snapshot 1 separates SATLA retail, DIST, continuing other-WH sales, historical Illinois Heritage/RNDC, and excluded SATLA replenishment. Follow-up correction includes historical RNDC/Heritage in monthly displayed totals and restores the missing `$121,213.66` September Store/Bar/Events forecast, reducing September net burn to `$105,018.14` and the modeled SATLA + DIST residual range to `$0–$6,260.58`. BID commits through `527b71c` are pushed and live in both checkouts; the earlier Google Doc is historical only. Three DIST QBO invoice PDFs were verified in AI Cloud `invoices to add`.
 
 ## Open
 

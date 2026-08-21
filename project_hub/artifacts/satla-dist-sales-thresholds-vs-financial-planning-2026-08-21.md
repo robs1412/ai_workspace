@@ -4,6 +4,8 @@ Working report for team review
 
 Corrected August 21, 2026 (America/Chicago)
 
+> Follow-up correction: the threshold figures in this narrative are superseded by the live BID dashboard. The cutover scenario omitted September's `$121,213.66` Store/Bar/Events forecast. After restoring that audited forecast row, September incoming is `$156,466.66`, outgoing is `$261,484.80`, and net burn is `$105,018.14`; the current modeled SATLA + DIST residual range is `$0–$6,260.58`. Historical monthly totals now also include the separately labeled RNDC/Heritage Illinois lane; December 2025 is `$97,535.38` other WH plus `$147,690.00` historical Illinois, totaling `$245,225.38`.
+
 OPS task: 379156
 
 BID dashboard: https://bid.koval.lan/bid/sales_thresholds.php
