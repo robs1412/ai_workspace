@@ -31,7 +31,7 @@ The first model combined detailed SATLA and DIST economics with company-level Fi
 ### ai_workspace
 
 - Repo Log ID: `AI-20260821-SALES-THRESHOLDS-01`
-- Commit SHA: `fb331c3`
+- Commit SHA: `fb331c3`, `e745613`
 - Commit Date: 2026-08-21
 - Change Summary: Corrected the team report source, recorded implementation evidence, and maintained this project-hub log.
 
