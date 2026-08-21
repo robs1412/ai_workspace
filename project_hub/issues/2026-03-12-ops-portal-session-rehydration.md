@@ -6,7 +6,7 @@
 - Owner: `Codex`
 - Priority: `High`
 - Status: `In Progress`
-- Last Updated: `2026-03-23 19:01:44 CET (Machine: RobertMBP-2.local)`
+- Last Updated: `2026-08-21 CDT (Machine: Macmini.lan)`
 
 ## Scope
 
@@ -88,3 +88,25 @@ The `2026-03-23` cross-user login symptom came from a separate identity-validati
 - Validate the fix through a real browser flow in OPS using a refreshed admin session and a task write.
 - Consider moving shared JWT recovery helpers out of `login/sso/crm_token.php` into reusable helper code to avoid duplicate logic.
 - Revisit whether `ops_sso_tokens` TTL should be extended or refreshed more intentionally for long-lived OPS sessions.
+
+## 2026-08-21 Rolling Session Renewal Follow-Up
+
+Robert reported that `https://www.koval-distillery.com/ops/tasks.php` showed a logged-out/session-expired result during task submission while `start.php` simultaneously reported nearly 30 days remaining. The two messages measured different layers: the rolling OPS PHP session cookie and the shorter-lived Portal JWT used for task writes.
+
+Local code changes prepared, not yet deployed:
+
+- OPS keepalive now refreshes the signed-in user's Portal JWT before its 24-hour expiry and saves the replacement token into the active session and per-user cache.
+- Normal token hydration now uses the same refresh path, closing the submission-time race between keepalive pings.
+- Keepalive reports Portal readiness without exposing the token.
+- The shared OPS footer shows a persistent refresh-sign-in banner when the PHP page remains open but Portal authentication cannot be renewed; the recovery opens in a new tab so an in-progress task form is preserved.
+- `start.php` now says `Login stays active while OPS is open` instead of showing a PHP-only countdown that could conflict with task-write authentication.
+- The Portal `PUT /auth/refresh` controller was repaired to use the installed Firebase JWT API, validate the signed token and active user, and return a fresh 24-hour JWT. The old implementation called methods not provided by the installed JWT library.
+
+Verification performed:
+
+- PHP lint passed for the changed OPS and Portal PHP files.
+- `tests/portal_session_refresh_test.php` passed with a near-expiry user JWT and verified session/cache replacement.
+- `tests/workflow_task_recurrence_filter_test.php` passed as a task-page regression check.
+- `git diff --check` passed in OPS.
+- Authenticated Chromium QA remains pending because the current local browser session redirects to login and automated 2FA was not authorized for this check.
+- No production pull or deployment was performed.
