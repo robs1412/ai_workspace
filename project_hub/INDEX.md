@@ -1,15 +1,15 @@
 # AI Workspace Project Hub
-Last Updated: 2026-08-18 CDT (Machine: Macmini.lan)
+Last Updated: 2026-08-21 CDT (Machine: Macmini.lan)
 
 ## Completed
-
-## Open
 
 - **2026-08-21 Sales Coverage Threshold Correction And BID Dashboard**
   - Master ID: `AI-INC-20260821-SALES-COVERAGE-THRESHOLD-01`
   - Detail log: `project_hub/issues/2026-08-21-sales-coverage-threshold-correction.md`
-  - Repos: `bid`, `ai_workspace`; live BID DB, AI Cloud Google Doc and invoice folder
-  - Status: in progress. The live sources prove the original `$300,000/month` figure was mislabeled as SATLA + DIST-only. BID snapshot 1 now models continuing other-WH sales separately and produces a corrected `$84,350–$182,484` SATLA + DIST range; deployment and Google Doc revision remain.
+  - Repos: `bid`, `ai_workspace`; live BID DB and AI Cloud invoice folder
+  - Status: completed. BID snapshot 1 separates SATLA retail, DIST, continuing other-WH sales, historical Illinois Heritage/RNDC, and excluded SATLA replenishment. The auto-refresh dashboard gives a corrected `$84,350–$182,484` SATLA + DIST range and keeps the explanatory report in show/hide sections. BID commits `47ead2f` and `d6a2ac9` are pushed and live in both checkouts; the earlier Google Doc is historical only. Three DIST QBO invoice PDFs were verified in AI Cloud `invoices to add`.
+
+## Open
 
 - **2026-08-18 SATLA Reconciliation Ledger**
   - Master ID: `AI-INC-20260818-SATLA-RECONCILIATION-LEDGER-01`

@@ -2,14 +2,14 @@
 
 - Master Incident ID: `AI-INC-20260821-SALES-COVERAGE-THRESHOLD-01`
 - Date Opened: 2026-08-21
-- Date Completed:
+- Date Completed: 2026-08-21
 - Owner: Robert
 - Priority: High
-- Status: In progress
+- Status: Completed
 
 ## Scope
 
-Correct the SATLA/DIST sales-threshold report so it includes continuing WH sales to other distributors and states, retains Heritage/RNDC Illinois only as historical context, publishes a DB-backed auto-refreshing BID dashboard, revises the team Google Doc, and uploads the new DIST QBO invoice PDFs to AI Cloud `invoices to add`.
+Correct the SATLA/DIST sales-threshold report so it includes continuing WH sales to other distributors and states, retains Heritage/RNDC Illinois only as historical context, publishes a DB-backed auto-refreshing BID dashboard with collapsible explanatory text, and uploads the new DIST QBO invoice PDFs to AI Cloud `invoices to add`. The earlier Google Doc remains historical context and is not the ongoing reporting surface.
 
 ## Symptoms
 
@@ -24,15 +24,15 @@ The first model combined detailed SATLA and DIST economics with company-level Fi
 ### bid
 
 - Repo Log ID: `BID-20260821-SALES-THRESHOLDS-01`
-- Commit SHA: pending
-- Commit Date: pending
-- Change Summary: Added normalized BID snapshots, assumptions, monthly channel rows, live refresh tools, a finance-authorized dashboard, historical Illinois comparison, current/continuing other-WH baselines, and regression tests.
+- Commit SHA: `47ead2f`, `d6a2ac9`
+- Commit Date: 2026-08-21
+- Change Summary: Added normalized BID snapshots, assumptions, monthly channel rows, live refresh tools, a finance-authorized dashboard, historical Illinois comparison, current/continuing other-WH baselines, regression tests, and collapsible report narrative. Removed the Google Doc from the live BID workflow.
 
 ### ai_workspace
 
 - Repo Log ID: `AI-20260821-SALES-THRESHOLDS-01`
-- Commit SHA: pending
-- Commit Date: pending
+- Commit SHA: `fb331c3`
+- Commit Date: 2026-08-21
 - Change Summary: Corrected the team report source, recorded implementation evidence, and maintained this project-hub log.
 
 ## Verification Notes
@@ -43,10 +43,11 @@ The first model combined detailed SATLA and DIST economics with company-level Fi
 - Current DB-backed September Financial Planning scenario 7 reads incoming `$35,253.00`, outgoing `$261,012.91`, net burn `$225,759.91`, and ending cash `-$42,086.23`.
 - Corrected SATLA + DIST residual range is about `$84,350` at August's other-WH pace to `$182,484` using the conservative six-completed-month other-WH baseline.
 - AI Cloud invoice PDFs uploaded with exact size readback: QBO 6682 / WH 8311, QBO 6683 / WH 8313, QBO 6684 / WH 8315.
+- BID snapshot `1` was read back from the shared database. Both live BID checkouts were fast-forwarded to `d6a2ac9`; PHP syntax passed, and `https://bid.koval.lan/bid/sales_thresholds.php` returned the normal authenticated-login redirect. A local authenticated-equivalent render confirmed the dashboard and show/hide sections.
 
 ## Rollback Plan
 
-Revert the dedicated BID commit and fast-forward both BID live checkouts. The dashboard tables are additive and may remain for audit; they can be dropped only with separate destructive-action approval. Restore the prior Google Doc body from Docs revision history if necessary. Do not delete the invoice PDFs without owner approval.
+Revert the dedicated BID commits and fast-forward both BID live checkouts. The dashboard tables are additive and may remain for audit; they can be dropped only with separate destructive-action approval. The historical Google Doc and invoice PDFs should not be deleted without owner approval.
 
 ## Follow-Ups
 
