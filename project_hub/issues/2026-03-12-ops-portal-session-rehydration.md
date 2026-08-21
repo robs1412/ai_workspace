@@ -95,6 +95,8 @@ Robert reported that `https://www.koval-distillery.com/ops/tasks.php` showed a l
 
 Local code changes prepared, not yet deployed:
 
+- OPS commit `6baf06f` is pushed to `origin/main`; Portal commit `ce74d8be` is pushed to `origin/dev`.
+
 - OPS keepalive now refreshes the signed-in user's Portal JWT before its 24-hour expiry and saves the replacement token into the active session and per-user cache.
 - Normal token hydration now uses the same refresh path, closing the submission-time race between keepalive pings.
 - Keepalive reports Portal readiness without exposing the token.
