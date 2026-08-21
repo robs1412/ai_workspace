@@ -2,10 +2,10 @@
 
 - Master Incident ID: `AI-INC-20260821-DUFRY-DUTY-FREE-MARKET-01`
 - Date Opened: 2026-08-21
-- Date Completed: Pending report-consumer update
+- Date Completed: 2026-08-21
 - Owner: Robert
 - Priority: High
-- Status: Open
+- Status: Completed
 
 ## Scope
 
@@ -28,17 +28,34 @@ Salesreport and Portal sales reports commonly use `vtiger_accountbillads.bill_st
 - Commit Date: 2026-08-21
 - Change Summary: The initial billing-state change was rolled back after downstream review showed operational consumers use that field. Billing and shipping states remain `Illinois`; dedicated `account_preferences.reporting_state` is now `Duty Free` for report-only use.
 
+### Salesreport
+
+- Repo Log ID: `DUFRY-REPORTING-ADDRESS-SALESREPORT-20260821`
+- Commit SHA: `9b32567`
+- Commit Date: 2026-08-21
+- Change Summary: Report-only market, state, city, account, product, goal, and sales-analysis consumers now join `koval_crm.vw_account_reporting_address`. Physical-address tax and compliance helpers remain unchanged. The commit is pushed to `master` and deployed to `/home/koval/public_html/salesreport`.
+
+### Portal
+
+- Repo Log ID: `DUFRY-REPORTING-ADDRESS-PORTAL-20260821`
+- Commit SHA: `4b3fe130`
+- Commit Date: 2026-08-21
+- Change Summary: All Portal report models now use `koval_crm.vw_account_reporting_address`. The commit is pushed to `dev` and deployed as backend image `koval-crm-backend:v20260821reportingstate`.
+
 ## Verification Notes
 
 - Exact preflight found no open Dufry incoming orders or picklists.
 - Corrected live account readback: billing state `Illinois`, shipping state `Illinois`, dedicated reporting state `Duty Free`.
 - Downstream review found billing state feeds Portal territory routing, Illinois compliance scans, geographic permissions, and future DIST/QBO billing-address payloads, so it must remain physical-address truth.
+- The exact production August WH report aggregation now returns `Duty Free` at `$6,599.64` / `5.17%`; the contributing invoices remain WH `8284` / QB `6655` at `$1,693.68` and WH `8285` / QB `6656` at `$4,905.96`.
+- Salesreport lint, the reporting-address boundary regression test, the existing WH invoice-exclusion regression test, and `git diff --check` passed. Portal report-model lint and `git diff --check` passed.
+- Live Salesreport HEAD is `9b32567`. The Portal backend is running image `koval-crm-backend:v20260821reportingstate`; its health checks, live request traffic, and application database migration readback passed.
 - No invoices, QBO records, shipping addresses, tax rows, email, or money movement were changed.
 
 ## Rollback Plan
 
-Guardedly restore `vtiger_accountbillads.bill_state='Illinois'` only for account `70251` if Robert reverses the classification, then read back both billing and shipping state and rerun the exact August market query.
+Guardedly clear `account_preferences.reporting_state` only for account `70251` if Robert reverses the reporting classification, then read back the reporting view plus physical billing and shipping states and rerun the exact August market query. Revert Salesreport `9b32567` and Portal `4b3fe130` only if the report-wide boundary itself must be rolled back.
 
 ## Follow-Ups
 
-Update sales/market report consumers to read `koval_crm.vw_account_reporting_address`, which already applies the dedicated reporting-location override, while tax, compliance, fulfillment, and billing-address consumers continue using physical addresses.
+No implementation follow-up remains. Keep future sales and market reporting on `koval_crm.vw_account_reporting_address`; keep tax, compliance, fulfillment, QBO, and billing-address consumers on physical address tables.
