@@ -3,6 +3,12 @@ Last Updated: 2026-08-21 CDT (Machine: Macmini.lan)
 
 ## Completed
 
+- **2026-08-21 Dufry Duty-Free Market Classification**
+  - Master ID: `AI-INC-20260821-DUFRY-DUTY-FREE-MARKET-01`
+  - Detail log: `project_hub/issues/2026-08-21-dufry-duty-free-market-classification.md`
+  - Repos: shared CRM data used by Salesreport and Portal reporting
+  - Status: completed. Dufry T5 account `70251` now uses billing/reporting state `Duty Free` while retaining its physical Illinois shipping address. The exact August WH market readback moved `$6,599.64` / `5.17%` from Illinois to Duty Free; Illinois filtering no longer matches Dufry and Duty Free filtering does. No invoices, QBO records, shipping addresses, email, or money movement changed.
+
 - **2026-08-21 Sales Coverage Threshold Correction And BID Dashboard**
   - Master ID: `AI-INC-20260821-SALES-COVERAGE-THRESHOLD-01`
   - Detail log: `project_hub/issues/2026-08-21-sales-coverage-threshold-correction.md`
