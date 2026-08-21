@@ -93,7 +93,7 @@ The `2026-03-23` cross-user login symptom came from a separate identity-validati
 
 Robert reported that `https://www.koval-distillery.com/ops/tasks.php` showed a logged-out/session-expired result during task submission while `start.php` simultaneously reported nearly 30 days remaining. The two messages measured different layers: the rolling OPS PHP session cookie and the shorter-lived Portal JWT used for task writes.
 
-Local code changes prepared, not yet deployed:
+Code and production deployment:
 
 - OPS commit `6baf06f` is pushed to `origin/main`; Portal commit `ce74d8be` is pushed to `origin/dev`.
 
@@ -111,4 +111,8 @@ Verification performed:
 - `tests/workflow_task_recurrence_filter_test.php` passed as a task-page regression check.
 - `git diff --check` passed in OPS.
 - Authenticated Chromium QA remains pending because the current local browser session redirects to login and automated 2FA was not authorized for this check.
-- No production pull or deployment was performed.
+- OPS production fast-forwarded from `9b66bfe` to `6baf06f` on `2026-08-21`; live branch/readback is clean `main` at `6baf06f`, and live PHP lint plus the two focused task/session tests passed.
+- Portal backend image `koval-crm-backend:v20260821authsession` was built from pushed commit `ce74d8be`, validated before deployment, and deployed at `2026-08-21 07:49:45` server time through the existing backend-only deploy path.
+- Portal deployment preflight and health check passed. Live container readback shows the backend and nginx running; internal backend root returned HTTP `200`, and unauthenticated `PUT /auth/refresh` returned the expected HTTP `401`.
+- Public unauthenticated command-line checks remain unsuitable as browser proof: the OPS edge returned HTTP `406`, and the public API hostname presented an existing certificate-name mismatch. TLS verification was not bypassed.
+- Final authenticated browser submission remains a user-session check because the prior browser token was already expired and no automated 2FA action was authorized. Robert must sign in once; subsequent active OPS sessions now renew the task-write JWT before expiry.
