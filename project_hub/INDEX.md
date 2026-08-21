@@ -7,7 +7,7 @@ Last Updated: 2026-08-21 CDT (Machine: Macmini.lan)
   - Master ID: `AI-INC-20260821-DUFRY-DUTY-FREE-MARKET-01`
   - Detail log: `project_hub/issues/2026-08-21-dufry-duty-free-market-classification.md`
   - Repos: `salesreport`, `portal`, `ai_workspace`; shared CRM reporting preference
-  - Status: completed. Salesreport `9b32567` and Portal `4b3fe130` move report-only consumers to `vw_account_reporting_address`; both are pushed and deployed, with Portal backend image `v20260821reportingstate`. The exact August WH aggregation now reports `Duty Free` at `$6,599.64` / `5.17%`, while physical billing and shipping remain `Illinois` for tax, compliance, fulfillment, and QBO.
+  - Status: completed. Salesreport `9b32567` and Portal `4b3fe130` move report-only consumers to `vw_account_reporting_address`; Salesreport `d79cc18` excludes account `70251` from Cook, Chicago, Illinois/RL-26, Schedule C, FET/tax-withdrawal, and tax-exception report populations. All commits are pushed and deployed. The exact August WH aggregation reports `Duty Free` at `$6,599.64` / `5.17%`; both DIST and QBO invoices have zero tax. Physical billing and shipping remain `Illinois` only for operational address truth.
 
 - **2026-08-21 Sales Coverage Threshold Correction And BID Dashboard**
   - Master ID: `AI-INC-20260821-SALES-COVERAGE-THRESHOLD-01`
