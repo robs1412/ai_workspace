@@ -3,12 +3,6 @@ Last Updated: 2026-08-21 CDT (Machine: Macmini.lan)
 
 ## Completed
 
-- **2026-08-21 Dufry Duty-Free Market Classification**
-  - Master ID: `AI-INC-20260821-DUFRY-DUTY-FREE-MARKET-01`
-  - Detail log: `project_hub/issues/2026-08-21-dufry-duty-free-market-classification.md`
-  - Repos: shared CRM data used by Salesreport and Portal reporting
-  - Status: completed. Dufry T5 account `70251` now uses billing/reporting state `Duty Free` while retaining its physical Illinois shipping address. The exact August WH market readback moved `$6,599.64` / `5.17%` from Illinois to Duty Free; Illinois filtering no longer matches Dufry and Duty Free filtering does. No invoices, QBO records, shipping addresses, email, or money movement changed.
-
 - **2026-08-21 Sales Coverage Threshold Correction And BID Dashboard**
   - Master ID: `AI-INC-20260821-SALES-COVERAGE-THRESHOLD-01`
   - Detail log: `project_hub/issues/2026-08-21-sales-coverage-threshold-correction.md`
@@ -16,6 +10,12 @@ Last Updated: 2026-08-21 CDT (Machine: Macmini.lan)
   - Status: completed. BID snapshot 1 separates SATLA retail, DIST, continuing other-WH sales, historical Illinois Heritage/RNDC, and excluded SATLA replenishment. The auto-refresh dashboard gives a corrected `$84,350–$182,484` SATLA + DIST range and keeps the explanatory report in show/hide sections. BID commits `47ead2f` and `d6a2ac9` are pushed and live in both checkouts; the earlier Google Doc is historical only. Three DIST QBO invoice PDFs were verified in AI Cloud `invoices to add`.
 
 ## Open
+
+- **2026-08-21 Dufry Duty-Free Market Classification**
+  - Master ID: `AI-INC-20260821-DUFRY-DUTY-FREE-MARKET-01`
+  - Detail log: `project_hub/issues/2026-08-21-dufry-duty-free-market-classification.md`
+  - Repos: shared CRM data used by Salesreport and Portal reporting
+  - Status: open. The initial shared billing-state change was rolled back after downstream review found operational consumers for territory routing, compliance, and future invoice addresses. Billing and shipping remain `Illinois`; dedicated `reporting_state` is `Duty Free`. Sales/market reports still need to adopt `vw_account_reporting_address` while tax, compliance, and fulfillment retain physical-address truth.
 
 - **2026-08-18 SATLA Reconciliation Ledger**
   - Master ID: `AI-INC-20260818-SATLA-RECONCILIATION-LEDGER-01`
