@@ -9,7 +9,7 @@
 
 ## Scope
 
-Add a Whole Foods-specific Illinois view to the SATLA call hitlist with durable last-order visibility and sortable columns. Add County Market to the existing Salesreport Chain Store Intelligence selector and the all-supported-chains rollup. Preserve the existing Mariano's reporting option; no future Mariano's orders were synthesized.
+Add a Whole Foods-specific Illinois view to the SATLA call hitlist with durable last-order visibility and sortable columns. Add County Market to the existing Salesreport Chain Store Intelligence selector and the all-supported-chains rollup. Preserve the existing Mariano's reporting option; no future Mariano's orders were synthesized. Follow-up: remove two records marked Former Location from the current-store hitlist and transfer their invoice ownership to the matching current Wheaton and Willowbrook accounts.
 
 ## Symptoms
 
@@ -24,9 +24,9 @@ The hitlist had only a generic chain-exclusion toggle. Its oldest-order server s
 ### order
 
 - Repo Log ID: `ORDER-WHOLE-FOODS-HITLIST-20260823-01`
-- Commit SHA: `a681d2cc3ae7d5fdb231f013087f4e469442d618` (feature commit `62f9e85` plus scope-label clarification)
+- Commit SHA: `f102131b64caa462c77c9818f4231e7487787553` (feature commits through the former-location follow-up)
 - Commit Date: 2026-08-23
-- Change Summary: Added the Whole Foods IL hitlist route, all-history SATLA/CRM last-order reconciliation, oldest/newest server sorting, clickable table sorting, and focused regression coverage.
+- Change Summary: Added the Whole Foods IL hitlist route, all-history SATLA/CRM last-order reconciliation, oldest/newest server sorting, clickable table sorting, explicit Former Location exclusion, guarded invoice-transfer tooling, and focused regression coverage.
 
 ### salesreport
 
@@ -39,14 +39,21 @@ The hitlist had only a generic chain-exclusion toggle. Its oldest-order server s
 
 - Full local PHP regression suites passed in both repositories.
 - Both commits were pushed to `origin/master`.
-- Order was pushed to its live bare remote and `/home/koval/public_html/order` fast-forwarded cleanly through `a681d2c`; live PHP lint and the new regression test passed.
+- Order was pushed to its live bare remote and `/home/koval/public_html/order` fast-forwarded cleanly through `f102131`; live PHP lint and the new regression test passed.
 - `/home/koval/public_html/salesreport` fast-forwarded cleanly to `0533ef5`; live PHP lint and the new regression test passed.
-- Read-only live DB readback found 31 non-self-distribution Illinois retail/bar CRM accounts matching Whole Foods, with last SATLA-order and last valid CRM-invoice dates available to the view.
+- Initial read-only live DB readback found 31 non-self-distribution Illinois retail/bar CRM accounts matching Whole Foods. The follow-up excludes the two rows explicitly named Former Location, leaving 29 current-store rows in the live hitlist.
+- Guarded transaction moved all 40 Wheaton-former invoice rows (`$16,510.98`, 39 valid plus one historical orphan row) from account `22486` to current Wheaton `153455`, and all 12 Willowbrook-former invoice rows (`$6,066.66`, all valid) from account `30854` to current Willowbrook `153456`.
+- Post-write readback shows both former accounts at zero invoice rows. Current Wheaton now has 132 valid invoices and current Willowbrook has 111 valid invoices.
 - Owner routes: `https://www.koval-distillery.com/order/call-hitlist.php?chain=whole_foods&sort=oldest_order` and `https://www.koval-distillery.com/salesreport/chain_store_intelligence.php?chain=county_market&state=Illinois`.
+
+## Invoice Transfer Evidence
+
+- Wheaton former `22486` -> current `153455`, invoice IDs: `22487, 23671, 23741, 24784, 25945, 27079, 27567, 28542, 30853, 33566, 34795, 35769, 36883, 37995, 38547, 40680, 41940, 42800, 43772, 45252, 47194, 47706, 48891, 50947, 51628, 52735, 54253, 54940, 56725, 56726, 59248, 60287, 62744, 63471, 65855, 67271, 69276, 71139, 72174, 73161`.
+- Willowbrook former `30854` -> current `153456`, invoice IDs: `30855, 33567, 34796, 35770, 36882, 38548, 40681, 41941, 42799, 43773, 161727, 349992`.
 
 ## Rollback Plan
 
-Revert Order commits `a681d2c` and `62f9e85` plus Salesreport commit `0533ef5`, push the reverts, and fast-forward both live checkouts. No schema or business-data mutation needs reversal.
+Revert Order commits through `f102131` plus Salesreport commit `0533ef5`, push the reverts, and fast-forward both live checkouts. If the invoice ownership must be reversed, use the exact invoice-ID lists above in one guarded transaction, requiring each row to belong to the stated current account before restoring the former account ID.
 
 ## Follow-Ups
 
