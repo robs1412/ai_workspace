@@ -7,7 +7,7 @@ Last Updated: 2026-08-23 CDT (Machine: Macmini.lan)
   - Master ID: `AI-INC-20260823-WHOLE-FOODS-HITLIST-COUNTY-MARKET-01`
   - Detail log: `project_hub/issues/2026-08-23-whole-foods-hitlist-county-market-reporting.md`
   - Repos: `order`, `salesreport`, live Order and Salesreport checkouts
-  - Status: completed. Order commits through `f102131` add a 29-current-store Whole Foods SATLA call-hitlist view with reconciled last-order dates and sortable columns; the two Former Location rows are excluded, and 52 invoice rows were transferred under checksum guards to current Wheaton `153455` and Willowbrook `153456`, leaving both former accounts at zero invoices. Salesreport `0533ef5` adds County Market to Chain Store Intelligence. Both repos are pushed and live, and full PHP regression suites pass. Mariano's remains supported without synthesizing future orders.
+  - Status: completed. Order commits through `a339b6f` add shared CRM-chain hitlist views for Whole Foods, Mariano's, County Market, Binny's, Garfield's, The Fresh Market, Heinen's, and Woodman's; Binny's is tasting-only. The two Whole Foods Former Location rows remain excluded, and 52 invoice rows were transferred under checksum guards to current Wheaton `153455` and Willowbrook `153456`. Salesreport `0dceae6` uses the same canonical chain IDs. Both repos are pushed and live, and full PHP regression suites pass.
 
 - **2026-08-21 Dufry Duty-Free Market Classification**
   - Master ID: `AI-INC-20260821-DUFRY-DUTY-FREE-MARKET-01`
