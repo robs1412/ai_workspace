@@ -24,7 +24,7 @@ The hitlist had only a generic chain-exclusion toggle. Its oldest-order server s
 ### order
 
 - Repo Log ID: `ORDER-WHOLE-FOODS-HITLIST-20260823-01`
-- Commit SHA: `62f9e85ff6d57f4b6c91942d2f892ccc1e24b091`
+- Commit SHA: `a681d2cc3ae7d5fdb231f013087f4e469442d618` (feature commit `62f9e85` plus scope-label clarification)
 - Commit Date: 2026-08-23
 - Change Summary: Added the Whole Foods IL hitlist route, all-history SATLA/CRM last-order reconciliation, oldest/newest server sorting, clickable table sorting, and focused regression coverage.
 
@@ -39,14 +39,14 @@ The hitlist had only a generic chain-exclusion toggle. Its oldest-order server s
 
 - Full local PHP regression suites passed in both repositories.
 - Both commits were pushed to `origin/master`.
-- Order was pushed to its live bare remote and `/home/koval/public_html/order` fast-forwarded cleanly to `62f9e85`; live PHP lint and the new regression test passed.
+- Order was pushed to its live bare remote and `/home/koval/public_html/order` fast-forwarded cleanly through `a681d2c`; live PHP lint and the new regression test passed.
 - `/home/koval/public_html/salesreport` fast-forwarded cleanly to `0533ef5`; live PHP lint and the new regression test passed.
 - Read-only live DB readback found 31 non-self-distribution Illinois retail/bar CRM accounts matching Whole Foods, with last SATLA-order and last valid CRM-invoice dates available to the view.
 - Owner routes: `https://www.koval-distillery.com/order/call-hitlist.php?chain=whole_foods&sort=oldest_order` and `https://www.koval-distillery.com/salesreport/chain_store_intelligence.php?chain=county_market&state=Illinois`.
 
 ## Rollback Plan
 
-Revert Order commit `62f9e85` and Salesreport commit `0533ef5`, push the reverts, and fast-forward both live checkouts. No schema or business-data mutation needs reversal.
+Revert Order commits `a681d2c` and `62f9e85` plus Salesreport commit `0533ef5`, push the reverts, and fast-forward both live checkouts. No schema or business-data mutation needs reversal.
 
 ## Follow-Ups
 

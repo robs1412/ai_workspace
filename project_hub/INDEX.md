@@ -7,7 +7,7 @@ Last Updated: 2026-08-23 CDT (Machine: Macmini.lan)
   - Master ID: `AI-INC-20260823-WHOLE-FOODS-HITLIST-COUNTY-MARKET-01`
   - Detail log: `project_hub/issues/2026-08-23-whole-foods-hitlist-county-market-reporting.md`
   - Repos: `order`, `salesreport`, live Order and Salesreport checkouts
-  - Status: completed. Order `62f9e85` adds an all-Illinois Whole Foods SATLA call-hitlist view with reconciled last-order dates and sortable columns; Salesreport `0533ef5` adds County Market to Chain Store Intelligence. Both commits are pushed and live, both full PHP regression suites pass, and live readback finds 31 matching non-self-distribution Illinois Whole Foods account rows. Mariano's remains supported without synthesizing future orders.
+  - Status: completed. Order commits through `a681d2c` add an all-Illinois Whole Foods SATLA call-hitlist view with reconciled last-order dates, sortable columns, and explicit inclusion of CRM rows marked Former Location; Salesreport `0533ef5` adds County Market to Chain Store Intelligence. Both repos are pushed and live, both full PHP regression suites pass, and live readback finds 31 matching non-self-distribution Illinois Whole Foods account rows. Mariano's remains supported without synthesizing future orders.
 
 - **2026-08-21 Dufry Duty-Free Market Classification**
   - Master ID: `AI-INC-20260821-DUFRY-DUTY-FREE-MARKET-01`
