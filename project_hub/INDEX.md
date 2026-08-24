@@ -1,7 +1,13 @@
 # AI Workspace Project Hub
-Last Updated: 2026-08-23 CDT (Machine: Macmini.lan)
+Last Updated: 2026-08-24 CDT (Machine: Macmini.lan)
 
 ## Completed
+
+- **2026-08-24 Salesreport DIST Invoice Link Fallback**
+  - Master ID: `AI-INC-20260824-SALESREPORT-DIST-INVOICE-LINK-FALLBACK-01`
+  - Detail log: `project_hub/issues/2026-08-24-salesreport-dist-invoice-link-fallback.md`
+  - Repos: `salesreport`, live Salesreport checkout
+  - Status: completed. The broad WH Distributor Sales report now recognizes approved DIST invoices through the authoritative incoming-order and picklist chain when the cached invoice-link field is stale. Salesreport commit `2bac4fa` is pushed and live; the exact August production predicate returns zero visible rows for invoice `8324`.
 
 - **2026-08-23 Whole Foods IL Hitlist And County Market Reporting**
   - Master ID: `AI-INC-20260823-WHOLE-FOODS-HITLIST-COUNTY-MARKET-01`
