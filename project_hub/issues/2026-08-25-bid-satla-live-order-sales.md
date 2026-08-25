@@ -26,9 +26,9 @@ The BID page had no live `/order` monthly-sales card. It displayed a dated Sales
 ### bid
 
 - Repo Log ID: `BID-SATLA-LIVE-SALES-20260825-01`
-- Commit SHA: `e919b27`
+- Commit SHA: `e43229a` (through live-sales and date-label commits beginning at `e919b27`)
 - Commit Date: 2026-08-25
-- Change Summary: Added a live `/order` monthly-sales query using the same confirmed-date and MMK-delivered fallback basis as the operational SATLA report; added live delivered sales, adjusted invoice total, invoice count, and source timestamps to BID; relabeled the cash schedule as sales due for payment in its Net-30 due-date month.
+- Change Summary: Added a live `/order` monthly-sales query using the same confirmed-date and MMK-delivered fallback basis as the operational SATLA report; added live delivered sales, adjusted invoice total, invoice count, and source timestamps to BID; relabeled the cash schedule as sales due for payment in its Net-30 due-date month; and made the schedule start from every live `/order` invoice before overlaying Portal paid state.
 
 ## Verification Notes
 
@@ -37,12 +37,14 @@ The BID page had no live `/order` monthly-sales card. It displayed a dated Sales
 - New live-sales regression passed locally and from the live BID HTTP endpoint.
 - Live DB readback for August at implementation time: 156 invoices, $64,966.53 delivered sales, $65,439.53 adjusted invoice total, latest MMK readback August 25 at 5:32 PM CT.
 - Exact date-basis readback: all 145 invoices / $54,612.83 due in August were delivered in July; the 123 August-delivered Portal invoices then visible totaled $45,422.60 and were due in September.
+- Coverage repair readback: the Portal-only schedule omitted 44 `/order` invoices totaling $23,341.61. After adding every live invoice and using the current `/order` delivered amount, 312 invoices classify without gaps as 139 paid, 155 open Net-30, and 18 overdue Net-30. August due sales are $54,825.80 and September due sales are $68,281.24, totaling exactly $123,107.04.
+- Invoice `1258375` was the final $270 variance: current `/order` delivered value is $525.88 while the stale Portal billed value is $795.88. `/order` now controls scheduled sales value; Portal controls paid state.
 - The new model endpoint returned HTTP 200 live; a deliberately nonexistent neighboring path returned HTTP 404, confirming the new release artifact is deployed.
 - The authenticated page remains protected by the normal login redirect; no authentication control was changed.
 
 ## Rollback Plan
 
-Revert BID commit `e919b27` and redeploy. This removes only the live sales card/model and restores the former cash-schedule labels; it does not change any SATLA, `/order`, MMK, payment, fee, tax, or close data.
+Revert BID commits through `e43229a` and redeploy. This removes only the live sales card/model and restores the former Portal-only cash schedule; it does not change any SATLA, `/order`, MMK, payment, fee, tax, or close data.
 
 ## Follow-Ups
 
