@@ -7,7 +7,7 @@ Last Updated: 2026-08-25 CDT (Machine: Macmini.lan)
   - Master ID: `AI-INC-20260825-BID-SATLA-LIVE-ORDER-SALES-01`
   - Detail log: `project_hub/issues/2026-08-25-bid-satla-live-order-sales.md`
   - Repos: `bid`, live BID checkout
-  - Status: completed. BID commit `7d9a46e` is explicitly deployed to both `/srv/development/bid` and `/srv/bid`. It adds a live `/order` sales card and reconciles every live invoice into paid or outstanding Net-30 state. The schedule contains 312 invoices: 139 paid, 155 open, and 18 overdue; August due sales of $54,825.80 plus September due sales of $68,281.24 equal the `/order` delivered-sales total of $123,107.04 exactly. Finalized July now shows $54,038.00 sales, $9,941.21 actual cash across 34 paid-date invoices, $9,808.76 fees, and the resulting $132.45 balance instead of forecast zeros.
+  - Status: completed. BID commit `b006c3f` is explicitly deployed to both `/srv/development/bid` and `/srv/bid`. It separates each row into monthly sales and Net-30 due-date sales, retains cash and forecast columns, and reconciles every live invoice into paid or outstanding Net-30 state. At deployment, July showed $54,038.00 finalized monthly sales and August showed $65,117.53 live monthly sales separately from $54,825.80 due in August; August plus September Net-30 due amounts still reconcile to $123,107.04.
 
 - **2026-08-24 Salesreport DIST Invoice Link Fallback**
   - Master ID: `AI-INC-20260824-SALESREPORT-DIST-INVOICE-LINK-FALLBACK-01`

@@ -26,7 +26,7 @@ The BID page had no live `/order` monthly-sales card. It displayed a dated Sales
 ### bid
 
 - Repo Log ID: `BID-SATLA-LIVE-SALES-20260825-01`
-- Commit SHA: `7d9a46e` (through live-sales, complete-schedule, and actual-row commits beginning at `e919b27`)
+- Commit SHA: `b006c3f` (through live-sales, complete-schedule, actual-row, and split-basis commits beginning at `e919b27`)
 - Commit Date: 2026-08-25
 - Change Summary: Added a live `/order` monthly-sales query using the same confirmed-date and MMK-delivered fallback basis as the operational SATLA report; added live delivered sales, adjusted invoice total, invoice count, and source timestamps to BID; relabeled the cash schedule as sales due for payment in its Net-30 due-date month; and made the schedule start from every live `/order` invoice before overlaying Portal paid state.
 
@@ -41,12 +41,13 @@ The BID page had no live `/order` monthly-sales card. It displayed a dated Sales
 - Invoice `1258375` was the final $270 variance: current `/order` delivered value is $525.88 while the stale Portal billed value is $795.88. `/order` now controls scheduled sales value; Portal controls paid state.
 - Historical-row repair: finalized July now displays 145 sales invoices / $54,038.00 sales, 34 invoices / $9,941.21 cash received by actual paid date, $9,808.76 final fees, and $132.45 closing due to KOVAL. Empty forecast zeros are no longer shown beside the actual closing balance.
 - Deployment correction: the first HTTP regression reached `/srv/bid`, while the user-facing route still served `/srv/development/bid` at `b9dc902`. Both checkouts were explicitly fast-forwarded to `7d9a46e`; each now contains the `Monthly actuals and Net-30 cash forecast` and `sales-month actual` markup, has clean scoped files, and passes the SATLA live-sales regression.
+- Split-basis presentation: each month now has separate `Sales for month` and `Net-30 amount due` columns. At deployment, July showed $54,038.00 finalized monthly sales separately from $0.00 due-date Net-30; August showed $65,117.53 live monthly sales separately from $54,825.80 due-date Net-30. Both server checkouts were explicitly fast-forwarded to `b006c3f` and passed the regression.
 - The new model endpoint returned HTTP 200 live; a deliberately nonexistent neighboring path returned HTTP 404, confirming the new release artifact is deployed.
 - The authenticated page remains protected by the normal login redirect; no authentication control was changed.
 
 ## Rollback Plan
 
-Revert BID commits through `7d9a46e` and redeploy. This removes only the live sales card/model and restores the former Portal-only cash schedule; it does not change any SATLA, `/order`, MMK, payment, fee, tax, or close data.
+Revert BID commits through `b006c3f` and redeploy. This removes only the live sales card/model and restores the former Portal-only cash schedule; it does not change any SATLA, `/order`, MMK, payment, fee, tax, or close data.
 
 ## Follow-Ups
 
