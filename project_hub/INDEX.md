@@ -1,7 +1,13 @@
 # AI Workspace Project Hub
-Last Updated: 2026-08-24 CDT (Machine: Macmini.lan)
+Last Updated: 2026-08-25 CDT (Machine: Macmini.lan)
 
 ## Completed
+
+- **2026-08-25 BID SATLA Live Order Sales**
+  - Master ID: `AI-INC-20260825-BID-SATLA-LIVE-ORDER-SALES-01`
+  - Detail log: `project_hub/issues/2026-08-25-bid-satla-live-order-sales.md`
+  - Repos: `bid`, live BID checkout
+  - Status: completed. BID commit `e919b27` adds a live `/order` sales card using the operational SATLA report basis and relabels the $54,612.83 figure as Net-30 billed due rather than monthly gross sales. Live August readback at completion was 156 invoices / $64,966.53 delivered / $65,439.53 adjusted, with MMK data through August 25 at 5:32 PM CT; the new live regression endpoint returns HTTP 200.
 
 - **2026-08-24 Salesreport DIST Invoice Link Fallback**
   - Master ID: `AI-INC-20260824-SALESREPORT-DIST-INVOICE-LINK-FALLBACK-01`
