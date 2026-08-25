@@ -7,7 +7,7 @@ Last Updated: 2026-08-25 CDT (Machine: Macmini.lan)
   - Master ID: `AI-INC-20260825-BID-SATLA-LIVE-ORDER-SALES-01`
   - Detail log: `project_hub/issues/2026-08-25-bid-satla-live-order-sales.md`
   - Repos: `bid`, live BID checkout
-  - Status: completed. BID commit `e919b27` adds a live `/order` sales card using the operational SATLA report basis and relabels the $54,612.83 figure as Net-30 billed due rather than monthly gross sales. Live August readback at completion was 156 invoices / $64,966.53 delivered / $65,439.53 adjusted, with MMK data through August 25 at 5:32 PM CT; the new live regression endpoint returns HTTP 200.
+  - Status: completed. BID commits beginning with `e919b27` add a live `/order` sales card using the operational SATLA report basis and identify the $54,612.83 figure as sales due for payment in August by Net-30 due date; all 145 of those invoices were delivered in July. Live August `/order` readback at completion was 156 invoices / $64,966.53 delivered / $65,439.53 adjusted, with MMK data through August 25 at 5:32 PM CT; the new live regression endpoint returns HTTP 200.
 
 - **2026-08-24 Salesreport DIST Invoice Link Fallback**
   - Master ID: `AI-INC-20260824-SALESREPORT-DIST-INVOICE-LINK-FALLBACK-01`

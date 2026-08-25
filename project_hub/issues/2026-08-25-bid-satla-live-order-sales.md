@@ -14,12 +14,12 @@ Correct the BID SATLA page so current-month sales are read live from the same DB
 ## Symptoms
 
 - `/order` showed roughly $64,000 of August SATLA delivered sales.
-- BID showed $54,612.83 under a gross label, suggesting a stale or conflicting sales total.
-- The BID amount was actually the value of invoices due during August on the Net-30 cash schedule, not August sales.
+- BID showed $54,612.83 under a gross label, suggesting a stale or conflicting sales-period total.
+- The BID amount was sales from July deliveries due for payment during August on the Net-30 cash schedule, rather than sales grouped into the August delivery/confirmation period.
 
 ## Root Cause
 
-The BID page had no live `/order` monthly-sales card. It displayed a dated Salesreport reconciliation snapshot and labeled the due-month cash schedule `Gross scheduled`, making the $54,612.83 Net-30 amount easy to mistake for current August sales. The August reconciliation snapshot was pulled August 24 while `/order` and MMK readbacks continued changing on August 25.
+The BID page had no live `/order` monthly-sales card. It displayed a dated Salesreport reconciliation snapshot and labeled the due-month cash schedule `Gross scheduled`, making $54,612.83 of sales due for payment in August easy to mistake for sales delivered/confirmed in August. The August reconciliation snapshot was pulled August 24 while `/order` and MMK readbacks continued changing on August 25.
 
 ## Repo Logs
 
@@ -28,7 +28,7 @@ The BID page had no live `/order` monthly-sales card. It displayed a dated Sales
 - Repo Log ID: `BID-SATLA-LIVE-SALES-20260825-01`
 - Commit SHA: `e919b27`
 - Commit Date: 2026-08-25
-- Change Summary: Added a live `/order` monthly-sales query using the same confirmed-date and MMK-delivered fallback basis as the operational SATLA report; added live delivered sales, adjusted invoice total, invoice count, and source timestamps to BID; relabeled the cash schedule as Net-30 billed due and explicitly not monthly sales.
+- Change Summary: Added a live `/order` monthly-sales query using the same confirmed-date and MMK-delivered fallback basis as the operational SATLA report; added live delivered sales, adjusted invoice total, invoice count, and source timestamps to BID; relabeled the cash schedule as sales due for payment in its Net-30 due-date month.
 
 ## Verification Notes
 
@@ -36,6 +36,7 @@ The BID page had no live `/order` monthly-sales card. It displayed a dated Sales
 - Existing SATLA forecast regression passed.
 - New live-sales regression passed locally and from the live BID HTTP endpoint.
 - Live DB readback for August at implementation time: 156 invoices, $64,966.53 delivered sales, $65,439.53 adjusted invoice total, latest MMK readback August 25 at 5:32 PM CT.
+- Exact date-basis readback: all 145 invoices / $54,612.83 due in August were delivered in July; the 123 August-delivered Portal invoices then visible totaled $45,422.60 and were due in September.
 - The new model endpoint returned HTTP 200 live; a deliberately nonexistent neighboring path returned HTTP 404, confirming the new release artifact is deployed.
 - The authenticated page remains protected by the normal login redirect; no authentication control was changed.
 
