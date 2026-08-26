@@ -3,6 +3,12 @@ Last Updated: 2026-08-25 CDT (Machine: Macmini.lan)
 
 ## Completed
 
+- **2026-08-26 BID Financial Refresh And Menu Performance**
+  - Master ID: `AI-INC-20260826-BID-FINANCE-MENU-PERF-01`
+  - Detail log: `project_hub/issues/2026-08-26-bid-financial-refresh-menu-performance.md`
+  - Repos: `bid`, live BID DB, live BID checkouts
+  - Status: completed. Current QBO A/P and A/R surfaces now read 93 / $135,829.32 and 77 / $218,468.48 at the 2026-08-26 09:54:22 CDT pull. Financial Planning scenario 1 has 569 active entries and 20 tracked upcoming reviews after guarded row-mapping repair. BID commits `98d9142` and `d887575` are pushed and deployed to both live checkouts; repeated menu navigation now uses a five-minute per-user browser-session cache.
+
 - **2026-08-25 BID SATLA Live Order Sales**
   - Master ID: `AI-INC-20260825-BID-SATLA-LIVE-ORDER-SALES-01`
   - Detail log: `project_hub/issues/2026-08-25-bid-satla-live-order-sales.md`
