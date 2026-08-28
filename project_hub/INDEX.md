@@ -1,7 +1,13 @@
 # AI Workspace Project Hub
-Last Updated: 2026-08-25 CDT (Machine: Macmini.lan)
+Last Updated: 2026-08-28 CDT (Machine: Macmini.lan)
 
 ## Completed
+
+- **2026-08-28 Salesreport Self-Distro WG Cutover**
+  - Master ID: `AI-INC-20260828-SALESREPORT-SELF-DISTRO-WG-CUTOVER-01`
+  - Detail log: `project_hub/issues/2026-08-28-salesreport-self-distro-wg-cutover.md`
+  - Repos: `salesreport`, live Salesreport checkout
+  - Status: completed. The Current Direct limit view now clamps requested start dates to the July 1, 2026 direct-sales cutover while preserving the Jan-Jun historical reference tab. Salesreport commit `028e0b4` is pushed and live; live DB-backed January 1 and July 1 requested starts through August 28 now return the same `939.89000` combined WG, `449.09000` store+tasting WG, and `490.80000` self-distro WG.
 
 - **2026-08-26 BID Financial Refresh And Menu Performance**
   - Master ID: `AI-INC-20260826-BID-FINANCE-MENU-PERF-01`
