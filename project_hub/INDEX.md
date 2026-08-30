@@ -1,7 +1,13 @@
 # AI Workspace Project Hub
-Last Updated: 2026-08-28 CDT (Machine: Macmini.lan)
+Last Updated: 2026-08-30 CDT (Machine: Macmini.lan)
 
 ## Completed
+
+- **2026-08-30 Recurring Task Completion Guard**
+  - Master ID: `AI-INC-20260830-RECURRING-TASK-COMPLETION-GUARD-01`
+  - Detail log: `project_hub/issues/2026-08-30-recurring-task-completion-guard.md`
+  - Repos: `ops`, `portal`; live CRM read-only audit
+  - Status: pushed; not deployed. OPS `3e85d76` and Portal `d62f15d7` remove editable recurring-task status controls and reject direct/bulk `Completed` transitions while preserving recurrence advancement. The read-only audit found 262 existing non-deleted completed recurring rows; no task data was changed.
 
 - **2026-08-28 Salesreport Self-Distro WG Cutover**
   - Master ID: `AI-INC-20260828-SALESREPORT-SELF-DISTRO-WG-CUTOVER-01`
