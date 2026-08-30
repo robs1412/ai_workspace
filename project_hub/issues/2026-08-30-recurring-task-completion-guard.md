@@ -5,7 +5,7 @@
 - Date Completed: 2026-08-30
 - Owner: Robert
 - Priority: High
-- Status: Pushed; not deployed
+- Status: Completed and live
 
 ## Scope
 
@@ -31,9 +31,16 @@ Recurring-task completion was treated as a frontend-only convention in part of P
 ### portal
 
 - Repo Log ID: `PORTAL-RECURRING-COMPLETION-GUARD-20260830`
-- Commit SHA: `d62f15d7`
+- Commit SHAs: `d62f15d7`, `62de5120`, `cfee7053`
 - Commit Date: 2026-08-30
-- Change Summary: Replaces the recurring task-detail Status dropdown with read-only status and enforces the no-completion rule in create, update, and bulk-complete API paths.
+- Change Summary: Replaces the recurring task-detail Status dropdown with read-only status and enforces the no-completion rule in create, update, and bulk-complete API paths. Portal task/project and shared router-mode View/Edit actions are true router links: normal clicks stay in the same window, while browser new-tab choices work.
+
+## Production Deployment
+
+- OPS live checkout: `main` at `3e85d76`; live PHP lint and the recurring completion policy test passed.
+- Portal production image tag: `v20260830recurringlinks`.
+- Portal live containers: backend and frontend both use `v20260830recurringlinks`; backend nginx remained healthy.
+- Independent live readback: Portal frontend and backend returned HTTP 200; live controller/policy PHP lint passed; the controller contains two completion-policy enforcement references; compiled frontend assets contain recurring-status references.
 
 ## Verification Notes
 
@@ -42,15 +49,21 @@ Recurring-task completion was treated as a frontend-only convention in part of P
 - Portal `data_history` confirms 503 Status-to-Completed history entries across 168 currently affected tasks, including 22 entries across 10 tasks in August 2026.
 - OPS PHP lint passed for every edited PHP file, and all seven `workflow_task_*` tests passed.
 - Portal controller/policy PHP lint passed; direct policy assertions passed; the edited Vue component passed targeted ESLint.
-- Full frontend lint remains red on unrelated pre-existing repository errors. Production build reached compilation but is blocked by the existing Node Sass 4.14 unsupported runtime 141 mismatch.
+- Full frontend lint remains red on unrelated pre-existing repository errors. Targeted ESLint passed for all changed action/task components, and the production Docker build completed successfully with the repository's existing warnings.
 - Authenticated browser QA was not available because no Playwright/Selenium driver is installed and the local pages redirect to login. No security controls or 2FA were changed.
+
+## Audit Publication and Send
+
+- AI Cloud document: `https://docs.google.com/document/d/1bgA3L3m8xqbpDYero_GcgKUYJNWxVPYcVMr590gZKvk/edit?usp=drivesdk`.
+- Google Docs readback confirmed the 262-row summary and exact priority task IDs `334189` and `360626` in AI Cloud `IT`.
+- phpList exact audience list: `192` (`Recurring task audit recipients 2026-08-30`), containing only subscriber IDs `381`, `8174`, and `31812` (Robert, Mark, and Dmytro); all three were confirmed, enabled, and unblacklisted before send.
+- phpList campaign: `664` (`Recurring task audit and completion safeguard now live`), status `sent`, processed `3`, with 3 distinct `phplist_usermessage` rows in `sent` status. No other submitted campaign remained after processing.
 
 ## Rollback Plan
 
-Revert OPS commit `3e85d76` and Portal commit `d62f15d7`, then redeploy through each repository's normal release path. No schema or data rollback is required.
+Revert OPS commit `3e85d76` and Portal commits through `cfee7053`, then redeploy through each repository's normal release path. No schema or data rollback is required.
 
 ## Follow-Ups
 
 - Decide separately whether and how to repair the 262 existing completed recurring rows. Do not bulk reopen them without source/owner review.
-- Deploy Portal and pull OPS live only with the normal production approval and readback steps.
-- The OPS-required Google Drive project-hub path was not mounted on this machine; this repo-backed project-hub entry is the available fallback record.
+- Review the three future-due rows first and decide whether to advance, end, or retire each recurrence.

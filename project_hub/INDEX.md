@@ -7,7 +7,7 @@ Last Updated: 2026-08-30 CDT (Machine: Macmini.lan)
   - Master ID: `AI-INC-20260830-RECURRING-TASK-COMPLETION-GUARD-01`
   - Detail log: `project_hub/issues/2026-08-30-recurring-task-completion-guard.md`
   - Repos: `ops`, `portal`; live CRM read-only audit
-  - Status: pushed; not deployed. OPS `3e85d76` and Portal `d62f15d7` remove editable recurring-task status controls and reject direct/bulk `Completed` transitions while preserving recurrence advancement. The read-only audit found 262 existing non-deleted completed recurring rows; no task data was changed.
+  - Status: completed and live. OPS `3e85d76` and Portal through `cfee7053` remove editable recurring-task status controls and reject direct/bulk `Completed` transitions while preserving recurrence advancement. Portal View/Edit actions remain same-window by default but are true links for right-click or Cmd/Ctrl-click new-tab choice. The read-only audit found 262 existing non-deleted completed recurring rows; no task data was changed. The detailed AI Cloud audit was sent through phpList campaign `664` to exact list `192` (Robert, Mark, and Dmytro), with 3/3 sent-row readback.
 
 - **2026-08-28 Salesreport Self-Distro WG Cutover**
   - Master ID: `AI-INC-20260828-SALESREPORT-SELF-DISTRO-WG-CUTOVER-01`
