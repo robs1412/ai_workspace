@@ -59,6 +59,15 @@ Recurring-task completion was treated as a frontend-only convention in part of P
 - phpList exact audience list: `192` (`Recurring task audit recipients 2026-08-30`), containing only subscriber IDs `381`, `8174`, and `31812` (Robert, Mark, and Dmytro); all three were confirmed, enabled, and unblacklisted before send.
 - phpList campaign: `664` (`Recurring task audit and completion safeguard now live`), status `sent`, processed `3`, with 3 distinct `phplist_usermessage` rows in `sent` status. No other submitted campaign remained after processing.
 
+### Active-user table follow-up
+
+- AI Cloud Google Sheet: `https://docs.google.com/spreadsheets/d/1TIdbKmy2pnRP2IxVm6Jga-UvDB__Qj5jPtrcC_5lMyE/edit?usp=drivesdk`.
+- The Sheet has a summary plus one tab for each of 18 active Portal owners/assignees. It contains 293 user-task responsibility rows covering 224 affected tasks, with live clickable Portal links; the separate `No Active User` tab contains the remaining 38 affected tasks.
+- Sheets API readback confirmed the 262-task total, 18 active users, the highest-volume user section, and stored `HYPERLINK` formulas.
+- All 18 active users resolved to existing confirmed, enabled, unblacklisted phpList subscribers; no subscriber or suppression repair was required.
+- phpList exact audience list: `193` (`Active users with completed recurring tasks 2026-08-30`), 18 members.
+- phpList campaign: `665` (`Recurring task audit tables by active user`), status `sent`, processed `18`, with 18 distinct `phplist_usermessage` rows in `sent` status. No other submitted campaign remained after processing.
+
 ## Rollback Plan
 
 Revert OPS commit `3e85d76` and Portal commits through `cfee7053`, then redeploy through each repository's normal release path. No schema or data rollback is required.
