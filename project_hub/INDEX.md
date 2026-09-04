@@ -3,6 +3,12 @@ Last Updated: 2026-08-30 CDT (Machine: Macmini.lan)
 
 ## Completed
 
+- **2026-09-04 Sales Assignment Attribution And Editor**
+  - Master ID: `AI-INC-20260904-SALES-ASSIGNMENT-ATTRIBUTION-EDITOR-01`
+  - Detail log: `project_hub/issues/2026-09-04-sales-assignment-attribution-and-editor.md`
+  - Repos: `salesreport`, live Salesreport checkout
+  - Status: completed and live. Current My Accounts assignments now override order-entry and activity fallback in SATLA + DIST Sales by User, while explicitly unassigned accounts remain Unassigned. Sales Hitlist Admin now supports different per-row destinations plus unassignments in one transactional Apply Changes action. Salesreport `b06f4b4` is pushed and deployed; live Sushi U.N.I readback credits Maria user `1351` via `Current sales assignment` without changing report sales totals.
+
 - **2026-08-30 Recurring Task Completion Guard**
   - Master ID: `AI-INC-20260830-RECURRING-TASK-COMPLETION-GUARD-01`
   - Detail log: `project_hub/issues/2026-08-30-recurring-task-completion-guard.md`
