@@ -19,6 +19,8 @@ from pathlib import Path
 
 import imaplib
 
+from frank_fintech_ack import approved_submission_ack
+
 TASK_FLOW_SCRIPT_DIR = Path("/Users/werkstatt/ai_workspace/scripts")
 if TASK_FLOW_SCRIPT_DIR.exists() and str(TASK_FLOW_SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(TASK_FLOW_SCRIPT_DIR))
@@ -756,6 +758,12 @@ def classify_message(
     tracked = find_tracked_reply(message, sent_log)
     primary_email = primary_email.strip().lower()
     assistant_email = assistant_email.strip().lower()
+
+    fintech_ack = approved_submission_ack(
+        message, frank_automation_log().parent / "fintech-submission-approvals.json"
+    ) if assistant_email == "frank.cannoli@kovaldistillery.com" else {}
+    if fintech_ack:
+        return "fintech-approved-submission-ack", fintech_ack
 
     if "Receipt from" in subject:
         return "receipt", {}
@@ -1890,6 +1898,7 @@ def main() -> int:
                     "assistant-self-mail",
                     "notification",
                     "cc-fyi-no-action",
+                    "fintech-approved-submission-ack",
                     "primary-forward",
                     "primary-input",
                 }:
