@@ -322,7 +322,12 @@ def record_mysql_failure(state_dir: Path, reason: str, values: dict[str, Any]) -
 
 def packet_from_scheduled_action(row: dict[str, Any]) -> dict[str, Any]:
     source_ref = str(row.get("source_ref") or row.get("id") or "")
-    task_id = row.get("ops_task_id") or row.get("task_id") or row.get("portal_task_id") or ""
+    task_id = next((str(row.get(field) or "").strip() for field in (
+        "ops_portal_or_domain_task", "ops_task_id", "task_id", "portal_task_id"
+    ) if str(row.get(field) or "").strip() not in {"", "0"}), "")
+    # A scheduled send is itself a domain task, even without an OPS task id.
+    if not task_id and str(row.get("id") or "").strip():
+        task_id = "scheduled-action:" + str(row["id"]).strip()
     calendar_parts = [str(row.get("calendar_id") or ""), str(row.get("calendar_event_id") or "")]
     calendar_event = " ".join(part for part in calendar_parts if part)
     return build_packet(
