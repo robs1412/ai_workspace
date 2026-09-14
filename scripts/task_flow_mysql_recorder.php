@@ -252,6 +252,22 @@ function task_flow_record(PDO $pdo, array $payload): void
     ]);
 }
 
+function task_flow_preserves_recovery_assessment(array $existing, array $incoming, string $event): bool
+{
+    $packet = json_decode((string) ($existing['packet_json'] ?? '{}'), true);
+    if (empty($packet['recovery_assessment']['technical_blocker_reassessed'])
+        || trim((string) ($existing['verification_readback'] ?? '')) === '') {
+        return false;
+    }
+    if (preg_match('/reopen|new_source|owner_instruction/', $event)
+        || !empty($incoming['reopened'])
+        || (!empty($incoming['source_ref']) && $incoming['source_ref'] !== ($existing['source_ref'] ?? ''))) {
+        return false;
+    }
+    return in_array(strtolower(trim((string) ($incoming['verification_readback'] ?? ''))),
+        ['', 'still-pending', 'route-recreated', 'routed-needs-worker'], true);
+}
+
 function task_flow_should_preserve_existing_packet(PDO $pdo, string $dedupeKey, array $incomingPacket, string $event = ''): bool
 {
     $incomingStatus = strtolower(task_flow_string($incomingPacket, 'status') ?: 'captured');
@@ -265,7 +281,7 @@ function task_flow_should_preserve_existing_packet(PDO $pdo, string $dedupeKey, 
     $incomingSession = trim(task_flow_string($incomingPacket, 'workspaceboard_session'));
     $incomingVerification = strtolower(task_flow_string($incomingPacket, 'verification_readback'));
     $stmt = $pdo->prepare(
-        'SELECT status, clarification_email, completion_or_blocker_email, verification_readback, next_update, workspaceboard_session
+        'SELECT status, clarification_email, completion_or_blocker_email, verification_readback, next_update, workspaceboard_session, source_ref, packet_json
          FROM ' . TASK_FLOW_DB . '.' . TASK_FLOW_PACKETS . '
          WHERE dedupe_key = :dedupe_key
          LIMIT 1'
@@ -300,6 +316,10 @@ function task_flow_should_preserve_existing_packet(PDO $pdo, string $dedupeKey, 
 
     if ($manualClassifierRepair) {
         return false;
+    }
+
+    if (task_flow_preserves_recovery_assessment($existing, $incomingPacket, $event)) {
+        return true;
     }
 
     if ($existingHasSessionRoute && $incomingDropsSessionRoute && in_array($incomingStatus, ['captured', 'captured_backlog', 'classified', 'routed', 'blocked'], true)) {
