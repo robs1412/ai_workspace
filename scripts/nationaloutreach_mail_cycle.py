@@ -2016,6 +2016,9 @@ def send_one(creds: dict[str, str], draft_path: Path, sent_dir: Path, failed_dir
             }
         else:
             task_packet = {**task_packet, "status": "reported", "completion_or_blocker_email": msg["Message-ID"]}
+    task_packet = scheduled_delivery_packet(
+        task_packet, str(msg["Message-ID"]), draft_path.name.replace(".approved.json", "")
+    )
     sent_payload = {
         **payload,
         "message_id": msg["Message-ID"],
@@ -2053,6 +2056,20 @@ def send_one(creds: dict[str, str], draft_path: Path, sent_dir: Path, failed_dir
         "sent_folder_appended": True,
         "sent_folder": sent_folder,
         "task_packet": task_packet,
+    }
+
+
+def scheduled_delivery_packet(packet: dict, message_id: str, action_id: str) -> dict:
+    # Only a successful send of this scheduled occurrence proves its delivery.
+    # Acknowledgements and owner questions still leave their business task open.
+    if (not action_id or not message_id or packet.get("status") != "reported"
+            or str(packet.get("scheduled_action") or "") != action_id
+            or str(packet.get("completion_or_blocker_email") or "") != message_id):
+        return packet
+    return {
+        **packet,
+        "verification_readback": f"Scheduled notification delivered; sent Message-ID: {message_id}; Sent-folder append verified.",
+        "next_update": "Notification sent. Preserve recurring parent tasks and separate staffing or reply obligations.",
     }
 
 
