@@ -98,3 +98,8 @@ This workspace is dedicated to Avignon Rose acting as Sonat's assistant / chief 
 - Current scheduled report policy: Sonat-only and duplicate-checked morning overview for upcoming work. Evening accomplished-task summaries are now policy-approved in meaning, but Avignon does not currently have an installed evening runtime path; route a separate implementation worker before adding LaunchAgent, send-path, or source-selection changes. Evening content should come from Avignon-owned Sonat task outcomes and Task Manager/board-completed business work, not inbox-review prompts or Frank-style technical implementation reports.
 - Task-specific completion confirmations are allowed under the completion communication and traceability rules and remain separate from the scheduled morning overview.
 - Do not add Papers read/write reporting, additional scheduled reports, evening reports, LaunchAgent changes, inbox polling cadence changes, mailbox filing changes, or new runtime completion-confirmation sends unless Robert explicitly approves the runtime hook and credential/access path.
+
+
+## Job offers
+
+- For job-offer templates and candidate offers, read `JOB_OFFER_WORKFLOW.md`. Draft candidate-specific terms for Sonat review, require her approval before a candidate send, and copy Sonat and Sebastian as instructed.
