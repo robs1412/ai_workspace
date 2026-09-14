@@ -126,6 +126,8 @@ def run_task_flow_due_runner(dry_run: bool = False) -> dict | None:
 
 
 def task_flow_status_from_action(action: dict) -> str:
+    if action.get("monitor_state") == "internal_recovery_required":
+        return "queued"
     current_state = str(action.get("current_state") or "")
     decision = str(action.get("decision") or "")
     classification = str(action.get("classification") or "")
@@ -175,7 +177,7 @@ def task_flow_packet_from_action(action: dict) -> dict:
         approval_gates=action.get("classification") or "",
         verification_readback=action.get("monitor_state") or action.get("decision") or "",
         papers_projection="",
-        next_update=action.get("completion_target") or action.get("decision") or "",
+        next_update=action.get("recovery_next_step") or action.get("completion_target") or action.get("decision") or "",
     )
 
 
@@ -1415,7 +1417,7 @@ def compose_direct_primary_closeout(action: dict, session: dict, blocked: bool, 
     point = (
         f"Clarification needed: {subject} still needs one answer before it can be filed as complete."
         if blocked
-        else f"Complete: {subject} reached a non-running completion state."
+        else f"Complete: {subject}."
     )
     known_status = compose_known_thread_status(action, session_id, session_title, state)
     if blocked and known_status:
@@ -1443,6 +1445,7 @@ def compose_direct_primary_closeout(action: dict, session: dict, blocked: bool, 
         )
     else:
         lines.extend([
+            summary_text,
             f"I closed the mailbox follow-through against visible session {session_id} / {session_title}.",
             "No extra external reply, credential/auth work, or unapproved production mutation was performed by the mailbox runtime.",
             "No further Robert decision is recorded in mailbox state.",
@@ -1457,6 +1460,29 @@ def compose_direct_primary_closeout_html(action: dict, session: dict, blocked: b
         + closeout_text_to_html(body)
         + "</body></html>"
     )
+
+
+def verified_direct_primary_closeout(session_id: str, blocked: bool, task_key: str) -> tuple[bool, str]:
+    try:
+        history = get_json("/api/session-history?" + urllib.parse.urlencode({"session_id": session_id, "lines": 1}))
+    except Exception:
+        return False, "Task Manager must recover the worker proof; session readback is unavailable."
+    work = history.get("current_work_state") or {}
+    if not task_key or str(work.get("taskflow_key") or "") != task_key:
+        return False, "Task Manager must link the worker result to this exact source task before reporting completion or asking the owner."
+    if not blocked:
+        if work.get("work_state") == "closed_with_proof" and str(work.get("proof_marker") or "").strip():
+            return True, str(work["proof_marker"])
+        return False, "Task Manager must recover the business result; a stopped terminal is not completion proof."
+    question = str(work.get("owner_question") or "").strip()
+    escalation = str(work.get("escalation_persona") or "").lower()
+    context = " ".join([question, str(work.get("blocker_text") or ""), escalation]).lower()
+    technical = ("task manager", "task-manager", "security guard", "security-guard", "press enter", "don't ask again",
+                 "command approval", "permission denied", "skill unavailable", "skill missing", "ssh", "sudo", "php -r",
+                 "traceback", "connection refused", "source body", "source email", "terminal", "not configured")
+    if not question or any(marker in context for marker in technical):
+        return False, "Task Manager must resolve the worker access/source/proof issue internally; no business question is established."
+    return True, question
 
 
 def monitor_direct_primary_action(
@@ -1541,7 +1567,18 @@ def monitor_direct_primary_action(
             **delayed_ack,
         }
     blocked = session_state == "blocked"
-    session_summary = board_session_summary(str(action.get("routed_session_id") or ""))
+    verified, evidence = verified_direct_primary_closeout(str(action.get("routed_session_id") or ""), blocked, str(action.get("dedupe_key") or ""))
+    if not verified:
+        return {
+            "monitor_state": "internal_recovery_required",
+            "current_state": state,
+            "session_status": session_state,
+            "archivable_now": False,
+            "owner_email_suppressed": True,
+            "recovery_next_step": evidence,
+            "escalation_persona": "task-manager",
+        }
+    session_summary = {"summary": evidence}
     closeout_state = "blocked_report_sent" if blocked else "completed_report_sent"
     if is_workspaceboard_blocked_thread(action):
         return {
