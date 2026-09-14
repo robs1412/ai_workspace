@@ -265,14 +265,16 @@ function task_flow_preserves_recovery_assessment(array $existing, array $incomin
         return false;
     }
     return in_array(strtolower(trim((string) ($incoming['verification_readback'] ?? ''))),
-        ['', 'still-pending', 'route-recreated', 'routed-needs-worker'], true);
+        ['', 'still-pending', 'route-recreated', 'routed-needs-worker', 'internal_recovery_required'], true);
 }
 
 function task_flow_should_preserve_existing_packet(PDO $pdo, string $dedupeKey, array $incomingPacket, string $event = ''): bool
 {
     $incomingStatus = strtolower(task_flow_string($incomingPacket, 'status') ?: 'captured');
     $event = strtolower(trim($event));
-    if (!in_array($incomingStatus, ['captured', 'captured_backlog', 'classified', 'routed', 'working', 'blocked'], true)) {
+    $isInternalRecoveryMonitor = $incomingStatus === 'queued'
+        && task_flow_string($incomingPacket, 'verification_readback') === 'internal_recovery_required';
+    if (!$isInternalRecoveryMonitor && !in_array($incomingStatus, ['captured', 'captured_backlog', 'classified', 'routed', 'working', 'blocked'], true)) {
         return false;
     }
     if (task_flow_string($incomingPacket, 'completion_or_blocker_email') !== '') {

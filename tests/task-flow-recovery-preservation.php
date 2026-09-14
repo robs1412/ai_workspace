@@ -5,6 +5,7 @@ $e=['packet_json'=>json_encode(['recovery_assessment'=>['technical_blocker_reass
 $weak=['status'=>'working','verification_readback'=>'still-pending','source_ref'=>'original'];
 $cases=[
  [true,$e,$weak,'route_monitor'],
+ [true,$e,array_merge($weak,['status'=>'queued','verification_readback'=>'internal_recovery_required']),'frank_previous_message_reconciled'],
  [false,$e,array_merge($weak,['verification_readback'=>'Activity381400 newly verified']),'worker_result'],
  [false,$e,array_merge($weak,['source_ref'=>'new-reply']),'route_monitor'],
  [false,$e,$weak,'owner_instruction'],
