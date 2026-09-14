@@ -280,6 +280,31 @@ def send_email(args: argparse.Namespace, to_addr: str, subject: str, body: str) 
         body_path.unlink(missing_ok=True)
 
 
+POLICY_PATH = Path("/Users/werkstatt/ai_workspace/runtime/workspaceboard-blocked-reminder-policy.json")
+
+
+def recipient_delivery_gate(user_id: int, log_path: Path, now: datetime) -> str:
+    """Pause only reminder delivery; never close or hide the underlying work."""
+    try:
+        policy = json.loads(POLICY_PATH.read_text()) if POLICY_PATH.exists() else {}
+        if user_id in policy.get("paused_recipient_user_ids", []):
+            return "defer_recipient_paused"
+        limit = max(0, int(policy.get("max_per_recipient_24h", 1)))
+        count = 0
+        if log_path.exists():
+            with log_path.open() as stream:
+                for line in stream:
+                    row = json.loads(line)
+                    when = parse_time(str(row.get("logged_at", "")))
+                    if (row.get("recipient_user_id") == user_id and row.get("ok")
+                            and not row.get("dry_run") and not row.get("suppressed")
+                            and when and 0 <= (now - when).total_seconds() < 86400):
+                        count += 1
+        return "defer_recipient_daily_limit" if count >= limit else ""
+    except (OSError, ValueError, TypeError):
+        return "defer_delivery_policy_unavailable"
+
+
 def main() -> int:
     args = parse_args()
     now = datetime.now(timezone.utc)
@@ -338,6 +363,11 @@ def main() -> int:
             })
             continue
         user_id, user_label, to_addr = recipient_for_session(session)
+        delivery_gate = recipient_delivery_gate(user_id, log_path, now)
+        if delivery_gate:
+            results.append({"session_id": session.get("id"), "action": delivery_gate,
+                            "recipient_user_id": user_id, "task_remains_open": True})
+            continue
         subject = f"Blocked reminder: {str(session.get('title') or 'Workspaceboard item')[:110]}"
         message = build_message(session, blocked_at, age_hours)
         route_signature = f"blocked-24h:{session.get('id')}:{key.split(':')[-1]}"
@@ -374,4 +404,13 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    import fcntl
+    lock_path = DEFAULT_STATE_PATH.with_suffix(".lock")
+    lock_path.parent.mkdir(parents=True, exist_ok=True)
+    with lock_path.open("a") as lock:
+        try:
+            fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except BlockingIOError:
+            print(json.dumps({"ok": True, "action": "skip_sweep_already_running"}))
+            raise SystemExit(0)
+        raise SystemExit(main())
