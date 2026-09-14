@@ -289,6 +289,10 @@ def existing_handoff_keys(path: Path) -> set[str]:
             continue
         key = str(row.get("handoff_key") or "").strip()
         if key:
+            if row.get("event") == "daemon_owned_due_item_skipped":
+                action_id = key.split("|", 2)[-1]
+                if action_id not in registered_scheduled_action_ids():
+                    continue
             keys.add(key)
     return keys
 
@@ -735,7 +739,7 @@ def route_due_items_to_worker(recorder: Path, state_dir: Path, items: list[dict]
             worker_pending.append(item)
 
     daemon_owned_results = []
-    if daemon_owned:
+    if daemon_owned and not dry_run:
         handoff_log.parent.mkdir(parents=True, exist_ok=True)
     for item in daemon_owned:
         if dry_run:
@@ -750,10 +754,11 @@ def route_due_items_to_worker(recorder: Path, state_dir: Path, items: list[dict]
             "workspace": workspace_for_task_flow_item(item),
             "reason": "owning automation lane executes scheduled action directly",
         }
-        with handoff_log.open("a", encoding="utf-8") as handle:
-            handle.write(json.dumps(row, ensure_ascii=True) + "\n")
-        handoff_log.chmod(0o600)
-        seen_handoffs.add(reminder_key(item))
+        if not dry_run:
+            with handoff_log.open("a", encoding="utf-8") as handle:
+                handle.write(json.dumps(row, ensure_ascii=True) + "\n")
+            handoff_log.chmod(0o600)
+            seen_handoffs.add(reminder_key(item))
 
     if not worker_pending:
         return {
@@ -765,11 +770,19 @@ def route_due_items_to_worker(recorder: Path, state_dir: Path, items: list[dict]
         }
 
     grouped: dict[str, list[dict]] = {}
+    routed: list[dict] = []
     for item in worker_pending:
-        grouped.setdefault(workspace_for_task_flow_item(item), []).append(item)
+        workspace = workspace_for_task_flow_item(item)
+        if str(item.get("workspaceboard_session") or "").strip():
+            reason = "existing_worker_requires_followthrough:" + str(item["workspaceboard_session"])
+            if not dry_run:
+                guard.record_blocked([item], workspace, "due-worker", reason)
+            routed.append({"workspace": workspace, "routed": False, "blocked_by_guard": True,
+                           "reason": reason, "items": [item["dedupe_key"]]})
+            continue
+        grouped.setdefault(workspace, []).append(item)
 
     api_base = os.environ.get("WORKSPACEBOARD_URL", DEFAULT_WORKSPACEBOARD_URL).rstrip("/")
-    routed: list[dict] = []
     for workspace, group in grouped.items():
         title = f"Task Flow due worker {time.strftime('%Y-%m-%d %H:%M')} {workspace}"
         message = build_worker_handoff_message(group)
