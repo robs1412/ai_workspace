@@ -1105,38 +1105,17 @@ def handle_direct_owner_message(message: dict, owner: str) -> dict:
                 "route_blocker": blocker,
                 "archivable_now": False,
             }
-        greeting = "Hi Robert," if owner == "robert-approver" else "Hi Sonat,"
-        blocker_body = "\n".join(
-            [
-                greeting,
-                "",
-                f"Captured but blocked: {normalized_subject(message.get('subject', '')) or 'direct request'}.",
-                "",
-                "What was done: I recognized this as direct Avignon work and recorded the source/dedupe state.",
-                f"What changed: the item is blocked before visible worker routing; blocker: {blocker}",
-                "What was not done: I did not file the source message to Handled, make CRM/Portal/OPS changes, send external replies, or guess at account/pricing/duplicate handling.",
-                "Next: Task Manager or Security Guard should restore/approve the visible route path, then Avignon can route and follow through.",
-            ]
-        )
-        in_reply_to, references = source_thread_headers(message)
-        blocker_message_id = send_avignon_owner_email(
-            direct_owner_reply_subject(str(message.get("subject") or "")),
-            blocker_body,
-            f"{dedupe_key}-route-blocked",
-            report_target["to"],
-            report_target["cc"],
-            in_reply_to=in_reply_to,
-            references=references,
-        )
         return {
             **base,
-            "classification": "direct-owner-route-blocked",
-            "decision": "direct-owner-route-blocked-report-sent",
-            "current_state": "captured_route_blocked_report_sent",
+            "classification": "direct-owner-route-local-retry",
+            "decision": "direct-owner-route-blocked-local-no-email",
+            "current_state": "captured_route_blocked_local_retry",
             "route_blocker": blocker,
-            "blocker_message_id": blocker_message_id,
+            "escalation_persona": "task-manager",
+            "output_channel": "workspaceboard",
             "archivable_now": False,
         }
+
     return {
         **base,
         "classification": "direct-owner-work-request",
@@ -1323,7 +1302,41 @@ def closeout_text_to_html(body: str) -> str:
     return "\n".join(paragraphs)
 
 
+def owner_blocker_email_gate(session: dict, session_summary: dict | None = None) -> str:
+    """Fail closed: infrastructure failures and invented questions stay internal."""
+    work = session.get("work_state") if isinstance(session.get("work_state"), dict) else {}
+    question = str(session.get("owner_question") or work.get("owner_question") or "").strip()
+    text = " ".join(str(value or "") for value in (
+        session.get("status_label"), session.get("blocker"), question,
+        work.get("blocker_text"), (session_summary or {}).get("summary"),
+    )).casefold()
+    compact = " ".join(text.split())
+    technical = (
+        "press enter", "esc to cancel", "don't ask again", "don’t ask again",
+        "tell codex", "commands that start", "php -r", "bootstrap.php",
+        "get_event_pdo", "permission denied", "command approval", "approval pending",
+        "pending approval", "sandbox", "traceback", "http 400", "http 401",
+        "http 403", "http 409", "http 500", "oauth", "credential", "authentication",
+        "skill unavailable", "skill is unavailable", "skill not found", "missing skill",
+        "configured local skill", "required email-worker", "task manager", "security guard",
+        "worker session", "visible worker", "session path", "prompt landed",
+        "hard-start", "terminal unavailable", "connection refused", "timed out",
+        "system error", "technical error", "routing failure", "source body",
+        "original request details", "source email", "missing workflow/target",
+        "workflow to automate or improve", "exact project/task name",
+    )
+    if session.get("approval_pending") or session.get("pending_approval") or any(s in compact for s in technical):
+        return "Technical failure or missing source context requires internal recovery, not an owner email."
+    if not question or len(question.split()) < 4:
+        return "No explicit business question was recorded; reconstruct the source and identify the actual decision internally."
+    return ""
+
+
 def compose_direct_owner_closeout(action: dict, session: dict, blocked: bool, session_summary: dict | None = None) -> str:
+    if blocked:
+        reason = owner_blocker_email_gate(session, session_summary)
+        if reason:
+            raise ValueError(reason)
     subject = str(action.get("subject") or "direct-owner request")
     state = str(session.get("status_label") or session.get("status") or "unknown")
     session_id = str(action.get("routed_session_id") or "")
@@ -1350,7 +1363,7 @@ def compose_direct_owner_closeout(action: dict, session: dict, blocked: bool, se
                 [
                     f"Current blocker: {blocker_text}",
                     "",
-                    clarification_request_text(subject, summary_text),
+                    owner_question_text,
                 ]
             )
         else:
@@ -1377,7 +1390,7 @@ def compose_direct_owner_closeout(action: dict, session: dict, blocked: bool, se
     if blocked and session_summary_has_active_context(summary_text):
         return compose_owner_style_status(subject, session_id, session_title, state, summary_text, str(action.get("owner") or "sonat"))
     if blocked:
-        clarification = owner_question_text or clarification_request_text(subject, summary_text)
+        clarification = owner_question_text
         lines.extend(
             [
                 f"I already have this linked to visible session {session_id} / {session_title}.",
@@ -1482,6 +1495,15 @@ def monitor_direct_owner_action(action: dict, user: str | None = None, app_pw: s
         fetched_body = str((fetched or {}).get("body") or "").strip()
         if fetched_body:
             session_summary = {**(session_summary or {}), "summary": fetched_body}
+    if blocked:
+        reason = owner_blocker_email_gate(session, session_summary)
+        if reason:
+            return {
+                "monitor_state": "internal-recovery-required",
+                "current_state": state, "session_status": "blocked",
+                "archivable_now": False, "status_blocker": reason,
+                "escalation_persona": "task-manager", "output_channel": "workspaceboard",
+            }
     target = direct_owner_report_target(str(action.get("owner") or "sonat"))
     closeout_state = "blocked_report_sent" if blocked else "completed_report_sent"
     task_id = f"{action.get('dedupe_key', 'avignon-direct-owner')}-{closeout_state}"
