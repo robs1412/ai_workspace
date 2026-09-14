@@ -614,6 +614,24 @@ def record_blocked_packet(recorder: Path, item: dict, blocker_text: str, owner_q
     return record_task_flow_packet(recorder, packet, event)
 
 
+_registered_scheduled_action_ids: frozenset[str] | None = None
+
+
+def registered_scheduled_action_ids() -> frozenset[str]:
+    global _registered_scheduled_action_ids
+    if _registered_scheduled_action_ids is None:
+        # Metadata only: ownership must come from an actual scheduled-action row.
+        php = ('require "/Users/werkstatt/ops/bootstrap.php"; '
+               '$s=get_event_pdo()->prepare("SELECT action_id FROM koval_crm.ai_scheduled_actions WHERE mailbox_lane=?"); '
+               '$s->execute(["nationaloutreach"]); echo json_encode($s->fetchAll(PDO::FETCH_COLUMN));')
+        result = subprocess.run(["php", "-r", php], capture_output=True, text=True, check=True, timeout=20)
+        rows = json.loads(result.stdout)
+        if not isinstance(rows, list):
+            raise RuntimeError("Scheduled-action ownership lookup returned an invalid result")
+        _registered_scheduled_action_ids = frozenset(str(value) for value in rows if value)
+    return _registered_scheduled_action_ids
+
+
 def is_daemon_owned_due_item(item: dict) -> bool:
     recurrence = item.get("recurrence") if isinstance(item.get("recurrence"), dict) else {}
     recurrence_rule = str(item.get("recurrence_rule") or recurrence.get("rule") or "").strip()
@@ -625,21 +643,7 @@ def is_daemon_owned_due_item(item: dict) -> bool:
     workspace = workspace_for_task_flow_item(item)
     if workspace not in DAEMON_OWNED_DUE_WORKSPACES:
         return False
-    text = " ".join([
-        str(item.get("owner_lane") or ""),
-        str(item.get("responsible_worker_or_persona") or ""),
-        str(item.get("scheduled_action") or ""),
-        str(item.get("source_ref") or ""),
-        str(item.get("next_update") or ""),
-    ]).lower()
-    return any(token in text for token in [
-        "vanessa",
-        "nationaloutreach",
-        "outreach-coordinator",
-        "internal-communicator",
-        "day-of cot",
-        "cot",
-    ])
+    return scheduled_action.strip() in registered_scheduled_action_ids()
 
 
 def record_daemon_owned_packet(recorder: Path, item: dict) -> dict:
