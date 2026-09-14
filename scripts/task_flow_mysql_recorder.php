@@ -309,7 +309,7 @@ function task_flow_should_preserve_existing_packet(PDO $pdo, string $dedupeKey, 
         && in_array($existingStatus, ['waiting', 'clarification_sent', 'reported', 'completed', 'handled', 'filed'], true)) {
         return true;
     }
-    if (in_array($existingStatus, ['no_action_closed', 'closed_with_proof'], true)
+    if (in_array($existingStatus, ['no_action_closed', 'closed_with_proof', 'review_ready'], true)
         && trim((string) ($existing['verification_readback'] ?? '')) !== '') {
         return true;
     }

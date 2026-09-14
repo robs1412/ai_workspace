@@ -29,6 +29,11 @@ $out=[];
 $out['filed_monitor']=task_flow_should_preserve_existing_packet(new FixturePDO($base),'same-source',$incoming,'frank_previous_message_reconciled');
 $closed=$base;$closed['status']='closed_with_proof';
 $out['closed_monitor']=task_flow_should_preserve_existing_packet(new FixturePDO($closed),'same-source',$incoming,'avignon_previous_message_reconciled');
+$ready=$base;$ready['status']='review_ready';
+$route=$incoming;$route['status']='working';$route['verification_readback']='route-recreated';
+$out['ready_result']=task_flow_should_preserve_existing_packet(new FixturePDO($ready),'same-source',$route,'avignon_direct_owner_monitor');
+$emptyReady=$ready;$emptyReady['verification_readback']='';
+$out['unverified_ready']=task_flow_should_preserve_existing_packet(new FixturePDO($emptyReady),'same-source',$route,'avignon_direct_owner_monitor');
 $unverified=$base;$unverified['verification_readback']='';
 $out['unverified']=task_flow_should_preserve_existing_packet(new FixturePDO($unverified),'same-source',$incoming,'frank_previous_message_reconciled');
 $newProof=$incoming;$newProof['completion_or_blocker_email']='<new-evidence@example.test>';
@@ -43,7 +48,7 @@ echo json_encode($out);
             result = subprocess.run(['php', str(path)], text=True, capture_output=True, check=True)
         self.assertEqual(json.loads(result.stdout), {
             'filed_monitor': True, 'closed_monitor': True, 'unverified': False,
-            'new_evidence': False, 'explicit_reopen': False,
+            'new_evidence': False, 'explicit_reopen': False, 'ready_result': True, 'unverified_ready': False,
         })
 
 
