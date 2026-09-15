@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import html
+import hashlib
 import imaplib
 import json
 import contextlib
@@ -2166,6 +2167,49 @@ def mark_scheduled_action_sent(
     return True
 
 
+def failed_send_task_packet(failure: dict) -> dict:
+    """Keep one recovery task per send intent, retaining each failed attempt as an event."""
+    draft_path = Path(str(failure.get("draft") or ""))
+    try:
+        draft = json.loads(draft_path.read_text())
+        if not isinstance(draft, dict):
+            draft = {}
+    except (OSError, ValueError):
+        draft = {}
+    parent = draft.get("task_packet")
+    parent = parent if isinstance(parent, dict) else {}
+    parent_key = str(parent.get("dedupe_key") or "")
+    source = str(draft.get("source_ref") or parent.get("source_ref") or draft.get("in_reply_to") or "").strip()
+    # Malformed files still need a visible repair task, but retry timestamps are not identity.
+    stable_path = re.sub(r"\.failed-\d+(?=\.json$)", "", str(draft_path))
+    identity = {
+        "parent": parent_key,
+        "source": source.lower().strip("<> "),
+        "action": str(draft.get("action_id") or ""),
+        "subject": str(draft.get("subject") or "").strip().lower(),
+        "from": str(draft.get("from") or "").strip().lower(),
+    }
+    for field in ("to", "cc", "bcc"):
+        values = draft.get(field) or []
+        values = values if isinstance(values, list) else [values]
+        identity[field] = sorted(str(value).strip().lower() for value in values)
+    if not source and not parent_key and not identity["action"]:
+        identity["fallback_path"] = stable_path
+    digest = hashlib.sha256(json.dumps(identity, sort_keys=True).encode()).hexdigest()[:24]
+    packet = shared_task_flow.build_packet(
+        dedupe_key="taskflow-email-send-failure-" + digest,
+        source_ref=source or stable_path,
+        intake_channel="approved-send:nationaloutreach",
+        responsible_worker_or_persona="nationaloutreach",
+        status="blocked",
+        source_links=str(draft.get("subject") or "Failed email delivery"),
+        verification_readback="email_send_blocked",
+        next_update="Review this failed delivery and its parent task; retry only after the delivery blocker is fixed.",
+    )
+    packet.update(parent_task_key=parent_key, failed_draft_path=str(draft_path))
+    return packet
+
+
 def send_approved(creds: dict[str, str], state_dir: Path, default_from: str) -> dict:
     lock_dir = state_dir / "send-approved.lock"
     try:
@@ -2253,14 +2297,7 @@ def send_approved(creds: dict[str, str], state_dir: Path, default_from: str) -> 
         for failure in failures:
             append_jsonl(state_dir / "send-failures.jsonl", {"logged_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"), **failure})
             if shared_task_flow:
-                packet = shared_task_flow.build_packet(
-                    source_ref=str(failure.get("draft") or ""),
-                    intake_channel="approved-send:nationaloutreach",
-                    responsible_worker_or_persona="nationaloutreach",
-                    status="blocked",
-                    verification_readback="email_send_blocked",
-                    next_update="review failed draft and resend only after blocker is fixed",
-                )
+                packet = failed_send_task_packet(failure)
                 shared_task_flow.append_event(state_dir / "task-flow-events.jsonl", packet, "email_send_blocked", error_type=failure.get("error_type"))
         return {"sent": len(sent), "failed": len(failures), "skipped_locked": False}
     finally:
