@@ -2199,6 +2199,7 @@ def failed_send_task_packet(failure: dict) -> dict:
     packet = shared_task_flow.build_packet(
         dedupe_key="taskflow-email-send-failure-" + digest,
         source_ref=source or stable_path,
+        parent_packet_dedupe_key=parent_key,
         intake_channel="approved-send:nationaloutreach",
         responsible_worker_or_persona="nationaloutreach",
         status="blocked",
@@ -2208,6 +2209,36 @@ def failed_send_task_packet(failure: dict) -> dict:
     )
     packet.update(parent_task_key=parent_key, failed_draft_path=str(draft_path))
     return packet
+
+
+def resolve_failed_send_task(state_dir: Path, result: dict) -> bool:
+    """Resolve only a previously recorded failure with actual successful-send proof."""
+    message_id = str(result.get("message_id") or "").strip()
+    if not message_id:
+        return False
+    identity = failed_send_task_packet({"draft": result.get("draft", "")})
+    marker = state_dir / "send-failure-recovery" / (identity["dedupe_key"] + ".json")
+    try:
+        packet = json.loads(marker.read_text())
+    except (OSError, ValueError):
+        return False
+    if not isinstance(packet, dict) or packet.get("dedupe_key") != identity["dedupe_key"] or packet.get("status") != "blocked":
+        return False
+    packet.update(
+        status="closed_with_proof",
+        completion_or_blocker_email=message_id,
+        verification_readback="Successful retry delivered this email; Message-ID " + message_id,
+        next_update="No resend required. Underlying business work remains on its source task.",
+        result_email_required=False,
+        owner_question_required=False,
+        output_channel="internal",
+    )
+    shared_task_flow.append_event(
+        state_dir / "task-flow-events.jsonl", packet, "email_send_failure_resolved",
+        message_id=message_id, sent_draft_path=str(result.get("draft") or ""),
+    )
+    write_json(marker, packet)
+    return True
 
 
 def send_approved(creds: dict[str, str], state_dir: Path, default_from: str) -> dict:
@@ -2298,7 +2329,11 @@ def send_approved(creds: dict[str, str], state_dir: Path, default_from: str) -> 
             append_jsonl(state_dir / "send-failures.jsonl", {"logged_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"), **failure})
             if shared_task_flow:
                 packet = failed_send_task_packet(failure)
-                shared_task_flow.append_event(state_dir / "task-flow-events.jsonl", packet, "email_send_blocked", error_type=failure.get("error_type"))
+                write_json(state_dir / "send-failure-recovery" / (packet["dedupe_key"] + ".json"), packet)
+                shared_task_flow.append_event(state_dir / "task-flow-events.jsonl", packet, "email_send_blocked", error_type=failure.get("error_type"), failed_draft_path=str(failure.get("draft") or ""))
+        if shared_task_flow:
+            for result in sent:
+                resolve_failed_send_task(state_dir, result)
         return {"sent": len(sent), "failed": len(failures), "skipped_locked": False}
     finally:
         if lock_acquired:
