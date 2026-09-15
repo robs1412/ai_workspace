@@ -2756,7 +2756,43 @@ echo $row ? json_encode($row, JSON_UNESCAPED_SLASHES) : '';
     return bool(dedupe_key), dedupe_key
 
 
+def owner_reply_has_reviewed_resolution(reply: dict) -> bool:
+    """Only an exact-source, explicit review can retire a no-response reply."""
+    source = normalize_message_id(reply.get("source_message_id"))
+    if not source:
+        return False
+    php = r"""
+require '/Users/werkstatt/ops/bootstrap.php';
+$input = json_decode(stream_get_contents(STDIN), true);
+$s = get_event_pdo()->prepare("SELECT status, source_ref, packet_json FROM koval_crm.ai_task_flow_packets WHERE dedupe_key=? LIMIT 1");
+$s->execute([$input['key']]);
+echo json_encode($s->fetch(PDO::FETCH_ASSOC));
+"""
+    try:
+        result = subprocess.run(
+            ["php", "-r", php], input=json.dumps({"key": task_flow_owner_reply_key(reply)}),
+            capture_output=True, text=True, timeout=10, check=False,
+        )
+        row = json.loads(result.stdout) if result.returncode == 0 else None
+        if not isinstance(row, dict):
+            return False
+        packet = json.loads(row.get("packet_json") or "{}")
+        proof = packet.get("owner_reply_resolution") or {}
+        return (
+            row.get("status") in {"filed_no_action", "closed_with_proof"}
+            and normalize_message_id(row.get("source_ref")) == source
+            and normalize_message_id(proof.get("source_ref")) == source
+            and proof.get("disposition") in {"acknowledgement_only", "owner_explicitly_closed"}
+            and bool(proof.get("reviewed_at"))
+            and bool(proof.get("source_excerpt"))
+        )
+    except (OSError, subprocess.TimeoutExpired, ValueError, TypeError, AttributeError):
+        return False
+
+
 def record_owner_reply_task_flow(args: argparse.Namespace, reply: dict, status: str = "waiting") -> tuple[bool, str]:
+    if owner_reply_has_reviewed_resolution(reply):
+        return True, f"proof-backed-primary:{task_flow_owner_reply_key(reply)}"
     has_primary_proof, primary_key = owner_reply_has_proof_backed_primary(reply)
     if has_primary_proof:
         return True, f"proof-backed-primary:{primary_key}"
