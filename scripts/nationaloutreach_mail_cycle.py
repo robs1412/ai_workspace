@@ -49,11 +49,11 @@ LEGACY_MITCH_REPORT_SCRIPT = Path("/Users/werkstatt/ai_workspace/nationaloutreac
 ALLOWED_FROM = {
     "codex@kovaldistillery.com",
     "vanessa.sterling@kovaldistillery.com",
+    "naomi.stern@kovaldistillery.com",
     "ezra.katz@kovaldistillery.com",
 }
 
 FORBIDDEN_FROM = {
-    "naomi.stern@kovaldistillery.com",  # Accounting mailbox owns Naomi since 2026-09-10.
     "nationaloutreach@kovaldistillery.com",
     "nationoutreach@kovaldistillery.com",
     "tastingroom@kovaldistillery.com",
@@ -62,6 +62,7 @@ FORBIDDEN_FROM = {
 VERIFIED_SEND_AS_ALIASES = {
     "codex@kovaldistillery.com",
     "vanessa.sterling@kovaldistillery.com",
+    "naomi.stern@kovaldistillery.com",
     "ezra.katz@kovaldistillery.com",
 }
 
@@ -74,7 +75,6 @@ FROM_DISPLAY_NAMES = {
 
 ROBERT_EMAIL = "robert@kovaldistillery.com"
 SONAT_EMAIL = "sonat@kovaldistillery.com"
-KOVAL_INTERNAL_DOMAINS = {"kovaldistillery.com", "koval-distillery.com"}
 
 SOCIAL_LINKS = {
     "X": "http://www.x.com/kovaldistillery",
@@ -448,8 +448,7 @@ def build_email_trace_message(**values) -> dict:
 
 def is_direct_owner_instruction_record(record: dict) -> bool:
     sender = sender_email(record.get("from") or "")
-    sender_domain = sender.rsplit("@", 1)[-1] if "@" in sender else ""
-    if sender not in {ROBERT_EMAIL, SONAT_EMAIL} and sender_domain not in KOVAL_INTERNAL_DOMAINS:
+    if sender not in {ROBERT_EMAIL, "sonat@kovaldistillery.com"}:
         return False
     recipients: set[str] = set()
     for field in ("to", "cc"):
@@ -847,7 +846,7 @@ def classify_message(headers: dict[str, str], body: str) -> dict[str, str]:
     if NAOMI_PATTERNS.search(combined):
         return {
             "route": "naomi-stern",
-            "suggestion": "Route source context to Naomi in BID using accounting@kovaldistillery.com and OPS 378246; do not send as Naomi through National Outreach. Preserve historical source references and check duplicate invoice work. Read docs/email-workers/naomi-accounting.md. Do not move money or change finance records.",
+            "suggestion": "Route to Naomi Stern for finance-operations triage: cash/control/cadence status, missing sources, and owner decisions. Do not move money or change finance records.",
             "send_allowed": "approval-required",
         }
     if sender == ROBERT_EMAIL and DIRECT_FORWARD_INSTRUCTION_PATTERNS.search(combined):
@@ -2032,7 +2031,7 @@ def send_one(creds: dict[str, str], draft_path: Path, sent_dir: Path, failed_dir
                 "status": "clarification_sent",
                 "clarification_email": msg["Message-ID"],
                 "completion_or_blocker_email": "",
-                "next_update": str(task_packet.get("next_update") or "Await the owner reply to the clarification question."),
+                "next_update": "Robert answered the clarification question.",
             }
         else:
             task_packet = {**task_packet, "status": "reported", "completion_or_blocker_email": msg["Message-ID"]}
