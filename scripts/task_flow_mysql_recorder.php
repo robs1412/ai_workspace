@@ -277,6 +277,26 @@ function task_flow_preserves_reviewed_owner_reply(array $existing, array $incomi
     $proof = $packet['owner_reply_resolution'] ?? [];
     $normalize = static fn($value) => strtolower(trim((string) $value, " <>\t\r\n"));
     $source = $normalize($incoming['source_ref'] ?? '');
+    if ($source !== '' && $normalize($existing['source_ref'] ?? '') === $source
+        && in_array($existing['status'] ?? '', ['closed_with_proof', 'completed', 'handled'], true)
+        && trim((string) ($existing['verification_readback'] ?? '')) !== ''
+        && empty($packet['owner_question_required']) && empty($packet['owner_decision_pending'])) {
+        $communication = $packet['communication_proof'] ?? [];
+        if (($communication['requested_communication_verified'] ?? false) === true
+            && $normalize($communication['source_ref'] ?? '') === $source
+            && !empty($communication['sent_message_id']) && !empty($communication['verified_recipients'])
+            && !empty($communication['requested_action'])) {
+            return true;
+        }
+        foreach (['recovery_proof', 'domain_proof', 'completion_proof'] as $kind) {
+            foreach (['event_id', 'shift_id', 'account_id', 'contact_id', 'activity_id',
+                'ops_task_id', 'portal_task_id', 'report_id', 'domain_readback'] as $field) {
+                if (!empty($packet[$kind][$field])) {
+                    return true;
+                }
+            }
+        }
+    }
     return $source !== ''
         && in_array($existing['status'] ?? '', ['filed_no_action', 'closed_with_proof'], true)
         && $normalize($existing['source_ref'] ?? '') === $source

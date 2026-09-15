@@ -18,3 +18,11 @@ foreach($cases as [$want,$existing,$incoming,$event]) {
  if(task_flow_preserves_reviewed_owner_reply($existing,$incoming,$event)!==$want)throw new RuntimeException('Reviewed reply preservation mismatch');
 }
 echo count($cases)," reviewed owner reply preservation checks passed\n";
+
+$domain=['status'=>'closed_with_proof','source_ref'=>'source@example.test','verification_readback'=>'Live event verified','packet_json'=>json_encode(['recovery_proof'=>['event_id'=>898]])];
+if (!task_flow_preserves_reviewed_owner_reply($domain,$i,'owner_reply_pending_response')) throw new RuntimeException('Domain proof lost');
+$domain['packet_json']=json_encode(['communication_proof'=>['requested_communication_verified'=>true,'source_ref'=>'source@example.test','sent_message_id'=>'sent@example.test','verified_recipients'=>['owner@example.test'],'requested_action'=>'Provide dates']]);
+if (!task_flow_preserves_reviewed_owner_reply($domain,$i,'owner_reply_pending_response')) throw new RuntimeException('Communication proof lost');
+$domain['packet_json']=json_encode(['recovery_proof'=>['message_id'=>'sent@example.test']]);
+if (task_flow_preserves_reviewed_owner_reply($domain,$i,'owner_reply_pending_response')) throw new RuntimeException('Sent message treated as domain proof');
+echo "3 business proof preservation checks passed\n";
