@@ -24,6 +24,8 @@ This root file is intentionally compact. Do not preload long lane histories, han
 - Current Illinois distribution truth: KOVAL is not distributed through Heritage Wine Cellars or RNDC in Illinois. The default current route is SATLA Spirits through `/order`; the exception is an account explicitly enabled in KOVAL's Illinois self-distribution account set, which must be handled through `/dist`. For account-specific work, verify the live `/dist` account set before choosing the route. Treat older Heritage/RNDC references in emails, trackers, CRM history, invoices, or source documents as historical context only unless the task explicitly concerns that historical period; do not copy them into current drafts, trackers, reports, activities, or order guidance.
 - The Cultivater is managed by Sonat. Send all The Cultivater communications, including Asher/Venetia drafts, approval packets, blocker details, route-info notes, completion reports, and follow-up packets, to Sonat by default, not Robert. Robert may receive brief chat status when he asks, but do not email The Cultivater operational packets to Robert unless he explicitly says to copy himself in addition to Sonat.
 
+- Persona business emails and human-facing event/task notes must use the responsible persona name and business facts; omit internal tool attribution such as "Created by Codex/Vanessa". Preserve technical provenance in internal audit records. Source: Robert, May 26, 2026, Chi Town tasting follow-up.
+
 ## Task Tracking
 
 - Primary durable task state is the DB-backed task spine: OPS/Portal task IDs when available, Workspaceboard Task Flow state, and DB-backed Task Flow handoff entries that cite those IDs.

@@ -2686,6 +2686,34 @@ def task_flow_owner_reply_key(reply: dict) -> str:
     return "taskflow-owner-reply-" + hashlib.sha256(f"{mailbox}:{source}".encode("utf-8")).hexdigest()[:16]
 
 
+def owner_reply_primary_has_completion_evidence(row: dict) -> bool:
+    """A sent message or a generic filed/reported label cannot finish business work."""
+    if row.get("status") not in {"closed_with_proof", "completed", "handled"}:
+        return False
+    try:
+        packet = json.loads(row.get("packet_json") or "{}")
+    except (TypeError, ValueError):
+        return False
+    if not isinstance(packet, dict) or not str(row.get("verification_readback") or "").strip():
+        return False
+    if any(packet.get(k) for k in ("owner_question_required", "owner_decision_pending")):
+        return False
+    communication = packet.get("communication_proof") or {}
+    if (isinstance(communication, dict)
+            and communication.get("requested_communication_verified") is True
+            and communication.get("source_ref") == row.get("source_ref")
+            and bool(row.get("source_ref"))
+            and communication.get("sent_message_id")
+            and communication.get("verified_recipients")
+            and communication.get("requested_action")):
+        return True
+    domain_keys = {"event_id", "shift_id", "account_id", "contact_id", "activity_id",
+                   "ops_task_id", "portal_task_id", "report_id", "domain_readback"}
+    return any(isinstance(packet.get(k), dict)
+               and any(packet[k].get(field) for field in domain_keys)
+               for k in ("recovery_proof", "domain_proof", "completion_proof"))
+
+
 def owner_reply_has_proof_backed_primary(reply: dict) -> tuple[bool, str]:
     source_ref = normalize_message_id(reply.get("source_message_id"))
     if not source_ref:
@@ -2694,66 +2722,33 @@ def owner_reply_has_proof_backed_primary(reply: dict) -> tuple[bool, str]:
     php = r"""
 require '/Users/werkstatt/ops/bootstrap.php';
 $input = json_decode(stream_get_contents(STDIN) ?: '{}', true);
-$sourceRef = (string)($input['source_ref'] ?? '');
-$wrapperKey = (string)($input['wrapper_key'] ?? '');
-if ($sourceRef === '' || $wrapperKey === '') {
-    exit;
-}
-$pdo = get_event_pdo();
-$stmt = $pdo->prepare(
-    "SELECT dedupe_key, status, clarification_email, completion_or_blocker_email
+$stmt = get_event_pdo()->prepare(
+    "SELECT dedupe_key, status, source_ref, verification_readback, packet_json
      FROM koval_crm.ai_task_flow_packets
-     WHERE archived_at IS NULL
-       AND source_ref = ?
-       AND (
-         completion_or_blocker_email <> ''
-         OR clarification_email <> ''
-         OR status IN ('reported','completed','handled','filed','closed_with_proof','clarification_sent')
-       )
-       AND (
-         dedupe_key NOT LIKE 'taskflow-owner-reply-%'
-         OR dedupe_key = ?
-       )
-     ORDER BY updated_at DESC
-     LIMIT 1"
+     WHERE archived_at IS NULL AND source_ref = ?
+       AND (dedupe_key NOT LIKE 'taskflow-owner-reply-%' OR dedupe_key = ?)
+     ORDER BY updated_at DESC LIMIT 20"
 );
-$stmt->execute([$sourceRef, $wrapperKey]);
-$row = $stmt->fetch(PDO::FETCH_ASSOC);
-if (!$row) {
-    $eventStmt = $pdo->prepare(
-        "SELECT dedupe_key, status,
-                JSON_UNQUOTE(JSON_EXTRACT(details_json, '$.message_id')) AS completion_or_blocker_email
-         FROM koval_crm.ai_task_flow_events
-         WHERE dedupe_key = ?
-           AND status IN ('reported','completed','handled','filed','closed_with_proof','clarification_sent')
-           AND COALESCE(JSON_UNQUOTE(JSON_EXTRACT(details_json, '$.message_id')), '') <> ''
-         ORDER BY id DESC
-         LIMIT 1"
-    );
-    $eventStmt->execute([$wrapperKey]);
-    $row = $eventStmt->fetch(PDO::FETCH_ASSOC);
-}
-echo $row ? json_encode($row, JSON_UNESCAPED_SLASHES) : '';
+$stmt->execute([$input['source_ref'], $input['wrapper_key']]);
+echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC), JSON_UNESCAPED_SLASHES);
 """
     try:
         result = subprocess.run(
             ["php", "-r", php],
             input=json.dumps({"source_ref": source_ref, "wrapper_key": wrapper_key}),
-            capture_output=True,
-            text=True,
-            timeout=10,
-            check=False,
+            capture_output=True, text=True, timeout=10, check=False,
         )
-    except (OSError, subprocess.TimeoutExpired):
+        rows = json.loads(result.stdout) if result.returncode == 0 else []
+    except (OSError, subprocess.TimeoutExpired, ValueError):
         return False, ""
-    if result.returncode != 0 or not (result.stdout or "").strip():
+    if not isinstance(rows, list):
         return False, ""
-    try:
-        row = json.loads(result.stdout.strip())
-    except json.JSONDecodeError:
-        return False, ""
-    dedupe_key = safe_text(row.get("dedupe_key"), 120)
-    return bool(dedupe_key), dedupe_key
+    for row in rows:
+        if isinstance(row, dict) and owner_reply_primary_has_completion_evidence(row):
+            key = safe_text(row.get("dedupe_key"), 120)
+            if key:
+                return True, key
+    return False, ""
 
 
 def owner_reply_has_reviewed_resolution(reply: dict) -> bool:
