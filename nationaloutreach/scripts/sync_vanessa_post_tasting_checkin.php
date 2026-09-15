@@ -128,6 +128,46 @@ function fixed_width_table(array $headers, array $rows): array
     return $lines;
 }
 
+function portal_tasting_report_status(array $event, int $userId): string
+{
+    if ($userId <= 0 || (int) ($event['id'] ?? 0) <= 0) {
+        return 'CRM match unavailable';
+    }
+    try {
+        $stmt = get_event_pdo()->prepare(
+            "SELECT DISTINCT a.activityid, a.eventstatus,
+                    (SELECT COUNT(*) FROM koval_crm.files f
+                     JOIN koval_crm.modules m ON m.id=f.module_id
+                     WHERE f.entity_id=a.activityid AND m.name='Activities' AND f.deleted=0) AS file_count
+               FROM koval_crm.vtiger_activity a
+               JOIN koval_crm.vtiger_crmentity e ON e.crmid=a.activityid AND e.deleted=0
+               JOIN koval_crm.vtiger_seactivityrel r ON r.activityid=a.activityid
+               JOIN event_bookings b ON b.id=?
+              WHERE a.activitytype='Tasting' AND a.eventstatus='Held'
+                AND e.smownerid=? AND a.date_start=b.event_date
+                AND LEFT(a.time_start,5)=LEFT(b.start_time,5)
+                AND LEFT(a.time_end,5)=LEFT(b.end_time,5)
+                AND TRIM(COALESCE(e.description,''))<>''
+                AND (r.crmid=b.distributor_account_id OR EXISTS
+                     (SELECT 1 FROM event_booking_accounts ba
+                      WHERE ba.event_booking_id=b.id AND ba.account_id=r.crmid))
+              LIMIT 3"
+        );
+        $stmt->execute([(int) $event['id'], $userId]);
+        $matches = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        if (count($matches) > 1) {
+            return 'Multiple CRM matches; review';
+        }
+        if (!$matches) {
+            return 'No exact CRM match';
+        }
+        $r = $matches[0];
+        return 'CRM #' . $r['activityid'] . ' (' . $r['file_count'] . ' files; Held)';
+    } catch (Throwable $error) {
+        return 'CRM check unavailable';
+    }
+}
+
 function build_attendance_rows(string $dateYmd, array $events): array
 {
     $eventIds = [];
@@ -215,6 +255,7 @@ function build_attendance_rows(string $dateYmd, array $events): array
                 (string) ($logs['clock_out'] ?: '-'),
                 $departure !== '' ? $departure : '-',
                 (string) ((int) ($photoCounts[$eventId] ?? 0)),
+                portal_tasting_report_status($event, $uid),
             ];
         }
     }
@@ -263,13 +304,16 @@ function build_body(string $dateLabel, array $events): string
             'Event arrival',
             'Clock out',
             'Event departure',
-            'Photos',
+            'OPS photos',
+            'CRM report',
         ], $attendanceRows));
     }
 
     $lines = array_merge($lines, [
         '',
         'Action tonight:',
+        '- check the matched CRM activity and its files before asking staff to repeat a report or upload photos again',
+        '- CRM report evidence does not fill missing OPS arrival/departure or TrackTime clocks; keep any actual timekeeping issue separate',
         '- verify whether the last tasting of the day needs any immediate owner-visible follow-up',
         '- if a staff issue, schedule problem, or customer follow-up surfaced, reply on the relevant thread or record the exact blocker',
         '- if nothing needs action, treat this reminder as complete with no further reply required',
