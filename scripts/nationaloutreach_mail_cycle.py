@@ -911,12 +911,31 @@ def classify_message(headers: dict[str, str], body: str) -> dict[str, str]:
     }
 
 
+REVIEWED_BULK_NEWSLETTER_SENDERS = frozenset({
+    "content@1871.com", "marketing@1871.com", "team@mail.perplexity.ai",
+    "info-ravenswoodchicago.org@shared1.ccsend.com",
+})
+
+
+def is_reviewed_bulk_newsletter(headers: dict[str, str]) -> bool:
+    """Recognize reviewed promotional lists without suppressing replies/forwards."""
+    return (
+        sender_email(headers.get("from", "")) in REVIEWED_BULK_NEWSLETTER_SENDERS
+        and headers.get("has_list_unsubscribe") == "true"
+        and not clean_subject(headers.get("in_reply_to", ""))
+        and not clean_subject(headers.get("references", ""))
+        and not re.match(r"^(?:re|fw|fwd)\s*:", clean_subject(headers.get("subject", "")), re.I)
+    )
+
+
 def is_newsletter_no_action_candidate(headers: dict[str, str], body: str, classification: dict[str, str]) -> bool:
     sender = sender_email(headers.get("from", ""))
     subject = clean_subject(headers.get("subject", ""))
     combined = f"{subject}\n{headers.get('from', '')}\n{routing_body(body)}"
     if sender in {ROBERT_EMAIL, SONAT_EMAIL}:
         return False
+    if is_reviewed_bulk_newsletter(headers):
+        return True
     if OWNER_QUESTION_PATTERNS.search(combined):
         return False
     if DIRECT_FORWARD_INSTRUCTION_PATTERNS.search(combined):
@@ -1591,6 +1610,7 @@ def fetch_messages(creds: dict[str, str], state_dir: Path, workspace_root: Path,
                 "in_reply_to": decode_value(header_msg.get("In-Reply-To", "")),
                 "references": decode_value(header_msg.get("References", "")),
             }
+            headers["has_list_unsubscribe"] = "true" if msg.get("List-Unsubscribe") else "false"
             classification = classify_message(headers, body)
             no_action_newsletter = is_newsletter_no_action_candidate(headers, body, classification)
             no_action_auth_code = is_no_action_auth_code_candidate(headers, body, classification)
@@ -1606,7 +1626,7 @@ def fetch_messages(creds: dict[str, str], state_dir: Path, workspace_root: Path,
                     "suggestion": "Portal auth-code intake. Use immediately for the active Codex Portal login flow or silent-login path; otherwise file as stale auth residue. Do not escalate this to Robert as a blocker.",
                     "send_allowed": "no-owner-escalation",
                 }
-            owner_question_needed = bool(
+            owner_question_needed = not (no_action_newsletter or no_action_auth_code) and bool(
                 OWNER_QUESTION_PATTERNS.search(
                     f"{headers.get('subject', '')}\n{headers.get('from', '')}\n{headers.get('to', '')}\n{headers.get('cc', '')}\n{routing_body(body)}"
                 )
