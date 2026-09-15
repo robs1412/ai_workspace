@@ -268,13 +268,30 @@ function task_flow_preserves_recovery_assessment(array $existing, array $incomin
         ['', 'still-pending', 'route-recreated', 'routed-needs-worker', 'internal_recovery_required'], true);
 }
 
+function task_flow_preserves_reviewed_owner_reply(array $existing, array $incoming, string $event): bool
+{
+    if ($event !== 'owner_reply_pending_response' || !empty($incoming['reopened'])) {
+        return false;
+    }
+    $packet = json_decode((string) ($existing['packet_json'] ?? '{}'), true) ?: [];
+    $proof = $packet['owner_reply_resolution'] ?? [];
+    $normalize = static fn($value) => strtolower(trim((string) $value, " <>\t\r\n"));
+    $source = $normalize($incoming['source_ref'] ?? '');
+    return $source !== ''
+        && in_array($existing['status'] ?? '', ['filed_no_action', 'closed_with_proof'], true)
+        && $normalize($existing['source_ref'] ?? '') === $source
+        && $normalize($proof['source_ref'] ?? '') === $source
+        && in_array($proof['disposition'] ?? '', ['acknowledgement_only', 'owner_explicitly_closed'], true)
+        && !empty($proof['reviewed_at']) && !empty($proof['source_excerpt']);
+}
+
 function task_flow_should_preserve_existing_packet(PDO $pdo, string $dedupeKey, array $incomingPacket, string $event = ''): bool
 {
     $incomingStatus = strtolower(task_flow_string($incomingPacket, 'status') ?: 'captured');
     $event = strtolower(trim($event));
     $isInternalRecoveryMonitor = $incomingStatus === 'queued'
         && task_flow_string($incomingPacket, 'verification_readback') === 'internal_recovery_required';
-    if (!$isInternalRecoveryMonitor && !in_array($incomingStatus, ['captured', 'captured_backlog', 'classified', 'routed', 'working', 'blocked'], true)) {
+    if ($event !== 'owner_reply_pending_response' && !$isInternalRecoveryMonitor && !in_array($incomingStatus, ['captured', 'captured_backlog', 'classified', 'routed', 'working', 'blocked'], true)) {
         return false;
     }
     if (task_flow_string($incomingPacket, 'completion_or_blocker_email') !== '') {
@@ -292,6 +309,9 @@ function task_flow_should_preserve_existing_packet(PDO $pdo, string $dedupeKey, 
     $existing = $stmt->fetch(PDO::FETCH_ASSOC);
     if (!is_array($existing)) {
         return false;
+    }
+    if ($event === 'owner_reply_pending_response') {
+        return task_flow_preserves_reviewed_owner_reply($existing, $incomingPacket, $event);
     }
     $existingStatus = strtolower(trim((string) ($existing['status'] ?? '')));
     $existingProof = trim((string) ($existing['completion_or_blocker_email'] ?? ''));
