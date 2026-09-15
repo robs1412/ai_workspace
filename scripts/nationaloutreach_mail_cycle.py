@@ -922,6 +922,11 @@ def is_reviewed_bulk_newsletter(headers: dict[str, str]) -> bool:
     return (
         sender_email(headers.get("from", "")) in REVIEWED_BULK_NEWSLETTER_SENDERS
         and headers.get("has_list_unsubscribe") == "true"
+        and not re.search(
+            r"\b(invoice|receipt|payment|order confirmation|registration confirmation|"
+            r"booking confirmation|verification|password|security alert|cancellation|cancelled|canceled)\b",
+            clean_subject(headers.get("subject", "")), re.I,
+        )
         and not clean_subject(headers.get("in_reply_to", ""))
         and not clean_subject(headers.get("references", ""))
         and not re.match(r"^(?:re|fw|fwd)\s*:", clean_subject(headers.get("subject", "")), re.I)

@@ -25,6 +25,11 @@ class ReviewedBulkNewsletters(unittest.TestCase):
     def test_lookalike_domain_does_not_match(self):
         self.assertFalse(cycle.is_reviewed_bulk_newsletter(self.headers(**{'from':'content@1871.com.example.org'})))
 
+    def test_transactional_or_security_subject_is_not_bulk_no_action(self):
+        for subject in ['Your registration confirmation', 'Invoice for membership', 'Security alert', 'Event canceled']:
+            with self.subTest(subject=subject):
+                self.assertFalse(cycle.is_reviewed_bulk_newsletter(self.headers(subject=subject)))
+
     def test_fetch_files_bulk_mail_without_queuing_an_owner_question(self):
         import json
         import tempfile
