@@ -797,6 +797,19 @@ def routing_body(body: str) -> str:
     return active.strip()
 
 
+def has_mismatched_invitation_link(body: str) -> bool:
+    """Keep branded card-link impersonation out of ordinary event routing."""
+    from urllib.parse import urlparse
+
+    if "paperless post" not in body.lower():
+        return False
+    match = re.search(r"view\s+the\s+card\s*(?:<|\]\()\s*(https?://[^\s>\)]+)", body, re.I)
+    if not match:
+        return False
+    hostname = (urlparse(html.unescape(match.group(1))).hostname or "").lower()
+    return bool(hostname) and not (hostname == "paperlesspost.com" or hostname.endswith(".paperlesspost.com"))
+
+
 def classify_message(headers: dict[str, str], body: str) -> dict[str, str]:
     combined = f"{headers.get('subject', '')}\n{headers.get('from', '')}\n{headers.get('to', '')}\n{headers.get('cc', '')}\n{routing_body(body)}"
     sender = sender_email(headers.get("from", ""))
@@ -805,6 +818,12 @@ def classify_message(headers: dict[str, str], body: str) -> dict[str, str]:
             "route": "portal-auth",
             "suggestion": "Portal auth-code intake. Use immediately for the active Codex Portal login flow or silent-login path; otherwise file as stale auth residue. Do not escalate this to Robert as a blocker.",
             "send_allowed": "no-owner-escalation",
+        }
+    if has_mismatched_invitation_link(body):
+        return {
+            "route": "security-guard",
+            "suggestion": "Branded invitation card link points outside the claimed provider. Preserve the source for internal Security Guard review; do not open links, reply, or create an outreach event.",
+            "send_allowed": "no",
         }
     if SENSITIVE_PATTERNS.search(combined):
         return {
