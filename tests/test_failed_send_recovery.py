@@ -16,11 +16,17 @@ class FailedSendRecoveryTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as root,patch.object(cycle.shared_task_flow,'append_event') as event:
             root,sent,marker,packet=self.fixture(root)
             self.assertEqual(packet['parent_packet_dedupe_key'],'business-primary')
+            normalized=cycle.shared_task_flow.build_packet(**packet)
+            self.assertEqual(normalized['result_email_required'],'false')
+            self.assertEqual(normalized['owner_question_required'],'false')
+            self.assertEqual(normalized['output_channel'],'internal')
             result={'draft':str(sent),'message_id':'<sent@example.com>'}
             self.assertTrue(cycle.resolve_failed_send_task(root,result))
             self.assertFalse(cycle.resolve_failed_send_task(root,result))
-            saved=json.loads(marker.read_text());self.assertEqual(saved['status'],'closed_with_proof');self.assertEqual(saved['completion_or_blocker_email'],'<sent@example.com>');self.assertEqual(saved['parent_packet_dedupe_key'],'business-primary')
+            saved=json.loads(marker.read_text());self.assertEqual(saved['status'],'completed');self.assertEqual(saved['completion_or_blocker_email'],'<sent@example.com>');self.assertEqual(saved['parent_packet_dedupe_key'],'business-primary')
             event.assert_called_once();self.assertEqual(event.call_args.args[2],'email_send_failure_resolved')
+            normalized=cycle.shared_task_flow.build_packet(**saved)
+            self.assertEqual(normalized['result_email_required'],'false')
     def test_missing_message_id_or_different_recipient_cannot_close(self):
         with tempfile.TemporaryDirectory() as root,patch.object(cycle.shared_task_flow,'append_event') as event:
             root,sent,marker,packet=self.fixture(root)

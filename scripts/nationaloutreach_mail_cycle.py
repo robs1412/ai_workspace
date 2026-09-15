@@ -2200,11 +2200,16 @@ def failed_send_task_packet(failure: dict) -> dict:
         dedupe_key="taskflow-email-send-failure-" + digest,
         source_ref=source or stable_path,
         parent_packet_dedupe_key=parent_key,
+        ops_portal_or_domain_task=parent_key or source or ("delivery-repair:" + digest),
         intake_channel="approved-send:nationaloutreach",
         responsible_worker_or_persona="nationaloutreach",
         status="blocked",
         source_links=str(draft.get("subject") or "Failed email delivery"),
         verification_readback="email_send_blocked",
+        result_email_required="false",
+        owner_question_required="false",
+        output_channel="internal",
+        escalation_path="Task Manager repairs delivery failures internally; do not email technical errors to the business owner.",
         next_update="Review this failed delivery and its parent task; retry only after the delivery blocker is fixed.",
     )
     packet.update(parent_task_key=parent_key, failed_draft_path=str(draft_path))
@@ -2225,12 +2230,12 @@ def resolve_failed_send_task(state_dir: Path, result: dict) -> bool:
     if not isinstance(packet, dict) or packet.get("dedupe_key") != identity["dedupe_key"] or packet.get("status") != "blocked":
         return False
     packet.update(
-        status="closed_with_proof",
+        status="completed",
         completion_or_blocker_email=message_id,
         verification_readback="Successful retry delivered this email; Message-ID " + message_id,
         next_update="No resend required. Underlying business work remains on its source task.",
-        result_email_required=False,
-        owner_question_required=False,
+        result_email_required="false",
+        owner_question_required="false",
         output_channel="internal",
     )
     shared_task_flow.append_event(
