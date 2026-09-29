@@ -51,3 +51,8 @@ sonatcodex() {
   ai_workspace_set_cli_owner sonat
   command /Users/werkstatt/ai_workspace/scripts/sonatcodex "$@"
 }
+
+robertcodex() {
+  ai_workspace_set_cli_owner robert
+  command /Users/werkstatt/ai_workspace/scripts/robertcodex "$@"
+}

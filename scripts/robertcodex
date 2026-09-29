@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+cd /Users/werkstatt/ai_workspace
+export CODEX_OWNER_USER_ID=1
+export CODEX_OWNER_LABEL=Robert
+export CODEX_OWNER_ROLE=ai-manager-robert
+export CODEX_OWNER_WORKSPACE=ai
+
+if [ "$#" -eq 0 ]; then
+  set -- 'CLI_OWNER_CONTEXT: Robert is operating this Codex CLI session. CODEX_OWNER_USER_ID=1, CODEX_OWNER_LABEL=Robert. Treat this as Robert-owned work.'
+fi
+exec /usr/local/bin/codex -C /Users/werkstatt/ai_workspace "$@"
