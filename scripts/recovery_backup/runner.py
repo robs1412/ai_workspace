@@ -3,7 +3,7 @@
 Estimate never invokes a backup program. Production config defaults to disabled.
 Only structured summaries are printed; child output and source paths stay private.
 """
-import argparse, contextlib, datetime, gzip, selectors, signal, time, fcntl, hashlib, json, os, re, shutil, sqlite3, stat, subprocess, sys, tempfile, uuid
+import argparse, contextlib, datetime, gzip, selectors, signal, time, fcntl, hashlib, json, os, re, shlex, shutil, sqlite3, stat, subprocess, sys, tempfile, uuid
 from pathlib import Path
 from inventory import inventory
 
@@ -70,7 +70,11 @@ def restic(config,destination,args):
     if not shutil.which(binary):raise BackupError('Restic is not installed at the configured location.')
     command=[binary,'--repo',destination['repository'],'--json','--no-cache',
              '--limit-upload',str(destination.get('upload_kib_per_second',config.get('upload_kib_per_second',2048)))]
-    command+=destination.get('restic_options',[])+args
+    options=list(destination.get('restic_options',[]))
+    if os.geteuid()==0 and destination.get('run_transport_as_user'):
+        prefix=shlex.join(['/usr/bin/sudo','-H','-u',destination['run_transport_as_user'],'--'])+' '
+        options=[('sftp.command='+prefix+x[len('sftp.command='):]) if x.startswith('sftp.command=') else x for x in options]
+    command+=options+args
     try:r=subprocess.run(command,env=child_env(config,destination),capture_output=True,text=True,timeout=config.get('timeout_seconds',172800))
     except (OSError,subprocess.TimeoutExpired):raise BackupError('Backup tool could not finish; no success recorded.') from None
     if r.returncode:raise BackupError('Backup tool failed (code %s); incomplete snapshots must not count as successful.'%r.returncode)
@@ -94,13 +98,17 @@ def candidate_files(config):
                 p=Path(base)/name
                 if not p.is_symlink() and not excluded(p,config):yield p
 
-def sqlite_copy(source,target):
+def sqlite_copy(source,target,reserve=0):
     # SQLite online backup includes committed WAL changes without copying open WAL files.
     target.parent.mkdir(parents=True,exist_ok=True,mode=0o700)
     try:
+        deadline=time.monotonic()+300
+        def progress(status, remaining, total):
+            if time.monotonic()>deadline:raise BackupError('SQLite snapshot exceeded its time limit.')
+            if shutil.disk_usage(target.parent).free < reserve:raise BackupError('Staging reserve exhausted during SQLite snapshot.')
         with sqlite3.connect(source.absolute().as_uri()+'?mode=ro',uri=True,timeout=30) as src:
             with sqlite3.connect(target,timeout=30) as dest:
-                src.backup(dest,pages=256,sleep=0.1)
+                src.backup(dest,pages=256,sleep=0.1,progress=progress)
                 if dest.execute('PRAGMA quick_check').fetchone()[0]!='ok':raise BackupError('SQLite consistency check failed.')
     except sqlite3.Error:raise BackupError('SQLite snapshot failed.') from None
     target.chmod(0o600)
@@ -108,8 +116,11 @@ def sqlite_copy(source,target):
 def export_database(job,out,reserve):
     process=None
     try:
-        process=subprocess.Popen(job['argv'],stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,
-          env={**os.environ,**job.get('environment',{})},start_new_session=True)
+        argv=list(job['argv'])
+        if os.geteuid()==0 and job.get('run_as_user'):
+            argv=['/usr/bin/sudo','-H','--preserve-env=SSH_ASKPASS,SSH_ASKPASS_REQUIRE,DISPLAY','-u',job['run_as_user'],'--']+argv
+        process=subprocess.Popen(argv,stdin=subprocess.DEVNULL,stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,
+          env={**os.environ,**job.get('environment',{}),'TMPDIR':str(out.parent.absolute())},start_new_session=True)
         deadline=time.monotonic()+job.get('timeout_seconds',3600);total=0
         with out.open('wb') as raw, gzip.GzipFile(fileobj=raw,mode='wb',compresslevel=3) as compressed, selectors.DefaultSelector() as poll:
             os.chmod(out,0o600);poll.register(process.stdout,selectors.EVENT_READ)
@@ -147,7 +158,7 @@ def stage_data(config,stage,allow_database_locks):
         except OSError:raise BackupError('Cannot inspect an included database candidate.') from None
         if magic!=b'SQLite format 3\x00':continue
         target=stage/'sqlite'/source.relative_to(source.anchor)
-        sqlite_copy(source,target)
+        sqlite_copy(source,target,config.get('minimum_local_free_bytes',15*1024**3))
         exclusions.extend([str(source),str(source)+'-wal',str(source)+'-shm',str(source)+'-journal'])
         sqlite_map.append({'original':str(source),'snapshot':str(target.relative_to(stage))})
     # Mapping stays inside encrypted backup. Never publish it in the owner report.

@@ -1,10 +1,34 @@
-# Recovery backup controller — built, not activated
+# Recovery backup controller
 
 The controller creates **two independent encrypted restic repositories**, one on
 .205 over SFTP and one in the AI Cloud shared Drive through rclone. Either
 repository can restore without the other. Existing daily metadata backup remains
-untouched. No LaunchDaemon is installed, no live repository initialized, no
-production export executed, and no retention deletions enabled.
+untouched. No LaunchDaemon or retention deletion is enabled. On October 21,
+both live encrypted repositories were initialized after the recovery key was
+independently saved and verified. PostgreSQL rehearsal exports passed; these
+temporary exports were removed and are not completed backups.
+
+## First production launch
+
+`launch_backup.py --now --allow-database-write-locks` requires administrator
+execution and explicit approval for the write-lock window. It verifies the
+saved-key and database-preflight receipts, then runs the first backup detached
+from SSH. `--at HH:MM` selects the next occurrence in the Mac's local timezone.
+The process survives SSH disconnect, but not reboot. No recurring job is installed.
+Read `tmp/recovery-backup-review/activation-status.json` for metadata-only status;
+only `verified_both` means both destinations passed snapshot and restore checks.
+
+The launch helper supplies one-run authorization in memory; the stored controller
+configuration remains disabled for unattended generic invocations. It checks at
+least 25 GiB free initially, and database/SQLite staging continuously preserves
+15 GiB free. This is an enforced ceiling on staging use, not a promise that all
+exports will fit. Exhaustion aborts the run and removes only that run's temporary
+files. No additional source cleanup is automatic.
+
+When run as root for complete source coverage, SSH exports and SFTP use the
+existing approved account identity. Root does not get a new SSH authorization.
+The native MySQL client has passed a representative schema-only export check;
+the full dump of all 19 schemas is still required for production success.
 
 ## Execution contract
 
