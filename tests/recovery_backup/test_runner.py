@@ -49,6 +49,13 @@ class Safety(unittest.TestCase):
   with tempfile.TemporaryDirectory(dir=ROOT/'tmp') as td:
    with self.assertRaises(runner.BackupError):
     runner.export_database({'argv':[sys.executable,'-c','raise SystemExit(2)']},Path(td)/'bad.sql.gz',0)
+ def test_export_diagnostic_names_job_without_private_error(self):
+  with tempfile.TemporaryDirectory(dir=ROOT/'tmp') as td:
+   with self.assertRaises(runner.BackupError) as error:
+    runner.export_database({'label':'fixture-db','argv':[sys.executable,'-c','import sys;sys.stderr.write("Access denied: PRIVATE_SENTINEL");sys.exit(2)']},Path(td)/'bad.sql.gz',0)
+   self.assertIn('fixture-db failed (exit 2',str(error.exception))
+   self.assertIn('access denied',str(error.exception))
+   self.assertNotIn('PRIVATE_SENTINEL',str(error.exception))
  def test_unresolved_activation_blockers(self):
   with self.assertRaisesRegex(runner.BackupError,'Activation blockers'):
    runner.gate({'execution_enabled':True,'activation_blockers':['fixture']},'run',True)

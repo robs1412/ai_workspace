@@ -115,11 +115,14 @@ def sqlite_copy(source,target,reserve=0):
 
 def export_database(job,out,reserve):
     process=None
+    diagnostic=tempfile.TemporaryFile(dir=out.parent)
+    label=job.get('label','database')
+    if not re.fullmatch('[a-z0-9-]+',label):label='database'
     try:
         argv=list(job['argv'])
         if os.geteuid()==0 and job.get('run_as_user'):
             argv=['/usr/bin/sudo','-H','--preserve-env=SSH_ASKPASS,SSH_ASKPASS_REQUIRE,DISPLAY','-u',job['run_as_user'],'--']+argv
-        process=subprocess.Popen(argv,stdin=subprocess.DEVNULL,stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,
+        process=subprocess.Popen(argv,stdin=subprocess.DEVNULL,stdout=subprocess.PIPE,stderr=diagnostic,
           env={**os.environ,**job.get('environment',{}),'TMPDIR':str(out.parent.absolute())},start_new_session=True)
         deadline=time.monotonic()+job.get('timeout_seconds',3600);total=0
         with out.open('wb') as raw, gzip.GzipFile(fileobj=raw,mode='wb',compresslevel=3) as compressed, selectors.DefaultSelector() as poll:
@@ -131,7 +134,17 @@ def export_database(job,out,reserve):
                 chunk=os.read(process.stdout.fileno(),1024*1024)
                 if not chunk:break
                 total+=len(chunk);compressed.write(chunk)
-            if process.wait(timeout=10) or not total:raise BackupError('Database export failed; backup aborted.')
+            code=process.wait(timeout=10)
+            if code or not total:
+                diagnostic.seek(0)
+                error=diagnostic.read(65536).decode(errors='replace').lower()
+                # Only fixed categories may leave the private subprocess stream.
+                categories=[term for term in ('access denied','permission denied','unknown variable',
+                  'unknown option','connection refused','host key verification failed',
+                  'a password is required','illegal option','unrecognized option','command not found',
+                  'lost connection','could not resolve hostname') if term in error]
+                detail=', '.join(categories) if categories else 'unclassified private error'
+                raise BackupError(f'Database export {label} failed (exit {code}, {total} SQL bytes): {detail}. Backup aborted.')
     except (OSError,subprocess.TimeoutExpired):raise BackupError('Database export did not complete.') from None
     finally:
         if process and process.poll() is None:
@@ -139,6 +152,7 @@ def export_database(job,out,reserve):
             try:process.wait(timeout=5)
             except subprocess.TimeoutExpired:os.killpg(process.pid,signal.SIGKILL);process.wait()
         if process and process.stdout:process.stdout.close()
+        diagnostic.close()
 
 def stage_data(config,stage,allow_database_locks):
     exclusions=[]; sqlite_map=[]
