@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+cd /Users/werkstatt/ai_workspace
+
+export CODEX_OWNER_USER_ID=165
+export CODEX_OWNER_LABEL=Dmytro
+export CODEX_OWNER_ROLE=ai-manager-dmytro
+export CODEX_OWNER_WORKSPACE=ai
+
+exec /usr/local/bin/codex -C /Users/werkstatt/ai_workspace \
+  "CLI_OWNER_CONTEXT: Dmytro is operating this Codex CLI session. CODEX_OWNER_USER_ID=165, CODEX_OWNER_LABEL=Dmytro, CODEX_OWNER_ROLE=ai-manager-dmytro. Load /Users/werkstatt/ai_workspace/worker_roles/ai-manager-dmytro-startup.md, reply exactly READY AI Manager Dmytro., and treat this as the AI Manager Dmytro control lane. Do not infer Robert ownership from the shared /Users/werkstatt path, SSH host, or Unix account. Route substantive work through Task Manager / visible Workspaceboard workers and report to Dmytro by default."
