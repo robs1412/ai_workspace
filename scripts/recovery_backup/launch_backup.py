@@ -43,6 +43,8 @@ def run(at):
                 raise runner.BackupError('Saved recovery key has not been verified.')
             runner.private_file(config['password_file'])
             proof = json.loads((REVIEW/'readiness.json').read_text())
+            if proof.get('global_read_lock_allowed') is False:
+                raise runner.BackupError('Primary database account lacks global backup read-lock privilege (MySQL 1227).')
             if not proof.get('primary_schema_check') or not proof.get('postgres_checks'):
                 raise runner.BackupError('Database preflight has not passed.')
             # Fifteen GiB is always reserved. The dump stream enforces it continuously.
@@ -81,6 +83,8 @@ def main():
         return run(at)
     # Test the readiness marker before detaching so a missing prerequisite is visible.
     proof = json.loads((REVIEW/'readiness.json').read_text())
+    if proof.get('global_read_lock_allowed') is False:
+        raise runner.BackupError('Primary database account lacks global backup read-lock privilege (MySQL 1227).')
     if not proof.get('primary_schema_check') or not proof.get('postgres_checks'):
         raise runner.BackupError('Database preflight has not passed.')
     command = [sys.executable, str(Path(__file__).resolve()), '--worker', '--allow-database-write-locks']
@@ -96,6 +100,9 @@ def main():
 if __name__=='__main__':
     try:
         sys.exit(main())
+    except runner.BackupError as error:
+        print(str(error))
+        sys.exit(1)
     except Exception:
         print('Launch failed; private details suppressed. No successful backup claimed.')
         sys.exit(1)

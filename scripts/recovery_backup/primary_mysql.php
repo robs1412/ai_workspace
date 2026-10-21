@@ -4,6 +4,7 @@ declare(strict_types=1);
 // --estimate is metadata-only. --dump is gated and requires an installed MySQL client.
 $options = getopt('', ['estimate', 'check', 'dump', 'approved', 'allow-write-locks', 'client:']);
 $temporary = null;
+$diagnostic = null;
 $exitCode = 0;
 try {
     require '/Users/werkstatt/ops/bootstrap.php';
@@ -30,13 +31,23 @@ try {
     $mode = isset($options['check']) ? ['--no-data', '--skip-lock-tables'] : ['--lock-all-tables'];
     $args = array_merge([$client, '--defaults-extra-file='.$temporary, '--column-statistics=0', '--no-tablespaces', '--set-gtid-purged=OFF'], $mode, ['--quick', '--routines', '--events', '--triggers', '--hex-blob'], $targets);
     // SQL goes only to the controller's protected export stream. stderr stays suppressed.
-    $process = proc_open($args, [0=>['file','/dev/null','r'], 1=>isset($options['check']) ? ['file','/dev/null','w'] : STDOUT, 2=>['file','/dev/null','w']], $pipes);
-    if (!is_resource($process) || proc_close($process) !== 0) throw new RuntimeException('Database export failed.');
+    $diagnostic = tmpfile();
+    if ($diagnostic === false) throw new RuntimeException('Cannot prepare private diagnostics.');
+    $process = proc_open($args, [0=>['file','/dev/null','r'], 1=>isset($options['check']) ? ['file','/dev/null','w'] : STDOUT, 2=>$diagnostic], $pipes);
+    if (!is_resource($process) || proc_close($process) !== 0) {
+        rewind($diagnostic);
+        $error = strtolower((string)stream_get_contents($diagnostic, 65536));
+        foreach (['access denied','permission denied','unknown variable','unknown option','lost connection','flush tables','reload privilege','lock tables'] as $category) {
+            if (strpos($error, $category) !== false) fwrite(STDERR, $category."\n");
+        }
+        throw new RuntimeException('Database export failed.');
+    }
     if (isset($options['check'])) echo json_encode(['representative_schema_export_check'=>true,'inventoried_schemas'=>count($names)]), PHP_EOL;
 } catch (Throwable $e) {
     fwrite(STDERR, "Database backup operation failed; private details suppressed.\n");
     $exitCode = 1;
 } finally {
+    if (is_resource($diagnostic)) fclose($diagnostic);
     if (is_string($temporary) && is_file($temporary)) unlink($temporary);
 }
 

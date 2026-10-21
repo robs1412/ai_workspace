@@ -8,6 +8,36 @@ both live encrypted repositories were initialized after the recovery key was
 independently saved and verified. PostgreSQL rehearsal exports passed; these
 temporary exports were removed and are not completed backups.
 
+## Persistent supervisor
+
+The owner-requested system LaunchDaemon is prepared by `install_daemon.py`.
+Run the installer with sudo; it installs a root-owned runtime/configuration copy
+and `com.koval.recovery-backup` with RunAtLoad and KeepAlive. It does not restart
+or terminate an existing detached backup. The foreground supervisor watches that
+attempt, preserves its success, and uses durable state for subsequent recovery.
+No daily schedule or retention deletion is added. After a verified first backup,
+the supervisor remains idle until a separate recurring schedule is approved.
+
+An interrupted dump/upload is retried as a fresh attempt, not resumed as an
+in-memory process. Restic can reuse uploaded data. Attempts are persisted before
+execution, limited to three, with 30-minute backoff; exhausted retries require
+attention. Only receipted controller-created staging is cleaned while its run
+lock is unheld. No source data or completed backup is deleted.
+
+Current primary database blocker: the native dump fails when requesting its
+global read lock. The server explicitly rejected `FLUSH TABLES WITH READ LOCK`
+with MySQL error 1227. The installed supervisor waits in
+`needs_database_backup_privilege` until an approved backup-capable database
+identity is configured and its lock check is revalidated. macOS root does not
+supply database privileges. Do not silently drop locking or change grants.
+
+Public metadata is projected to `tmp/recovery-backup-review/daemon-status.json`;
+configuration and retry state live in the protected installed service directory.
+An interrupted active legacy backup has no process resurrection; the supervisor
+will retry it after its lock releases, subject to prerequisite gates. No reboot
+or launchd kill test has been performed against production. FileVault is on:
+after a cold boot, disk unlock is required before any installed daemon can run.
+
 ## First production launch
 
 `launch_backup.py --now --allow-database-write-locks` requires administrator
