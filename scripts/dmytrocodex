@@ -2,11 +2,17 @@
 set -euo pipefail
 
 cd /Users/werkstatt/ai_workspace
+source /Users/werkstatt/ai_workspace/scripts/workspaceboard_session_context.sh
 
 export CODEX_OWNER_USER_ID=165
 export CODEX_OWNER_LABEL=Dmytro
 export CODEX_OWNER_ROLE=ai-manager-dmytro
 export CODEX_OWNER_WORKSPACE=ai
 
-exec /usr/local/bin/codex -C /Users/werkstatt/ai_workspace \
+WB_HANDOFF_CONTEXT_ARGS=()
+if [[ "${WORKSPACEBOARD_SESSION_ID:-}" =~ ^[a-f0-9]{8}([a-f0-9]{8})?$ ]]; then
+  WB_HANDOFF_CONTEXT_ARGS=(-c "shell_environment_policy.set.WORKSPACEBOARD_SESSION_ID='${WORKSPACEBOARD_SESSION_ID}'")
+fi
+
+exec /usr/local/bin/codex -C /Users/werkstatt/ai_workspace ${WB_HANDOFF_CONTEXT_ARGS[@]+"${WB_HANDOFF_CONTEXT_ARGS[@]}"} \
   "CLI_OWNER_CONTEXT: Dmytro is operating this Codex CLI session. CODEX_OWNER_USER_ID=165, CODEX_OWNER_LABEL=Dmytro, CODEX_OWNER_ROLE=ai-manager-dmytro. Load /Users/werkstatt/ai_workspace/worker_roles/ai-manager-dmytro-startup.md, reply exactly READY AI Manager Dmytro., and treat this as the AI Manager Dmytro control lane. Do not infer Robert ownership from the shared /Users/werkstatt path, SSH host, or Unix account. Route substantive work through Task Manager / visible Workspaceboard workers and report to Dmytro by default."

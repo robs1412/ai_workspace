@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 require_once '/Users/werkstatt/ops/bootstrap.php';
+require_once __DIR__ . '/handoff_session_context.php';
 
 const HANDOFF_DB = 'koval_crm';
 const HANDOFF_ENTRIES = 'ai_task_flow_handoff_entries';
@@ -204,6 +205,7 @@ function handoff_record(PDO $pdo, array $payload): array
 {
     handoff_install($pdo);
     $entry = is_array($payload['entry'] ?? null) ? $payload['entry'] : $payload;
+    $entry = handoff_apply_session_context($entry, getenv());
     $workspace = handoff_string($entry, 'workspace');
     $summary = handoff_string($entry, 'summary');
     if ($workspace === '' || $summary === '') {

@@ -2,6 +2,7 @@
 set -euo pipefail
 
 cd /Users/werkstatt/ai_workspace
+source /Users/werkstatt/ai_workspace/scripts/workspaceboard_session_context.sh
 export CODEX_OWNER_USER_ID=1
 export CODEX_OWNER_LABEL=Robert
 export CODEX_OWNER_ROLE=ai-manager-robert
@@ -10,4 +11,9 @@ export CODEX_OWNER_WORKSPACE=ai
 if [ "$#" -eq 0 ]; then
   set -- 'CLI_OWNER_CONTEXT: Robert is operating this Codex CLI session. CODEX_OWNER_USER_ID=1, CODEX_OWNER_LABEL=Robert. Treat this as Robert-owned work.'
 fi
-exec /usr/local/bin/codex -C /Users/werkstatt/ai_workspace "$@"
+WB_HANDOFF_CONTEXT_ARGS=()
+if [[ "${WORKSPACEBOARD_SESSION_ID:-}" =~ ^[a-f0-9]{8}([a-f0-9]{8})?$ ]]; then
+  WB_HANDOFF_CONTEXT_ARGS=(-c "shell_environment_policy.set.WORKSPACEBOARD_SESSION_ID='${WORKSPACEBOARD_SESSION_ID}'")
+fi
+
+exec /usr/local/bin/codex -C /Users/werkstatt/ai_workspace ${WB_HANDOFF_CONTEXT_ARGS[@]+"${WB_HANDOFF_CONTEXT_ARGS[@]}"} "$@"
