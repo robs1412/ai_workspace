@@ -50,5 +50,48 @@ class DueQueueRecoveryTests(unittest.TestCase):
             self.assertTrue(any(r.get('dry_run') and r['items']==['fresh'] for r in result['items']))
             self.assertEqual(guard.can_create.call_args.args[0],[items[1]])
 
+    def test_pending_prompt_is_recorded_without_retry_or_success_receipt(self):
+        ns=policy();guard=mock.Mock();guard.can_create.return_value=(True,'ok')
+        ns['create_worker_route_session']=mock.Mock(return_value=('pending-worker',{}))
+        ns['deliver_worker_route_message']=mock.Mock(side_effect=RuntimeError('HTTP 409: prompt_pending_in_composer'))
+        ns['record_blocked_packet']=mock.Mock(return_value={'ok':True})
+        ns['record_routed_packet']=mock.Mock()
+        with tempfile.TemporaryDirectory() as tmp:
+            p=Path(tmp)
+            result=ns['route_due_items_to_worker'](p/'recorder',p,[{'dedupe_key':'due'}],guard)
+            self.assertFalse(result['routed'])
+            self.assertEqual(result['items'][0]['failed_session_id'],'pending-worker')
+            self.assertEqual(ns['record_blocked_packet'].call_args.kwargs['session_id'],'pending-worker')
+            ns['deliver_worker_route_message'].assert_called_once()
+            ns['record_routed_packet'].assert_not_called()
+            self.assertFalse((p/'task-flow-worker-handoffs.jsonl').exists())
+
+    def test_creation_failure_does_not_abort_other_workspaces(self):
+        ns=policy();guard=mock.Mock();guard.can_create.return_value=(True,'ok')
+        ns['workspace_for_task_flow_item']=lambda item:item['workspace']
+        ns['create_worker_route_session']=mock.Mock(side_effect=[RuntimeError('unavailable'),('accepted-worker',{})])
+        ns['deliver_worker_route_message']=mock.Mock(return_value={'prompt_delivery':{'ok':True}})
+        ns['record_blocked_packet']=mock.Mock(return_value={'ok':True})
+        ns['record_routed_packet']=mock.Mock(return_value={'ok':True})
+        with tempfile.TemporaryDirectory() as tmp:
+            p=Path(tmp)
+            items=[{'dedupe_key':'failed','workspace':'ai'},{'dedupe_key':'good','workspace':'bid'}]
+            result=ns['route_due_items_to_worker'](p/'recorder',p,items,guard)
+            self.assertTrue(result['routed'])
+            self.assertFalse(result['items'][0]['routed'])
+            self.assertEqual(result['items'][1]['session_id'],'accepted-worker')
+            rows=[json.loads(line) for line in (p/'task-flow-worker-handoffs.jsonl').read_text().splitlines()]
+            self.assertEqual([r['dedupe_key'] for r in rows],['good'])
+
+    def test_blocked_packet_retains_created_worker_for_followthrough(self):
+        tree=ast.parse((ROOT/'scripts/task_flow_due_runner.py').read_text())
+        fn=next(n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name=='record_blocked_packet')
+        shared=mock.Mock();shared.build_packet.side_effect=lambda **kw:kw
+        ns={'Path':Path,'shared_task_flow':shared,'record_task_flow_packet':lambda recorder,packet,event:packet}
+        exec(compile(ast.Module(body=[fn],type_ignores=[]),'blocked','exec'),ns)
+        packet=ns['record_blocked_packet'](Path('unused'),{'dedupe_key':'due'},'pending','inspect',session_id='worker')
+        self.assertEqual(packet['workspaceboard_session'],'worker')
+        self.assertEqual(packet['status'],'blocked')
+
 
 if __name__=='__main__':unittest.main()

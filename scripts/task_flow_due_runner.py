@@ -596,7 +596,7 @@ def record_routed_packet(recorder: Path, item: dict, session_id: str, due_or_tri
     return record_task_flow_packet(recorder, packet, event)
 
 
-def record_blocked_packet(recorder: Path, item: dict, blocker_text: str, owner_question: str, *, event: str = "task_flow_scheduler_route_blocked") -> dict:
+def record_blocked_packet(recorder: Path, item: dict, blocker_text: str, owner_question: str, *, event: str = "task_flow_scheduler_route_blocked", session_id: str = "") -> dict:
     packet = shared_task_flow.build_packet(
         source_ref=item.get("source_ref") or item.get("dedupe_key") or "",
         dedupe_key=item.get("dedupe_key") or "",
@@ -604,7 +604,7 @@ def record_blocked_packet(recorder: Path, item: dict, blocker_text: str, owner_q
         requester="task-flow-reminder",
         owner_lane=item.get("owner_lane") or "",
         responsible_worker_or_persona=item.get("responsible_worker_or_persona") or "",
-        workspaceboard_session="",
+        workspaceboard_session=session_id,
         ops_portal_or_domain_task=item.get("ops_portal_or_domain_task") or "",
         status="blocked",
         due_or_trigger="",
@@ -800,9 +800,24 @@ def route_due_items_to_worker(recorder: Path, state_dir: Path, items: list[dict]
         if dry_run:
             routed.append({"workspace": workspace, "dry_run": True, "items": [item.get("dedupe_key") for item in group]})
             continue
-        session_id, attachments = create_worker_route_session(api_base, workspace, title, message)
-        guard.record_created(group, workspace, "due-worker", session_id)
-        delivery = deliver_worker_route_message(api_base, session_id, str(attachments.get("id") or ""), message)
+        session_id = ""
+        try:
+            session_id, attachments = create_worker_route_session(api_base, workspace, title, message)
+            guard.record_created(group, workspace, "due-worker", session_id)
+            delivery = deliver_worker_route_message(api_base, session_id, str(attachments.get("id") or ""), message)
+        except Exception as exc:
+            blocker_text = f"Due-worker handoff failed for session {session_id or 'not-created'}: {exc}"
+            next_step = "Inspect the existing worker and verify prompt acceptance before retrying; do not resend a pending prompt."
+            guard.record_blocked(group, workspace, "due-worker", blocker_text)
+            recorded_packets = [record_blocked_packet(
+                recorder, item, blocker_text, next_step,
+                event="task_flow_due_worker_delivery_blocked", session_id=session_id,
+            ) for item in group]
+            routed.append({"workspace": workspace, "routed": False,
+                           "failed_session_id": session_id, "reason": blocker_text,
+                           "items": [item.get("dedupe_key") for item in group],
+                           "recorded_packets": recorded_packets})
+            continue
         next_check_epoch = int(time.time()) + 1800
         next_check = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(next_check_epoch))
         recorded_packets = []
@@ -939,7 +954,7 @@ def route_unscheduled_items_to_worker(recorder: Path, board_recorder: Path, stat
             blocker_text = f"Scheduler bridge created worker session {session_id} but could not deliver the handoff message: {exc}"
             owner_question = "Inspect Workspaceboard session-message health or open the worker session directly."
             for item in group:
-                blocked_results.append(record_blocked_packet(recorder, item, blocker_text, owner_question))
+                blocked_results.append(record_blocked_packet(recorder, item, blocker_text, owner_question, session_id=session_id))
             continue
         next_check_epoch = int(time.time()) + 600
         next_check = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(next_check_epoch))
