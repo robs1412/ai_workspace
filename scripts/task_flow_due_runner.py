@@ -610,9 +610,9 @@ def record_blocked_packet(recorder: Path, item: dict, blocker_text: str, owner_q
         due_or_trigger="",
         scheduled_action=item.get("scheduled_action") or "",
         calendar_event=item.get("calendar_event") or "",
-        clarification_email=blocker_text,
-        completion_or_blocker_email=blocker_text,
-        verification_readback="task_flow_scheduler_bridge_blocked",
+        clarification_email=blocker_text[:255],
+        completion_or_blocker_email=blocker_text[:255],
+        verification_readback="task_flow_scheduler_bridge_blocked: " + blocker_text,
         next_update=owner_question,
     )
     return record_task_flow_packet(recorder, packet, event)

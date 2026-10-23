@@ -89,9 +89,12 @@ class DueQueueRecoveryTests(unittest.TestCase):
         shared=mock.Mock();shared.build_packet.side_effect=lambda **kw:kw
         ns={'Path':Path,'shared_task_flow':shared,'record_task_flow_packet':lambda recorder,packet,event:packet}
         exec(compile(ast.Module(body=[fn],type_ignores=[]),'blocked','exec'),ns)
-        packet=ns['record_blocked_packet'](Path('unused'),{'dedupe_key':'due'},'pending','inspect',session_id='worker')
+        packet=ns['record_blocked_packet'](Path('unused'),{'dedupe_key':'due'},'pending '*100,'inspect',session_id='worker')
         self.assertEqual(packet['workspaceboard_session'],'worker')
         self.assertEqual(packet['status'],'blocked')
+        self.assertLessEqual(len(packet['clarification_email']),255)
+        self.assertLessEqual(len(packet['completion_or_blocker_email']),255)
+        self.assertIn('pending '*100,packet['verification_readback'])
 
 
 if __name__=='__main__':unittest.main()
