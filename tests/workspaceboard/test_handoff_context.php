@@ -16,7 +16,13 @@ try {
  file_put_contents($dir.'/'.$thread.'.json',json_encode(['codex_thread_id'=>$thread,'workspaceboard_session'=>'3339bac44fbdbed5','owner_user_id'=>1]));
  unset($env['WORKSPACEBOARD_SESSION_ID']);
  check(handoff_apply_session_context([],$env,$dir)['workspaceboard_session']==='3339bac44fbdbed5','verified fallback');
+ $otherThread='01a1696e-f2a4-7e22-9adb-4bb4a68b976e';
+ $aliasEnv=['CODEX_THREAD_ID'=>$otherThread,'CODEX_OWNER_USER_ID'=>'1'];
+ $alias=handoff_apply_session_context(['workspaceboard_session'=>$thread],$aliasEnv,$dir);
+ check($alias['workspaceboard_session']==='3339bac44fbdbed5','known legacy UUID alias resolves after thread changes');
+ check($alias['metadata']['codex_thread_id']===$otherThread,'new recording thread retained');
+ check($alias['metadata']['requested_session_ref']===$thread,'legacy alias audited');
  $env['CODEX_OWNER_USER_ID']='3';
  check(handoff_apply_session_context([],$env,$dir)['workspaceboard_session']==='','owner isolation');
 } finally {unlink($dir.'/'.$thread.'.json');rmdir($dir);}
-echo "PASS: 8 handoff context checks\n";
+echo "PASS: 11 handoff context checks\n";
