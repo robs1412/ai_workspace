@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import importlib.util
 import json
 import os
 import re
@@ -97,6 +98,7 @@ def load_stop_ship_rows(days_back: int, limit: int) -> dict[str, Any]:
         "$raw=koval_invoice_compliance_fetch($db,$from,$today,$limit);"
         "$rows=koval_allianz_trade_source_rows($raw,$policy);"
         "$rows=koval_allianz_trade_attach_payment_checks($db,$rows);"
+        "$candidates=array_values(array_filter($rows,static fn(array $row): bool => (int)$row['days_overdue'] >= (int)$policy['maximum_extension_period_days'] && !in_array((int)$row['account_id'],$policy['stop_ship_excluded_account_ids'],true) && koval_allianz_trade_coverage_for_row($row,$policy)!==null));"
         "$rows=koval_allianz_trade_enrich_rows($rows,$policy);"
         "$review=array_values(array_filter($rows,static fn(array $row): bool => !empty($row['allianz_covered']) && !empty($row['allianz_stop_ship_review_reason'])));"
         "$excluded=count(array_filter($rows,static fn(array $row): bool => !empty($row['allianz_stop_ship_excluded'])));"
@@ -104,11 +106,58 @@ def load_stop_ship_rows(days_back: int, limit: int) -> dict[str, Any]:
         "return !empty($row['allianz_covered']) && !empty($row['allianz_stop_ship_required']);"
         "}));"
         "$summary=koval_allianz_trade_summarize($rows);"
-        "$out=['from'=>$from,'to'=>$today,'raw_count'=>count($raw),'source_limit_reached'=>count($raw)>=$limit,'stop_ship_count'=>count($rows),'verification_count'=>count($review),'excluded_count'=>$excluded,'verification_rows'=>$review,'summary'=>$summary,'rows'=>$rows];"
+        "$out=['from'=>$from,'to'=>$today,'raw_count'=>count($raw),'source_limit_reached'=>count($raw)>=$limit,'stop_ship_count'=>count($rows),'verification_count'=>count($review),'excluded_count'=>$excluded,'verification_rows'=>$review,'payment_check_candidates'=>$candidates,'summary'=>$summary,'rows'=>$rows];"
         "echo json_encode($out, JSON_UNESCAPED_SLASHES);"
     )
     payload = json.loads(run_php(php, timeout=60))
     return payload if isinstance(payload, dict) else {}
+
+
+def refresh_candidate_payment_checks(payload: dict[str, Any], helper: Any = None, *, persist: bool = True) -> dict[str, Any]:
+    """Refresh established invoice identities from QBO before a scheduled alert.
+
+    QBO errors abort the send. Unestablished identities stay in manual review.
+    """
+    candidates = payload.get("payment_check_candidates") or []
+    if not candidates:
+        return {"saved": 0, "unestablished": 0}
+    if helper is None:
+        spec = importlib.util.spec_from_file_location("allianz_qbo", ROOT / ".private/scripts/qbo_api_portal_invoice_check.py")
+        if spec is None or spec.loader is None:
+            raise RuntimeError("QBO readback helper unavailable; report not sent.")
+        helper = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(helper)
+    config, token = helper.current_token()
+    company = helper.qbo_query(config, token, "select * from CompanyInfo").get("QueryResponse", {}).get("CompanyInfo", [])
+    if len(company) != 1 or str(company[0].get("CompanyName", "")).strip().upper() != "KOVAL DISTILLERY":
+        raise RuntimeError("QBO company verification failed; report not sent.")
+    checks = []
+    unestablished = 0
+    for row in candidates:
+        previous = row.get("allianz_payment_check") or {}
+        doc = str(row.get("qb_number") or "").strip()
+        expected_id = str(previous.get("qbo_invoice_id") or "")
+        if not expected_id or not re.fullmatch(r"[0-9]+", doc) or doc == "0" or str(previous.get("qbo_doc_number") or "").strip() != doc:
+            unestablished += 1
+            continue
+        invoices = helper.qbo_query(config, token, f"select * from Invoice where DocNumber = '{doc}' maxresults 2").get("QueryResponse", {}).get("Invoice", [])
+        if len(invoices) != 1 or str(invoices[0].get("Id")) != expected_id or str(invoices[0].get("DocNumber")) != doc:
+            raise RuntimeError(f"QBO invoice identity changed for {doc}; report not sent.")
+        invoice = invoices[0]
+        if invoice.get("Balance") is None or invoice.get("TotalAmt") is None:
+            raise RuntimeError(f"QBO balance unavailable for {doc}; report not sent.")
+        total, balance = round(float(invoice["TotalAmt"]), 2), round(float(invoice["Balance"]), 2)
+        paid = balance == 0 and total > 0 and bool(invoice.get("LinkedTxn"))
+        status = "PAID" if paid else ("PARTIAL" if 0 < balance < total else ("OPEN" if balance > 0 else "UNKNOWN"))
+        checks.append({
+            "invoice_number": row["invoice_number"], "qbo_doc_number": doc,
+            "qbo_invoice_id": expected_id, "qbo_total": total, "qbo_balance": balance,
+            "qbo_payment_status": status,
+            "status": "OK" if abs(total - float(row.get("portal_total") or 0)) <= 0.01 else "AMOUNT_MISMATCH",
+            "action": "ALLIANZ_LIVE_QBO_READBACK",
+        })
+    result = helper.persist_qbo_payment_checks(checks) if persist and checks else {"saved": 0}
+    return {**result, "queried": len(checks), "unestablished": unestablished}
 
 
 def advance_once(current: date, recurring_type: str) -> date:
@@ -282,6 +331,10 @@ def main() -> int:
     due_raw = task.due_date or task.date_start
     is_due = bool(re.fullmatch(r"\d{4}-\d{2}-\d{2}", due_raw) and datetime.strptime(due_raw, "%Y-%m-%d").date() <= today)
     payload = load_stop_ship_rows(args.days_back, args.row_limit)
+    payment_refresh = None
+    if (is_due or args.force) and not args.dry_run:
+        payment_refresh = refresh_candidate_payment_checks(payload)
+        payload = load_stop_ship_rows(args.days_back, args.row_limit)
     body = build_body(payload)
     result: dict[str, Any] = {
         "ok": True,
@@ -298,6 +351,7 @@ def main() -> int:
         "verification_count": int(payload.get("verification_count") or 0),
         "excluded_count": int(payload.get("excluded_count") or 0),
         "source_limit_reached": bool(payload.get("source_limit_reached")),
+        "payment_refresh": payment_refresh,
         "sent": False,
         "message_id": "",
         "advanced_to": "",
