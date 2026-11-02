@@ -96,12 +96,15 @@ def load_stop_ship_rows(days_back: int, limit: int) -> dict[str, Any]:
         "$policy=koval_allianz_trade_policy_config();"
         "$raw=koval_invoice_compliance_fetch($db,$from,$today,$limit);"
         "$rows=koval_allianz_trade_source_rows($raw,$policy);"
+        "$rows=koval_allianz_trade_attach_payment_checks($db,$rows);"
         "$rows=koval_allianz_trade_enrich_rows($rows,$policy);"
+        "$review=array_values(array_filter($rows,static fn(array $row): bool => !empty($row['allianz_covered']) && !empty($row['allianz_stop_ship_review_reason'])));"
+        "$excluded=count(array_filter($rows,static fn(array $row): bool => !empty($row['allianz_stop_ship_excluded'])));"
         "$rows=array_values(array_filter($rows, static function(array $row): bool {"
         "return !empty($row['allianz_covered']) && !empty($row['allianz_stop_ship_required']);"
         "}));"
         "$summary=koval_allianz_trade_summarize($rows);"
-        "$out=['from'=>$from,'to'=>$today,'raw_count'=>count($raw),'stop_ship_count'=>count($rows),'summary'=>$summary,'rows'=>array_slice($rows,0,100)];"
+        "$out=['from'=>$from,'to'=>$today,'raw_count'=>count($raw),'source_limit_reached'=>count($raw)>=$limit,'stop_ship_count'=>count($rows),'verification_count'=>count($review),'excluded_count'=>$excluded,'verification_rows'=>$review,'summary'=>$summary,'rows'=>$rows];"
         "echo json_encode($out, JSON_UNESCAPED_SLASHES);"
     )
     payload = json.loads(run_php(php, timeout=60))
@@ -170,14 +173,14 @@ def build_body(payload: dict[str, Any]) -> str:
         "",
     ]
     if not rows:
-        lines.extend(["No covered accounts are currently in the stop-ship review area.", ""])
+        lines.extend(["No covered invoices currently meet the verified active stop-ship review criteria.", ""])
     else:
         lines.extend(["Covered accounts currently in stop-ship review:", ""])
         for row in rows:
             account = str(row.get("account_name") or "Unknown account")
             invoice = str(row.get("invoice_no") or row.get("invoice_number") or "")
             status = str(row.get("allianz_status") or "Stop-ship review")
-            exposure = money(row.get("portal_total"))
+            exposure = money(row.get("allianz_stop_ship_balance"))
             days = int(row.get("days_overdue") or 0)
             covered = str(row.get("allianz_covered_name") or "")
             limit = money(row.get("allianz_approved_limit"))
@@ -191,9 +194,23 @@ def build_body(payload: dict[str, Any]) -> str:
                 pieces.append(f"covered as {covered}, limit {limit}")
             lines.append("; ".join(pieces))
         lines.append("")
+    review_rows = payload.get("verification_rows") or []
+    if review_rows:
+        lines.extend(["Payment verification needed — these entries are not on the active stop-ship list:", ""])
+        for row in review_rows:
+            lines.append(f"- {str(row.get('account_name') or '').strip()}; invoice {row.get('invoice_number')}; invoice total {money(row.get('portal_total'))}; {row.get('allianz_stop_ship_review_reason')}")
+        lines.extend(["", "Unverified items remain unresolved; this is not an all-clear to ship. Review insurance reporting/claim deadlines separately.", ""])
+    lines.extend([
+        "RNDC IL is excluded from the active stop-ship list per Robert's November 2 instruction; historical receivables and insurance follow-up remain separate.",
+        "Balances under $100, partial payments, corrections, discrepancies, and missing or older-than-seven-day QBO checks require manual payment verification before any stop-ship decision.",
+        "",
+    ])
+    if payload.get("source_limit_reached"):
+        lines.extend(["The source row limit was reached; older invoices may be outside this review. This is not a complete account-clearance report.", ""])
     lines.extend([
         "Source: Allianz Trade compliance logic",
         REPORT_URL + "?payment_status=unpaid&alert_status=stop_ship&covered_only=1&show_all=0&limit=500",
+        "Payment verification: " + REPORT_URL + "?payment_status=unpaid&alert_status=verification&covered_only=1&limit=500",
         "",
         "Codex",
     ])
@@ -278,6 +295,9 @@ def main() -> int:
         "to": payload.get("to", ""),
         "raw_count": int(payload.get("raw_count") or 0),
         "stop_ship_count": int(payload.get("stop_ship_count") or 0),
+        "verification_count": int(payload.get("verification_count") or 0),
+        "excluded_count": int(payload.get("excluded_count") or 0),
+        "source_limit_reached": bool(payload.get("source_limit_reached")),
         "sent": False,
         "message_id": "",
         "advanced_to": "",
